@@ -1,0 +1,176 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "User": {
+    "dataSource": "db",
+    "public": false
+  },
+  "AccessToken": {
+    "dataSource": "db",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "db",
+    "public": false
+  },
+  "TPackagingInstructionLots": {
+    "dataSource": "AccountDb",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "TPackagingInstructions": {
+    "dataSource": "AccountDb",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "TPackagingMaterial": {
+    "dataSource": "AccountDb",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "TPackagingStatus": {
+    "dataSource": "AccountDb",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "TPaymentType": {
+    "dataSource": "AccountDb",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "TPiInventory": {
+    "dataSource": "AccountDb",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "TPiInventoryHistory": {
+    "dataSource": "AccountDb",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "TShipmentContainerMap": {
+    "dataSource": "AccountDb",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "TServices": {
+    "dataSource": "AccountDb",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "TShipmentInternational": {
+    "dataSource": "AccountDb",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "TShipmentLots": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+  "TShipmentDomestic": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+  "TShipmentType": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+  "TUsers": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+  "TShipmentent": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+  "TSteamshipLine": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+  "TState": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+  "TWrapType": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+  "TOrigin": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+  "TInventoryLocation": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+  "TAddress": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+  "TLocation": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+  "TCustomerServiceMap": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+  "TCustomViews": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+  "TCountry": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+  "TContainerDomestic": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+  "TCompany": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+  "TContainerType": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+  "TContainerInternational": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+  "TCity": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+  "TPackagingType": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+  "TPalletType": {
+    "dataSource": "AccountDb",
+    "public": true
+  }
+}
