@@ -3,6 +3,34 @@ import React from 'react';
 //import '../../public/stylesheets/bootstrap.min.css';
 import { Link } from 'react-router';
 class  ShipmentDetailsForm extends React.Component {
+    constructor(){
+        super();
+        this.state={
+            showEdit : 'block',
+            hideEdit : 'none'
+
+        }
+        this.onClick=this.onClick.bind(this);
+    }
+    onClick(){
+        if (this.state.hideEdit === 'block'){
+            this.setState({
+                hideEdit : 'none',
+                showEdit : 'block'
+            })
+            $('.panel-group').removeClass('active');
+
+        }
+        else {
+            this.setState({
+                hideEdit: 'block',
+                showEdit: 'none'
+            })
+            $('.panel-group').addClass('active');
+        }
+
+ }
+    
     render() {
         return (
             <section className="shipment">
@@ -133,7 +161,23 @@ class  ShipmentDetailsForm extends React.Component {
                         </div>
                     </div>
                 </div>
-
+                 <div className="row">   
+        
+                    <div className=" col-lg-12 ">   
+                        <div className="text_left">
+                         <div className="pull-right margin-10-last-r"><button type="button" id="back" className="btn  btn-gray text-uppercase"> BACK</button> </div>
+                         
+                         <div className="pull-left margin-10-last-l"><button type="button"  className="btn  btn-gray text-uppercase">Allocate Containers</button> </div>                 
+                        
+                         
+                         <div className="pull-left margin-10-all"><Link to="shipmentconfirm"><button type="button" id="confirm" className="btn  btn-success text-uppercase">Confirm</button></Link> </div>                 
+                        
+                        
+                          <div className="pull-left margin-10-all"><Link to="shipmentconfirm"><button type="button" id="edit_shipment"  className="btn  btn-orange text-uppercase">Edit</button></Link> </div>                 
+                        </div>  
+                    </div>  
+                    <div className=" col-lg-12 "><hr/></div>    
+            </div>
 
                 <br className="clearfix"/>
 
@@ -152,7 +196,29 @@ class  ShipmentDetailsForm extends React.Component {
                                 </div>
                                 <div id="ContainerSummary" className="panel-collapse collapse ">
 
-                                    <div className="table-responsive">
+                                    <div id="edit" className="edit row pddn-10-btm" style={{display:this.state.hideEdit}}>
+                                            <form action="" method="post">
+                                                <div className="form-group">
+                                                    <div className="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                                                        <input type="text" className="form-control " id="Purchase_Order" placeholder="# of bags"/>
+                                                            <div className="error"><span></span></div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <div className=" col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                                                            <input type="text" className="form-control" id="" placeholder="# of Containers"/>
+                                                                <div className="error"><span></span></div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="form-group ">
+                                                            <div className="col-lg-3 col-md-3 col-sm-3 col-xs-6  padding-top-btm-xs ">
+                                                                <button type="button"  className="btn btn-success btn_right_no_margin">ADD</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                   <div className="table-responsive">
                                         <table className="table table-striped">
                                             <thead className="base_bg">
                                             <tr >
@@ -459,23 +525,15 @@ class  ShipmentDetailsForm extends React.Component {
                                         </div>
                                     </div>
 
-                                    <div className="text_left pddn-10-top">
-                                        <div className="pull-left margin-10-last-l">
-                                            <button type="button" className="btn btn-sm  btn-gray">Print Load Order</button>
-                                        </div>
-
-                                        <div className="pull-left margin-10-all">
-                                            <button type="button" className="btn btn-sm  btn-gray">Add To Queue</button>
-                                        </div>
-
-                                        <div className="pull-left margin-10-all">
-                                            <button type="button" className="btn btn-sm  btn-orange"></button>
-                                        </div>
-
-                                        <div className="pull-left margin-10-all">
-                                            <button type="button" className="btn btn-sm  btn-primary">View</button>
-                                        </div>
-                                    </div>
+                                   <div className="text_left pddn-10-top" style={{display : this.state.showEdit}}>
+                         <div className="pull-left margin-10-last-l"><button type="button"  className="btn btn-sm  btn-gray">Print Load Order</button> </div>
+                         
+                         <div className="pull-left margin-10-all"><button type="button"  className="btn btn-sm  btn-gray">Add To Queue</button> </div>
+                         
+                         <div className="pull-left margin-10-all"><button type="button" onClick={this.onClick} id="edit_shipment_details"  className="btn btn-sm  btn-orange">Edit</button> </div> 
+                         
+                         <div className="pull-left margin-10-all"><button type="button"  className="btn btn-sm  btn-primary">View</button> </div>
+                        </div>  
 
                                 </div>
                             </div>
@@ -538,39 +596,15 @@ class  ShipmentDetailsForm extends React.Component {
 
                 </div>
 
-                <div className="row">
-                    <div className=" col-lg-12 ">
-                        <hr/>
-                    </div>
-                    <div className=" col-lg-12 ">
-                        <div className="text_left">
-                            <div className="pull-left margin-10-last-l">
-                                <button type="button" className="btn  btn-gray text-uppercase"><i className="fa fa-angle-left"
-                                                                                              aria-hidden="true"></i> &nbsp;
-                                    BACK
-                                </button>
-                            </div>
-
-                            <div className="pull-left margin-10-all">
-                                <button type="button" className="btn  btn-gray text-uppercase">Allocate Containers</button>
-                            </div>
-
-
-                            <div className="pull-left margin-10-all">
-                                <button type="button" className="btn  btn-gray text-uppercase">Confirm</button>
-                            </div>
-
-
-                            <div className="pull-left margin-10-all">
-                              <Link to="shipdetailsedit"><button type="button" id="edit_details" className="btn  btn-orange text-uppercase">Edit
-                                </button></Link>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
+               <div className="row" style={{display:this.state.hideEdit}} >    
+    <div className=" col-lg-12 "><hr/></div>
+    <div className=" col-lg-12 " >
+    <div className="pull-left margin-10-last-l"><button type="button"  id="cancel_btn" onClick={this.onClick}  className="btn  btn-gray text-uppercase">CANCEL</button> </div>              
+    <div className="pull-left margin-10-all "><button type="button" id="save_changes" onClick={this.onClick} className="btn  btn-orange text-uppercase">Save Changes</button> </div>               
+    </div>  
+    </div>  
+            
+    </div>
             </section>
         );
     }

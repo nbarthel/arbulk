@@ -1,16 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router';
 import './styles.css';
+import { hashHistory } from 'react-router'
 import '../../public/stylesheets/bootstrap.min.css'
 import '../../public/stylesheets/font-awesome.min.css'
 import BreadCrumb from '../BreadCrumbComponent/BreadCrumb';
 
 
  class Header extends React.Component {
-  componentWillMount() {
-  
-  }
-
+constructor(props){
+  super(props);
+  this.onLogout = this.onLogout.bind(this);
+}
+  onLogout(){
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userId');
+    hashHistory.push('/')
+  } 
      render() {
        return (
         <div>
@@ -25,7 +31,7 @@ import BreadCrumb from '../BreadCrumbComponent/BreadCrumb';
            <span className="icon-bar"></span>
            <span className="icon-bar"></span>
          </button>
-         <a className="navbar-brand" href="index.html"> <img src="../../public/img/logo_inner.png" className="img-responsive"/></a>
+       <span className="navbar-brand imgbg" ></span>
        </div>
 
 
@@ -36,32 +42,22 @@ import BreadCrumb from '../BreadCrumbComponent/BreadCrumb';
              <ul className="dropdown-menu">
                <li><a href="javascript:void(0)">PACKAGING</a></li>
                <li role="separator" className="divider"></li>
-              <li><Link to="enterpackginginst" >Enter Packaging Instructions</Link></li>
+              <li><Link to="/Packaging/enterpackginginst/" >Enter Packaging Instructions</Link></li>
+               <li><Link to="/Packaging/packaginginstview/">View Packaging Instructions</Link></li>         
                <li role="separator" className="divider"></li>
-              <li><Link to="confirmpckginst">Confirm Packaging Instructions</Link></li>
-              <li role="separator" className="divider"></li>
-               <li><Link to="packaginginstqueue">View Packaging Queue</Link></li>
-               <li><Link to="packaginginstview">View Packaging Instructions</Link></li>
+               <li><Link to="/Packaging/railcararrival">Mark Railcar Arrivals </Link></li>
+               <li><Link to="/Packaging/railcardeparte">Mark Railcar Departures </Link></li>
                <li role="separator" className="divider"></li>
-               <li><Link to="inventorycard">Inventory Card</Link></li>
-               <li role="separator" className="divider"></li>
-               <li><Link to="railcararrival">Mark Railcar Arrivals </Link></li>
-               <li><Link to="railcardeparte">Mark Railcar Departures </Link></li>
-               <li><Link to="">Print Bagging Instruction</Link></li>
+               <li><Link to="/Packaging/packaginginstqueue">View Packaging Queue</Link></li>
              </ul>
            </li>
            <li className="dropdown">
-             <a href="javascript:void(0)" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SHIPEMENT<span className="caret"></span></a>
+             <a href="javascript:void(0)" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SHIPMENT<span className="caret"></span></a>
              <ul className="dropdown-menu">
                <li><a href="javascript:void(0)">Shipments</a></li>
                <li role="separator" className="divider"></li>
-               <li><Link to="shipmententry">Enter Shipments</Link></li>
-               <li><Link to="shipmentarrive">Entry Shipment Arrival</Link></li>
-               <li><Link to="shipmentview">Shipment View</Link></li>
-               <li role="separator" className="divider"></li>
-               <li><Link to="shipmentdetails">Shipment Details</Link></li>
-               <li role="separator" className="divider"></li>
-               <li><Link to="shipmentconfirm">Confirm Shipments</Link></li>
+               <li><Link to="/Shipment/shipmententry">Enter Shipments</Link></li>
+               <li><Link to="/Shipment/shipmentview">Shipment View</Link></li>            
              </ul>
            </li>
            <li className="dropdown">
@@ -69,15 +65,15 @@ import BreadCrumb from '../BreadCrumbComponent/BreadCrumb';
              <ul className="dropdown-menu">
                <li><a href="javascript:void(0)">Containers</a></li>
                <li role="separator" className="divider"></li>
-               <li><a href="javascript:void(0)">Enter Container Arrival</a></li>
-               <li><a href="javascript:void(0)">View Container</a></li>
+               <li><Link to="/Container/containerarrivalentry">Enter Container Arrival</Link></li>
+               <li><Link to="/Container/containerview">View Container</Link></li>
                <li role="separator" className="divider"></li>
-               <li><a href="javascript:void(0)">View Container Queue </a></li>
+               <li><Link to="/Conatainer/containerqueueview">View Container Queue </Link></li>
              </ul>
            </li>
-           <li><Link to="adminlogin">ADMIN</Link></li>
+           <li><Link to="/Admin/adminlogin">ADMIN</Link></li>
            <li><a href="#">HELP</a></li>
-           <li><a href="#">LOGOUT <i className="fa fa-lock" aria-hidden="true"></i></a></li>
+           <li onClick={this.onLogout}><a href="#">LOGOUT <i className="fa fa-lock" aria-hidden="true"></i></a></li>
          </ul>
        </div>
      </div>

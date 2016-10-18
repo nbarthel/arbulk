@@ -1,6 +1,6 @@
 import React from 'react';
 import routes from '../../routes';
-import BreadCrumbs from 'react-breadcrumbs';
+//import BreadCrumbs from 'react-breadcrumbs';
 export default class BreadCrumb extends React.Component {
  
 
@@ -9,8 +9,8 @@ export default class BreadCrumb extends React.Component {
       <section className="breadcrumb_bg">  
 	    <div className="container">
              <div id="row">  
-           <BreadCrumbs routes={this.props.routes}/>
-          </div>	
+            
+            </div>	
 	    </div>	
     </section>
     );

@@ -496,12 +496,12 @@ class  ShipmentViewForm extends React.Component
 
                                                                                 <div className="pull-left margin-10-last-l"><button type="button"  className="btn  btn-gray text-uppercase">Add to queue</button></div>
                                                                                 <div className="pull-left margin-10-all"><button type="button"  className="btn  btn-gray text-uppercase">Print Load Oreder</button></div>
-                                                                                <div className="pull-left margin-10-all"><button type="button"  className="btn  btn-gray text-uppercase">Allocate Container</button></div>
+                                                                                <div className="pull-left margin-10-all"><Link to="containerarrivalentry"><button type="button"  className="btn  btn-primary text-uppercase">Allocate Container</button></Link></div>
 
 
-                                                                                <div className="pull-right margin-10-last-r"><button type="button"  className="btn  btn-primary text-uppercase">VIEW</button></div>
+                                                                                <div className="pull-right margin-10-last-r"><Link to="shipmentdetails"><button type="button"  className="btn  btn-primary text-uppercase">VIEW</button></Link></div>
                                                                                 <div className="pull-right margin-10-all"><Link to="shipmentedit"><button type="button"  className="btn  btn-orange text-uppercase">EDIT</button></Link></div>
-                                                                                <div className="pull-right margin-10-all"><button type="button"  className="btn  btn-success text-uppercase">Confirm</button></div>
+                                                                                <div className="pull-right margin-10-all"><Link to="shipmentconfirm"><button type="button"  className="btn  btn-success text-uppercase">Confirm</button></Link></div>
 
 
                                                                             </div>

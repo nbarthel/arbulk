@@ -4,7 +4,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import validateInput from '../../../public/validations/validateInput';
 import '../../../public/stylesheets/bootstrap.min.css';
-
+import { browserHistory } from 'react-router';
 class AdminLoginForm extends React.Component{
 	constructor(props){
 		super(props);
@@ -27,11 +27,13 @@ class AdminLoginForm extends React.Component{
 		return isValid;
 	}
 	onSubmit(e){
+		
 		e.preventDefault();
-		if(this.isValid()){
+		browserHistory.push('/Admin/createusr')
+		/*if(this.isValid()){
 			this.setState({errors:{}});
 
-		}
+		}*/
 	}
 	render()
 	{
@@ -79,9 +81,9 @@ class AdminLoginForm extends React.Component{
 	<label className="pull-left">
 	<Link to="/forgotpass">Forgot Password?</Link>
 	</label>
-	<Link to="/createusr"><button 
+	<button 
 	type="submit"
-	className="login-btn pull-right">Sign in</button></Link>
+	className="login-btn pull-right">Sign in</button>
 	</div>
 	</form> 
 	</section>

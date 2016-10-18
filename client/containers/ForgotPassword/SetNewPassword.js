@@ -2,10 +2,10 @@ import React from 'react';
 import { Link } from 'react-router';
 
  class SetNewPassword extends React.Component{
-  componentWillMount() {
+  /*componentWillMount() {
   	document.body.classList.remove('signin_bg');
   }
-
+*/
   
   render() {
     return (

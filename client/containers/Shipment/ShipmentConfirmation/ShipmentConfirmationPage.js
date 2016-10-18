@@ -5,9 +5,11 @@ import Footer from '../../../components/Footer';
 class ShipmentConfirmationPage  extends React.Component{
     render(){
         return(
-            <div className="wrapper">
-            <Header />
+            <div className="wrapper-inner">
+            <div className="content-inside">
+                <Header />
                 <ShipmentConfirmationForm/>
+                </div>
                 <Footer />
             </div>
         );

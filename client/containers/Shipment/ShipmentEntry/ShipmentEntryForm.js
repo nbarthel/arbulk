@@ -15,7 +15,7 @@ class ShipmentEntryForm extends React.Component {
                                 <fieldset className="scheduler-border no-right-border">
                                     <legend className="scheduler-border">Shipment Info</legend>
 
-                                    <div className="form-group has-error">
+                                    <div className="form-group">
                                         <label for="customer_name"
                                                className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Customer
                                             Name</label>
@@ -23,7 +23,7 @@ class ShipmentEntryForm extends React.Component {
                                         <div className="col-lg-6    col-sm-11 col-xs-11 ">
                                             <input type="text" className="form-control" id="" placeholder="Customer Name"/>
 
-                                            <div className="error"><span>Error occur required field</span></div>
+                                            <div className="error"><span></span></div>
                                         </div>
                                     </div>
 
@@ -69,7 +69,7 @@ class ShipmentEntryForm extends React.Component {
 
                                 <fieldset className="scheduler-border no-right-border">
                                     <legend className="scheduler-border">Material Info</legend>
-                                    <div className="bages_estimated col-lg-11 col-md-11 col-sm-11 col-xs-11"><span>Bags in Inventory = 1990</span>
+                                    <div className="bages_estimated col-lg-11 col-md-11 col-sm-11 col-xs-11"><span></span>
                                     </div>
                                     <div className="form-group ">
                                         <label for="Rail_Car_Number"

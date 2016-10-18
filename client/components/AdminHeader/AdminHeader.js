@@ -25,8 +25,8 @@ export default class AdminHeader extends React.Component {
 
 				 <div className="collapse navbar-collapse" id="navigation-menu">
 					 <ul className="nav navbar-nav navbar-right top_nav">      
-						<li><Link to="/createusr">Create User</Link></li>
-						<li><Link to="modifyusr">Modify User</Link></li>
+						<li><Link to="/Admin/createusr">Create User</Link></li>
+						<li><Link to="/Admin/modifyusr">Modify User</Link></li>
 						<li><a href="#">Customers & Truckers  </a></li>
 						<li><a href="#">Add Material  </a></li>
 						<li><a href="#">Upload Data</a></li>

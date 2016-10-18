@@ -9,14 +9,15 @@ Author URI: http://www.qsstechnosoft.com/
 
 /*
 @font-face{	font-family:"HelveticaNeue"; src:url("../fonts/HelveticaNeue.ttf");}
-<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Raleway" />
 */
-/*@font-face{	font-family:"Raleway-Medium"; src:url("../fonts/raleway/Raleway-Medium.ttf");}
+@font-face{	font-family:"Raleway-Medium"; src:url("../fonts/raleway/Raleway-Medium.ttf");}
 /*@font-face {
   /*font-family: 'HelveticaNeue';
   /*src: url('../fonts/HelveticaNeue.eot'); /* IE9 Compat Modes */
   /*src: url('../fonts/HelveticaNeue.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
      
-   /*    url('../fonts/HELVETICANEUE-BOLD-WEBFONT.TTF')  format('truetype'), /* Safari, Android, iOS */
-     /*  url('../fonts/HelveticaNeue.svg') format('svg'); /* Legacy iOS */
+    /*   url('../fonts/HELVETICANEUE-BOLD-WEBFONT.TTF')  format('truetype'), /* Safari, Android, iOS */
+      /* url('../fonts/HelveticaNeue.svg') format('svg'); /* Legacy iOS */
+/*
 
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Raleway" />*/
