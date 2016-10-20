@@ -1,6 +1,7 @@
 import React from 'react';
 import '../../../public/stylesheets/style.css';
 import '../../../public/stylesheets/bootstrap.min.css';
+import '../../../public/stylesheets/jquery.dataTables.min.css';
 
 class  ContainerViewForm extends React.Component {
     render(){
@@ -26,7 +27,7 @@ class  ContainerViewForm extends React.Component {
                                         <ul>
                                             <li>
                                                 <label className="control control--checkbox">SC
-                                                    <input type="checkbox" checked="checked" id="row1"/><div className="control__indicator"></div>
+                                                    <input type="checkbox" defaultChecked id="row1"/><div className="control__indicator"></div>
                                                 </label>
                                             </li>
                                             <li>
@@ -46,7 +47,7 @@ class  ContainerViewForm extends React.Component {
                                             <ul className="scroll">
                                                 <li>
                                                     <label className="control control--checkbox">AA Customers
-                                                        <input type="checkbox" checked="checked" id="row1"/><div className="control__indicator"></div>
+                                                        <input type="checkbox" defaultChecked id="row1"/><div className="control__indicator"></div>
                                                     </label>
                                                 </li>
                                                 <li>
@@ -56,7 +57,7 @@ class  ContainerViewForm extends React.Component {
                                                 </li>
                                                 <li>
                                                     <label className="control control--checkbox">Exxon
-                                                        <input type="checkbox" checked="checked" id="row1"/><div className="control__indicator"></div>
+                                                        <input type="checkbox" defaultChecked id="row1"/><div className="control__indicator"></div>
                                                     </label>
                                                 </li>
                                                 <li>
@@ -104,7 +105,7 @@ class  ContainerViewForm extends React.Component {
                                                         <ul className="pddn-10-top">
                                                             <li>
                                                                 <label className="control control--checkbox">Open Shipment
-                                                                    <input checked="checked" id="row1" type="checkbox"/><div className="control__indicator"></div>
+                                                                    <input defaultChecked id="row1" type="checkbox"/><div className="control__indicator"></div>
                                                                     </label>
                                                                 </li>
                                                             </ul>
@@ -155,7 +156,7 @@ class  ContainerViewForm extends React.Component {
                                                                             <ul className="scroll">
                                                                                 <li>
                                                                                     <label className="control control--checkbox">Unconfirmed
-                                                                                        <input type="checkbox" checked="checked" id="row1"/><div className="control__indicator"></div>
+                                                                                        <input type="checkbox" defaultChecked id="row1"/><div className="control__indicator"></div>
                                                                                     </label>
                                                                                 </li>
                                                                                 <li>
@@ -165,7 +166,7 @@ class  ContainerViewForm extends React.Component {
                                                                                 </li>
                                                                                 <li>
                                                                                     <label className="control control--checkbox">Arrived
-                                                                                        <input type="checkbox" checked="checked" id="row1"/><div className="control__indicator"></div>
+                                                                                        <input type="checkbox" defaultChecked id="row1"/><div className="control__indicator"></div>
                                                                                     </label>
                                                                                 </li>
                                                                                 <li>
@@ -230,184 +231,195 @@ class  ContainerViewForm extends React.Component {
 
                                                                             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                                                 <div className=" table-responsive view_table">
+<div id="Packaging_Instruction_View_wrapper" className="dataTables_wrapper no-footer">
 
-                                                                                    <table id="Packaging_Instruction_View" className="table table-expandable table-striped" cellspacing="0" >
+<table id="Packaging_Instruction_View" className="table table-expandable table-striped" cellSpacing="0" >
+  <thead className="table_head">
+    <tr >
+      <th>ARB </th>
+      <th>Customer</th>
+      <th>PO </th>
+      <th>Railcar# </th>
+      <th>Booking # </th>
+      <th>Shipment Type</th>
+      <th>Container #</th>
+      <th>Trucker </th>
+      <th>Arrived? </th>
+      <th>Steamship Line </th>
+      <th>Type </th>
+      <th> <label className="control control--checkbox">
+        <input type="checkbox"  />
+        <div className="control__indicator"></div>
+        </label>
+      </th>
+    </tr>
+  </thead>
+  <thead className="base_bg" data-toggle="collapse" data-target="#head1" aria-expanded="true">
+   <tr>
+		<th colSpan="2"><i className="fa fa-chevron-down" aria-hidden="true"></i> SC </th>
+		<th colSpan="9"><span>Ravago</span></th>
+		<th>
+			<label className="control control--checkbox">
+			  <input type="checkbox" defaultChecked />
+			  <div className="control__indicator"></div>
+			</label>	
+		</th>
+	</tr> 
+</thead>
+  <tbody id="head1" className="collapseIn">
+    <tr >
+      <td></td>
+      <td></td>
+      <td>3972219 </td>
+      <td></td>
+      <td>7 Containers</td>
+      <td>INTERNATIONAL </td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><label className="control control--checkbox">
+        <input type="checkbox" />
+        <div className="control__indicator"></div>
+        </label></td>
+    </tr>
+    <tr >
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>038VH1092122 </td>
+      <td>UESU4299722-0 </td>
+      <td></td>
+      <td>IP</td>
+      <td>Y</td>
+      <td>Maersk</td>
+      <td>40 ft. HC</td>
+      <td>Unconfirmed</td>
+      <td><label className="control control--checkbox">
+        <input type="checkbox" defaultChecked />
+        <div className="control__indicator"></div>
+        </label></td>
+    </tr>
+    <tr >
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>038VH1092122 </td>
+      <td>UESU4299722-0 </td>
+      <td></td>
+      <td>IP</td>
+      <td>Y</td>
+      <td>Maersk</td>
+      <td>40 ft. HC</td>
+      <td>Unconfirmed</td>
+      <td><label className="control control--checkbox">
+        <input type="checkbox" defaultChecked />
+        <div className="control__indicator"></div>
+        </label></td>
+    </tr>
+    <tr >
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>038VH1092122 </td>
+      <td>UESU4299722-0 </td>
+      <td></td>
+      <td>IP</td>
+      <td>Y</td>
+      <td>Maersk</td>
+      <td>40 ft. HC</td>
+      <td>Unconfirmed</td>
+      <td><label className="control control--checkbox">
+        <input type="checkbox" />
+        <div className="control__indicator"></div>
+        </label></td>
+    </tr>
+    <tr >
+      <td></td>
+      <td></td>
+      <td>3972219 </td>
+      <td></td>
+      <td>4 Containers</td>
+      <td>INTERNATIONAL </td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><label className="control control--checkbox">
+        <input type="checkbox" />
+        <div className="control__indicator"></div>
+        </label></td>
+    </tr>
+    <tr >
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>038VH1092122 </td>
+      <td>UESU4299722-0 </td>
+      <td></td>
+      <td>IP</td>
+      <td>Y</td>
+      <td>Maersk</td>
+      <td>40 ft. HC</td>
+      <td>Unconfirmed</td>
+      <td><label className="control control--checkbox">
+        <input type="checkbox"  />
+        <div className="control__indicator"></div>
+        </label></td>
+    </tr>
+    <tr >
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>038VH1092122 </td>
+      <td>UESU4299722-0 </td>
+      <td></td>
+      <td>IP</td>
+      <td>Y</td>
+      <td>Maersk</td>
+      <td>40 ft. HC</td>
+      <td>Unconfirmed</td>
+      <td><label className="control control--checkbox">
+        <input type="checkbox"  />
+        <div className="control__indicator"></div>
+        </label></td>
+    </tr>
+    <tr >
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>038VH1092122 </td>
+      <td>UESU4299722-0 </td>
+      <td></td>
+      <td>IP</td>
+      <td>Y</td>
+      <td>Maersk</td>
+      <td>40 ft. HC</td>
+      <td>Unconfirmed</td>
+      <td><label className="control control--checkbox">
+        <input type="checkbox" />
+        <div className="control__indicator"></div>
+        </label></td>
+    </tr> 
+  </tbody>
+</table>
 
-                                                                                        <thead className="table_head">
-                                                                                        <tr >
-                                                                                            <th>ARB </th>
-                                                                                            <th>Customer</th>
-                                                                                            <th>PO </th>
-                                                                                            <th>Railcar# </th>
-                                                                                            <th>Booking # </th>
-                                                                                            <th>Container #</th>
-                                                                                            <th>Trucker </th>
-                                                                                            <th>Arrived? </th>
-                                                                                            <th>Steamship Line </th>
-                                                                                            <th>Type </th>
-                                                                                            <th>
-                                                                                                <label className="control control--checkbox">
-                                                                                                    <input type="checkbox"  id="row1"/><div className="control__indicator"></div>
-                                                                                                </label>
-                                                                                            </th>
-                                                                                        </tr>
-                                                                                        </thead>
-                                                                                        <thead className="base_bg " data-toggle="collapse" data-target="#head1" className="clickable" >
-                                                                                        <tr >
-                                                                                            <th colspan="2"><i className="fa fa-chevron-down" aria-hidden="true"></i> SC </th>
-                                                                                            <th colspan="8"><span>Ravago</span></th>
-                                                                                            <th>
-                                                                                                <label className="control control--checkbox">
-                                                                                                    <input type="checkbox" checked="checked" id="row1"/><div className="control__indicator"></div>
-                                                                                                </label>
-                                                                                            </th>
-                                                                                        </tr>
-                                                                                        </thead>
-                                                                                        <tbody   id="head1" className="collapseIn">
-
-                                                                                        <tr >
-                                                                                            <td> </td>
-                                                                                            <td> </td>
-                                                                                            <td>3972219 </td>
-                                                                                            <td> </td>
-                                                                                            <td>7 Containers</td>
-                                                                                            <td></td>
-                                                                                            <td></td>
-                                                                                            <td></td>
-                                                                                            <td></td>
-                                                                                            <td></td>
-
-                                                                                            <td>
-                                                                                                <label className="control control--checkbox">
-                                                                                                    <input type="checkbox" id="row1"/><div className="control__indicator"></div>
-                                                                                                </label>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr >
-                                                                                            <td> </td>
-                                                                                            <td> </td>
-                                                                                            <td> </td>
-                                                                                            <td>038VH1092122 </td>
-                                                                                            <td>UESU4299722-0 </td>
-                                                                                            <td>IP</td>
-                                                                                            <td>Y</td>
-                                                                                            <td>Maersk</td>
-                                                                                            <td>40 ft. HC</td>
-                                                                                            <td>Unconfirmed</td>
-                                                                                            <td>
-                                                                                                <label className="control control--checkbox">
-                                                                                                    <input type="checkbox" checked="checked" id="row1"/><div className="control__indicator"></div>
-                                                                                                </label>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr >
-                                                                                            <td> </td>
-                                                                                            <td> </td>
-                                                                                            <td> </td>
-                                                                                            <td>038VH1092122 </td>
-                                                                                            <td>UESU4299722-0 </td>
-                                                                                            <td>IP</td>
-                                                                                            <td>Y</td>
-                                                                                            <td>Maersk</td>
-                                                                                            <td>40 ft. HC</td>
-                                                                                            <td>Unconfirmed</td>
-                                                                                            <td>
-                                                                                                <label className="control control--checkbox">
-                                                                                                    <input type="checkbox" checked="checked" id="row1"/><div className="control__indicator"></div>
-                                                                                                </label>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr >
-                                                                                            <td> </td>
-                                                                                            <td> </td>
-                                                                                            <td> </td>
-                                                                                            <td>038VH1092122 </td>
-                                                                                            <td>UESU4299722-0 </td>
-                                                                                            <td>IP</td>
-                                                                                            <td>Y</td>
-                                                                                            <td>Maersk</td>
-                                                                                            <td>40 ft. HC</td>
-                                                                                            <td>Unconfirmed</td>
-                                                                                            <td>
-                                                                                                <label className="control control--checkbox">
-                                                                                                    <input type="checkbox" id="row1"/><div className="control__indicator"></div>
-                                                                                                </label>
-                                                                                            </td>
-                                                                                        </tr>
-
-                                                                                        <tr >
-                                                                                            <td> </td>
-                                                                                            <td> </td>
-                                                                                            <td>3972219 </td>
-                                                                                            <td> </td>
-                                                                                            <td>4 Containers</td>
-                                                                                            <td></td>
-                                                                                            <td></td>
-                                                                                            <td></td>
-                                                                                            <td></td>
-                                                                                            <td></td>
-
-                                                                                            <td>
-                                                                                                <label className="control control--checkbox">
-                                                                                                    <input type="checkbox" id="row1"/><div className="control__indicator"></div>
-                                                                                                </label>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr >
-                                                                                            <td> </td>
-                                                                                            <td> </td>
-                                                                                            <td> </td>
-                                                                                            <td>038VH1092122 </td>
-                                                                                            <td>UESU4299722-0 </td>
-                                                                                            <td>IP</td>
-                                                                                            <td>Y</td>
-                                                                                            <td>Maersk</td>
-                                                                                            <td>40 ft. HC</td>
-                                                                                            <td>Unconfirmed</td>
-                                                                                            <td>
-                                                                                                <label className="control control--checkbox">
-                                                                                                    <input type="checkbox"  id="row1"/><div className="control__indicator"></div>
-                                                                                                </label>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr >
-                                                                                            <td> </td>
-                                                                                            <td> </td>
-                                                                                            <td> </td>
-                                                                                            <td>038VH1092122 </td>
-                                                                                            <td>UESU4299722-0 </td>
-                                                                                            <td>IP</td>
-                                                                                            <td>Y</td>
-                                                                                            <td>Maersk</td>
-                                                                                            <td>40 ft. HC</td>
-                                                                                            <td>Unconfirmed</td>
-                                                                                            <td>
-                                                                                                <label className="control control--checkbox">
-                                                                                                    <input type="checkbox"  id="row1"/><div className="control__indicator"></div>
-                                                                                                </label>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr >
-                                                                                            <td> </td>
-                                                                                            <td> </td>
-                                                                                            <td> </td>
-                                                                                            <td>038VH1092122 </td>
-                                                                                            <td>UESU4299722-0 </td>
-                                                                                            <td>IP</td>
-                                                                                            <td>Y</td>
-                                                                                            <td>Maersk</td>
-                                                                                            <td>40 ft. HC</td>
-                                                                                            <td>Unconfirmed</td>
-                                                                                            <td>
-                                                                                                <label className="control control--checkbox">
-                                                                                                    <input type="checkbox" id="row1"/><div className="control__indicator"></div>
-                                                                                                </label>
-                                                                                            </td>
-                                                                                        </tr>
 
 
-                                                                                    </tbody>
-                                                                                </table>
+<div className="dataTables_info" id="Packaging_Instruction_View_info" role="status" aria-live="polite">Showing 1 to 8 of 8 entries</div>
+
+<div className="dataTables_paginate paging_simple_numbers" id="Packaging_Instruction_View_paginate">
+<a className="paginate_button previous disabled" aria-controls="Packaging_Instruction_View" data-dt-idx="0" tabIndex="0" id="Packaging_Instruction_View_previous">Previous</a>
+
+
+<span><a className="paginate_button current" aria-controls="Packaging_Instruction_View" data-dt-idx="1" tabIndex="0">1</a></span>
+<a className="paginate_button next disabled" aria-controls="Packaging_Instruction_View" data-dt-idx="2" tabIndex="0" id="Packaging_Instruction_View_next">Next</a></div>
+
+																				
+</div>
+                                                                                  
                                                                             </div>
 
                                                                             <div className="row-fluid pddn-50-btm padding-top-btm-xs">
@@ -417,8 +429,8 @@ class  ContainerViewForm extends React.Component {
                                                                                 <div className="pull-left margin-10-all"><button type="button"  className="btn  btn-gray">Add to Queue</button></div>
 
 
-                                                                                <div className="pull-right margin-10-last-r"><button type="button"  className="btn  btn-success">View</button></div>
-                                                                                <div className="pull-right margin-10-all"><button type="button" id="edit_btn"  className="btn  btn-orange">EDIT</button></div>
+                                                                                <div className="pull-right margin-10-last-r"><a href="#/Container/containerdetails"  className="btn  btn-success">View</a></div>
+                                                                                <div className="pull-right margin-10-all"><a href="#/Conatainer/containerarrivaledit" id="edit_btn"  className="btn  btn-orange">EDIT</a></div>
 
 
                                                                             </div>

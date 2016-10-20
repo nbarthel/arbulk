@@ -1,6 +1,4 @@
 import React from 'react';
-import '../../public/stylesheets/style.css';
-import '../../public/stylesheets/bootstrap.min.css';
 
 class ContainerDetailsForm extends React.Component {
     render() {
@@ -74,12 +72,12 @@ class ContainerDetailsForm extends React.Component {
                                         <li> Container Tare Weight</li>
                                         <li className=" pddn-10-top">
                                             <label className="control control--checkbox ">Container Type Confirmed?
-                                                <input type="checkbox" checked="checked" /><div className="control__indicator"></div>
+                                                <input type="checkbox" defaultChecked /><div className="control__indicator"></div>
                                             </label>
                                         </li>
                                         <li >
                                             <label className="control control--checkbox ">Container Steamship Line Confirmed?
-                                                <input type="checkbox" checked="checked" /><div className="control__indicator"></div>
+                                                <input type="checkbox" defaultChecked /><div className="control__indicator"></div>
                                             </label>
                                         </li>
                                         <li >
@@ -154,7 +152,7 @@ class ContainerDetailsForm extends React.Component {
                                             <li>Origin: <b>Made in USA</b></li>
                                             <li className=" pddn-20-top">
                                                 <label className="control control--checkbox ">Shipment Complete
-                                                    <input type="checkbox" checked="checked" /><div className="control__indicator"></div>
+                                                    <input type="checkbox" defaultChecked /><div className="control__indicator"></div>
                                                 </label>
                                             </li>
                                         </ul>
@@ -219,6 +217,13 @@ class ContainerDetailsForm extends React.Component {
                                                     <td>D030G2E02C</td>
                                                     <td>33334</td>
                                                 </tr>
+                                                <tr>
+                                                    <th>Total</th>
+                                                    <th>660 Bags</th>               
+                                                    <th>91039 lbs.</th>             
+                                                    <th></th>               
+                                                    <th></th>               
+                                                </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -240,7 +245,7 @@ class ContainerDetailsForm extends React.Component {
                             </div>
                         </div>
                         <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <div className="pull-right margin-10-last-r"><button type="button"  className="btn  btn-orange text-uppercase"> Edit</button> </div>
+                            <div className="pull-right margin-10-last-r"><a href="#/Container/containereditloadorder"  className="btn  btn-orange text-uppercase"> Edit</a> </div>
                             <div className="pull-right margin-10-all"><button type="button" id="edit_details"  className="btn  btn-primary text-uppercase">Print Load Order</button> </div>
                             <div className="pull-right margin-10-all"><button type="button" id="edit_details"  className="btn  btn-primary text-uppercase">Print BOL</button> </div>
 

@@ -7,10 +7,10 @@ class ContainerArrivalEntryPage  extends React.Component{
         return(
             <div className="wrapper-inner">
             <div className="content-inside">
-            <Header />
+            	<Header />
                 <ContainerArrivalEntryForm/>
-                </div>
-                <Footer />
+            </div>
+            <Footer />
             </div>
         );
 

@@ -21,7 +21,7 @@ export default function createRoutes(store) {
 		}
 	},
 	{
-		path: '/Packaging/enterpackginginst',
+		path: '/Packaging/enterpackginginst/(:id)',
 		name: 'Enter Packaging Instruction ',
 		getComponent(nextState, cb){
 			System.import('./containers/Packaging/EnterPackagingInstruction/EnterPackagingInstructionPage')
@@ -31,7 +31,7 @@ export default function createRoutes(store) {
 
 	},
 	{
-		path: '/Packaging/packaginginstview',
+		path: '/Packaging/packaginginstview/(:id)',
 		name: 'Packaging Instruction View',
 		getComponent(nextState, cb){
 			System.import('./containers/Packaging/PackagingInstructionView/PackagingInstructionViewPage')
@@ -103,10 +103,46 @@ export default function createRoutes(store) {
 		}
 	},
 	{
+		path: '/Container/containerdetails',
+		name: 'Container Details Page',
+		getComponent(nextState, cb){
+			System.import('./containers/containers/ContainerDetails/ContainerDetailsPage')
+			.then(loadModule(cb))
+			.catch(errorLoading)
+		}
+	},
+	{
+		path: '/Container/containereditloadorder',
+		name: 'Container Edit Load Order Page',
+		getComponent(nextState, cb){
+			System.import('./containers/containers/ContainerEditLoadOrder/ContainerEditLoadOrderPage')
+			.then(loadModule(cb))
+			.catch(errorLoading)
+		}
+	},
+	{
+		path: '/Conatainer/containerarrivaledit',
+		name: 'Container Arrival Edit Page',
+		getComponent(nextState, cb){
+			System.import('./containers/containers/ContainerArrivalEdit/ContainerArrivalEditPage')
+			.then(loadModule(cb))
+			.catch(errorLoading)
+		}
+	},
+	{
 		path: '/Conatainer/containerqueueview',
 		name: 'Container Queue View Page',
 		getComponent(nextState, cb){
 			System.import('./containers/containers/ContainerQueueView/ContainerQueueViewPage')
+			.then(loadModule(cb))
+			.catch(errorLoading)
+		}
+	},
+	{
+		path: '/Conatainer/containerqueueviewedit',
+		name: 'Container Queue View Edit Page',
+		getComponent(nextState, cb){
+			System.import('./containers/containers/ContainerQueueViewEdit/ContainerQueueViewEditPage')
 			.then(loadModule(cb))
 			.catch(errorLoading)
 		}
@@ -128,7 +164,34 @@ export default function createRoutes(store) {
 			.then(loadModule(cb))
 			.catch(errorLoading)
 		}
-	}
+	},
+	{
+		path: '/Packaging/inventorycard/(:id)/(:cID)',
+		name: 'Inventory Card',
+		getComponent(nextState, cb){
+			System.import('./containers/Packaging/InventoryCard/InventoryCardPage')
+			.then(loadModule(cb))
+			.catch(errorLoading)
+		}
+	},
+	{
+		path: '/Packaging/confirmpckginst/(:id)',
+		name: 'Confirm Packaging',
+		getComponent(nextState, cb){
+			System.import('./containers/Packaging/ConfirmPackagingInstruction/ConfirmPackagingInstructionPage')
+			.then(loadModule(cb))
+			.catch(errorLoading)
+		}
+	},
+	{
+		path: '/forgotpass',
+		name: 'Forgot Password',
+		getComponent(nextState, cb){
+			System.import('./containers/ForgotPassword/ForgotPasswordPage')
+			.then(loadModule(cb))
+			.catch(errorLoading)
+		}
+	},
 
 	];
 

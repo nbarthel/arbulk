@@ -6,15 +6,22 @@ import validateInput from '../../public/validations/validateInput';
 import '../../public/stylesheets/bootstrap.min.css';
 import './style.css';
 import { push } from 'react-router-redux';
-import { browserHistory } from 'react-router';
+import axios from 'axios'
+import SweetAlert from 'sweetalert-react';
+import '../../public/stylesheets/sweetalert.css';
+import { hashHistory } from 'react-router';
+import { Base_Url } from  '../../constants/index';
+var Spinner = require('react-spinkit');
 class LoginForm extends React.Component{
 	constructor(props,context){
 		super(props);
 		this.state={
 			email: '',
 			password: '',
-			errors: {}
-		}
+			errors: {},
+			isLoading: false,
+			}
+			//	this.userData= { }
 		this.onChange=this.onChange.bind(this);
 		this.onSubmit=this.onSubmit.bind(this);
 	}
@@ -22,34 +29,46 @@ class LoginForm extends React.Component{
 		this.setState({[e.target.name]: e.target.value});
 	}
 	isValid(){
+		
 		const { errors , isValid } = validateInput(this.state);
 		if(!isValid){
-			this.setState({errors});
+			this.setState({ errors });
 		}
+		
 		return isValid;
-	}
+		
+		}
 	onSubmit(e){
 		e.preventDefault();
-		//this.props.dispatch(push('/enterpackginginst'))
-		browserHistory.push('/Packaging/enterpackginginst')	
-	/*	e.preventDefault();
-		this.props.userLoginRequest(this.state)
-		.then(function (response) {
-			hashHistory.push('enterpackginginst')
+		if(this.isValid() == true){
+			axios.post(Base_Url+'TUsers/login?include=user',this.state)
+			.then((response)=>{
+			debugger
+			localStorage.setItem('userName',response.data.user.firstName)
+			localStorage.setItem('userId',response.data.user.id)
+
+			/*this.setState(
+				isLoading:false,
+			})*/
+			debugger
+			//console.log(response.data.user)
+			//this.userData = response.data
+			//this.userData = response.data.user
+			hashHistory.push('/Packaging/enterpackginginst/')
+			//console.log(this.state.userData)		
+			}).catch(function(error){
+				swal("Fail :(" , "You Have Entered Wrong Username or Password " , "error")
 			})
-		.catch(function(error){
-			console.log(error)
-		})*/
+		}
 	}		
 	render()
 	{
 	return(
-	<div id="container">
-	<div id="wrapper">
+	 
 	<div id="login" className="animate form">
 	<section className="login_content" >
 	<div>
-		<span className="pull-right img-responsive imgbg" ></span>
+	<span className="pull-right img-responsive imgbg" ></span>
 	</div>
 	
 	<div className="clearfix"></div>
@@ -89,11 +108,11 @@ class LoginForm extends React.Component{
 	onClick={this.onSubmit}
 	className="login-btn pull-right">Sign in</button>	
 	</div>
+	{this.state.isLoading ? <Spinner spinnerName='circle' /> : null}
 	</form> 
 	</section>
 	</div>
-	</div>
-	</div>
+	 
 	)
 	}
 }

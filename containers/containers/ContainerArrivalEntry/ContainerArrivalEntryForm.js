@@ -6,7 +6,7 @@ class  ContainerArrivalEntryForm extends React.Component {
     render() {
         return (
            <section className="container_detils">  
-            <div className="container-fluid"> 
+            <div className="container"> 
             <div className="row">   
             <form className="form-horizontal">
             <div className="  col-lg-12 col-md-12 col-sm-12 col-xs-12 ">  
@@ -178,6 +178,15 @@ class  ContainerArrivalEntryForm extends React.Component {
                                 </div>  
                          </fieldset>
                         </div> 
+						
+<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+<div className="form-group col-lg-12">							
+<div className="pull-left margin-10-last-l"><button type="submit" className="btn  btn-gray text-uppercase ">CANCEL</button> </div>
+<div className="pull-left margin-10-all"><button type="button" className="btn  btn-primary text-uppercase ">Save</button> </div>
+</div>		
+</div>
+						  
+						  
                     </div> 
                                     
                      <div id="Domestic" className=" active  tab-pane">
@@ -320,6 +329,12 @@ class  ContainerArrivalEntryForm extends React.Component {
                             </div>
                          </fieldset>
                         </div> 
+<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+<div className="form-group col-lg-12">							
+<div className="pull-left margin-10-last-l"><button type="submit" className="btn  btn-gray text-uppercase ">CANCEL</button> </div>
+<div className="pull-left margin-10-all"><button type="button" className="btn  btn-primary text-uppercase ">Save</button> </div>
+</div>		
+</div>
                     </div> 
                 
             </div>

@@ -11,3 +11,15 @@ require('../../js/popover.js')
 require('../../js/scrollspy.js')
 require('../../js/tab.js')
 require('../../js/affix.js')
+
+
+
+
+
+			<DatePicker
+								 dateFormat="MM-DD-YYYY"
+								 selected={this.state.startDate}
+								 value={this.state.startDate}
+								 ref={"date" + index}
+								 onChange={(e, x) => this.handleChange1(e,x)} placeholderText="RailCar Arrival Date"/>
+				

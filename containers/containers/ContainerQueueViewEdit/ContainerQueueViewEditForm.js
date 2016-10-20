@@ -1,8 +1,6 @@
 import React from 'react';
-import '../../../public/stylesheets/style.css';
-import '../../../public/stylesheets/bootstrap.min.css';
 
-class  ContainerQueueViewForm extends React.Component {
+class  ContainerQueueViewEditForm extends React.Component {
     render() {
         return (
             <section className="view_table-queue">
@@ -162,20 +160,20 @@ class  ContainerQueueViewForm extends React.Component {
                     <div className="row-fluid">
                     <div className="col-md-12"> <hr/></div>
                     </div>
+                        
                         <div className="row-fluid pddn-50-btm">
-
+    
                             <div className="padding-top-btm-xs">
-                                <div className="padding-20-last-l pull-left"><button type="button"    className="btn  btn-gray text-uppercase">Back</button></div>
-                                <div className="padding-20-all pull-left"><button type="button"    className="btn  btn-primary text-uppercase">Mark Loaded</button></div>
-
-                                <div className="padding-20-last-r pull-right"><button type="button" id="view"  className="btn  btn-success text-uppercase">View</button></div>
-                                <div className="padding-20-all pull-right"><a href="#/Conatainer/containerqueueviewedit" id="edit_btn"  className="btn  btn-orange text-uppercase">Edit Queue</a></div>
-                                <div className="padding-20-all pull-left"><button type="button" className="btn  btn-primary text-uppercase">Print Container Load Order</button></div>
-
+                                <div className="padding-20-last-l pull-left"><button type="button" id="back" className="btn  btn-gray text-uppercase">Back</button></div>
+                                
+                                
+                                <div className="padding-20-last-r pull-right"><button type="button" id="save" className="btn  btn-success text-uppercase">Save </button></div>
+                                <div className="padding-20-all pull-right"><button type="button" id="cancel" className="btn  btn-gray text-uppercase">Cancel</button></div>
+                                
+                                
                             </div>
-
-
                         </div>
+
 
                         <div className="row pddn-50-btm">
 
@@ -196,6 +194,6 @@ class  ContainerQueueViewForm extends React.Component {
 
                 </section>	
             )
-            }
-            }
-            export default ContainerQueueViewForm;
+    }
+}
+export default ContainerQueueViewEditForm;
