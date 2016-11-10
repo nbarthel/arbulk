@@ -14,42 +14,95 @@ module.exports = function(Tinventorylocation) {
         customErr.statusCode = 422;
         customErr.message=null;
         console.log(">>>>>>>>>>>>>>>>>>tinventory" ,tinventory)
+        //var tinventory1 = JSON.stringify(tinventory)
+        //var Tinvet = JSON.parse(tinventory1)
+        //console.log("stringify converted object>>>" ,Tinvet.postArray[0].Tpinventory )
+        //
         Tinventorylocation.create({
-                "id": 0,
-                "locationName": tinventory.Tpinventory.locationName,
-                "locationId": tinventory.Tpinventory.location_id,
-                "active": 1
+                    "id": 0,
+                    "locationName": tinventory.Tpinventory.locationName,
+                    "locationId": tinventory.Tpinventory.location_id,
+                    "active": 1
 
-            },
+                },
+                function (err, obj) {
+                    if (err) {
+                        //logger.error("errooorrrrr" , JSON.stringify(obj));
+                        return cb(null, {errors: err});
+                    }
+                    if(obj!= null && obj!= undefined){
+                        console.log(">>>>>>>>>>>>>>>>>>>>>>.Object" , JSON.stringify((obj)))
+                        console.log(">>>>>>>>>>>.Invnetory lacation table entry done" ,JSON.stringify(obj) )
+                        if(!(tinventory.Tinventory)){
+                            return cb(null, {errors: err});
+                        }
+                        else{
+                            console.log(">>>>>>>>>>>.Invnetory lacation table entry done");
+                            inventoryData.create({
+
+                                "id": 0,
+                                "piLotId": tinventory.Tinventory.piLotId,
+                                "inventoryLocationId": obj.id,
+                                "noOfBags": tinventory.Tinventory.noOfBags,
+                                "weight": tinventory.Tinventory.weight,
+                                "createdOn": "2016-10-03",
+                                "createdBy": 1,
+                                "modifiedOn": "2016-10-03",
+                                "modifiedBy": 1,
+                                "active": 1
+
+                            },function(err , lotsObj){
+                                if (err) {
+                                    // logger.error(err);
+                                    return cb(null, {errors: err});
+                                }
+                                else{
+                                    console.log("lots Object" , lotsObj)
+                                }
+                            });
+                        }
+
+                        cb(null,obj);
+                    }
+                })
+
+
+
+    };
+
+
+    Tinventorylocation.deleteLocation = function(tinventory, cb) {
+        var inventoryData = Tinventorylocation.app.models.TPiInventory;
+        var ds = Tinventorylocation.dataSource;
+        var customErr = new Error();
+        customErr.statusCode = 422;
+        customErr.message=null;
+        console.log(">>>>>>>>>>>>>>>>>>tinventory" ,tinventory)
+
+        inventoryData.deleteById({
+
+                "id": tinventory.Tinventory
+                         },
             function (err, obj) {
                 if (err) {
                     //logger.error("errooorrrrr" , JSON.stringify(obj));
+                    console.log(">>>.errors" , err)
                     return cb(null, {errors: err});
+
                 }
                 if(obj!= null && obj!= undefined){
-                    console.log(">>>>>>>>>>>>>>>>>>>>>>.Object" , JSON.stringify((obj)))
-                    console.log(">>>>>>>>>>>.Invnetory lacation table entry done" ,JSON.stringify(obj) )
-                    if(!(tinventory.Tinventory)){
+                     if(!(tinventory.Tinventory)){
                         return cb(null, {errors: err});
                     }
                     else{
-                        console.log(">>>>>>>>>>>.Invnetory lacation table entry done");
-                        inventoryData.create({
 
-                            "id": 0,
-                            "piLotId": tinventory.Tinventory.piLotId,
-                            "inventoryLocationId": obj.id,
-                            "noOfBags": tinventory.Tinventory.noOfBags,
-                            "weight": tinventory.Tinventory.weight,
-                            "createdOn": "2016-10-03",
-                            "createdBy": 1,
-                            "modifiedOn": "2016-10-03",
-                            "modifiedBy": 1,
-                            "active": 1
+                         Tinventorylocation.deleteById({
+
+                            "id": tinventory.Tpinventory
 
                         },function(err , lotsObj){
                             if (err) {
-                               // logger.error(err);
+                                // logger.error(err);
                                 return cb(null, {errors: err});
                             }
                             else{
@@ -62,7 +115,14 @@ module.exports = function(Tinventorylocation) {
                 }
             })
 
+
+
     };
+
+
+
+
+
 
 
     Tinventorylocation.updatebagweight = function(tinventory, cb) {
@@ -119,8 +179,11 @@ module.exports = function(Tinventorylocation) {
 
     };
 
-
-
+      Tinventorylocation.remoteMethod('deleteLocation', {
+        description: 'create deleteLocation Entry for Material.',
+        returns: {arg: 'Result', type: 'object'},
+        http: {path:'/deleteLocation', verb: 'post'}
+    });
 
 
     Tinventorylocation.remoteMethod('addbagweight', {

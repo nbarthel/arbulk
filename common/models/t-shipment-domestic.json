@@ -155,6 +155,22 @@
       },
       "_selectable": true
     },
+    "bookingNumber": {
+      "type": "String",
+      "required": false,
+      "length": 30,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "booking_number",
+        "dataType": "varchar",
+        "dataLength": 30,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      },
+      "_selectable": true
+    },
     "paymentTypeId": {
       "type": "Number",
       "required": false,
@@ -301,7 +317,28 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "TShipmentent": {
+      "type": "belongsTo",
+      "model": "TShipmentent",
+      "foreignKey": "shipmentId"
+    },
+    "TShipmentType": {
+      "type": "belongsTo",
+      "model": "TShipmentType",
+      "foreignKey": "typeOfShipment"
+    },
+    "TPaymentType": {
+      "type": "belongsTo",
+      "model": "TPaymentType",
+      "foreignKey": "paymentTypeId"
+    },
+    "TShipmentPi": {
+      "type": "hasMany",
+      "model": "TShipmentPi",
+      "foreignKey": "shipPiId"
+    }
+  },
   "acls": [],
   "methods": {}
 }

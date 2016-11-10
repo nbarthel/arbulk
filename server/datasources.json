@@ -14,7 +14,6 @@
     "multipleStatements": true,
     "connectionLimit": 10
   },
-
   "emailDs": {
     "name": "emailDs",
     "connector": "mail",
@@ -34,6 +33,4 @@
       }
     ]
   }
-
-
 }

@@ -21,11 +21,11 @@ constructor(props){
        return (
         <div>
      <header>
-   <nav className="navbar navbar-default ">
+   <nav className="navbar navbar-default  navbar-fixed-top">
      <div className="container-fluid">
 
        <div className="navbar-header">
-         <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+         <button type="button" className="navbar-toggle collapsed " data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
            <span className="sr-only">Toggle navigation</span>
            <span className="icon-bar"></span>
            <span className="icon-bar"></span>
@@ -65,7 +65,7 @@ constructor(props){
              <ul className="dropdown-menu">
                <li><a href="javascript:void(0)">Containers</a></li>
                <li role="separator" className="divider"></li>
-               <li><Link to="/Container/containerarrivalentry">Enter Container Arrival</Link></li>
+               <li><Link to="/Container/containerarrivalentry/">Enter Container Arrival</Link></li>
                <li><Link to="/Container/containerview">View Container</Link></li>
                <li role="separator" className="divider"></li>
                <li><Link to="/Conatainer/containerqueueview">View Container Queue </Link></li>
@@ -79,7 +79,7 @@ constructor(props){
      </div>
    </nav>
 </header>
- <BreadCrumb />
+ <BreadCrumb routes = {this.props.routes} />
  </div>
 
     );

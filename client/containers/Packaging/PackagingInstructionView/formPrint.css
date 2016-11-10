@@ -1,0 +1,49 @@
+html, body, div, span, applet, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre,a, abbr, acronym, address, big, cite, code,del, dfn, em, img, ins, kbd, q, s, samp,small, strike, strong, sub, sup, tt, var,b, u, i, center,dl, dt, dd, ol, ul, li,fieldset, form, label, legend,table, caption, tbody, tfoot, thead, tr, th, td,article, aside, canvas, details, embed,figure, figcaption, footer, header, hgroup,menu, nav, output, ruby, section, summary,time, mark, audio, video { margin: 0; padding: 0; border: 0; font: inherit; font-size: 100%; vertical-align: baseline;}
+body {font-size: 12px;  font-weight:300; margin: 0; padding: 0;  height:100%;  background:#fff; color:#000; font-family:Arial, Helvetica, sans-serif; margin:0 auto;}
+.warpper-inner{max-width:8.27in;  max-height:11.69in;  background:#fff; padding:30px 0px 0px 0px; }
+.content-inside{padding-bottom: 50px;   position:relative;  z-index:1; }
+h3{margin:0px; padding:0px; font-weight:600;}
+
+.logo{ display:inline-black; width:100%; padding-bottom: 75px;}
+.logo .img{width:30%; text-align:left; float: left;}
+.logo .text{width:70%; text-align:right; font-size:24px; text-transform:uppercase; font-weight:600; float: right; padding-top: 10px;}
+
+.packaging_details{ width:100%; clear:both;}
+.packaging_details .packaging_data{width:60%; padding-bottom: 50px;}
+.packaging_details .packaging_data table{border:1px solid #000;  border-collapse: collapse;}
+.packaging_details .packaging_data table td{padding: 6px 15px;font-size: 14px;white-space: nowrap;overflow:  hidden;text-overflow: ellipsis;  vertical-align: middle; border:1px solid #000;}
+.bg_striped tr:nth-child(odd) {background-color: #ccc ; border:1px solid #000; }
+.bg_striped td:nth-child(odd){ text-align:right; border-right:1px solid #000;}
+.bg_striped td:nth-child(even){ font-weight: 600;}
+
+.label_confirmation{ border-top:1px solid #000; width:100%; clear:both; padding-bottom: 50px;}
+.label_confirmation  p{ text-decoration:underline; margin-top:20px; margin-left:20px;}
+.label_confirmation .info{ border:1px solid #000; padding:7px; width:130px;  margin-top:20px; margin-left:20px;}
+
+.label_confirmation .info span{  display:block;}
+
+.inventry{ border-top:1px solid #000; width:100%; clear:both; height: 150px;}
+.inventry .inventry_data{ width:100%; display:inline-black;}
+.inventry .info{padding:5px; width:27%; float: right;  border:1px solid #000; }
+.inventry .info span{  display:block; margin-bottom:15px;}
+.inventry table{ width:71%; float:left;}
+.inventry table tr{line-height: 35px;}
+.inventry table tr td.total{text-align:right; padding-right:92px;}
+
+.location{ border-top:1px solid #000; width:100%; clear:both; padding-bottom: 50px;}
+.location .location_data{ width:100%; display:inline-black;}
+.location table{ width:100%; }
+.location table tr{line-height: 35px;}
+.location table tr td{text-align:center;}
+.location table tr td:first-child{text-align:left;}
+.location table tr td:last-child{text-align:right;}
+
+.qtyVerification{ border-top:1px solid #000; width:100%; clear:both;}
+.qtyVerification table{ width:70%; }
+.qtyVerification table tr{line-height: 35px;}
+.qtyVerification table tr td{text-align:center;}
+.qtyVerification table tr td:first-child{text-align:left;}
+.qtyVerification table tr td:last-child{text-align:right;}
+.create_btn{float: right;padding: 10px 15px;width: 188px;margin-top: 10px;margin-bottom: 50px;}
+.create_btn1{float: left;padding: 10px 15px;width: 188px;margin-top: 10px;margin-bottom: 50px;}
+.logo_icon{background: url("../../../public/img/logo_inner.png"); background-repeat: no-repeat; height: 30px; width: 150px;}

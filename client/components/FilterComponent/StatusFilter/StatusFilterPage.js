@@ -3,14 +3,14 @@ import _ from 'lodash';
 class StatusFilterPage extends React.Component {
     constructor(props){
         super(props);
-        this.status = [{name:"Unconfirmed",id: 0},
-        {name:"Confirmed",id:1},
-        {name:"Arrived",id:2},
-        {name:"Queued",id:3},
-        {name:"Partially Packaged",id:4},
-        {name:"In Inventory",id:5},
-        {name:"Shipped",id:6}]
-
+       this.status = [{name:"UNCONFIRMED",id: 0},
+        {name:"CONFIRMED",id:1},
+        {name:"READY",id:2},
+        {name:"QUEUED",id:3},
+        {name:"PARTIALLYPACKED",id:4},
+        {name:"ININVENTORY",id:5},
+        {name:"SHIPPED",id:6}]
+        
         this.checkedStatus = { }
 
     
@@ -41,8 +41,7 @@ class StatusFilterPage extends React.Component {
                 <hr/>
                     <div className="head_bg">
                         <h6 className="pull-left text_left">STATUS  </h6>
-                        <a href="javascript:void()"  className="pull-right text_right"> Show All</a>
-                    </div>
+                   </div>
                     <ul className="scroll">
                        {stats} 
                        

@@ -81,28 +81,18 @@
     "TLocation": {
       "type": "belongsTo",
       "model": "TLocation",
-      "foreignKey": "locationId"
+      "foreignKey": "location_id"
     },
-
     "TPiInventory": {
       "type": "hasMany",
       "model": "TPiInventory",
       "foreignKey": "inventory_location_id"
     },
-
-
     "TPiInventoryHistory": {
       "type": "hasMany",
       "model": "TPiInventoryHistory",
       "foreignKey": "inventory_location_id"
-    },
-    "TLocation" : {
-      "type": "belongsTo",
-      "model": "TLocation",
-      "foreignKey": "location_id"
     }
-
-
   },
   "acls": [],
   "methods": {}

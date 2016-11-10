@@ -157,7 +157,13 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "TShipmentent": {
+      "type": "belongsTo",
+      "model": "TShipmentent",
+      "foreignKey": "shipmentId"
+    }
+  },
   "acls": [],
   "methods": {}
 }

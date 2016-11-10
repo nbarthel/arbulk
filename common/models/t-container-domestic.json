@@ -237,7 +237,24 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "TShipmentent": {
+      "type": "belongsTo",
+      "model": "TShipmentent",
+      "foreignKey": "shipmentId"
+    },
+    "TShipmentLots": {
+      "type": "belongsTo",
+      "model": "TShipmentLots",
+      "foreignKey": "shipmentLotsId"
+    },
+    "TCompany": {
+      "type": "belongsTo",
+      "model": "TCompany",
+      "foreignKey": "trucker_id"
+    }
+
+  },
   "acls": [],
   "methods": {}
 }

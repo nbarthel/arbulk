@@ -21,13 +21,13 @@ componentDidMount() {
             queries: [{
                 endpoint: 'TPackagingInstructionLots',
                 filter: {
-                    include : ['TPackagingInstructions',{"relation": "TPackagingInstructions", "scope": {"include": ["TLocation","TCompany","TOrigin","TWrapType","TPalletType"]}}]
+                    include : ['TPackagingInstructions',{"relation": "TPackagingInstructions", "scope": {"include": ["TLocation","TCompany","TOrigin","TWrapType","TPalletType","TPackagingMaterial","TPackagingType"]}}]
                 }
             }]
         });
         var base = 'TPackagingInstructionLots'+'/'+this.id;
         this.url = PIview._buildUrl(base, {
-            include : ['TPackagingInstructions',{"relation": "TPackagingInstructions", "scope": {"include": ["TLocation","TCompany","TOrigin","TWrapType","TPalletType"]}}]
+            include : ['TPackagingInstructions',{"relation": "TPackagingInstructions", "scope": {"include": ["TLocation","TCompany","TOrigin","TWrapType","TPalletType","TPackagingMaterial","TPackagingType"]}}]
 
 
         });

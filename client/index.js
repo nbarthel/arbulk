@@ -36,7 +36,7 @@ const rootRoute = {
 
 ReactDOM.render(
   <Provider store={store}>
-  		<Router history={history} routes={rootRoute} />
+  		<Router onUpdate={() => window.scrollTo(0, 0)} history={history} routes={rootRoute} />
   </Provider>,
   document.getElementById('root')
 );

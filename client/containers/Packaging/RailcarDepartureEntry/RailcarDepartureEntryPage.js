@@ -21,7 +21,7 @@ export default class RailcarDepartureEntryPage extends React.Component {
       }]
     });
     var base = 'TPackagingInstructionLots';
-    //T
+  
     $.ajax({
       url: this.url,
       success:function(data){
@@ -45,10 +45,8 @@ export default class RailcarDepartureEntryPage extends React.Component {
 
     });
 
-    console.log('sdsddsdsdsdsd' , this.url);
-
-
-    $.ajax({
+  
+   $.ajax({
       url: this.url,
       success:function(data){
         console.log('ajax ',data);

@@ -9,13 +9,20 @@ class ConfirmPackagingInstructionForm extends React.Component{
 constructor(props){
 	super(props);
 	this.check = [ ]
-	this.state = { }
+	this.state = {
+	display : 'none' }
 	this.onClick = this.onClick.bind(this)
 	this.onSubmit = this.onSubmit.bind(this)
 	this.userName = localStorage.getItem('userName')
 	this.userId = localStorage.getItem('userId')
 }
-
+componentDidMount() {
+	if(this.props.data.TPackagingInstructions.TPackagingMaterial.packagingTypeId == 1){
+		this.setState({
+			display: 'block'
+		})
+	}
+}
 onClick(e){
 	if(e.target.checked){
 		this.check.push(e.target.id)
@@ -80,7 +87,7 @@ render(){
 					</div>
 					<div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">			
 						<label className="control control--checkbox ">Confirmed
-						  <input type="checkbox" onClick={this.onClick} id={this.props.data.TPackagingInstructions.TCompany.name}/><div className="control__indicator"></div>
+						  <input type="checkbox" onClick={this.onClick} id={this.props.data.TPackagingInstructions.TCompany ? this.props.data.TPackagingInstructions.TCompany.name : ''}/><div className="control__indicator"></div>
 						</label>				
 				    </div>
                 </div>
@@ -92,7 +99,7 @@ render(){
 					    id="ar_bulk_location"
 					    name="ar_bulk_location"
 					    disabled>
-						<option value={this.props.data.TPackagingInstructions.TLocation.locationName}>{this.props.data.TPackagingInstructions.TLocation.locationName}</option>
+						<option value={this.props.data.TPackagingInstructions.TLocation? this.props.data.TPackagingInstructions.TLocation.locationName :''}>{this.props.data.TPackagingInstructions.TLocation? this.props.data.TPackagingInstructions.TLocation.locationName : ''}</option>
 						</select>
 					  <div className="error"><span></span></div>
 					</div>
@@ -109,7 +116,7 @@ render(){
 					  <input type="text"
 					   className = "form-control"
 					   id = "Purchase_Order"
-					   value = {this.props.data.TPackagingInstructions.po_number}
+					   value = {this.props.data.TPackagingInstructions ? this.props.data.TPackagingInstructions.po_number : ''}
 					   disabled/>
 					  <div className="error"><span></span></div>
 					</div>
@@ -126,7 +133,7 @@ render(){
 					  type="text" 
 					  className="form-control" 
 					  id="Rail_Car_Number" 
-					  value = {this.props.data.railcar_number}
+					  value = {this.props.data ? this.props.data.railcar_number : '' }
 					  disabled/>
 					  <div className="error"><span></span></div>
 					</div>
@@ -142,7 +149,7 @@ render(){
 					     <input type="text" 
 					     className="form-control" 
 					     id="Lot_Number" 
-					     value = {this.props.data.lot_number}
+					     value = {this.props.data ? this.props.data.lot_number : ''}
 					     disabled/>
 					  <div className="error"><span></span></div>
 					</div>
@@ -170,7 +177,7 @@ render(){
 					  type="text" 
 					  className="form-control" 
 					  id="Material" 
-					  value = {this.props.data.TPackagingInstructions.material}
+					  value = {this.props.data.TPackagingInstructions ? this.props.data.TPackagingInstructions.material : ''}
 					  disabled />
 					  <div className="error"><span></span></div>
 					</div>
@@ -188,7 +195,7 @@ render(){
 					   type="text" 
 					   className="form-control" 
 					   id="Origin" 
-					   value = {this.props.data.TPackagingInstructions.TOrigin.origin}
+					   value = {this.props.data.TPackagingInstructions.TOrigin ? this.props.data.TPackagingInstructions.TOrigin.origin : ''}
 					   disabled />
 					  <div className="error"><span></span></div>
 					</div>
@@ -202,14 +209,9 @@ render(){
 				<div className="form-group">
 					<div className="col-lg-3 "><label htmlFor="Type_of_Packaging" className=" control-label">Type of Packaging</label></div>
 					<div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-					  <select className="form-control" id="Type_of_Packaging" name="Type_of_Packaging">
-						<option value="">193, 162 lbs</option>
-						<option value="">Packaging 1</option>
-						<option value="">Packaging 2</option>
-						<option value="">Packaging 3</option>
-						<option value="">Packaging 4</option>
-						<option value="">Packaging 5</option>
-					  </select>
+					  <select className="form-control" id="Type_of_Packaging" name="Type_of_Packaging" disabled>
+						<option value="">Bags</option>
+						</select>
 					  <div className="error"><span></span></div>
 					</div>
 					<div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">			
@@ -219,16 +221,11 @@ render(){
 				    </div>
                 </div>
 				
-				<div className="form-group">
+				<div className="form-group" style = {{display : this.state.display}}>
 					<div className="col-lg-3 "><label htmlFor="Type_of_Bag" className=" control-label">Type of Bag</label></div>
 					<div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-					  <select className="form-control" id="Type_of_Bag" name="Type_of_Bag">
-						<option value="">Ravago Bags</option>
-						<option value="">Bag 1</option>
-						<option value="">Bag 2</option>
-						<option value="">Bag 3</option>
-						<option value="">Bag 4</option>
-						<option value="">Bag 5</option>
+					  <select className="form-control" id="Type_of_Bag" name="Type_of_Bag" disabled>
+						<option value={this.props.data.TPackagingInstructions.TPackagingMaterial.packagingName ? this.props.data.TPackagingInstructions.TPackagingMaterial.packagingName : '' }>{this.props.data.TPackagingInstructions.TPackagingMaterial.packagingName}</option>				
 					  </select>
 					  <div className="error"><span></span></div>
 					</div>
@@ -243,7 +240,7 @@ render(){
 					<div className="col-lg-3 "><label htmlFor="Type_of_Pallet" className=" control-label">Type of Pallet</label></div>
 					<div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
 					  <select className="form-control" id="Type_of_Pallet" name="Type_of_Pallet" disabled>
-						<option value={this.props.data.TPackagingInstructions.TPalletType.palletType}>{this.props.data.TPackagingInstructions.TPalletType.palletType}</option>
+						<option value={this.props.data.TPackagingInstructions.TPalletType ? this.props.data.TPackagingInstructions.TPalletType.palletType : ''}>{this.props.data.TPackagingInstructions.TPalletType ? this.props.data.TPackagingInstructions.TPalletType.palletType : ''}</option>
 						</select>
 					  <div className="error"><span></span></div>
 					</div>
@@ -258,7 +255,7 @@ render(){
 					<div className="col-lg-3 "><label htmlFor="No_of_Bages_Pallat" className=" control-label">No of Bages/Pallat</label></div>
 					<div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
 					 <select className="form-control" id="No_of_Bages_Pallat" name="No_of_Bages_Pallat" disabled>
-						<option value={this.props.data.TPackagingInstructions.number_of_bags}>{this.props.data.TPackagingInstructions.number_of_bags}</option>
+						<option value={this.props.data.TPackagingInstructions ? this.props.data.TPackagingInstructions.bags_per_pallet : ''}>{this.props.data.TPackagingInstructions ? this.props.data.TPackagingInstructions.bags_per_pallet : ''}</option>
 						<option value="">Pallet 1</option>
 						<option value="">Pallet 2</option>
 						<option value="">Pallet 3</option>

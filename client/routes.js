@@ -22,7 +22,7 @@ export default function createRoutes(store) {
 	},
 	{
 		path: '/Packaging/enterpackginginst/(:id)',
-		name: 'Enter Packaging Instruction ',
+		name: 'Packaging > Enter Packaging Instruction ',
 		getComponent(nextState, cb){
 			System.import('./containers/Packaging/EnterPackagingInstruction/EnterPackagingInstructionPage')
 			.then(loadModule(cb))
@@ -85,6 +85,24 @@ export default function createRoutes(store) {
 		}
 	},
 	{
+		path: '/Shipment/shipmentConfirmation/(:id)',
+		name: 'Confirm Shipment',
+		getComponent(nextState,cb){
+			System.import('./containers/Shipment/ShipmentConfirmation/ShipmentConfirmationPage')
+			.then(loadModule(cb))
+			.catch(errorLoading)
+		}
+	},
+	{
+		path:'/Shipment/shipmentedit/(:id)',
+		name: 'Edit Shipment',
+		getComponent(nextState,cb){
+			System.import('./containers/Shipment/ShipmentEdit/ShipmentEditPage')
+			.then(loadModule(cb))
+			.catch(errorLoading)
+		}
+	},
+	{
 		path: '/Container/containerarrivalentry',
 		name: 'Container Arrival Entry',
 		getComponent(nextState, cb){
@@ -93,6 +111,15 @@ export default function createRoutes(store) {
 			.catch(errorLoading)
 		}
 	},
+		{
+			path: '/Container/containerarrivalentry/(:id)/(:id)',
+			name: 'Container Arrival Entry',
+			getComponent(nextState, cb){
+				System.import('./containers/containers/ContainerArrivalEntry/ContainerArrivalEntryPage')
+					.then(loadModule(cb))
+					.catch(errorLoading)
+			}
+		},
 	{
 		path: '/Container/containerview',
 		name: 'Container View Page',
@@ -102,6 +129,36 @@ export default function createRoutes(store) {
 			.catch(errorLoading)
 		}
 	},
+	{
+		path: '/Container/containeredit/(:id)',
+		name: 'Container Edit',
+		getComponent(nextState,cb){
+			System.import('./containers/containers/ContainerEdit/ContainerEditPage')
+			.then(loadModule(cb))
+			.catch(errorLoading)
+		}
+	},
+
+		{
+			path: '/Container/containerPrint/(:containerId)',
+			name: 'Form Print',
+			getComponent(nextState, cb){
+				System.import('./containers/containers/ContainerPrint/ContainerPrint')
+					.then(loadModule(cb))
+					.catch(errorLoading)
+			}
+		},
+		{
+			path: '/Shipment/shipmentPrint/(:id)',
+			name: 'Form Print',
+			getComponent(nextState, cb){
+				System.import('./containers/Shipment/ShipmentPrint/ShipmentPrint')
+					.then(loadModule(cb))
+					.catch(errorLoading)
+			}
+		},
+
+
 	{
 		path: '/Conatainer/containerqueueview',
 		name: 'Container Queue View Page',
@@ -156,6 +213,24 @@ export default function createRoutes(store) {
 			.catch(errorLoading)
 		}
 	},
+	{
+            path: '/Packaging/packagingInstFormPrint/(:id)/(:cID)',
+            name: 'Print Form',
+            getComponent(nextState, cb){
+                System.import('./containers/Packaging/PackagingInstructionView/PackagingInstructionFormPrint')
+                    .then(loadModule(cb))
+                    .catch(errorLoading)
+            }
+        },
+        {
+            path: '/Container/containerPrint/(:containerId)',
+            name: 'Form Print',
+            getComponent(nextState, cb){
+                System.import('./containers/containers/ContainerPrint/ContainerPrint')
+                    .then(loadModule(cb))
+                    .catch(errorLoading)
+            }
+        }
 
 	];
 

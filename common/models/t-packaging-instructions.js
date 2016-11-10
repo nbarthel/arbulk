@@ -118,7 +118,7 @@ module.exports = function(Tpackaginginstructions) {
                             weight : tpackaging.packagingLots[0].weight,
                             bags_to_ship: 0,
                             status: "UNCONFIRMED",
-                            stamp_confirmed: 1,
+                            stamp_confirmed: 0,
                             railcar_arrived_on: null,
                                 railcar_departed_on: null,
                                 queue_sequence: 1,
@@ -126,7 +126,9 @@ module.exports = function(Tpackaginginstructions) {
                                 createdOn:  tpackaging.PI.created_on ,
                                 modifiedBy: 1,
                                 modifedOn:  tpackaging.PI.created_on ,
-                                active: 1
+                                active: 1,
+                                arrived: 0,
+                                railcar_status : 'INTRANSIT'
                         },function(err , lotsObj){
                             if (err) {
                                // logger.error(err);
@@ -150,7 +152,7 @@ module.exports = function(Tpackaginginstructions) {
                                 weight: tpackaging.packagingLots[i].weight,
                                 bags_to_ship: "0",
                                 status: "UNCONFIRMED",
-                                stamp_confirmed: 1,
+                                stamp_confirmed: 0,
                                 railcar_arrived_on: null,
                                 railcar_departed_on: null,
                                 queue_sequence: 1,
@@ -158,7 +160,9 @@ module.exports = function(Tpackaginginstructions) {
                                 createdOn:  tpackaging.PI.created_on ,
                                 modifiedBy: 1,
                                 modifedOn:  tpackaging.PI.created_on ,
-                                active: 1
+                                active: 1,
+                                arrived: 0,
+                                railcar_status : 'INTRANSIT'
 
                             }, function (err, lotsObj) {
                                 if (err) {
@@ -214,7 +218,7 @@ module.exports = function(Tpackaginginstructions) {
                 custom_label: tpackaging.custom_label ,
                 notes: tpackaging.notes ,
                 packaging_status: tpackaging.packaging_status ,
-                stamp_confirmed: tpackaging.stamp_confirmed ,
+                stamp_confirmed: 0 ,
                 pi_confirmations: tpackaging.pi_confirmations,
                 created_by: 12 ,
                 created_on: today ,
@@ -228,10 +232,9 @@ module.exports = function(Tpackaginginstructions) {
                     return cb(null, {errors: err});
                 }
                 if(obj!= null && !(obj=== undefined) && obj.customer_id!= null &&!(obj.customer_id === undefined)){
-                    //logger.debug("New PI Entry is updated =" + obj.customer_id);
-                    console.log('tpackaging.TPackagingInstructionLots', tpackaging.TPackagingInstructionLots)
+
                     if(tpackaging.TPackagingInstructionLots.length == 0){
-                        console.log('tpackaging.TPackagingInstructionLots>>>>' , tpackaging.TPackagingInstructionLots)
+
                         return cb(null, {errors: err});
                     }
                     else if(tpackaging.TPackagingInstructionLots.length ==1){
@@ -256,7 +259,7 @@ module.exports = function(Tpackaginginstructions) {
                             weight: tpackaging.TPackagingInstructionLots[0].weight,
                             bags_to_ship: 0,
                             status: "UNCONFIRMED",
-                            stamp_confirmed: 1,
+                            stamp_confirmed: 0,
                             railcar_arrived_on: null,
                                 railcar_departed_on: null,
                                 queue_sequence: 1,
@@ -264,7 +267,9 @@ module.exports = function(Tpackaginginstructions) {
                                 createdOn: today,
                                 modifiedBy: 1,
                                 modifedOn: today,
-                                active: 1
+                                active: 1,
+                            arrived: 0,
+                            railcar_status : tpackaging.TPackagingInstructionLots[0].railcar_status
 
                         },function(err , lotsObj){
                             if (err) {
@@ -293,7 +298,9 @@ module.exports = function(Tpackaginginstructions) {
                                 createdOn: today,
                                 modifiedBy: 1,
                                 modifedOn: today,
-                                active: 1
+                                active: 1,
+                                arrived: 0,
+                                railcar_status : tpackaging.TPackagingInstructionLots[i].railcar_status
 
                             }, function (err, lotsObj) {
                                 if (err) {
@@ -314,7 +321,7 @@ module.exports = function(Tpackaginginstructions) {
     Tpackaginginstructions.getPoList = function(cb) {
 
         var ds = Tpackaginginstructions.dataSource;
-        var sql ="SELECT po_number as poNumber FROM t_packaging_instructions"
+        var sql ="SELECT po_number as poNumber FROM t_packaging_instructions";
 
         ds.connector.query(sql, function (err, result) {
             if (err) {
@@ -326,14 +333,53 @@ module.exports = function(Tpackaginginstructions) {
 
     };
 
+    Tpackaginginstructions.getPoListID2 = function(cb) {
 
+        var ds = Tpackaginginstructions.dataSource;
+        var sql ="SELECT po_number as poNumber FROM t_packaging_instructions where customer_id =2";
+
+        ds.connector.query(sql, function (err, result) {
+            if (err) {
+                //logger.error(err)
+                return cb(err);
+            }
+            cb(null, result);
+        });
+
+    };
+
+    Tpackaginginstructions.getPoListID1 = function(cb) {
+
+        var ds = Tpackaginginstructions.dataSource;
+        var sql ="SELECT po_number as poNumber FROM t_packaging_instructions where customer_id =1";
+
+        ds.connector.query(sql, function (err, result) {
+            if (err) {
+                //logger.error(err)
+                return cb(err);
+            }
+            cb(null, result);
+        });
+
+    };
+
+    Tpackaginginstructions.remoteMethod('getPoListID1', {
+        description: 'get getPoListID',
+        returns: { type: 'object',root: true},
+        http: {path:"/getPoListID1", verb: 'get'}
+    });
+
+    Tpackaginginstructions.remoteMethod('getPoListID2', {
+        description: 'get getPoListID',
+        returns: { type: 'object',root: true},
+        http: {path:"/getPoListID2", verb: 'get'}
+    });
 
     Tpackaginginstructions.remoteMethod('getPoList', {
         description: 'get getPoList',
         returns: { type: 'object',root: true},
         http: {path:"/getPoList", verb: 'get'}
     });
-
 
 
 

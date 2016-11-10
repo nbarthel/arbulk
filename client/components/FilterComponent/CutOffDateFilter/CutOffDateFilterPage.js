@@ -36,8 +36,7 @@ constructor(){
                 <hr/>
                 <div className="head_bg">
                     <h6 className="pull-left text_left">CUT OFF DATE </h6>
-                    <a href="" className="pull-right text_right"> Show All</a>
-                </div>
+              </div>
 
                 <div className="">
                     <div id="date" className="row">

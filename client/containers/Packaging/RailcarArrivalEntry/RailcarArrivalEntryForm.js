@@ -15,20 +15,21 @@ import { hashHistory } from 'react-router'
 export default class RailcarArrivalEntryForm extends React.Component {
 	 constructor(props){
             super(props);
-            this.buttonDisplay = [ ]
+         this.buttonDisplay = [ ]
             this.checkedCustomer = [ ]
             this.checkedStatus = [ ] 
             this.checkedCompany = [ ]
             this.Query = [ ]
             this.Where = { }
 		    this.cartArray = [ ]
+		    this.dateArray = [ ]
 		this.state = {
 			startDate : '',
 			key:0
 		}
 		this.updateCartArrival = this.updateCartArrival.bind(this);
 		this.handleChange1 = this.handleChange1.bind(this)
-		this.click = this.click.bind(this)
+		
 			 this.onClickli = this.onClickli.bind(this)
             this.onClickPo = this.onClickPo.bind(this)
             this.lotSearch = this.lotSearch.bind(this)
@@ -39,16 +40,27 @@ export default class RailcarArrivalEntryForm extends React.Component {
             this.onRemove = this.onRemove.bind(this)
             this.onSearch = this.onSearch.bind(this)
             this.onTextChange = this.onTextChange.bind(this)
+            this.onTap = this.onTap.bind(this)
         }
+         onformat(inputDate) {
+        var datear = inputDate.split('-')
+       return (datear[1] +'-'+ datear[2] +'-'+ datear[0])
+   }
          onTextChange(e){
           this.Query[e.target.id] = e.target.value
           console.log(this.Query)
         }
         handleChange1(x,event) {
-		this.setState({
-			startDate:x
-		});
+        	debugger;
+        	var dateValue = this.onformat(x.target.value)
+		// this.setState({
+		// 	startDate:dateValue
+		// });
+		document.getElementById('row1'+ x.target.id).disabled = false
+		this.dateArray.push(dateValue)
+
 	}
+
 	 onClickPo(e){
         debugger;
            this.Query[e.target.id] = e.target.getAttribute('value')
@@ -84,7 +96,8 @@ onClickli(e){
 		}
 		console.log(this.Where)
 		var serachObj = []
-		var serachObjLots = undefined
+		 var serachObjLots =[]
+		
 		if (this.Where != undefined && this.Where!= null)
 		{
 			if(this.Where.Customer && this.Where.Customer.length >0){
@@ -112,10 +125,10 @@ onClickli(e){
 				var status = [];
 				var objStatus = {};
 				for(var z in this.Where.status){
-					objStatus = {"packaging_status" : this.Where.status[z]}
+					objStatus = {"status" : this.Where.status[z]}
 					status.push(objStatus)
 				}
-				serachObj.push(status)
+				serachObjLots.push(status)
 			}
 
 			if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.POSearch && this.Where.Query.POSearch!= undefined ){
@@ -125,14 +138,17 @@ onClickli(e){
 
 
 			if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.railcarSearch && this.Where.Query.railcarSearch!= undefined ){
-				 serachObjLots = [{'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}}]
+				var railSearch = [{'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}}]
+			    serachObjLots.push(railSearch)
 			}
 
 			if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.LotSearch && this.Where.Query.LotSearch!= undefined ){
-				 serachObjLots =  [{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
+				var lotSearch =  [{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
+			      serachObjLots.push(lotSearch)
 			}
 
 			var serachObj = [].concat.apply([], serachObj);
+			var serachObjLots = [].concat.apply([], serachObjLots);
 
 			var PIview = createDataLoader(FilterComponent, {
 				queries: [{
@@ -145,21 +161,21 @@ onClickli(e){
 			var base = 'TPackagingInstructionLots';
 			//TPackagingInstructionLots
 
-			if(serachObj && serachObj != undefined && serachObjLots === undefined){
+			if(serachObj && serachObj != undefined && serachObjLots.length == 0){
 				debugger;
 				this.urlSearch = PIview._buildUrl(base, {
 
-					include : {"relation": "TPackagingInstructions", "scope":{  where:{  "or":serachObj} ,"include": ["TLocation" , "TCompany"]}},
-		   //       where:
+					include : {"relation": "TPackagingInstructions", "scope":{  where:{  "or":serachObj} ,"include": ["TOrigin" , "TCompany"]}},
+					//       where:
 					// {  "or":
 					// 	[ {'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}},{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
 					// }
 				})
 			}
-			else if(serachObjLots!=undefined && serachObj.length > 0) {
+			else if(serachObjLots.length > 0 && serachObj.length > 0) {
 				debugger;
 				this.urlSearch = PIview._buildUrl(base, {
-					include : {"relation": "TPackagingInstructions", "scope":{where:{  "or":serachObj} ,"include": ["TLocation" , "TCompany"]}},
+					include : {"relation": "TPackagingInstructions", "scope":{where:{  "or":serachObj} ,"include": ["TOrigin" , "TCompany"]}},
 					"where":
 					{  "or":
 						[ {'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}},{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
@@ -169,11 +185,12 @@ onClickli(e){
 			else{
 				debugger;
 				this.urlSearch = PIview._buildUrl(base, {
-					include : {"relation": "TPackagingInstructions", "scope":{"include": ["TLocation" , "TCompany"]}},
+					include : {"relation": "TPackagingInstructions", "scope":{"include": ["TOrigin" , "TCompany"]}},
 					"where":
 					{
 						"or":
-						[ {'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}},{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
+						serachObjLots
+							//[ {'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}},{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
 					}
 				});
 			}
@@ -196,6 +213,7 @@ onClickli(e){
 			})
 		}
 	}
+
 
 
     onCompanyFilter(e,location){
@@ -320,14 +338,33 @@ onClickli(e){
 		})
 	})
   }
-  	click(data , value)
+  	click(data,value,index)
 	{
+
+		if(data.target.checked){
+			//this.checked = true
+			
+			document.getElementById('th'+ index).value = "YES"
+			this.props.data[index].arrived = 1
+			this.forceUpdate()
+		}
+		else if(!data.target.checked){
+			// this.checked = false
+			document.getElementById('th'+index).value = "NO"
+			this.props.data[index].arrived = 0
+			this.forceUpdate()
+		}
+
 		var cartDataArray = []
+		var dateArray = []
 		this.cartArray.push(value.id)
+
          this.lotOrderValue = value
 
 		console.log("clicked" , data , value)
 	};
+
+
 	updateCartArrival(){
 	debugger;
       if(this.cartArray.length < 1 && (this.state.startDate=null || this.state.startDate=== undefined || this.state.startDate=== '' || this.state.startDate=== false)){
@@ -335,25 +372,49 @@ onClickli(e){
          return
       }
 
-   var option = {
-      railcar_arrived_on : parseInt(this.state.startDate._d.getMonth())+parseInt('1')+'/'+this.state.startDate._d.getDate()+'/' +this.state.startDate._d.getFullYear(),
-      status : 'ARRIVED'
-   }
+   // var option = {
+   //    railcar_arrived_on : parseInt(this.state.startDate._d.getMonth())+parseInt('1')+'/'+this.state.startDate._d.getDate()+'/' +this.state.startDate._d.getFullYear(),
+   //    status : 'ARRIVED'
+   // }
 
   if(this.lotOrderValue.status == "CONFIRMED")
 {
-       this.cartArray.forEach((id)=>{
-    axios.put(Base_Url+"TPackagingInstructionLots/" + id , option).then(function(response){
-         swal('Success' , 'Arrival Submitted' ,'success')
+   this.cartArray.forEach((id ,index)=>{
+    axios.put(Base_Url+"TPackagingInstructionLots/" + id , {railcar_arrived_on : this.dateArray[index] , status:"READY" , arrived : 1,railcar_status:"ARRIVED"}).then(function(response){
+         swal({
+                      title: "Success",
+                      text: "Arrival Submitted",
+                      type: "success",
+                      showCancelButton: true,
+                        },
+                     function(isConfirm){
+                      hashHistory.push('/Packaging/packaginginstview/')
+                 });
     }).catch(function(err){
        console.log("Error Is" + err)
     })
  })
 }
 
-else if(this.lotOrderValue.status == "ARRIVED")
+else if(this.lotOrderValue.status == "UNCONFIRMED")
 {
-	swal("Info" , "Railcar already arrived" , 'info')
+this.cartArray.forEach((id ,index)=>{
+    axios.put(Base_Url+"TPackagingInstructionLots/" + id , {railcar_arrived_on : this.dateArray[index] , arrived : 1,railcar_status:"ARRIVED"}).then(function(response){
+        
+                    swal({
+                      title: "Success",
+                      text: "Arrival Submitted",
+                      type: "success",
+                      showCancelButton: true,
+                        },
+                     function(isConfirm){
+                      hashHistory.push('/Packaging/packaginginstview/')
+                 });
+
+ }).catch(function(err){
+       console.log("Error Is" + err)
+    })
+ })
 }
 
 
@@ -362,14 +423,15 @@ else{
 }
 
 }
+
     render() {
-		debugger;
+	debugger;
 		var fiterData = undefined ;
 		fiterData = this.state.viewData ? this.state.viewData : undefined ;
 
         if(fiterData != undefined){
-			var railCarFilterData = _.map(fiterData , (view)=>{
-				if(view.TPackagingInstructions) {
+			var railCarFilterData = _.map(fiterData , (view ,index)=>{
+				if(view.TPackagingInstructions && (view.status == "CONFIRMED" || view.status == "UNCONFIRMED"|| view.status == "READY") ){
 					return (
 						<tr>
 							<td>{view.TPackagingInstructions.TCompany? view.TPackagingInstructions.TCompany.name : ''}</td>
@@ -377,8 +439,8 @@ else{
 							<td>{view.railcar_number ? view.railcar_number : ''}</td>
 							<td>{view.lot_number ? view.lot_number: ''}</td>
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.material : ''}</td>
-							<td> {view.status == "CONFIRMED" || view.status =="ARRIVED" ? "YES" : "NO"}</td>
-							<td> {view.railcar_arrived_on != null ? "YES" : "NO"}</td>
+							<td> {view.status == "CONFIRMED"? "YES" : "NO"}</td>
+							<td > {view.arrived ==1 ? "YES" : "NO"}</td>
 							<td>
 								<label className="control control--checkbox">
 									<input type="checkbox" id="row1" value={view} onChange={(e) => this.click(e,view)}/>
@@ -386,6 +448,9 @@ else{
 									<div className="control__indicator"></div>
 								</label>
 							</td>
+							<td>
+							<input type="date" onChange={(e, x) => this.handleChange1(e,x)}  id={index}/>
+					</td>
 						</tr>
 					)
 				}
@@ -416,7 +481,10 @@ else{
 		const railCart = this.props.data
 
 
-		var railcartData = _.map(railCart , (view)=>{
+		var railcartData = _.map(railCart , (view ,index)=>{
+		debugger;
+   
+			if(view.TPackagingInstructions && (view.status == "CONFIRMED" || view.status == "UNCONFIRMED")) {
 		return(
 	              	<tr>
 							<td>{view.TPackagingInstructions.TCompany? view.TPackagingInstructions.TCompany.name : ''}</td>
@@ -424,17 +492,22 @@ else{
 							<td>{view.railcar_number ? view.railcar_number : ''}</td>
 							<td>{view.lot_number ? view.lot_number: ''}</td>
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.material : ''}</td>
-							<td> {view.status == "CONFIRMED" || view.status =="ARRIVED" ? "YES" : "NO"}</td>
-							<td> {view.railcar_arrived_on != null ? "YES" : "NO"}</td>
+							<td> {view.status == "CONFIRMED" ? "YES" : "NO"}</td>
+							<td ref="arrived" id={"th"+index}> {view.arrived == 1 || this.checked==true ? "YES" : "NO"}</td>
 							<td>
 								<label className="control control--checkbox">
-									<input type="checkbox" id="row1" value={view} onChange={(e) => this.click(e,view)}/>
+									<input type="checkbox" id={"row1"+ index} value={view} onChange={(e) => this.click(e,view,index)} disabled/>
 
 									<div className="control__indicator"></div>
 								</label>
 							</td>
+							<td>
+							<input type="date" className="calender"   onChange={(e, x) => this.handleChange1(e,x)}  id={index}   />
+					</td>
 						</tr>
 		)
+	}
+	
 		})
     return (
       
@@ -453,12 +526,7 @@ else{
 			<div className="row">			
 			<FilterButton buttonDisplay = {this.buttonDisplay} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/> 
 				<div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs">					
-					<div className="pull-right btn_right_margin">
-						<select className="form-control"  id="customer_name" name="customer_name">
-							 <option value="Date">Group By</option>
-							 <option value="Date">Date</option>
-						</select>
-					</div>	
+					
 				</div>	
 				
 			<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 "><hr/></div>	
@@ -476,9 +544,10 @@ else{
 							<th>Material </th>
 							<th>Confirmed</th>
 							<th>Arrived</th>
+							<th></th>
+							<th>Arrival Date</th>
 							<th>
 								<label className="control control--checkbox">
-								  <input type="checkbox" id="row1"/><div className="control__indicator"></div>
 								</label>									
 							</th>
 						</tr>
@@ -494,17 +563,16 @@ else{
 					<div className="pull-left pddn-10-top ">					
 						 <div className="padding-10-last-l" >
 						 <div className="right-inner-addon "><i className="fa fa-calendar" aria-hidden="true"></i>				
-							<DatePicker
-								 dateFormat="MM-DD-YYYY"
-								 selected={this.state.startDate}
-								 value={this.state.startDate}
-								 onChange={(x, event) => this.handleChange1(x,event)} placeholderText="RailCar Arrival Date"/>	</div>
+										<input className="form-control" id="date" name="date" placeholder="railcar arrival Date" type="text" onClick={this.onTap}/>
+				
+
+								 </div>
 						</div>
 						</div>						
 					</div>					
 				    <div className="pull-right padding-top-btm-xs"> 					
-						<div className="pull-right padding-10-last-r"><button type="button"  className="btn  btn-primary" onClick={this.updateCartArrival} >ARRIVED </button></div>
-						<div className="pull-right padding-10-all"><button type="button"  className="btn  btn-gray" onClick={hashHistory.goBack}>BACK </button></div>						
+						<div className="pull-right padding-10-last-r"><button type="button"  className="btn  btn-primary" onClick={this.updateCartArrival} >Save </button></div>
+						<div className="pull-right padding-10-all"><button type="button"  className="btn  btn-gray" onClick={hashHistory.goBack}>Cancel </button></div>						
 					</div>					
 				</div>
 				

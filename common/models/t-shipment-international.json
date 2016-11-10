@@ -235,6 +235,22 @@
       },
       "_selectable": true
     },
+    "piLotsId": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 10,
+      "scale": 0,
+      "mysql": {
+        "columnName": "pi_lots_id",
+        "dataType": "int",
+        "dataLength": null,
+        "dataPrecision": 10,
+        "dataScale": 0,
+        "nullable": "Y"
+      },
+      "_selectable": true
+    },
     "notes": {
       "type": "String",
       "required": false,
@@ -333,7 +349,33 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "TShipmentent": {
+      "type": "belongsTo",
+      "model": "TShipmentent",
+      "foreignKey": "shipmentId"
+    },
+    "TContainerType": {
+      "type": "belongsTo",
+      "model": "TContainerType",
+      "foreignKey": "containerTypeId"
+    },
+    "TSteamshipLine": {
+      "type": "belongsTo",
+      "model": "TSteamshipLine",
+      "foreignKey": "steamshipLineId"
+    },
+    "TPackagingInstructionLots": {
+      "type": "hasMany",
+      "model": "TPackagingInstructionLots",
+      "foreignKey": "id"
+    },
+    "TShipmentPi": {
+      "type": "hasMany",
+      "model": "TShipmentPi",
+      "foreignKey": "shipPiId"
+    }
+  },
   "acls": [],
   "methods": {}
 }

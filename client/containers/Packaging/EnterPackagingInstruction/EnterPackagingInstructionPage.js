@@ -45,6 +45,7 @@ var Loader = require('react-loader');
     
   
     }
+   
     }
        render(){
       /*console.log("The recived data is :->>>>>. ",this.state.entryInfo)

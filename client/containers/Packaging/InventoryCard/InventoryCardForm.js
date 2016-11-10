@@ -13,6 +13,8 @@ class InventoryCardForm extends React.Component{
 constructor(){
 	super();
 	this.state = {
+		//stamp : false
+		index :0
 }
 	//this.id = this.props.id
 	//console.log(this.id)
@@ -24,31 +26,25 @@ constructor(){
 	this.onCheck = this.onCheck.bind(this)
 	this.onCheckBoxChange = this.onCheckBoxChange.bind(this)
 	this.addToQueue =this.addToQueue.bind(this)
+	this.onStampConfirmed = this.onStampConfirmed.bind(this);
 	//this.onCancel = this.onCancel.bind(this)
 	//this.onSaveChange = this.onSaveChange.bind(this)
 	}
 	onConfirm(e){
-		 if(this.props.lots[0].status == "ININVENTORY"){
-				hashHistory.push('/Packaging/confirmpckginst/'+this.props.cId)                 }
-                else if(this.props.lots[0].status == "ARRIVED"){
-                   swal("Info","Order is already arrived","info")
-                }
-                else if(this.props.lots[0].status == "QUEUED"){
-                   swal("Info","Order is already queued","info")
-                }
+
+		 if(this.status == "UNCONFIRMED"){
+				hashHistory.push('/Packaging/confirmpckginst/'+this.props.cId)   
+           }
+                
                  else{
-                 swal("Error","Selected order Should be in Inventory","error")
+                  swal("Error","Please select unconfirmed order","error")
                 }
 			
 	}
 	onEdit(e){
-	if(this.props.lots[0].status=="UNCONFIRMED" || this.props.lots[0].status=="PARTIALLYPACKED" || this.props.lots[0].status=="ININVENTORY")
-         {
-				hashHistory.push('/Packaging/enterpackginginst/'+this.props.id)                  }
-           else{
-               swal('Info' , 'This order has been confirmed , therefore you can not update!!')
-           }
-		
+	
+				hashHistory.push('/Packaging/enterpackginginst/'+this.props.id)  
+				                
 	}
 componentWillMount() {
 
@@ -64,7 +60,7 @@ componentWillMount() {
         var baseNew = 'TInventoryLocations'+'/'+this.props.id;
         //TPackagingInstructionLots
         this.url = PIview._buildUrl(baseNew, {
-            include : ['TPackagingInstructions',{"relation": "TPackagingInstructions", "scope": {"include": ["TLocation","TCompany"]}}]
+            include : ["TShipmentLots", 'TPackagingInstructions',{"relation":  "TPackagingInstructions" ,"scope": {"include": ["TLocation","TCompany"]}}]
 
 
         });
@@ -81,6 +77,8 @@ componentWillMount() {
                         viewInventoryCardData : [data]
                     }
                 )
+
+       	        
                 this.status = this.state.viewInventoryCardData? this.state.viewInventoryCardData[0].TPackagingInstructionLots[0].status : '';
                 console.log( '>>>>>>>>>>>>Inventoryraillcart' , this.state.viewInventoryCardData)
             }.bind(this)
@@ -101,7 +99,7 @@ componentWillMount() {
     }
 
     addToQueue(e){
-      debugger
+
      let id = this.props.cId
      var sequence =  this.state.queue_Sequence[0].max_mark
      
@@ -111,7 +109,7 @@ componentWillMount() {
       }
 
     
-      if(this.props.lots[0].status == "CONFIRMED"){
+      if(this.status == "READY"){
       axios.put( Base_Url+"TPackagingInstructionLots/"+id , option).then(function(response){
                   console.log("Queue Added" , response)
                   swal({
@@ -129,45 +127,46 @@ componentWillMount() {
         })
 
   }
-  else if(this.props.lots[0].status == "QUEUED"){
-  	 swal("Info","The order is already Queued","info")
-  }
-  else if(this.props.lots[0].status == "ARRIVED"){
-    swal("Info" , 'Order is already Arrived' , 'info')
-  }
+ 
   else {
-    swal("error","The selected order has not confirmed yet","error")
+    swal("","The selected order is not ready","info")
   }
 }
   
     onCheckBoxChange(e){
 			//console.log(this.checked)
-			debugger
+
 			if(e.target.checked){
-				this.checked = true
+				this.checkedPI = true
+				localStorage.setItem('packagingFlag' , 'true')
 				console.log(this.checked)
 			}
 			else if(!e.target.checked){
-				this.checked = false
+				this.checkedPI = false
+				localStorage.setItem('packagingFlag' , 'false')
 				console.log(this.checked)
 			}
-			this.forceUpdate()
+			//this.forceUpdate()
 		}
 	onSaveChange(e){
+		console.log("I was Called")
 			if (this.checked){
-				swal("Saved","Data Saved",'success')
-				this.setState({
-					key: this.state.key + 1
-				})
+				//swal("Saved","Data Saved",'success')
+				// this.setState({
+				// 	key: this.state.key + 1
+				// })
 			}
 			else {
 				swal("Failed","Please Check Packaging Complete","error")
 			}
 
 		}
+		/*onSave(e){
+			console.log("IWASCALLED")
+		}*/
 
-    onCheck(e){
-    	debugger
+    onCheck(e,status){
+    this.status = status
 	if(e.target.checked){
 	this.id = e.target.id
 	console.log(">>>>>>>>>>>>>>>>>>",this.id)}
@@ -177,13 +176,45 @@ componentWillMount() {
 	}
 	this.forceUpdate()
 }
+	onStampConfirmed(e){
 
+		let id = this.props.cId
+		var stamp ;
+		if(e.target.checked) {
+			 stamp = true
+			if(localStorage.getItem('stamp')){
+				localStorage.removeItem('stamp')
+			}
+			localStorage.setItem('stamp' , true)
+			axios.put( Base_Url+"TPackagingInstructionLots/"+id , {"stamp_confirmed" : 1}).then(function(response){
+
+			})
+
+		}
+		//else if(!e.target.checked){
+		//	 stamp =false
+		//	if(localStorage.getItem('stamp')){
+		//		localStorage.removeItem('stamp')
+		//	}
+		//	localStorage.setItem('stamp' , false)
+			//axios.put( Base_Url+"TPackagingInstructionLots/"+id , {"stamp_confirmed" : 0}).then(function(response){
+            //
+			//})
+
+		//}
+
+
+
+		this.forceUpdate()
+	}
 
 	render(){
+		
+		//console.log("ThisLength",this.length)
 		if(this.props.lots != undefined){
 			console.log("status",this.props.lots[0].status)
 		}
-		debugger;
+
 		console.log("OOOOOOOO_____OOOOOOOOO",this.props.viewData)
 		console.log("sssfsdsdsadasdas",this.state.viewInventoryCardData)
 		console.log(">>>>>>>>>>>>>>>>>>>>>...",this.state.currentInventory)
@@ -221,7 +252,7 @@ componentWillMount() {
 		
 			<div className=" col-lg-4 col-md-4 col-sm-6 col-xs-12 pddn-20-top">			
 				<label className="control control--checkbox ">Stamp Confirmed <br/><b>{this.userName}</b>
-				  <input type="checkbox"  id="row1"/><div className="control__indicator"></div>
+				  <input type="checkbox"  id="rowstamp" onChange={this.onStampConfirmed}/><div className="control__indicator"></div>
 				</label>				
 			</div>
 			
@@ -259,12 +290,10 @@ componentWillMount() {
 	<div >
 	<div className="row pddn-40-top">	
 	
-	 <CurrentInventory key={this.currentInventoryKey} onCancel = {this.onCancel} lid={this.props.lid} id = {this.props.id} lID={this.props.cId} checked = {this.checked} lotId = {this.id}  onCheckBoxChange = {this.onCheckBoxChange} onSaveChange = {this.onSaveChange} lots = {this.props.lots}/>
+	 <CurrentInventory key={this.state.index} length = {this.length}  onCancel = {this.onCancel} lid={this.props.lid} id = {this.props.id} lID={this.props.cId} checked = {this.checked} lotId = {this.id}  onCheckBoxChange = {this.onCheckBoxChange} onSaveChange = {this.onSaveChange} lots = {this.props.lots}/>
 	<InventoryHistory data = {this.props.viewData} />
 	
-	
-	
-	</div>
+   </div>
 	<div className="row pddn-20-top">	
 	
 	 <InventoryLocationHistory id = {1} />

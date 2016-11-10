@@ -13,8 +13,9 @@ import HeadBody from './HeadBody';
 import NestedRows from './NestedRows'
 import request from '../../utils/request';
 import { Base_Url } from '../../constants'
+var moment = require('moment');
 /*import './js/jquery.dataTables.min.js';
-import './stylesheet/jquery.dataTables.min.css'*/
+*//*import './stylesheet/jquery.dataTables.min.css'*/
 var Loader = require('react-loader');
 
 class ViewDataComponent extends React.Component{
@@ -23,12 +24,15 @@ class ViewDataComponent extends React.Component{
         super(props);
         this.isAsc = false
         this.state = {
-        loaded : false }
+        loaded : false 
+        }
         this.PIData = { }
         this.myObj = { }
         this.qArray = []
         this.checkclick = this.checkclick.bind(this);
-        //this.onAscending = this.onAscending.bind(this)    
+        //this.onAscending = this.onAscending.bind(this)   
+        this.onToggel = this.onToggel.bind(this) 
+        this.onClickRow = this.onClickRow.bind(this)
       }
 componentWillMount(){
    let id = this.props.id
@@ -41,7 +45,7 @@ componentWillMount(){
              }
         }]
       })
-    console.log("I have recieved props",)
+    console.log("I have recieved props")
     //debugger
    
     var base = 'TPackagingInstructions'+'/'+id;
@@ -116,14 +120,16 @@ componentWillMount(){
 
     }  
   }
-/*componentDidMount() {
+componentDidMount() {
+  debugger
    $(document).ready(function()
    { 
-   //alert("hello kamal");
-    $('#Packaging_Instruction_View').DataTable();  
-  
+    var table = $('#Packaging_Instruction_View').DataTable({
+      colReorder: true
+    });
+    
    } );
-}*/
+}
 checkclick(data , value)
 {
     debugger;
@@ -371,6 +377,46 @@ var PIview = createDataLoader(ViewDataComponent,{
 })
 }*/
 
+onToggel(e ,elm){
+console.log('>>>>>>' , $(elm))
+
+  debugger; 
+  $( "button" ).click(function() {
+  $( "p" ).slideToggle( "slow" );
+});
+}
+
+onClickRow(e){
+
+           var rowObj = $(this.refs.clickable)
+            //var aa= rowObj.attr('data-target')
+            var aa = e.target.getAttribute('data-target')
+            //$('#Packaging_Instruction_View').find('.'+aa).toggleClass('hide')
+       
+
+      if($('#Packaging_Instruction_View').find('.'+aa).length > 2)
+      {
+        $('#Packaging_Instruction_View').find('.'+aa).each(function(index){
+           $('#Packaging_Instruction_View').find('.'+aa).toggleClass('hide')
+
+
+        })
+      } 
+
+        else if($('#Packaging_Instruction_View').find('.'+aa).length ==2)
+{
+        for(var i in $('#Packaging_Instruction_View').find('.'+aa))
+        {
+
+         $('#Packaging_Instruction_View').find('.'+aa).toggleClass('hide')
+             }
+         }
+         else{
+           $('#Packaging_Instruction_View').find('.'+aa).toggleClass('hide')
+         }
+ }
+
+
 
 render(){
   debugger;
@@ -388,24 +434,32 @@ debugger
       console.log("<<<<<^^>>>>>",this.state.viewData)
       // const data = this.state.xyz
       var listData =  _.map(this.state.viewData,(view,index)=>{
-      debugger
+      
+      var count = index
       return (
-       <tbody key={index}>
-       <tr  className="base_bg clickable"  >
-       <th > {view.TLocation ? view.TLocation.locationName : ''} </th>
-           <th >{view.TCompany ? view.TCompany.name : ''}</th>           
-           <th>{view.po_number} </th>
-           <th></th>
-           <th></th>
-           <th>{view.material}</th>
-           <th></th>
-           <th></th>
-           <th></th>
-           <th></th>
-           <th></th>
-           <th></th>
-           <th></th>
-           <th></th>   
+       <thead key={index} >
+       <tr  className="base_bg clickable" ref ="clickable">
+       <th style ={{display : this.props.showARB}}> <i className="fa fa-chevron-down" aria-hidden="false" data-target ={count}  onClick={(e) => {this.onClickRow(e)}}></i> {view.TLocation ? view.TLocation.locationName : ''} </th>
+           <th style ={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</th>           
+           <th style ={{display : this.props.showPO}}>{view.po_number} </th>
+           <th style ={{display : this.props.Railcar}}></th>
+           <th style ={{display : this.props.showMaterial}}></th>
+           <th style ={{display : this.props.showConfmd}}></th>
+           <th style ={{display : this.props.showArrvd}}></th>
+           <th style ={{display : this.props.showRecd}}></th>
+           <th style ={{display : this.props.showCutoff}}></th>
+           <th style ={{display : this.props.showWeight}}></th>
+           <th style ={{display : this.props.showBag}}></th>
+           <th style ={{display : this.props.showInInvt}}></th>
+           <th style ={{display : this.props.showStatus}}></th>
+           <th style ={{display : this.props.showRailcarArr}}></th>
+           <th style ={{display : this.props.showRailcarArrD}}></th>
+           <th style ={{display : this.props.showRailcarDep}}></th>
+           <th style ={{display : this.props.showRailcarDepDate}}></th>
+           <th style ={{display : this.props.showDaysPresent}}></th>
+            <th></th>
+      
+           <th style ={{display : this.props.showRailcarStatus}}></th>
            <th>
                <label className="control control--checkbox">
                    <input type="checkbox" onChange={(e)=>{this.props.headerCheckboxChange(e,view)}} value={view.id}  id={view.id}/><div className="control__indicator"></div>
@@ -414,23 +468,36 @@ debugger
        </tr>
        {
           _.map(view.TPackagingInstructionLots,(data,index)=>{
+            let diff;
+            if(data.railcar_arrived_on != null && data.railcar_departed_on != null){
+            let start = new Date(moment(data.railcar_arrived_on).format("YYYY-MM-DD"))
+            let end = new Date(moment(data.railcar_departed_on).format("YYYY-MM-DD"))
+             diff = parseInt((end-start ) / (1000*60*60*24))
+          }
+
            debugger
            return(
-                   <tr key={index}>
-                   <td> </td>
-                   <td> </td>
-                   <td> </td>
-                   <td>{data.railcar_number ?data.railcar_number : ''}</td>
-                   <td>{data.lot_number ? data.lot_number : ''}</td>
-                   <td></td>
-                   <td>{data.status == 'CONFIRMED' || data.status == 'ARRIVED' ? 'YES': 'NO'}</td>
-                   <td>{data.railcar_arrived_on != null ? 'YES' : 'NO'}</td>
-                   <td></td>
-                   <td></td>
-                   <td>{selectedWeight == 'lbs' ? data.weight:(data.weight/2.20462).toFixed(2)}</td>
-                   <td>{}</td>
-                   <td>0</td>
-                   <td>{data.status ? data.status : '' }</td>
+                   <tr key={index} className ={count}>
+                   <td style ={{display : this.props.showARB}}> </td>
+                   <td style ={{display : this.props.showCustomer}}> </td>
+                   <td style ={{display : this.props.showPO}}> </td>
+                   <td style ={{display : this.props.Railcar}}>{data.railcar_number ?data.railcar_number : ''}</td>
+                   <td style ={{display : this.props.showLot}}>{data.lot_number ? data.lot_number : ''}</td>
+                   <td style ={{display : this.props.showMaterial}}>{view.material}</td>
+                   <td style ={{display : this.props.showConfmd}}>{data.status == 'CONFIRMED' || data.status == 'ARRIVED' ? 'YES': 'NO'}</td>
+                   <td style ={{display : this.props.showArrvd}}>{data.railcar_arrived_on != null ? 'YES' : 'NO'}</td>
+                   <td style ={{display : this.props.showRecd}}></td>
+                   <td style ={{display : this.props.showCutoff}}></td>
+                   <td style ={{display : this.props.showWeight}}>{selectedWeight == 'lbs' ? data.weight:(data.weight/2.20462).toFixed(2)}</td>
+                   <td style ={{display : this.props.showBag}}>{}</td>
+                   <td style ={{display : this.props.showInInvt}}>{data.inInventory ?data.inInventory : '' }</td>
+                   <td style ={{display : this.props.showStatus}}>{data.status ? data.status : '' }</td>
+                   <td style ={{display : this.props.showRailcarArr}}>{data.arrived != null && data.arrived == 1 ? "Yes" : "No"}</td>
+                   <td style ={{display : this.props.showRailcarArrD}}>{data.railcar_arrived_on != null ? moment(data.railcar_arrived_on).format("YYYY-MM-DD") : "N/A"}</td>
+                   <td style ={{display : this.props.showRailcarDep}}>{data.railcar_status == "RETURN" ? 'YES' : "NO"}</td>
+                   <td style ={{display : this.props.showRailcarDepDate}}>{data.railcar_departed_on != null ? moment(data.railcar_departed_on).format("YYYY-MM-DD") : "N/A"}</td>
+                   <td style ={{display : this.props.showDaysPresent}}>{diff ? diff : 'N/A'}</td>
+                   <td style ={{display : this.props.showRailcarStatus}}>{data.railcar_status ? data.railcar_status : ''}</td>
                    <td>
                    <label className="control control--checkbox">
                    <input type="checkbox"  onClick={(e) => this.checkclick(e,data)}   onChange={(e)=>{this.props.checkboxChange(e,data)}} value={view.id} id={view.TPackagingInstructionLots[index].id}/><div className="control__indicator"></div>
@@ -442,8 +509,9 @@ debugger
          )
        }
 
+       </thead>
 
-       </tbody>
+    
            )
        }
   )
@@ -452,13 +520,13 @@ debugger
  <table id="Packaging_Instruction_View" className="table table-expandable table-striped" cellSpacing="0" >
              <thead className="table_head">
            <tr className="sorting_head" >
-               <th onClick={(e)=> this.onAscending(e,'location')}>ARB 
+               <th style = {{display : this.props.showARB}} onClick={(e)=> this.onAscending(e,'location')}>ARB 
                     <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                     </span>
                </th>
-               <th onClick={(e)=> this.onAscending(e,'company')}>Customer 
+               <th style = {{display : this.props.showCustomer}} onClick={(e)=> this.onAscending(e,'company')}>Customer 
 
                         <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
@@ -466,60 +534,60 @@ debugger
                 </span> 
 
                </th>
-               <th onClick={(e)=> this.onAscending(e,'po_number')}>PO
+               <th style ={{display : this.props.showPO}} onClick={(e)=> this.onAscending(e,'po_number')}>PO
                  <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span> 
                </th>
-               <th  onClick={(e)=> this.onAscending(e,'railcar_number')}>Railcar#
+               <th style ={{display : this.props.Railcar}} onClick={(e)=> this.onAscending(e,'railcar_number')}>Railcar#
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span> 
                 </th>
-               <th  onClick={(e)=> this.onAscending(e,'lot_number')}>Lot#
+               <th style ={{display : this.props.showLot}} onClick={(e)=> this.onAscending(e,'lot_number')}>Lot#
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span> 
                 
                </th>
-               <th  onClick={(e)=> this.onAscending(e,'po_number')}>Material
+               <th style ={{display : this.props.showMaterial}} onClick={(e)=> this.onAscending(e,'po_number')}>Material
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span> 
                 
                </th>
-               <th onClick={(e)=> this.onAscending(e,'po_number')}>Confmd 
+               <th style ={{display : this.props.showConfmd}} onClick={(e)=> this.onAscending(e,'po_number')}>Confmd 
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>                
                </th>
-               <th  onClick={(e)=> this.onAscending(e,'po_number')}>Arrvd
+               <th style ={{display : this.props.showArrvd}} onClick={(e)=> this.onAscending(e,'po_number')}>Arrvd
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span> 
                 
                </th>
-               <th  onClick={(e)=> this.onAscending(e,'po_number')}>Recd 
+               <th style ={{display : this.props.showRecd}} onClick={(e)=> this.onAscending(e,'po_number')}>Recd 
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span> 
                 
                </th>
-               <th  onClick={(e)=> this.onAscending(e,'po_number')}>Cutoff 
+               <th style ={{display : this.props.showCutoff}} onClick={(e)=> this.onAscending(e,'po_number')}>Cutoff 
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span> 
                 
                </th>
-               <th  onClick={(e)=> this.onAscending(e,'weight')}>Weight 
+               <th style ={{display : this.props.showWeight}} onClick={(e)=> this.onAscending(e,'weight')}>Weight 
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -527,32 +595,65 @@ debugger
                 
 
                </th>
-               <th  onClick={(e)=> this.onAscending(e,'po_number')}>#Bags 
+               <th style ={{display : this.props.showBag}} onClick={(e)=> this.onAscending(e,'po_number')}>#Bags 
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span> 
                 
                </th>
-               <th  onClick={(e)=> this.onAscending(e,'po_number')}>(In Invt.) 
+               <th style ={{display : this.props.showInInvt}} onClick={(e)=> this.onAscending(e,'po_number')}>(In Invt.) 
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span> 
                 
                </th>
-               <th  >Status 
+               <th style ={{display : this.props.showStatus}} >Status 
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span> 
                </th>
-               <th>
-                   <label className="control control--checkbox">
-                       <input type="checkbox" id="row1"/>
-
-                       <div className="control__indicator"></div>
-                   </label>
+             
+                <th style ={{display : this.props.showRailcarArr}} >Railcar Arrival
+               <span className="fa-stack ">
+                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                        <i className="fa fa-sort-desc fa-stack-1x"></i>
+                </span> 
+               </th>
+                <th style ={{display : this.props.showRailcarArrD}} >Railcar Arrival Date
+               <span className="fa-stack ">
+                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                        <i className="fa fa-sort-desc fa-stack-1x"></i>
+                </span> 
+               </th>
+               <th style ={{display : this.props.showRailcarDep}} >Railcar Departure
+               <span className="fa-stack ">
+                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                        <i className="fa fa-sort-desc fa-stack-1x"></i>
+                </span> 
+               </th>
+               <th style ={{display : this.props.showRailcarDepDate}} >Railcar Departure Date
+               <span className="fa-stack ">
+                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                        <i className="fa fa-sort-desc fa-stack-1x"></i>
+                </span> 
+               </th>
+                 <th style ={{display : this.props.showDaysPresent}} >Railcar Days Present
+               <span className="fa-stack ">
+                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                        <i className="fa fa-sort-desc fa-stack-1x"></i>
+                </span> 
+               </th>
+                 <th style ={{display : this.props.showRailcarStatus}} >Railcar Status 
+               <span className="fa-stack ">
+                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                        <i className="fa fa-sort-desc fa-stack-1x"></i>
+                </span> 
+               </th>
+                 <th>
+                 
                </th>
              </tr>
            </thead>

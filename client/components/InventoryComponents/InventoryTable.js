@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import { createDataLoader } from 'react-loopback';
+var moment = require('moment');
  class InventoryTable extends Component {
  constructor(props){
  	super(props);
@@ -54,6 +55,7 @@ import { createDataLoader } from 'react-loopback';
  
  	console.log("props>>>>>>>",this.props.viewData)
  	var tableData = _.map(this.props.viewData,(view,index)=>{
+
  		debugger
  		return(
  			<table key={index}  className="table table-expandable table-striped" cellSpacing="0" >
@@ -115,14 +117,14 @@ import { createDataLoader } from 'react-loopback';
 								<td>{data.status == 'CONFIRMED' ? 'YES': 'NO'}</td>
 								<td>Y</td>
 								<td>{data.railcar_arrived_on != null ? 'YES' : 'NO'}</td>
-								<td></td>
+								<td>{(data.TShipmentInternational && data.TShipmentInternational.length>0) ?moment(data.TShipmentInternational[0].cargoCutoffDate).format('MM-DD-YYYY') : 'NA'}</td>
 								<td>{data.weight}</td>
 								<td>{data.bags_to_ship}</td>
-								<td>0</td>
+								<td>{(data.TShipmentLots && data.TShipmentLots.length > 0) ?data.TShipmentLots[0].noOfBags : 'NA'}</td>
 								<td>{data.status?data.status : ''}</td>
 								<td>
-									<label className="control control--checkbox">
-									  <input type="checkbox" onClick={this.props.onCheck}  id={data.id}/><div className="control__indicator"></div>
+									<label className="control control--checkbox" id={data.status}>
+									  <input type="checkbox" onClick={(e) => {this.props.onCheck(e,name)}} value={data.status?data.status : ''} id={data.id}/><div className="control__indicator"></div>
 									</label>									
 								</td>
 							</tr>
@@ -141,14 +143,14 @@ import { createDataLoader } from 'react-loopback';
 								<td>{data.status == 'CONFIRMED' ? 'YES': 'NO'}</td>
 								<td>Y</td>
 								<td>{data.railcar_arrived_on != null ? 'YES' : 'NO'}</td>
-								<td></td>
+								<td>{(data.TShipmentInternational && data.TShipmentInternational.length>0) ?moment(data.TShipmentInternational[0].cargoCutoffDate).format('MM-DD-YYYY') : 'NA'}</td>
 								<td>{data.weight}</td>
-								<td>{data.bags_to_ship}</td>
-								<td>0</td>
+								<td>{(data.TShipmentLots && data.TShipmentLots.length>0) ?data.TShipmentLots[0].noOfBags : 'NA'}</td>
+								<td>{data.inInventory}</td>
 								<td>{data.status?data.status : ''}</td>
 								<td>
 									<label className="control control--checkbox">
-									  <input type="checkbox" onClick={this.props.onCheck}  id={data.id}/><div className="control__indicator"></div>
+									  <input type="checkbox" onClick={(e) => {this.props.onCheck(e,data.status)}}  id={data.id}/><div className="control__indicator"></div>
 									</label>									
 								</td>
 							</tr>

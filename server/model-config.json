@@ -172,5 +172,13 @@
   "TPalletType": {
     "dataSource": "AccountDb",
     "public": true
+  },
+  "TShipmentAddress": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+  "TShipmentPi": {
+    "dataSource": "AccountDb",
+    "public": true
   }
 }

@@ -8,6 +8,7 @@ import RailcarInformation from '../../../components/RailcarInformation/RailcarIn
 import {Base_Url} from '../../../constants';
 var Spinner = require('react-spinkit');
 import  validateInput  from './PIValidator';
+import { createDataLoader } from 'react-loopback';
 export default class EnterPackagingInstructionForm extends React.Component {
     constructor(props) 
     	{
@@ -16,15 +17,19 @@ export default class EnterPackagingInstructionForm extends React.Component {
     	this.PI ={ }
     	this.obj = { }
     	this.railcarObj = { }
+		this.railObjects = []
+		this.rObjects = []
     	this.PIedit = { }
     	this.railCarObjects = []
     	this.RailCarChange = { } 
 	    this.state = { 
 	    	railCarInfoList: [],
+	    	customChecked : false,
 	    	index: 0, 
 	    	display: 'none',
 	    	isLoading : false,
-	    	errors : { }
+	    	errors : { },
+			rObjects:[]
 	    }
 	    this.userId = localStorage.getItem('userId')
 	    //this.index = 0
@@ -48,12 +53,41 @@ export default class EnterPackagingInstructionForm extends React.Component {
 	   	this.onUpdate =this.onUpdate.bind(this);
 	   	this.handleWeightEdit = this.handleWeightEdit.bind(this)
 	   	this.onMinus = this.onMinus.bind(this)
+	   	this.onChekBoxClick = this.onChekBoxClick.bind(this)
+			this.Add = false
 	   	//this.onCancel = this.onCancel.bind(this)
 	   //	this.onSaveChange = this.onSaveChange.bind(this)
 	   // this.handlePIeditChange = this.handlePIeditChange.bind(this)
 }
 componentWillMount() {
-	axios.get(Base_Url +"TCompanies",{requestId: 'data'}).then((response) => {
+
+	var PIview = createDataLoader(EnterPackagingInstructionForm,{
+		queries:[{
+			endpoint: 'TPackagingInstructions',
+			filter: {
+				include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
+			}
+		}]
+	})
+	console.log("I have recieved props")
+	//debugger
+
+	var base = 'TCompanies'
+	this.urlCustomer = PIview._buildUrl(base, {
+		"where" : {type : "CUSTOMER" }
+	})
+
+
+	axios.get(Base_Url+"TPackagingInstructions/getPoList").then((response) => {
+            this.setState({
+                polList: response.data
+            })
+        })
+            .catch(function(err){
+                console.log(err)
+            })
+
+	axios.get(this.urlCustomer).then((response) => {
 		this.setState({
 			customer: response.data
 		})
@@ -151,9 +185,13 @@ handlePOEditChange(e){
 	this.forceUpdate()
 	console.log(this.props.data)
 }
+	cancel(e){
+
+		window.location.reload();
+	}
 handleMaterialEditChange(e){
 	this.props.data.material = e.target.value
-	//this.props.data.material = this.refs.Material.value
+	//t	his.props.data.material = this.refs.Material.value
 	this.forceUpdate()
 	console.log(this.props.data)
 }
@@ -182,7 +220,7 @@ this.forceUpdate()
 console.log(this.props.data)
 }
 handleNumberofbagsChange(e){
-	this.props.data.number_of_bags = e.target.value
+	this.props.data.bags_per_pallet = e.target.value
 	//this.props.data.number_of_bags =  this.refs.bagsNumber.value
 	this.forceUpdate()
 	console.log(this.props.data)
@@ -240,6 +278,7 @@ handleRailcarChange(e){
  // 	})
    }
 onUpdate(e){
+	debugger;
 	//console.log(">>>>>>>>>>>>>>>>>>>>>>",this.PIedit)
 	//swal("Failed" , "Error occured please try later!" , "error");
 	console.log(">>>>>>>>>>>>>>>>>>>>>>>>.",this.props.data)
@@ -254,6 +293,7 @@ onUpdate(e){
 	data:this.props.data,
 	success:function(){
 		swal("Posted" , "Data Has Been Successfully Edited !" , "success");
+		hashHistory.push('/Packaging/packaginginstview/')
 	},
 	Error:function(err){
 		swal("Failed" , "Error occured please try later!" , "error");
@@ -273,7 +313,18 @@ isValid(){
 }
 	
 
-onSubmit(e){	
+onSubmit(e){
+	
+	var checkPo = []
+	for(var i in this.state.polList){
+		checkPo.push(this.state.polList[i].poNumber)
+	}
+	if(this.obj.po_number != ""){
+		if(checkPo.indexOf(this.obj.po_number) > 0){
+		swal('Warning' , "This Purchase order already exists" , 'info')
+		return ;
+	}
+	}
 	if(this.isValid() == true){
 	console.log("PI Object",this.obj)
 	let today = new Date();
@@ -296,9 +347,12 @@ Object.defineProperty(this.Allobjs,"PI",{
                                         writable: true,
                                         configurable:true,
 										value:this.obj})
+//if(this.state.customChecked == false){
  	if(Object.keys(this.railcarObj).length !== 0){
  		this.addrailcarObject();
- 	}
+ 	}	
+//}
+
 console.log(this.railCarObjects)
 /*var Allobjs = {}*/
 	/*Object.defineProperty(this.Allobjs,"packagingLots",{
@@ -318,6 +372,9 @@ if(this.railCarObjects== 0){
 	return;
 }
 console.log(this.Allobjs)
+if(this.Allobjs.PI.po_number == "" || this.Allobjs.PI.po_number === undefined){
+	this.Allobjs.PI.po_number = this.Allobjs.packagingLots[0].lot_number
+}
 $.ajax({
 	type:"POST",
 	url: postUrl,
@@ -334,8 +391,12 @@ $.ajax({
 	})
 
 }
+	else{
+		swal('',"Please complete fields marked as red" , 'info')
+	}
 
 }
+
     
   addrailcarObject(){
    	var railCarObjects = Object.assign({},this.railcarObj)
@@ -347,8 +408,8 @@ $.ajax({
     	    	this.setState({
     		railCarInfoList : [ ]
     	})
-    	
-    
+
+		this.Add = false
     	console.log(">>>>>?>>>>>?>>>>>?>>>>>>",this.railcarObj)
     	console.log(this.railCarObjects)
     	//React.unmountComponentAtNode(document.getElementById(''));  
@@ -357,6 +418,7 @@ onAdd(e){
 	/*var railCarObjects = Object.assign({},this.railcarObj)
 	this.railCarObjects.push(railCarObjects)*/
 	//console.log(this.railcarObj)
+	this.Add = true
 	if(Object.keys(this.railcarObj).length !== 0){
 		this.addrailcarObject();
 		const railCarInfoList = this.state.railCarInfoList;
@@ -375,6 +437,86 @@ onAdd(e){
 }
 
  
+
+onChekBoxClick(e){
+debugger;
+if(e.target.checked == true)
+{
+	
+ var obj = ""
+
+ var arrRail = []
+ var mulrail = []
+ var arrWeight = []
+ var arrlot= []
+	if(this.Add == false) {
+      this.state.rObjects.push(this.railcarObj)
+	}
+	else if(this.Add == true){
+
+     	mulrail.push(this.railcarObj)
+		this.state.rObjects.push(mulrail)
+		this.state.rObjects = [].concat.apply([], this.state.rObjects);
+
+		this.state.rObjects.push(this.railCarObjects)
+	}
+ // railObjects.push(this.addrailcarObjectLabel())
+	this.state.rObjects = [].concat.apply([], this.state.rObjects);
+
+ for(var i in this.state.origin){
+
+  if(this.state.origin[i].id == this.obj.origin_id){
+   var originName = this.state.origin[i].origin
+
+}
+
+}
+
+
+
+ for(var i in this.state.rObjects){
+   arrRail.push(this.state.rObjects[i].railcar_number)
+   arrWeight.push(this.state.rObjects[i].weight)
+   arrlot.push(this.state.rObjects[i].lot_number)
+ } 
+var uniqueRail = arrRail.filter(function(elem, index, self) {
+    return index == self.indexOf(elem);
+})
+
+var uniquelot = arrlot.filter(function(elem, index, self) {
+    return index == self.indexOf(elem);
+})
+
+var uniqueWeight = arrWeight.filter(function(elem, index, self) {
+    return index == self.indexOf(elem);
+})
+
+
+var obj = "po#"+' '+ this.obj.po_number +'\n' +"lot#"+' '+ uniquelot.join() + '\n' +"origin:"+' '+  originName + '\n' +'material:' +' '+this.obj.material +'\n' +"weight:"+' '+ uniqueWeight.join() 
+
+
+	this.autolabel = obj
+	this.obj.custom_label = obj
+	this.setState({
+		labelObject : obj,
+		customChecked : true
+	})
+}
+else{
+  this.setState({
+		labelObject : null,
+		customChecked : true
+	})
+	this.obj.custom_label = ""
+}
+}
+ addrailcarObjectLabel()
+ {
+   	var railCarObjects = Object.assign({},this.railcarObj)
+	this.railCarObjects.push(railCarObjects)
+	console.log(this.railCarObjects)
+     return this.railCarObjects
+    }
 render() {
 	   var customers = _.map(this.state.customer,(customer) => 
     	{
@@ -754,7 +896,7 @@ render() {
 					  ref="bagsNumber"
 					  onChange={(e)=>{this.handleNumberofbagsChange(e)}}
 					  name="bags_per_pallet"
-					  value={this.props.data.number_of_bags} /> 
+					  value={this.props.data.bags_per_pallet} /> 
 					  :
 					  <input 
 					  type="number" 
@@ -822,6 +964,11 @@ render() {
 			</fieldset>	
 		</div>	
 		<div className="Packaging_footer">
+		<div className=" col-lg-4 col-md-4 col-sm-4 col-xs-4 pddn-10-top">			
+					<label className="control control--checkbox ">Create Label
+					  <input type="checkbox" onClick = {this.onChekBoxClick}  id="row1"/><div className="control__indicator"></div>
+					</label>				
+	</div>
    <div className="container">
       <h4>CUSTOM LABEL</h4><hr/>
       <div className=" col-lg-3 col-md-3 col-sm-3 col-xs-12 pddn-10-top">  	 
@@ -844,6 +991,7 @@ render() {
             onChange ={this.handlePIChange} 
             rows="3" 
             id="Notes"
+            value={ this.obj.custom_label }
             placeholder="Enter Custom Label information"></textarea>
         	} 
             <div className="error"><span>{this.state.errors.custom_label}</span></div>
@@ -858,8 +1006,10 @@ render() {
          this.props.data != undefined ? <button type="button"  className="btn  btn-primary" onClick = {this.onUpdate}>Update</button> : 
          <button type="button"  className="btn  btn-primary" onClick = {this.onSubmit}>SUBMIT</button> } 
          </div>
-         <div className="pull-left padding-20-all"><button type="button" onClick={hashHistory.goBack}  className="btn  btn-gray">CANCEL</button> </div>
-      </div>
+         <div className="pull-left padding-20-all"><button type="button" onClick={(e) => this.cancel(e)}  className="btn  btn-gray">CANCEL</button> </div>
+		  <div className="pull-left padding-20-all"><button type="button" onClick={hashHistory.goBack}  className="btn  btn-gray">BACK</button> </div>
+
+	  </div>
       {this.state.isLoading ?  <Spinner spinnerName='circle' /> : null}
    </div>
 

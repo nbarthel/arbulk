@@ -184,7 +184,6 @@
       "model": "TPackagingInstructionLots",
       "foreignKey": "piLotId"
     }
-
   },
   "acls": [],
   "methods": {}

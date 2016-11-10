@@ -75,6 +75,22 @@
       },
       "_selectable": true
     },
+    "inInventory": {
+      "type": "String",
+      "required": false,
+      "length": 30,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "inInventory",
+        "dataType": "varchar",
+        "dataLength": 30,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      },
+      "_selectable": true
+    },
     "weight": {
       "type": "Number",
       "required": false,
@@ -266,6 +282,38 @@
         "nullable": "Y"
       },
       "_selectable": true
+    },
+    "arrived": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "arrived",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "Y"
+      },
+      "_selectable": true
+    },
+    "railcar_status": {
+      "type": "String",
+      "required": false,
+      "length": 15,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "railcar_status",
+        "dataType": "enum",
+        "dataLength": 15,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      },
+      "_selectable": true
     }
   },
   "validations": [],
@@ -284,6 +332,11 @@
       "type": "hasMany",
       "model": "TPiInventory",
       "foreignKey": "piLotId"
+    },
+    "TShipmentInternational": {
+      "type": "hasMany",
+      "model": "TShipmentInternational",
+      "foreignKey": "piLotsId"
     }
   },
   "acls": [],

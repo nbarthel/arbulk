@@ -94,7 +94,7 @@
   },
   "validations": [],
   "relations": {
-    "TInventoryLocation" : {
+    "TInventoryLocation": {
       "type": "hasMany",
       "model": "TInventoryLocation",
       "foreignKey": "location_id"

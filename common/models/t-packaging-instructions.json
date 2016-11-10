@@ -9,14 +9,11 @@
     "schema": "arbulk",
     "table": "t_packaging_instructions"
   },
-
-
-
   "properties": {
     "id": {
       "type": "Number",
-      "required": true,
       "generated": true,
+      "required": true,
       "length": null,
       "precision": 10,
       "scale": 0,
@@ -380,6 +377,11 @@
       "model": "TLocation",
       "foreignKey": "location_id"
     },
+    "TPackagingType": {
+      "type": "belongsTo",
+      "model": "TPackagingType",
+      "foreignKey": "bag_id"
+    },
     "TOrigin": {
       "type": "belongsTo",
       "model": "TOrigin",
@@ -405,8 +407,6 @@
       "model": "TPackagingInstructionLots",
       "foreignKey": "pi_id"
     }
-
-
   },
   "acls": [],
   "methods": {}

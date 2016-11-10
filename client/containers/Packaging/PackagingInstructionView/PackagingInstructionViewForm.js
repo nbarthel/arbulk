@@ -14,6 +14,7 @@
     import axios from 'axios'
     var Loader = require('react-loader')
    import {Base_Url} from '../../../constants';
+  import '../../../public/stylesheets/style.css'
 export default class PackagingInstructionViewForm extends React.Component {
         constructor(props){
             super(props);
@@ -24,18 +25,38 @@ export default class PackagingInstructionViewForm extends React.Component {
                 selectedOption: 'lbs',
                 index : 0,
                 selectedOption1: 'kg',
-
+                showARB:"",
+                showCustomer:"",
+                showPO:"",
+                Railcar:"",
+                showLot:"",
+                showMaterial:"",
+                showConfmd:"",
+                showArrvd:"",
+                showRecd:"",
+                showCutoff:"",
+                showWeight:"",
+                showBag:"",
+                showInInvt:"",
+                showStatus:"",
+                showRailcarArr:"",
+                showRailcarArrD:"",
+                showRailcarDep:"",
+                showRailcarDepDate:"",
+                showDaysPresent:"",
+                showRailcarStatus:"",
             }
             this.status
             this.buttonDisplay = [ ]
             this.checkedCustomer = [ ]
             this.checkedStatus = [ ] 
             this.checkedCompany = [ ]
-            this.Query = [ ]
+            this.Query = {}
             this.Where = { }
             this.qArray = []
             this.selected = null
             this.piID = null
+            this.showARB ="block"
             this.onClickli = this.onClickli.bind(this)
             this.onClickPo = this.onClickPo.bind(this)
             this.lotSearch = this.lotSearch.bind(this)
@@ -59,8 +80,9 @@ export default class PackagingInstructionViewForm extends React.Component {
             this.headerCheckboxChange = this.headerCheckboxChange.bind(this)
         }
     componentWillMount() {
-
-     axios.get(Base_Url+"TCustomViews").then(response=>{
+       
+  
+  axios.get(Base_Url+"TCustomViews").then(response=>{
          this.setState({
              savedViews : response.data
          })
@@ -72,14 +94,16 @@ export default class PackagingInstructionViewForm extends React.Component {
     })
 })
 
-
-
+ 
 
  }
         //this.state.queue_Sequence[0].max_mark
 
      onTextChange(e){
-          this.Query[e.target.id] = e.target.value
+        debugger
+         var idValue = e.target.id 
+        
+          this.Query[idValue] = e.target.value
           console.log(this.Query)
         }
 
@@ -117,6 +141,7 @@ onSearch(e){
             }
          console.log(this.Where)
           var serachObj = []
+          var serachObjLots =[]
             if (this.Where != undefined && this.Where!= null)
                 {
                     if(this.Where.Customer && this.Where.Customer.length >0){
@@ -141,13 +166,14 @@ onSearch(e){
                     }
 
                     if(this.Where.status && this.Where.status.length){
-                        var status = [];
+                        debugger;
+                        var Railstatus = [];
                         var objStatus = {};
                         for(var z in this.Where.status){
-                            objStatus = {"packaging_status" : this.Where.status[z]}
-                            status.push(objStatus)
+                            objStatus = {"status" : this.Where.status[z]}
+                            Railstatus.push(objStatus)
                         }
-                        serachObj.push(status)
+                         serachObjLots.push(Railstatus)
                     }
 
                     if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.POSearch && this.Where.Query.POSearch!= undefined ){
@@ -157,15 +183,17 @@ onSearch(e){
 
 
                     if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.railcarSearch && this.Where.Query.railcarSearch!= undefined ){
-                        var serachObjLots = [{'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}}]
+                        var railSearch = [{'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}}]
+                         serachObjLots.push(railSearch)
                     }
 
                     if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.LotSearch && this.Where.Query.LotSearch!= undefined ){
-                        var serachObjLots =  [{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
+                        var lotSearch =  [{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
+                        serachObjLots.push(lotSearch)
                     }
 
-                    var serachObj = [].concat.apply([], serachObj);
-
+                     serachObj = [].concat.apply([], serachObj);
+                      serachObjLots = [].concat.apply([], serachObjLots);
                     var PIview = createDataLoader(PackagingInstructionViewForm, {
                         queries: [{
                             endpoint: 'TPackagingInstructions',
@@ -176,33 +204,35 @@ onSearch(e){
                     });
                     var base = 'TPackagingInstructions';
 
-                    if(serachObjLots && serachObjLots != undefined ){
-                        debugger;
+                    if(serachObjLots && serachObjLots.length > 0 ){
+                      
                         this.urlSearch = PIview._buildUrl(base, {
                             include : ["TLocation" , "TCompany" ,{"relation": "TPackagingInstructionLots", "scope":
                             {
                                 "where":
                             {  "or":
-                               [ {'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}},{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
+                                serachObjLots
+                              // [ {'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}},{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
                             }
                             }
                                }
                             ],
                             where : {
-                                "or": serachObj
+                                "and": serachObj
                             }
                         });
                     }
+
                     else {
                         this.urlSearch = PIview._buildUrl(base, {
                             include: ["TLocation", "TCompany", "TPackagingInstructionLots"],
                             where: {
-                                "or": serachObj
+                                "and": serachObj
                             }
                  });
                     }
 
-                   console.log(this.urlSearch , ">>>>>>>>>>>d,lpwkdlwjldjwlkdjwo");
+                   
                     $.ajax({
                         url: this.urlSearch,
                         success:function(data){
@@ -214,13 +244,14 @@ onSearch(e){
                                     viewData : data
                                 }
                             )
-                            console.log( "ajax>>>>>>>")
+                            
                         }.bind(this)
 
                     })
                 }
 }
         onCompanyFilter(e,location){
+
             if(e.target.checked){
             this.forceUpdate()
             this.checkedCompany.push(e.target.id)
@@ -322,15 +353,22 @@ onSearch(e){
 
     }
     viewChange(e){
-
-        var index = e.target.selectedIndex ;
-
-
+         debugger
+         var index = e.target.selectedIndex ;
+         var blob = e.target.value
          var changedView = this.state.savedViews[index -1]
-        this.Where = JSON.parse(changedView.viewFilters)
+        this.Where = JSON.parse(blob)
 
         console.log(this.Where)
+        //if(this.Query != undefined){
+        //    Object.defineProperty(this.Where,"Query",{enumerable:true ,
+        //        writable: true,
+        //        configurable: true,
+        //        value:this.Query})
+        //}
+        //console.log(this.Where)
         var serachObj = []
+        var serachObjLots =[]
         if (this.Where != undefined && this.Where!= null)
         {
             if(this.Where.Customer && this.Where.Customer.length >0){
@@ -355,31 +393,34 @@ onSearch(e){
             }
 
             if(this.Where.status && this.Where.status.length){
-                var status = [];
+                debugger;
+                var Railstatus = [];
                 var objStatus = {};
                 for(var z in this.Where.status){
-                    objStatus = {"packaging_status" : this.Where.status[z]}
-                    status.push(objStatus)
+                    objStatus = {"status" : this.Where.status[z]}
+                    Railstatus.push(objStatus)
                 }
-                serachObj.push(status)
+                serachObjLots.push(Railstatus)
             }
 
-            if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.POSearch && his.Where.Query.POSearch!= undefined ){
+            if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.POSearch && this.Where.Query.POSearch!= undefined ){
                 var poSearch =  [ {'po_number': {"like": "%" + this.Where.Query.POSearch + "%"}}]
                 serachObj.push(poSearch)
             }
 
 
             if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.railcarSearch && this.Where.Query.railcarSearch!= undefined ){
-                var serachObjLots = [{'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}}]
+                var railSearch = [{'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}}]
+                serachObjLots.push(railSearch)
             }
 
             if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.LotSearch && this.Where.Query.LotSearch!= undefined ){
-                var serachObjLots =  [{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
+                var lotSearch =  [{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
+                serachObjLots.push(lotSearch)
             }
 
-            var serachObj = [].concat.apply([], serachObj);
-
+            serachObj = [].concat.apply([], serachObj);
+            serachObjLots = [].concat.apply([], serachObjLots);
             var PIview = createDataLoader(PackagingInstructionViewForm, {
                 queries: [{
                     endpoint: 'TPackagingInstructions',
@@ -390,33 +431,35 @@ onSearch(e){
             });
             var base = 'TPackagingInstructions';
 
-            if(serachObjLots && serachObjLots != undefined ){
-                debugger;
+            if(serachObjLots && serachObjLots.length > 0 ){
+
                 this.urlSearch = PIview._buildUrl(base, {
                     include : ["TLocation" , "TCompany" ,{"relation": "TPackagingInstructionLots", "scope":
                     {
                         "where":
                         {  "or":
-                            [ {'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}},{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
+                            serachObjLots
+                            // [ {'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}},{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
                         }
                     }
                     }
                     ],
                     where : {
-                        "or": serachObj
-                    }
-                });
-            }
-            else {
-                this.urlSearch = PIview._buildUrl(base, {
-                    include: ["TLocation", "TCompany", "TPackagingInstructionLots"],
-                    where: {
-                        "or": serachObj
+                        "and": serachObj
                     }
                 });
             }
 
-            console.log(this.urlSearch , ">>>>>>>>>>>d,lpwkdlwjldjwlkdjwo");
+            else {
+                this.urlSearch = PIview._buildUrl(base, {
+                    include: ["TLocation", "TCompany", "TPackagingInstructionLots"],
+                    where: {
+                        "and": serachObj
+                    }
+                });
+            }
+
+
             $.ajax({
                 url: this.urlSearch,
                 success:function(data){
@@ -428,14 +471,14 @@ onSearch(e){
                             viewData : data
                         }
                     )
-                    console.log( "ajax>>>>>>>")
+
                 }.bind(this)
 
             })
         }
     }
-    saveView(e){
-        debugger;
+saveView(e){
+       
         var saveCustomView = {
             "id": 0,
             "screenName": "PACKAGING",
@@ -448,16 +491,22 @@ onSearch(e){
             "active": 1
         }
         console.log("Save Customer View" , saveCustomView);
-   if(saveCustomView.viewFilters != undefined && saveCustomView.viewFilters != null){
-     axios.post(Base_Url + "TCustomViews", saveCustomView).then(response=> {
+        if(saveCustomView.viewFilters != undefined && saveCustomView.viewFilters != null){
+        axios.post(Base_Url + "TCustomViews", saveCustomView).then(response=> {
         swal('Success' , "Successfully Saved..." , 'success');
         console.log("response", response)
-    })
+        
+         axios.get(Base_Url+"TCustomViews").then(response=>{
+         this.setState({
+             savedViews : response.data
+             })
+         })
+       })
     
-}
-    else {
-   swal('Error' , "Please Select Filter Options First" , 'error');
-}
+            }
+       else {
+        swal('Error' , "Please Select Filter Options First" , 'error');
+      }
 
     }
 
@@ -495,7 +544,8 @@ onSearch(e){
         console.log("PIID",this.piID)
         }
         else if(!e.target.checked){
-            console.log("I am uncheckeed")
+            this.piID = undefined
+            console.log("PIID",this.piID)
         }
         
     }
@@ -516,8 +566,7 @@ onSearch(e){
       //this.piID = null
      
     }
-    console.log("SelectedID >>>>>>>>>>>>.",this.selected)
-    console.log("piID><^><^><^>^<^>^<",this.piID)
+
   }
 onButtonRemove(index,button){
     this.buttonDisplay.splice(index,1)
@@ -541,41 +590,32 @@ onButtonRemove(index,button){
                 key : this.state.key +1,
                 index : this.state.index +1
             })
+            document.getElementById('customer_name').selectedIndex = 0
          this.forceUpdate();
 
     }
     onConfirmClick(){
     if(this.selected != undefined && this.selected != null){
-      console.log(">>>>>>>>>>>>>",this.selected)
-                if(this.status == "ININVENTORY"){
+    
+                if(this.status == "UNCONFIRMED"){
                 hashHistory.push('/Packaging/confirmpckginst/'+this.selected)
                  }
-                else if(this.status == "ARRIVED"){
-                   swal("Info","Order is already arrived","info")
-                }
-                else if(this.status == "QUEUED"){
-                   swal("Info","Order is already queued","info")
-                }
+            
                  else{
-                 swal("Error","Selected order Should be in Inventory","error")
+                 swal("Error","Please select unconfirmed order","error")
                 }
         }
       else 
       {
-        swal("Selection Missing", "Please Select A Lot To Confirm.","error")
+        swal("Selection Missing", "Please select a lot to confirm.","error")
       }
   }
 
-  onEdit(){ debugger
+  onEdit(){ 
     if(this.piID != null && this.piID != undefined){
-         if(this.status=="UNCONFIRMED" || this.status=="PARTIALLYPACKED" || this.status=="ININVENTORY")
-         {
+         
              hashHistory.push('/Packaging/enterpackginginst/'+this.piID)
-                  }
-           else{
-               swal('Info' , 'This order has been confirmed , therefore you can not update!!')
-           }
-     }
+       }
       else {
         swal("Nothing To Edit","Please Select A PI To Edit.","error")
       }
@@ -599,6 +639,10 @@ onButtonRemove(index,button){
      var sequence =  localStorage.getItem('queue_Sequence')
       var queueArray = []
       queueArray.push(qArray);
+      //if(queueArray.length[0] == null){
+      //    swal('',"Please select an order" , "info")
+      //    return
+      //}
      localStorage.removeItem('qArray');
       localStorage.removeItem('queue_Sequence');
       var option = {
@@ -609,7 +653,7 @@ onButtonRemove(index,button){
 
           status : "Queued"
       }
-      if(this.status == "CONFIRMED"){
+      if(this.status == "READY"){
       if(queueArray && queueArray.length > 0&& qArray!= null){
           queueArray.forEach((id)=>{
               axios.put( Base_Url+"TPackagingInstructionLots/"+id , option).then(function(response){
@@ -640,17 +684,284 @@ onButtonRemove(index,button){
       }
 
   }
-  else if(this.status == "QUEUED"){
-    swal("Info" , 'Order is already queued' , 'info')
-  }
-  else if(this.status == "ARRIVED"){
-    swal("Info" , 'Order is already Arrived' , 'info')
-  }
+  
   else {
-    swal("error","The selected order has not confirmed yet","error")
+    swal("","The selected order is not ready","info")
   }
 }
-
+onHideColumn(e,name){
+    console.log(e.target.name)
+    switch(e.target.name){
+    case "ARB" :
+    if(this.state.showARB == ""){
+    this.setState({
+        showARB : "none"
+    })
+}
+else{
+    this.setState({
+        showARB : ""
+    })
+}
+ break;
+ case "Customer" : 
+   if(this.state.showCustomer == ""){
+    this.setState({
+        showCustomer : "none"
+    })
+}
+else{
+    this.setState({
+        showCustomer : ""
+    })
+}
+break;
+ case "PO" : 
+   if(this.state.showPO == ""){
+    this.setState({
+        showPO : "none"
+    })
+}
+else{
+    this.setState({
+        showPO : ""
+    })
+}
+break;
+ case "Railcar" : 
+ console.log(e.target.name)
+  if(this.state.showRailcar == ""){
+    this.setState({
+        showRailcar : "none"
+    })
+}
+else{
+    this.setState({
+        showRailcar : ""
+    })
+}
+break;
+ case "Lot" : 
+ console.log(e.target.name)
+  if(this.state.showLot == ""){
+    this.setState({
+        showLot : "none"
+    })
+}
+else{
+    this.setState({
+        showLot : ""
+    })
+}
+break;
+ case "Material" : 
+ console.log(e.target.name)
+  if(this.state.showMaterial == ""){
+    this.setState({
+        showMaterial : "none"
+    })
+}
+else{
+    this.setState({
+        showMaterial : ""
+    })
+}
+break;
+ case "Confmd" : 
+ console.log(e.target.name)
+  if(this.state.showConfmd == ""){
+    this.setState({
+        showConfmd : "none"
+    })
+}
+else{
+    this.setState({
+        showConfmd : ""
+    })
+}
+break;
+ case "Arrvd" : 
+ console.log(e.target.name)
+  if(this.state.showArrvd == ""){
+    this.setState({
+        showArrvd : "none"
+    })
+}
+else{
+    this.setState({
+        showArrvd : ""
+    })
+}
+break;
+ case "Recd" : 
+ console.log(e.target.name)
+  if(this.state.showRecd == ""){
+    this.setState({
+        showRecd : "none"
+    })
+}
+else{
+    this.setState({
+        showRecd : ""
+    })
+}
+break;
+ case "Cutoff" : 
+ console.log(e.target.name)
+  if(this.state.showCutoff == ""){
+    this.setState({
+        showCutoff : "none"
+    })
+}
+else{
+    this.setState({
+        showCutoff : ""
+    })
+}
+break;
+ case "Weight" : 
+ console.log(e.target.name)
+  if(this.state.showWeight == ""){
+    this.setState({
+        showWeight : "none"
+    })
+}
+else{
+    this.setState({
+        showWeight : ""
+    })
+}
+break;
+ case "Bag" : 
+ console.log(e.target.name)
+  if(this.state.showBag == ""){
+    this.setState({
+        showBag : "none"
+    })
+}
+else{
+    this.setState({
+        showBag : ""
+    })
+}
+break;
+ case "InInvt" : 
+ console.log(e.target.name)
+  if(this.state.showInInvt == ""){
+    this.setState({
+        showInInvt : "none"
+    })
+}
+else{
+    this.setState({
+        showInInvt : ""
+    })
+}
+break;
+ case "Status" : 
+ console.log(e.target.name)
+  if(this.state.showStatus == ""){
+    this.setState({
+        showStatus : "none"
+    })
+}
+else{
+    this.setState({
+        showStatus : ""
+    })
+}
+break;
+ case "RailcarArr" : 
+ console.log(e.target.name)
+  if(this.state.showRailcarArr == ""){
+    this.setState({
+        showRailcarArr : "none"
+    })
+}
+else{
+    this.setState({
+        showRailcarArr : ""
+    })
+}
+break;
+ case "RailcarArrD" : 
+ console.log(e.target.name)
+  if(this.state.showRailcarArrD == ""){
+    this.setState({
+        showRailcarArrD : "none"
+    })
+}
+else{
+    this.setState({
+        showRailcarArrD : ""
+    })
+}
+break;
+ case "RailcarDep" : 
+ console.log(e.target.name)
+  if(this.state.showRailcarDep == ""){
+    this.setState({
+        showRailcarDep : "none"
+    })
+}
+else{
+    this.setState({
+        showRailcarDep : ""
+    })
+}
+break;
+ case "RailcarDepDate" : 
+ console.log(e.target.name)
+  if(this.state.showRailcarDepDate == ""){
+    this.setState({
+        showRailcarDepDate : "none"
+    })
+}
+else{
+    this.setState({
+        showRailcarDepDate : ""
+    })
+}
+break;
+ case "DaysPresent" : 
+ console.log(e.target.name)
+  if(this.state.showDaysPresent == ""){
+    this.setState({
+        showDaysPresent : "none"
+    })
+}
+else{
+    this.setState({
+        showDaysPresent : ""
+    })
+}
+break;
+ case "RailcarStatus" : 
+ console.log(e.target.name)
+  if(this.state.showRailcarStatus == ""){
+    this.setState({
+        showRailcarStatus : "none"
+    })
+}
+else{
+    this.setState({
+        showRailcarStatus : ""
+    })
+}
+break;
+}
+}
+print(e){
+        if(this.selected != undefined || this.piID != undefined){
+            console.log('print view',this.piID+'/'+this.selected)
+            hashHistory.push('/Packaging/packagingInstFormPrint/'+this.piID+'/'+this.selected)
+            //hashHistory.push('/Packaging/inventorycard/'+this.piID+'/'+this.selected)
+        }
+        else
+        {
+            swal("Selection Missing", "Please Select A Lot To View.","error")
+        }
+    }
   render() {
 
       var index = 0
@@ -703,45 +1014,117 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
 
             <div className="row">           
             <FilterButton buttonDisplay = {this.buttonDisplay}  onButtonRemove = {this.onButtonRemove} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
-
-                   <div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs pull-right">
+                    <div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs pull-right">
                     <div className="pull-right ">
 
                          <select className="form-control"   id="customer_name" name="customer_name" onChange={this.viewChange}>
-                              <option value="Please Select An Option" disabled>Select</option>
+                              <option value="Please Select An Option" disabled selected>Select custom view</option>
                              {
-                                 _.map(this.state.savedViews , (views,index)=>{
-                                     debugger;
-                                     return(
 
-                                         <option key = {index} value={views}>{views.viewName}</option>
-                                     )
+                                 _.map(this.state.savedViews , (views,index)=>{
+                                     if(views.screenName == "PACKAGING") {
+                                         return (
+
+                                             <option key={index} value={views.viewFilters}>{views.viewName}</option>
+                                         )
+                                     }
                                  })
                              }
                         </select>
                     </div>                  
-                    <div className="pull-right btn_right_margin">
-                        <select className="form-control"  id="customer_name" name="customer_name">
-                             <option value="">Group By</option>
-                             <option value="Date">Date</option>
-                        </select>
-                    </div>  
-                </div>  
+                     
+
+                </div>
             </div>  
         </div>
 
-            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 "><hr/></div>   
+            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+                 <a href="javascript:void(0)" name = "ARB" onClick = {(e) => {this.onHideColumn(e,name)}}>ARB</a> -- 
+                 <a href="javascript:void(0)" name = "Customer" onClick = {(e) => {this.onHideColumn(e)}}>Customer</a> --- 
+                 <a href="javascript:void(0)" name = "PO" onClick={(e) => {this.onHideColumn(e)}}>PO</a> -- 
+                 <a href="javascript:void(0)" name = "Railcar" onClick={(e) => {this.onHideColumn(e)}}>Railcar#</a> -- 
+                 <a href="javascript:void(0)" name = "Lot" onClick={(e) => {this.onHideColumn(e)}}>Lot#</a> -- 
+                 <a href="javascript:void(0)" name = "Material" onClick={(e) => {this.onHideColumn(e)}}>Material</a> -- 
+                 <a href="javascript:void(0)" name = "Confmd" onClick={(e) => {this.onHideColumn(e)}}>Confmd</a> -- 
+                 <a href="javascript:void(0)" name = "Arrvd" onClick={(e) => {this.onHideColumn(e)}}>Arrvd</a> -- 
+                 <a href="javascript:void(0)" name = "Recd" onClick={(e) => {this.onHideColumn(e)}}>Recd</a> -- 
+                 <a href="javascript:void(0)" name = "Cutoff" onClick={(e) => {this.onHideColumn(e)}}>Cutoff</a> -- 
+                 <a href="javascript:void(0)" name = "Weight" onClick={(e) => {this.onHideColumn(e)}}>Weight</a> -- 
+                 <a href="javascript:void(0)" name = "Bag" onClick={(e) => {this.onHideColumn(e)}}>#Bags</a> -- 
+                 <a href="javascript:void(0)" name = "InInvt" onClick={(e) => {this.onHideColumn(e)}}>In.Invt.</a> -- 
+                 <a href="javascript:void(0)" name = "Status"onClick={(e) => {this.onHideColumn(e)}}>Status</a> -- 
+                 <a href="javascript:void(0)" name = "RailcarArr" onClick={(e) => {this.onHideColumn(e)}}>Railcar Arrival</a> -- 
+                 <a href="javascript:void(0)" name = "RailcarArrD" onClick={(e) => {this.onHideColumn(e)}}>Railcar Arrival Date</a> -- 
+                 <a href="javascript:void(0)" name = "RailcarDep" onClick={(e) => {this.onHideColumn(e)}}>Railcar Departure</a> -- 
+                 <a href="javascript:void(0)" name = "RailcarDepDate" onClick={(e) => {this.onHideColumn(e)}}>Railcar Departure Date</a> -- 
+                 <a href="javascript:void(0)" name = "DaysPresent" onClick={(e) => {this.onHideColumn(e)}}>Railcar Days Present</a> -- 
+                 <a href="javascript:void(0)" name = "RailcarStatus" onClick={(e) => {this.onHideColumn(e)}}>Railcar Status</a> 
+            </div>   
             
             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div className=" table-responsive view_table">  
+                <div className=" table-responsive view_table viewLoad">  
                 
-                      {this.props.id != undefined ? <ViewDataComponent headerCheckboxChange = {this.headerCheckboxChange} checkboxChange = {this.checkboxChange} key={this.state.index} filterData = {filterData} id = {this.props.id} weight={this.state.selectedOption}/> : <ViewDataComponent checkboxChange = {this.checkboxChange} headerCheckboxChange = {this.headerCheckboxChange} key={this.state.index} filterData = {filterData} weight={this.state.selectedOption} />}               
+                      {this.props.id != undefined ? <ViewDataComponent 
+                        headerCheckboxChange = {this.headerCheckboxChange}
+                        showARB = {this.state.showARB}
+                        showCustomer = {this.state.showCustomer}
+                        showPO = {this.state.showPO}
+                        Railcar = {this.state.Railcar}
+                        showLot = {this.state.showLot}
+                        showMaterial = {this.state.showMaterial}
+                        showConfmd = {this.state.showConfmd}
+                        showArrvd = {this.state.showArrvd}
+                        showRecd = {this.state.showRecd}
+                        showCutoff = {this.state.showCutoff}
+                        showWeight = {this.state.showWeight}
+                        showBag = {this.state.showBag}
+                        showInInvt = {this.state.showInInvt}
+                        showStatus = {this.state.showStatus }
+                        showRailcarArr = {this.state.showRailcarArr}
+                        showRailcarArrD = {this.state.showRailcarArrD}
+                        showRailcarDep = {this.state.showRailcarDep}
+                        showRailcarDepDate = {this.state.showRailcarDepDate}
+                        showDaysPresent = {this.state.showDaysPresent}
+                        showRailcarStatus = {this.state.showRailcarStatus}
+                        checkboxChange = {this.checkboxChange}
+                        key={this.state.index}
+                        filterData = {filterData}
+                        id = {this.props.id} 
+                        weight={this.state.selectedOption}/> 
+                        : 
+                        <ViewDataComponent 
+                        checkboxChange = {this.checkboxChange} 
+                        headerCheckboxChange = {this.headerCheckboxChange} 
+                        key={this.state.index}  
+                        showARB = { this.state.showARB }
+                        showARB = {this.state.showARB}
+                        showCustomer = {this.state.showCustomer}
+                        showPO = {this.state.showPO}
+                        Railcar = {this.state.Railcar}
+                        showLot = {this.state.showLot}
+                        showMaterial = {this.state.showMaterial}
+                        showConfmd = {this.state.showConfmd}
+                        showArrvd = {this.state.showArrvd}
+                        showRecd = {this.state.showRecd}
+                        showCutoff = {this.state.showCutoff}
+                        showWeight = {this.state.showWeight}
+                        showBag = {this.state.showBag}
+                        showInInvt = {this.state.showInInvt}
+                        showStatus = {this.state.showStatus }
+                        showRailcarArr = {this.state.showRailcarArr}
+                        showRailcarArrD = {this.state.showRailcarArrD}
+                        showRailcarDep = {this.state.showRailcarDep}
+                        showRailcarDepDate = {this.state.showRailcarDepDate}
+                        showDaysPresent = {this.state.showDaysPresent}
+                        showRailcarStatus = {this.state.showRailcarStatus}  
+                        filterData = {filterData} 
+                        weight={this.state.selectedOption} />}               
              
                   </div>
         
                 <div className="row-fluid pddn-50-btm padding-top-btm-xs">
                     
-                        <div className="pull-left margin-10-last-l"><button type="button"  className="btn  btn-gray">Print Bagging Instruction</button></div>       
+                        <div className="pull-left margin-10-last-l"><button type="button" onClick = {(e)=>{this.print(e)}} className="btn  btn-gray">Print Packaging Instruction</button></div>       
                         <div className="pull-left margin-10-all"><button type="button" onClick={this.addToQueue} className="btn  btn-gray">Add To Queue</button></div>
                         <div className="pull-left margin-10-all"><button type="button"  className="btn  btn-gray">Print</button></div>
                     

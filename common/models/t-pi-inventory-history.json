@@ -131,7 +131,6 @@
       "model": "TInventoryLocation",
       "foreignKey": "inventory_location_id"
     }
-
   },
   "acls": [],
   "methods": {}

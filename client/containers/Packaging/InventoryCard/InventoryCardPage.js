@@ -5,24 +5,30 @@ import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 import { createDataLoader } from 'react-loopback';
 class InventoryCardPage extends InventoryCardForm{
+  constructor(props){
+    super(props);
+   
+  }
 componentDidMount(){
+    alert("did mount")
+    debugger
 var InventView = createDataLoader(InventoryCardPage,{
            queries:[{
            endpoint: 'TPackagingInstructions',
               filter: {
-              include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
+              include: [{"relation":"TPackagingInstructionLots" ,"scope":{"include" :["TShipmentLots"]}},{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
              }
         }]
       })
-    console.log("I have recieved props",)
+    console.log("I have recieved props")
     //debugger
    
     var base = 'TPackagingInstructions'+'/'+this.props.params.id;
     this.url = InventView._buildUrl(base, {
-      include: ['TPackagingInstructionLots',"TLocation","TCompany"]
+      include: [{"relation":"TPackagingInstructionLots" ,"scope":{"include" :["TShipmentLots" ,"TShipmentInternational"]}},"TLocation","TCompany"]
     })
     console.log(this.url,"<<<<<<<<<<<<<<<<<<<<URL")
-     
+     debugger
       $.ajax({
             url: this.url,
             success:function(data){
@@ -31,16 +37,20 @@ var InventView = createDataLoader(InventoryCardPage,{
                   viewData : [data],
                   lots : data.TPackagingInstructionLots,
                   LocationId : data.TLocation.id
-                 })
+                  })
+               this.length = this.state.viewData.length
           }.bind(this)
-
+          
         })
+      
      }
    
 	render(){
     let lots
+    let length
     if(this.state.viewData != undefined){
       lots = this.state.viewData.TPackagingInstructionLots
+      
     console.log(lots)
     }
 
@@ -49,7 +59,7 @@ var InventView = createDataLoader(InventoryCardPage,{
 			<div className="wrapper">
 			<div className="content-inside">
 			<Header />
-			<InventoryCardForm  id = {this.props.params.id} cId = {this.props.params.cID} lid={this.state.LocationId}	viewData = {this.state.viewData} lots = {this.state.lots} />
+			<InventoryCardForm length = {this.length}  id = {this.props.params.id} cId = {this.props.params.cID} lid={this.state.LocationId}	viewData = {this.state.viewData} lots = {this.state.lots} />
 			</div>
 			<Footer />
 			</div>
