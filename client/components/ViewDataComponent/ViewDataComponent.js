@@ -13,25 +13,28 @@ import HeadBody from './HeadBody';
 import NestedRows from './NestedRows'
 import request from '../../utils/request';
 import { Base_Url } from '../../constants'
+
 var moment = require('moment');
+//import from './js/'
+//import '../js/fixed.js'
 /*import './js/jquery.dataTables.min.js';
 *//*import './stylesheet/jquery.dataTables.min.css'*/
 var Loader = require('react-loader');
 
 class ViewDataComponent extends React.Component{
-    
+
     constructor(props){
         super(props);
         this.isAsc = false
         this.state = {
-        loaded : false 
+        loaded : false
         }
         this.PIData = { }
         this.myObj = { }
         this.qArray = []
         this.checkclick = this.checkclick.bind(this);
-        //this.onAscending = this.onAscending.bind(this)   
-        this.onToggel = this.onToggel.bind(this) 
+        //this.onAscending = this.onAscending.bind(this)
+        this.onToggel = this.onToggel.bind(this)
         this.onClickRow = this.onClickRow.bind(this)
       }
 componentWillMount(){
@@ -47,13 +50,13 @@ componentWillMount(){
       })
     console.log("I have recieved props")
     //debugger
-   
+
     var base = 'TPackagingInstructions'+'/'+id;
     this.url = PIview._buildUrl(base, {
       include: ['TPackagingInstructionLots',"TLocation","TCompany"]
     })
     console.log(this.url,"<<<<<<<<<<<<<<<<<<<<URL")
-      
+
       $.ajax({
             url: this.url,
             success:function(data){
@@ -90,7 +93,8 @@ componentWillMount(){
        var base = 'TPackagingInstructions';
         //TPackagingInstructionLots
         this.url = PIview._buildUrl(base, {
-            include : ['TPackagingInstructionLots',"TLocation" , "TCompany"]
+           // include : [{"relation":"TPackagingInstructionLots" ,"scope":{"include" :["TShipmentLots" ,"TShipmentInternational"]}},"TLocation" , "TCompany"]
+            include : [{"relation":"TPackagingInstructionLots" ,"scope":{"include" :{"relation" : "TShipmentLots" , "scope":{"include":{"relation":"TShipmentent" , "scope":{"include" : "TShipmentInternational"}}}}}},"TLocation" , "TCompany"]
 
 
         });
@@ -118,16 +122,16 @@ componentWillMount(){
 })
 
 
-    }  
+    }
   }
 componentDidMount() {
   debugger
    $(document).ready(function()
-   { 
+   {
     var table = $('#Packaging_Instruction_View').DataTable({
       colReorder: true
     });
-    
+
    } );
 }
 checkclick(data , value)
@@ -166,11 +170,11 @@ var PIview = createDataLoader(ViewDataComponent,{
             success:function(data){
                 console.log('ajax ',data);
                 debugger
-               this.sortedadta = 
+               this.sortedadta =
                    {
                        viewData : data
                    }
-               
+
                this.isAsc = true;
 
                             switch(switchvalue) {
@@ -180,7 +184,7 @@ var PIview = createDataLoader(ViewDataComponent,{
                            });
                            this.setState({
                            viewData  : sortedData
-                                   }) 
+                                   })
                              break;
                    case 'lot_number':
                      sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
@@ -188,7 +192,7 @@ var PIview = createDataLoader(ViewDataComponent,{
                      });
                      this.setState({
                            viewData  : sortedData
-                                   }) 
+                                   })
                        break;
                                case 'railcar_number':
                                 sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
@@ -196,7 +200,7 @@ var PIview = createDataLoader(ViewDataComponent,{
                                 });
                       this.setState({
                            viewData  : sortedData
-                                   }) 
+                                   })
                       break;
                        case 'weight':
                                 sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
@@ -204,7 +208,7 @@ var PIview = createDataLoader(ViewDataComponent,{
                                 });
                       this.setState({
                            viewData  : sortedData
-                                   }) 
+                                   })
                       break;
                       case 'location':
                                 sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
@@ -212,7 +216,7 @@ var PIview = createDataLoader(ViewDataComponent,{
                                 });
                       this.setState({
                            viewData  : sortedData
-                                   }) 
+                                   })
                       break;
                       case 'company':
                                 sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
@@ -220,7 +224,7 @@ var PIview = createDataLoader(ViewDataComponent,{
                                 });
                       this.setState({
                            viewData  : sortedData
-                                   }) 
+                                   })
                       break;
     default:
         this.state.viewData
@@ -232,7 +236,7 @@ var PIview = createDataLoader(ViewDataComponent,{
         })
 
     axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
-    
+
     this.setState({
         queue_Sequence : response.data
     })
@@ -263,11 +267,11 @@ var PIview = createDataLoader(ViewDataComponent,{
             success:function(data){
                 console.log('ajax ',data);
                 debugger
-               this.sortedadta = 
+               this.sortedadta =
                    {
                        viewData : data
                    }
-               
+
                this.isAsc = false;
 
                             switch(switchvalue) {
@@ -277,7 +281,7 @@ var PIview = createDataLoader(ViewDataComponent,{
                            });
                            this.setState({
                            viewData  : sortedData.reverse()
-                                   }) 
+                                   })
                              break;
                    case 'lot_number':
                      sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
@@ -285,7 +289,7 @@ var PIview = createDataLoader(ViewDataComponent,{
                      });
                      this.setState({
                            viewData  : sortedData.reverse()
-                                   }) 
+                                   })
                        break;
                       case 'railcar_number':
                       sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
@@ -293,7 +297,7 @@ var PIview = createDataLoader(ViewDataComponent,{
 });
                       this.setState({
                            viewData  : sortedData.reverse()
-                                   }) 
+                                   })
                       break;
                       case 'weight':
                                 sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
@@ -301,7 +305,7 @@ var PIview = createDataLoader(ViewDataComponent,{
                                 });
                       this.setState({
                            viewData  : sortedData.reverse()
-                                   }) 
+                                   })
                       break;
                        case 'location':
                                 sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
@@ -309,7 +313,7 @@ var PIview = createDataLoader(ViewDataComponent,{
                                 });
                       this.setState({
                            viewData  : sortedData.reverse()
-                                   }) 
+                                   })
                       break;
                       case 'company':
                                 sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
@@ -317,7 +321,7 @@ var PIview = createDataLoader(ViewDataComponent,{
                                 });
                       this.setState({
                            viewData  : sortedData.reverse()
-                                   }) 
+                                   })
                       break;
     default:
         this.state.viewData
@@ -329,7 +333,7 @@ var PIview = createDataLoader(ViewDataComponent,{
         })
 
     axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
-    
+
     this.setState({
         queue_Sequence : response.data
     })
@@ -380,7 +384,7 @@ var PIview = createDataLoader(ViewDataComponent,{
 onToggel(e ,elm){
 console.log('>>>>>>' , $(elm))
 
-  debugger; 
+  debugger;
   $( "button" ).click(function() {
   $( "p" ).slideToggle( "slow" );
 });
@@ -392,7 +396,7 @@ onClickRow(e){
             //var aa= rowObj.attr('data-target')
             var aa = e.target.getAttribute('data-target')
             //$('#Packaging_Instruction_View').find('.'+aa).toggleClass('hide')
-       
+
 
       if($('#Packaging_Instruction_View').find('.'+aa).length > 2)
       {
@@ -401,7 +405,7 @@ onClickRow(e){
 
 
         })
-      } 
+      }
 
         else if($('#Packaging_Instruction_View').find('.'+aa).length ==2)
 {
@@ -420,27 +424,27 @@ onClickRow(e){
 
 render(){
   debugger;
-        
+
        var filterData = this.props.filterData ;
 
       if(filterData.constructor === Array)
       {
            this.state.viewData = filterData
        }
-      
+
       var selectedWeight = this.props.weight;
-      
+
 debugger
       console.log("<<<<<^^>>>>>",this.state.viewData)
       // const data = this.state.xyz
       var listData =  _.map(this.state.viewData,(view,index)=>{
-      
+
       var count = index
       return (
        <thead key={index} >
        <tr  className="base_bg clickable" ref ="clickable">
        <th style ={{display : this.props.showARB}}> <i className="fa fa-chevron-down" aria-hidden="false" data-target ={count}  onClick={(e) => {this.onClickRow(e)}}></i> {view.TLocation ? view.TLocation.locationName : ''} </th>
-           <th style ={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</th>           
+           <th style ={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</th>
            <th style ={{display : this.props.showPO}}>{view.po_number} </th>
            <th style ={{display : this.props.Railcar}}></th>
            <th style ={{display : this.props.showMaterial}}></th>
@@ -458,7 +462,7 @@ debugger
            <th style ={{display : this.props.showRailcarDepDate}}></th>
            <th style ={{display : this.props.showDaysPresent}}></th>
             <th></th>
-      
+
            <th style ={{display : this.props.showRailcarStatus}}></th>
            <th>
                <label className="control control--checkbox">
@@ -477,7 +481,7 @@ debugger
 
            debugger
            return(
-                   <tr key={index} className ={count}>
+               <tr key={index} className ={count}>
                    <td style ={{display : this.props.showARB}}> </td>
                    <td style ={{display : this.props.showCustomer}}> </td>
                    <td style ={{display : this.props.showPO}}> </td>
@@ -486,24 +490,25 @@ debugger
                    <td style ={{display : this.props.showMaterial}}>{view.material}</td>
                    <td style ={{display : this.props.showConfmd}}>{data.status == 'CONFIRMED' || data.status == 'ARRIVED' ? 'YES': 'NO'}</td>
                    <td style ={{display : this.props.showArrvd}}>{data.railcar_arrived_on != null ? 'YES' : 'NO'}</td>
-                   <td style ={{display : this.props.showRecd}}></td>
-                   <td style ={{display : this.props.showCutoff}}></td>
+                   <td style ={{display : this.props.showRecd}}>NA</td>
+                   <td style ={{display : this.props.showCutoff}}>{(data.TShipmentLots && data.TShipmentLots.length>0 && data.TShipmentLots[0].TShipmentent && data.TShipmentLots[0].TShipmentent.TShipmentInternational && data.TShipmentLots[0].TShipmentent.TShipmentInternational.length>0 )?moment(data.TShipmentLots[0].TShipmentent.TShipmentInternational[0].cargoCutoffDate).format("YYYY-MM-DD"):'NA'}</td>
                    <td style ={{display : this.props.showWeight}}>{selectedWeight == 'lbs' ? data.weight:(data.weight/2.20462).toFixed(2)}</td>
-                   <td style ={{display : this.props.showBag}}>{}</td>
-                   <td style ={{display : this.props.showInInvt}}>{data.inInventory ?data.inInventory : '' }</td>
+                       <td style ={{display : this.props.showBag}}>{(data.TShipmentLots && data.TShipmentLots.length > 0 && data.TShipmentLots[data.TShipmentLots.length-1].noOfBags)?data.TShipmentLots[data.TShipmentLots.length -1].noOfBags : 'NA'}</td>
+                                        <td style ={{display : this.props.showInInvt}}>{(data.inInventory && (data.TShipmentLots && data.TShipmentLots.length>0)) ?(data.inInventory - data.TShipmentLots[data.TShipmentLots.length -1].noOfBags ):data.inInventory }</td>
+
                    <td style ={{display : this.props.showStatus}}>{data.status ? data.status : '' }</td>
                    <td style ={{display : this.props.showRailcarArr}}>{data.arrived != null && data.arrived == 1 ? "Yes" : "No"}</td>
                    <td style ={{display : this.props.showRailcarArrD}}>{data.railcar_arrived_on != null ? moment(data.railcar_arrived_on).format("YYYY-MM-DD") : "N/A"}</td>
-                   <td style ={{display : this.props.showRailcarDep}}>{data.railcar_status == "RETURN" ? 'YES' : "NO"}</td>
+                   <td style ={{display : this.props.showRailcarDep}}>{data.railcar_departed_on != null ? "YES" : "NO"}</td>
                    <td style ={{display : this.props.showRailcarDepDate}}>{data.railcar_departed_on != null ? moment(data.railcar_departed_on).format("YYYY-MM-DD") : "N/A"}</td>
-                   <td style ={{display : this.props.showDaysPresent}}>{diff ? diff : 'N/A'}</td>
+                   <td style ={{display : this.props.showDaysPresent}}>{diff ? diff +1 : 'N/A'}</td>
                    <td style ={{display : this.props.showRailcarStatus}}>{data.railcar_status ? data.railcar_status : ''}</td>
                    <td>
-                   <label className="control control--checkbox">
-                   <input type="checkbox"  onClick={(e) => this.checkclick(e,data)}   onChange={(e)=>{this.props.checkboxChange(e,data)}} value={view.id} id={view.TPackagingInstructionLots[index].id}/><div className="control__indicator"></div>
-                   </label>
+                       <label className="control control--checkbox">
+                           <input type="checkbox"  onClick={(e) => this.checkclick(e,data)}   onChange={(e)=>{this.props.checkboxChange(e,data)}} value={view.id} id={view.TPackagingInstructionLots[index].id}/><div className="control__indicator"></div>
+                       </label>
                    </td>
-                   </tr>
+               </tr>
                   )
             }
          )
@@ -511,149 +516,149 @@ debugger
 
        </thead>
 
-    
+
            )
        }
   )
  return(
  <Loader loaded={this.state.loaded}>
- <table id="Packaging_Instruction_View" className="table table-expandable table-striped" cellSpacing="0" >
-             <thead className="table_head">
-           <tr className="sorting_head" >
-               <th style = {{display : this.props.showARB}} onClick={(e)=> this.onAscending(e,'location')}>ARB 
+ <table id="Packaging_Instruction_View" className="table table-expandable header-fixed" cellSpacing="0" >
+             <thead className="table_head header-fixed header">
+           <tr className="sorting_head header-fixed" >
+               <th style = {{display : this.props.showARB}} onClick={(e)=> this.onAscending(e,'location')}>ARB
                     <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                     </span>
                </th>
-               <th style = {{display : this.props.showCustomer}} onClick={(e)=> this.onAscending(e,'company')}>Customer 
+               <th style = {{display : this.props.showCustomer}} onClick={(e)=> this.onAscending(e,'company')}>Customer
 
                         <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span> 
+                </span>
 
                </th>
                <th style ={{display : this.props.showPO}} onClick={(e)=> this.onAscending(e,'po_number')}>PO
                  <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span> 
+                </span>
                </th>
                <th style ={{display : this.props.Railcar}} onClick={(e)=> this.onAscending(e,'railcar_number')}>Railcar#
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span> 
+                </span>
                 </th>
                <th style ={{display : this.props.showLot}} onClick={(e)=> this.onAscending(e,'lot_number')}>Lot#
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span> 
-                
+                </span>
+
                </th>
                <th style ={{display : this.props.showMaterial}} onClick={(e)=> this.onAscending(e,'po_number')}>Material
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span> 
-                
+                </span>
+
                </th>
-               <th style ={{display : this.props.showConfmd}} onClick={(e)=> this.onAscending(e,'po_number')}>Confmd 
+               <th style ={{display : this.props.showConfmd}} onClick={(e)=> this.onAscending(e,'po_number')}>Confmd
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>                
+                </span>
                </th>
                <th style ={{display : this.props.showArrvd}} onClick={(e)=> this.onAscending(e,'po_number')}>Arrvd
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span> 
-                
-               </th>
-               <th style ={{display : this.props.showRecd}} onClick={(e)=> this.onAscending(e,'po_number')}>Recd 
-                <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span> 
-                
-               </th>
-               <th style ={{display : this.props.showCutoff}} onClick={(e)=> this.onAscending(e,'po_number')}>Cutoff 
-                <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span> 
-                
-               </th>
-               <th style ={{display : this.props.showWeight}} onClick={(e)=> this.onAscending(e,'weight')}>Weight 
-               <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span> 
-                
+                </span>
 
                </th>
-               <th style ={{display : this.props.showBag}} onClick={(e)=> this.onAscending(e,'po_number')}>#Bags 
+               <th style ={{display : this.props.showRecd}} onClick={(e)=> this.onAscending(e,'po_number')}>Recd
+                <span className="fa-stack ">
+                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                        <i className="fa fa-sort-desc fa-stack-1x"></i>
+                </span>
+
+               </th>
+               <th style ={{display : this.props.showCutoff}} onClick={(e)=> this.onAscending(e,'po_number')}>Cutoff
+                <span className="fa-stack ">
+                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                        <i className="fa fa-sort-desc fa-stack-1x"></i>
+                </span>
+
+               </th>
+               <th style ={{display : this.props.showWeight}} onClick={(e)=> this.onAscending(e,'weight')}>Weight
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span> 
-                
+                </span>
+
+
                </th>
-               <th style ={{display : this.props.showInInvt}} onClick={(e)=> this.onAscending(e,'po_number')}>(In Invt.) 
+               <th style ={{display : this.props.showBag}} onClick={(e)=> this.onAscending(e,'po_number')}>#Bags
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span> 
-                
+                </span>
+
                </th>
-               <th style ={{display : this.props.showStatus}} >Status 
+               <th style ={{display : this.props.showInInvt}} onClick={(e)=> this.onAscending(e,'po_number')}>(In Invt.)
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span> 
+                </span>
+
                </th>
-             
+               <th style ={{display : this.props.showStatus}} >Status
+               <span className="fa-stack ">
+                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                        <i className="fa fa-sort-desc fa-stack-1x"></i>
+                </span>
+               </th>
+
                 <th style ={{display : this.props.showRailcarArr}} >Railcar Arrival
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span> 
+                </span>
                </th>
                 <th style ={{display : this.props.showRailcarArrD}} >Railcar Arrival Date
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span> 
+                </span>
                </th>
                <th style ={{display : this.props.showRailcarDep}} >Railcar Departure
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span> 
+                </span>
                </th>
                <th style ={{display : this.props.showRailcarDepDate}} >Railcar Departure Date
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span> 
+                </span>
                </th>
                  <th style ={{display : this.props.showDaysPresent}} >Railcar Days Present
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span> 
+                </span>
                </th>
-                 <th style ={{display : this.props.showRailcarStatus}} >Railcar Status 
+                 <th style ={{display : this.props.showRailcarStatus}} >Railcar Status
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span> 
+                </span>
                </th>
                  <th>
-                 
+
                </th>
              </tr>
            </thead>

@@ -49,6 +49,7 @@ this.paymentChange = this.paymentChange.bind(this)
 this.paidByChange = this.paidByChange.bind(this)
 this.requestedShipdateChange = this.requestedShipdateChange.bind(this)
 this.requestedDeliveryDate = this.requestedDeliveryDate.bind(this)
+this.handleBagsToShip = this.handleBagsToShip.bind(this)
 }
 requestedDeliveryDate(e){
     this.props.editData.TShipmentDomestic[0].requestedDeliveryDate = e.target.value
@@ -206,6 +207,14 @@ bagsChange(e){
         this.props.editData.TShipmentLots[0].noOfBags = e.target.value
         this.forceUpdate()
     }
+     handleBagsToShip(e){
+        this.props.editData.TShipmentLots[0].noOfBags = e.target.value
+        this.forceUpdate()
+    }
+    handleLotBagsToShip(e,index){
+        this.props.editData.TShipmentLots[index].noOfBags = e.target.value
+        this.forceUpdate()
+    }
 componentDidMount() {
                   var MIView = createDataLoader(ShipmentEditForm, {
                         queries: [{
@@ -340,7 +349,7 @@ var paymentType = _.map(this.state.paymentType,(pType,index)=>{
         var editableLot = []
         editableLot = _.map(this.props.editData.TShipmentLots,(lots,index) =>{
             if(index != 0){
-            return <LotInformation key = {index} lotNumber = {this.lotNumber} id = {index} data = {lots} />}
+            return <LotInformation key = {index} lotNumber = {this.lotNumber} handleLotBagsToShip = {(e) => {this.handleLotBagsToShip(e,index)}} id = {index} data = {lots} />}
         })
 return (
 
@@ -393,19 +402,7 @@ return (
                                 <div className="error"><span></span></div>
                             </div>
                         </div>
-                        <div className="form-group">
-                            <label for="Purchase_Order" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">No. of Bags</label>
-                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
-                                <input type="text"
-                                className="form-control"
-                                id=""
-                                onChange = {this.bagsChange}
-                                value = {this.props.editData.numberOfBags}
-                                placeholder="No. of Bags"/>
-                                <div className="error"><span></span></div>
-                            </div>
-                        </div>
-                        <div className="bages_estimated col-lg-11 col-md-11 col-sm-11 col-xs-11"><span></span></div>
+                       <div className="bages_estimated col-lg-11 col-md-11 col-sm-11 col-xs-11"><span></span></div>
                     </fieldset>
                     <fieldset className="scheduler-border no-right-border">
                         <legend className="scheduler-border">Material Info</legend>
@@ -423,12 +420,29 @@ return (
                             <label for="Weight" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Lot Number</label>
                             <div className="col-lg-6    col-sm-11 col-xs-11 ">
                                 <select value ={this.props.editData.TShipmentLots[0].TPackagingInstructionLots.id} className="form-control" id="" >
-                                
                                 {this.lotNumber}
                                 </select>
                                 <div className="error"><span></span></div>
                             </div>
                         </div>
+                          <div className="form-group ">
+                                        <label htmlFor="Bags_To_Ship"
+                                               className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Bags To Ship</label>
+
+                                        <div className="col-lg-6  col-sm-11  col-xs-11">
+                                            <input type = "number" className="form-control"
+                                                   id="bags_to_ship"
+                                                   name="bags_to_ship"
+                                                   placeholder = "Bags To Ship"
+                                                   value = {this.props.editData.TShipmentLots[0].noOfBags ? this.props.editData.TShipmentLots[0].noOfBags : ''}
+                                                   onChange = {this.handleBagsToShip}
+                                                   defaultValue = ""/>
+
+
+
+                                            <div className="error"><span></span></div>
+                                        </div>
+                                    </div>
                         <div className="form-group">
                             <label for="Lot_Number" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">No. of Bags  for Lot</label>
                             <div className="col-lg-6    col-sm-11 col-xs-11 ">

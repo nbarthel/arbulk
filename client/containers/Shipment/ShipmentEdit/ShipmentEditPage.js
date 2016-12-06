@@ -46,7 +46,7 @@ class ShipmentEditPage  extends React.Component{
     render(){
         return(
             <div className="wrapper">
-            <Header />
+            <Header routes = {this.props.routes}/>
               <Loader loaded = {this.state.loaded}>
                 {this.state.editData != undefined ? (this.state.editData.isDomestic == 1 ? <ShipmentEditForm editData = {this.state.editData}/> : <InternationalShipementEdit editData = {this.state.editData}/>) : null}
                 </Loader>

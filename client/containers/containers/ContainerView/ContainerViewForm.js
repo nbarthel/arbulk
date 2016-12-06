@@ -55,15 +55,22 @@ class  ContainerViewForm extends React.Component {
             this.onCheckboxChange = this.onCheckboxChange.bind(this)
         this.handleTextChange = this.handleTextChange.bind(this)
         this.viewChange = this.viewChange.bind(this)
+        this.addToqueue = this.addToqueue.bind(this)
         }
 
 
     componentWillMount() {
-
-
-        axios.get(Base_Url+"TCustomViews").then(response=>{
+         axios.get(Base_Url+"TCustomViews").then(response=>{
             this.setState({
                 savedViews : response.data
+            })
+        })
+
+        axios.get(Base_Url+"TContainerInternationals/getMaxQueue").then(response=>{
+            this.sequense = response.data
+
+            this.setState({
+                max_seq : this.sequense[0].max_mark
             })
         })
     }
@@ -236,10 +243,12 @@ class  ContainerViewForm extends React.Component {
             this.checkedStatus = []
             this.checkedCompany = []
             this.Query = []
+
             delete this.Where.Company 
             delete this.Where.Customer 
             delete this.Where.status  
             delete this.state.viewData
+      //  delete this.Where
         delete this.state.Container
         delete this.state.Arrival
         delete this.state.SteamLine
@@ -252,7 +261,11 @@ class  ContainerViewForm extends React.Component {
 
     }
 
-onCheckboxChange(e,data){
+onCheckboxChange(e,data ,contData){
+    this.containerData = contData
+    console.log(">>>>>>>>>>>>>Contaimner Data" ,  this.containerData)
+    this.contId = contData.id
+    this.type = data.isDomestic
         this.editId = data.id
         console.log("DATA",data)
          if(data.isDomestic==1){
@@ -265,12 +278,42 @@ onCheckboxChange(e,data){
         }
 
     }
-onEdit(e){
+        onEdit(e){
         hashHistory.push('Container/containeredit/'+this.editId)
-    }
+           }
+
+    addToqueue() {
+        debugger;
+       if(!this.containerData.containerSteamshipLineConfirmed){
+           swal("", "Domestic container can not be in queue" , 'info')
+           return;
+       }
+        if(!this.containerData.containerArrived){
+            swal("" , "Container must be arrived before queued" , 'info');
+            return
+        }
+
+        var id  = this.contId
+        axios.put(Base_Url + "TContainerInternationals/" + id , {sequence : parseInt(this.state.max_seq)+1 , status : 'QUEUED' ,isqueued : 1}).then((response)=> {
+            swal({
+                    title: "Success",
+                    text: "Successfully added to the queue",
+                    type: "success",
+                    showCancelButton: true,
+                },
+                function(isConfirm){
+                    hashHistory.push('/Conatainer/containerqueueview')
+
+                }
+            );
+        }).catch((err)=>{
+
+        })
+}
+
     onSearch(e){
-debugger;
-        Object.defineProperty(this.Where,"Query",{enumerable:true ,
+        debugger;
+      Object.defineProperty(this.Where,"Query",{enumerable:true ,
             writable: true,
             configurable: true,
             value:this.Query})
@@ -371,7 +414,20 @@ debugger;
             //debugger
             var base = 'TShipmentents';
             //TPackagingInstructionLots TContainerInternational
-            if(intl.length >0 && serachObj.length > 0  && arrival.length>0) {
+            if(serachObjLots && serachObjLots.length>0){
+                this.url = PIview._buildUrl(base, {
+                    "include": [{
+                        "relation": "TContainerDomestic",
+                        "scope": {"where": {"or": serachObjLots}}
+                    }, {
+                        "relation": "TContainerInternational",
+                        "scope": {"where": {"or": serachObjLots}}
+                    }, "TCompany", "TLocation", "TShipmentDomestic", "TShipmentInternational"],
+                    where: {"and": serachObj}
+
+                });
+            }
+            if(intl.length >0 && serachObj.length > 0  && arrival.length>0 && serachObjLots.length ==0) {
                 this.url = PIview._buildUrl(base, {
                     "include": [{
                         "relation": "TShipmentDomestic",
@@ -385,7 +441,7 @@ debugger;
                 });
             }
 
-           else if(intl.length >0 && serachObj.length == 0  &&  arrival.length==0) {
+           else if(intl.length >0 && serachObj.length == 0  &&  arrival.length==0 && serachObjLots.length ==0) {
                 debugger;
                 this.url = PIview._buildUrl(base, {
                     "include": ["TShipmentDomestic",
@@ -398,7 +454,7 @@ debugger;
                 });
             }
 
-            else if(intl.length >0 &&  arrival.length > 0 && serachObj.length == 0  ) {
+            else if(intl.length >0 &&  arrival.length > 0 && serachObj.length == 0  && serachObjLots.length ==0) {
                 debugger;
                 this.url = PIview._buildUrl(base, {
                     "include": [{
@@ -413,7 +469,7 @@ debugger;
                 });
             }
 
-            else if( arrival.length>0 && intl.length ==0 && serachObj.length == 0) {
+            else if( arrival.length>0 && intl.length ==0 && serachObj.length == 0 && serachObjLots.length ==0) {
                 this.url = PIview._buildUrl(base, {
                     "include": [{
                         "relation": "TContainerDomestic",
@@ -424,7 +480,7 @@ debugger;
 
                 });
             }
-            else if(intl.length ==0 && serachObj.length > 0  && arrival.length==0)
+            else if(intl.length ==0 && serachObj.length > 0  && arrival.length==0 && serachObjLots.length ==0)
             {
                 this.url = PIview._buildUrl(base, {
                     "include" : ["TContainerDomestic","TContainerInternational","TCompany" ,"TLocation","TShipmentDomestic","TShipmentInternational"],
@@ -433,7 +489,7 @@ debugger;
 
                 });
             }
-            console.log(this.url,"<<<<<<<<<<<<<<<<<<<<URL")
+
 
             $.ajax({
                 url: this.url,
@@ -563,7 +619,20 @@ debugger;
             //debugger
             var base = 'TShipmentents';
             //TPackagingInstructionLots TContainerInternational
-            if(intl.length >0 && serachObj.length > 0  && arrival.length>0) {
+            if(serachObjLots && serachObjLots.length>0){
+                this.url = PIview._buildUrl(base, {
+                    "include": [{
+                        "relation": "TContainerDomestic",
+                        "scope": {"where": {"or": serachObjLots}}
+                    }, {
+                        "relation": "TContainerInternational",
+                        "scope": {"where": {"or": serachObjLots}}
+                    }, "TCompany", "TLocation", "TShipmentDomestic", "TShipmentInternational"],
+                    where: {"and": serachObj}
+
+                });
+            }
+            if(intl.length >0 && serachObj.length > 0  && arrival.length>0 && serachObjLots.length == 0 ) {
                 this.url = PIview._buildUrl(base, {
                     "include": [{
                         "relation": "TShipmentDomestic",
@@ -577,7 +646,7 @@ debugger;
                 });
             }
 
-            else if(intl.length >0 && serachObj.length == 0  &&  arrival.length==0) {
+            else if(intl.length >0 && serachObj.length == 0  &&  arrival.length==0 && serachObjLots.length == 0 ) {
                 debugger;
                 this.url = PIview._buildUrl(base, {
                     "include": ["TShipmentDomestic",
@@ -590,7 +659,7 @@ debugger;
                 });
             }
 
-            else if(intl.length >0 &&  arrival.length > 0 && serachObj.length == 0  ) {
+            else if(intl.length >0 &&  arrival.length > 0 && serachObj.length == 0 && serachObjLots.length == 0 ) {
                 debugger;
                 this.url = PIview._buildUrl(base, {
                     "include": [{
@@ -605,7 +674,7 @@ debugger;
                 });
             }
 
-            else if( arrival.length>0 && intl.length ==0 && serachObj.length == 0) {
+            else if( arrival.length>0 && intl.length ==0 && serachObj.length == 0 && serachObjLots.length == 0 ) {
                 this.url = PIview._buildUrl(base, {
                     "include": [{
                         "relation": "TContainerDomestic",
@@ -616,7 +685,7 @@ debugger;
 
                 });
             }
-            else if(intl.length ==0 && serachObj.length > 0  && arrival.length==0)
+            else if(intl.length ==0 && serachObj.length > 0  && arrival.length==0 && serachObjLots.length ==0)
             {
                 this.url = PIview._buildUrl(base, {
                     "include" : ["TContainerDomestic","TContainerInternational","TCompany" ,"TLocation","TShipmentDomestic","TShipmentInternational"],
@@ -840,7 +909,9 @@ break;
         })
 
     }
-
+onViewClick(e){
+        hashHistory.push('/Conatainer/containerDetails/'+this.contId + '/'+ this.type)
+    }
     render(){
         var filterData = ''
         if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData.length >0 )){
@@ -909,8 +980,8 @@ break;
         <div className="row-fluid pddn-50-btm padding-top-btm-xs">
             <div className="pull-left margin-10-last-l"><button type="button" onClick={(e) => this.print(e)} className="btn  btn-primary">Print BOL</button></div>
             <div className="pull-left margin-10-all"><button type="button"  className="btn  btn-primary">Print Load Order</button></div>
-            <div className="pull-left margin-10-all"><button type="button"  className="btn  btn-gray">Add to Queue</button></div>
-            <div className="pull-right margin-10-last-r"><button type="button"  className="btn  btn-success">View</button></div>
+            <div className="pull-left margin-10-all"><button type="button"  className="btn  btn-gray" onClick={this.addToqueue}>Add to Queue</button></div>
+            <div className="pull-right margin-10-last-r"><button type="button"  className="btn  btn-success" onClick = {this.onViewClick.bind(this)}>View</button></div>
             <div className="pull-right margin-10-all"><button type="button" id="edit_btn"  className="btn  btn-orange" onClick = {this.onEdit}>EDIT</button></div>
         </div>
         <div className="row pddn-50-btm">

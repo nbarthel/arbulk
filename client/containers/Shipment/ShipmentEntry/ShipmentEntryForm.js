@@ -6,6 +6,7 @@ var DatePicker = require('react-datepicker');
 import SweetAlert from 'sweetalert-react';
 import { DateField, Calendar } from 'react-datepicker'
 var moment = require('moment');
+import _ from 'lodash';
 var Spinner = require('react-spinkit');
 import {Base_Url} from '../../../constants';
 import { createDataLoader } from 'react-loopback';
@@ -44,7 +45,7 @@ class ShipmentEntryForm extends React.Component {
         this.minus=0;
         this.lotminus=0;
         this.poNumber
-        this.lotNumber 
+        this.lotNumber
         this.MIObjects = []
         this.material=[]
         this.DomesticInfoObjects = []
@@ -69,6 +70,9 @@ class ShipmentEntryForm extends React.Component {
             errors : { },
             errorsd : { },
             errorsI : { },
+        }
+        this.Address = {
+            zipCode: ''
         }
         this.lastSelectedPo = {"po_number" : ""}
         this.userId = localStorage.getItem('userId')
@@ -96,18 +100,19 @@ class ShipmentEntryForm extends React.Component {
         this.onLotMinus = this.onLotMinus.bind(this)
         this.onDomesticShipMinus=this.onDomesticShipMinus.bind(this)
         this.onCancel = this.onCancel.bind(this)
+        this.onZipBlur = this.onZipBlur.bind(this)
        // this.onDomestiCarearMinus=this.onDomestiCarearMinus.bind(this);
         //this.onCancel = this.onCancel.bind(this)
         this.isValid = this.isValid.bind(this)
         this.Total = 0
-
+       // numberOfBags : '',
 
         this.SIObj = {
 
             location_id : '',
             customer_id: '',
             isDomestic : '',
-            numberOfBags : '',
+
             numberOfContainers : '',
             releaseNumber : ''
 
@@ -219,6 +224,19 @@ class ShipmentEntryForm extends React.Component {
         this.shipDate=startdate
         console.log("startDate",startdate)
     }
+
+    onZipBlur(e){
+            var zipCode = this.Address.zipCode
+            if(zipCode.length != 6){
+                this.zipError = 1
+                this.zipCodeError = 'Enter A Valid Zip Code'
+            }else if(zipCode.length == 6){
+                this.zipError = 0
+                this.zipCodeError = ''
+            }
+            this.forceUpdate()
+        }
+
     RequestedDeliveryDate(date){
 
         var startdate=date.format('YYYY-MM-DD')
@@ -255,21 +273,20 @@ class ShipmentEntryForm extends React.Component {
 
     }
     InternationalCargoDate(date){
-        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>.",date)
-
-        var startdate=date.format('YYYY-MM-DD')
+     var startdate=date.format('YYYY-MM-DD')
 
 
         this.setState({
             CargoCutoffDate:date
         });
-        console.log(startdate);
+
         this.internationalCargoCutOffDate=startdate
-        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>date format",date)
+
 
     }
     handleSIChange(e){
        // debugger
+
         if(e.target.name == "customer_id"){
            var MIView = createDataLoader(ShipmentEntryForm,{
             queries: [{
@@ -291,24 +308,23 @@ class ShipmentEntryForm extends React.Component {
         this.poNumber = _.map(this.state.poNumber,(poNum,index)=>{
             return <option key={index} value={poNum.id}>{poNum.po_number}</option>})
                 console.log("poNumber",this.state.poNumber)
-            this.forceUpdate()                
+            this.forceUpdate()
          })
-         
-        
+
+
         this.setState({[e.target.name]: e.target.value});
         this.SIObj[e.target.name] = e.target.value
         console.log("SICHANGES",this.SIObj)
     }
     handleLIChange(e){
-        debugger
+
         this.LIobj[e.target.name] = e.target.value
         this.comPo.lot_id = e.target.value
-        let selectedValue = e.target.selectedIndex - 1 
-        this.inInventoryBags = this.state.lotNumber[selectedValue].inInventory 
+        let selectedValue = e.target.selectedIndex - 1
+        this.inInventoryBags = this.state.lotNumber[selectedValue].inInventory
+        this.comPo.inInventorybags = this.state.lotNumber[selectedValue].inInventory
         this.forceUpdate()
-        console.log("inInventory",this.inInventoryBags)
-        console.log("LICHANGE",this.LIobj)
-        
+
     }
     handleMIChange(e){
             debugger
@@ -325,7 +341,7 @@ class ShipmentEntryForm extends React.Component {
                     var base = 'TPackagingInstructionLots';
 
                     var pLotUrl = MIView._buildUrl(base, {
-                         
+
                         "where": {"pi_id":  e.target.value }
                      } );
                  console.log(pLotUrl)
@@ -334,9 +350,18 @@ class ShipmentEntryForm extends React.Component {
                     lotNumber: response.data
                    })
                    console.log("LOTNUMBER",this.state.lotNumber)
-                   console.log("HERE")
+                  var getKeys = []
+                     for(var i in this.state.lotNumber){
+
+                         getKeys.push(this.state.lotNumber[i].inInventory)
+
+                     }
+                     //var getKeys = _.pluck(this.state.lotNumber, 'inInventory');
+                     var inventoryBags = getKeys.filter(function(val) { return val !== null; })
+                     this.Total = inventoryBags.reduce(function(a,b){return parseInt(a)+parseInt(b) ;})
+
                 this.lotNumber = _.map(this.state.lotNumber,(lotNum,index) => {
-                    this.Total = this.Total + parseInt(lotNum.inInventory)
+
             return <option key = {index}  value = {lotNum.id}>{lotNum.lot_number}</option>
         })
         document.getElementById("lot_Number").selectedIndex = null
@@ -351,8 +376,8 @@ class ShipmentEntryForm extends React.Component {
         console.log("MICHANGE",this.MIobj)
     }
     handleCompPOChange(e,value){
-        console.log("I WAS CALLED") 
-        console.log(value)         
+        console.log("I WAS CALLED")
+        console.log(value)
     }
     handleComplotNumberChange(e){
 
@@ -404,7 +429,7 @@ class ShipmentEntryForm extends React.Component {
 
         console.log(this.DomesticInfoObjects);
     }*/
-    onAdd(){debugger
+    onAdd(){
         if(this.state.materialInfoList.length == 0 && Object.keys(this.MIobj).length != 0) {
             if(this.LIobj.lot_id == undefined){
                 swal("Empty Lot","Please select a lot number before adding new lots","error")
@@ -415,7 +440,7 @@ class ShipmentEntryForm extends React.Component {
             console.log("LIOBJECTS",this.LIObjects)
             const materialInfoList = this.state.materialInfoList;
             var count = this.state.index+1
-            
+
             this.setState({
                 index:count,
                 materialInfoList: materialInfoList.concat(<MaterialInformation key={materialInfoList.length} poNumber = {this.poNumber} onChange={(e) => {this.handleCompPOChange(e,value)}} comPo = {this.comPo}
@@ -424,7 +449,7 @@ class ShipmentEntryForm extends React.Component {
         }
         else if(this.state.materialInfoList.length > 0){
             if(this.comPo.lot_id == ""){
-                swal("Empty Lot","Please select a lot number before adding new lots","error")
+                swal("Empty Lot","Please select a lot number before adding new lots","info")
                 return
             }
             this.LIObjects.push(_.cloneDeep(this.comPo))
@@ -445,9 +470,8 @@ class ShipmentEntryForm extends React.Component {
 
     }
     onLotAdd(){
-        debugger
         if(this.comPo.lot_id != "") {
-          
+
            this.LIObjects.push(_.cloneDeep(this.comPo))
            this.comPo.lot_id = ""
             const lotInfoList = this.state.lotInfoList;
@@ -455,12 +479,9 @@ class ShipmentEntryForm extends React.Component {
             this.setState({
                 index:count,
                 lotInfoList:lotInfoList.concat(<LotInformation key = {lotInfoList.length} lotNumber = {this.state.lotNumber}
-                                                              lastSelectedPo = {this.lastSelectedPo} onChange = {this.handleLIChange.bind(this)} comPo = {this.comPo}/>)
+                                                              lastSelectedPo = {this.lastSelectedPo} onChange = {this.handleLIChange.bind(this)} comPo = {this.comPo} handlebagsToShip = {this.handlebagsToShip.bind(this)}/>)
             })
-            console.log(this.state.lotInfoList)
-
-            console.log(this.MIObjects);
-        }
+       }
         else {
             swal("Empty Fields","Please Enter All The Fields Before Adding New Lots.","error")
         }
@@ -525,17 +546,7 @@ class ShipmentEntryForm extends React.Component {
 
 
     }
-    /*onDomestiCarearMinus(e){
-        this.setState({
-            DomesticCarearInfoList : [ ]
-        })
-
-
-    }*/
-
-
-
-    //React.unmountComponentAtNode(document.getElementById(''));}
+   //React.unmountComponentAtNode(document.getElementById(''));}
     onAdd1(){
         if(Object.keys(this.Address).length != 0) {
             this.addDomesticshipObject();
@@ -553,7 +564,7 @@ class ShipmentEntryForm extends React.Component {
         }
 
     }
-   
+
 
     handleOptionChange(e){
         //debugger
@@ -569,7 +580,7 @@ class ShipmentEntryForm extends React.Component {
             selectedOption : option
         })
        console.log("isDomestic",this.isDomestic)
-        
+
         console.log(option);
     }
     isValid(){
@@ -606,8 +617,7 @@ class ShipmentEntryForm extends React.Component {
     }
 
     onSubmit(e){
-        // if(this.isValid() == true) {
-
+debugger;
         if(!(this.isValid())){
             swal("" , "Please fill red marked fields" , "error")
             return
@@ -628,6 +638,11 @@ class ShipmentEntryForm extends React.Component {
                 swal("", "Please fill red marked International Shipment fields", "error")
                 return
             }
+        }
+
+        if(parseInt(this.SIObj.numberOfBags) > parseInt(this.Total)){
+            swal("" , "Shipped bags must not be greater than Inventory bags" , "info")
+            return
         }
 
         this.SIObj.isDomestic = this.isDomestic
@@ -694,20 +709,73 @@ class ShipmentEntryForm extends React.Component {
         this.Allobjs.International.CargoCutoffDate = this.internationalCargoCutOffDate
         this.Allobjs.International.DocCutoffDate = this.DocCutoffDate
 
+        axios.post(Base_Url+"TShipmentents/createShipMentEntry",this.Allobjs).then((response)=>{
 
-        console.log(this.Allobjs);
 
-        axios.post(Base_Url+"TShipmentents/createShipMentEntry",this.Allobjs)
-            .then((response) => {
-                if(this.SIObj.numberOfBags == this.Total){
-                    this.LIObjects.forEach( function(element, index) {
-                        axios.put(Base_Url+"TPackagingInstructionLots/"+element.lot_id,{status:"SHIPPED"})
-                    });
-                }
-            }).then((response) => {
-                swal("Posted","Success","success")
-                hashHistory.push("/Shipment/shipmentview")
-            })
+        //if(parseInt(this.SIObj.numberOfBags) == parseInt(this.Total)){
+            var Lilength = this.LIObjects.length
+            if(this.LIObjects.length > 1) {
+                this.LIObjects.forEach(function (element, index) {
+                    if (parseInt(element.bagsToShip) == parseInt(element.inInventorybags)) {
+                        axios.put(Base_Url + "TPackagingInstructionLots/" + element.lot_id, {status: "SHIPPED"}).then((response)=> {
+
+                        }).then((response)=> {
+
+                            if (Lilength == index + 1) {
+                                swal("Posted", "Success", "success")
+                                hashHistory.push("/Shipment/shipmentview")
+                            }
+                        })
+                    }
+                    else{
+                        if (Lilength == index + 1) {
+                            swal("Posted", "Success", "success")
+                            hashHistory.push("/Shipment/shipmentview")
+                        }
+                    }
+
+
+                });
+            }
+            else if(this.LIObjects.length ==1){
+                this.LIObjects.forEach(function (element, index) {
+                    if (parseInt(element.bagsToShip) == parseInt(element.inInventorybags)) {
+                        axios.put(Base_Url + "TPackagingInstructionLots/" + element.lot_id, {status: "SHIPPED"}).then((response)=> {
+                            swal("Posted", "Success", "success")
+                            hashHistory.push("/Shipment/shipmentview")
+                        }).then((response)=> {
+
+                            //if (Lilength == index + 1) {
+                            //    swal("Posted", "Success", "success")
+                            //    hashHistory.push("/Shipment/shipmentview")
+                            //}
+                        })
+                    }
+
+
+                });
+            }
+           // }
+           // else{
+           //     swal("Posted","Success","success")
+           //     hashHistory.push("/Shipment/shipmentview")
+           // }
+
+
+        })
+
+
+
+
+        //axios.post(Base_Url+"TShipmentents/createShipMentEntry",this.Allobjs)
+        //    .then((response) => {
+        //        debugger;
+        //
+        //    }).then((response) => {
+        //
+        //        swal("Posted","Success","success")
+        //        hashHistory.push("/Shipment/shipmentview")
+        //    })
 
 
 
@@ -718,13 +786,9 @@ class ShipmentEntryForm extends React.Component {
         //  }
    }
   //  hashHistory.push('/Container/containerarrivalentry/'+response.data.id+'/'+this.SIObj.isDomestic )
- onSubmitContainer(e){
+onSubmitContainer(e){
 
-
-
-
-
-     if(!(this.isValid())){
+  if(!(this.isValid())){
          swal("" , "Please fill red marked fields" , "error")
          return
      }
@@ -744,6 +808,11 @@ class ShipmentEntryForm extends React.Component {
              swal("", "Please fill red marked International Shipment fields", "error")
              return
          }
+     }
+
+     if(parseInt(this.SIObj.numberOfBags) > parseInt(this.Total)){
+         swal("" , "Shipped bags must not be greater than Inventory bags" , "info")
+         return
      }
 
      this.SIObj.isDomestic = this.isDomestic
@@ -810,15 +879,77 @@ class ShipmentEntryForm extends React.Component {
      this.Allobjs.International.CargoCutoffDate = this.internationalCargoCutOffDate
      this.Allobjs.International.DocCutoffDate = this.DocCutoffDate
 
+    axios.post(Base_Url+"TShipmentents/createShipMentEntry",this.Allobjs).then((response)=>{
 
-     console.log(this.Allobjs);
 
-     axios.post(Base_Url+"TShipmentents/createShipMentEntry",this.Allobjs)
-         .then((response) => {
-             debugger;
-             swal("Posted","Success","success")
-             hashHistory.push('/Container/containerarrivalentry/'+response.data.id+'/'+this.SIObj.isDomestic )
-         })
+        //if(parseInt(this.SIObj.numberOfBags) == parseInt(this.Total)){
+        var Lilength = this.LIObjects.length
+        if(this.LIObjects.length > 1) {
+            this.LIObjects.forEach(function (element, index) {
+                if (parseInt(element.bagsToShip) == parseInt(element.inInventorybags)) {
+                    axios.put(Base_Url + "TPackagingInstructionLots/" + element.lot_id, {status: "SHIPPED"}).then((data)=> {
+
+                    }).then((data)=> {
+
+                        if (Lilength == index + 1) {
+                            swal("Posted", "Success", "success")
+                            hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/'+ 1 )
+                        }
+                    })
+                }
+                else{
+                    if (Lilength == index + 1) {
+                        swal("Posted", "Success", "success")
+                        hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/'+1 )
+                    }
+                }
+
+
+            });
+        }
+        else if(this.LIObjects.length ==1){
+            this.LIObjects.forEach(function (element, index) {
+                if (parseInt(element.bagsToShip) == parseInt(element.inInventorybags)) {
+                    axios.put(Base_Url + "TPackagingInstructionLots/" + element.lot_id, {status: "SHIPPED"}).then((data)=> {
+                        swal("Posted", "Success", "success")
+                        hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/'+ 1 )
+                    }).then((data)=> {
+
+                        //if (Lilength == index + 1) {
+                        //    swal("Posted", "Success", "success")
+                        //    hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/'+ response.data.isDomestic )
+                        //}
+                    })
+                }
+                else{
+                    swal("Posted", "Success", "success")
+                    hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/'+ 1 )
+                }
+
+
+            });
+        }
+        // }
+        // else{
+        //     swal("Posted","Success","success")
+        //     hashHistory.push("/Shipment/shipmentview")
+        // }
+
+
+    })
+
+
+
+
+     //axios.post(Base_Url+"TShipmentents/createShipMentEntry",this.Allobjs)
+     //    .then((response) => {
+     //        debugger;
+     //
+     //    }).then((response) => {
+     //
+     //        swal("Posted","Success","success")
+     //        hashHistory.push("/Shipment/shipmentview")
+     //    })
 
 
 
@@ -826,20 +957,25 @@ class ShipmentEntryForm extends React.Component {
      this.Address = {}
 
 
+     //  }
 
 
 
  }
 
     onCancel(e){
-        windoe.location.reload()
+        windoew.location.reload()
+    }
+
+    handlebagsToShip(e){
+
+        this.comPo.bagsToShip = e.target.value
+        console.log("bagsToShip",this.LIobj)
     }
 
 
-
-
     render() {
-    var location = _.map(this.state.location,(location,index) => 
+    var location = _.map(this.state.location,(location,index) =>
         {
             return <option key = {index} id = {location.id} value = {location.id}>{location.locationName}</option>
         })
@@ -865,8 +1001,8 @@ class ShipmentEntryForm extends React.Component {
         })
         if(this.state.lotNumber){
             console.log(this.state.lotNumber[0].TPackagingInstructionLots)
-                  
-        
+
+
     }
                return (
 
@@ -959,28 +1095,32 @@ class ShipmentEntryForm extends React.Component {
                                             <div className="error"><span>{this.state.errors.numberOfBags}</span></div>
                                         </div>
                                     </div>
-                                    <div className="form-group">
-                                        <label htmlFor="Purchase_Order"
-                                               className={this.state.errors.numberOfBags? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>No. of
-                                            Bags</label>
+                                    {
+                                        /*
+                                        <div className="form-group">
+                                            <label htmlFor="Purchase_Order"
+                                                   className={this.state.errors.numberOfBags? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>No.
+                                                of
+                                                Bags</label>
 
-                                        <div className="col-lg-6    col-sm-11 col-xs-11 ">
-                                            <input type="text"
-                                                   className="form-control"
-                                                   id="No. of Bags"
-                                                   placeholder="No. of Bags"
-                                                   name="numberOfBags"
-                                                   onChange={this.handleSIChange}
-                                                   value={this.state.noofbags}
-                                                   type="number"
+                                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                                <input type="text"
+                                                       className="form-control"
+                                                       id="No. of Bags"
+                                                       placeholder="No. of Bags"
+                                                       name="numberOfBags"
+                                                       onChange={this.handleSIChange}
+                                                       value={this.state.noofbags}
+                                                       type="number"
 
 
-                                                />
+                                                    />
 
-                                            <div className="error"><span>{this.state.errors.numberOfBags}</span></div>
+                                                <div className="error"><span>{this.state.errors.numberOfBags}</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-
+                                   */ }
                                 </fieldset>
 
 
@@ -1001,7 +1141,7 @@ class ShipmentEntryForm extends React.Component {
                                                     defaultValue = "">
                                                     <option value="" disabled >Purchase Order Number</option>
                                                     {this.poNumber}
-                                               
+
                                             </select>
 
                                             <div className="error"><span></span></div>
@@ -1038,6 +1178,27 @@ class ShipmentEntryForm extends React.Component {
                                         </div>
 
                                     </div>
+
+                                    <div className="form-group ">
+                                        <label htmlFor="Bags_To_Ship"
+                                               className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Bags To Ship</label>
+
+                                        <div className="col-lg-6  col-sm-11  col-xs-11">
+                                            <input type = "number" className="form-control"
+                                                   id="bags_to_ship"
+                                                   name="bags_to_ship"
+                                                   placeholder = "Bags To Ship"
+                                                   onChange={this.handlebagsToShip.bind(this)}
+                                                   defaultValue = ""/>
+
+
+
+                                            <div className="error"><span></span></div>
+                                        </div>
+                                    </div>
+
+
+
 
                                     <div className="form-group">
                                         <label htmlFor="Lot_Number"
@@ -1157,7 +1318,7 @@ class ShipmentEntryForm extends React.Component {
                                                         >
                                                         <option disabled value = "">Select</option>
                                                         {steamShipLine}
-                                                   
+
                                                 </select>
 
                                                 <div className="error"><span></span></div>
@@ -1298,7 +1459,7 @@ class ShipmentEntryForm extends React.Component {
                                         <div className="col-lg-6  col-sm-11 col-xs-11 ">
                                           <input type="text"
                                            className="form-control"
-                                            id="" 
+                                            id=""
                                             placeholder="Booking Number"
                                             name = "bookingNumber"
                                             onChange={this.DomesticChange}
@@ -1380,24 +1541,24 @@ class ShipmentEntryForm extends React.Component {
                                             </div>
                                         </div>
                                         <div className="form-group">
-                                            <label htmlFor="Type_of_Packaging"
-                                                   className={this.state.errorsd.recipentTelNumber ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Reciepient Telephone
-                                            </label>
+                                             <label htmlFor="Type_of_Packaging"
+                                                    className={this.state.errorsd.recipentTelNumber ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Reciepient Telephone
+                                             </label>
 
-                                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
-                                                <input type="text"
-                                                       className="form-control"
-                                                       id=""
-                                                       placeholder="Reciepient Telephone"
-                                                       name="recipentTelNumber"
-                                                       onChange={this.DomesticChange}
+                                             <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                                 <input type="text"
+                                                        className="form-control"
+                                                        id=""
+                                                        placeholder="Reciepient Telephone"
+                                                        name="recipentTelNumber"
+                                                        onChange={this.DomesticChange}
 
 
-                                                    />
+                                                     />
 
-                                                <div className="error"><span></span></div>
-                                            </div>
-                                        </div>
+                                                 <div className="error"><span>{this.state.errorsd.recipentTelNumber ? this.state.errorsd.recipentTelNumber : '' }</span></div>
+                                             </div>
+                                         </div>
 
 
                                         <div className="pddn-30-top">
@@ -1425,21 +1586,24 @@ class ShipmentEntryForm extends React.Component {
                                             </div>
 
                                             <div className="form-group">
-                                                <label htmlFor="Stretch_wrap"
-                                                       className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Ship
-                                                    to Zip Code</label>
+                                                 <label htmlFor="Stretch_wrap"
+                                                        className={this.zipError ?  "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error" :"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Ship
+                                                     to Zip Code</label>
 
-                                                <div className="col-lg-6   col-sm-11 col-xs-11 ">
-                                                    <input type="text"
-                                                           className="form-control"
-                                                           id="No_of_Bages_Pallat"
-                                                           placeholder="Ship to Zip Code"
-                                                           name="zipCode"
-                                                           onChange={this.DomesticChange1}
-                                                        />
+                                                 <div className="col-lg-6   col-sm-11 col-xs-11 ">
+                                                     <input
+                                                     type = "number"
+                                                      maxlength = "3"
+                                                            className="form-control"
+                                                            id="No_of_Bages_Pallat"
+                                                            placeholder="Ship to Zip Code"
+                                                            name="zipCode"
+                                                            onBlur = {this.onZipBlur}
+                                                            onChange={this.DomesticChange1}
+                                                         />
 
-                                                    <div className="error"><span></span></div>
-                                                </div>
+                                                     <div className="error"><span>{this.zipCodeError != '' ? this.zipCodeError : ''}</span></div>
+                                                 </div>
                                                 {this.state.DomesticInfoList.length> 0 ? <i className="fa-2x fa fa-minus base_color" onClick={this.onDomesticShipMinus} aria-hidden="true"></i> : null}
                                             </div>
                                             <div className="form-group">
@@ -1622,7 +1786,7 @@ class ShipmentEntryForm extends React.Component {
                                 <div className="pull-left margin-10-all">
                                     <button type="button" className="btn  btn-gray text-uppercase" onClick={this.onCancel}>Cancel</button>
                                 </div>
-                           
+
                             </div>
 
                         </form>

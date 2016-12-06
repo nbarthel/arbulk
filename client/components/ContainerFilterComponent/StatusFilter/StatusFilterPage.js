@@ -3,13 +3,11 @@ import _ from 'lodash';
 class StatusFilterPage extends React.Component {
     constructor(props){
         super(props);
-       this.status = [{name:"UNCONFIRMED",id: 0},
-        {name:"CONFIRMED",id:1},
-        {name:"READY",id:2},
-        {name:"QUEUED",id:3},
-        {name:"PARTIALLY PACKED",id:4},
-        {name:"ININVENTORY",id:5},
-        {name:"SHIPPED",id:6}]
+       this.status = [
+        {name:"ALLOCATED",id:0},
+         {name:"QUEUED",id:1},
+        {name:"LOADED",id:2},
+           {name:"INTRANSIT",id:3},{name:"DELIVERED",id:4}]
         
         this.checkedStatus = { }
 

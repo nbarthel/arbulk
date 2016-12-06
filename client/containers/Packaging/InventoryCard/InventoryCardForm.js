@@ -236,6 +236,38 @@ componentWillMount() {
 	<div className="label_info" >
 		<div className="row pddn-20-top">
 
+			<div className=" col-lg-4 col-md-4 col-sm-6 col-xs-12">
+				<fieldset className="scheduler-border">
+					<legend className="scheduler-border">PACKAGING Info </legend>
+					<div className="col-lg-5 col-sm-5 col-xs-5">Bag Type</div>
+					<div  className="col-lg-2 col-sm-2 col-xs-2 ">:</div>
+					<div className="col-lg-5 col-sm-5 col-xs-5"><b>{this.props.viewData ? this.props.viewData[0].TPackagingMaterial.packagingName : ''}</b></div>
+
+					<div className="col-lg-5 col-sm-5 col-xs-5">Pallet Type</div>
+					<div  className="col-lg-2 col-sm-2 col-xs-2">:</div>
+					<div className="col-lg-5 col-sm-5 col-xs-5"><b>{this.props.viewData ? this.props.viewData[0].TPalletType.palletType : ''}</b></div>
+
+					<div className="col-lg-5 col-sm-5 col-xs-5">Bags per Pallet</div>
+					<div  className="col-lg-2 col-sm-2 col-xs-2">:</div>
+					<div className="col-lg-5 col-sm-5 col-xs-5"><b> {this.props.viewData ? this.props.viewData[0].bags_per_pallet : ''}</b></div>
+
+					<div className="col-lg-5 col-sm-5 col-xs-5">Stretch Wrap</div>
+					<div  className="col-lg-2 col-sm-2 col-xs-2">:</div>
+					<div className="col-lg-5 col-sm-5 col-xs-5"><b>{this.props.viewData ? this.props.viewData[0].TWrapType.name : ''}</b></div>
+
+					<div className="col-lg-5 col-sm-5 col-xs-5">ORIGIN</div>
+					<div  className="col-lg-2 col-sm-2 col-xs-2 ">:</div>
+					<div className="col-lg-5 col-sm-5 col-xs-5"><b>Made in {this.props.viewData ? this.props.viewData[0].TOrigin.origin : ''}</b></div>
+
+				</fieldset>
+			</div>
+
+
+
+
+
+
+
 					<div className=" col-lg-4 col-md-4 col-sm-6 col-xs-12">
 						<fieldset className="scheduler-border">
 							<legend className="scheduler-border">PACKAGING LABEL </legend>

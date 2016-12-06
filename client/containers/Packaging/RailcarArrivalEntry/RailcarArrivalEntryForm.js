@@ -559,17 +559,7 @@ else{
 				</div>
 										
 				
-				<div className=" ">				
-					<div className="pull-left pddn-10-top ">					
-						 <div className="padding-10-last-l" >
-						 <div className="right-inner-addon "><i className="fa fa-calendar" aria-hidden="true"></i>				
-										<input className="form-control" id="date" name="date" placeholder="railcar arrival Date" type="text" onClick={this.onTap}/>
-				
 
-								 </div>
-						</div>
-						</div>						
-					</div>					
 				    <div className="pull-right padding-top-btm-xs"> 					
 						<div className="pull-right padding-10-last-r"><button type="button"  className="btn  btn-primary" onClick={this.updateCartArrival} >Save </button></div>
 						<div className="pull-right padding-10-all"><button type="button"  className="btn  btn-gray" onClick={hashHistory.goBack}>Cancel </button></div>						

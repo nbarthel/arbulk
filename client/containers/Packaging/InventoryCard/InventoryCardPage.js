@@ -10,8 +10,7 @@ class InventoryCardPage extends InventoryCardForm{
    
   }
 componentDidMount(){
-    alert("did mount")
-    debugger
+  
 var InventView = createDataLoader(InventoryCardPage,{
            queries:[{
            endpoint: 'TPackagingInstructions',
@@ -25,7 +24,7 @@ var InventView = createDataLoader(InventoryCardPage,{
    
     var base = 'TPackagingInstructions'+'/'+this.props.params.id;
     this.url = InventView._buildUrl(base, {
-      include: [{"relation":"TPackagingInstructionLots" ,"scope":{"include" :["TShipmentLots" ,"TShipmentInternational"]}},"TLocation","TCompany"]
+      include: [{"relation":"TPackagingInstructionLots" ,"scope":{"include" :["TShipmentLots" ,"TShipmentInternational"]}},"TLocation","TCompany","TPackagingMaterial","TPalletType","TWrapType","TOrigin"]
     })
     console.log(this.url,"<<<<<<<<<<<<<<<<<<<<URL")
      debugger
@@ -58,7 +57,7 @@ var InventView = createDataLoader(InventoryCardPage,{
 		return(
 			<div className="wrapper">
 			<div className="content-inside">
-			<Header />
+			<Header routes = {this.props.routes} />
 			<InventoryCardForm length = {this.length}  id = {this.props.params.id} cId = {this.props.params.cID} lid={this.state.LocationId}	viewData = {this.state.viewData} lots = {this.state.lots} />
 			</div>
 			<Footer />

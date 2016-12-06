@@ -4,8 +4,7 @@
 import Validator from 'validator';
 import isEmpty from 'lodash/isEmpty';
 export default function validateInternationalInput(data){
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>dataaaaaaaaaaaa",data);
-    debugger
+
     let errorsI = {};
 
 

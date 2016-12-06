@@ -53,7 +53,7 @@ class CurrentInventory extends Component {
 
 
 componentWillReceiveProps(nextProps) {
-
+	
 	var stamp = this.props.stamp
     this.stamp = stamp
 	let id = this.props.lID

@@ -35,8 +35,7 @@ export default class PrintPackaging extends React.Component {
                 }
             }]
         })
-        console.log("I have recieved props")
-        //debugger
+
 
         var base = 'TPackagingInstructions'+'/'+this.props.params.id;
         this.url = InventView._buildUrl(base, {
@@ -282,7 +281,7 @@ export default class PrintPackaging extends React.Component {
                                             <td>2)  ____________________________</td>
                                         </tr>
                                         <tr>
-                                            <td colSpan="2">Packout Accuracy & Inventory Input):</td>
+                                            <td colSpan="2">Packout Accuracy and Inventory Input):</td>
                                             <td>_______________________________</td>
                                         </tr>
                                     </table>

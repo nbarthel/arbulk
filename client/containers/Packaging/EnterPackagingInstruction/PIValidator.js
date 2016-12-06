@@ -21,12 +21,12 @@ debugger
 	if (Validator.isNull(data.origin_id)){
 		errors.origin_id = 'Origin field is required';
 	}
-	if (Validator.isNull(data.packaging_material_id)){
-		errors.packaging_material_id = "Type field is required"
-	}
-	if(data.packaging_material_id == '1'){
 	if (Validator.isNull(data.bag_id)){
 		errors.bag_id = "Type field is required"
+	}
+	if(data.bag_id == '1'){
+	if (Validator.isNull(data.packaging_material_id)){
+		errors.packaging_material_id = "Type field is required"
 	}
 	}
 	if (Validator.isNull(data.pallet_type_id)){

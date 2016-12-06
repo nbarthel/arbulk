@@ -22,7 +22,7 @@ export default function createRoutes(store) {
 	},
 	{
 		path: '/Packaging/enterpackginginst/(:id)',
-		name: 'Packaging > Enter Packaging Instruction ',
+		name: <span>Packaging<i className="fa fa-angle-double-right"/>Enter Packaging Instruction</span>,
 		getComponent(nextState, cb){
 			System.import('./containers/Packaging/EnterPackagingInstruction/EnterPackagingInstructionPage')
 			.then(loadModule(cb))
@@ -32,7 +32,7 @@ export default function createRoutes(store) {
 	},
 	{
 		path: '/Packaging/packaginginstview/(:id)',
-		name: 'Packaging Instruction View',
+		name: <span>Packaging<i className="fa fa-angle-double-right"/>Packaging Instruction View</span>,
 		getComponent(nextState, cb){
 			System.import('./containers/Packaging/PackagingInstructionView/PackagingInstructionViewPage')
 			.then(loadModule(cb))
@@ -41,7 +41,7 @@ export default function createRoutes(store) {
 	},
 	{
 		path: '/Packaging/railcararrival',
-		name: 'Railcar Arrival',
+		name: <span>Packaging<i className="fa fa-angle-double-right"/>Railcar Arrival</span>,
 		getComponent(nextState, cb){
 			System.import('./containers/Packaging/RailcarArrivalEntry/RailcarArrivalEntryPage')
 			.then(loadModule(cb))
@@ -50,7 +50,7 @@ export default function createRoutes(store) {
 	},
 	{
 		path: '/Packaging/railcardeparte',
-		name: 'Railcar Departure',
+		name: <span>Packaging<i className="fa fa-angle-double-right"/>Railcar Departure</span>,
 		getComponent(nextState, cb){
 			System.import('./containers/Packaging/RailcarDepartureEntry/RailcarDepartureEntryPage')
 			.then(loadModule(cb))
@@ -59,7 +59,7 @@ export default function createRoutes(store) {
 	},
 	{
 		path: '/Packaging/packaginginstqueue',
-		name: 'Packaging Queue View',
+		name: <span>Packaging<i className = "fa fa-angle-double-right"/>Packaging Queue View</span>,
 		getComponent(nextState, cb){
 			System.import('./containers/Packaging/PackagingInstructionQueueView/PackagingInstructionQueueViewPage')
 			.then(loadModule(cb))
@@ -68,16 +68,25 @@ export default function createRoutes(store) {
 	},
 	{
 		path: '/Shipment/shipmententry',
-		name: 'Shipment Entry',
+		name: <span>Shipment<i className="fa fa-angle-double-right"/>Shipment Entry</span>,
 		getComponent(nextState, cb){
 			System.import('./containers/Shipment/ShipmentEntry/ShipmentEntryPage')
 			.then(loadModule(cb))
 			.catch(errorLoading)
 		}
 	},
+		{
+			path: '/Shipment/shipmentPrint/(:id)',
+			name: 'Form Print',
+			getComponent(nextState, cb){
+				System.import('./containers/Shipment/ShipmentPrint/ShipmentPrint')
+					.then(loadModule(cb))
+					.catch(errorLoading)
+			}
+		},
 	{
 		path: '/Shipment/shipmentview',
-		name: 'Shipment View',
+		name: <span>Shipment<i className="fa fa-angle-double-right"/>Shipment View</span>,
 		getComponent(nextState, cb){
 			System.import('./containers/Shipment/ShipmentView/ShipmentViewPage')
 			.then(loadModule(cb))
@@ -86,7 +95,7 @@ export default function createRoutes(store) {
 	},
 	{
 		path: '/Shipment/shipmentConfirmation/(:id)',
-		name: 'Confirm Shipment',
+		name: <span>Shipment<i className = "fa fa-angle-double-right"/>Confirm Shipment</span>,
 		getComponent(nextState,cb){
 			System.import('./containers/Shipment/ShipmentConfirmation/ShipmentConfirmationPage')
 			.then(loadModule(cb))
@@ -95,7 +104,7 @@ export default function createRoutes(store) {
 	},
 	{
 		path:'/Shipment/shipmentedit/(:id)',
-		name: 'Edit Shipment',
+		name: <span>Shipment<i className="fa fa-angle-double-right"/>Edit Shipment</span>,
 		getComponent(nextState,cb){
 			System.import('./containers/Shipment/ShipmentEdit/ShipmentEditPage')
 			.then(loadModule(cb))
@@ -104,7 +113,7 @@ export default function createRoutes(store) {
 	},
 	{
 		path: '/Container/containerarrivalentry',
-		name: 'Container Arrival Entry',
+		name: <span>Container<i className="fa fa-angle-double-right"/>Container Arrival Entry</span>,
 		getComponent(nextState, cb){
 			System.import('./containers/containers/ContainerArrivalEntry/ContainerArrivalEntryPage')
 			.then(loadModule(cb))
@@ -122,7 +131,7 @@ export default function createRoutes(store) {
 		},
 	{
 		path: '/Container/containerview',
-		name: 'Container View Page',
+		name: <span>Container<i className="fa fa-angle-double-right"/>Container View Page</span>,
 		getComponent(nextState, cb){
 			System.import('./containers/containers/ContainerView/ContainerViewPage')
 			.then(loadModule(cb))
@@ -131,37 +140,16 @@ export default function createRoutes(store) {
 	},
 	{
 		path: '/Container/containeredit/(:id)',
-		name: 'Container Edit',
+		name: <span>Container<i className="fa fa-angle-double-right"/>Container Edit</span>,
 		getComponent(nextState,cb){
 			System.import('./containers/containers/ContainerEdit/ContainerEditPage')
 			.then(loadModule(cb))
 			.catch(errorLoading)
 		}
 	},
-
-		{
-			path: '/Container/containerPrint/(:containerId)',
-			name: 'Form Print',
-			getComponent(nextState, cb){
-				System.import('./containers/containers/ContainerPrint/ContainerPrint')
-					.then(loadModule(cb))
-					.catch(errorLoading)
-			}
-		},
-		{
-			path: '/Shipment/shipmentPrint/(:id)',
-			name: 'Form Print',
-			getComponent(nextState, cb){
-				System.import('./containers/Shipment/ShipmentPrint/ShipmentPrint')
-					.then(loadModule(cb))
-					.catch(errorLoading)
-			}
-		},
-
-
 	{
 		path: '/Conatainer/containerqueueview',
-		name: 'Container Queue View Page',
+		name: <span>Container<i className="fa fa-angle-double-right"/>Container Queue View Page</span>,
 		getComponent(nextState, cb){
 			System.import('./containers/containers/ContainerQueueView/ContainerQueueViewPage')
 			.then(loadModule(cb))
@@ -188,7 +176,7 @@ export default function createRoutes(store) {
 	},
 	{
 		path: '/Packaging/inventorycard/(:id)/(:cID)',
-		name: 'Inventory Card',
+		name: <span>Packaging<i className="fa fa-angle-double-right"/>Inventory Card</span>,
 		getComponent(nextState, cb){
 			System.import('./containers/Packaging/InventoryCard/InventoryCardPage')
 			.then(loadModule(cb))
@@ -197,7 +185,7 @@ export default function createRoutes(store) {
 	},
 	{
 		path: '/Packaging/confirmpckginst/(:id)',
-		name: 'Confirm Packaging',
+		name: <span>Packaging<i className="fa fa-angle-double-right"/>Confirm Packaging</span>,
 		getComponent(nextState, cb){
 			System.import('./containers/Packaging/ConfirmPackagingInstruction/ConfirmPackagingInstructionPage')
 			.then(loadModule(cb))
@@ -230,7 +218,35 @@ export default function createRoutes(store) {
                     .then(loadModule(cb))
                     .catch(errorLoading)
             }
-        }
+        },
+        {
+        	path: '/Shipment/shipmentDetails/(:id)',
+        	name: <span>Shipment<i className="fa fa-angle-double-right"/>Shipment View Details</span>,
+        	getComponent(nextState,cb){
+        		System.import('./containers/Shipment/ShipmentDetails/ShipmentDetailsPage')
+        		.then(loadModule(cb))
+        		.catch(errorLoading)
+        	}
+        },
+		{
+			path: '/Shipment/shipmentDetails/(:id)/(:isDomestic)',
+			name: <span>Shipment<i className="fa fa-angle-double-right"/>Shipment View Details</span>,
+			getComponent(nextState,cb){
+				System.import('./containers/Shipment/ShipmentDetails/ShipmentDetailsPage')
+					.then(loadModule(cb))
+					.catch(errorLoading)
+			}
+		},
+        {
+        	path:'/Conatainer/containerDetails/(:id)/(:isDomestic)',
+        	name: <span>Container<i className="fa fa-angle-double-right"/>Container Edit Detail</span>,
+        	getComponent(nextState,cb){
+        		System.import('./containers/containers/ContainerDetails/ContainerDetailsPage')
+        		.then(loadModule(cb))
+        		.catch(errorLoading)
+        	}
+
+        },
 
 	];
 

@@ -6,7 +6,7 @@ class ShipmentViewPage  extends React.Component{
     render(){
         return(
             <div className="wrapper">
-            <Header />
+            <Header routes = {this.props.routes}/>
                 <ShipmentViewForm/>
                 <Footer />
             </div>

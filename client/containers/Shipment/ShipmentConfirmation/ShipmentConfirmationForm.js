@@ -2,6 +2,9 @@ import React from 'react';
 import '../../../public/stylesheets/sweetalert.css';
 import SweetAlert from 'sweetalert-react';
 //var shpData = require('./ShpmentViewData.json')
+import axios from 'axios'
+import { Base_Url } from '../../../constants'
+import { hashHistory } from 'react-router'
 
 class  ShipmentConfirmationForm extends React.Component {
     constructor(props){
@@ -24,11 +27,18 @@ class  ShipmentConfirmationForm extends React.Component {
         console.log("COUNT",this.count)
     }
     onSubmit(e){
-        if(this.count == 19){
-            swal("Hogaya","Hogaya BC","info")
+        console.log(">>>>>>>>>>>>>>>>>>" , this.props.data.TShipmentent.TShipmentInternational[0].id)
+        var shipmentId = this.props.data.TShipmentent.TShipmentInternational[0].id
+        if(this.count == 16){
+
+            axios.put(Base_Url+"TShipmentInternationals/"+ shipmentId , {status : "CONFIRMED"}).then((response)=>{
+                swal("Confirmed","Shipment Has Been Confirmed","info")
+                hashHistory.push("/Shipment/shipmentview")
+            })
+
         }
         else{
-            swal("Na Ho Paega","Tumse Na Ho paega beta","error")
+            swal("Missing Checks","Please Check All The Checkboxes","error")
         }
     }
     render() {
@@ -48,7 +58,7 @@ class  ShipmentConfirmationForm extends React.Component {
                     <div className="col-lg-3 "><label for="" className=" control-label">Customer Name</label></div>
                     <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
                     <select className="form-control" id="" name="Type_of_Packaging" disabled>
-                     <option value = {this.props.data.TCompany ?this.props.data.TCompany.name : '' }>{this.props.data.TCompany ?this.props.data.TCompany.name : '' }</option>
+                     <option value = {this.props.data.TShipmentent.TCompany ?this.props.data.TShipmentent.TCompany.name : '' }>{this.props.data.TShipmentent.TCompany ?this.props.data.TShipmentent.TCompany.name : '' }</option>
                       </select>                              
                       <div className="error"><span></span></div>
                     </div>
@@ -63,7 +73,7 @@ class  ShipmentConfirmationForm extends React.Component {
                 <div className="form-group">
                     <div className="col-lg-3 "><label for="Purchase_Order" className=" control-label">Release #</label></div>
                     <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-                      <input type="text" className="form-control" disabled value = {this.props.data.releaseNumber ? this.props.data.releaseNumber : '' } id="Purchase_Order" placeholder="Release #"/>
+                      <input type="text" className="form-control" disabled value = {this.props.data.TShipmentent.releaseNumber ? this.props.data.TShipmentent.releaseNumber : '' } id="Purchase_Order" placeholder="Release #"/>
                       <div className="error"><span></span></div>
                     </div>
                     <div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">          
@@ -76,7 +86,7 @@ class  ShipmentConfirmationForm extends React.Component {
                 <div className="form-group ">
                     <div className="col-lg-3 "><label for="Rail_Car_Number" className=" control-label">Purchase Order Number</label></div>
                     <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-                      <input type="text" className="form-control" id="Rail_Car_Number" placeholder="Purchase Order Number"/>
+                      <input type="text" className="form-control" value = {this.props.data.TPackagingInstructions.po_number} disabled id="Rail_Car_Number" placeholder="Purchase Order Number"/>
                       <div className="error"><span></span></div>
                     </div>
                     <div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">      
@@ -88,7 +98,7 @@ class  ShipmentConfirmationForm extends React.Component {
                 <div className="form-group">
                     <div className="col-lg-3 "><label for="Lot_Number" className="control-label">Lot Number</label></div>
                     <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-                         <input type="text" className="form-control" disabled value = '' id="Lot_Number" placeholder="Lot Number"/>
+                         <input type="text" className="form-control" disabled value = {this.props.data.TPackagingInstructionLots.lot_number} id="Lot_Number" placeholder="Lot Number"/>
                       <div className="error"><span></span></div>
                     </div>
                     <div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">          
@@ -98,12 +108,12 @@ class  ShipmentConfirmationForm extends React.Component {
                     </div>
                 </div>
                 
-                <div className="pddn-100-top"> 
+                <div className="pddn-10-top"> 
                         <div className="form-group">
                         
                             <div className="col-lg-3 "><label for="Material" className=" control-label">Material</label></div>
                             <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-                               <input type="text" className="form-control" id="" placeholder="Material"/>
+                               <input type="text" className="form-control" value = {this.props.data.TPackagingInstructions.material} disabled id="" placeholder="Material"/>
                               <div className="error"><span></span></div>
                             </div>
                             <div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">              
@@ -117,7 +127,7 @@ class  ShipmentConfirmationForm extends React.Component {
                             <div className="col-lg-3 "><label for="Material" className="control-label">Number of Containers</label></div>
                             <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
                                <select disabled className="form-control" id="Type_of_Packaging" name="Type_of_Packaging">
-                                <option >{this.props.data.numberOfContainers}</option>
+                                <option >{this.props.data.TShipmentent.numberOfContainers}</option>
                               </select>
                               <div className="error"><span></span></div>
                             </div>
@@ -131,7 +141,7 @@ class  ShipmentConfirmationForm extends React.Component {
                         <div className="form-group">
                             <div className="col-lg-3 "><label for="" className=" control-label">Number of Bags</label></div>
                             <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-                               <input type="text" className="form-control" value = {this.props.data.numberOfBags} id="" placeholder="Number of Bags"/>
+                               <input type="text" className="form-control" value = {this.props.data.TShipmentent.numberOfBags} disabled id="" placeholder="Number of Bags"/>
                               <div className="error"><span></span></div>
                             </div>
                             <div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">              
@@ -159,7 +169,7 @@ class  ShipmentConfirmationForm extends React.Component {
                 <div className="form-group">
                     <div className="col-lg-3 "><label for="Type_of_Packaging" className=" control-label">Freight Forwarder</label></div>
                     <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-                      <input type="text" className="form-control" value = {this.props.data.TShipmentInternational[0].freightForwarder != null ? this.props.data.TShipmentInternational[0].freightForwarder : ''} id="" placeholder="Freight Forwarder"/>
+                      <input type="text" className="form-control" disabled value = {this.props.data.TShipmentent.TShipmentInternational[0].freightForwarder != null ? this.props.data.TShipmentent.TShipmentInternational[0].freightForwarder : ''} id="" placeholder="Freight Forwarder"/>
                       <div className="error"><span></span></div>
                     </div>
                     <div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">          
@@ -172,7 +182,7 @@ class  ShipmentConfirmationForm extends React.Component {
                 <div className="form-group">
                     <div className="col-lg-3 "><label for="Type_of_Bag" className=" control-label">Container Type</label></div>
                     <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-                      <input type="text" className="form-control"  disabled value = '' id="" placeholder="Container Type"/>
+                      <input type="text" className="form-control"  disabled value = {this.props.data.TShipmentent.TShipmentInternational[0].TContainerType.name} id="" placeholder="Container Type"/>
                       <div className="error"><span></span></div>
                     </div>
                     <div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">      
@@ -186,7 +196,7 @@ class  ShipmentConfirmationForm extends React.Component {
                     <div className="col-lg-3 "><label for="Type_of_Pallet" className=" control-label">Steamline  Vessel</label></div>
                     <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
                       <select className="form-control" disabled id="Type_of_Pallet" name="Type_of_Pallet">
-                        <option>{this.props.data.TShipmentInternational[0].TSteamshipLine.name}</option>
+                        <option>{this.props.data.TShipmentent.TShipmentInternational[0].TSteamshipLine.name}</option>
                       </select>
                       <div className="error"><span></span></div>
                     </div>
@@ -196,38 +206,39 @@ class  ShipmentConfirmationForm extends React.Component {
                         </label>                
                     </div>
                 </div>
-                
+             {/*   
                 <div className="form-group">
                     <div className="col-lg-3 "><label for="No_of_Bages_Pallat" className=" control-label">Shipment FInal  Destination</label></div>
-                    <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-                      <input type="text" className="form-control" id="" placeholder="Shipment FInal  Destination"/>
-                      <div className="error"><span></span></div>
-                    </div>
-                    <div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">          
-                        <label className="control control--checkbox ">Confirmed
-                          <input type="checkbox" onClick = {this.onCheck} id=""/><div className="control__indicator"></div>
-                        </label>                
-                    </div>
-                </div>
-                
-                <div className="form-group">
-                    <div className="col-lg-3 "><label for="Stretch_wrap" className=" control-label">Receiving Customer</label></div>
-                    <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-                        <input type="text" className="form-control" id="" placeholder="Receiving Customer"/>
-                      <div className="error"><span></span></div>
-                    </div>
-                    <div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">          
-                        <label className="control control--checkbox ">Confirmed
-                          <input type="checkbox" onClick = {this.onCheck}  id=""/><div className="control__indicator"></div>
-                        </label>                
-                    </div>
-                </div>
+                                 <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
+                                   <input type="text" className="form-control" id="" placeholder="Shipment FInal  Destination"/>
+                                   <div className="error"><span></span></div>
+                                 </div>
+                                 <div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">          
+                                     <label className="control control--checkbox ">Confirmed
+                                       <input type="checkbox" onClick = {this.onCheck} id=""/><div className="control__indicator"></div>
+                                     </label>                
+                                 </div>
+                             </div>
+                             
+                             <div className="form-group">
+                                 <div className="col-lg-3 "><label for="Stretch_wrap" className=" control-label">Receiving Customer</label></div>
+                                 <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
+                                     <input type="text" className="form-control" id="" placeholder="Receiving Customer"/>
+                                   <div className="error"><span></span></div>
+                                 </div>
+                                 <div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">          
+                                     <label className="control control--checkbox ">Confirmed
+                                       <input type="checkbox" onClick = {this.onCheck}  id=""/><div className="control__indicator"></div>
+                                     </label>                
+                                 </div>
+                             </div>
+                         */}
         
                 <div className="form-group">
                     <div className="col-lg-3 "><label for="Stretch_wrap" className=" control-label">Earlieast Return Date </label></div>
                     <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
                        <div className="right-inner-addon "><i className="fa fa-calendar" aria-hidden="true"></i>
-                        <input className="form-control" disabled id="date" name="date" value = {moment(this.props.data.TShipmentInternational[0].earliestReturnDate).format("MM-DD-YYYY")} placeholder="Earlieast Return Date" type="text"/>
+                        <input className="form-control" disabled id="date" name="date" value = {moment(this.props.data.TShipmentent.TShipmentInternational[0].earliestReturnDate).format("MM-DD-YYYY")} placeholder="Earlieast Return Date" type="text"/>
                     </div>
                       <div className="error"><span></span></div>
                     </div>
@@ -242,7 +253,7 @@ class  ShipmentConfirmationForm extends React.Component {
                     <div className="col-lg-3 "><label for="Stretch_wrap" className=" control-label">Doc Cutoff Date</label></div>
                     <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
                      <div className="right-inner-addon "><i className="fa fa-calendar" aria-hidden="true"></i>
-                        <input className="form-control" disabled value = {moment(this.props.data.TShipmentInternational[0].docCutoffDate).format("MM-DD-YYYY")} id="date" name="date" placeholder="Doc Cutoff Date" type="text"/>
+                        <input className="form-control" disabled value = {moment(this.props.data.TShipmentent.TShipmentInternational[0].docCutoffDate).format("MM-DD-YYYY")} id="date" name="date" placeholder="Doc Cutoff Date" type="text"/>
                     </div>
                       <div className="error"><span></span></div>
                     </div>
@@ -257,7 +268,7 @@ class  ShipmentConfirmationForm extends React.Component {
                     <div className="col-lg-3 "><label for="Stretch_wrap" className=" control-label">Cutoff Date </label></div>
                     <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
                         <div className="right-inner-addon "><i className="fa fa-calendar" aria-hidden="true"></i>
-                        <input className="form-control" id="date" name="date" disabled placeholder="Cutoff Date" type="text"/>
+                        <input className="form-control" id="date" name="date" value= {moment(this.props.data.TShipmentent.TShipmentInternational[0].cargoCutoffDate).format("MM-DD-YYYY")} disabled placeholder="Cutoff Date" type="text"/>
                     </div>
                       <div className="error"><span></span></div>
                     </div>
@@ -271,7 +282,7 @@ class  ShipmentConfirmationForm extends React.Component {
                 <div className="form-group">
                     <div className="col-lg-3 "><label for="Stretch_wrap" className=" control-label">Pick Up Location</label></div>
                     <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-                        <input type="text" className="form-control" disabled value = {this.props.data.TShipmentInternational[0].containerPickupLocation} id="" placeholder="Pick Up Location"/>
+                        <input type="text" className="form-control" disabled value = {this.props.data.TShipmentent.TShipmentInternational[0].containerPickupLocation} id="" placeholder="Pick Up Location"/>
                       <div className="error"><span></span></div>
                     </div>
                     <div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">          
@@ -284,7 +295,7 @@ class  ShipmentConfirmationForm extends React.Component {
                 <div className="form-group">
                     <div className="col-lg-3 "><label for="Stretch_wrap" className=" control-label">Return Location </label></div>
                     <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-                        <input type="text" className="form-control" disabled id="" value ={this.props.data.TShipmentInternational[0].containerReturnLocation} placeholder="Return Location"/>
+                        <input type="text" className="form-control" disabled id="" value ={this.props.data.TShipmentent.TShipmentInternational[0].containerReturnLocation} placeholder="Return Location"/>
                       <div className="error"><span></span></div>
                     </div>
                     <div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">          
@@ -294,23 +305,23 @@ class  ShipmentConfirmationForm extends React.Component {
                     </div>
                 </div>
                 
-                <div className="form-group">
-                    <div className="col-lg-3 "><label for="Stretch_wrap" className=" control-label"> Trucker</label></div>
-                    <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-                        <input type="text" className="form-control" id="" placeholder="Trucker"/>
-                      <div className="error"><span></span></div>
-                    </div>
-                    <div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">          
-                        <label className="control control--checkbox ">Confirmed
-                          <input type="checkbox" onClick = {this.onCheck} id=""/><div className="control__indicator"></div>
-                        </label>                
-                    </div>
-                </div>
+               {/* <div className="form-group">
+                                   <div className="col-lg-3 "><label for="Stretch_wrap" className=" control-label"> Trucker</label></div>
+                                   <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
+                                       <input type="text" className="form-control" id="" placeholder="Trucker"/>
+                                     <div className="error"><span></span></div>
+                                   </div>
+                                   <div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">          
+                                       <label className="control control--checkbox ">Confirmed
+                                         <input type="checkbox" onClick = {this.onCheck} id=""/><div className="control__indicator"></div>
+                                       </label>                
+                                   </div>
+                               </div>*/}
                 
                 <div className="form-group">
                     <div className="col-lg-3 "><label for="Stretch_wrap" className=" control-label">Note </label></div>
                     <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-                        <input type="text" className="form-control" id="" placeholder="Note"/>
+                        <input type="text" className="form-control" id="" value = {this.props.data.TShipmentent.TShipmentInternational[0].notes} disabled placeholder="Note"/>
                       <div className="error"><span></span></div>
                     </div>
                     <div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">          

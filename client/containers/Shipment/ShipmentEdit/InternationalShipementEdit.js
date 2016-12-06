@@ -39,7 +39,7 @@ class InternationalShipementEdit extends React.Component {
 		this.noteChange = this.noteChange.bind(this)
 		this.freeDaysChange = this.freeDaysChange.bind(this)
 		this.lotBagsChange = this.lotBagsChange.bind(this)
-		this.bagsChange = this.bagsChange.bind(this)
+		this.handleBagsToShip = this.handleBagsToShip.bind(this)
 	}
 	bagsChange(e){
 		this.props.editData.numberOfBags = e.target.value
@@ -86,6 +86,14 @@ class InternationalShipementEdit extends React.Component {
 		this.props.editData.TShipmentInternational[0].bookingNumber = e.target.value
 		this.forceUpdate()
 	}
+    handleBagsToShip(e){
+        this.props.editData.TShipmentLots[0].noOfBags = e.target.value
+        this.forceUpdate()
+    }
+    handleLotBagsToShip(e,index){
+        this.props.editData.TShipmentLots[index].noOfBags = e.target.value
+        this.forceUpdate()
+    }
 	poChange(e){
 		var MIView = createDataLoader(InternationalShipementEdit, {
                         queries: [{
@@ -304,7 +312,7 @@ class InternationalShipementEdit extends React.Component {
 		var editableLot = []
         editableLot = _.map(this.props.editData.TShipmentLots,(lots,index) =>{
             if(index != 0){
-            return <LotInformation key = {index} lotNumber = {this.lotNumber} id = {index} data = {lots} />}
+            return <LotInformation key = {index} lotNumber = {this.lotNumber} handleLotBagsToShip = {(e) => {this.handleLotBagsToShip(e,index)}} id = {index} data = {lots} />}
         })
 		return (
 			<section className="shipment_edit">  
@@ -356,18 +364,6 @@ class InternationalShipementEdit extends React.Component {
                                 <div className="error"><span></span></div>
                             </div>
                         </div>
-                        <div className="form-group">
-                            <label for="Purchase_Order" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">No. of Bags</label>
-                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
-                                <input type="text"
-                                className="form-control"
-                                id=""
-                                onChange = {this.bagsChange}
-                                value = {this.props.editData.numberOfBags}
-                                placeholder="No. of Bags"/>
-                                <div className="error"><span></span></div>
-                            </div>
-                        </div>
                         <div className="bages_estimated col-lg-11 col-md-11 col-sm-11 col-xs-11"><span></span></div>
                     </fieldset>
        
@@ -397,6 +393,24 @@ class InternationalShipementEdit extends React.Component {
                                 <div className="error"><span></span></div>
                             </div>
                         </div>
+                          <div className="form-group ">
+                                        <label htmlFor="Bags_To_Ship"
+                                               className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Bags To Ship</label>
+
+                                        <div className="col-lg-6  col-sm-11  col-xs-11">
+                                            <input type = "number" className="form-control"
+                                                   id="bags_to_ship"
+                                                   name="bags_to_ship"
+                                                   placeholder = "Bags To Ship"
+                                                   value = {this.props.editData.TShipmentLots[0].noOfBags ? this.props.editData.TShipmentLots[0].noOfBags : ''}
+                                                   onChange = {this.handleBagsToShip}
+                                                   defaultValue = ""/>
+
+
+
+                                            <div className="error"><span></span></div>
+                                        </div>
+                                    </div>
                         <div className="form-group">
                             <label for="Lot_Number" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">No. of Bags  for Lot</label>
                             <div className="col-lg-6    col-sm-11 col-xs-11 ">

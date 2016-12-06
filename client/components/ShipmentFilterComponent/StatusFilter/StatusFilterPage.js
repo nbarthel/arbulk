@@ -4,12 +4,8 @@ class StatusFilterPage extends React.Component {
     constructor(props){
         super(props);
        this.status = [{name:"UNCONFIRMED",id: 0},
-        {name:"CONFIRMED",id:1},
-        {name:"READY",id:2},
-        {name:"QUEUED",id:3},
-        {name:"PARTIALLY PACKED",id:4},
-        {name:"ININVENTORY",id:5},
-        {name:"SHIPPED",id:6}]
+        {name:"CONFIRMED",id:1}]
+
         
         this.checkedStatus = { }
 
@@ -22,6 +18,13 @@ class StatusFilterPage extends React.Component {
             this.props.buttonDisplay.push(e.target.value)
             //console.log(this.props.checkedStatus)
         }
+     {name:"READY",id:2},
+     {name:"QUEUED",id:3},
+     {name:"PARTIALLY PACKED",id:4},
+     {name:"ININVENTORY",id:5},
+     {name:"SHIPPED",id:6}
+
+
         else if (!e.target.checked){
          delete this.props.checkedStatus[e.target.id]
          //console.log(this.props.checkedStatus)

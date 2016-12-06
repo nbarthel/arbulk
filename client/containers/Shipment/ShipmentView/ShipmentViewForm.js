@@ -90,10 +90,20 @@ class  ShipmentViewForm extends React.Component
         hashHistory.push('/Container/containerarrivalentry')
     }
     onConfirmClick(e){
-        hashHistory.push('/Shipment/shipmentConfirmation')
+      if(this.confId != null || undefined){
+              hashHistory.push('/Shipment/shipmentConfirmation/'+this.confId)}
+              else{
+                swal("Selection Missing","Please Select A Shipment Lot","info")
+              }
     }
 
-
+onViewClick(e){
+      if(this.conFirmID != null || undefined){
+          hashHistory.push('/Shipment/shipmentDetails/'+this.conFirmID);
+    }else{
+      swal("Selection Missing","Please Select A Shipment Lot","info")
+    }
+}
 
  componentWillMount() {
        
@@ -115,16 +125,21 @@ class  ShipmentViewForm extends React.Component
  }
 
 
-    checkboxChange(e,value){
+    checkboxChange(e,value,data){
         debugger
-        console.log(value)
+        console.log(value,data)
         if(e.target.checked){
             this.conFirmID = e.target.value
             this.selected = e.target.id
+            this.confId = data.id 
             this.status = value.status
+            this.shipId = value.id
         }
         else if(!e.target.checked){
             this.selected = null
+            this.confId = null
+            this.selected = null
+            this.conFirmID = null
             //this.piID = null
 
         }
@@ -132,7 +147,9 @@ class  ShipmentViewForm extends React.Component
         console.log("ConfirmID><^><^><^>^<^>^<",this.conFirmID)
     }
 
-
+    allocateContainer(e){
+        hashHistory.push('/Shipment/shipmentDetails/'+this.shipId+'/'+ 1 )
+    }
 
 
     addToQueue(e){
@@ -691,7 +708,7 @@ debugger;
              this.url = PIview._buildUrl(base, {
                  //include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational",{"relation" : "TPackagingInstructionLots" ,"scope":{"where":{"or":serachObjLots}}}}]
 
-                 include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational","scope":{"where" : {"or" : cutofFilter },"include":["TSteamshipLine"]}},{"relation" : "TShipmentLots" ,"scope":{"include":"TPackagingInstructionLots"}}],
+                 include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational","scope":{"where" : {"or" : cutofFilter },"include":["TSteamshipLine"]}},{"relation" : "TShipmentLots" ,"scope":{"include":["TPackagingInstructionLots","TPackagingInstructions"]}}],
                  where: {
                      "and": serachObj
                  }
@@ -710,7 +727,9 @@ debugger;
                      "scope": {"include": ["TSteamshipLine"]}
                  }, {
                      "relation": "TShipmentLots",
-                     "scope": {"include": "TPackagingInstructionLots", "where": {"lot_number": "wewff"}}
+                     "scope": {"include": ["TPackagingInstructionLots","TPackagingInstructions"]
+                        // , "where": {"lot_number": "wewff"}
+                     }
                  }],
                  where: {
                      "and": serachObj
@@ -1238,12 +1257,16 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
 
                                                                             <div className="row-fluid pddn-50-btm padding-top-btm-xs">
 
-                                                                                <div className="pull-left margin-10-last-l"><button type="button"  className="btn  btn-gray text-uppercase" onClick={this.addToQueue}>Add to queue</button></div>
-                                                                                <div className="pull-left margin-10-all"><button type="button"  className="btn  btn-gray text-uppercase" onClick = {(e) => {this.print(e)}}>Print Load Oreder</button></div>
+                                                                                {
+                                                                                    /*
+                                                                                    <div className="pull-left margin-10-last-l"><button type="button"  className="btn  btn-gray text-uppercase" onClick={this.addToQueue}>Add to queue</button></div>
+                                                                                       */
+                                                                                }
+                                                                             <div className="pull-left margin-10-all"><button type="button"  className="btn  btn-gray text-uppercase" onClick = {(e) => {this.print(e)}}>Print Load Oreder</button></div>
                                                                                 <div className="pull-left margin-10-all"><button type="button" onClick = {(e) => {this.allocateContainer(e)} }  className="btn  btn-primary text-uppercase">Allocate Container</button></div>
 
 
-                                                                                <div className="pull-right margin-10-last-r"><button type="button"  className="btn  btn-primary text-uppercase">VIEW</button></div>
+                                                                                <div className="pull-right margin-10-last-r"><button type="button"  className="btn  btn-primary text-uppercase" onClick = {this.onViewClick.bind(this)}>VIEW</button></div>
                                                                                 <div className="pull-right margin-10-all"><button type="button"  className="btn  btn-orange text-uppercase" onClick={(e) =>this.onEditClick(e)}>EDIT</button></div>
                                                                                 <div className="pull-right margin-10-all"><button type="button" onClick = {(e) => {this.onConfirmClick(e)}}  className="btn  btn-success text-uppercase">Confirm</button></div>
 

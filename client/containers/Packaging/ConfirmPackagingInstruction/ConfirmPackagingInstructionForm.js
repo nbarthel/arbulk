@@ -17,7 +17,7 @@ constructor(props){
 	this.userId = localStorage.getItem('userId')
 }
 componentDidMount() {
-	if(this.props.data.TPackagingInstructions.TPackagingMaterial.packagingTypeId == 1){
+	if(this.props.data.TPackagingInstructions.bag_id == 1){
 		this.setState({
 			display: 'block'
 		})
@@ -35,7 +35,7 @@ onClick(e){
 	}
 }
 onSubmit(e){
-	if(this.check.length != 13){
+	if(this.check.length < 12){
 		sweetAlert("Submit","Please Select All The Fields!!!","error")
 	}
 	else {
@@ -210,7 +210,7 @@ render(){
 					<div className="col-lg-3 "><label htmlFor="Type_of_Packaging" className=" control-label">Type of Packaging</label></div>
 					<div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
 					  <select className="form-control" id="Type_of_Packaging" name="Type_of_Packaging" disabled>
-						<option value="">Bags</option>
+						<option value="">{this.props.data.TPackagingInstructions.TPackagingType ? this.props.data.TPackagingInstructions.TPackagingType.packagingType : 'N/A'}</option>
 						</select>
 					  <div className="error"><span></span></div>
 					</div>

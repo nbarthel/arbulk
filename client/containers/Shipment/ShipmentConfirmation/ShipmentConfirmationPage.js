@@ -23,11 +23,10 @@ class ShipmentConfirmationPage  extends React.Component{
         }
       }]
     })
-       var base = 'TShipmentents'+'/'+this.id;
+       var base = 'TShipmentLots'+'/'+this.id;
         //TPackagingInstructionLots
         this.url = PIview._buildUrl(base, {
-                    "include" : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType","TPaymentType"]}},{"relation" :"TShipmentInternational","scope":{"include":["TSteamshipLine","TContainerType"]}},{"relation" : "TShipmentLots" ,"scope":{"include":["TPackagingInstructionLots"]}}]
-
+                    "include" : ["TPackagingInstructionLots","TPackagingInstructions",{"relation" :"TShipmentent","scope":{"include":["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic" , "scope":{"include" : ["TShipmentType","TPaymentType"]}}, "TShipmentAddress" ,{"relation":"TShipmentInternational","scope":{"include":["TSteamshipLine","TContainerType"]}}]}}]
         });
         console.log('sdsddsdsdssdssssssssssd' , this.url);
       $.ajax({
@@ -38,7 +37,7 @@ class ShipmentConfirmationPage  extends React.Component{
                this.setState(
                    {
                        confirmData : data,
-                        loaded : true
+                       loaded : true
                    }
                )
                //console.log( this.state.xyz)
@@ -50,9 +49,9 @@ class ShipmentConfirmationPage  extends React.Component{
         return(
             <div className="wrapper-inner">
             <div className="content-inside">
-                <Header />
+                <Header routes = {this.props.routes}/>
                 <Loader loaded = {this.state.loaded}>
-               {(this.state.confirmData === undefined) ? null : this.state.confirmData.isDomestic == 0 ? <ShipmentConfirmationForm data = {this.state.confirmData}/> : <ShipmentConfirmDomestic data = {this.state.confirmData}/>}
+               {(this.state.confirmData === undefined) ? null : this.state.confirmData.TShipmentent.isDomestic == 0 ? <ShipmentConfirmationForm data = {this.state.confirmData}/> : <ShipmentConfirmDomestic data = {this.state.confirmData}/>}
                 </Loader>
                 </div>
                 <Footer />

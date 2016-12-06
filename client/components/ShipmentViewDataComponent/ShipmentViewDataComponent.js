@@ -385,7 +385,7 @@ onClickRow(e){
 
 
 render(){
-  debugger;
+
         
        var filterData = this.props.filterData ;
 
@@ -477,7 +477,13 @@ render(){
                     var returnLocation = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? view.TShipmentInternational[0].containerReturnLocation : ''
                     var docCutoff = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? moment(view.TShipmentInternational[0].docCutoffDate).format("YYYY-MM-DD") : ''
                     var steamShipline = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? view.TShipmentInternational[0].TSteamshipLine.name : ''
-                    }
+                    var status = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? view.TShipmentInternational[0].status : ''
+
+                  }
+                  else if(view.isDomestic == 1){
+                      var status = (view.TShipmentDomestic && view.TShipmentDomestic.length >0) ? view.TShipmentDomestic[0].status : ''
+
+                  }
            return(
                    <tr key={index} className ={count}>
                    <td style ={{display : this.props.showARB}}> </td>
@@ -503,11 +509,11 @@ render(){
                    <td style ={{display : this.props.showPU}}>{view.isDomestic == 1 ? 'N/A' : puLocation}</td>
                    <td style ={{display : this.props.showRet}}>{view.isDomestic == 1 ? 'N/A' : returnLocation}</td>
                    <td style ={{display : this.props.showDoc}}>{view.isDomestic == 1 ? 'N/A' : docCutoff}</td>
-                   <td style ={{display : this.props.showStatus}}>N/A</td>
+                   <td style ={{display : this.props.showStatus}}>{status== null? "UNCONFIRMED" :status}</td>
                    <td style ={{display : this.props.showTrucker}}>N/A</td>
                    <td>
                    <label className="control control--checkbox">
-                   <input type="checkbox"  onClick={(e) => this.checkclick(e,data)} id = {data.TPackagingInstructionLots ? data.TPackagingInstructionLots.id : ''} value = {view.id}  onChange={(e)=>{this.props.checkboxChange(e,view)}} /><div className="control__indicator"></div>
+                   <input type="checkbox"  onClick={(e) => this.checkclick(e,data)} id = {data.TPackagingInstructionLots ? data.TPackagingInstructionLots.id : ''} value = {view.id}  onChange={(e)=>{this.props.checkboxChange(e,view,data)}} /><div className="control__indicator"></div>
                    </label>
                    </td>
                    </tr>

@@ -50,7 +50,7 @@ export default class RailcarArrivalEntryPage extends React.Component {
     return (
       <div className="wrapper-inner">
       <div className="content-inside">
-      <Header />
+      <Header routes = {this.props.routes}/>
       <RailcarArrivalEntryForm key="0" data={viewRailData}/>
       </div>
       <Footer />

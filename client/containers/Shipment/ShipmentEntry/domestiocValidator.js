@@ -5,8 +5,7 @@
 import Validator from 'validator';
 import isEmpty from 'lodash/isEmpty';
 export default function validateDomesticInput(data){
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>dataaaaaaaaaaaa",data);
-    debugger
+
     let errorsd = {};
 
     if (Validator.isNull(data.typeOfShipment))
@@ -28,6 +27,8 @@ export default function validateDomesticInput(data){
     }
     if (Validator.isNull(data.recipentTelNumber)){
         errorsd.recipentTelNumber = 'recipentTelNumber field is required';
+    }else if(data.recipentTelNumber.length != 11){
+        errorsd.recipentTelNumber = 'Please enter valid telephone number'
     }
     if (Validator.isNull(data.carrier))
     {

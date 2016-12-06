@@ -67,16 +67,6 @@ componentWillMount(){
 
         })
 
-   axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
-    debugger;
-    this.setState({
-        queue_Sequence : response.data
-    })
-})
-
-
-
-
     }
    else {
     debugger
@@ -95,7 +85,7 @@ componentWillMount(){
 
 
         });
-        console.log('sdsddsdsdssdssssssssssd' , this.url);
+
       $.ajax({
             url: this.url,
             success:function(data){
@@ -138,7 +128,7 @@ checkclick(data , value)
     this.qArray.push(value.id)
     localStorage.setItem('qArray',this.qArray)
     localStorage.setItem('queue_Sequence',this.state.queue_Sequence[0].max_mark)
-    console.log("clicked>>>>>>>>" ,value)
+
 }
 
 onAscending(e,head){
@@ -161,7 +151,7 @@ var PIview = createDataLoader(ContainerViewDataComponent,{
 
 
         });
-        console.log('sdsddsdsdssdssssssssssd' , this.url);
+
       $.ajax({
             url: this.url,
             success:function(data){
@@ -393,166 +383,86 @@ onClickRow(e){
         debugger
         console.log("<<<<<^^>>>>>",this.state.viewData)
 
-        var listData =  _.map(this.state.viewData,(view,index)=>{
-               if(view.TContainerDomestic && view.TContainerDomestic.length> 0){
-                var bookingNumber = ''
-                var Arr  = ''
-                var steamShip = ''
-                if(view.TContainerDomestic.length > 0 || view.TContainerInternational.length > 0) {
-                    if (view.isDomestic == 1) {
-                        if (view.TShipmentDomestic.length > 0) {
-                            bookingNumber = view.TShipmentDomestic[0].bookingNumber
-                        }
-                        if (view.TContainerDomestic.length > 0) {
-                            var Arrived = view.TContainerDomestic[0].containerArrived
-                            if (Arrived == 1) {
-                                Arr = 'YES'
-                            }
-                            else {
-                                Arr = 'NO'
-                            }
-                        }
-                    }
-                    else {
-                        if (view.TShipmentInternational.length > 0) {
-                            bookingNumber = view.TShipmentInternational[0].bookingNumber
-                        }
-
-                        if (view.TContainerInternational.length > 0) {
-                            var Arrived = view.TContainerInternational[0].containerArrived
-                            if (Arrived == 1) {
-                                Arr = 'YES'
-                            }
-                            else {
-                                Arr = 'NO'
-                            }
-                        }
-                        if (view.TContainerInternational.length > 0) {
-                            var steamLine = view.TContainerInternational[0].containerSteamshipLineConfirmed
-                            if (steamLine == 1) {
-                                steamShip = 'YES'
-                            }
-                            else {
-                                steamShip = 'NO'
-                            }
-                        }
-                    }
-
-
-                    var count = index
-                    return (
-                        <thead key={index}>
-                        <tr className="base_bg clickable" ref="clickable">
-                            <th style={{display : this.props.showARB}}><i className="fa fa-chevron-down"
-                                                                          aria-hidden="false" data-target={count}
-                                                                          onClick={(e) => {this.onClickRow(e)}}></i> {view.TLocation ? view.TLocation.locationName : ''}
-                            </th>
-                            <th style={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</th>
-                            <th style={{display : this.props.showRelease}}></th>
-                            <th style={{display : this.props.showBooking}}></th>
-                            <th style={{display : this.props.showContainer}}></th>
-                            <th style={{display : this.props.showTrucker}}></th>
-                            <th style={{display : this.props.showArrived}}></th>
-                            <th style={{display : this.props.showSteamShip}}></th>
-                            <th style = {{display : this.props.showType}}></th>
-                            <th>
-                                <label className="control control--checkbox">
-                                    <input type="checkbox" onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
-                                           value={view.id} id={view.id}/>
-
-                                    <div className="control__indicator"></div>
-                                </label>
-                            </th>
-                        </tr>
-                        {
-                            _.map(view.TContainerDomestic , (data ,index)=>{
-
-
-                            return(
-                                <tr key={index} className={count}>
-                                    <td style={{display : this.props.showARB}}></td>
-                                    <td style={{display : this.props.showCustomer}}></td>
-                                    <td style={{display : this.props.showRelease}}>{view.releaseNumber} </td>
-                                    <td style={{display : this.props.showBooking}}>{bookingNumber ? bookingNumber : 'N/A'}</td>
-                                    <td style={{display : this.props.showContainer}}>{data.containerNumber}</td>
-                                    <td style={{display : this.props.showTrucker}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0)?(view.TContainerDomestic[0].TCompany?view.TContainerDomestic[0].TCompany.name:'') : "N/A"}</td>
-                                    <td style={{display : this.props.showArrived}}>{Arr ? Arr : 'No'}</td>
-                                    <td style={{display : this.props.showSteamShip}}>{steamShip ? steamShip : 'N/A'}</td>
-                                    <td style={{display : this.props.showType}}>{'N/A'}</td>
-                                    <td>
-                                        <label className="control control--checkbox">
-                                            <input type="checkbox" onClick={(e) => this.checkclick(e,view)}
-                                                   onChange={(e)=>{this.props.onCheckboxChange(e,view)}} value={view.id}
-                                                   id={''}/>
-
-                                            <div className="control__indicator"></div>
-                                        </label>
-                                    </td>
-                                </tr>
-                            )
-                        })
-
-                        }
-
-
-                        </thead>
-
-
-                    )
-                }
-
-                }
-            else if(view.TContainerInternational && view.TContainerInternational.length> 0){
-                   var bookingNumber = ''
-                   var Arr  = ''
-                   var steamShip = ''
-                   if(view.TContainerDomestic.length > 0 || view.TContainerInternational.length > 0) {
-                       if (view.isDomestic == 1) {
-                           if (view.TShipmentDomestic.length > 0) {
-                               bookingNumber = view.TShipmentDomestic[0].bookingNumber
-                           }
-                           if (view.TContainerDomestic.length > 0) {
-                               var Arrived = view.TContainerDomestic[0].containerArrived
-                               if (Arrived == 1) {
-                                   Arr = 'YES'
-                               }
-                               else {
-                                   Arr = 'NO'
-                               }
-                           }
-                       }
-                       else {
-                           if (view.TShipmentInternational.length > 0) {
-                               bookingNumber = view.TShipmentInternational[0].bookingNumber
-                               var type = view.TShipmentInternational[0].TContainerType ? view.TShipmentInternational[0].TContainerType.name:'N/A'
-                               var steamship = view.TShipmentInternational[0].TSteamshipLine? view.TShipmentInternational[0].TSteamshipLine.name : 'N/A'
-
-                           }
-                           //if (view.TShipmentInternational.length > 0) {
-                           //    var type = view.TShipmentInternational[0].TContainerType.name
-                           //}
-                           if (view.TContainerInternational.length > 0) {
-                               var Arrived = view.TContainerInternational[0].containerArrived
-                               if (Arrived == 1) {
-                                   Arr = 'YES'
-                               }
-                               else {
-                                   Arr = 'NO'
-                               }
-                           }
-                           if (view.TContainerInternational.length > 0) {
-                               var steamLine = view.TContainerInternational[0].containerSteamshipLineConfirmed
-                               if (steamLine == 1) {
-                                   steamShip = 'YES'
-                               }
-                               else {
-                                   steamShip = 'NO'
-                               }
-                           }
-                       }
-
-
-                       var count = index
+        var listData =  _.map(this.state.viewData,(view,index) => {
+                if(view.isDomestic == 1){
+                               if(view.TContainerDomestic.length > 0){
+                                 var bookingNumber = (view.TShipmentDomestic && view.TShipmentDomestic.length>0 )? view.TShipmentDomestic[0].bookingNumber : ''            
+                                 var count = index
+                                   var shipType = view.isDomestic == 1 ? "DOMESTIC" : "INTERNATIONAL"
+                                   return (
+                                        <thead key={index}>
+                                        <tr className="base_bg clickable" ref="clickable">
+                                            <th style={{display : this.props.showARB}}><i className="fa fa-chevron-down"
+                                                                                          aria-hidden="false" data-target={count}
+                                                                                          onClick={(e) => {this.onClickRow(e)}}></i> {view.TLocation ? view.TLocation.locationName : ''}
+                                            </th>
+                                            <th style={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</th>
+                                            <th style={{display : this.props.showRelease}}></th>
+                                            <th style={{display : this.props.showBooking}}></th>
+                                            <th style={{display : this.props.showContainer}}></th>
+                                            <th style={{display : this.props.showTrucker}}></th>
+                                            <th style={{display : this.props.showArrived}}></th>
+                                            <th style={{display : this.props.showSteamShip}}></th>
+                                            <th style = {{display : this.props.showType}}></th>
+                                            <td style={{display : this.props.showType}}></td>
+                                            <td style={{display : this.props.showType}}></td>
+                                            {
+                                                <th>
+                                                <label className="control control--checkbox">
+                                                    <input type="checkbox" onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
+                                                           value={view.id} id={view.id}/>
+                
+                                                    <div className="control__indicator"></div>
+                                                </label>
+                                            </th>
+                                            }
+                                        </tr>
+                                        {
+                                        _.map(view.TContainerDomestic , (data ,index)=>{
+                                          if(data.containerArrived == 1){
+                                            var Arr = 'YES'
+                                          } else{
+                                            var Arr = 'NO'
+                                          }
+                                            return(
+                                                <tr key={index} className={count}>
+                                                    <td style={{display : this.props.showARB}}></td>
+                                                    <td style={{display : this.props.showCustomer}}></td>
+                                                    <td style={{display : this.props.showRelease}}>{view.releaseNumber} </td>
+                                                    <td style={{display : this.props.showBooking}}>{bookingNumber ? bookingNumber : 'N/A'}</td>
+                                                    <td style={{display : this.props.showContainer}}>{data.containerNumber}</td>
+                                                    <td style={{display : this.props.showTrucker}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0)?(view.TContainerDomestic[index].TCompany?view.TContainerDomestic[index].TCompany.name:'') : "N/A"}</td>
+                                                    <td style={{display : this.props.showArrived}}>{Arr ? Arr : 'No'}</td>
+                                                    <td style={{display : this.props.showSteamShip}}>{'N/A'}</td>
+                                                    <td style={{display : this.props.showType}}>{'N/A'}</td>
+                                                    <td style={{display : this.props.showType}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0) ? (view.TContainerDomestic[index].status == null ? "ALLOCATED" : view.TContainerDomestic[index].status) : 'ALLOCATED'}</td>
+                                                    <td style={{display : this.props.showType}}>{shipType}</td>
+                                                    <td>
+                                                        <label className="control control--checkbox">
+                                                            <input type="checkbox" onClick={(e) => this.checkclick(e,view)}
+                                                                   onChange={(e)=>{this.props.onCheckboxChange(e,view,data)}} value={view.id}
+                                                                   id={''}/>
+                
+                                                            <div className="control__indicator"></div>
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })
+                
+                                        }
+                
+                
+                                        </thead>
+                                 )}
+                              }
+                  else if(view.isDomestic == 0){
+                  if(view.TContainerInternational.length > 0) {
+                  var shipType = view.isDomestic == 0 ? "INTERNATIONAL" : "DOMESTIC"
+                  var bookingNumber = view.TShipmentInternational[0].bookingNumber
+                  var type = view.TShipmentInternational[0].TContainerType ? view.TShipmentInternational[0].TContainerType.name:'N/A'
+                  var steamship = view.TShipmentInternational[0].TSteamshipLine? view.TShipmentInternational[0].TSteamshipLine.name : 'N/A'               
+                  var count = index
                        return (
                            <thead key={index}>
                            <tr className="base_bg clickable" ref="clickable">
@@ -568,6 +478,8 @@ onClickRow(e){
                                <th style={{display : this.props.showArrived}}></th>
                                <th style={{display : this.props.showSteamShip}}></th>
                                <th style = {{display : this.props.showType}}></th>
+                               <td style={{display : this.props.showType}}></td>
+                               <td style={{display : this.props.showType}}></td>
                                <th>
                                    <label className="control control--checkbox">
                                        <input type="checkbox" onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
@@ -578,11 +490,13 @@ onClickRow(e){
                                </th>
                            </tr>
                            {
+                          _.map(view.TContainerInternational , (data ,index)=>{
+                             if(data.containerArrived == 1){
+                                      var Arr = 'YES'
+                                          } else{
+                                            var Arr = 'NO'
+                                          }
 
-
-                               _.map(view.TContainerInternational , (data ,index)=>{
-
-                                   debugger;
                                    return(
                                        <tr key={index} className={count}>
                                            <td style={{display : this.props.showARB}}></td>
@@ -590,14 +504,18 @@ onClickRow(e){
                                            <td style={{display : this.props.showRelease}}>{view.releaseNumber} </td>
                                            <td style={{display : this.props.showBooking}}>{bookingNumber ? bookingNumber : 'N/A'}</td>
                                            <td style={{display : this.props.showContainer}}>{data.containerNumber}</td>
-                                           <td style={{display : this.props.showTrucker}}>{(view.TContainerInternational && view.TContainerInternational.length > 0)?(view.TContainerInternational[0].TCompany?view.TContainerInternational[0].TCompany.name:'') : "N/A"}</td>
+                                           <td style={{display : this.props.showTrucker}}>{(view.TContainerInternational && view.TContainerInternational.length > 0) ? (view.TContainerInternational[index].TCompany ? view.TContainerInternational[index].TCompany.name:'') : "N/A"}</td>
                                            <td style={{display : this.props.showArrived}}>{Arr ? Arr : 'No'}</td>
                                            <td style={{display : this.props.showSteamShip}}>{steamship ? steamship : 'N/A'}</td>
                                            <td style={{display : this.props.showType}}>{type}</td>
+                                           <td style={{display : this.props.showType}}>{(view.TContainerInternational && view.TContainerInternational.length > 0) ? (view.TContainerInternational[index].status == null ?"ALLOCATED" : view.TContainerInternational[index].status ): 'NA'}</td>
+                                           <td style={{display : this.props.showType}}>{shipType}</td>
+
+
                                            <td>
                                                <label className="control control--checkbox">
                                                    <input type="checkbox" onClick={(e) => this.checkclick(e,view)}
-                                                          onChange={(e)=>{this.props.onCheckboxChange(e,view)}} value={view.id}
+                                                          onChange={(e)=>{this.props.onCheckboxChange(e,view,data)}} value={view.id}
                                                           id={''}/>
 
                                                    <div className="control__indicator"></div>
@@ -617,9 +535,9 @@ onClickRow(e){
 
                }
 
-            }
+            })
 
-        )
+        
         return(
             <Loader loaded={this.state.loaded}>
                 <table id="Packaging_Instruction_View" className="table table-expandable table-striped" cellSpacing="0" >
@@ -679,6 +597,20 @@ onClickRow(e){
 
                         </th>
                         <th style ={{display : this.props.showType}} onClick={(e)=> this.onAscending(e,'po_number')}>Type
+                <span className="fa-stack ">
+                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                        <i className="fa fa-sort-desc fa-stack-1x"></i>
+                </span>
+
+                        </th>
+                        <th style ={{display : this.props.showType}} onClick={(e)=> this.onAscending(e,'po_number')}>Status
+                <span className="fa-stack ">
+                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                        <i className="fa fa-sort-desc fa-stack-1x"></i>
+                </span>
+
+                        </th>
+                        <th style ={{display : this.props.showType}} onClick={(e)=> this.onAscending(e,'po_number')}>Shipment Type
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
