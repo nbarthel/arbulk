@@ -107,6 +107,22 @@
       },
       "_selectable": true
     },
+    "status": {
+      "type": "String",
+      "required": false,
+      "length": 15,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "status",
+        "dataType": "enum",
+        "dataLength": 15,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      },
+      "_selectable": true
+    },
     "recipentTelNumber": {
       "type": "String",
       "required": false,

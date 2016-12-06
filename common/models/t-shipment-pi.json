@@ -67,7 +67,6 @@
       "model": "TShipmentLots",
       "foreignKey": "sId"
     }
-
   },
   "acls": [],
   "methods": {}

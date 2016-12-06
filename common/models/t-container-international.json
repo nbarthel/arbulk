@@ -219,6 +219,22 @@
       },
       "_selectable": true
     },
+    "status": {
+      "type": "String",
+      "required": false,
+      "length": 15,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "status",
+        "dataType": "enum",
+        "dataLength": 15,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      },
+      "_selectable": true
+    },
     "containerDelivered": {
       "type": "Number",
       "required": false,
@@ -315,6 +331,22 @@
       },
       "_selectable": true
     },
+    "isqueued": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "isqueued",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "Y"
+      },
+      "_selectable": true
+    },
     "active": {
       "type": "Number",
       "required": false,
@@ -338,6 +370,16 @@
       "type": "belongsTo",
       "model": "TShipmentent",
       "foreignKey": "shipmentId"
+    },
+    "TCompany": {
+      "type": "belongsTo",
+      "model": "TCompany",
+      "foreignKey": "trucker_id"
+    },
+    "TContainerLoad": {
+      "type": "hasMany",
+      "model": "TContainerLoad",
+      "foreignKey": "loadContId"
     }
   },
   "acls": [],

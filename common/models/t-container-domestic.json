@@ -91,6 +91,22 @@
       },
       "_selectable": true
     },
+    "status": {
+      "type": "String",
+      "required": false,
+      "length": 15,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "status",
+        "dataType": "enum",
+        "dataLength": 15,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      },
+      "_selectable": true
+    },
     "containerNumber": {
       "type": "String",
       "required": false,
@@ -99,6 +115,22 @@
       "scale": null,
       "mysql": {
         "columnName": "container_number",
+        "dataType": "varchar",
+        "dataLength": 30,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      },
+      "_selectable": true
+    },
+    "sealNumber": {
+      "type": "String",
+      "required": false,
+      "length": 30,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "seal_number",
         "dataType": "varchar",
         "dataLength": 30,
         "dataPrecision": null,
@@ -131,6 +163,54 @@
       "scale": 0,
       "mysql": {
         "columnName": "container_arrived",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "Y"
+      },
+      "_selectable": true
+    },
+    "containerLoaded": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "container_loaded",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "Y"
+      },
+      "_selectable": true
+    },
+    "containerInTransit": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "container_in_transit",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "Y"
+      },
+      "_selectable": true
+    },
+    "containerDelivered": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "container_delivered",
         "dataType": "tinyint",
         "dataLength": null,
         "dataPrecision": 3,
@@ -252,8 +332,17 @@
       "type": "belongsTo",
       "model": "TCompany",
       "foreignKey": "trucker_id"
+    },
+    "TContainerLoad": {
+      "type": "hasMany",
+      "model": "TContainerLoad",
+      "foreignKey": "loadContId"
+    },
+    "TContainerLoad": {
+      "type": "hasMany",
+      "model": "TContainerLoad",
+      "foreignKey": "loadContDId"
     }
-
   },
   "acls": [],
   "methods": {}

@@ -277,6 +277,11 @@
       "type": "hasMany",
       "model": "TContainerInternational",
       "foreignKey": "shipmentId"
+    },
+    "TContainerAllocation": {
+      "type": "hasMany",
+      "model": "TContainerAllocation",
+      "foreignKey": "shipment_id"
     }
   },
   "acls": [],

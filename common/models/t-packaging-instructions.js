@@ -69,7 +69,7 @@ module.exports = function(Tpackaginginstructions) {
         customErr.statusCode = 422;
         customErr.message=null;
 
-        console.log("tapackaging lots entry array check" , tpackaging.packagingLots.length  ,tpackaging.packagingLots )
+        console.log("tapackaging lots entry array check" , tpackaging  ,tpackaging.packagingLots )
 
         Tpackaginginstructions.create({
                 customer_id: tpackaging.PI.customer_id,
