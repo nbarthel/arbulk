@@ -180,5 +180,14 @@
   "TShipmentPi": {
     "dataSource": "AccountDb",
     "public": true
+  },
+  "TContainerLoad": {
+    "dataSource": "AccountDb",
+    "public": true
+  },
+
+  "TContainerAllocation": {
+    "dataSource": "AccountDb",
+    "public": true
   }
 }
