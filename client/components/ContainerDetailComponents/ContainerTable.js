@@ -10,6 +10,8 @@ class ContainerTable extends Component {
     }
 
 	render() {
+       var QtyShip = 0
+      var QtyReq = 0
         var railcar_Number = (this.props.table && this.props.table.TShipmentent && this.props.table.TShipmentent.TShipmentLots && this.props.table.TShipmentent.TShipmentLots.length>0 && this.props.table.TShipmentent.TShipmentLots[0].TPackagingInstructionLots) ? this.props.table.TShipmentent.TShipmentLots[0].TPackagingInstructionLots.railcar_number : 'NA'
 		var booking_Number = (this.props.table && this.props.table.TShipmentent && this.props.table.TShipmentent.TShipmentDomestic && this.props.table.TShipmentent.TShipmentDomestic.length>0) ? this.props.table.TShipmentent.TShipmentDomestic[0].bookingNumber : 'NA'
         var booking_Number_Int = (this.props.table && this.props.table.TShipmentent && this.props.table.TShipmentent.TShipmentInternational && this.props.table.TShipmentent.TShipmentInternational.length>0) ? this.props.table.TShipmentent.TShipmentInternational[0].bookingNumber : 'NA'
@@ -17,6 +19,14 @@ class ContainerTable extends Component {
         var material = (this.props.table && this.props.table.TShipmentent && this.props.table.TShipmentent.TShipmentLots && this.props.table.TShipmentent.TShipmentLots.length>0 && this.props.table.TShipmentent.TShipmentLots[0].TPackagingInstructionLots) ? this.props.table.TShipmentent.TShipmentLots[0].TPackagingInstructions.material : 'NA'
         var cutOffDate = (this.props.table && this.props.table.TShipmentent && this.props.table.TShipmentent.TShipmentInternational && this.props.table.TShipmentent.TShipmentInternational.length>0) ? this.props.table.TShipmentent.TShipmentInternational[0].cargoCutoffDate : 'NA'
         var inInventory = (this.props.table && this.props.table.TShipmentent && this.props.table.TShipmentent.TShipmentLots && this.props.table.TShipmentent.TShipmentLots.length>0 && this.props.table.TShipmentent.TShipmentLots[0].TPackagingInstructionLots) ? this.props.table.TShipmentent.TShipmentLots[0].TPackagingInstructionLots.status : 'NA'
+        if(this.props.table && this.props.table.TShipmentent && this.props.table.TShipmentent.TShipmentLots && this.props.table.TShipmentent.TShipmentLots.length > 0){
+             QtyReq = this.props.table.TShipmentent.TShipmentLots[this.props.table.TShipmentent.TShipmentLots.length -1].TPackagingInstructionLots.inInventory
+         }
+
+         if(this.props.table && this.props.table.TShipmentent && this.props.table.TShipmentent.TShipmentLots &&  this.props.table.TShipmentent.TShipmentLots.length > 0){
+             QtyShip = this.props.table.TShipmentent.TShipmentLots[0].noOfBags
+         }
+
         return (
 			 <table className="table table-striped">
                                     <thead className="base_bg">
@@ -45,8 +55,8 @@ class ContainerTable extends Component {
                                         <td>{'NO'}</td>
                                         <td>{(inInventory == "ININVENTORY")? 'YES' : 'NO'}</td>
                                         <td>{(cutOffDate!= "NA") ? moment(cutOffDate).format('MM-DD-YYYY'):"NA"}</td>
-                                        <td>2970 Bags</td>
-                                        <td>990 Bags</td>
+                                        <td>{QtyReq} Bags</td>
+                                        <td>{QtyShip} Bags</td>
                                     </tr>
 
                                     </tbody>

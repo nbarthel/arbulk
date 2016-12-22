@@ -11,15 +11,15 @@ import '../../../public/stylesheets/style.css'
 export default class PackagingInstructionViewPage extends React.Component {
   constructor(props){
     super(props);
-    this.state = { 
+    this.state = {
       viewData : undefined,
-      
+
     }
-    
+
   }
 
-  render() { 
-    debugger
+  render() {
+    //debugger
       console.log("ajx data>>>>>>>>>>",this.state.viewData)
     return (
       <div className="wrapper-inner">
@@ -28,7 +28,7 @@ export default class PackagingInstructionViewPage extends React.Component {
       {this.props.params.id != undefined ? <PackagingInstructionViewForm id = {this.props.params.id}/> : <PackagingInstructionViewForm />}
 		 </div>
 
-		<Footer/>      
+		<Footer/>
 	     </div>
     );
   }

@@ -9,27 +9,28 @@ var webpackDevMiddleware = require('webpack-dev-middleware');
 var webpackHotMiddleware = require('webpack-hot-middleware');
 var config = require(`../webpack.config.${mode}`);
 var compiler = webpack(config);
+
 console.log(">>>>>>>>>>>...in server.js>>>>");
 console.log(">>>>>>>>>>>...in server.js>>>>" , __dirname ,config);
 if(mode === env.DEVELOPMENT) {
     // only need in development
-    app.use(webpackDevMiddleware(compiler, { noInfo: false, publicPath: config.output.publicPath }));  
- 
+    app.use(webpackDevMiddleware(compiler, { noInfo: false, publicPath: config.output.publicPath }));
+
 app.use(webpackHotMiddleware(compiler));
     app.get('*',(req , res) =>{
-   
+
      res.sendFile(path.join(__dirname, '../client/index.html'));
-  })  
+  })
 }
 
  else {
  // only need in development
-   app.use(webpackDevMiddleware(compiler, { noInfo: false, publicPath: config.output.publicPath }));  
- 
+   app.use(webpackDevMiddleware(compiler, { noInfo: false, publicPath: config.output.publicPath }));
+
 app.use(webpackHotMiddleware(compiler));
     //app.get('*',(req , res) =>{
   //res.sendFile(path.join(__dirname, '../client/index.html'));
-  //})  
+  //})
 }
 
 boot(app, __dirname);

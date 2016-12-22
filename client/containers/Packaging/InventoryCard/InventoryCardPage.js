@@ -7,10 +7,10 @@ import { createDataLoader } from 'react-loopback';
 class InventoryCardPage extends InventoryCardForm{
   constructor(props){
     super(props);
-   
+
   }
 componentDidMount(){
-  
+
 var InventView = createDataLoader(InventoryCardPage,{
            queries:[{
            endpoint: 'TPackagingInstructions',
@@ -21,10 +21,10 @@ var InventView = createDataLoader(InventoryCardPage,{
       })
     console.log("I have recieved props")
     //debugger
-   
+
     var base = 'TPackagingInstructions'+'/'+this.props.params.id;
     this.url = InventView._buildUrl(base, {
-      include: [{"relation":"TPackagingInstructionLots" ,"scope":{"include" :["TShipmentLots" ,"TShipmentInternational"]}},"TLocation","TCompany","TPackagingMaterial","TPalletType","TWrapType","TOrigin"]
+      include: [{"relation":"TPackagingInstructionLots" ,"scope":{"include" :["TShipmentLots" ,"TShipmentInternational"]}},"TLocation","TCompany","TPackagingMaterial","TPalletType","TWrapType","TOrigin","TPackagingType"]
     })
     console.log(this.url,"<<<<<<<<<<<<<<<<<<<<URL")
      debugger
@@ -39,17 +39,17 @@ var InventView = createDataLoader(InventoryCardPage,{
                   })
                this.length = this.state.viewData.length
           }.bind(this)
-          
+
         })
-      
+
      }
-   
+
 	render(){
     let lots
     let length
     if(this.state.viewData != undefined){
       lots = this.state.viewData.TPackagingInstructionLots
-      
+
     console.log(lots)
     }
 

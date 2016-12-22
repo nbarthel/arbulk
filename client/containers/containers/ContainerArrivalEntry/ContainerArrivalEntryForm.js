@@ -164,8 +164,8 @@ class  ContainerArrivalEntryForm extends React.Component {
             }
         }
         else{
-            this.IsInternational = false,
-                this.IsDomestic = true
+            this.IsInternational = true,
+                this.IsDomestic = false
             //this.intl = '#International'
             //this.dom = '#Domestic'
         }
@@ -225,7 +225,7 @@ class  ContainerArrivalEntryForm extends React.Component {
   this.IntpostObj.
 }*/
 onBookingChange(e){
-    debugger;
+
     var dataView = createDataLoader(ContainerArrivalEntryForm,{
         queries:[{
             endpoint: 'TShipmentDomestics',
@@ -240,7 +240,7 @@ onBookingChange(e){
     if(this.shipmentType=="1"){
         var base = "TShipmentents/"+this.shipmentId
         this.urlData = dataView._buildUrl(base, {
-            include : ["TShipmentDomestic" ,"TShipmentAddress",{"relation" : "TShipmentLots" , "scope" :{"include" :"TPackagingInstructionLots"}} ,{"relation" : "TShipmentLots" , "scope" :{"include" :"TPackagingInstructionLots"}},{"relation" :"TShipmentLots" ,"scope":{"include" : "TPackagingInstructionLots"}}]
+            include : ["TShipmentDomestic" ,"TContainerDomestic","TContainerInternational","TShipmentAddress",{"relation" : "TShipmentLots" , "scope" :{"include" :"TPackagingInstructionLots"}} ,{"relation" : "TShipmentLots" , "scope" :{"include" :"TPackagingInstructionLots"}},{"relation" :"TShipmentLots" ,"scope":{"include" : "TPackagingInstructionLots"}}]
         })
 
         axios.get(this.urlData).then((response)=>{
@@ -328,6 +328,29 @@ isIValid(){
 }
 onSave(e){
   debugger
+  if(this.shipmentType == 1){
+    var arrivedDom = (this.state.domesticData && this.state.domesticData.TContainerDomestic) ? this.state.domesticData.TContainerDomestic.length : 0 ;
+    var arrivedInt = (this.state.IntlData && this.state.IntlData.TContainerInternational) ? this.state.IntlData.TContainerInternational.length : 0 ;
+    var totalContainer = this.state.domesticData  ?  this.state.domesticData.numberOfContainers : 0
+  if(parseInt(arrivedDom) + parseInt(arrivedInt) == parseInt(totalContainer))
+  {
+  swal("" , "Arrived containers can not be more than assigned containers" , "info")
+  return
+}
+}
+else if(this.shipmentType == 0){
+
+  var arrivedDom = (this.state.domesticData && this.state.domesticData.TContainerDomestic) ? this.state.domesticData.TContainerDomestic.length : 0
+  var arrivedInt = (this.state.IntlData && this.state.IntlData.TContainerInternational) ? this.state.IntlData.TContainerInternational.length : 0
+  var totalContainer = this.state.IntlData  ?  this.state.IntlData.numberOfContainers : 0
+  if((parseInt(arrivedDom) + parseInt(arrivedInt)) == parseInt(totalContainer))
+  {
+  swal("" , "Arrived containers can not be more than assigned containers" , "info")
+  return
+}
+}
+
+
   let today = new Date();
   let dd = today.getDate();
   let mm = today.getMonth()+1;
@@ -355,18 +378,41 @@ onSave(e){
   this.postObj.shipmentLotsId = this.lotsId ? this.lotsId : null
   this.postObj.containerArrived = this.containerArrived
   this.postObj.modifiedOn = today
+  this.postObj.status = "ARRIVED"
   this.postObj.id = 0
   if(this.isValid() == true){
     axios.post(Base_Url + 'TContainerDomestics',this.postObj).then((response) =>{
       swal('Success',"Entry Done","success")
         hashHistory.push('/Container/containerview')
 
-    })}else{
+    })
+  }else{
       swal("Missing","Please fill in all the fields","info")
     }
   console.log("POSTOBJ",this.postObj)
 }
 onIntSave(e){
+  if(this.shipmentType == 1){
+    var arrivedDom = (this.state.domesticData && this.state.domesticData.TContainerDomestic) ? this.state.domesticData.TContainerDomestic.length : 0 ;
+    var arrivedInt = (this.state.IntlData && this.state.IntlData.TContainerInternational) ? this.state.IntlData.TContainerInternational.length : 0 ;
+    var totalContainer = this.state.domesticData  ?  this.state.domesticData.numberOfContainers : 0
+  if(parseInt(arrivedDom) + parseInt(arrivedInt) == parseInt(totalContainer))
+  {
+  swal("" , "Arrived containers can not be more than assigned containers" , "info")
+  return
+}
+}
+else if(this.shipmentType == 0){
+
+  var arrivedDom = (this.state.domesticData && this.state.domesticData.TContainerDomestic) ? this.state.domesticData.TContainerDomestic.length : 0
+  var arrivedInt = (this.state.IntlData && this.state.IntlData.TContainerInternational) ? this.state.IntlData.TContainerInternational.length : 0
+  var totalContainer = this.state.IntlData  ?  this.state.IntlData.numberOfContainers : 0
+  if((parseInt(arrivedDom) + parseInt(arrivedInt)) == parseInt(totalContainer))
+  {
+  swal("" , "Arrived containers can not be more than assigned containers" , "info")
+  return
+}
+}
   let today = new Date();
   let dd = today.getDate();
   let mm = today.getMonth()+1;
@@ -396,6 +442,8 @@ if(this.shipmentId == ""){
   this.IntPostObj.createdBy = this.userID
   this.IntPostObj.createdOn = today
   this.IntPostObj.modifiedOn = today
+  this.IntPostObj.status = "ARRIVED"
+
   this.IntPostObj.id = 0
   console.log("THISINTPOSTOBJ",this.IntPostObj)
     debugger;
@@ -733,12 +781,12 @@ this.value = e.target.value
                                  <label htmlFor="Type_of_Packaging" className="col-lg-6 ">Number of Containers:</label>
                                  <div className="col-lg-6"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?this.state.IntlData.numberOfContainers : ''}</p></div>
                              </div>
-
+{/*
                                 <div className="form-group">
                                     <label htmlFor="Type_of_Bag" className="col-lg-6 "># of Bags per Container:</label>
                                     <div className="col-lg-6"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?this.state.IntlData.numberOfBags : ''}</p></div>
                                 </div>
-
+*/}
                                 <div className="form-group">
                                     <label htmlFor="Type_of_Pallet" className="col-lg-6 ">Steamship Line:</label>
                                     <div className="col-lg-6"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?this.state.IntlData.TShipmentInternational[0].TSteamshipLine.name : ''}</p></div>
@@ -889,7 +937,7 @@ this.value = e.target.value
                             </div>
                             <div className=" col-lg-6 col-md-6 col-sm-7 col-xs-12 no-space">
                             <ul className="no-space">
-                                <li>Type of Shipment :{( this.state.domesticData && this.state.domesticData.isDomestic) ? "DOMESTIC" : "INTERNATIONAL"}</li>
+                                <li>Type of Shipment :{( this.state.domesticData && this.state.domesticData.isDomestic) ? "DOMESTIC" : "DOMESTIC"}</li>
                                 <li>Shipping Reference Number : {(this.state.domesticData.TShipmentDomestic && this.state.domesticData.TShipmentDomestic.length>0) ?this.state.domesticData.TShipmentDomestic[0].shippingReferenceNumber :''}</li>
                                 <li>Recipient : {(this.state.domesticData.TShipmentDomestic && this.state.domesticData.TShipmentDomestic.length>0) ?this.state.domesticData.TShipmentDomestic[0].recipent:''}</li>
                                 <li>Recipient Contact : {(this.state.domesticData.TShipmentDomestic && this.state.domesticData.TShipmentDomestic.length>0) ?this.state.domesticData.TShipmentDomestic[0].recipentContact:''}</li>

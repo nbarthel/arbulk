@@ -7,7 +7,7 @@ var Loader = require('react-loader');
  export default class EnterPackagingInstructionPage extends React.Component {
   constructor(props){
     super(props);
-    this.state = { 
+    this.state = {
         loaded: true}
   }
    componentWillMount(){
@@ -23,10 +23,18 @@ var Loader = require('react-loader');
              }
         }]
       })
+      if(this.props.params.lotId){
+        var base = 'TPackagingInstructions'+'/'+this.props.params.id;
+        this.url = PIview._buildUrl(base, {
+          include: {"relation" : "TPackagingInstructionLots" , "scope":{"where" : {id : this.props.params.lotId}}}
+        })
+      }
+      else{
     var base = 'TPackagingInstructions'+'/'+this.props.params.id;
     this.url = PIview._buildUrl(base, {
       include: ['TPackagingInstructionLots']
     })
+  }
     console.log(this.url,"<<<<<<<<<<<<<<<<<<<<URL")
       $.ajax({
             url: this.url,
@@ -42,10 +50,10 @@ var Loader = require('react-loader');
 
         })
    /* console.log("The recived data is :->>>>>. ",this.state.entryInfo)*/
-    
-  
+
+
     }
-   
+
     }
        render(){
       /*console.log("The recived data is :->>>>>. ",this.state.entryInfo)

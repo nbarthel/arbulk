@@ -14,25 +14,25 @@ import NestedRows from './NestedRows'
 import request from '../../utils/request';
 import { Base_Url } from '../../constants'
 var moment = require('moment');
-/*import './js/jquery.dataTables.min.js';
-*//*import './stylesheet/jquery.dataTables.min.css'*/
+import './js/tableHeadFixer.js'
+//*import './stylesheet/jquery.dataTables.min.css'*/
 var Loader = require('react-loader');
 
 class ContainerViewDataComponent extends React.Component{
-    
+
     constructor(props){
         super(props);
         this.isAsc = false
         this.state = {
-        loaded : false 
+        loaded : false
         }
-        
+
         this.PIData = { }
         this.myObj = { }
         this.qArray = []
         this.checkclick = this.checkclick.bind(this);
-        //this.onAscending = this.onAscending.bind(this)   
-        this.onToggel = this.onToggel.bind(this) 
+        //this.onAscending = this.onAscending.bind(this)
+        this.onToggel = this.onToggel.bind(this)
         this.onClickRow = this.onClickRow.bind(this)
       }
 componentWillMount(){
@@ -48,13 +48,13 @@ componentWillMount(){
       })
     console.log("I have recieved props")
     //debugger
-   
+
     var base = 'TPackagingInstructions'+'/'+id;
     this.url = PIview._buildUrl(base, {
       include: ['TPackagingInstructionLots',"TLocation","TCompany"]
     })
     console.log(this.url,"<<<<<<<<<<<<<<<<<<<<URL")
-      
+
       $.ajax({
             url: this.url,
             success:function(data){
@@ -109,17 +109,13 @@ componentWillMount(){
 })
 
 
-    }  
+    }
   }
 componentDidMount() {
-  debugger
-   $(document).ready(function()
-   { 
-    var table = $('#Packaging_Instruction_View').DataTable({
-      colReorder: true
-    });
-    
-   } );
+  $(function () {
+    setTimeout(function(){debugger;$("#Packaging_Instruction_View").tableHeadFixer({'head' : true})}, 1000);
+      //$(".Packaging_Instruction_View").tableHeadFixer({'head' : true});
+  });
 }
 checkclick(data , value)
 {
@@ -157,11 +153,11 @@ var PIview = createDataLoader(ContainerViewDataComponent,{
             success:function(data){
                 console.log('ajax ',data);
                 debugger
-               this.sortedadta = 
+               this.sortedadta =
                    {
                        viewData : data
                    }
-               
+
                this.isAsc = true;
 
                             switch(switchvalue) {
@@ -171,7 +167,7 @@ var PIview = createDataLoader(ContainerViewDataComponent,{
                            });
                            this.setState({
                            viewData  : sortedData
-                                   }) 
+                                   })
                              break;
                    case 'lot_number':
                      sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
@@ -179,7 +175,7 @@ var PIview = createDataLoader(ContainerViewDataComponent,{
                      });
                      this.setState({
                            viewData  : sortedData
-                                   }) 
+                                   })
                        break;
                                case 'railcar_number':
                                 sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
@@ -187,7 +183,7 @@ var PIview = createDataLoader(ContainerViewDataComponent,{
                                 });
                       this.setState({
                            viewData  : sortedData
-                                   }) 
+                                   })
                       break;
                        case 'weight':
                                 sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
@@ -195,7 +191,7 @@ var PIview = createDataLoader(ContainerViewDataComponent,{
                                 });
                       this.setState({
                            viewData  : sortedData
-                                   }) 
+                                   })
                       break;
                       case 'location':
                                 sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
@@ -203,7 +199,7 @@ var PIview = createDataLoader(ContainerViewDataComponent,{
                                 });
                       this.setState({
                            viewData  : sortedData
-                                   }) 
+                                   })
                       break;
                       case 'company':
                                 sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
@@ -211,7 +207,7 @@ var PIview = createDataLoader(ContainerViewDataComponent,{
                                 });
                       this.setState({
                            viewData  : sortedData
-                                   }) 
+                                   })
                       break;
     default:
         this.state.viewData
@@ -223,7 +219,7 @@ var PIview = createDataLoader(ContainerViewDataComponent,{
         })
 
     axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
-    
+
     this.setState({
         queue_Sequence : response.data
     })
@@ -254,11 +250,11 @@ var PIview = createDataLoader(ContainerViewDataComponent,{
             success:function(data){
                 console.log('ajax ',data);
                 debugger
-               this.sortedadta = 
+               this.sortedadta =
                    {
                        viewData : data
                    }
-               
+
                this.isAsc = false;
 
                             switch(switchvalue) {
@@ -268,7 +264,7 @@ var PIview = createDataLoader(ContainerViewDataComponent,{
                            });
                            this.setState({
                            viewData  : sortedData.reverse()
-                                   }) 
+                                   })
                              break;
                    case 'lot_number':
                      sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
@@ -276,7 +272,7 @@ var PIview = createDataLoader(ContainerViewDataComponent,{
                      });
                      this.setState({
                            viewData  : sortedData.reverse()
-                                   }) 
+                                   })
                        break;
                       case 'railcar_number':
                       sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
@@ -284,7 +280,7 @@ var PIview = createDataLoader(ContainerViewDataComponent,{
 });
                       this.setState({
                            viewData  : sortedData.reverse()
-                                   }) 
+                                   })
                       break;
                       case 'weight':
                                 sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
@@ -292,7 +288,7 @@ var PIview = createDataLoader(ContainerViewDataComponent,{
                                 });
                       this.setState({
                            viewData  : sortedData.reverse()
-                                   }) 
+                                   })
                       break;
                        case 'location':
                                 sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
@@ -300,7 +296,7 @@ var PIview = createDataLoader(ContainerViewDataComponent,{
                                 });
                       this.setState({
                            viewData  : sortedData.reverse()
-                                   }) 
+                                   })
                       break;
                       case 'company':
                                 sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
@@ -308,7 +304,7 @@ var PIview = createDataLoader(ContainerViewDataComponent,{
                                 });
                       this.setState({
                            viewData  : sortedData.reverse()
-                                   }) 
+                                   })
                       break;
     default:
         this.state.viewData
@@ -320,7 +316,7 @@ var PIview = createDataLoader(ContainerViewDataComponent,{
         })
 
     axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
-    
+
     this.setState({
         queue_Sequence : response.data
     })
@@ -330,7 +326,7 @@ var PIview = createDataLoader(ContainerViewDataComponent,{
 onToggel(e ,elm){
 console.log('>>>>>>' , $(elm))
 
-  debugger; 
+  debugger;
   $( "button" ).click(function() {
   $( "p" ).slideToggle( "slow" );
 });
@@ -342,7 +338,7 @@ onClickRow(e){
             //var aa= rowObj.attr('data-target')
             var aa = e.target.getAttribute('data-target')
             //$('#Packaging_Instruction_View').find('.'+aa).toggleClass('hide')
-       
+
 
       if($('#Packaging_Instruction_View').find('.'+aa).length > 2)
       {
@@ -351,7 +347,7 @@ onClickRow(e){
 
 
         })
-      } 
+      }
 
         else if($('#Packaging_Instruction_View').find('.'+aa).length ==2)
 {
@@ -386,12 +382,22 @@ onClickRow(e){
         var listData =  _.map(this.state.viewData,(view,index) => {
                 if(view.isDomestic == 1){
                                if(view.TContainerDomestic.length > 0){
-                                 var bookingNumber = (view.TShipmentDomestic && view.TShipmentDomestic.length>0 )? view.TShipmentDomestic[0].bookingNumber : ''            
+                                 var bookingNumber = (view.TShipmentDomestic && view.TShipmentDomestic.length>0 )? view.TShipmentDomestic[0].bookingNumber : ''
                                  var count = index
                                    var shipType = view.isDomestic == 1 ? "DOMESTIC" : "INTERNATIONAL"
                                    return (
-                                        <thead key={index}>
-                                        <tr className="base_bg clickable" ref="clickable">
+                                        <tbody key={index}>
+                                        <tr className="base_bg clickable" ref="clickable" style={{"backgroundColor": "#e5e5ff"}}>
+                                            {
+                                                <th>
+                                                <label className="control control--checkbox">
+                                                    <input type="checkbox" onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
+                                                           value={view.id} id={view.id}/>
+
+                                                    <div className="control__indicator"></div>
+                                                </label>
+                                            </th>
+                                            }
                                             <th style={{display : this.props.showARB}}><i className="fa fa-chevron-down"
                                                                                           aria-hidden="false" data-target={count}
                                                                                           onClick={(e) => {this.onClickRow(e)}}></i> {view.TLocation ? view.TLocation.locationName : ''}
@@ -406,16 +412,7 @@ onClickRow(e){
                                             <th style = {{display : this.props.showType}}></th>
                                             <td style={{display : this.props.showType}}></td>
                                             <td style={{display : this.props.showType}}></td>
-                                            {
-                                                <th>
-                                                <label className="control control--checkbox">
-                                                    <input type="checkbox" onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
-                                                           value={view.id} id={view.id}/>
-                
-                                                    <div className="control__indicator"></div>
-                                                </label>
-                                            </th>
-                                            }
+
                                         </tr>
                                         {
                                         _.map(view.TContainerDomestic , (data ,index)=>{
@@ -426,6 +423,15 @@ onClickRow(e){
                                           }
                                             return(
                                                 <tr key={index} className={count}>
+                                                  <td>
+                                                        <label className="control control--checkbox">
+                                                            <input type="checkbox" onClick={(e) => this.checkclick(e,view)}
+                                                                   onChange={(e)=>{this.props.onCheckboxChange(e,view,data)}} value={view.id}
+                                                                   id={''}/>
+
+                                                            <div className="control__indicator"></div>
+                                                        </label>
+                                                    </td>
                                                     <td style={{display : this.props.showARB}}></td>
                                                     <td style={{display : this.props.showCustomer}}></td>
                                                     <td style={{display : this.props.showRelease}}>{view.releaseNumber} </td>
@@ -437,23 +443,15 @@ onClickRow(e){
                                                     <td style={{display : this.props.showType}}>{'N/A'}</td>
                                                     <td style={{display : this.props.showType}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0) ? (view.TContainerDomestic[index].status == null ? "ALLOCATED" : view.TContainerDomestic[index].status) : 'ALLOCATED'}</td>
                                                     <td style={{display : this.props.showType}}>{shipType}</td>
-                                                    <td>
-                                                        <label className="control control--checkbox">
-                                                            <input type="checkbox" onClick={(e) => this.checkclick(e,view)}
-                                                                   onChange={(e)=>{this.props.onCheckboxChange(e,view,data)}} value={view.id}
-                                                                   id={''}/>
-                
-                                                            <div className="control__indicator"></div>
-                                                        </label>
-                                                    </td>
+
                                                 </tr>
                                             )
                                         })
-                
+
                                         }
-                
-                
-                                        </thead>
+
+
+                                        </tbody>
                                  )}
                               }
                   else if(view.isDomestic == 0){
@@ -461,11 +459,19 @@ onClickRow(e){
                   var shipType = view.isDomestic == 0 ? "INTERNATIONAL" : "DOMESTIC"
                   var bookingNumber = view.TShipmentInternational[0].bookingNumber
                   var type = view.TShipmentInternational[0].TContainerType ? view.TShipmentInternational[0].TContainerType.name:'N/A'
-                  var steamship = view.TShipmentInternational[0].TSteamshipLine? view.TShipmentInternational[0].TSteamshipLine.name : 'N/A'               
+                  var steamship = view.TShipmentInternational[0].TSteamshipLine? view.TShipmentInternational[0].TSteamshipLine.name : 'N/A'
                   var count = index
                        return (
-                           <thead key={index}>
-                           <tr className="base_bg clickable" ref="clickable">
+                           <tbody key={index}>
+                           <tr className="base_bg clickable" ref="clickable" style={{"backgroundColor": "#e5e5ff"}}>
+                               <th>
+                                   <label className="control control--checkbox">
+                                       <input type="checkbox" onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
+                                              value={view.id} id={view.id}/>
+
+                                       <div className="control__indicator"></div>
+                                   </label>
+                               </th>
                                <th style={{display : this.props.showARB}}><i className="fa fa-chevron-down"
                                                                              aria-hidden="false" data-target={count}
                                                                              onClick={(e) => {this.onClickRow(e)}}></i> {view.TLocation ? view.TLocation.locationName : ''}
@@ -480,14 +486,7 @@ onClickRow(e){
                                <th style = {{display : this.props.showType}}></th>
                                <td style={{display : this.props.showType}}></td>
                                <td style={{display : this.props.showType}}></td>
-                               <th>
-                                   <label className="control control--checkbox">
-                                       <input type="checkbox" onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
-                                              value={view.id} id={view.id}/>
 
-                                       <div className="control__indicator"></div>
-                                   </label>
-                               </th>
                            </tr>
                            {
                           _.map(view.TContainerInternational , (data ,index)=>{
@@ -499,6 +498,15 @@ onClickRow(e){
 
                                    return(
                                        <tr key={index} className={count}>
+                                           <td>
+                                               <label className="control control--checkbox">
+                                                   <input type="checkbox" onClick={(e) => this.checkclick(e,view)}
+                                                          onChange={(e)=>{this.props.onCheckboxChange(e,view,data)}} value={view.id}
+                                                          id={''}/>
+
+                                                   <div className="control__indicator"></div>
+                                               </label>
+                                           </td>
                                            <td style={{display : this.props.showARB}}></td>
                                            <td style={{display : this.props.showCustomer}}></td>
                                            <td style={{display : this.props.showRelease}}>{view.releaseNumber} </td>
@@ -512,22 +520,14 @@ onClickRow(e){
                                            <td style={{display : this.props.showType}}>{shipType}</td>
 
 
-                                           <td>
-                                               <label className="control control--checkbox">
-                                                   <input type="checkbox" onClick={(e) => this.checkclick(e,view)}
-                                                          onChange={(e)=>{this.props.onCheckboxChange(e,view,data)}} value={view.id}
-                                                          id={''}/>
 
-                                                   <div className="control__indicator"></div>
-                                               </label>
-                                           </td>
                                        </tr>
                                    )
                                })
 
                            }
 
-                           </thead>
+                           </tbody>
 
 
                        )
@@ -537,12 +537,15 @@ onClickRow(e){
 
             })
 
-        
+
         return(
             <Loader loaded={this.state.loaded}>
                 <table id="Packaging_Instruction_View" className="table table-expandable table-striped" cellSpacing="0" >
                     <thead className="table_head">
-                    <tr className="sorting_head" >
+                    <tr className="sorting_head"  style={{"backgroundColor" : "#2e6da4"}}>
+                        <th>
+
+                        </th>
                         <th style = {{display : this.props.showARB}} onClick={(e)=> this.onAscending(e,'location')}>ARB
                     <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
@@ -617,9 +620,7 @@ onClickRow(e){
                 </span>
 
                         </th>
-                        <th>
 
-                        </th>
                     </tr>
                     </thead>
                     {listData}

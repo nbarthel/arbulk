@@ -13,12 +13,9 @@ import HeadBody from './HeadBody';
 import NestedRows from './NestedRows'
 import request from '../../utils/request';
 import { Base_Url } from '../../constants'
-
 var moment = require('moment');
-//import from './js/'
-//import '../js/fixed.js'
-/*import './js/jquery.dataTables.min.js';
-*//*import './stylesheet/jquery.dataTables.min.css'*/
+import './js/tableHeadFixer.js'
+//import './js/fixed.js'
 var Loader = require('react-loader');
 
 class ViewDataComponent extends React.Component{
@@ -36,7 +33,9 @@ class ViewDataComponent extends React.Component{
         //this.onAscending = this.onAscending.bind(this)
         this.onToggel = this.onToggel.bind(this)
         this.onClickRow = this.onClickRow.bind(this)
+
       }
+
 componentWillMount(){
    let id = this.props.id
       if(this.props.id != undefined){
@@ -49,7 +48,7 @@ componentWillMount(){
         }]
       })
     console.log("I have recieved props")
-    //debugger
+    //////debugger
 
     var base = 'TPackagingInstructions'+'/'+id;
     this.url = PIview._buildUrl(base, {
@@ -70,7 +69,7 @@ componentWillMount(){
         })
 
    axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
-    debugger;
+    //debugger;
     this.setState({
         queue_Sequence : response.data
     })
@@ -81,7 +80,7 @@ componentWillMount(){
 
     }
    else {
-    debugger
+    //debugger
   var PIview = createDataLoader(ViewDataComponent,{
       queries:[{
         endpoint: 'TPackagingInstructions',
@@ -103,7 +102,7 @@ componentWillMount(){
             url: this.url,
             success:function(data){
                 console.log('ajax ',data);
-                debugger
+                //debugger
                this.setState(
                    {
                        viewData : data,
@@ -115,7 +114,7 @@ componentWillMount(){
         })
 
      axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
-    debugger;
+    //debugger;
     this.setState({
         queue_Sequence : response.data
     })
@@ -125,18 +124,15 @@ componentWillMount(){
     }
   }
 componentDidMount() {
-  debugger
-   $(document).ready(function()
-   {
-    var table = $('#Packaging_Instruction_View').DataTable({
-      colReorder: true
-    });
+  $(function () {
+    setTimeout(function(){debugger;$("#Packaging_Instruction_View").tableHeadFixer({'head' : true})}, 1000);
+      //$(".Packaging_Instruction_View").tableHeadFixer({'head' : true});
+  });
 
-   } );
 }
 checkclick(data , value)
 {
-    debugger;
+    //debugger;
     var queueArray = []
     this.qArray.push(value.id)
     localStorage.setItem('qArray',this.qArray)
@@ -169,7 +165,7 @@ var PIview = createDataLoader(ViewDataComponent,{
             url: this.url,
             success:function(data){
                 console.log('ajax ',data);
-                debugger
+                //debugger
                this.sortedadta =
                    {
                        viewData : data
@@ -266,7 +262,7 @@ var PIview = createDataLoader(ViewDataComponent,{
             url: this.url,
             success:function(data){
                 console.log('ajax ',data);
-                debugger
+                //debugger
                this.sortedadta =
                    {
                        viewData : data
@@ -362,7 +358,7 @@ var PIview = createDataLoader(ViewDataComponent,{
             url: this.url,
             success:function(data){
                 console.log('ajax ',data);
-                debugger
+                //debugger
                this.setState(
                    {
                        viewData : data,
@@ -374,7 +370,7 @@ var PIview = createDataLoader(ViewDataComponent,{
         })
 
      axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
-    debugger;
+    //debugger;
     this.setState({
         queue_Sequence : response.data
     })
@@ -384,7 +380,7 @@ var PIview = createDataLoader(ViewDataComponent,{
 onToggel(e ,elm){
 console.log('>>>>>>' , $(elm))
 
-  debugger;
+  //debugger;
   $( "button" ).click(function() {
   $( "p" ).slideToggle( "slow" );
 });
@@ -423,7 +419,7 @@ onClickRow(e){
 
 
 render(){
-  debugger;
+  //debugger;
 
        var filterData = this.props.filterData ;
 
@@ -434,15 +430,18 @@ render(){
 
       var selectedWeight = this.props.weight;
 
-debugger
-      console.log("<<<<<^^>>>>>",this.state.viewData)
-      // const data = this.state.xyz
       var listData =  _.map(this.state.viewData,(view,index)=>{
 
       var count = index
       return (
-       <thead key={index} >
+
+       <tbody key={index}>
        <tr  className="base_bg clickable" ref ="clickable">
+       <th>
+               <label className="control control--checkbox">
+                   <input type="checkbox" onChange={(e)=>{this.props.headerCheckboxChange(e,view)}} value={view.id}  id={view.id}/><div className="control__indicator"></div>
+               </label>
+           </th>
        <th style ={{display : this.props.showARB}}> <i className="fa fa-chevron-down" aria-hidden="false" data-target ={count}  onClick={(e) => {this.onClickRow(e)}}></i> {view.TLocation ? view.TLocation.locationName : ''} </th>
            <th style ={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</th>
            <th style ={{display : this.props.showPO}}>{view.po_number} </th>
@@ -464,11 +463,7 @@ debugger
             <th></th>
 
            <th style ={{display : this.props.showRailcarStatus}}></th>
-           <th>
-               <label className="control control--checkbox">
-                   <input type="checkbox" onChange={(e)=>{this.props.headerCheckboxChange(e,view)}} value={view.id}  id={view.id}/><div className="control__indicator"></div>
-               </label>
-           </th>
+
        </tr>
        {
           _.map(view.TPackagingInstructionLots,(data,index)=>{
@@ -479,9 +474,14 @@ debugger
              diff = parseInt((end-start ) / (1000*60*60*24))
           }
 
-           debugger
+           //debugger
            return(
                <tr key={index} className ={count}>
+                   <td>
+                       <label className="control control--checkbox">
+                           <input type="checkbox"  onClick={(e) => this.checkclick(e,data)}   onChange={(e)=>{this.props.checkboxChange(e,data)}} value={view.id} id={view.TPackagingInstructionLots[index].id}/><div className="control__indicator"></div>
+                       </label>
+                   </td>
                    <td style ={{display : this.props.showARB}}> </td>
                    <td style ={{display : this.props.showCustomer}}> </td>
                    <td style ={{display : this.props.showPO}}> </td>
@@ -503,18 +503,14 @@ debugger
                    <td style ={{display : this.props.showRailcarDepDate}}>{data.railcar_departed_on != null ? moment(data.railcar_departed_on).format("YYYY-MM-DD") : "N/A"}</td>
                    <td style ={{display : this.props.showDaysPresent}}>{diff ? diff +1 : 'N/A'}</td>
                    <td style ={{display : this.props.showRailcarStatus}}>{data.railcar_status ? data.railcar_status : ''}</td>
-                   <td>
-                       <label className="control control--checkbox">
-                           <input type="checkbox"  onClick={(e) => this.checkclick(e,data)}   onChange={(e)=>{this.props.checkboxChange(e,data)}} value={view.id} id={view.TPackagingInstructionLots[index].id}/><div className="control__indicator"></div>
-                       </label>
-                   </td>
+
                </tr>
                   )
             }
          )
        }
 
-       </thead>
+       </tbody>
 
 
            )
@@ -522,148 +518,157 @@ debugger
   )
  return(
  <Loader loaded={this.state.loaded}>
- <table id="Packaging_Instruction_View" className="table table-expandable header-fixed" cellSpacing="0" >
-             <thead className="table_head header-fixed header">
-           <tr className="sorting_head header-fixed" >
-               <th style = {{display : this.props.showARB}} onClick={(e)=> this.onAscending(e,'location')}>ARB
-                    <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                    </span>
-               </th>
-               <th style = {{display : this.props.showCustomer}} onClick={(e)=> this.onAscending(e,'company')}>Customer
 
+        <table id="Packaging_Instruction_View" className="table table-expandable" cellSpacing="0">
+                    <thead id="table_head1" className="table_head header-fixed header red" >
+                  <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}} >
+                     <th>
+
+                      </th>
+                      <th   style = {{display : this.props.showARB }} onClick={(e)=> this.onAscending(e,'location')}>ARB
+                           <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                           </span>
+                      </th>
+                      <th style = {{display : this.props.showCustomer}} onClick={(e)=> this.onAscending(e,'company')}>Customer
+
+                               <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
+
+                      </th>
+                      <th style ={{display : this.props.showPO}} onClick={(e)=> this.onAscending(e,'po_number')}>PO
                         <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
+                               <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
+                      </th>
+                      <th style ={{display : this.props.Railcar}} onClick={(e)=> this.onAscending(e,'railcar_number')}>Railcar#
+                      <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
+                       </th>
+                      <th style ={{display : this.props.showLot}} onClick={(e)=> this.onAscending(e,'lot_number')}>Lot#
+                       <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
 
-               </th>
-               <th style ={{display : this.props.showPO}} onClick={(e)=> this.onAscending(e,'po_number')}>PO
-                 <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
-               </th>
-               <th style ={{display : this.props.Railcar}} onClick={(e)=> this.onAscending(e,'railcar_number')}>Railcar#
-               <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
-                </th>
-               <th style ={{display : this.props.showLot}} onClick={(e)=> this.onAscending(e,'lot_number')}>Lot#
-                <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
+                      </th>
+                      <th style ={{display : this.props.showMaterial}} onClick={(e)=> this.onAscending(e,'po_number')}>Material
+                      <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
 
-               </th>
-               <th style ={{display : this.props.showMaterial}} onClick={(e)=> this.onAscending(e,'po_number')}>Material
-               <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
+                      </th>
+                      <th style ={{display : this.props.showConfmd}} onClick={(e)=> this.onAscending(e,'po_number')}>Confmd
+                      <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
+                      </th>
+                      <th style ={{display : this.props.showArrvd}} onClick={(e)=> this.onAscending(e,'po_number')}>Arrvd
+                       <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
 
-               </th>
-               <th style ={{display : this.props.showConfmd}} onClick={(e)=> this.onAscending(e,'po_number')}>Confmd
-               <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
-               </th>
-               <th style ={{display : this.props.showArrvd}} onClick={(e)=> this.onAscending(e,'po_number')}>Arrvd
-                <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
+                      </th>
+                      <th style ={{display : this.props.showRecd}} onClick={(e)=> this.onAscending(e,'po_number')}>Recd
+                       <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
 
-               </th>
-               <th style ={{display : this.props.showRecd}} onClick={(e)=> this.onAscending(e,'po_number')}>Recd
-                <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
+                      </th>
+                      <th style ={{display : this.props.showCutoff}} onClick={(e)=> this.onAscending(e,'po_number')}>Cutoff
+                       <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
 
-               </th>
-               <th style ={{display : this.props.showCutoff}} onClick={(e)=> this.onAscending(e,'po_number')}>Cutoff
-                <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
-
-               </th>
-               <th style ={{display : this.props.showWeight}} onClick={(e)=> this.onAscending(e,'weight')}>Weight
-               <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
+                      </th>
+                      <th style ={{display : this.props.showWeight}} onClick={(e)=> this.onAscending(e,'weight')}>Weight
+                      <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
 
 
-               </th>
-               <th style ={{display : this.props.showBag}} onClick={(e)=> this.onAscending(e,'po_number')}>#Bags
-               <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
+                      </th>
+                      <th style ={{display : this.props.showBag}} onClick={(e)=> this.onAscending(e,'po_number')}>#Bags
+                      <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
 
-               </th>
-               <th style ={{display : this.props.showInInvt}} onClick={(e)=> this.onAscending(e,'po_number')}>(In Invt.)
-               <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
+                      </th>
+                      <th style ={{display : this.props.showInInvt}} onClick={(e)=> this.onAscending(e,'po_number')}>(In Invt.)
+                      <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
 
-               </th>
-               <th style ={{display : this.props.showStatus}} >Status
-               <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
-               </th>
+                      </th>
+                      <th style ={{display : this.props.showStatus}} >Status
+                      <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
+                      </th>
 
-                <th style ={{display : this.props.showRailcarArr}} >Railcar Arrival
-               <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
-               </th>
-                <th style ={{display : this.props.showRailcarArrD}} >Railcar Arrival Date
-               <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
-               </th>
-               <th style ={{display : this.props.showRailcarDep}} >Railcar Departure
-               <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
-               </th>
-               <th style ={{display : this.props.showRailcarDepDate}} >Railcar Departure Date
-               <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
-               </th>
-                 <th style ={{display : this.props.showDaysPresent}} >Railcar Days Present
-               <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
-               </th>
-                 <th style ={{display : this.props.showRailcarStatus}} >Railcar Status
-               <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
-               </th>
-                 <th>
+                       <th style ={{display : this.props.showRailcarArr}} >Railcar Arrival
+                      <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
+                      </th>
+                       <th style ={{display : this.props.showRailcarArrD}} >Railcar Arrival Date
+                      <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
+                      </th>
+                      <th style ={{display : this.props.showRailcarDep}} >Railcar Departure
+                      <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
+                      </th>
+                      <th style ={{display : this.props.showRailcarDepDate}} >Railcar Departure Date
+                      <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
+                      </th>
+                        <th style ={{display : this.props.showDaysPresent}} >Railcar Days Present
+                      <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
+                      </th>
+                        <th style ={{display : this.props.showRailcarStatus}} >Railcar Status
+                      <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
+                      </th>
 
-               </th>
-             </tr>
-           </thead>
-                {listData}
-        </table>
+                    </tr>
+                  </thead>
+                  {listData}
+               </table>
+
+               {/*<table id="Packaging_Instruction_View" className="table table-expandable" cellSpacing="0">
+
+
+                      </table>*/}
+
+
         </Loader>)
   }
 }

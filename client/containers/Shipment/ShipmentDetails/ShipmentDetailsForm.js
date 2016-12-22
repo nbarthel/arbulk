@@ -49,6 +49,7 @@ class  ShipmentDetailsForm extends React.Component {
         this.onAdd = this.onAdd.bind(this)
         this.onSaveChange = this.onSaveChange.bind(this)
         this.deleteAllocate = this.deleteAllocate.bind(this)
+        this.onDeleteFunction = this.onDeleteFunction.bind(this)
     }
     componentDidMount() {
        console.log("aloc",this.props.allocShipment)
@@ -219,6 +220,15 @@ class  ShipmentDetailsForm extends React.Component {
 
    var unique = this.removeDuplicates(this.b , "truckerId")
    var TotalSum = this.sum(unique, 'noOfContainer');
+  var delArray = []
+  this.deleteArray = [].concat.apply([], this.deleteArray)
+  for(var i in this.deleteArray){
+    if(this.deleteArray[i].id > 0){
+      delArray.push(this.deleteArray[i])
+    }
+  }
+
+
 
         if(this.state.CSummaryData.numberOfContainers < TotalSum){
           window.location.reload()
@@ -227,28 +237,123 @@ class  ShipmentDetailsForm extends React.Component {
             return
         }
 
+if(this.deleteArray.length > 0  && unique.length ==0){
+  var arr = []
+  var delLength = this.deleteArray.length
+  arr = this.deleteArray
+  arr = [].concat.apply([], arr)
+  arr.forEach(function(element){
+  $.ajax({
+  	type:"delete",
+  	url: Base_Url +"/TContainerAllocations/"+element.id,
 
+  	success:function(){
+  		// swal("Posted" , "Data Has Been Successfully Edited !" , "success");
+  		// hashHistory.push('/Packaging/packaginginstview/')
+  	},
+  	Error:function(err){
+  		swal("Failed" , "Error occured please try later!" , "error");
+  	}
+  	})
+
+})
+}
+
+
+if(unique.length >0 && delArray.length == 0){
         unique.forEach(function(element,index) {
 
             var length = unique.length
 
-        axios.patch(Base_Url +"/TContainerAllocations",element).then((response)=>{
+              axios.patch(Base_Url +"/TContainerAllocations",element).then((response)=>{
                 if(length == index+1){
                   swal({
                       title: "Success",
                       text: "Done",
                       type: "success",
                       showCancelButton: true,
-      },
-              function(isConfirm){
-
+                },
+               function(isConfirm){
               	window.location.reload();
+});
 }
-);
-                }
         })
         })
+      }
+
+      if(unique.length >0 && delArray.length > 0){
+        var arr = []
+        var length2 = delArray.length
+        // arr = this.deleteArray
+        // arr = [].concat.apply([], arr)
+        var length2 = delArray.length
+        delArray.forEach(function(element , idx){
+          if(element.id > 0){
+        $.ajax({
+        	type:"delete",
+        	url: Base_Url +"/TContainerAllocations/"+element.id,
+
+        	success:function(){
+            if(length2 == idx + 1){
+              unique.forEach(function(element,index) {
+
+                  var length = unique.length
+
+                    axios.patch(Base_Url +"/TContainerAllocations",element).then((response)=>{
+                      if(length == index+1){
+                        swal({
+                            title: "Success",
+                            text: "Done",
+                            type: "success",
+                            showCancelButton: true,
+                      },
+                     function(isConfirm){
+                      window.location.reload();
+            });
+            }
+              })
+              })
+
+            }
+        		// swal("Posted" , "Data Has Been Successfully Edited !" , "success");
+        		// hashHistory.push('/Packaging/packaginginstview/')
+        	},
+        	Error:function(err){
+        		swal("Failed" , "Error occured please try later!" , "error");
+        	}
+        	})
+        }
+
+
+      })
+
+            }
     }
+
+
+onDeleteFunction(deleteArray){
+  var unique = deleteArray
+  unique.forEach(function(element,index) {
+
+      var length = unique.length
+
+        axios.patch(Base_Url +"/TContainerAllocations",element).then((response)=>{
+          if(length == index+1){
+            swal({
+                title: "Success",
+                text: "Done",
+                type: "success",
+                showCancelButton: true,
+          },
+         function(isConfirm){
+          window.location.reload();
+});
+}
+  })
+  })
+
+}
+
 
   onClick(){
         if (this.state.hideEdit === 'block'){
@@ -315,7 +420,7 @@ bArray = this.b
                       //b[b.length-1]['noOfContainer'] += this.allocatedArray[i]['noOfContainer'];
 
                   } else {
-                      debugger;
+
                       this.b[this.b.length] = (this.b[i]);
                        var id =  (this.b[i+1]) ? (this.b[i+1].id) : (this.b[i].id)
                       this.b[i].id = id
@@ -387,15 +492,14 @@ this.b.push(_.cloneDeep(this.truckerDetail))
                          this.unique.splice(0,1)
                         this.b = this.unique
                       //  this.b = bArray
-                        swal("" , "Allocation must not be greater than Allocated Container" , "info")
+                        swal("" , "Allocated container can't be more than Unallocated container" , "info")
                    }
              else{
                if(this.unique.length > 1){
                  this.unique.splice(this.unique.length -1,1)
                  this.b = this.unique
                }
-             //this.b = bArray
-             swal("" , "Allocation must not be greater than Allocated Container" , "info")
+            swal("" , "Allocated container can't be more than Unallocated container" , "info")
 
         return
       }
@@ -414,19 +518,34 @@ this.b.push(_.cloneDeep(this.truckerDetail))
 
 deleteAllocate(e){
   debugger;
+  if(this.props.data.isDomestic == 0){
+    if((this.state.CSummaryData && this.state.CSummaryData.TContainerInternational && this.state.CSummaryData.TContainerInternational.length > 0 ) && (this.state.CSummaryData.TContainerInternational.length == this.state.CSummaryData.numberOfContainers) )
+    {
+      swal("" , "This allocation can not be deleted" , "info")
+      return
+    }
+  }else if(this.props.data.isDomestic == 1){
+    if((this.state.CSummaryData && this.state.CSummaryData.TContainerDomestic && this.state.CSummaryData.TContainerDomestic.length > 0 ) && (this.state.CSummaryData.TContainerDomestic.length == this.state.CSummaryData.numberOfContainers) )
+    {
+      swal("" , "This allocation can not be deleted" , "info")
+      return
+    }
+  }
   var index = e.target.getAttribute('value')
-  alert(e.target.getAttribute('value'))
+//  alert(e.target.getAttribute('value'))
   console.log(this.b)
   if(this.b.length == 0){
     this.b = this.state.CSummaryData.TContainerAllocation
-    this.deleteArray =   this.b.splice(index , 1)
+    var obj =   this.b.splice(index , 1)
+    this.deleteArray.push(obj)
     console.log(this.b)
     this.unique = this.removeDuplicates(this.b , "truckerId")
     this.addSum = this.sum(this.unique, 'noOfContainer');
     this.unAllacated  =   this.addSum
     this.forceUpdate()
   }else{
-   this.deleteArray = this.b.splice(index , 1)
+   var obj1 = this.b.splice(index , 1)
+   this.deleteArray.push(obj1)
   console.log(this.state.CSummaryData.TContainerAllocation.length , "lengthhhh")
   this.unique = this.removeDuplicates(this.b , "truckerId")
   this.addSum = this.sum(this.unique, 'noOfContainer');

@@ -44,12 +44,11 @@ class ContainerDetailsForm extends React.Component {
         this.handleContainerLoadChecks = this.handleContainerLoadChecks.bind(this)
         this.onRightClick = this.onRightClick.bind(this)
         this.onSaveClick = this.onSaveClick.bind(this)
+        this.cIArray =[]
     }
     onLeftClick(e){
 
-       // this.props.containerId
-
-      if(Object.keys(this.obj).length > 0){
+    if(Object.keys(this.obj).length > 0){
       axios.post(Base_Url+"TContainerLoads",this.obj).then((response)=>{
       axios.put(Base_Url+"TPiInventories/"+this.delObject.pInventoryId,{active:0})
        }).then((response)=>{
@@ -115,28 +114,57 @@ handleContainerLoadChecks(e,data){
  this.pInventId = data.piInventId
 }
 handleCurrentInvChecks(e,data){
-  this.obj.id = 0
-this.obj.invLocId = data.inventoryLocationId
-this.obj.noOfBags =  data.noOfBags
-this.obj.weight = data.weight
-    if(this.props.isDomestic == 1){
-        this.obj.loadContId = null
-        this.obj.loadContDId  = this.props.containerId
- }
-    else if(this.props.isDomestic == 0){
-        this.obj.loadContId = this.props.containerTable.id
-        this.obj.loadContDId =null
-    }
+  if(e.target.checked){
+    this.obj.id = 0
+    this.obj.invLocId = data.inventoryLocationId
+    this.obj.noOfBags =  data.noOfBags
+    this.obj.weight = data.weight
+        if(this.props.isDomestic == 1){
+            this.obj.loadContId = null
+            this.obj.loadContDId  = this.props.containerId
+     }
+        else if(this.props.isDomestic == 0){
+            this.obj.loadContId = this.props.containerTable.id
+            this.obj.loadContDId =null
+        }
 
 
 
-this.obj.lotId = parseInt(this.lotId)
-this.obj.createdBy = this.userId
-this.obj.active = 1
-this.obj.piInventId = data.id
-this.delObject.locationId = data.inventoryLocationId
-this.delObject.pInventoryId = data.id
-console.log("object",this.obj,this.delObject)
+    this.obj.lotId = parseInt(this.lotId)
+    this.obj.createdBy = this.userId
+    this.obj.active = 1
+    this.obj.piInventId = data.id
+    this.delObject.locationId = data.inventoryLocationId
+    this.delObject.pInventoryId = data.id
+    this.cIArra.push(this.obj)
+    console.log("object",this.obj,this.delObject)
+  }
+  else if(!e.target.checked){
+    // this.obj.id = 0
+    // this.obj.invLocId = data.inventoryLocationId
+    // this.obj.noOfBags =  data.noOfBags
+    // this.obj.weight = data.weight
+    //     if(this.props.isDomestic == 1){
+    //         this.obj.loadContId = null
+    //         this.obj.loadContDId  = this.props.containerId
+    //  }
+    //     else if(this.props.isDomestic == 0){
+    //         this.obj.loadContId = this.props.containerTable.id
+    //         this.obj.loadContDId =null
+    //     }
+    //
+    //
+    //
+    // this.obj.lotId = parseInt(this.lotId)
+    // this.obj.createdBy = this.userId
+    // this.obj.active = 1
+    // this.obj.piInventId = data.id
+    // this.delObject.locationId = data.inventoryLocationId
+    // this.delObject.pInventoryId = data.id
+    // this.cIRemove.push(this.obj)
+    // console.log("object",this.obj,this.delObject)
+  }
+
 }
 loadNewData(){
 
@@ -268,7 +296,7 @@ changeLot(e){
     }
     onEditClick(e){
        if(this.props.isDomestic == 0){
-           if(this.props.containerTable.status == null){
+           if(this.props.containerTable.status == "ARRIVED"){
                swal("", "Container must be queued" , 'info')
                return;
            }

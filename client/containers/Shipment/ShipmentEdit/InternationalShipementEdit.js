@@ -106,10 +106,10 @@ class InternationalShipementEdit extends React.Component {
                     var base = 'TPackagingInstructionLots';
 
                     var pLotUrl = MIView._buildUrl(base, {
-                          
+
                         "where": {"pi_id":  e.target.value }
                      } );
-                 
+
                  axios.get(pLotUrl).then((response)=>{
                    this.setState({
                     lotNumber: response.data
@@ -146,8 +146,8 @@ class InternationalShipementEdit extends React.Component {
            var Purl = MIView._buildUrl(baseUrl,{
             "where" : {"customer_id": e.target.value}
            })
-         
-         
+
+
          axios.get(Purl).then((response)=>{
             this.setState({
                 poNumber: response.data
@@ -155,7 +155,7 @@ class InternationalShipementEdit extends React.Component {
         this.poNumber = _.map(this.state.poNumber,(poNum,index)=>{
             return <option key={index} value={poNum.id}>{poNum.po_number}</option>})
                 console.log("poNumber",this.state.poNumber)
-            this.forceUpdate()                
+            this.forceUpdate()
          })
 	}
 	CargoDate(e){
@@ -167,7 +167,7 @@ class InternationalShipementEdit extends React.Component {
 	EarliestReturnDate(e){
         this.props.editData.TShipmentInternational[0].earliestReturnDate = e.target.value
         console.log(this.props.editData.TShipmentInternational[0].earliestReturnDate);
-       
+
     }
 	componentDidMount() {
             var MIView = createDataLoader(InternationalShipementEdit, {
@@ -181,10 +181,10 @@ class InternationalShipementEdit extends React.Component {
                     var base = 'TPackagingInstructionLots';
 
                     var pLotUrl = MIView._buildUrl(base, {
-                          
+
                         "where": {"pi_id":  this.props.editData.TShipmentLots[0].sId }
                      } );
-                 
+
                  axios.get(pLotUrl).then((response)=>{
                    this.setState({
                     lotNumber: response.data
@@ -211,8 +211,8 @@ class InternationalShipementEdit extends React.Component {
                 this.SIObj.id = this.props.editData.id
                 this.SIObj.isDomestic = this.props.editData.isDomestic
                 this.SIObj.loactionId = this.props.editData.loactionId
-                
-           
+
+
            var MIView = createDataLoader(InternationalShipementEdit,{
             queries: [{
                 endpoint: 'TPackagingInstructions',
@@ -225,8 +225,8 @@ class InternationalShipementEdit extends React.Component {
            var Purl = MIView._buildUrl(baseUrl,{
             "where" : {"customer_id": this.props.editData.customerId}
            })
-         
-         
+
+
          axios.get(Purl).then((response)=>{
             this.setState({
                 poNumber: response.data
@@ -234,7 +234,7 @@ class InternationalShipementEdit extends React.Component {
         this.poNumber = _.map(this.state.poNumber,(poNum,index)=>{
             return <option key={index} value={poNum.id}>{poNum.po_number}</option>})
                 console.log("poNumber",this.state.poNumber)
-                this.forceUpdate()          
+                this.forceUpdate()
          })
    }
             componentWillMount() {
@@ -291,6 +291,7 @@ class InternationalShipementEdit extends React.Component {
             })
             }
      onSave(e){
+			 debugger;
      	this.SIObj.customerId = this.props.editData.customerId
         this.SIObj.releaseNumber = this.props.editData.releaseNumber
         this.SIObj.numberOfContainers = this.props.editData.numberOfContainers
@@ -298,13 +299,58 @@ class InternationalShipementEdit extends React.Component {
         this.SIObj.id = this.props.editData.id
         this.SIObj.isDomestic = this.props.editData.isDomestic
         this.SIObj.loactionId = this.props.editData.loactionId
-		this.id = this.props.editData.id 
+		this.id = this.props.editData.id
 		this.postObj.SI = this.SIObj
 		this.postObj.International = this.props.editData.TShipmentInternational
 		this.postObj.lotInformation = this.props.editData.TShipmentLots
 		axios.post(Base_Url+"TShipmentents/updateShipMentEntry",this.postObj).then((response)=>{
-            hashHistory.push("/Shipment/shipmentview")
-            swal("success","Edited Successfully","success")
+
+			var Lilength = this.postObj.lotInformation.length
+			if(this.postObj.lotInformation.length > 1) {
+					this.postObj.lotInformation.forEach(function (element, index) {
+							if (parseInt(element.noOfBags) == parseInt(element.TPackagingInstructionLots.inInventory)) {
+									axios.put(Base_Url + "TPackagingInstructionLots/" + element.piLotsId, {status: "SHIPPED"}).then((response)=> {
+
+									}).then((response)=> {
+
+											if (Lilength == index + 1) {
+													swal("Posted", "Success", "success")
+													hashHistory.push("/Shipment/shipmentview")
+											}
+									})
+							}
+							else{
+									if (Lilength == index + 1) {
+											swal("Posted", "Success", "success")
+											hashHistory.push("/Shipment/shipmentview")
+									}
+							}
+
+
+					});
+			}
+			else if(this.postObj.lotInformation.length ==1){
+					this.postObj.lotInformation.forEach(function (element, index) {
+							if (parseInt(element.noOfBags) == parseInt(element.TPackagingInstructionLots.inInventory)) {
+									axios.put(Base_Url + "TPackagingInstructionLots/" + element.piLotsId, {status: "SHIPPED"}).then((response)=> {
+											swal("Posted", "Success", "success")
+											hashHistory.push("/Shipment/shipmentview")
+									}).then((response)=> {
+
+											//if (Lilength == index + 1) {
+											//    swal("Posted", "Success", "success")
+											//    hashHistory.push("/Shipment/shipmentview")
+											//}
+									})
+							}
+							else{
+									swal("Posted","Success","success")
+									hashHistory.push("/Shipment/shipmentview")
+							}
+
+
+					});
+			}
 		})
 		console.log("POSTOBJ",this.postObj)
 	}
@@ -315,9 +361,9 @@ class InternationalShipementEdit extends React.Component {
             return <LotInformation key = {index} lotNumber = {this.lotNumber} handleLotBagsToShip = {(e) => {this.handleLotBagsToShip(e,index)}} id = {index} data = {lots} />}
         })
 		return (
-			<section className="shipment_edit">  
-<div className="container"> 
-<div className="row">   
+			<section className="shipment_edit">
+<div className="container">
+<div className="row">
 <form className="form-horizontal">
 	<div className=" col-lg-6  col-sm-6 col-xs-12">
 			<fieldset className="scheduler-border ">
@@ -366,9 +412,9 @@ class InternationalShipementEdit extends React.Component {
                         </div>
                         <div className="bages_estimated col-lg-11 col-md-11 col-sm-11 col-xs-11"><span></span></div>
                     </fieldset>
-       
 
-       
+
+
           <fieldset className="scheduler-border ">
 				<legend className="scheduler-border">Material Info</legend>
 				 <div className="bages_estimated col-lg-11 col-md-11 col-sm-11 col-xs-11"><span></span></div>
@@ -384,10 +430,10 @@ class InternationalShipementEdit extends React.Component {
                         <div className="form-group">
                             <label for="Weight" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Lot Number</label>
                             <div className="col-lg-6    col-sm-11 col-xs-11 ">
-                                <select 
+                                <select
                                 value = {this.props.editData.TShipmentLots[0].TPackagingInstructionLots.id}
                                 className="form-control" id="" >
-                                
+
                                 {this.lotNumber}
                                 </select>
                                 <div className="error"><span></span></div>
@@ -406,8 +452,6 @@ class InternationalShipementEdit extends React.Component {
                                                    onChange = {this.handleBagsToShip}
                                                    defaultValue = ""/>
 
-
-
                                             <div className="error"><span></span></div>
                                         </div>
                                     </div>
@@ -421,10 +465,10 @@ class InternationalShipementEdit extends React.Component {
                         {this.props.editData.TShipmentLots.length > 1 ? editableLot : ''}
             </fieldset>
 	</div>
-	
-	
- 
-    <div className=" col-lg-6  col-sm-6 col-xs-12">	
+
+
+
+    <div className=" col-lg-6  col-sm-6 col-xs-12">
 	    <fieldset className="scheduler-border  tab-pane active " id="International">
 		<legend className="scheduler-border">Shipment Info International</legend>
 			<div className="form-group ">
@@ -434,7 +478,7 @@ class InternationalShipementEdit extends React.Component {
 					  <div className="error"><span></span></div>
 					</div>
                 </div>
-				
+
 				<div className="form-group">
 					<label for="" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Freight Forwarder</label>
 					<div className="col-lg-6    col-sm-11 col-xs-11 ">
@@ -442,7 +486,7 @@ class InternationalShipementEdit extends React.Component {
 					  <div className="error"><span></span></div>
 					</div>
                 </div>
-				
+
 				<div className="form-group">
 					<label for="" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Container Type</label>
 					<div className="col-lg-6    col-sm-11 col-xs-11 ">
@@ -453,7 +497,7 @@ class InternationalShipementEdit extends React.Component {
 					  <div className="error"><span></span></div>
 					</div>
                 </div>
-				
+
 				<div className="form-group">
 					<label for="" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Steamship Line</label>
 					<div className="col-lg-6    col-sm-11 col-xs-11 ">
@@ -464,19 +508,19 @@ class InternationalShipementEdit extends React.Component {
 					  <div className="error"><span></span></div>
 					</div>
                 </div>
-				
+
 				<div className="form-group">
 					<label for="" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Steamship Vessel</label>
 					<div className="col-lg-6 col-sm-11 col-xs-11 ">
 					 <input type="text" className="form-control" onChange = {this.vesselChange} value = {this.props.editData.TShipmentInternational[0].steamshipVessel} id="SteamshipVessel" placeholder="Steamship Vessel"/>
 					  <div className="error"><span></span></div>
-					 
+
 					</div>
                 </div>
-				
+
 				<div className="form-group">
 					<label for="" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Earliest Return Date</label>
-					<div className="col-lg-6 col-sm-11 col-xs-11 ">					
+					<div className="col-lg-6 col-sm-11 col-xs-11 ">
 					 <div className="right-inner-addon "><i className="fa fa-calendar" aria-hidden="true"></i>
 						<input className="form-control"  name="date" onChange = {this.EarliestReturnDate} id = "errdate" placeholder="Earliest Return Date" type="date"/>
 					</div>
@@ -485,14 +529,14 @@ class InternationalShipementEdit extends React.Component {
                 </div>
 				<div className="form-group">
 					<label for="" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Doc Cutoff Date/Time</label>
-					<div className="col-lg-6 col-sm-11 col-xs-11 ">					
+					<div className="col-lg-6 col-sm-11 col-xs-11 ">
 					 <div className="right-inner-addon "><i className="fa fa-calendar" aria-hidden="true"></i>
 						<input className="form-control" id="dcdate" onChange = {this.DocDate} name="date" placeholder="Doc Cutoff Date/Time" type="date"/>
 					</div>
 					  <div className="error"><span></span></div>
 					</div>
                 </div>
-				
+
 				<div className="form-group">
 					<label for="" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Cargo Cutoff Date/Time </label>
 					<div className="col-lg-6    col-sm-11 col-xs-11 ">
@@ -502,7 +546,7 @@ class InternationalShipementEdit extends React.Component {
 					 <div className="error"><span></span></div>
 					</div>
                 </div>
-				
+
 				<div className="form-group">
 					<label for="" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"># of Free Days per Container</label>
 					<div className="col-lg-6   col-sm-11 col-xs-11 ">
@@ -524,34 +568,34 @@ class InternationalShipementEdit extends React.Component {
 					  <div className="error"><span></span></div>
 					</div>
                 </div>
-				
+
 				<div className="form-group">
 					<label for="No_of_Bages_Pallat" className="col-lg-12 control-label">Notes</label>
 					<div className="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-					 <textarea className="form-control textarea-entry" onChange = {this.noteChange} value = {this.props.editData.TShipmentInternational[0].notes} rows="3" id="Notes"></textarea> 					  
+					 <textarea className="form-control textarea-entry" onChange = {this.noteChange} value = {this.props.editData.TShipmentInternational[0].notes} rows="3" id="Notes"></textarea>
 					 <div className="error"><span></span></div>
 					</div>
                 </div>
-		   
-	    </fieldset>	
-	
-	</div>	
-	
-	<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 pddn-30-btm padding-top-btm-xs">    
-		<div className="pull-left margin-10-last-l"><button type="button"  className="btn  btn-orange text-uppercase hidden">Delete</button></div>	
-		<div className="pull-left margin-10-all"><button type="button"  className="btn  btn-gray text-uppercase" onClick ={hashHistory.goBack}>Cancel</button></div>
-		<div className="pull-left margin-10-all"><button type="button"  className="btn  btn-primary text-uppercase" onClick = {this.onSave}>Save</button></div>	
-	</div>
-	
-	</form>	
-	
- </div>		
-	
- </div>	
- 
- 
 
-	
+	    </fieldset>
+
+	</div>
+
+	<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 pddn-30-btm padding-top-btm-xs">
+		<div className="pull-left margin-10-last-l"><button type="button"  className="btn  btn-orange text-uppercase hidden">Delete</button></div>
+		<div className="pull-left margin-10-all"><button type="button"  className="btn  btn-gray text-uppercase" onClick ={hashHistory.goBack}>Cancel</button></div>
+		<div className="pull-left margin-10-all"><button type="button"  className="btn  btn-primary text-uppercase" onClick = {this.onSave}>Save</button></div>
+	</div>
+
+	</form>
+
+ </div>
+
+ </div>
+
+
+
+
 </section>
 		);
 	}

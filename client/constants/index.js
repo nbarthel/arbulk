@@ -14,8 +14,8 @@
 //export const Base_Url = 'http://52.66.136.193:3000/api/'
 
  //export const Base_Url = 'http://192.168.0.105:8080/api/';
-export const Base_Url = "http://172.27.101.87:8080/api/";
-//export const Base_Url = "http://172.31.98.51:8080/api/";
+//export const Base_Url = "http://172.27.101.87:8080/api/";
+export const Base_Url = "http://172.31.98.51:8080/api/";
 
 //export const Base_Url = "http://192.168.43.135:8080/api/"
 //export const Base_Url = "http://192.168.0.7:8080/api/"

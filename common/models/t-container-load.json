@@ -186,6 +186,11 @@
       "model": "TInventoryLocation",
       "foreignKey": "invLocId"
     },
+    "TPiInventory": {
+      "type": "belongsTo",
+      "model": "TPiInventory",
+      "foreignKey": "piInventId"
+    },
     "TContainerInternational": {
       "type": "belongsTo",
       "model": "TContainerInternational",

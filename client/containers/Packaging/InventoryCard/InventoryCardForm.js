@@ -31,20 +31,20 @@ constructor(){
 	//this.onSaveChange = this.onSaveChange.bind(this)
 	}
 	onConfirm(e){
-
+debugger;
 		 if(this.status == "UNCONFIRMED"){
-				hashHistory.push('/Packaging/confirmpckginst/'+this.props.cId)   
+				hashHistory.push('/Packaging/confirmpckginst/'+this.id)
            }
-                
+
                  else{
                   swal("Error","Please select unconfirmed order","error")
                 }
-			
+
 	}
 	onEdit(e){
-	
-				hashHistory.push('/Packaging/enterpackginginst/'+this.props.id)  
-				                
+
+				hashHistory.push('/Packaging/enterpackginginst/'+this.props.id)
+
 	}
 componentWillMount() {
 
@@ -78,14 +78,14 @@ componentWillMount() {
                     }
                 )
 
-       	        
+
                 this.status = this.state.viewInventoryCardData? this.state.viewInventoryCardData[0].TPackagingInstructionLots[0].status : '';
                 console.log( '>>>>>>>>>>>>Inventoryraillcart' , this.state.viewInventoryCardData)
             }.bind(this)
 
         })
-        
-		//alert('status' , this.status)        
+
+		//alert('status' , this.status)
      axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
     this.setState({
         queue_Sequence : response.data
@@ -95,20 +95,20 @@ componentWillMount() {
 
 
 
-     
+
     }
 
     addToQueue(e){
 
      let id = this.props.cId
      var sequence =  this.state.queue_Sequence[0].max_mark
-     
+
       var option = {
           queue_sequence : parseInt(sequence) + 1 ,
           status : "Queued"
       }
 
-    
+
       if(this.status == "READY"){
       axios.put( Base_Url+"TPackagingInstructionLots/"+id , option).then(function(response){
                   console.log("Queue Added" , response)
@@ -120,20 +120,21 @@ componentWillMount() {
       },
               function(isConfirm){
               hashHistory.push('/Packaging/packaginginstqueue/')
-                 
+
             });
             }).catch(function(err){
                   console.log("Error Is" + err)
         })
 
   }
- 
+
   else {
     swal("","The selected order is not ready","info")
   }
 }
-  
+
     onCheckBoxChange(e){
+			debugger;
 			//console.log(this.checked)
 
 			if(e.target.checked){
@@ -166,6 +167,7 @@ componentWillMount() {
 		}*/
 
     onCheck(e,status){
+			debugger;
     this.status = status
 	if(e.target.checked){
 	this.id = e.target.id
@@ -209,7 +211,7 @@ componentWillMount() {
 	}
 
 	render(){
-		
+
 		//console.log("ThisLength",this.length)
 		if(this.props.lots != undefined){
 			console.log("status",this.props.lots[0].status)
@@ -221,14 +223,14 @@ componentWillMount() {
 		return(
 
 
-<section className="inventory_card">  
-		<div className="container-fluid"> 
+<section className="inventory_card">
+		<div className="container-fluid">
 
-		<div className="row pddn-20-top">	
-			<div className="col-lg-12">	  
-	
+		<div className="row pddn-20-top">
+			<div className="col-lg-12">
+
 		<InventoryTable id = {this.props.id} lotId = {this.props.cId} onCheck = {this.onCheck} viewData = {this.props.viewData} />
-	
+
 	</div>
 		</div>
 
@@ -241,7 +243,7 @@ componentWillMount() {
 					<legend className="scheduler-border">PACKAGING Info </legend>
 					<div className="col-lg-5 col-sm-5 col-xs-5">Bag Type</div>
 					<div  className="col-lg-2 col-sm-2 col-xs-2 ">:</div>
-					<div className="col-lg-5 col-sm-5 col-xs-5"><b>{this.props.viewData ? this.props.viewData[0].TPackagingMaterial.packagingName : ''}</b></div>
+					<div className="col-lg-5 col-sm-5 col-xs-5"><b>{this.props.viewData ? (this.props.viewData[0].TPackagingType ? this.props.viewData[0].TPackagingType.packagingType : '') : ''}</b></div>
 
 					<div className="col-lg-5 col-sm-5 col-xs-5">Pallet Type</div>
 					<div  className="col-lg-2 col-sm-2 col-xs-2">:</div>
@@ -272,72 +274,72 @@ componentWillMount() {
 						<fieldset className="scheduler-border">
 							<legend className="scheduler-border">PACKAGING LABEL </legend>
 							<div>{this.props.viewData? this.props.viewData[0].custom_label : ''} </div>
-							
+
 						</fieldset>
 					</div>
-					<div className=" col-lg-4 col-md-4 col-sm-6 col-xs-12 ">			
-										
-					</div>	
-			
-		
-		
-		
-			<div className=" col-lg-4 col-md-4 col-sm-6 col-xs-12 pddn-20-top">			
+					<div className=" col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
+
+					</div>
+
+
+
+
+			<div className=" col-lg-4 col-md-4 col-sm-6 col-xs-12 pddn-20-top">
 				<label className="control control--checkbox ">Stamp Confirmed <br/><b>{this.userName}</b>
 				  <input type="checkbox"  id="rowstamp" onChange={this.onStampConfirmed}/><div className="control__indicator"></div>
-				</label>				
+				</label>
 			</div>
-			
+
 		</div>
-		
-		<div className="row">	
-			<div className=" col-lg-7 col-md-7 col-sm-7 col-xs-12" >	
+
+		<div className="row">
+			<div className=" col-lg-7 col-md-7 col-sm-7 col-xs-12" >
 				<div className="text_left">
-				
+
 				 <div className="pull-left margin-10-last-l"><button type="button"  className="btn  btn-gray">Print Bagging Instruction</button> </div>
-				 
-				 <div className="pull-left margin-10-all"><button type="button" onClick = {this.addToQueue}  className="btn  btn-gray">Add To Queue</button> </div>	
-				 
-				 <div className="pull-left margin-10-all"><button type="button"  className="btn btn-gray" onClick={this.onConfirm}>Confirm</button> </div>		 		 
-				
-				
-				  <div className="pull-left margin-10-all"><button type="button" id="edit_btn" onClick={this.onEdit} className="btn  btn-orange">Edit</button> </div>		 		 
-				</div>	
-			</div>	
-			<div className=" col-lg-5 col-md-5 col-sm-5 col-xs-12">	
-				<div className="pull-right margin-10-last-r"><button type="button" id="back" onClick = {hashHistory.goBack} className="btn  btn-gray">Back</button> </div>				
-			</div>	
+
+				 <div className="pull-left margin-10-all"><button type="button" onClick = {this.addToQueue}  className="btn  btn-gray">Add To Queue</button> </div>
+
+				 <div className="pull-left margin-10-all"><button type="button"  className="btn btn-gray" onClick={this.onConfirm}>Confirm</button> </div>
+
+
+				  <div className="pull-left margin-10-all"><button type="button" id="edit_btn" onClick={this.onEdit} className="btn  btn-orange">Edit</button> </div>
+				</div>
+			</div>
+			<div className=" col-lg-5 col-md-5 col-sm-5 col-xs-12">
+				<div className="pull-right margin-10-last-r"><button type="button" id="back" onClick = {hashHistory.goBack} className="btn  btn-gray">Back</button> </div>
+			</div>
 		</div>
-		
+
 		 <div className="col-lg-12 margin-btm-40 label-gray font-size-16" >
 		   Inventory Card
 		 </div>
 	</div>
-	
-	
+
+
 
 
 
 	<br className="clearfix"/>
 	<div >
-	<div className="row pddn-40-top">	
-	
+	<div className="row pddn-40-top">
+
 	 <CurrentInventory key={this.state.index} length = {this.length}  onCancel = {this.onCancel} lid={this.props.lid} id = {this.props.id} lID={this.props.cId} checked = {this.checked} lotId = {this.id}  onCheckBoxChange = {this.onCheckBoxChange} onSaveChange = {this.onSaveChange} lots = {this.props.lots}/>
 	<InventoryHistory data = {this.props.viewData} />
-	
+
    </div>
-	<div className="row pddn-20-top">	
-	
+	<div className="row pddn-20-top">
+
 	 <InventoryLocationHistory id = {1} />
 	 <PendingShipment />
 
 	</div>
-	
+
 	</div>
-	
-	
-	
- </div>	 
+
+
+
+ </div>
 </section>
 
 

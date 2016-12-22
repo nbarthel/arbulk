@@ -4,7 +4,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import validateInput from '../../../public/validations/validateInput';
 import '../../../public/stylesheets/bootstrap.min.css';
-import { browserHistory } from 'react-router';
+import { hashHistory } from 'react-router';
 class AdminLoginForm extends React.Component{
 	constructor(props){
 		super(props);
@@ -29,7 +29,7 @@ class AdminLoginForm extends React.Component{
 	onSubmit(e){
 		
 		e.preventDefault();
-		browserHistory.push('/Admin/createusr')
+		hashHistory.push('/Admin/createusr')
 		/*if(this.isValid()){
 			this.setState({errors:{}});
 
@@ -43,8 +43,7 @@ class AdminLoginForm extends React.Component{
 	<div id="login" className="animate form">
 	<section className="login_content" >
 	<div>
-	<img src="../../../public/img/logo.png" 
-	className="pull-right img-responsive"/>
+	<span className="pull-right img-responsive imgbg" ></span>
 	</div>
 	
 	<div className="clearfix"></div>

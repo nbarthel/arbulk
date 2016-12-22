@@ -10,14 +10,14 @@ import { createDataLoader } from 'react-loopback';
 import FilterComponent from '../../../components/FilterComponent';
 import FilterButton from '../../../components/FilterComponent/FilterButton';
 import SweetAlert from 'sweetalert-react';
-import '../../../public/stylesheets/sweetalert.css' 
+import '../../../public/stylesheets/sweetalert.css'
 import { hashHistory } from 'react-router'
 export default class RailcarArrivalEntryForm extends React.Component {
 	 constructor(props){
             super(props);
          this.buttonDisplay = [ ]
             this.checkedCustomer = [ ]
-            this.checkedStatus = [ ] 
+            this.checkedStatus = [ ]
             this.checkedCompany = [ ]
             this.Query = [ ]
             this.Where = { }
@@ -29,7 +29,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 		}
 		this.updateCartArrival = this.updateCartArrival.bind(this);
 		this.handleChange1 = this.handleChange1.bind(this)
-		
+
 			 this.onClickli = this.onClickli.bind(this)
             this.onClickPo = this.onClickPo.bind(this)
             this.lotSearch = this.lotSearch.bind(this)
@@ -51,7 +51,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
           console.log(this.Query)
         }
         handleChange1(x,event) {
-        	debugger;
+        	//debugger;
         	var dateValue = this.onformat(x.target.value)
 		// this.setState({
 		// 	startDate:dateValue
@@ -62,7 +62,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 	}
 
 	 onClickPo(e){
-        debugger;
+        //debugger;
            this.Query[e.target.id] = e.target.getAttribute('value')
 
           document.getElementById('POSearch').value = e.target.getAttribute('value')
@@ -71,7 +71,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
       }
 
       lotSearch(e){
-          debugger;
+          //debugger;
            this.Query[e.target.id] = e.target.getAttribute('value')
            console.log(this.Query)
            document.getElementById('LotSearch').value = e.target.getAttribute('value')
@@ -87,7 +87,7 @@ onClickli(e){
 }
 
 	onSearch(e){
-		debugger;
+		//debugger;
 		if(this.Query != undefined){
 			Object.defineProperty(this.Where,"Query",{enumerable:true ,
 				writable: true,
@@ -97,7 +97,7 @@ onClickli(e){
 		console.log(this.Where)
 		var serachObj = []
 		 var serachObjLots =[]
-		
+
 		if (this.Where != undefined && this.Where!= null)
 		{
 			if(this.Where.Customer && this.Where.Customer.length >0){
@@ -162,7 +162,7 @@ onClickli(e){
 			//TPackagingInstructionLots
 
 			if(serachObj && serachObj != undefined && serachObjLots.length == 0){
-				debugger;
+				//debugger;
 				this.urlSearch = PIview._buildUrl(base, {
 
 					include : {"relation": "TPackagingInstructions", "scope":{  where:{  "or":serachObj} ,"include": ["TOrigin" , "TCompany"]}},
@@ -173,7 +173,7 @@ onClickli(e){
 				})
 			}
 			else if(serachObjLots.length > 0 && serachObj.length > 0) {
-				debugger;
+				//debugger;
 				this.urlSearch = PIview._buildUrl(base, {
 					include : {"relation": "TPackagingInstructions", "scope":{where:{  "or":serachObj} ,"include": ["TOrigin" , "TCompany"]}},
 					"where":
@@ -183,7 +183,7 @@ onClickli(e){
 				});
 			}
 			else{
-				debugger;
+				//debugger;
 				this.urlSearch = PIview._buildUrl(base, {
 					include : {"relation": "TPackagingInstructions", "scope":{"include": ["TOrigin" , "TCompany"]}},
 					"where":
@@ -199,7 +199,7 @@ onClickli(e){
 			$.ajax({
 				url: this.urlSearch,
 				success:function(data){
-					debugger;
+					//debugger;
 					console.log('ajax ',data);
 
 					this.setState(
@@ -236,11 +236,11 @@ onClickli(e){
               //console.log(this.Where)
               delete this.Where.Company
              }
-                let value = e.target.value               
+                let value = e.target.value
                 let index = this.buttonDisplay.indexOf(e.target.value)
                 if(index !== -1)
-                this.buttonDisplay = _.without(this.buttonDisplay,value)       
-                 this.forceUpdate() 
+                this.buttonDisplay = _.without(this.buttonDisplay,value)
+                 this.forceUpdate()
                    }
         }
         onCustomerFilter(e,customer){
@@ -281,7 +281,7 @@ onClickli(e){
                                                       value:this.checkedStatus})
             this.buttonDisplay.push(e.target.value)
             this.forceUpdate()
-            
+
             //console.log(this.props.buttonDisplay)
            /* console.log(this.Where)
             console.log(this.checkedStatus)
@@ -301,8 +301,8 @@ onClickli(e){
             //let value = e.target.value
                 let index = this.buttonDisplay.indexOf(e.target.value)
                 if(index !== -1)
-                this.buttonDisplay = _.without(this.buttonDisplay,value) 
-                //console.log(this.buttonDisplay)      
+                this.buttonDisplay = _.without(this.buttonDisplay,value)
+                //console.log(this.buttonDisplay)
                   this.forceUpdate()
                   }
         }
@@ -325,7 +325,7 @@ onClickli(e){
 			 }
 
     }
-  
+
  	onTap() {
   	$(document).ready(function(){
 		var date_input=$('input[name="date"]'); //our date input has the name "date"
@@ -343,7 +343,7 @@ onClickli(e){
 
 		if(data.target.checked){
 			//this.checked = true
-			
+
 			document.getElementById('th'+ index).value = "YES"
 			this.props.data[index].arrived = 1
 			this.forceUpdate()
@@ -366,7 +366,7 @@ onClickli(e){
 
 
 	updateCartArrival(){
-	debugger;
+	//debugger;
       if(this.cartArray.length < 1 && (this.state.startDate=null || this.state.startDate=== undefined || this.state.startDate=== '' || this.state.startDate=== false)){
          swal('Info' , 'Please select arrival Date and or row' , 'info')
          return
@@ -400,7 +400,7 @@ else if(this.lotOrderValue.status == "UNCONFIRMED")
 {
 this.cartArray.forEach((id ,index)=>{
     axios.put(Base_Url+"TPackagingInstructionLots/" + id , {railcar_arrived_on : this.dateArray[index] , arrived : 1,railcar_status:"ARRIVED"}).then(function(response){
-        
+
                     swal({
                       title: "Success",
                       text: "Arrival Submitted",
@@ -425,7 +425,7 @@ else{
 }
 
     render() {
-	debugger;
+	//debugger;
 		var fiterData = undefined ;
 		fiterData = this.state.viewData ? this.state.viewData : undefined ;
 
@@ -482,8 +482,8 @@ else{
 
 
 		var railcartData = _.map(railCart , (view ,index)=>{
-		debugger;
-   
+		//debugger;
+
 			if(view.TPackagingInstructions && (view.status == "CONFIRMED" || view.status == "UNCONFIRMED")) {
 		return(
 	              	<tr>
@@ -507,36 +507,36 @@ else{
 						</tr>
 		)
 	}
-	
+
 		})
     return (
-      
+
     <section className="side-filter">
-      <div className="menu-bg hidden-md hidden-lg hidden-sm  visible-xs-block">  
+      <div className="menu-bg hidden-md hidden-lg hidden-sm  visible-xs-block">
 		 <div className="">
 		  <h4 className="pull-left">REFINE YOUR RESULT </h4>
-		  <button type="button" className="btn btn-default collapsed pull-right " data-toggle="collapse" data-target="#filter-menu" aria-expanded="false"><i className="fa fa-caret-down fa-2x" aria-hidden="true"></i></button>			 
+		  <button type="button" className="btn btn-default collapsed pull-right " data-toggle="collapse" data-target="#filter-menu" aria-expanded="false"><i className="fa fa-caret-down fa-2x" aria-hidden="true"></i></button>
 		</div>
-	</div> 
+	</div>
 <div className="container">
 	<div className="row-fluid">
 <FilterComponent key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter}/>	 	<div id="filter-grid">
 		<div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
 
-			<div className="row">			
-			<FilterButton buttonDisplay = {this.buttonDisplay} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/> 
-				<div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs">					
-					
-				</div>	
-				
-			<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 "><hr/></div>	
-			
+			<div className="row">
+			<FilterButton buttonDisplay = {this.buttonDisplay} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
+				<div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs">
+
+				</div>
+
+			<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 "><hr/></div>
+
 			<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-				<div className="table-responsive ">	
+				<div className="table-responsive ">
 					<table className="table table-striped">
 						<thead className="base_bg">
 						  <tr >
-							
+
 							<th>Customer</th>
 							<th>PO# </th>
 							<th>Railcar# </th>
@@ -548,7 +548,7 @@ else{
 							<th>Arrival Date</th>
 							<th>
 								<label className="control control--checkbox">
-								</label>									
+								</label>
 							</th>
 						</tr>
 						</thead>
@@ -557,22 +557,22 @@ else{
 						</tbody>
 					</table>
 				</div>
-										
-				
 
-				    <div className="pull-right padding-top-btm-xs"> 					
+
+
+				    <div className="pull-right padding-top-btm-xs">
 						<div className="pull-right padding-10-last-r"><button type="button"  className="btn  btn-primary" onClick={this.updateCartArrival} >Save </button></div>
-						<div className="pull-right padding-10-all"><button type="button"  className="btn  btn-gray" onClick={hashHistory.goBack}>Cancel </button></div>						
-					</div>					
+						<div className="pull-right padding-10-all"><button type="button"  className="btn  btn-gray" onClick={hashHistory.goBack}>Cancel </button></div>
+					</div>
 				</div>
-				
-		</div>		
+
+		</div>
 		</div>
 	</div>
 	</div>
 </div>
- 
-</section>	
+
+</section>
     );
   }
 }

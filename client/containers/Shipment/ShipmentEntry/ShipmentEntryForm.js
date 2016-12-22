@@ -358,7 +358,7 @@ class ShipmentEntryForm extends React.Component {
                      }
                      //var getKeys = _.pluck(this.state.lotNumber, 'inInventory');
                      var inventoryBags = getKeys.filter(function(val) { return val !== null; })
-                     this.Total = inventoryBags.reduce(function(a,b){return parseInt(a)+parseInt(b) ;})
+                     this.Total = inventoryBags.reduce(function(a,b){return parseInt(a)+parseInt(b) ;},0)
 
                 this.lotNumber = _.map(this.state.lotNumber,(lotNum,index) => {
 
@@ -617,7 +617,7 @@ class ShipmentEntryForm extends React.Component {
     }
 
     onSubmit(e){
-debugger;
+
         if(!(this.isValid())){
             swal("" , "Please fill red marked fields" , "error")
             return
@@ -751,15 +751,19 @@ debugger;
                             //}
                         })
                     }
+                    else{
+                        swal("Posted","Success","success")
+                        hashHistory.push("/Shipment/shipmentview")
+                    }
 
 
                 });
             }
            // }
-           // else{
-           //     swal("Posted","Success","success")
-           //     hashHistory.push("/Shipment/shipmentview")
-           // }
+          //  else{
+          //      swal("Posted","Success","success")
+          //      hashHistory.push("/Shipment/shipmentview")
+          //  }
 
 
         })

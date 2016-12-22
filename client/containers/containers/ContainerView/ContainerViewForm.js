@@ -15,7 +15,7 @@ class  ContainerViewForm extends React.Component {
         super(props);
             this.status
             this.state = {
-  showARB:"",
+           showARB:"",
            showCustomer:"",
            showRelease:"",
            showBooking:"",
@@ -33,7 +33,7 @@ class  ContainerViewForm extends React.Component {
             this.isDomestic=false
             this.buttonDisplay = [ ]
             this.checkedCustomer = [ ]
-            this.checkedStatus = [ ] 
+            this.checkedStatus = [ ]
             this.checkedCompany = [ ]
             this.editId = ''
             this.Query = {}
@@ -146,7 +146,7 @@ class  ContainerViewForm extends React.Component {
             this.buttonDisplay.push(e.target.value)
             //console.log(this.props.checkedCompany)
             //console.log(this.props.buttonDisplay)
-           
+
            }
             else if (!e.target.checked){
 
@@ -158,11 +158,11 @@ class  ContainerViewForm extends React.Component {
               //console.log(this.Where)
               delete this.Where.Company
              }
-                let value = e.target.value               
+                let value = e.target.value
                 let index = this.buttonDisplay.indexOf(e.target.value)
                 if(index !== -1)
-                this.buttonDisplay = _.without(this.buttonDisplay,value)       
-                 this.forceUpdate() 
+                this.buttonDisplay = _.without(this.buttonDisplay,value)
+                 this.forceUpdate()
                    }
         }
         onCustomerFilter(e,customer){
@@ -189,7 +189,7 @@ class  ContainerViewForm extends React.Component {
                 let value = e.target.value
                 let index = this.buttonDisplay.indexOf(e.target.value)
                 if(index !== -1)
-                this.buttonDisplay = _.without(this.buttonDisplay,value)       
+                this.buttonDisplay = _.without(this.buttonDisplay,value)
                   this.forceUpdate()
                    }
         }
@@ -203,7 +203,7 @@ class  ContainerViewForm extends React.Component {
                                                       value:this.checkedStatus})
             this.buttonDisplay.push(e.target.value)
             this.forceUpdate()
-            
+
             //console.log(this.props.buttonDisplay)
            /* console.log(this.Where)
             console.log(this.checkedStatus)
@@ -223,8 +223,8 @@ class  ContainerViewForm extends React.Component {
             //let value = e.target.value
                 let index = this.buttonDisplay.indexOf(e.target.value)
                 if(index !== -1)
-                this.buttonDisplay = _.without(this.buttonDisplay,value) 
-                //console.log(this.buttonDisplay)      
+                this.buttonDisplay = _.without(this.buttonDisplay,value)
+                //console.log(this.buttonDisplay)
                   this.forceUpdate()
                   }
         }
@@ -244,9 +244,9 @@ class  ContainerViewForm extends React.Component {
             this.checkedCompany = []
             this.Query = []
 
-            delete this.Where.Company 
-            delete this.Where.Customer 
-            delete this.Where.status  
+            delete this.Where.Company
+            delete this.Where.Customer
+            delete this.Where.status
             delete this.state.viewData
       //  delete this.Where
         delete this.state.Container
@@ -262,12 +262,14 @@ class  ContainerViewForm extends React.Component {
     }
 
 onCheckboxChange(e,data ,contData){
+
     this.containerData = contData
     console.log(">>>>>>>>>>>>>Contaimner Data" ,  this.containerData)
     this.contId = contData.id
     this.type = data.isDomestic
         this.editId = data.id
         console.log("DATA",data)
+        this.parentShipId = data.TContainerInternational[0].id
          if(data.isDomestic==1){
             this.isDomestic=true;
             //swal('' , 'Domestic container is not allowed for ')
@@ -283,7 +285,6 @@ onCheckboxChange(e,data ,contData){
            }
 
     addToqueue() {
-        debugger;
        if(!this.containerData.containerSteamshipLineConfirmed){
            swal("", "Domestic container can not be in queue" , 'info')
            return;
@@ -293,8 +294,16 @@ onCheckboxChange(e,data ,contData){
             return
         }
 
-        var id  = this.contId
-        axios.put(Base_Url + "TContainerInternationals/" + id , {sequence : parseInt(this.state.max_seq)+1 , status : 'QUEUED' ,isqueued : 1}).then((response)=> {
+   if(this.containerData && (this.containerData.status == "LOADED" || this.containerData.status == "INTRANSIT" || this.containerData.status == "DELIVERED"))
+   {
+     swal("" , "The container is already" +" "+ this.containerData.status , 'info');
+     return
+   }
+
+
+         var id  = this.contId
+         var shipId = this.parentShipId
+         axios.put(Base_Url + "TContainerInternationals/" + id , {sequence : parseInt(this.state.max_seq)+1 , status : 'QUEUED' ,isqueued : 1}).then((response)=> {
             swal({
                     title: "Success",
                     text: "Successfully added to the queue",
@@ -302,6 +311,9 @@ onCheckboxChange(e,data ,contData){
                     showCancelButton: true,
                 },
                 function(isConfirm){
+                  axios.put(Base_Url + "/TShipmentents/"+ shipId , {status : "QUEUED"}).then((response)=>{
+
+                  })
                     hashHistory.push('/Conatainer/containerqueueview')
 
                 }
@@ -312,7 +324,7 @@ onCheckboxChange(e,data ,contData){
 }
 
     onSearch(e){
-        debugger;
+
       Object.defineProperty(this.Where,"Query",{enumerable:true ,
             writable: true,
             configurable: true,
@@ -770,7 +782,7 @@ else{
     })
 }
  break;
- case "Customer" : 
+ case "Customer" :
    if(this.state.showCustomer == ""){
     this.setState({
         showCustomer : "none"
@@ -782,7 +794,7 @@ else{
     })
 }
 break;
- case "Container" : 
+ case "Container" :
    if(this.state.showContainer == ""){
     this.setState({
         showContainer : "none"
@@ -794,7 +806,7 @@ else{
     })
 }
 break;
- case "Release" : 
+ case "Release" :
  console.log(e.target.name)
   if(this.state.showRelease == ""){
     this.setState({
@@ -807,7 +819,7 @@ else{
     })
 }
 break;
- case "Booking" : 
+ case "Booking" :
  console.log(e.target.name)
   if(this.state.showBooking == ""){
     this.setState({
@@ -820,7 +832,7 @@ else{
     })
 }
 break;
- case "Trucker" : 
+ case "Trucker" :
  console.log(e.target.name)
   if(this.state.showTrucker == ""){
     this.setState({
@@ -833,7 +845,7 @@ else{
     })
 }
 break;
- case "Arrived" : 
+ case "Arrived" :
  console.log(e.target.name)
   if(this.state.showArrived == ""){
     this.setState({
@@ -846,7 +858,7 @@ else{
     })
 }
 break;
- case "SteamShip" : 
+ case "SteamShip" :
  console.log(e.target.name)
   if(this.state.showSteamShip == ""){
     this.setState({
@@ -859,7 +871,7 @@ else{
     })
 }
 break;
- case "Type" : 
+ case "Type" :
  console.log(e.target.name)
   if(this.state.showType == ""){
     this.setState({
@@ -954,15 +966,15 @@ onViewClick(e){
 
     </div>
     <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
-                 <a href="javascript:void(0)" name = "ARB" onClick = {(e) => {this.onHideColumn(e,name)}}>ARB</a> -- 
-                 <a href="javascript:void(0)" name = "Customer" onClick = {(e) => {this.onHideColumn(e)}}>Customer</a> --- 
-                 <a href="javascript:void(0)" name = "Release" onClick={(e) => {this.onHideColumn(e)}}>Release</a> -- 
-                 <a href="javascript:void(0)" name = "Booking" onClick={(e) => {this.onHideColumn(e)}}>Booking</a> -- 
-                 <a href="javascript:void(0)" name = "Container" onClick={(e) => {this.onHideColumn(e)}}>Container</a> -- 
-                 <a href="javascript:void(0)" name = "Trucker" onClick={(e) => {this.onHideColumn(e)}}>Trucker</a> -- 
-                 <a href="javascript:void(0)" name = "Arrived" onClick={(e) => {this.onHideColumn(e)}}>Arrived</a> -- 
-                 <a href="javascript:void(0)" name = "SteamShip" onClick={(e) => {this.onHideColumn(e)}}>SteamShip Line</a> -- 
-                 <a href="javascript:void(0)" name = "Type" onClick={(e) => {this.onHideColumn(e)}}>Type</a> 
+                 <a href="javascript:void(0)" name = "ARB" onClick = {(e) => {this.onHideColumn(e,name)}}>ARB</a> --
+                 <a href="javascript:void(0)" name = "Customer" onClick = {(e) => {this.onHideColumn(e)}}>Customer</a> ---
+                 <a href="javascript:void(0)" name = "Release" onClick={(e) => {this.onHideColumn(e)}}>Release</a> --
+                 <a href="javascript:void(0)" name = "Booking" onClick={(e) => {this.onHideColumn(e)}}>Booking</a> --
+                 <a href="javascript:void(0)" name = "Container" onClick={(e) => {this.onHideColumn(e)}}>Container</a> --
+                 <a href="javascript:void(0)" name = "Trucker" onClick={(e) => {this.onHideColumn(e)}}>Trucker</a> --
+                 <a href="javascript:void(0)" name = "Arrived" onClick={(e) => {this.onHideColumn(e)}}>Arrived</a> --
+                 <a href="javascript:void(0)" name = "SteamShip" onClick={(e) => {this.onHideColumn(e)}}>SteamShip Line</a> --
+                 <a href="javascript:void(0)" name = "Type" onClick={(e) => {this.onHideColumn(e)}}>Type</a>
                  </div>
     <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div className="table-responsive view_table viewLoad">
@@ -974,7 +986,7 @@ onViewClick(e){
                         showTrucker = {this.state.showTrucker}
                         showArrived = {this.state.showArrived}
                         showSteamShip = {this.state.showSteamShip}
-                        showType = {this.state.showType} 
+                        showType = {this.state.showType}
                         onCheckboxChange = {this.onCheckboxChange} key={this.state.index} onCheckboxChange = {this.onCheckboxChange} filterData = {filterData}/>
         </div>
         <div className="row-fluid pddn-50-btm padding-top-btm-xs">

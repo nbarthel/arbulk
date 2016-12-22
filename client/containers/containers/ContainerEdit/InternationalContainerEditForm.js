@@ -14,7 +14,7 @@ import { hashHistory } from 'react-router'
                   "name":"Trucker1"},
                   {"id": 2,
                   "name":"Trucker2"}],
-              
+
         }
         this.IntPostObj = { }
         this.shipmentId = ''
@@ -45,7 +45,7 @@ import { hashHistory } from 'react-router'
             this.setState({
                 customer: response.data
             })
-        
+
         })
             .catch(function(err){
                 console.log('eroor>>>>' , err)
@@ -69,7 +69,7 @@ componentDidMount() {
         	document.getElementById("containerSteamshipLineConfirmed").checked = true
         }
         if(this.props.editData.TContainerInternational[0].containerTypeConfirmed){
-        	document.getElementById("ContainerTypeConfirmed").checked = true	
+        	document.getElementById("ContainerTypeConfirmed").checked = true
         }
 	var CIView = createDataLoader(InternationalContainerEditForm,{
                 queries:[{
@@ -77,7 +77,7 @@ componentDidMount() {
                   filter:{
                     include:["TShipmentDomestic"]
                   }
-                }]             
+                }]
   })
 
  this.customerValue = this.props.editData.customerId
@@ -90,7 +90,7 @@ componentDidMount() {
     this.setState({
       bookingNumbers : response.data
     })
-     
+
   })
 }
 onContainerTChange(e){
@@ -111,7 +111,7 @@ if(this.props.editData.TContainerInternational[0].containerTypeConfirmed == 0){
 }
 onChassisChange(e){
   this.props.editData.TContainerInternational[0].chasisNumber = e.target.value
-  this.chassisNumber = e.target.value 
+  this.chassisNumber = e.target.value
   this.forceUpdate()
 }
 handleContainerSteamLineCheck(e){
@@ -131,20 +131,20 @@ handleContainerArrivedCheck(e){
 if(this.props.editData.TContainerInternational[0].containerArrived == 1){
   	this.props.editData.TContainerInternational[0].containerArrived = 0
   	this.ContainerArrivedInt = 0
-  	 
+
   	return
   	}
 if(this.props.editData.TContainerInternational[0].containerArrived == 0){
   this.props.editData.TContainerInternational[0].containerArrived == 1
   this.ContainerArrivedInt = 1
- 
+
   return
   }
- 
+
 }
 onBookingChange(e){
   this.shipmentId = e.target.value
-  console.log("ShipmentId",this.shipmentId) 
+  console.log("ShipmentId",this.shipmentId)
 }
 onTruckerChange(e){
   if(e.target.id == "d_Trucker" ){
@@ -174,12 +174,12 @@ onSave(e){
   var yyyy = today.getFullYear();
   if(dd<10){
     dd = '0'+dd
-  } 
+  }
   if(mm<10){
     mm = '0'+mm
   }
   today = mm+'/'+dd+'/'+yyyy
-  this.id = this.props.editData.TContainerInternational[0].id 
+  this.id = this.props.editData.TContainerInternational[0].id
   this.IntPostObj.shipmentId = parseInt(this.shipmentId)
   this.IntPostObj.truckerId = this.truckerId
   this.IntPostObj.pickupTruckerId = this.pickupTrucker
@@ -191,7 +191,7 @@ onSave(e){
   this.IntPostObj.containerArrived = this.ContainerArrivedInt
   this.IntPostObj.sealNumber
   this.IntPostObj.modifiedBy = this.userID
-  this.IntPostObj.modifiedOn = today 
+  this.IntPostObj.modifiedOn = today
   axios.put(Base_Url + "TContainerInternationals" + "/" + this.id,this.IntPostObj).then((response) =>{
   	swal("success","Succuessfully Edited","success");
       hashHistory.push('/Container/containerview')
@@ -206,7 +206,7 @@ onSave(e){
                   filter:{
                     include:["TShipmentDomestic"]
                   }
-                }]             
+                }]
   })
  if(e.target.id == "customer_domestic" ){
  this.customerValue = e.target.value
@@ -219,7 +219,7 @@ onSave(e){
     this.setState({
       bookingNumbers : response.data
     })
-     
+
   })
     if(e.target.value == "1"){
             axios.get(Base_Url+"TPackagingInstructions/getPoListID1").then((response)=>{
@@ -240,10 +240,10 @@ onSave(e){
                 this.poNumber = _.map(this.state.poNumber,(poNum,index)=>{
             return <option key={index} id={poNum} value={poNum.poNumber}>{poNum.poNumber}</option>})
                 console.log("poNumber",this.state.poNumber)
-            })                
-            
+            })
+
             }
-         
+
  }else if(e.target.id == "customer_international"){
 this.value = e.target.value
   var base = "TShipmentents"
@@ -255,7 +255,7 @@ this.value = e.target.value
     this.setState({
       bookingNumbers : response.data
     })
-    
+
   })
  }
   }
@@ -269,25 +269,25 @@ this.value = e.target.value
           var customers = _.map(this.state.customer,(cust,index)=>{
             return <option key = {index} value = {cust.id} id = {cust.id}>{cust.name}</option>
           })
-          
+
           if(this.state.bookingNumbers != undefined ){
                     var bookingNumbers = _.map(this.state.bookingNumbers,(book,index) => {
                       if(book.TShipmentInternational.length > 0){
                       	return <option key = {index} value = {book.TShipmentInternational[0].shipmentId}>{book.TShipmentInternational[0].bookingNumber}</option>}
-                      	          
+
                     })}
 		return (
-<section className="shipment">  
-<div className="container-fluid"> 
-<div className="row">   
+<section className="shipment">
+<div className="container-fluid">
+<div className="row">
 <form className="form-horizontal">
 	<div className=" col-lg-6 col-md-6 col-sm-6 col-xs-12">
-	
-		
+
+
 		<div className="  col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
 			<fieldset className="scheduler-border sameHeight">
 				<legend className="scheduler-border">SHIPMENT INFO</legend>
-				
+
 				<div className="form-group">
                    <label htmlFor="Customer" className="col-lg-6 control-label">Customer</label>
                      <div className="col-lg-6">
@@ -309,10 +309,10 @@ this.value = e.target.value
                                 </div>
                             </div>
 
-				
-				 <div className="form-group ">              
+
+				 <div className="form-group ">
                                 <label htmlFor="Dropoff_Trucker" className="col-lg-6 control-label">Dropoff Trucker</label>
-                                <div className="col-lg-6"> 
+                                <div className="col-lg-6">
                                  <select className="form-control" value = {this.props.editData ? this.props.editData.TContainerInternational[0].truckerId : null} onChange = {this.onTruckerChange} id="d_Trucker" name="Dropoff_Trucker">
                                     <option selected disabled value="">Dropoff Trucker</option>
                                     {trucker}
@@ -320,9 +320,9 @@ this.value = e.target.value
                                   <div className="error"><span></span></div>
                                 </div>
                             </div>
-				 <div className="form-group ">             
+				 <div className="form-group ">
                                 <label htmlFor="P_U_Trucker" className="col-lg-6 control-label">P / U Trucker</label>
-                                <div className="col-lg-6"> 
+                                <div className="col-lg-6">
                                  <select className="form-control" value = {this.props.editData ? this.props.editData.TContainerInternational[0].pickupTruckerId : null}  onChange = {this.onTruckerChange} id="pu_Trucker" name="P_U_Trucker">
                                     <option disabled selected value="">P/U Trucker</option>
                                     {trucker}
@@ -330,16 +330,16 @@ this.value = e.target.value
                                   <div className="error"><span></span></div>
                                 </div>
                             </div>
-			  
+
 			   <div className="form-group ">
-                              
+
                                     <label htmlFor="Container" className="col-lg-6 control-label">Container #</label>
-                                    <div className="col-lg-6"> 
+                                    <div className="col-lg-6">
                                       <input type="text" className="form-control" ref = "containerNumber" value = {this.props.editData.TContainerInternational[0].containerNumber} onChange = {this.onContainerChange}  id="Container_int" placeholder="Container" />
                                       <div className="error"><span></span></div>
                                     </div>
                                 </div>
-				
+
 				<div className="form-group">
                                     <label htmlFor="Chassis" className="col-lg-6 control-label">Chassis #</label>
                                     <div className="col-lg-6">
@@ -347,7 +347,7 @@ this.value = e.target.value
                                          <div className="error"><span></span></div>
                                     </div>
                                 </div>
-				
+
 				<div className="form-group">
                                     <label htmlFor="Container_Tare_Weight" className="col-lg-6 control-label">Container Tare Weight</label>
                                     <div className="col-lg-6">
@@ -355,91 +355,93 @@ this.value = e.target.value
                                       <div className="error"><span></span></div>
                                     </div>
                                 </div>
-				
-			    
-				
-				<div className="form-group pddn-10-top">                
-                                    <div className=" col-lg-6 col-md-8 col-sm-6 col-xs-12 ">            
+
+
+
+				<div className="form-group pddn-10-top">
+                                    <div className=" col-lg-6 col-md-8 col-sm-6 col-xs-12 ">
                                         <label className="control control--checkbox ">Container Type Confirmed?
                                           <input type="checkbox" value = {this.props.editData.TContainerInternational[0].containerTypeConfirmed} onChange = {this.handleContainerTypeCheck} id="ContainerTypeConfirmed"/><div className="control__indicator"></div>
-                                        </label>                
+                                        </label>
                                     </div>
-				
+
 					<div className="col-lg-6 col-md-4 col-sm-6 col-xs-12 text_right">
-					 <label for="Container_Type"  className="">Container Type</label> 
+					 <label for="Container_Type"  className="">Container Type</label>
 					</div>
-                </div> 
-				
-				<div className="form-group">                
-                                    <div className=" col-lg-6 col-md-8 col-sm-6 col-xs-12 ">            
+                </div>
+
+				<div className="form-group">
+                                    <div className=" col-lg-6 col-md-8 col-sm-6 col-xs-12 ">
                                         <label className="control control--checkbox ">Container Steamship Line Type Confirmed?
                                           <input type="checkbox" value = {this.props.editData.TContainerInternational[0].containerSteamshipLineConfirmed} onChange = {this.handleContainerSteamLineCheck}  id="containerSteamshipLineConfirmed"/><div className="control__indicator"></div>
-                                        </label>                
+                                        </label>
                                     </div>
-				
+
 				  <div className="col-lg-6 col-md-4 col-sm-6 col-xs-12 text_right">
-					 <label for="Steamship_Line" className=" ">Steamship Line</label> 
+					 <label for="Steamship_Line" className=" ">Steamship Line</label>
 					</div>
-                </div> 
-				
-			   <div className="form-group">             
-                                    <div className=" col-lg-6 col-md-8 col-sm-6 col-xs-12 ">            
+                </div>
+
+			   <div className="form-group">
+                                    <div className=" col-lg-6 col-md-8 col-sm-6 col-xs-12 ">
                                         <label className="control control--checkbox ">Container Arrived?
                                           <input type="checkbox" value = {this.props.editData.TContainerInternational[0].containerArrived}  onChange = {this.handleContainerArrivedCheck} id="containerArrived"/><div className="control__indicator"></div>
-                                        </label>                
+                                        </label>
                                     </div>
-				
+
 					<div className="col-lg-6 col-md-4 col-sm-6 col-xs-12 text_right  ">
-					 <label for="Container_Type" className="">&nbsp; </label> 
+					 <label for="Container_Type" className="">&nbsp; </label>
 					</div>
-                </div> 
-				
-			</fieldset>	
-			
+                </div>
+
+			</fieldset>
+
             <div className="text_left">
-			  <div className="pull-left padding-20-last-l "><button type="button"  className="btn  btn-gray">CANCEL </button>  </div>	
+			  <div className="pull-left padding-20-last-l "><button type="button"  className="btn  btn-gray">CANCEL </button>  </div>
 			  <div className="pull-left padding-20-all"><button type="button" className="btn  btn-primary" onClick = {this.onSave}> SAVE </button> </div>
-			 		
+
 			</div>
 
 	</div>
 	</div>
-	
+
    <div className=" col-lg-6 col-md-6 col-sm-6 col-xs-12">
 	<div className=" col-lg-12 col-md-12 col-sm-12 col-xs-12">
 	    <fieldset className="scheduler-border sameHeight">
 				<legend className="scheduler-border">SHIPMENT INFO</legend>
-				
+
 				<div className="form-group">
 					<label for="Material" className="col-lg-6 ">Booking #:   </label>
 					<div className="col-lg-6"><p>{this.props.editData.TShipmentInternational ?(this.props.editData.TShipmentInternational ?  this.props.editData.TShipmentInternational[0].bookingNumber : '') : ''}</p></div>
                 </div>
-				
+
 				<div className="form-group">
 					<label for="Origin" className="col-lg-6 ">Container Type:</label>
 					<div className="col-lg-6"><p>{this.props.editData.TShipmentInternational ?(this.props.editData.TShipmentInternational ?  this.props.editData.TShipmentInternational[0].TContainerType.name: '') : ''}</p></div>
                 </div>
-				
+
 				<div className="form-group">
 					<label for="Type_of_Packaging" className="col-lg-6 ">Number of Containers:</label>
 					<div className="col-lg-6"><p>{this.props.editData.TShipmentInternational ?(this.props.editData.TShipmentInternational ?  this.props.editData.numberOfContainers: '') : ''}</p></div>
                 </div>
-				
-				<div className="form-group">
-					<label for="Type_of_Bag" className="col-lg-6 "># of Bags per Container:</label>
-					<div className="col-lg-6"><p>{this.props.editData.TShipmentInternational ?(this.props.editData.TShipmentInternational ?  this.props.editData.numberOfBags: '') : ''}</p></div>
-                </div>
-				
+
+                {/*
+                                                <div className="form-group">
+                                                    <label htmlFor="Type_of_Bag" className="col-lg-6 "># of Bags per Container:</label>
+                                                    <div className="col-lg-6"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?this.state.IntlData.numberOfBags : ''}</p></div>
+                                                </div>
+                */}
+
 				<div className="form-group">
 					<label for="Type_of_Pallet" className="col-lg-6 ">Steamship Line:</label>
 					<div className="col-lg-6"><p>{this.props.editData.TShipmentInternational ?(this.props.editData.TShipmentInternational ?  this.props.editData.TShipmentInternational[0].TSteamshipLine.name: '') : ''}</p></div>
                 </div>
-				
+
 				<div className="form-group">
 					<label for="No_of_Bages_Pallat" className="col-lg-6 ">Steamship Vessel:</label>
 					<div className="col-lg-6"><p>{this.props.editData.TShipmentInternational ?(this.props.editData.TShipmentInternational ?  this.props.editData.TShipmentInternational[0].steamshipVessel: '') : ''}</p></div>
                 </div>
-				
+
 				<div className="form-group">
 					<label for="Stretch_wrap" className="col-lg-6 ">Earliest Return Date:</label>
 					<div className="col-lg-6"><p>{this.props.editData.TShipmentInternational ?(this.props.editData.TShipmentInternational ?  moment(this.props.editData.TShipmentInternational[0].earliestReturnDate).format('MM-DD-YYYY') : '') : ''}</p></div>
@@ -451,18 +453,18 @@ this.value = e.target.value
 				<div className="form-group">
 					<label for="Stretch_wrap" className="col-lg-6 ">Cutoff Date:</label>
 					<div className="col-lg-6"><p>{this.props.editData.TShipmentInternational ?(this.props.editData.TShipmentInternational ?  moment(this.props.editData.TShipmentInternational[0].cargoCutoffDate).format('MM-DD-YYYY') : '') : ''}</p></div>
-                </div>				
-		</fieldset>	
-	</div>	
-	</div>		
-	</form>	
-</div>		
-	
-</div>	
- 
+                </div>
+		</fieldset>
+	</div>
+	</div>
+	</form>
+</div>
+
+</div>
 
 
-</section>	
+
+</section>
 		);
 	}
 }

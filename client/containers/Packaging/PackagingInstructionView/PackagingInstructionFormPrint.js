@@ -1,6 +1,3 @@
-/**
- * Created by azmat on 18/10/16.
- */
 
 import React from 'react';
 //import EnterPackagingInstructionForm from './EnterPackagingInstructionForm';
@@ -17,6 +14,7 @@ export default class PrintPackaging extends React.Component {
         this.state = {loaded: true,lot:'',railCar:'',weight:'',noBox:''};
         this.state.viewData={packaging_status:'',custom_label:'',TCompany:{},TLocation:{},TPackagingType:{},TPalletType:{},TWrapType:{},TOrigin:{},TPackagingInstructionLots:[]}
         this.createPDF = this.createPDF.bind(this);
+        this.labellemgth = this.state.viewData.custom_label.split("\n")
     }
 
  componentWillUnmount(){
@@ -36,7 +34,9 @@ export default class PrintPackaging extends React.Component {
             }]
         })
 
-
+// if(this.props.params.cID == null){
+//
+// }
         var base = 'TPackagingInstructions'+'/'+this.props.params.id;
         this.url = InventView._buildUrl(base, {
             include: ['TPackagingInstructionLots',"TLocation","TCompany","TPackagingType","TPalletType","TWrapType","TOrigin","TPackagingMaterial"]
@@ -48,17 +48,35 @@ export default class PrintPackaging extends React.Component {
             url: this.url,
             success:function(data){
                 console.log('Invent>>>>>>>>>>>>>>>',data);
-
+                debugger;
                 /*forEach(data.TPackagingInstructionLots,function(item){
                         lot=item.lot_number;
                 }*/
-                for(var a=0;a<data.TPackagingInstructionLots.length;a++){
-                    lot=lot+data.TPackagingInstructionLots[a].lot_number+',';
-                    railcar=railcar+data.TPackagingInstructionLots[a].railcar_number+',';
-                    weight=data.TPackagingInstructionLots[a].weight+',';
+                if(this.props.params.cID == "null"){
+                  for(var a=0;a<data.TPackagingInstructionLots.length;a++){
+                    //if(this.props.params && this.props.params.cID == null){
+                      lot=lot+data.TPackagingInstructionLots[a].lot_number+',';
+                      railcar=railcar+data.TPackagingInstructionLots[a].railcar_number+',';
+                      weight=data.TPackagingInstructionLots[a].weight+',';
+
+
+                    }
                 }
 
-                //data['packaging_type']='box';
+
+                else if(this.props.params.cID!= "null"){
+                  for(var a=0;a<data.TPackagingInstructionLots.length;a++){
+                    if(data.TPackagingInstructionLots[a].id == this.props.params.cID){
+                      lot=lot+data.TPackagingInstructionLots[a].lot_number+',';
+                      railcar=railcar+data.TPackagingInstructionLots[a].railcar_number+',';
+                      weight=data.TPackagingInstructionLots[a].weight+',';
+                    }
+
+                    }
+                }
+
+
+    //data['packaging_type']='box';
                 //data['packaging_type']='pallet';
 
 
@@ -118,7 +136,7 @@ export default class PrintPackaging extends React.Component {
                 $('body').scrollTop(0);
                 createPDF();
             });
-//create pdf
+
             function createPDF(){
                 getCanvas().then(function(canvas){
                     var
@@ -149,84 +167,100 @@ export default class PrintPackaging extends React.Component {
         hashHistory.push('/Packaging/packagingInstFormPrint/')
     }
     render(){
+    var lengthLabel =  this.state.viewData.custom_label.split("\n").length
+   this.dataList =   _.map(this.state.viewData.TPackagingType.packagingType , (status,index)=>{
+
+         if(status!=''){
+           debugger;
+           console.log("boxesssssssssssss" , status)
+             if(status=='Boxes'){
+                 return(
+                     <div className="packaging_data ">
+                         <table width="100%" className="bg_striped">
+                             <tbody>
+                             <tr><td>DATE:</td> <td>{moment(this.state.viewData.TCompany.createdOn).format("YYYY-MM-DD")}</td></tr>
+                             <tr><td>CUSTOMER:</td> <td>{this.state.viewData.TCompany.name}</td></tr>
+                             <tr><td>PO#: </td> <td>{this.state.viewData.po_number}</td></tr>
+                             <tr><td>RAILCAR#: </td> <td>{this.state.railcar}</td></tr>
+                             <tr><td>MATERIAL: </td> <td>{this.state.viewData.material}</td></tr>
+                             <tr><td>LOT#: </td> <td>{this.state.lot}</td></tr>
+                             <tr><td>PACKAGING TYPE:</td> <td>{status}</td></tr>
+                             <tr><td>PALLET TYPE:</td> <td>{this.state.viewData.TPalletType.palletType}</td></tr>
+                             <tr><td>ORIGIN: </td> <td>{this.state.viewData.TOrigin.origin}</td></tr>
+                             </tbody>
+                         </table>
+                     </div>
+                 )
+             }
+             else if(status!='Boxes'){
+                 return(
+                     <div className="packaging_data ">
+                         <table width="100%" className="bg_striped">
+                             <tbody>
+                             <tr><td>DATE:</td> <td>{moment(this.state.viewData.TCompany.createdOn).format("YYYY-MM-DD")}</td></tr>
+                             <tr><td>CUSTOMER:</td> <td>{this.state.viewData.TCompany.name}</td></tr>
+                             <tr><td>PO#: </td> <td>{this.state.viewData.po_number}</td></tr>
+                             <tr><td>RAILCAR#: </td> <td>{this.state.railcar}</td></tr>
+                             <tr><td>MATERIAL: </td> <td>{this.state.viewData.material}</td></tr>
+                             <tr><td>LOT#: </td> <td>{this.state.lot}</td></tr>
+                             <tr><td>PACKAGING TYPE:</td> <td>{status}</td></tr>
+                             <tr><td>BAG TYPE:</td> <td>{this.state.viewData.TPackagingMaterial ? this.state.viewData.TPackagingMaterial.packagingName : 'bag'}</td></tr>
+                             <tr><td>BAGS PER PALLET:</td> <td>{this.state.viewData.bags_per_pallet}</td></tr>
+                             <tr><td>STRETCH WRAP:</td> <td>{this.state.viewData.TWrapType.name}</td></tr>
+                             <tr><td>PALLET TYPE:</td> <td>{this.state.viewData.TPalletType.palletType}</td></tr>
+                             <tr><td>ORIGIN: </td> <td>{this.state.viewData.TOrigin.origin}</td></tr>
+                             </tbody>
+                         </table>
+                     </div>
+
+                 )
+             }
+         }
+
+     })
+
+
+
+
             return (
                 <div>
                     <div className="warpper-inner">
                         <div className="content-inside">
                             <div className="logo">
                                 <div className="img"><span className="img-responsive logo_icon"></span></div>
-                                    <div className="text"> PACKAGING INSTRUCTIONS - BOXES </div>
+                                    <div className="text"> PACKAGING INSTRUCTIONS - {(this.state.viewData && this.state.viewData.TPackagingType && this.state.viewData.TPackagingType.packagingType && this.state.viewData.TPackagingType.packagingType.length > 1 && this.state.viewData.TPackagingType.packagingType[0] == 'Boxes')? 'Boxes' : 'Bags'} </div>
                                 </div>
                                 <div className="packaging_details ">
                                     {
-                                        _.map(this.state.viewData.TPackagingType.packagingType , (status,index)=>{
-                                            console.log(';;;;;;;;;',status)
-                                            if(status!=''){
-                                                if(status=='Boxes'){
-                                                    return(
-                                                        <div className="packaging_data ">
-                                                            <table width="100%" className="bg_striped">
-                                                                <tbody>
-                                                                <tr><td>DATE:</td> <td>{moment(this.state.viewData.TCompany.createdOn).format("YYYY-MM-DD")}</td></tr>
-                                                                <tr><td>CUSTOMER:</td> <td>{this.state.viewData.TCompany.name}</td></tr>
-                                                                <tr><td>PO#: </td> <td>{this.state.viewData.po_number}</td></tr>
-                                                                <tr><td>RAILCAR#: </td> <td>{this.state.railcar}</td></tr>
-                                                                <tr><td>MATERIAL: </td> <td>{this.state.viewData.material}</td></tr>
-                                                                <tr><td>LOT#: </td> <td>{this.state.lot}</td></tr>
-                                                                <tr><td>PACKAGING TYPE:</td> <td>{status}</td></tr>
-                                                                <tr><td>PALLET TYPE:</td> <td>{this.state.viewData.TPalletType.palletType}</td></tr>
-                                                                <tr><td>ORIGIN: </td> <td>{this.state.viewData.TOrigin.origin}</td></tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    )
-                                                }
-                                                else if(status!='Boxes'){
-                                                    return(
-                                                        <div className="packaging_data ">
-                                                            <table width="100%" className="bg_striped">
-                                                                <tbody>
-                                                                <tr><td>DATE:</td> <td>{moment(this.state.viewData.TCompany.createdOn).format("YYYY-MM-DD")}</td></tr>
-                                                                <tr><td>CUSTOMER:</td> <td>{this.state.viewData.TCompany.name}</td></tr>
-                                                                <tr><td>PO#: </td> <td>{this.state.viewData.po_number}</td></tr>
-                                                                <tr><td>RAILCAR#: </td> <td>{this.state.railcar}</td></tr>
-                                                                <tr><td>MATERIAL: </td> <td>{this.state.viewData.material}</td></tr>
-                                                                <tr><td>LOT#: </td> <td>{this.state.lot}</td></tr>
-                                                                <tr><td>PACKAGING TYPE:</td> <td>{status}</td></tr>
-                                                                <tr><td>BAG TYPE:</td> <td>{this.state.viewData.TPackagingMaterial ? this.state.viewData.TPackagingMaterial.packagingName : 'bag'}</td></tr>
-                                                                <tr><td>BAGS PER PALLET:</td> <td>{this.state.viewData.bags_per_pallet}</td></tr>
-                                                                <tr><td>STRETCH WRAP:</td> <td>{this.state.viewData.TWrapType.name}</td></tr>
-                                                                <tr><td>PALLET TYPE:</td> <td>{this.state.viewData.TPalletType.palletType}</td></tr>
-                                                                <tr><td>ORIGIN: </td> <td>{this.state.viewData.TOrigin.origin}</td></tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-
-                                                    )
-                                                }
-                                            }
-
-                                        })
+                                      this.dataList
                                     }
 
                                 </div>
-                                <div className="label_confirmation">
+                                <div className="label_confirmation" >
                                     <h3>LABEL CONFIRMATION</h3>
                                     <p>SAMPLE LABEL</p>
-                                    <div className="info">
-                                        {this.state.viewData.custom_label.split("\n").map(function(item) {
+
+                                    <div className="info" style={{"float":"left" , "margin-top" : 50}}>
+                                        {this.state.viewData.custom_label.split("\n").map(function(item ,index) {
                                             return (
                                                 <span>
                                                     {item}
-                                                    <br/>
+
+                                                  <br/>
+
+                                                  {/*lengthLabel && lengthLabel == index +1) ?  "Stamp Confirmed By : __________" : ""*/}
+
                                                 </span>
                                             )
                                         })}
 
                                     </div>
+<div style={{"float":"left" , "margin" : 70}}>Stamp Confirmed By : __________</div>
+
                                 </div>
 
-                                <div className="inventry">
+
+                                <div className="inventry" style={{"float":"left" , "margin-top" : 50}}>
                                     <h3>INVENTORY</h3>
                                     <div className="inventry_data">
                                         <table>
@@ -288,9 +322,8 @@ export default class PrintPackaging extends React.Component {
                                 </div>
                             </div>
                         </div>
-             
-                        <button id="create_pdf" type="button" className="create_btn" >CREATE PDF </button></div>
+
+                        <button id="create_pdf" type="button" className="create_btn"  >CREATE PDF </button></div>
 );
     }
 }
-

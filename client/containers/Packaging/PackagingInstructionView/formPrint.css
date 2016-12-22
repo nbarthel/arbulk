@@ -44,6 +44,6 @@ h3{margin:0px; padding:0px; font-weight:600;}
 .qtyVerification table tr td{text-align:center;}
 .qtyVerification table tr td:first-child{text-align:left;}
 .qtyVerification table tr td:last-child{text-align:right;}
-.create_btn{float: right;padding: 10px 15px;width: 188px;margin-top: 10px;margin-bottom: 50px;}
+.create_btn{float: right;padding: 10px 15px;width: 188px;margin-top: 135px;margin-bottom: 50px;}
 .create_btn1{float: left;padding: 10px 15px;width: 188px;margin-top: 10px;margin-bottom: 50px;}
 .logo_icon{background: url("../../../public/img/logo_inner.png"); background-repeat: no-repeat; height: 30px; width: 150px;}

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-     
+
  class ShipmentDetailsTable extends Component {
 	constructor(props){
         super(props);
-       
+
         this.Table
     }
     componentDidMount() {
-       
+
     }
     render() {
         if(this.props.tabledata){
@@ -32,12 +32,12 @@ import React, { Component } from 'react';
                                                 <td>{tble.TPackagingInstructionLots ? (tble.TPackagingInstructionLots.status == "UNCONFIRMED" ? 'N' : 'Y') : ''}</td>
                                                 <td>Y</td>
                                                 <td>{cutOff}</td>
-                                                <td>2970 Bags</td>
-                                                <td>990 Bags</td>
+                                                <td>{tble.TPackagingInstructionLots ? (tble.TPackagingInstructionLots.inInventory ? tble.TPackagingInstructionLots.inInventory : '') : ''} Bags</td>
+                                                  <td>{tble.noOfBags ? tble.noOfBags : ''} Bags</td>
                                                 <td><label className="control control--checkbox" >
                                                           <input type="checkbox" onClick = {(e) => this.props.tableCheckBoxChange(e,tble)}/><div className = "control__indicator"></div>
                                                      </label>
-                                                </td>                            
+                                                </td>
                             </tr>
                         </tbody>)
                 })}

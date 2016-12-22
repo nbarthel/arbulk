@@ -49,7 +49,7 @@ export default class PackagingInstructionViewForm extends React.Component {
             this.status
             this.buttonDisplay = [ ]
             this.checkedCustomer = [ ]
-            this.checkedStatus = [ ] 
+            this.checkedStatus = [ ]
             this.checkedCompany = [ ]
             this.Query = {}
             this.Where = { }
@@ -65,7 +65,7 @@ export default class PackagingInstructionViewForm extends React.Component {
             this.onStatusFilter = this.onStatusFilter.bind(this)
             this.onRemove = this.onRemove.bind(this)
            // this.onClick = this.onClick.bind(this)
-            this.onButtonRemove = this.onButtonRemove.bind(this) 
+            this.onButtonRemove = this.onButtonRemove.bind(this)
             this.onSearch = this.onSearch.bind(this)
             this.onTextChange = this.onTextChange.bind(this)
             this.saveView = this.saveView.bind(this)
@@ -75,13 +75,13 @@ export default class PackagingInstructionViewForm extends React.Component {
             this.handleOptionChange = this.handleOptionChange.bind(this)
             this.handleOptionChange1 = this.handleOptionChange.bind(this)
             this.onEdit =this.onEdit.bind(this)
-            this.qArray = [] 
+            this.qArray = []
             this.addToQueue = this.addToQueue.bind(this)
             this.headerCheckboxChange = this.headerCheckboxChange.bind(this)
         }
     componentWillMount() {
-       
-  
+
+
   axios.get(Base_Url+"TCustomViews").then(response=>{
          this.setState({
              savedViews : response.data
@@ -94,42 +94,35 @@ export default class PackagingInstructionViewForm extends React.Component {
     })
 })
 
- 
+
 
  }
         //this.state.queue_Sequence[0].max_mark
 
      onTextChange(e){
-        debugger
-         var idValue = e.target.id 
-        
+
+         var idValue = e.target.id
+
           this.Query[idValue] = e.target.value
           console.log(this.Query)
         }
 
       onClickPo(e){
-        debugger;
+
            this.Query[e.target.id] = e.target.getAttribute('value')
 
           document.getElementById('POSearch').value = e.target.getAttribute('value')
-           console.log(this.Query)
-           console.log('>>>>>> target Value' , e.target.value)
+
       }
 
       lotSearch(e){
-          debugger;
            this.Query[e.target.id] = e.target.getAttribute('value')
-           console.log(this.Query)
            document.getElementById('LotSearch').value = e.target.getAttribute('value')
-           console.log('>>>>>> target Value' , e.target.value)
-      }
+  }
 
 onClickli(e){
   this.Query[e.target.id] = e.target.getAttribute('value')
-
-    document.getElementById('railcarSearch').value = e.target.getAttribute('value')
-  console.log(this.Query)
-  console.log('>>>>>> target Value' , e.target.value)
+  document.getElementById('railcarSearch').value = e.target.getAttribute('value')
 }
 
 onSearch(e){
@@ -139,7 +132,7 @@ onSearch(e){
                     configurable: true,
                     value:this.Query})
             }
-         console.log(this.Where)
+
           var serachObj = []
           var serachObjLots =[]
             if (this.Where != undefined && this.Where!= null)
@@ -166,7 +159,7 @@ onSearch(e){
                     }
 
                     if(this.Where.status && this.Where.status.length){
-                        debugger;
+
                         var Railstatus = [];
                         var objStatus = {};
                         for(var z in this.Where.status){
@@ -205,7 +198,7 @@ onSearch(e){
                     var base = 'TPackagingInstructions';
 
                     if(serachObjLots && serachObjLots.length > 0 ){
-                      
+
                         this.urlSearch = PIview._buildUrl(base, {
                             include : ["TLocation" , "TCompany" ,{"relation": "TPackagingInstructionLots", "scope":
                             {
@@ -232,11 +225,11 @@ onSearch(e){
                  });
                     }
 
-                   
+
                     $.ajax({
                         url: this.urlSearch,
                         success:function(data){
-                            debugger;
+
                             console.log('ajax ',data);
 
                             this.setState(
@@ -244,7 +237,7 @@ onSearch(e){
                                     viewData : data
                                 }
                             )
-                            
+
                         }.bind(this)
 
                     })
@@ -262,7 +255,7 @@ onSearch(e){
             this.buttonDisplay.push(e.target.value)
             //console.log(this.props.checkedCompany)
             //console.log(this.props.buttonDisplay)
-           
+
            }
             else if (!e.target.checked){
 
@@ -274,11 +267,11 @@ onSearch(e){
               //console.log(this.Where)
               delete this.Where.Company
              }
-                let value = e.target.value               
+                let value = e.target.value
                 let index = this.buttonDisplay.indexOf(e.target.value)
                 if(index !== -1)
-                this.buttonDisplay = _.without(this.buttonDisplay,value)       
-                 this.forceUpdate() 
+                this.buttonDisplay = _.without(this.buttonDisplay,value)
+                 this.forceUpdate()
                    }
         }
         onCustomerFilter(e,customer){
@@ -305,7 +298,7 @@ onSearch(e){
                 let value = e.target.value
                 let index = this.buttonDisplay.indexOf(e.target.value)
                 if(index !== -1)
-                this.buttonDisplay = _.without(this.buttonDisplay,value)       
+                this.buttonDisplay = _.without(this.buttonDisplay,value)
                   this.forceUpdate()
                    }
         }
@@ -319,7 +312,7 @@ onSearch(e){
                                                       value:this.checkedStatus})
             this.buttonDisplay.push(e.target.value)
             this.forceUpdate()
-            
+
             //console.log(this.props.buttonDisplay)
            /* console.log(this.Where)
             console.log(this.checkedStatus)
@@ -339,13 +332,13 @@ onSearch(e){
             //let value = e.target.value
                 let index = this.buttonDisplay.indexOf(e.target.value)
                 if(index !== -1)
-                this.buttonDisplay = _.without(this.buttonDisplay,value) 
-                //console.log(this.buttonDisplay)      
+                this.buttonDisplay = _.without(this.buttonDisplay,value)
+                //console.log(this.buttonDisplay)
                   this.forceUpdate()
                   }
         }
 
-   
+
     handleTextChange(e){
         this.setState({
             Text  : e.target.value
@@ -353,7 +346,7 @@ onSearch(e){
 
     }
     viewChange(e){
-         debugger
+
          var index = e.target.selectedIndex ;
          var blob = e.target.value
          var changedView = this.state.savedViews[index -1]
@@ -393,7 +386,7 @@ onSearch(e){
             }
 
             if(this.Where.status && this.Where.status.length){
-                debugger;
+
                 var Railstatus = [];
                 var objStatus = {};
                 for(var z in this.Where.status){
@@ -459,12 +452,9 @@ onSearch(e){
                 });
             }
 
-
             $.ajax({
                 url: this.urlSearch,
                 success:function(data){
-                    debugger;
-                    console.log('ajax ',data);
 
                     this.setState(
                         {
@@ -478,7 +468,7 @@ onSearch(e){
         }
     }
 saveView(e){
-       
+
         var saveCustomView = {
             "id": 0,
             "screenName": "PACKAGING",
@@ -495,14 +485,14 @@ saveView(e){
         axios.post(Base_Url + "TCustomViews", saveCustomView).then(response=> {
         swal('Success' , "Successfully Saved..." , 'success');
         console.log("response", response)
-        
+
          axios.get(Base_Url+"TCustomViews").then(response=>{
          this.setState({
              savedViews : response.data
              })
          })
        })
-    
+
             }
        else {
         swal('Error' , "Please Select Filter Options First" , 'error');
@@ -510,61 +500,54 @@ saveView(e){
 
     }
 
-
     handleOptionChange1(e) {
-        debugger;
-        this.setState({
+           this.setState({
             selectedOption: e.target.value
         });
     }
 
     handleOptionChange(changeEvent) {
-        debugger;
-        var selectedOption = changeEvent.target.value
-
-        this.setState({
+      var selectedOption = changeEvent.target.value
+      this.setState({
             selectedOption: changeEvent.target.value
-
-        });
+    });
          console.log( selectedOption);
     }
 
  onViewClick(e){
     if(this.selected != undefined || this.piID != undefined){
    hashHistory.push('/Packaging/inventorycard/'+this.piID+'/'+this.selected)}
-   else 
+   else
    {
     swal("Selection Missing", "Please Select A Lot To View.","error")
    }
     }
     headerCheckboxChange(e,value){
-        debugger
+
+
         if(e.target.checked){
-        this.piID = e.target.value  
+        this.piID = e.target.value
         console.log("PIID",this.piID)
+         //this.status = value.status
         }
         else if(!e.target.checked){
             this.piID = undefined
             console.log("PIID",this.piID)
         }
-        
+
     }
  checkboxChange(e,value){
-   /*  var queueArray = []
-    this.qArray.push(id)
-    localStorage.setItem('qArray',this.qArray)
-    localStorage.setItem('queue_Sequence',this.state.queue_Sequence[0].max_mark)
-    console.log("clicked" , id)*/
-    debugger
+
     if(e.target.checked){
-             this.piID = e.target.value 
+             this.piID = e.target.value
              this.selected = e.target.id
              this.status = value.status
          }
     else if(!e.target.checked){
       this.selected = null
-      //this.piID = null
-     
+      this.piID = null
+      this.status = null
+
     }
 
   }
@@ -574,7 +557,7 @@ onButtonRemove(index,button){
 
 }
     onRemove(e){
-        debugger;
+
         console.log("clicked")
          this.buttonDisplay = [];
          //this.buttonDisplay = []
@@ -582,9 +565,9 @@ onButtonRemove(index,button){
             this.checkedStatus = []
             this.checkedCompany = []
             this.Query = []
-            delete this.Where.Company 
-            delete this.Where.Customer 
-            delete this.Where.status  
+            delete this.Where.Company
+            delete this.Where.Customer
+            delete this.Where.status
             delete this.state.viewData
             this.setState({
                 key : this.state.key +1,
@@ -596,49 +579,43 @@ onButtonRemove(index,button){
     }
     onConfirmClick(){
     if(this.selected != undefined && this.selected != null){
-    
+
                 if(this.status == "UNCONFIRMED"){
                 hashHistory.push('/Packaging/confirmpckginst/'+this.selected)
                  }
-            
+
                  else{
                  swal("Error","Please select unconfirmed order","error")
                 }
         }
-      else 
+      else
       {
         swal("Selection Missing", "Please select a lot to confirm.","error")
       }
   }
 
-  onEdit(){ 
-    if(this.piID != null && this.piID != undefined){
-         
+  onEdit(){
+
+    if(this.piID != null && this.piID != undefined && this.selected == null){
+
              hashHistory.push('/Packaging/enterpackginginst/'+this.piID)
        }
-      else {
+       else if(this.selected != null && this.selected != undefined)
+       {
+          hashHistory.push('/Packaging/enterpackginginst/'+this.piID +'/'+ this.selected)
+       }
+      else{
         swal("Nothing To Edit","Please Select A PI To Edit.","error")
       }
   }
-  /*checkboxChange(e,id){
-    if(e.target.checked){
-             this.selected = e.target.id
-              this.piID = e.target.id
-         }
-    else if(!e.target.checked){
-      this.selected = null
-      this.piID = null
-    }
-    console.log("SelectedID >>>>>>>>>>>>.",this.selected)
- console.log("Piiddd>>>>>>>>>>>.",this.piID);
-}*/
+
   addToQueue(e){
-      debugger
+
       let pid = this.piID
      var qArray =  localStorage.getItem('qArray')
      var sequence =  localStorage.getItem('queue_Sequence')
-      var queueArray = []
-      queueArray.push(qArray);
+      var queueArray = qArray.split(",")
+      //queueArray.push(qArray);
       //if(queueArray.length[0] == null){
       //    swal('',"Please select an order" , "info")
       //    return
@@ -651,12 +628,12 @@ onButtonRemove(index,button){
 
       var optionpkg = {
 
-          status : "Queued"
+          status : "QUEUED"
       }
-      if(this.status == "READY"){
-      if(queueArray && queueArray.length > 0&& qArray!= null){
-          queueArray.forEach((id)=>{
-              axios.put( Base_Url+"TPackagingInstructionLots/"+id , option).then(function(response){
+      if(this.status == "READY" || this.status == "CONFIRMED"){
+      if(queueArray && queueArray.length > 0 && qArray!= null){
+          queueArray.forEach((id , index)=>{
+              axios.put( Base_Url+"TPackagingInstructionLots/"+id , {queue_sequence : option.queue_sequence + parseInt(index) , status : "QUEUED"}).then(function(response){
                   console.log("Queue Added" , response)
                   swal({
                       title: "Success",
@@ -666,15 +643,10 @@ onButtonRemove(index,button){
       },
               function(isConfirm){
               hashHistory.push('/Packaging/packaginginstqueue/')
-                  axios.put(Base_Url+"TPackagingInstructionLots/" + id , optionpkg).then(function(response){
 
-                  }).catch(function(err){
-                      console.log("Error Is" + err)
-                  })
-}
-); 
-                 
-              }).catch(function(err){
+      }
+       );
+      }).catch(function(err){
                   console.log("Error Is" + err)
               })
           })
@@ -684,7 +656,7 @@ onButtonRemove(index,button){
       }
 
   }
-  
+
   else {
     swal("","The selected order is not ready","info")
   }
@@ -704,7 +676,7 @@ else{
     })
 }
  break;
- case "Customer" : 
+ case "Customer" :
    if(this.state.showCustomer == ""){
     this.setState({
         showCustomer : "none"
@@ -716,7 +688,7 @@ else{
     })
 }
 break;
- case "PO" : 
+ case "PO" :
    if(this.state.showPO == ""){
     this.setState({
         showPO : "none"
@@ -728,7 +700,7 @@ else{
     })
 }
 break;
- case "Railcar" : 
+ case "Railcar" :
  console.log(e.target.name)
   if(this.state.showRailcar == ""){
     this.setState({
@@ -741,7 +713,7 @@ else{
     })
 }
 break;
- case "Lot" : 
+ case "Lot" :
  console.log(e.target.name)
   if(this.state.showLot == ""){
     this.setState({
@@ -754,7 +726,7 @@ else{
     })
 }
 break;
- case "Material" : 
+ case "Material" :
  console.log(e.target.name)
   if(this.state.showMaterial == ""){
     this.setState({
@@ -767,7 +739,7 @@ else{
     })
 }
 break;
- case "Confmd" : 
+ case "Confmd" :
  console.log(e.target.name)
   if(this.state.showConfmd == ""){
     this.setState({
@@ -780,7 +752,7 @@ else{
     })
 }
 break;
- case "Arrvd" : 
+ case "Arrvd" :
  console.log(e.target.name)
   if(this.state.showArrvd == ""){
     this.setState({
@@ -793,7 +765,7 @@ else{
     })
 }
 break;
- case "Recd" : 
+ case "Recd" :
  console.log(e.target.name)
   if(this.state.showRecd == ""){
     this.setState({
@@ -806,7 +778,7 @@ else{
     })
 }
 break;
- case "Cutoff" : 
+ case "Cutoff" :
  console.log(e.target.name)
   if(this.state.showCutoff == ""){
     this.setState({
@@ -819,7 +791,7 @@ else{
     })
 }
 break;
- case "Weight" : 
+ case "Weight" :
  console.log(e.target.name)
   if(this.state.showWeight == ""){
     this.setState({
@@ -832,7 +804,7 @@ else{
     })
 }
 break;
- case "Bag" : 
+ case "Bag" :
  console.log(e.target.name)
   if(this.state.showBag == ""){
     this.setState({
@@ -845,7 +817,7 @@ else{
     })
 }
 break;
- case "InInvt" : 
+ case "InInvt" :
  console.log(e.target.name)
   if(this.state.showInInvt == ""){
     this.setState({
@@ -858,7 +830,7 @@ else{
     })
 }
 break;
- case "Status" : 
+ case "Status" :
  console.log(e.target.name)
   if(this.state.showStatus == ""){
     this.setState({
@@ -871,7 +843,7 @@ else{
     })
 }
 break;
- case "RailcarArr" : 
+ case "RailcarArr" :
  console.log(e.target.name)
   if(this.state.showRailcarArr == ""){
     this.setState({
@@ -884,7 +856,7 @@ else{
     })
 }
 break;
- case "RailcarArrD" : 
+ case "RailcarArrD" :
  console.log(e.target.name)
   if(this.state.showRailcarArrD == ""){
     this.setState({
@@ -897,7 +869,7 @@ else{
     })
 }
 break;
- case "RailcarDep" : 
+ case "RailcarDep" :
  console.log(e.target.name)
   if(this.state.showRailcarDep == ""){
     this.setState({
@@ -910,7 +882,7 @@ else{
     })
 }
 break;
- case "RailcarDepDate" : 
+ case "RailcarDepDate" :
  console.log(e.target.name)
   if(this.state.showRailcarDepDate == ""){
     this.setState({
@@ -923,7 +895,7 @@ else{
     })
 }
 break;
- case "DaysPresent" : 
+ case "DaysPresent" :
  console.log(e.target.name)
   if(this.state.showDaysPresent == ""){
     this.setState({
@@ -936,7 +908,7 @@ else{
     })
 }
 break;
- case "RailcarStatus" : 
+ case "RailcarStatus" :
  console.log(e.target.name)
   if(this.state.showRailcarStatus == ""){
     this.setState({
@@ -952,6 +924,10 @@ break;
 }
 }
 print(e){
+  if(this.status == "UNCONFIRMED"){
+    swal("" , "The Order is not confirmed yet" , "info")
+    return
+  }
         if(this.selected != undefined || this.piID != undefined){
             console.log('print view',this.piID+'/'+this.selected)
             hashHistory.push('/Packaging/packagingInstFormPrint/'+this.piID+'/'+this.selected)
@@ -974,17 +950,17 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
 
   return (
     <section className="side-filter">
-    <div className="menu-bg hidden-md hidden-lg hidden-sm  visible-xs-block">  
+    <div className="menu-bg hidden-md hidden-lg hidden-sm  visible-xs-block">
         <div className="">
           <h4 className="pull-left">REFINE YOUR RESULT </h4>
-          <button type="button" className="btn collapsed pull-right " data-toggle="collapse" data-target="#filter-menu" aria-expanded="false"><i className="fa fa-caret-down fa-2x" aria-hidden="true"></i></button>             
+          <button type="button" className="btn collapsed pull-right " data-toggle="collapse" data-target="#filter-menu" aria-expanded="false"><i className="fa fa-caret-down fa-2x" aria-hidden="true"></i></button>
         </div>
     </div>
 
    <div className="container">
     <div className="row-fluid">
-            
-    <FilterComponent key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter}/>        
+
+    <FilterComponent key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter}/>
         <div id="filter-grid">
          <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
              <div className="pull-right margin-30-right">
@@ -1012,7 +988,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                      </div>
 
 
-            <div className="row">           
+            <div className="row">
             <FilterButton buttonDisplay = {this.buttonDisplay}  onButtonRemove = {this.onButtonRemove} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
                     <div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs pull-right">
                     <div className="pull-right ">
@@ -1031,40 +1007,40 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                                  })
                              }
                         </select>
-                    </div>                  
-                     
+                    </div>
+
 
                 </div>
-            </div>  
+            </div>
         </div>
 
             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
-                 <a href="javascript:void(0)" name = "ARB" onClick = {(e) => {this.onHideColumn(e,name)}}>ARB</a> -- 
-                 <a href="javascript:void(0)" name = "Customer" onClick = {(e) => {this.onHideColumn(e)}}>Customer</a> --- 
-                 <a href="javascript:void(0)" name = "PO" onClick={(e) => {this.onHideColumn(e)}}>PO</a> -- 
-                 <a href="javascript:void(0)" name = "Railcar" onClick={(e) => {this.onHideColumn(e)}}>Railcar#</a> -- 
-                 <a href="javascript:void(0)" name = "Lot" onClick={(e) => {this.onHideColumn(e)}}>Lot#</a> -- 
-                 <a href="javascript:void(0)" name = "Material" onClick={(e) => {this.onHideColumn(e)}}>Material</a> -- 
-                 <a href="javascript:void(0)" name = "Confmd" onClick={(e) => {this.onHideColumn(e)}}>Confmd</a> -- 
-                 <a href="javascript:void(0)" name = "Arrvd" onClick={(e) => {this.onHideColumn(e)}}>Arrvd</a> -- 
-                 <a href="javascript:void(0)" name = "Recd" onClick={(e) => {this.onHideColumn(e)}}>Recd</a> -- 
-                 <a href="javascript:void(0)" name = "Cutoff" onClick={(e) => {this.onHideColumn(e)}}>Cutoff</a> -- 
-                 <a href="javascript:void(0)" name = "Weight" onClick={(e) => {this.onHideColumn(e)}}>Weight</a> -- 
-                 <a href="javascript:void(0)" name = "Bag" onClick={(e) => {this.onHideColumn(e)}}>#Bags</a> -- 
-                 <a href="javascript:void(0)" name = "InInvt" onClick={(e) => {this.onHideColumn(e)}}>In.Invt.</a> -- 
-                 <a href="javascript:void(0)" name = "Status"onClick={(e) => {this.onHideColumn(e)}}>Status</a> -- 
-                 <a href="javascript:void(0)" name = "RailcarArr" onClick={(e) => {this.onHideColumn(e)}}>Railcar Arrival</a> -- 
-                 <a href="javascript:void(0)" name = "RailcarArrD" onClick={(e) => {this.onHideColumn(e)}}>Railcar Arrival Date</a> -- 
-                 <a href="javascript:void(0)" name = "RailcarDep" onClick={(e) => {this.onHideColumn(e)}}>Railcar Departure</a> -- 
-                 <a href="javascript:void(0)" name = "RailcarDepDate" onClick={(e) => {this.onHideColumn(e)}}>Railcar Departure Date</a> -- 
-                 <a href="javascript:void(0)" name = "DaysPresent" onClick={(e) => {this.onHideColumn(e)}}>Railcar Days Present</a> -- 
-                 <a href="javascript:void(0)" name = "RailcarStatus" onClick={(e) => {this.onHideColumn(e)}}>Railcar Status</a> 
-            </div>   
-            
-            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div className=" table-responsive view_table viewLoad">  
-                
-                      {this.props.id != undefined ? <ViewDataComponent 
+                 <a href="javascript:void(0)" name = "ARB" onClick = {(e) => {this.onHideColumn(e,name)}}>ARB</a> --
+                 <a href="javascript:void(0)" name = "Customer" onClick = {(e) => {this.onHideColumn(e)}}>Customer</a> ---
+                 <a href="javascript:void(0)" name = "PO" onClick={(e) => {this.onHideColumn(e)}}>PO</a> --
+                 <a href="javascript:void(0)" name = "Railcar" onClick={(e) => {this.onHideColumn(e)}}>Railcar#</a> --
+                 <a href="javascript:void(0)" name = "Lot" onClick={(e) => {this.onHideColumn(e)}}>Lot#</a> --
+                 <a href="javascript:void(0)" name = "Material" onClick={(e) => {this.onHideColumn(e)}}>Material</a> --
+                 <a href="javascript:void(0)" name = "Confmd" onClick={(e) => {this.onHideColumn(e)}}>Confmd</a> --
+                 <a href="javascript:void(0)" name = "Arrvd" onClick={(e) => {this.onHideColumn(e)}}>Arrvd</a> --
+                 <a href="javascript:void(0)" name = "Recd" onClick={(e) => {this.onHideColumn(e)}}>Recd</a> --
+                 <a href="javascript:void(0)" name = "Cutoff" onClick={(e) => {this.onHideColumn(e)}}>Cutoff</a> --
+                 <a href="javascript:void(0)" name = "Weight" onClick={(e) => {this.onHideColumn(e)}}>Weight</a> --
+                 <a href="javascript:void(0)" name = "Bag" onClick={(e) => {this.onHideColumn(e)}}>#Bags</a> --
+                 <a href="javascript:void(0)" name = "InInvt" onClick={(e) => {this.onHideColumn(e)}}>In.Invt.</a> --
+                 <a href="javascript:void(0)" name = "Status"onClick={(e) => {this.onHideColumn(e)}}>Status</a> --
+                 <a href="javascript:void(0)" name = "RailcarArr" onClick={(e) => {this.onHideColumn(e)}}>Railcar Arrival</a> --
+                 <a href="javascript:void(0)" name = "RailcarArrD" onClick={(e) => {this.onHideColumn(e)}}>Railcar Arrival Date</a> --
+                 <a href="javascript:void(0)" name = "RailcarDep" onClick={(e) => {this.onHideColumn(e)}}>Railcar Departure</a> --
+                 <a href="javascript:void(0)" name = "RailcarDepDate" onClick={(e) => {this.onHideColumn(e)}}>Railcar Departure Date</a> --
+                 <a href="javascript:void(0)" name = "DaysPresent" onClick={(e) => {this.onHideColumn(e)}}>Railcar Days Present</a> --
+                 <a href="javascript:void(0)" name = "RailcarStatus" onClick={(e) => {this.onHideColumn(e)}}>Railcar Status</a>
+            </div>
+
+            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12"  >
+                <div className=" table-responsive view_table viewLoad mega" style={{height: 300}}>
+
+                      {this.props.id != undefined ? <ViewDataComponent
                         headerCheckboxChange = {this.headerCheckboxChange}
                         showARB = {this.state.showARB}
                         showCustomer = {this.state.showCustomer}
@@ -1089,13 +1065,13 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                         checkboxChange = {this.checkboxChange}
                         key={this.state.index}
                         filterData = {filterData}
-                        id = {this.props.id} 
-                        weight={this.state.selectedOption}/> 
-                        : 
-                        <ViewDataComponent 
-                        checkboxChange = {this.checkboxChange} 
-                        headerCheckboxChange = {this.headerCheckboxChange} 
-                        key={this.state.index}  
+                        id = {this.props.id}
+                        weight={this.state.selectedOption}/>
+                        :
+                        <ViewDataComponent
+                        checkboxChange = {this.checkboxChange}
+                        headerCheckboxChange = {this.headerCheckboxChange}
+                        key={this.state.index}
                         showARB = { this.state.showARB }
                         showARB = {this.state.showARB}
                         showCustomer = {this.state.showCustomer}
@@ -1116,29 +1092,27 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                         showRailcarDep = {this.state.showRailcarDep}
                         showRailcarDepDate = {this.state.showRailcarDepDate}
                         showDaysPresent = {this.state.showDaysPresent}
-                        showRailcarStatus = {this.state.showRailcarStatus}  
-                        filterData = {filterData} 
-                        weight={this.state.selectedOption} />}               
-             
+                        showRailcarStatus = {this.state.showRailcarStatus}
+                        filterData = {filterData}
+                        weight={this.state.selectedOption} />}
+
                   </div>
-        
+
                 <div className="row-fluid pddn-50-btm padding-top-btm-xs">
-                    
-                        <div className="pull-left margin-10-last-l"><button type="button" onClick = {(e)=>{this.print(e)}} className="btn  btn-gray">Print Packaging Instruction</button></div>       
+
+                        <div className="pull-left margin-10-last-l"><button type="button" onClick = {(e)=>{this.print(e)}} className="btn  btn-gray">Print Packaging Instruction</button></div>
                         <div className="pull-left margin-10-all"><button type="button" onClick={this.addToQueue} className="btn  btn-gray">Add To Queue</button></div>
                         <div className="pull-left margin-10-all"><button type="button"  className="btn  btn-gray">Print</button></div>
-                    
-                
-                        <div className="pull-right margin-10-last-r"><button type="button" onClick={(e) => this.onViewClick(e)} className="btn  btn-primary">View</button></div>       
+                      <div className="pull-right margin-10-last-r"><button type="button" onClick={(e) => this.onViewClick(e)} className="btn  btn-primary">View</button></div>
                         <div className="pull-right margin-10-all"><button type="button" id="edit_btn" onClick={this.onEdit}  className="btn  btn-orange">EDIT</button></div>
                         <div className="pull-right margin-10-all"><button type="button" onClick = {(e) => this.onConfirmClick(e)}  className="btn  btn-default">Confirm</button></div>
-                    
-                
+
+
                 </div>
-                
-               <div className="row pddn-50-btm">        
+
+               <div className="row pddn-50-btm">
                     <div  className="col-lg-12 col-md-12 col-sm-12 col-xs-12"><hr/></div>
-                    
+
                     <div className="col-lg-4 col-sm-4 col-md-4 col-xs-12 ">
                         <input
                             type="text"
@@ -1149,21 +1123,21 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                             value = {this.state.Text}
                             />
                     </div>
-                    
+
                     <div className="col-lg-4 col-sm-4 col-md-4 col-xs-12 padding-top-btm-xs">
                         <button type="button" onClick={(e) => this.saveView(e)} className="btn  btn-success margin-left-xs">SAVE CUSTOMER VIEW</button>
                     </div>
                </div>
-            </div>  
-        </div>        
+            </div>
+        </div>
     </div>
- </div>        
+ </div>
 
-    
-   
-    
 
- 
+
+
+
+
 </section>
 
     );

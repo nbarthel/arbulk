@@ -22,10 +22,10 @@ class ContainerSummaryComponent extends Component {
         this.notArrivedContainers = 0
     }
     componentWillReceiveProps(nextProps) {
-            if(nextProps.SId != null){     
-                    this.shipmentId = nextProps.SId 
-            
-                    
+            if(nextProps.SId != null){
+                    this.shipmentId = nextProps.SId
+
+
                                var CSView = createDataLoader(ContainerSummaryComponent,{
                               queries:[{
                                 endpoint: 'TPackagingInstructions',
@@ -44,7 +44,7 @@ class ContainerSummaryComponent extends Component {
                                     CSummaryData : response.data
                                 })
                                })
-            }            }    
+            }            }
 	render() {
         this.allocatedTruckersTable
         this.arrivedTruckersTable
@@ -61,7 +61,7 @@ class ContainerSummaryComponent extends Component {
             if(this.state.CSummaryData != undefined && (this.state.CSummaryData.TContainerDomestic.length == 0 || this.state.CSummaryData.TContainerInternational.length ==0) ){
                 this.unAllocatedContainers = this.state.CSummaryData.numberOfContainers
             }
-            
+
             if(this.state.CSummaryData != undefined && (this.state.CSummaryData.TContainerDomestic.length != 0 || this.state.CSummaryData.TContainerInternational.length != 0)){
                 if(this.props.isDomestic == 0){
                     this.unAllocatedContainers = this.state.CSummaryData.numberOfContainers - this.state.CSummaryData.TContainerInternational.length
@@ -70,7 +70,7 @@ class ContainerSummaryComponent extends Component {
 
                         for(var k = 0; k < this.sortedTruckerList.length; k++){
                             if(this.sortedTruckerList[k].containerArrived == 0){
-                                this.notArrivedTruckers.push(this.sortedTruckerList[k]) 
+                                this.notArrivedTruckers.push(this.sortedTruckerList[k])
                             }
                             else if(this.sortedTruckerList[k].containerArrived == 1){
                                 this.arrivedTruckers.push(this.sortedTruckerList[k])
@@ -82,7 +82,7 @@ class ContainerSummaryComponent extends Component {
                         this.arrivedTruckersList = _.uniqBy(this.arrivedTruckers,'truckerId')
                         console.log(this.notArrivedTruckers)
                         this.allocatedTruckers = _.uniqBy(this.sortedTruckerList,'truckerId')
-                      
+
                         console.log(this.allocatedTruckers,this.truckerCount)
                     if(this.state.CSummaryData && this.state.CSummaryData.TContainerDomestic && this.state.CSummaryData.TContainerDomestic.length > 0)
                     {
@@ -171,7 +171,7 @@ class ContainerSummaryComponent extends Component {
                                                                                                                              <td></td>
                                                                                                                              </tr>)
                                                 })}
-                       
+
                         if(this.allocatedTruckers.length > 0){this.allocatedTruckersTable = _.map(this.allocatedTruckers,(allocTable,index) => {
                                                       return(<tr key = {index}>
                                                                                                   <td>ALLOCATED</td>
@@ -185,7 +185,7 @@ class ContainerSummaryComponent extends Component {
                                                                                                   <td></td>
                                                                                                   </tr>)
                                                 })}
-                               
+
                 }
                 else {
                      this.unAllocatedContainers = this.state.CSummaryData.numberOfContainers - this.state.CSummaryData.TContainerDomestic.length
@@ -195,7 +195,7 @@ class ContainerSummaryComponent extends Component {
                         for(var k = 0; k < this.sortedTruckerList.length; k++){
                           debugger
                             if(this.sortedTruckerList[k].containerArrived == 0){
-                                this.notArrivedTruckers.push(this.sortedTruckerList[k]) 
+                                this.notArrivedTruckers.push(this.sortedTruckerList[k])
                             }
                             else if(this.sortedTruckerList[k].containerArrived == 1){
                                 this.arrivedTruckers.push(this.sortedTruckerList[k])
@@ -207,11 +207,11 @@ class ContainerSummaryComponent extends Component {
                         this.arrivedTruckersList = _.uniqBy(this.arrivedTruckers,'truckerId')
                         console.log(this.notArrivedTruckers)
                         this.allocatedTruckers = _.uniqBy(this.sortedTruckerList,'truckerId')
-                      
+
                         console.log(this.allocatedTruckers,this.truckerCount)
                         debugger
-                         this.LoadedTruckerList = _.map(this.sortedTruckerList,(loadedArr,index) => { 
-                                                                                  
+                         this.LoadedTruckerList = _.map(this.sortedTruckerList,(loadedArr,index) => {
+
                                                 if(loadedArr.containerLoaded == 1 || loadedArr.containerInTransit == 1 || loadedArr.containerDelivered == 1){
                                                   return(_.map(loadedArr.TContainerLoad,(contLoaded,loadedIndex) => {
                                                                                                       return (<tr key = {loadedIndex}>
@@ -224,13 +224,13 @@ class ContainerSummaryComponent extends Component {
                                                                                            <td>{contLoaded.noOfBags}</td>
                                                                                            <td>{contLoaded.weight}</td>
                                                                                            <td></td>
-                                                                                           </tr> 
+                                                                                           </tr>
                                                                                                         )
                                                                                                     })
                                                                                                   )}
                        })
-                       this.InTransitTruckerList = _.map(this.sortedTruckerList,(inTransitArr,index) => { 
-                                                                                  
+                       this.InTransitTruckerList = _.map(this.sortedTruckerList,(inTransitArr,index) => {
+
                                                 if(inTransitArr.containerInTransit == 1 || inTransitArr.containerDelivered == 1){
                                                   return(_.map(inTransitArr.TContainerLoad,(contLoaded,loadedIndex) => {
                                                                                                       return (<tr key = {loadedIndex}>
@@ -243,13 +243,13 @@ class ContainerSummaryComponent extends Component {
                                                                                            <td>{contLoaded.noOfBags}</td>
                                                                                            <td>{contLoaded.weight}</td>
                                                                                            <td></td>
-                                                                                           </tr> 
+                                                                                           </tr>
                                                                                                         )
                                                                                                     })
                                                                                                   )}
                        })
-                         this.InTransitTruckerList = _.map(this.sortedTruckerList,(inTransitArr,index) => { 
-                                                                                  
+                         this.InTransitTruckerList = _.map(this.sortedTruckerList,(inTransitArr,index) => {
+
                                                 if(inTransitArr.containerInTransit == 1 || inTransitArr.containerDelivered == 1){
                                                   return(_.map(inTransitArr.TContainerLoad,(contLoaded,loadedIndex) => {
                                                                                                       return (<tr key = {loadedIndex}>
@@ -262,13 +262,13 @@ class ContainerSummaryComponent extends Component {
                                                                                            <td>{contLoaded.noOfBags}</td>
                                                                                            <td>{contLoaded.weight}</td>
                                                                                            <td></td>
-                                                                                           </tr> 
+                                                                                           </tr>
                                                                                                         )
                                                                                                     })
                                                                                                   )}
                        })
-                            this.InTransitTruckerList = _.map(this.sortedTruckerList,(inTransitArr,index) => { 
-                                                                                  
+                            this.InTransitTruckerList = _.map(this.sortedTruckerList,(inTransitArr,index) => {
+
                                                 if(inTransitArr.containerInTransit == 1 || inTransitArr.containerDelivered == 1){
                                                   return(_.map(inTransitArr.TContainerLoad,(contLoaded,loadedIndex) => {
                                                                                                       return (<tr key = {loadedIndex}>
@@ -281,13 +281,13 @@ class ContainerSummaryComponent extends Component {
                                                                                            <td>{contLoaded.noOfBags}</td>
                                                                                            <td>{contLoaded.weight}</td>
                                                                                            <td></td>
-                                                                                           </tr> 
+                                                                                           </tr>
                                                                                                         )
                                                                                                     })
                                                                                                   )}
                        })
-                             this.deliveredTruckerList = _.map(this.sortedTruckerList,(delivArr,index) => { 
-                                                                                  
+                             this.deliveredTruckerList = _.map(this.sortedTruckerList,(delivArr,index) => {
+
                                                 if(delivArr.containerDelivered == 1){
                                                   return(_.map(delivArr.TContainerLoad,(contLoaded,loadedIndex) => {
                                                                                                       return (<tr key = {loadedIndex}>
@@ -300,7 +300,7 @@ class ContainerSummaryComponent extends Component {
                                                                                            <td>{contLoaded.noOfBags}</td>
                                                                                            <td>{contLoaded.weight}</td>
                                                                                            <td></td>
-                                                                                           </tr> 
+                                                                                           </tr>
                                                                                                         )
                                                                                                     })
                                                                                                   )}
@@ -344,9 +344,9 @@ class ContainerSummaryComponent extends Component {
                                                                                                   <td></td>
                                                                                                   </tr>)
                                                 })}
-                  
+
                 }
-               
+
             }
         }
 		return (

@@ -34,10 +34,14 @@ const rootRoute = {
 	childRoutes: createRoutes(store)
 }
 
+// componentDidUpdate() {
+//   ReactDOM.findDOMNode(this).scrollTop = 0
+// }
+
+
 ReactDOM.render(
   <Provider store={store}>
   		<Router onUpdate={() => window.scrollTo(0, 0)} history={history} routes={rootRoute} />
   </Provider>,
   document.getElementById('root')
 );
-

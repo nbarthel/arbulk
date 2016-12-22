@@ -18,7 +18,7 @@ class PackagingInstructionQueueViewPage extends React.Component{
 
  onDoubleClick(e,queueView){
         var id = queueView.TPackagingInstructions.id
-    
+
        //this.props.location.search = id
         hashHistory.push('/Packaging/packaginginstview/'+id)
     }
@@ -36,10 +36,8 @@ class PackagingInstructionQueueViewPage extends React.Component{
         var base = 'TPackagingInstructionLots';
         //TPackagingInstructionLots
         this.url = PIview._buildUrl(base, {
-            include : ['TPackagingInstructions',{"relation": "TPackagingInstructions", "scope": {"include": ["TLocation","TCompany"]}}]
-
-
-        });
+            include : [{"relation": "TPackagingInstructions", "scope": {"include": ["TLocation","TCompany"]}}]
+    });
 
         console.log('sdsddsdsdsdsd' , this.url);
 

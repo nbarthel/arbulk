@@ -22,14 +22,14 @@ class CurrentInventory extends Component {
 		errors: { }
 		}
 	this.currentInventArray
-	 
+
 	this.index
 	this.addFlag = false
 	this.selectedRow = { }
 	this.edit = false
 	this.splRow = false
 	this.rowAdd = false
-	this.PILots 
+	this.PILots
 	this.onClick=this.onClick.bind(this);
 	this.handleInputChange =  this.handleInputChange.bind(this)
 	this.handleLocationChange = this.handleLocationChange.bind(this)
@@ -53,7 +53,7 @@ class CurrentInventory extends Component {
 
 
 componentWillReceiveProps(nextProps) {
-	
+
 	var stamp = this.props.stamp
     this.stamp = stamp
 	let id = this.props.lID
@@ -61,10 +61,10 @@ componentWillReceiveProps(nextProps) {
 	var PIview = createDataLoader(InventoryHistory, {
             queries: [{
                 endpoint: 'TPiInventories',
-                filter:  
-                {"include" : ["TInventoryLocation","TPackagingInstructionLots"] 
+                filter:
+                {"include" : ["TInventoryLocation","TPackagingInstructionLots"]
             }
-                
+
             }]
         });
 //"include": {"relation": "classes", "scope": {"include": ["teachers","students"]}}
@@ -80,7 +80,7 @@ componentWillReceiveProps(nextProps) {
             url: this.urlnew,
             success:function(data){
             	console.log('ajax>>>>>>>>>>>>>> ',data);
-              
+
               	if(data.stamp_confirmed){
                      document.getElementById('rowstamp').checked = true
 				}
@@ -125,7 +125,7 @@ componentWillReceiveProps(nextProps) {
 			swal("error","Press Save or Cancel before starting a new task","error")
 		}
 }
-	
+
 	splitRow(index){
 		console.log("OrignalTable",this.orignalTble)
 		this.index = index
@@ -191,7 +191,7 @@ else{
 			})
 
 		}
-		
+
 
 
 		else{
@@ -211,7 +211,7 @@ else{
 			       console.log("After EDIT CANCEL",this.orignalTble)
 		    }
 		     else if(this.splRow)
-		    { 
+		    {
 		    	this.setState({
 		    		 rows : _.cloneDeep(this.orignalTble)
 		    	})
@@ -222,7 +222,7 @@ else{
 		      		rows : _.cloneDeep(this.orignalTble)
 		      	})
 			   this.rowAdd = false
-			
+
 		    }
 		    else if(this.delete){
 		    	debugger
@@ -231,8 +231,8 @@ else{
 		    	})
 		    	this.delete = false
 		    }
-			
-				
+
+
 				this.setState({
 					hideEdit : 'block',
 					showEdit : 'none',
@@ -279,12 +279,12 @@ else{
 				this.state.rows[this.index] = this.selectedRow
 				debugger
 				if(this.refs.noOfBags.value != "" && this.refs.locationName.value != "" && this.refs.weight.value != ""){
-				if(this.refs.noOfBags.value != "0" && this.refs.weight != "0"){	
+				if(this.refs.noOfBags.value != "0" && this.refs.weight != "0"){
 
 				this.refs.noOfBags.value = null
 				this.refs.locationName.value = null
 				this.refs.weight.value = null
-				this.forceUpdate();		
+				this.forceUpdate();
 				this.dummyObj = _.cloneDeep(this.state.rows[this.index])
 				console.log(this.dummyObj)
 				let InvtLocation = this.dummyObj.TInventoryLocation
@@ -303,10 +303,10 @@ else{
 				if(!this.isPresent){
 				this.editPostArray.splice(this.index,0,this.postObj)
 				}
-				
+
 				console.log("EditPostArray",this.editPostArray)
 				this.postObj = { }
-			} 
+			}
 			else{
 				swal("Error","Number of Bags and Weight cannot be Zero","error")
 			}
@@ -319,7 +319,7 @@ else{
 			debugger
 			this.isSplitPresent = false
 			if(this.refs.noOfBags.value != "" && this.refs.locationName.value != "" && this.refs.weight.value != ""){
-			if(this.refs.noOfBags.value != "0" && this.refs.weight.value != "0"){	
+			if(this.refs.noOfBags.value != "0" && this.refs.weight.value != "0"){
 			if(this.row.TInventoryLocation.locationName != this.refs.locationName.value){
 			if(this.row.noOfBags > parseInt(this.selectedRow.noOfBags) && this.row.weight > parseInt(this.selectedRow.weight)){
 			this.row.noOfBags = this.row.noOfBags - parseInt(this.selectedRow.noOfBags)
@@ -363,7 +363,7 @@ else{
 			else if(this.row.noOfBags <= parseInt(this.selectedRow.noOfBags)  || this.row.weight <= parseInt(this.selectedRow.weight)){
 			if(this.row.noOfBags < parseInt(this.selectedRow.noOfBags)){
 				swal("Error","Please adjust number of bags accordingly","error")
-				
+
 			}
 			else if(this.row.weight < parseInt(this.selectedRow.weight)){
 				swal("Error","Please adjust weight accordingly","error")
@@ -371,8 +371,8 @@ else{
 			}
 			else if(this.row.noOfBags == parseInt(this.selectedRow.noOfBags) || this.row.weight == parseInt(this.selectedRow.weight)){
 
-				swal("Error","Please adjust the values for weight and bags accordingly","error")	
-				
+				swal("Error","Please adjust the values for weight and bags accordingly","error")
+
 			}
 			}
 		}
@@ -388,7 +388,7 @@ else{
 		else{
 			swal("Error","All fields must be present","error")
 		}
-			
+
 	}
 	else {//debugger
 		 this.rowAdd = true
@@ -417,10 +417,10 @@ else{
 		 this.refs.weight.value = null
 	}
 	this.index = undefined
-						
-}				
-		
-	/*	onSelect(e){ 
+
+}
+
+	/*	onSelect(e){
 			console.log("check",this.props.checked)
 			//this.radioCheck = true
 			this.index = e.target.value
@@ -485,7 +485,7 @@ else{
 		}
 	}
 		//this.totalBags = this.totalBags % 2 == 0 ?this.totalBags /2 : (this.totalBags +1) / 2
-        
+
 //axios.put(Base_Url+ "TPackagingInstructionLots/" +this.CID ,{inInventory : this.totalBags}).then((response) =>{
 
 //})
@@ -493,18 +493,25 @@ else{
 	}
 
 		onSaveChange(e){
-			debugger
+debugger;
 			var stamp = localStorage.getItem('stamp')
-			//localStorage.removeItem('stamp')
-
-		if(this.addPostArray.length == 0 && this.editPostArray.length == 0 && this.splitAddPostArray.length == 0 && this.splitPostArray.length == 0 && this.addPostArray.length == 0 && this.deletePostArray.length == 0 ){
-		 		swal("","Please press add before save","info")
-		 		return
-			}
-
+	this.CID = this.props.lID == "null" ? this.props.lotId : this.props.lID
 			var packStatus = localStorage.getItem('packagingFlag') ? localStorage.getItem('packagingFlag')  :'false' ;
+			if(this.addPostArray.length == 0 && this.editPostArray.length == 0 && this.splitAddPostArray.length == 0 && this.splitPostArray.length == 0 && this.addPostArray.length == 0 && this.deletePostArray.length == 0){
+
+				if(packStatus == 'true'){
+						axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"ININVENTORY"})
+						swal("Edited","Data Has Been Successfully Edited","success")
+						localStorage.removeItem('packagingFlag')
+						return;
+					}
+
+						swal("","Please press add before save","info")
+						return
+					}
+
 			if(this.edit){
-				this.CID = this.props.lID
+				this.CID = this.props.lID == "null" ? this.props.lotId : this.props.lID
 				this.checked = this.props.checked
 				this.url = Base_Url+"TInventoryLocations/updatebagweight"
 				//console.log("POSTOBJECT",)
@@ -551,7 +558,7 @@ else{
 				})
 			}
 			else if(this.splRow){
-				this.CID = this.props.lID
+			this.CID = this.props.lID == "null" ? this.props.lotId : this.props.lID
 				console.log(">>>>>>>>spl",this.row,this.selectedRow)
 				this.url = Base_Url+"TInventoryLocations/updatebagweight"
 				let spliturl1 = Base_Url+"TInventoryLocations/updatebagweight"
@@ -605,7 +612,7 @@ else{
 			this.splitAddPostArray = [ ]
 			console.log(this.splRow)
 			console.log("empty",this.postObj)
-			
+
 			this.setState({
 					hideEdit : 'block',
 					showEdit : 'none',
@@ -614,8 +621,9 @@ else{
 
 			}
 			else if(!this.edit && !this.splRow && this.addPostArray.length != 0){
-				debugger;
-				this.CID = this.props.lID
+
+
+				this.CID = this.props.lID == "null" ? this.props.lotId : this.props.lID
 				this.checked = this.props.checked
 				console.log("ADDPOSTARRAY",this.addPostArray)
 				let postArray = this.addPostArray
@@ -659,19 +667,29 @@ else{
 				})
 			}
 			else if(this.deletePostArray.length != 0){
+    		this.CID = this.props.lID == "null" ? this.props.lotId : this.props.lID
 				let deleteArr = this.deletePostArray
 				let deleteurl = Base_Url+"TInventoryLocations/deleteLocation"
 				deleteArr.forEach(function(data){
 				axios.delete(Base_Url+"TPiInventories/"+data.Tinventory).then((response)=>{
 				axios.delete(Base_Url+"TInventoryLocations/"+data.Tpinventory)
 				})
-				
+
 							})
-			this.setState({
+		this.setState({
 					hideEdit : 'block',
 					showEdit : 'none',
 				})
 			}
+
+			if(packStatus == 'true'){
+					axios.put(Base_Url + "TPackagingInstructionLots/"+	this.CID,{status:"ININVENTORY",inInventory:this.totalBags})
+					swal("Edited","Data Has Been Successfully Edited","success")
+					localStorage.removeItem('packagingFlag')
+				}else {
+					axios.put(Base_Url + "TPackagingInstructionLots/"+	this.CID,{status:"PARTIALLYPACKED",inInventory : this.totalBags})
+					swal("Edited","Data Has Been Successfully Edited","success")
+				}
 			console.log("AddPOSTARRAY",this.addPostArray)
 			console.log("EditPOSTARRAY",this.editPostArray)
 			console.log()
@@ -688,7 +706,7 @@ else{
 		/*	debugger
 			if(this.index == undefined){
 			if(Validator.isNull(this.addRow.noOfBags)){
-				let error = {noOfBags: "Must be a number"} 
+				let error = {noOfBags: "Must be a number"}
 				this.setState({
 					errors : error
 				})
@@ -702,7 +720,7 @@ else{
 		}
 		else {
 			if(Validator.isNull(this.selectedRow.noOfBags)){
-				let error = {noOfBags: "Must be a number"} 
+				let error = {noOfBags: "Must be a number"}
 				this.setState({
 					errors : error
 				})
@@ -715,11 +733,11 @@ else{
 			}
 		}*/
 		}
-	
+
 	validateWeight(e){
 		/*if(this.index == undefined){
 			if(Validator.isNull(this.addRow.weight)){
-				let error = {weight: "Must be a number"} 
+				let error = {weight: "Must be a number"}
 				this.setState({
 					errors : error
 				})
@@ -733,7 +751,7 @@ else{
 		}
 		else {
 			if(Validator.isNull(this.selectedRow.weight)){
-				let error = {weight: "Must be a number"} 
+				let error = {weight: "Must be a number"}
 				this.setState({
 					errors : error
 				})
@@ -746,7 +764,7 @@ else{
 			}
 		}*/
 		}
-	
+
 
 	render() {
 
@@ -762,9 +780,9 @@ else{
 		if(this.props.lots){
 		this.PILots = this.props.lots
 	}
-		
+
 		if(this.state.rows != undefined){
-			if(this.state.showEdit != 'none'){	
+			if(this.state.showEdit != 'none'){
 		var inventory = _.map(this.state.rows,(invent,index) => {
 			if(invent.TInventoryLocation)
 			{      	return (
@@ -798,49 +816,49 @@ else{
 
 		})
 	}
-	
-	
+
+
 }
 		return (
-			 <div className=" col-lg-6 col-md-6 col-sm-6 col-xs-12"> 
+			 <div className=" col-lg-6 col-md-6 col-sm-6 col-xs-12">
 	 <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 active">
-	 	 <div className=" col-lg-7 col-md-7 col-sm-7 col-xs-12"> 
-				<div className="table-responsive">	
+	 	 <div className=" col-lg-7 col-md-7 col-sm-7 col-xs-12">
+				<div className="table-responsive">
 				 <h5>Current Inventory</h5>
-				 <div id="edit" className="edit" style={{display: this.state.showEdit}}>			
+				 <div id="edit" className="edit" style={{display: this.state.showEdit}}>
 			    <div className="form-group">
 					<div className="col-md-3  col-sm-6 col-xs-6">
 					  <input type="number" onChange = {this.handleInputChange} ref="noOfBags" onBlur = {(e) => {this.valdiateNoOfBags(e)}} className={this.state.errors.noOfBags ? "form-control has error" : "form-control"} id="noOfBags" placeholder="#Bags" />
 					  <div className="error"><span></span></div>
-					</div>				
+					</div>
                 </div>
 				<div className="form-group">
 					<div className=" col-md-3 col-sm-6 col-xs-6">
 					  <input type="text" onChange={this.handleLocationChange} ref="locationName" className="form-control" id="locationName" placeholder="Location" />
 					  <div className="error"><span></span></div>
-					</div>				
+					</div>
                 </div>
 				<div className="form-group">
 					<div className=" col-md-3 col-sm-6 col-xs-6">
 					  <input type="number" onChange={this.handleInputChange} ref = "weight" onBlur = {(e) => {this.validateWeight(e)}} className={this.state.errors.noOfBags ? "form-control has error" : "form-control"} id="weight" placeholder="Weight"/>
 					  <div className="error"><span></span></div>
-					</div>				
+					</div>
                 </div>
 				<div className="form-group ">
 					<div className="col-md-3 col-sm-6 col-xs-6 text_right  ">
 					 <button type="button" onClick={this.onAdd}  className="btn btn-primary btn_right_no_margin">ADD</button>
-				</div>		
-                </div>		    
-				
+				</div>
+                </div>
+
 			</div>
 					<table className="table table-striped">
 						<thead className="base_bg">
-						  <tr >				
+						  <tr >
 							<th>Inv. Location</th>
 							<th>Bags</th>
 							<th>Weight</th>
-							<th>Lot #</th> 
-							<th style={{display: this.state.showEdit}}>Action </th>				
+							<th>Lot #</th>
+							<th style={{display: this.state.showEdit}}>Action </th>
 						</tr>
 						</thead>
 						<tbody>
@@ -857,20 +875,20 @@ else{
 				</div>
 				<div id="edit" style={{display:this.state.showEdit}}>
 				<div className="pull-left padding-20-last-l"><button type="button" id="inventory-save" onClick={this.props.onSaveChange} onClick = {this.onSaveChange} className="btn  btn-primary tex-uppercase">Save Changes</button> </div>
-				 <div className="pull-left padding-20-all"><button type="button" id="cancel" onClick={this.onCancel.bind(this)}  className="btn  btn-gray tex-uppercase">CANCEL</button> </div>				 
+				 <div className="pull-left padding-20-all"><button type="button" id="cancel" onClick={this.onCancel.bind(this)}  className="btn  btn-gray tex-uppercase">CANCEL</button> </div>
 				</div>
 				<div className="pull-left padding-20-last-l" style={{display:this.state.hideEdit}}><button type="button" id="inventory-edit" className="btn  btn-orange tex-uppercase" onClick={this.onClick}>Edit Inventory</button> </div>
 			</div>
-			<div className=" col-lg-5 col-md-5 col-sm-5 col-xs-12"> 
-				<div className="table-responsive">	
+			<div className=" col-lg-5 col-md-5 col-sm-5 col-xs-12">
+				<div className="table-responsive">
 				 <h5>&nbsp; </h5>
 					<TotalComponent totalRailcarWeight = {this.totalRailcarWeight} totalWeight = {this.totalWeight} />
 				</div>
-				
-				<label className="control control--checkbox " style={{display:this.state.showEdit}}>Packaging Complete 
+
+				<label className="control control--checkbox " style={{display:this.state.showEdit}}>Packaging Complete
 				  <input type="checkbox" onChange={this.props.onCheckBoxChange} id="row1"/><div className="control__indicator"></div>
-				</label>	
-				
+				</label>
+
 			</div>
 		</div>
 	</div>

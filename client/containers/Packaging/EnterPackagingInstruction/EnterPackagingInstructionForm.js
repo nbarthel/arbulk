@@ -21,6 +21,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
 		this.rObjects = []
     	this.PIedit = { }
     	this.railCarObjects = []
+      	this.labelLength = [{"arr" : 12} , {"see": 12}],
     	this.RailCarChange = { }
 	    this.state = {
 	    	railCarInfoList: [],
@@ -29,7 +30,8 @@ export default class EnterPackagingInstructionForm extends React.Component {
 	    	display: 'none',
 	    	isLoading : false,
 	    	errors : { },
-			rObjects:[]
+			rObjects:[],
+      labelLength : []
 	    }
 	    this.userId = localStorage.getItem('userId')
 	    //this.index = 0
@@ -58,6 +60,13 @@ export default class EnterPackagingInstructionForm extends React.Component {
 	   	//this.onCancel = this.onCancel.bind(this)
 	   //	this.onSaveChange = this.onSaveChange.bind(this)
 	   // this.handlePIeditChange = this.handlePIeditChange.bind(this)
+}
+componentDidMount() {
+	if(this.props.data.bag_id == 1){
+		this.setState({
+			display : "block"
+		})
+	}
 }
 componentWillMount() {
 
@@ -205,6 +214,17 @@ handleOriginEditChange(e){
 handleTypeOfPackagingEditChange(e){
 	this.props.data.bag_id = e.target.value
 	//this.props.data.packaging_material_id = this.refs.packagingType.value
+	if(e.target.value != 1){
+		this.setState({
+			display : "none"
+		})
+		//this.props.data.packaging_material_id = 0
+	}
+	else {
+		this.setState({
+			display : "block"
+		})
+	}
 	this.forceUpdate()
 	console.log(this.props.data)
 }
@@ -443,7 +463,9 @@ onChekBoxClick(e){
 
 if(e.target.checked == true)
 {
-
+this.setState({
+  labelLength :[{"aaa" : 12} , {"sasa" : 12}]
+})
  var obj = ""
 
  var arrRail = []
@@ -494,7 +516,7 @@ var uniquelot = arrlot.filter(function(elem, index, self) {
 	})
 
 var stampConfirm = localStorage.getItem('userName')
-var obj =  this.obj.po_number +'\n' + uniquelot.join() + '\n' + originName + '\n' + this.obj.material +'\n' + uniqueWeight.join() + '\n' + "Stamp Confirmed By :" +  stampConfirm
+var obj =  this.obj.po_number +'\n' + uniquelot.join() + '\n' + originName + '\n' + this.obj.material +'\n' + uniqueWeight.join()
 
 	this.autolabel = obj
 	this.obj.custom_label = obj
@@ -838,7 +860,7 @@ render() {
 					    id="Type_of_Unit"
 					    name="packaging_material_id"
 					    ref="unitType"
-					    onChange={(e) => {this.handleTypeofUnitEditChange}}
+					    onChange={(e) => {this.handleTypeofUnitEditChange(e)}}
 					    value = {this.props.data.packaging_material_id}>
 						{unittypes}
 					  </select>
@@ -958,10 +980,12 @@ render() {
 					 name="notes"
 					 rows="3"
 					 id="Notes"></textarea>
+
 					 }
 					 <div className="error"><span></span></div>
 					</div>
                 </div>
+
 			</fieldset>
 		</div>
 		<div className="Packaging_footer">
@@ -972,6 +996,7 @@ render() {
 	</div>
    <div className="container">
       <h4>CUSTOM LABEL</h4><hr/>
+      {
       <div className=" col-lg-3 col-md-3 col-sm-3 col-xs-12 pddn-10-top">
          <div className="form-group">
             {
@@ -996,9 +1021,49 @@ render() {
             placeholder="Enter Custom Label information"></textarea>
         	}
             <div className="error"><span>{this.state.errors.custom_label}</span></div>
+
          </div>
 
       </div>
+    }
+
+    {
+
+      _.map(this.state.rObjects , function(element , index){
+        debugger;
+        return(
+    <div className=" col-lg-3 col-md-3 col-sm-3 col-xs-12 pddn-10-top">
+       <div className="form-group">
+          {
+          (element.arr ==13) ?
+          <textarea
+          className="form-control  textarea"
+          name= "custom_label"
+          onChange ={(e)=>{this.handleLabelChange(e)}}
+          ref="customLabel"
+          rows="3"
+          id="Notes"
+          value = {this.props.data.custom_label}
+          placeholder="Enter Custom Label information"></textarea>
+          :
+          <textarea
+          className="form-control  textarea"
+          name = "custom_label"
+
+          rows="3"
+          id="Notes"
+          value={"anuragagaga"}
+          placeholder="Enter Custom Label information"></textarea>
+        }
+          <div className="error"><span>{}</span></div>
+
+       </div>
+
+    </div>
+  )})
+  }
+
+
 
 
       <div className=" col-lg-12 col-md-12 col-sm-12 col-xs-12   padding-20-last-l ">

@@ -46,6 +46,8 @@ class ContainerSummaryComponent extends Component {
                                })
             }            }
 	render() {
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>" , this.arrivedTruckersList)
+        this.arrivedLength = (this.arrivedTruckersList && this.arrivedTruckersList.length > 0) ? this.arrivedTruckersList.length : 0
         this.allocatedTruckersTable
         this.arrivedTruckersTable
         this.notArrivedTruckersTable
@@ -120,21 +122,24 @@ class ContainerSummaryComponent extends Component {
                         })
                     }
 
-                    if (this.arrivedTruckersList.length > 0) {
-                        this.arrivedTruckersTable = _.map(this.arrivedTruckersList, (arrTr, index) => {
-                            return ( <tr key={index}>
-                                <td>ARRIVED</td>
-                                <td>{arrTr.TCompany.name}</td>
-                                <td>{this.arrivedTruckersCount[index]}</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
 
-                            </tr>)
-                        })
-                    }
+
+
+                    // if (this.arrivedTruckersList.length > 0) {
+                    //     this.arrivedTruckersTable = _.map(this.arrivedTruckersList, (arrTr, index) => {
+                    //         return ( <tr key={index}>
+                    //             <td>ARRIVED</td>
+                    //             <td>{arrTr.TCompany.name}</td>
+                    //             <td>{this.arrivedTruckersCount[index]}</td>
+                    //             <td></td>
+                    //             <td></td>
+                    //             <td></td>
+                    //             <td></td>
+                    //             <td></td>
+                    //
+                    //         </tr>)
+                    //     })
+                    // }
 
 
                     if (this.props.allocatedTruckers.length == 0) {
@@ -247,19 +252,20 @@ class ContainerSummaryComponent extends Component {
 
                                                                                                   </tr>)
                                                 })}
-                        if(this.arrivedTruckersList.length > 0){this.arrivedTruckersTable = _.map(this.arrivedTruckersList,(arrTr,index) => {
-                                                   return( <tr key = {index}>
-                                                                                                                             <td>ARRIVED</td>
-                                                                                                                             <td>{arrTr.TCompany.name}</td>
-                                                                                                                             <td>{this.arrivedTruckersCount[index]}</td>
-                                                                                                                             <td></td>
-                                                                                                                             <td></td>
-                                                                                                                             <td></td>
-                                                                                                                             <td></td>
-                                                                                                                             <td></td>
 
-                                                                                                                             </tr>)
-                                                })}
+  // if(this.arrivedTruckersList.length > 0){this.arrivedTruckersTable = _.map(this.arrivedTruckersList,(arrTr,index) => {
+  //                                                  return( <tr key = {index}>
+  //                                                                                                                            <td>ARRIVED</td>
+  //                                                                                                                            <td>{arrTr.TCompany.name}</td>
+  //                                                                                                                            <td>{this.arrivedTruckersCount[index]}</td>
+  //                                                                                                                            <td></td>
+  //                                                                                                                            <td></td>
+  //                                                                                                                            <td></td>
+  //                                                                                                                            <td></td>
+  //                                                                                                                            <td></td>
+  //
+  //                                                                                                                            </tr>)
+  //                                               })}
                     if (this.props.allocatedTruckers.length == 0) {
 
                         if (this.state.CSummaryData != undefined && this.state.CSummaryData.TContainerAllocation.length > 0) {
@@ -357,7 +363,7 @@ class ContainerSummaryComponent extends Component {
                                             {this.notArrivedTruckersTable ? this.notArrivedTruckersTable : <tr>
                                                                           <td>NOT ARRIVED</td>
                                                                           <td></td>
-                                                                          <td>0</td>
+                                                                          <td>{(this.arrivedLength && this.arrivedLength >0) ? parseInt(this.unAllocatedContainers) - parseInt(this.arrivedLength) : this.unAllocatedContainers}</td>
                                                                           <td></td>
                                                                           <td></td>
                                                                           <td></td>
@@ -376,7 +382,7 @@ class ContainerSummaryComponent extends Component {
                                             <td>&nbsp;</td>
 
                                             </tr>
-                                            {this.arrivedTruckersTable ? this.arrivedTruckersTable :  <tr>
+                                            {(this.props.CSummaryData && (this.props.CSummaryData.TContainerDomestic || this.props.CSummaryData.TContainerInternational) && (this.props.CSummaryData.TContainerDomestic.length == 0 && this.props.CSummaryData.TContainerInternational.length == 0)) ? <tr>
                                                                           <td>ARRIVED</td>
                                                                           <td></td>
                                                                           <td>0</td>
@@ -386,7 +392,7 @@ class ContainerSummaryComponent extends Component {
                                                                           <td></td>
                                                                           <td></td>
 
-                                                                          </tr>}
+                                                                          </tr> : ''}
                                             <tr>
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>

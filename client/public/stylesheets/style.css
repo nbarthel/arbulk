@@ -1,9 +1,9 @@
 /*
 
 Theme Name: ARBulk
-Theme URI: http://www.qsstechnosoft.com/ 
+Theme URI: http://www.qsstechnosoft.com/
 Author: Qss Technosoft pvt.ltd.
-Author URI: http://www.qsstechnosoft.com/ 
+Author URI: http://www.qsstechnosoft.com/
 
 */
 
@@ -17,17 +17,22 @@ Author URI: http://www.qsstechnosoft.com/
 }
 
 html, body {width: 100%; height:100%;}
+th {position: relative; top:0px}
 body {font-size: 14px;  color: #333; margin: 0;padding: 0; width: 100%; height:100%;}
 a {text-decoration: none;color: #004a98;}
 a:hover{text-decoration: none;color: #0b6acf;}
 p {margin: 0 0 15px 0;   display: block;}
 hr {height: 1px; background: #ccc;border: none;margin: 15px 0 15px 0;}
+.loadedContent {
+	height : 600px
+}
 .underline{text-decoration:underline;}
 .bold{ font-weight:bold;}
 .error{color:red;}
 .pos-absolute-b{ position:absolute;bottom:0;left:0;}
 .pos-relative-b{ position:relative;bottom:0;left:0;}
 .pos-fixed-b{ position:fixed;bottom:0;left:0;}
+.table> thead> tr> th{z-index: 99}
 /*input::-webkit-datetime-edit{ color: transparent; }*/
 
 /* Include this to make it visible when input is clicked */
@@ -37,7 +42,7 @@ hr {height: 1px; background: #ccc;border: none;margin: 15px 0 15px 0;}
 /* Include this to make it visible when input is clicked */
 /*input:focus::-webkit-datetime-edit{ color: #000; }*/
 
-/*input[type="date"]::before { 
+/*input[type="date"]::before {
 	content: attr(data-placeholder);
 	width: 100%;
 }*/
@@ -61,7 +66,17 @@ hr {height: 1px; background: #ccc;border: none;margin: 15px 0 15px 0;}
 ul.list-style-disc > li {list-style-type:disc;}
 
 /*////////////////////////------border------ /////////////////////////////*/
+/*.position{position:relative}
+.mega {
+    height: 250px;
+    margin: 10px;
+    overflow: auto;
 
+    position:relative;
+
+}*/
+/*.header{position:absolute; background-color:rgb(202, 202, 202);}*/
+/*.header+* {margin-top:30px;}*/
 .border-top{border-top:1px solid #ccc;}
 .border-bottom{border-bottom:1px solid #e5e5e5;}
 
@@ -166,8 +181,8 @@ ul.list-style-disc > li {list-style-type:disc;}
 
 /*////////////////////////------custom scroll------ /////////////////////////////*/
 /*
-::-webkit-scrollbar {width: 6px;} 
-::-webkit-scrollbar-track {-webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.3);border-radius: 6px;} 
+::-webkit-scrollbar {width: 6px;}
+::-webkit-scrollbar-track {-webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.3);border-radius: 6px;}
 ::-webkit-scrollbar-thumb {border-radius: 6px;-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); }
 */
 /*=================================================================================================*/
@@ -217,7 +232,7 @@ a.hiddenanchor{display: none;}
 .login_content input:focus { -ms-outline: none !important; -webkit-outline: none !important; -moz-outline: none !important;outline: none !important; padding-left:15px; -webkit-transition:0.6s ease; -moz-transition:0.6s ease; -o-transition:0.6s ease; transition:  0.6s ease;}
 .login_content input:focus:hover { outline: none !important;}
 .login-btn{display: inline-block;padding: 10px 20px;margin-bottom: 0;font-size: 14px;font-weight: 400;line-height: 1.42857143;text-align: center;white-space: nowrap;vertical-align: middle;-ms-touch-action: manipulation;touch-action: manipulation;cursor: pointer;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;background-image: none;border: 1px solid transparent;background-color:#004a98;color:#ffffff;}
-.login-btn:hover{ background-color:#0b6acf; }	
+.login-btn:hover{ background-color:#0b6acf; }
 
 /*////////////////////////------body_section  global------ /////////////////////////////*/
 
@@ -226,7 +241,7 @@ a.hiddenanchor{display: none;}
 
 
 
-fieldset.scheduler-border {border: 1px solid #ccc !important; margin: 0 0 1.5em 0 !important; border-radius: 5px; 
+fieldset.scheduler-border {border: 1px solid #ccc !important; margin: 0 0 1.5em 0 !important; border-radius: 5px;
 padding: 15px 20px 15px 20px;
 }
 
@@ -379,27 +394,27 @@ legend.scheduler-border { text-transform:uppercase !important;font-weight: bold 
 #filter-menu{min-width:220px; width:100%; height:100%; float:left;}
 }
 
-@media (min-width: 220px) and (max-width: 1200px) { 
+@media (min-width: 220px) and (max-width: 1200px) {
 .form-horizontal .control-label {padding-top: 0px; margin-bottom: 0;text-align: right; display:none;}
 .edit_Packaging  .col-md-7 {width: 95.5%;}
 .edit_Packaging  .col-md-1 {padding:0px; width: 2.5%; padding-top:4px;}
 .col-xs-1{padding-right: 0px;padding-left: 0px; padding-top:5px;}
 .padding-top-btm-xs-sm{ padding-top:10px!important;}
-#login .signin_label{ padding-top:0px; vertical-align:middle;}	
+#login .signin_label{ padding-top:0px; vertical-align:middle;}
 .container_detils .label_details .sameHeight { height: auto;}
 }
 @media (min-width: 480px) and (max-width: 768px) {
 
 }
-@media only screen and (max-width: 320px){ 
+@media only screen and (max-width: 320px){
 .breadcrumb_bg i {padding: 0 2px;}
  .create_user fieldset.scheduler-border {padding: 15px 5px 15px 5px;}
 
 }
 
 @media (min-width: 320px) and (max-width: 768px) {
-.padding-top-btm-xs{ padding:10px px !important;}	
-.margin-left-xs{ margin-left:15px !important;}	
+.padding-top-btm-xs{ padding:10px px !important;}
+.margin-left-xs{ margin-left:15px !important;}
 .padding-top-btm-xs{ padding-top:10px !important; }
 .inventory_card  h5{text-align:center;}
 .inventory_card .table-top-padding{padding-top:0px;}
@@ -419,7 +434,7 @@ legend.scheduler-border {font-size: 14px;}
 .top_nav_admin  > li > a {  position: relative; display: block;  padding: 15px 6px; font-size: 11px; }
 }
 @media (min-width:768px) and (max-width: 900px) {
-.top_nav_admin  > li > a {  position: relative; display: block;  padding: 15px 8px; font-size: 8px; }		
+.top_nav_admin  > li > a {  position: relative; display: block;  padding: 15px 8px; font-size: 8px; }
 }
 
 @media (min-width: 768px) and (max-width: 1200px) {
@@ -429,7 +444,7 @@ legend.scheduler-border {font-size: 14px;}
 .tab-width li{ font-size: 13px; width:50%}
 }
 @media (min-width: 768px) and (max-width: 800px) {.top_nav li {font-size: 13px;}}
-@media only screen and (max-width: 768px){ 
+@media only screen and (max-width: 768px){
 .edit_Packaging fieldset .col-xs-1{margin-left:0px; padding-left:0px;}
 .shipment_edit fieldset .col-xs-1{margin-left:0px; padding-left:0px;}
 }
@@ -451,10 +466,10 @@ legend.scheduler-border {font-size: 14px;}
 }
 
 
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    margin: 0; 
+    margin: 0;
 }

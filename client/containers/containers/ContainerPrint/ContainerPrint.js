@@ -38,7 +38,7 @@ export default class ContainerPrint extends React.Component {
         //var base = 'TPackagingInstructions'+'/'+this.props.params.id;
         var base = 'TContainerInternationals/'+this.id;
         this.url = InventView._buildUrl(base, {
-            "include" : {"relation": "TShipmentent","scope":{"include":["TShipmentDomestic" ,"TShipmentInternational","TShipmentLots","TCompany","TLocation"]}}
+            "include" : {"relation": "TShipmentent","scope":{"include":["TShipmentDomestic" ,{"relation" :"TShipmentInternational" , "scope" :{"include" : "TSteamshipLine"}},"TShipmentLots","TCompany","TLocation"]}}
         })
         $.ajax({
             url: this.url,
@@ -172,9 +172,9 @@ export default class ContainerPrint extends React.Component {
                                             <td width="50%">
                                                 <strong className="font-12">
                                                     {this.state.viewData.TShipmentent.TCompany.name}&nbsp;
-                                                    C/O MAERSK
-                                                    MSC ALESSIA
-                                                    RETURN LOADS TO APM
+                                                    C/O {(this.state.viewData && this.state.viewData.TShipmentent && this.state.viewData.TShipmentent.TShipmentInternational && this.state.viewData.TShipmentent.TShipmentInternational.length > 0 && this.state.viewData.TShipmentent.TShipmentInternational[0].TSteamshipLine) ? this.state.viewData.TShipmentent.TShipmentInternational[0].TSteamshipLine.name : ""}
+
+                                                    {" "}RETURN LOADS TO APM
                                                     CONTAINER TARE WT: 3,810 KG
                                                     VGM = 29,009 KG
                                                 </strong>
@@ -358,5 +358,3 @@ export default class ContainerPrint extends React.Component {
 
     }
 }
-
-

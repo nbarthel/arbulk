@@ -31,6 +31,16 @@ export default function createRoutes(store) {
 
 	},
 	{
+		path: '/Packaging/enterpackginginst/(:id)/(:lotId)',
+		name: <span>Packaging<i className="fa fa-angle-double-right"/>Enter Packaging Instruction</span>,
+		getComponent(nextState, cb){
+			System.import('./containers/Packaging/EnterPackagingInstruction/EnterPackagingInstructionPage')
+			.then(loadModule(cb))
+			.catch(errorLoading)
+		}
+
+	},
+	{
 		path: '/Packaging/packaginginstview/(:id)',
 		name: <span>Packaging<i className="fa fa-angle-double-right"/>Packaging Instruction View</span>,
 		getComponent(nextState, cb){
@@ -166,10 +176,64 @@ export default function createRoutes(store) {
 		}
 	},
 	{
+		path: '/Admin/modifyUser',
+		name: <span>Admin<i className="fa fa-angle-double-right"/>Modify User</span>,
+		getComponent(nextState, cb){
+			System.import('./containers/Admin/ModifyUser/ModifyUserPage')
+			.then(loadModule(cb))
+			.catch(errorLoading)
+		}
+	},
+	{
+		path: '/Admin/editUser/(:empId)',
+		name: <span>Admin<i className="fa fa-angle-double-right"/>Edit User</span>,
+		getComponent(nextState, cb){
+			System.import('./containers/Admin/ModifyUser/EditUser')
+			.then(loadModule(cb))
+			.catch(errorLoading)
+		}
+	},
+	{
+		path: '/Admin/CustAndTruck',
+		name: <span>Admin<i className="fa fa-angle-double-right"/>Customers And Truckers</span>,
+		getComponent(nextState, cb){
+			System.import('./containers/Admin/CustomersAndTruckers/CustomersAndTruckersPage')
+			.then(loadModule(cb))
+			.catch(errorLoading)
+		}
+	},
+	{
+		path: '/Admin/AddCustAndTruck',
+		name: <span>Admin<i className="fa fa-angle-double-right"/>Add Customers And Truckers</span>,
+		getComponent(nextState, cb){
+			System.import('./containers/Admin/CustomersAndTruckers/AddCustomersAndTruckers')
+			.then(loadModule(cb))
+			.catch(errorLoading)
+		}
+	},
+	{
+		path: '/Admin/EditCustAndTruck/(:custId)',
+		name: <span>Admin<i className="fa fa-angle-double-right"/>Edit Customers And Truckers</span>,
+		getComponent(nextState, cb){
+			System.import('./containers/Admin/EditCustomersAndTruckers/EditCustomersAndTruckersPage')
+			.then(loadModule(cb))
+			.catch(errorLoading)
+		}
+	},
+	{
 		path: '/Admin/createusr',
-		name: 'Create User',
+		name: <span>Admin<i className="fa fa-angle-double-right"/>Create User</span>,
 		getComponent(nextState, cb){
 			System.import('./containers/Admin/CreateUser/CreateUserPage')
+			.then(loadModule(cb))
+			.catch(errorLoading)
+		}
+	},
+	{
+		path: '/Admin/AddMaterial',
+		name: <span>Admin<i className="fa fa-angle-double-right"/>Add Material</span>,
+		getComponent(nextState, cb){
+			System.import('./containers/Admin/AddMaterial/AddMaterialPage')
 			.then(loadModule(cb))
 			.catch(errorLoading)
 		}
