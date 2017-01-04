@@ -2,7 +2,10 @@ import React from 'react';
 import '../../../public/stylesheets/style.css';
 import '../../../public/stylesheets/bootstrap.min.css';
 import './arrayclean.js';
+import { Base_Url} from '../../../constants';
 import ReactDOM from 'react-dom'
+import axios from 'axios'
+import { hashHistory } from 'react-router'
 
 class  ContainerQueueViewForm extends React.Component {
     constructor(props){
@@ -23,9 +26,9 @@ class  ContainerQueueViewForm extends React.Component {
     }
 
 
-    handleSortableUpdate() {
-
-        var newItems = _.clone(this.props.data, true);
+    handleSortableUpdate(e , selected , swapped) {
+        debugger;
+        var newItems = _.clone(this.props.queueData, true);
         var $node = $(ReactDOM.findDOMNode(this));
         var ids = $node.sortable('toArray', { attribute: 'data-id' });
         var keys = $node.sortable('toArray', { attribute: 'id' });
@@ -37,15 +40,11 @@ class  ContainerQueueViewForm extends React.Component {
             // this.props.data.queue_sequence = index;
         });
         console.log('>>>>>>>' , newSequence)
-
-
-        //for(var j in ids)
-        //{
-        //    axios.put(Base_Url+"TPackagingInstructionLots/" + ids[j] , {queue_sequence : newSequence[j] }).then((response)=>{
-        //        debugger;
-        //        console.log('response>>>>>>' , response)
-        //    });
-        //}
+       for(var j in ids)
+        {
+           axios.put(Base_Url+"TContainerInternationals/" + ids[j] , {sequence : newSequence[j] }).then((response)=>{
+     });
+        }
 
         // Lets React reorder the DOM
         // swal("Success" , 'Successfully updated Qsequence' , 'success')
@@ -63,10 +62,18 @@ class  ContainerQueueViewForm extends React.Component {
 
     render() {
         var propsdata = (this.props.queueData && this.props.queueData.length > 0 )?this.props.queueData.reverse() : []
-        this.queueViewList = _.map(propsdata , (data , index) =>{
+        var arrPropsdata = _.sortBy(propsdata, 'sequence', function(n) {
+             return Math.sin(n);
+   });
+
+   arrPropsdata = arrPropsdata.reverse()
+   var arrPropsdataSorted = arrPropsdata.sort(function(a, b) {
+    return parseFloat(a.sequence) - parseFloat(b.sequence);
+});
+        this.queueViewList = _.map(arrPropsdataSorted , (data , index) =>{
             if(data.sequence != null){
                 return(
-                    <tr key={data.sequence}>
+                    <tr key={data.sequence} id = {data.sequence} data-id={data.id} className="item">
                         <td>{(data.TShipmentent && data.TShipmentent.TLocation) ? data.TShipmentent.TLocation.locationName : 'NA'} </td>
                         <td>{(data.TShipmentent && data.TShipmentent.TCompany) ? data.TShipmentent.TCompany.name : 'NA'}</td>
                         <td>{(data.TShipmentent && data.TShipmentent.TShipmentLots && data.TShipmentent.TShipmentLots.length > 0 && data.TShipmentent.TShipmentLots[0].TPackagingInstructionLots) ? data.TShipmentent.TShipmentLots[0].TPackagingInstructionLots.railcar_number  : 'NA'}</td>
@@ -128,10 +135,10 @@ class  ContainerQueueViewForm extends React.Component {
                         <div className="row-fluid pddn-50-btm">
 
                             <div className="padding-top-btm-xs">
-                                <div className="padding-20-last-l pull-left"><button type="button"    className="btn  btn-gray text-uppercase">Back</button></div>
+                                <div className="padding-20-last-l pull-left"><button type="button"    className="btn  btn-gray text-uppercase" onClick={hashHistory.goBack}>Back</button></div>
 
                                <div className="padding-20-all pull-right"><button type="button"   id="edit_btn"  className="btn  btn-orange text-uppercase" onClick={this.callonEdit}>Edit</button></div>
-                                <div className="padding-20-all pull-right"><button type="button"     className="btn  btn-primary text-uppercase">Print Container Load Order</button></div>
+
 
                             </div>
                         </div>
@@ -142,7 +149,7 @@ class  ContainerQueueViewForm extends React.Component {
 
                     </div>
 
-                </section>	
+                </section>
             )
             }
             }

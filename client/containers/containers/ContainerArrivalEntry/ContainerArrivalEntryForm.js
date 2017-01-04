@@ -190,12 +190,7 @@ class  ContainerArrivalEntryForm extends React.Component {
           "where" : {type : "TRUCKER" }
       })
 
-
-
-
-
-
-      axios.get(this.urlTrucker).then((response) => {
+    axios.get(this.urlTrucker).then((response) => {
           this.setState({
               trucker: response.data
           })
@@ -378,7 +373,7 @@ else if(this.shipmentType == 0){
   this.postObj.shipmentLotsId = this.lotsId ? this.lotsId : null
   this.postObj.containerArrived = this.containerArrived
   this.postObj.modifiedOn = today
-  this.postObj.status = "ARRIVED"
+  this.postObj.status = this.containerArrived ?"ARRIVED" :"NOT ARRIVED"
   this.postObj.id = 0
   if(this.isValid() == true){
     axios.post(Base_Url + 'TContainerDomestics',this.postObj).then((response) =>{
@@ -392,6 +387,7 @@ else if(this.shipmentType == 0){
   console.log("POSTOBJ",this.postObj)
 }
 onIntSave(e){
+
   if(this.shipmentType == 1){
     var arrivedDom = (this.state.domesticData && this.state.domesticData.TContainerDomestic) ? this.state.domesticData.TContainerDomestic.length : 0 ;
     var arrivedInt = (this.state.IntlData && this.state.IntlData.TContainerInternational) ? this.state.IntlData.TContainerInternational.length : 0 ;
@@ -442,7 +438,7 @@ if(this.shipmentId == ""){
   this.IntPostObj.createdBy = this.userID
   this.IntPostObj.createdOn = today
   this.IntPostObj.modifiedOn = today
-  this.IntPostObj.status = "ARRIVED"
+  this.IntPostObj.status = this.ContainerArrivedInt ? "ARRIVED" : "NOT ARRIVED"
 
   this.IntPostObj.id = 0
   console.log("THISINTPOSTOBJ",this.IntPostObj)
@@ -924,15 +920,10 @@ this.value = e.target.value
                             <legend className="scheduler-border">SHIPMENT INFO</legend>
                             <div className=" col-lg-6 col-md-6 col-sm-5 col-xs-12 no-space">
                             <ul className="no-space">
-                                {
-                                    _.map(this.state.domesticData.TShipmentLots , (data,index)=>{
-                                        return(
-                                            <li key={index}>Eligible Lot Numbers : {data.TPackagingInstructionLots?data.TPackagingInstructionLots.lot_number : ''}</li>
-                                               )
-                                    })
+                            {
+                                      <li>Eligible Lot Numbers : {(this.state.domesticData && this.state.domesticData.TShipmentLots && this.state.domesticData.TShipmentLots.length > 0 && this.state.domesticData.TShipmentLots[0].TPackagingInstructionLots && this.state.domesticData.TShipmentLots[0].TPackagingInstructionLots)?this.state.domesticData.TShipmentLots[0].TPackagingInstructionLots.lot_number : ''}</li>
 
-
-                                }
+                                       }
                             </ul>
                             </div>
                             <div className=" col-lg-6 col-md-6 col-sm-7 col-xs-12 no-space">

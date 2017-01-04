@@ -35,6 +35,7 @@ class  ContainerViewForm extends React.Component {
             this.checkedCustomer = [ ]
             this.checkedStatus = [ ]
             this.checkedCompany = [ ]
+            this.checkedContainer = []
             this.editId = ''
             this.Query = {}
             this.Where = { }
@@ -77,7 +78,7 @@ class  ContainerViewForm extends React.Component {
     print(e){
         if(this.containerId != '' && this.isDomestic==false){
             console.log('print view',this.containerId)
-            hashHistory.push('/Container/containerPrint/'+this.containerId)
+            hashHistory.push('/Container/containerPrint/'+this.contId)
             //hashHistory.push('/Packaging/inventorycard/'+this.piID+'/'+this.selected)
         }
         else if(this.containerId=='' && this.isDomestic==false)
@@ -90,6 +91,21 @@ class  ContainerViewForm extends React.Component {
             swal('','Domestic Container report is not available');
         }
     }
+
+  printLoadOrder(e){
+
+    if(this.editId != undefined || this.contId != undefined){
+        console.log('print view',this.editId+'/'+this.contId)
+        hashHistory.push('/Shipment/shipmentPrint/'+this.editId + '/'+ this.contId)
+        //hashHistory.push('/Packaging/inventorycard/'+this.piID+'/'+this.selected)
+    }
+    else
+    {
+        console.log('mmmmmmmmmmmmmmmmmmmmm');
+        //hashHistory.push('/Shipment/shipmentPrint/')
+        swal("Selection Missing", "Please Select A Lot To View.","error")
+    }
+  }
 
     Arrival(e){
 
@@ -105,13 +121,13 @@ class  ContainerViewForm extends React.Component {
 
     onContainerFilter(e,location){
         if(e.target.checked){
-            this.forceUpdate()
-            this.checkedContainer.push(e.target.id)
+             this.checkedContainer.push(e.target.id)
             Object.defineProperty(this.Where,"Container",{enumerable: true ,
                 writable: true,
                 configurable:true,
                 value:this.checkedContainer})
             this.buttonDisplay.push(e.target.value)
+              this.forceUpdate()
             //console.log(this.props.checkedCompany)
             //console.log(this.props.buttonDisplay)
 
@@ -262,14 +278,15 @@ class  ContainerViewForm extends React.Component {
     }
 
 onCheckboxChange(e,data ,contData){
-
+debugger;
     this.containerData = contData
     console.log(">>>>>>>>>>>>>Contaimner Data" ,  this.containerData)
     this.contId = contData.id
     this.type = data.isDomestic
         this.editId = data.id
         console.log("DATA",data)
-        this.parentShipId = data.TContainerInternational[0].id
+        this.parentShipId = (data.TContainerInternational && data.TContainerInternational.length > 0 )?data.TContainerInternational[0].id : ''
+        this.shipmentid = (data.TShipmentInternational && data.TShipmentInternational.length > 0) ?data.TShipmentInternational[0].id : ''
          if(data.isDomestic==1){
             this.isDomestic=true;
             //swal('' , 'Domestic container is not allowed for ')
@@ -281,10 +298,11 @@ onCheckboxChange(e,data ,contData){
 
     }
         onEdit(e){
-        hashHistory.push('Container/containeredit/'+this.editId)
+        hashHistory.push('Container/containeredit/'+this.editId +'/'+this.contId)
            }
 
     addToqueue() {
+      debugger;
        if(!this.containerData.containerSteamshipLineConfirmed){
            swal("", "Domestic container can not be in queue" , 'info')
            return;
@@ -300,24 +318,28 @@ onCheckboxChange(e,data ,contData){
      return
    }
 
-
-         var id  = this.contId
-         var shipId = this.parentShipId
+       var id  = this.contId
+         var shipId = this.shipmentid
          axios.put(Base_Url + "TContainerInternationals/" + id , {sequence : parseInt(this.state.max_seq)+1 , status : 'QUEUED' ,isqueued : 1}).then((response)=> {
-            swal({
+
+           axios.put(Base_Url + "TShipmentInternationals/"+ shipId , {status : "QUEUED"}).then((response)=>{
+             swal({
                     title: "Success",
                     text: "Successfully added to the queue",
                     type: "success",
                     showCancelButton: true,
                 },
-                function(isConfirm){
-                  axios.put(Base_Url + "/TShipmentents/"+ shipId , {status : "QUEUED"}).then((response)=>{
 
-                  })
-                    hashHistory.push('/Conatainer/containerqueueview')
+                    function(isConfirm){
+                      hashHistory.push('/Conatainer/containerqueueview')
 
                 }
             );
+           })
+
+
+
+
         }).catch((err)=>{
 
         })
@@ -334,6 +356,7 @@ onCheckboxChange(e,data ,contData){
         var serachObj = []
         var serachObjLots =[]
         var shipType = []
+        var containerSearch = []
         var isDomestic
         var intl = []
         var arrival = []
@@ -342,15 +365,9 @@ onCheckboxChange(e,data ,contData){
                 writable: true,
                 configurable: true,
                 value:this.shipMentType})
+  }
 
-
-
-        }
-
-
-        if(this.Where.shipMentType && this.Where.shipMentType == "Domestic") {
-
-
+     if(this.Where.shipMentType && this.Where.shipMentType == "Domestic") {
             isDomestic = true
             var objShip = {"isDomestic" : 1}
             serachObj.push(objShip)
@@ -359,6 +376,20 @@ onCheckboxChange(e,data ,contData){
             var objShip = {"isDomestic" : 0}
             serachObj.push(objShip)
         }
+
+   //containerTypeId
+   if(this.Where.Container && this.Where.Container.length > 0){
+     var container = []
+     var obj2 = {}
+     for (var i in this.Where.Container) {
+         obj2 = {"containerTypeId": this.Where.Container[i]}
+         container.push(obj2);
+     }
+     containerSearch.push(container)
+   }
+
+      console.log("Search object" , serachObj)
+
         if (this.Where != undefined && this.Where!= null) {
             if (this.Where.Customer && this.Where.Customer.length > 0) {
                 var customer = []
@@ -413,7 +444,8 @@ onCheckboxChange(e,data ,contData){
 
             serachObj = [].concat.apply([], serachObj);
             serachObjLots = [].concat.apply([], serachObjLots);
-
+            containerSearch = [].concat.apply([], containerSearch);
+                 console.log("search obj second" , serachObj , serachObjLots)
             var PIview = createDataLoader(ContainerViewForm,{
                 queries:[{
                     endpoint: 'TPackagingInstructions',
@@ -422,11 +454,18 @@ onCheckboxChange(e,data ,contData){
                     }
                 }]
             })
-            console.log("I have recieved props")
-            //debugger
+
             var base = 'TShipmentents';
             //TPackagingInstructionLots TContainerInternational
-            if(serachObjLots && serachObjLots.length>0){
+ if((containerSearch && containerSearch.length > 0)){
+
+   this.url = PIview._buildUrl(base, {
+       "include": ["TContainerInternational", "TCompany", "TLocation", "TShipmentDomestic", {"relation":"TShipmentInternational" , "scope":{"include" : "TContainerType" , "where":{"or":containerSearch}}}]
+       //where: {"and": serachObj}
+
+   });
+ }
+  if(serachObjLots && serachObjLots.length>0){
                 this.url = PIview._buildUrl(base, {
                     "include": [{
                         "relation": "TContainerDomestic",
@@ -434,7 +473,7 @@ onCheckboxChange(e,data ,contData){
                     }, {
                         "relation": "TContainerInternational",
                         "scope": {"where": {"or": serachObjLots}}
-                    }, "TCompany", "TLocation", "TShipmentDomestic", "TShipmentInternational"],
+                    }, "TCompany", "TLocation", "TShipmentDomestic","TShipmentInternational"],
                     where: {"and": serachObj}
 
                 });
@@ -991,7 +1030,7 @@ onViewClick(e){
         </div>
         <div className="row-fluid pddn-50-btm padding-top-btm-xs">
             <div className="pull-left margin-10-last-l"><button type="button" onClick={(e) => this.print(e)} className="btn  btn-primary">Print BOL</button></div>
-            <div className="pull-left margin-10-all"><button type="button"  className="btn  btn-primary">Print Load Order</button></div>
+            <div className="pull-left margin-10-all"><button type="button"  onClick={(e) => this.printLoadOrder(e)} className="btn  btn-primary">Print Load Order</button></div>
             <div className="pull-left margin-10-all"><button type="button"  className="btn  btn-gray" onClick={this.addToqueue}>Add to Queue</button></div>
             <div className="pull-right margin-10-last-r"><button type="button"  className="btn  btn-success" onClick = {this.onViewClick.bind(this)}>View</button></div>
             <div className="pull-right margin-10-all"><button type="button" id="edit_btn"  className="btn  btn-orange" onClick = {this.onEdit}>EDIT</button></div>

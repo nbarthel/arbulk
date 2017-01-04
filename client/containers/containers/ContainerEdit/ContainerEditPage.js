@@ -10,6 +10,7 @@ var Loader = require('react-loader')
  		super(props);
  		this.state = {loaded : false}
  		this.id = this.props.params.id
+    this.cntId = this.props.params.contId
  	}
  	componentDidMount() {
  	var CIview = createDataLoader(ContainerEditPage,{
@@ -23,10 +24,8 @@ var Loader = require('react-loader')
        var base = 'TShipmentents'+ '/' + this.id;
         //TPackagingInstructionLots
         this.url = CIview._buildUrl(base, {
-             "include" : ["TContainerDomestic","TContainerInternational","TCompany" ,"TLocation","TShipmentDomestic",{"relation":"TShipmentInternational","scope":{"include":["TContainerType" , "TSteamshipLine"]}}]
-
-
-        });
+             "include" : [{"relation" : "TContainerDomestic" ,"scope" : {"where" :{"id" : this.props.params.contId}}} , {"relation" : "TContainerDomestic" ,"scope" : {"where" :{"id" :this.props.params.contId}}} ,"TContainerInternational","TCompany" ,"TLocation","TShipmentDomestic",{"relation":"TShipmentInternational","scope":{"include":["TContainerType" , "TSteamshipLine"]}}]
+  });
         console.log('sdsddsdsdssdssssssssssd' , this.url);
       $.ajax({
             url: this.url,
@@ -38,7 +37,7 @@ var Loader = require('react-loader')
                        editData : data,
                        loaded : true
                    }
-               )
+            )
                //console.log( this.state.xyz)
         }.bind(this)
         })
@@ -49,7 +48,7 @@ var Loader = require('react-loader')
             <div className="content-inside">
             <Header routes = {this.props.routes}/>
              <Loader loaded={this.state.loaded}>
-   {this.state.editData != undefined ? (this.state.editData.isDomestic == 1 ? <DomesticContainerEditForm editData = {this.state.editData}/> : <InternationalContainerEditForm editData = {this.state.editData}/>) : null} 
+   {this.state.editData != undefined ? (this.state.editData.isDomestic == 1 ? <DomesticContainerEditForm editData = {this.state.editData}/> : <InternationalContainerEditForm editData = {this.state.editData}/>) : null}
                </Loader>
                 </div>
 

@@ -94,6 +94,18 @@ export default function createRoutes(store) {
 					.catch(errorLoading)
 			}
 		},
+		{
+			 path: '/Shipment/shipmentPrint/(:id)/(:contId)',
+			 name: 'Form Print',
+			 getComponent(nextState, cb){
+				 System.import('./containers/Shipment/ShipmentPrint/ShipmentPrint')
+					 .then(loadModule(cb))
+					 .catch(errorLoading)
+			 }
+		 },
+
+
+
 	{
 		path: '/Shipment/shipmentview',
 		name: <span>Shipment<i className="fa fa-angle-double-right"/>Shipment View</span>,
@@ -150,6 +162,15 @@ export default function createRoutes(store) {
 	},
 	{
 		path: '/Container/containeredit/(:id)',
+		name: <span>Container<i className="fa fa-angle-double-right"/>Container Edit</span>,
+		getComponent(nextState,cb){
+			System.import('./containers/containers/ContainerEdit/ContainerEditPage')
+			.then(loadModule(cb))
+			.catch(errorLoading)
+		}
+	},
+	{
+		path: '/Container/containeredit/(:id)/(:contId)',
 		name: <span>Container<i className="fa fa-angle-double-right"/>Container Edit</span>,
 		getComponent(nextState,cb){
 			System.import('./containers/containers/ContainerEdit/ContainerEditPage')
@@ -238,6 +259,16 @@ export default function createRoutes(store) {
 			.catch(errorLoading)
 		}
 	},
+
+	{
+	  path: '/Admin/UploadData',
+	  name: <span>Admin<i className="fa fa-angle-double-right"/>Upload Data</span>,
+	  getComponent(nextState, cb){
+	   System.import('./containers/Admin/UploadData/UploadDataPage')
+	   .then(loadModule(cb))
+	   .catch(errorLoading)
+	  }
+	 },
 	{
 		path: '/Packaging/inventorycard/(:id)/(:cID)',
 		name: <span>Packaging<i className="fa fa-angle-double-right"/>Inventory Card</span>,

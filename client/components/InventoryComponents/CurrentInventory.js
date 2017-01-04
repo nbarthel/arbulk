@@ -19,7 +19,8 @@ class CurrentInventory extends Component {
 		hideEdit: 'block',
 		showEdit : 'none',
 		addFlag : false,
-		errors: { }
+		errors: { },
+		weightLBS : 0
 		}
 	this.currentInventArray
 
@@ -38,8 +39,10 @@ class CurrentInventory extends Component {
 	this.backupRow = { }
 	this.onSaveChange = this.onSaveChange.bind(this)
 	this.splitRow = this.splitRow.bind(this)
+	this.noteChange = this.noteChange.bind(this)
 	//this.onEdit = this.onEdit.bind(this)
 	this.orignalTble
+	this.totalWeight = 0
 	this.actualDeleteObj = { }
 	this.editPostArray = [ ]
 	this.splitPostArray = [ ]
@@ -54,11 +57,11 @@ class CurrentInventory extends Component {
 
 componentWillReceiveProps(nextProps) {
 
-	var stamp = this.props.stamp
+   	var stamp = this.props.stamp
     this.stamp = stamp
-	let id = this.props.lID
-	let lotId = nextProps.lotId
-	var PIview = createDataLoader(InventoryHistory, {
+   	let id = this.props.lID
+   	let lotId = nextProps.lotId
+   	var PIview = createDataLoader(InventoryHistory, {
             queries: [{
                 endpoint: 'TPiInventories',
                 filter:
@@ -68,7 +71,7 @@ componentWillReceiveProps(nextProps) {
             }]
         });
 //"include": {"relation": "classes", "scope": {"include": ["teachers","students"]}}
-	var base1 = 'TPackagingInstructionLots/'+ lotId;
+	      var base1 = 'TPackagingInstructionLots/'+ lotId;
           this.urlnew = PIview._buildUrl(base1, {
            include: {"relation": "TPiInventory", "scope": {"include": ["TInventoryLocation"]}}
            //include : ['TPiInventory',{"relation":'TPiInventory',"scope":{"include":["TInventoryLocation"]}}]
@@ -248,17 +251,44 @@ else{
 				//this.radioCheck = false
 				//this.refs['ref'+this.index].checked = false
 				this.index = undefined
+				this.setState({
+       weightLBS: 0
+ })
 			}
 
 	handleInputChange(e){
+debugger;
 				if(this.index != undefined){
 				this.selectedRow[e.target.id] =  e.target.value
+				if(e.target.id == "noOfBags"){
+					let val = e.target.value
+				//	debugger;
+					//this.addrow.weight = val * 24.99
+				 this.setState({
+					 weightBox : val * 25
+				 })
+				}
+				console.log(this.addRow)
 				}
 				else{
 
 					this.addRow[e.target.id] = e.target.value
+					if(e.target.id == "noOfBags"){
+						let val = e.target.value
+					//	debugger;
+						//this.addrow.weight = val * 24.99
+           this.setState({
+						 weightBox : val * 25
+					 })
+					}
 					console.log(this.addRow)
 				}
+				if(e.target.id == "weight"){
+				     this.setState({
+				      weightLBS : e.target.value
+				     })
+				    }
+
 			}
 	handleLocationChange(e){
 				if(this.index != undefined)
@@ -271,9 +301,13 @@ else{
 				}
 			}
 		onAdd(){
+debugger;
+var calcWeight = this.state.weightBox
+ if(this.state.weightBox){
+	 this.state.weightBox = ''
+ }
 
 			if(this.edit){
-				debugger
 				this.isPresent = false
 				console.log("BEFORE EDIT ADD",this.orignalTble)
 				this.state.rows[this.index] = this.selectedRow
@@ -285,6 +319,7 @@ else{
 				this.refs.locationName.value = null
 				this.refs.weight.value = null
 				this.forceUpdate();
+				this.state.rows[this.index].weight = calcWeight
 				this.dummyObj = _.cloneDeep(this.state.rows[this.index])
 				console.log(this.dummyObj)
 				let InvtLocation = this.dummyObj.TInventoryLocation
@@ -318,12 +353,14 @@ else{
 			else if(this.splRow) {
 			debugger
 			this.isSplitPresent = false
+			this.refs.weight.value = calcWeight
+			this.selectedRow.weight = calcWeight
 			if(this.refs.noOfBags.value != "" && this.refs.locationName.value != "" && this.refs.weight.value != ""){
 			if(this.refs.noOfBags.value != "0" && this.refs.weight.value != "0"){
 			if(this.row.TInventoryLocation.locationName != this.refs.locationName.value){
-			if(this.row.noOfBags > parseInt(this.selectedRow.noOfBags) && this.row.weight > parseInt(this.selectedRow.weight)){
+			if(this.row.noOfBags > parseInt(this.selectedRow.noOfBags)){
 			this.row.noOfBags = this.row.noOfBags - parseInt(this.selectedRow.noOfBags)
-			this.row.weight = this.row.weight - parseInt(this.selectedRow.weight)
+			this.row.weight = parseInt(this.row.weight) - this.selectedRow.weight
 			this.state.rows.splice(this.index,1,this.row,this.selectedRow)
 			this.refs.noOfBags.value = null
 			this.refs.locationName.value = null
@@ -392,6 +429,11 @@ else{
 	}
 	else {//debugger
 		 this.rowAdd = true
+
+		//  if(this.refs.noOfBags.value != "" &&	this.refs.locationName.value != "" && this.refs.weight.value != "")
+		//  {
+		//
+		//  }
 		 if(this.refs.noOfBags.value != "" &&	this.refs.locationName.value != "" && this.refs.weight.value != ""){
 		 this.addRow.added = true
 		 this.state.rows.push(_.cloneDeep(this.addRow))
@@ -417,6 +459,9 @@ else{
 		 this.refs.weight.value = null
 	}
 	this.index = undefined
+	this.setState({
+	  weightLBS: ''
+	 })
 
 }
 
@@ -493,9 +538,9 @@ else{
 	}
 
 		onSaveChange(e){
-debugger;
+      debugger;
 			var stamp = localStorage.getItem('stamp')
-	this.CID = this.props.lID == "null" ? this.props.lotId : this.props.lID
+	    this.CID = this.props.lID == "null" ? this.props.lotId : this.props.lID
 			var packStatus = localStorage.getItem('packagingFlag') ? localStorage.getItem('packagingFlag')  :'false' ;
 			if(this.addPostArray.length == 0 && this.editPostArray.length == 0 && this.splitAddPostArray.length == 0 && this.splitPostArray.length == 0 && this.addPostArray.length == 0 && this.deletePostArray.length == 0){
 
@@ -503,7 +548,8 @@ debugger;
 						axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"ININVENTORY"})
 						swal("Edited","Data Has Been Successfully Edited","success")
 						localStorage.removeItem('packagingFlag')
-						return;
+						window.location.reload()
+						return
 					}
 
 						swal("","Please press add before save","info")
@@ -516,6 +562,13 @@ debugger;
 				this.url = Base_Url+"TInventoryLocations/updatebagweight"
 				//console.log("POSTOBJECT",)
 				let editArray = this.editPostArray
+				if(this.state.notes != null)
+				{
+				for(var j in editArray){
+             editArray[j].Tinventory["notes"]= this.state.notes
+
+               }
+						 }
 				this.url = Base_Url+"TInventoryLocations/updatebagweight"
 				var urledit = Base_Url+"TInventoryLocations/updatebagweight"
 				editArray.forEach(function(data){
@@ -563,6 +616,16 @@ debugger;
 				this.url = Base_Url+"TInventoryLocations/updatebagweight"
 				let spliturl1 = Base_Url+"TInventoryLocations/updatebagweight"
 				let splitarr1 = this.splitPostArray
+					let splitarr2 = this.splitAddPostArray
+				if(this.state.notes != null)
+				{
+				for(var j in splitarr1){
+						 splitarr1[j].Tinventory["notes"] = this.state.notes
+						  splitarr2[j].Tinventory["notes"] = this.state.notes
+
+
+							 }
+						 }
 				splitarr1.forEach(function(data){
 					$.ajax({
 				type:"POST",
@@ -575,7 +638,8 @@ debugger;
 				})
 			this.url1 = Base_Url+"TInventoryLocations/addbagweight"
 			let spliturl2 = Base_Url+"TInventoryLocations/addbagweight"
-			let splitarr2 = this.splitAddPostArray
+
+
 			splitarr2.forEach(function(data){
 				$.ajax({
 				type:"POST",
@@ -627,6 +691,13 @@ debugger;
 				this.checked = this.props.checked
 				console.log("ADDPOSTARRAY",this.addPostArray)
 				let postArray = this.addPostArray
+				if(this.state.notes != null)
+				{
+				for(var j in postArray){
+             postArray[j].Tinventory["notes"]= this.state.notes
+
+               }
+						 }
 			this.url = Base_Url+"TInventoryLocations/addbagweight"
 			var urladd = Base_Url+"TInventoryLocations/addbagweight"
 			postArray.forEach(function(data){
@@ -672,7 +743,11 @@ debugger;
 				let deleteurl = Base_Url+"TInventoryLocations/deleteLocation"
 				deleteArr.forEach(function(data){
 				axios.delete(Base_Url+"TPiInventories/"+data.Tinventory).then((response)=>{
-				axios.delete(Base_Url+"TInventoryLocations/"+data.Tpinventory)
+				axios.delete(Base_Url+"TInventoryLocations/"+data.Tpinventory).then((response)=>{
+					window.location.reload()
+				})
+
+
 				})
 
 							})
@@ -686,6 +761,7 @@ debugger;
 					axios.put(Base_Url + "TPackagingInstructionLots/"+	this.CID,{status:"ININVENTORY",inInventory:this.totalBags})
 					swal("Edited","Data Has Been Successfully Edited","success")
 					localStorage.removeItem('packagingFlag')
+
 				}else {
 					axios.put(Base_Url + "TPackagingInstructionLots/"+	this.CID,{status:"PARTIALLYPACKED",inInventory : this.totalBags})
 					swal("Edited","Data Has Been Successfully Edited","success")
@@ -702,7 +778,17 @@ debugger;
 			//this.props.onSave()
 
 		}
+		noteChange(e)
+		{
+    this.setState({
+			notes : e.target.value
+		})
+		}
+
+
 		valdiateNoOfBags(e){
+			debugger;
+			this.addRow['weight'] = this.state.weightBox
 		/*	debugger
 			if(this.index == undefined){
 			if(Validator.isNull(this.addRow.noOfBags)){
@@ -819,7 +905,8 @@ debugger;
 
 
 }
-		return (
+
+	return (
 			 <div className=" col-lg-6 col-md-6 col-sm-6 col-xs-12">
 	 <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 active">
 	 	 <div className=" col-lg-7 col-md-7 col-sm-7 col-xs-12">
@@ -840,7 +927,7 @@ debugger;
                 </div>
 				<div className="form-group">
 					<div className=" col-md-3 col-sm-6 col-xs-6">
-					  <input type="number" onChange={this.handleInputChange} ref = "weight" onBlur = {(e) => {this.validateWeight(e)}} className={this.state.errors.noOfBags ? "form-control has error" : "form-control"} id="weight" placeholder="Weight"/>
+					  <input type="number" id="weightBox" value= {this.state.weightBox ? this.state.weightBox.toFixed(2) : ''} onChange={this.handleInputChange} ref = "weight" onBlur = {(e) => {this.validateWeight(e)}} className={this.state.errors.noOfBags ? "form-control has error" : "form-control"} id="weight" placeholder="Weight"/>
 					  <div className="error"><span></span></div>
 					</div>
                 </div>
@@ -882,7 +969,7 @@ debugger;
 			<div className=" col-lg-5 col-md-5 col-sm-5 col-xs-12">
 				<div className="table-responsive">
 				 <h5>&nbsp; </h5>
-					<TotalComponent totalRailcarWeight = {this.totalRailcarWeight} totalWeight = {this.totalWeight} />
+					<TotalComponent notesChange={this.noteChange}  weightLBS = {this.state.weightBox? this.state.weightBox : this.totalWeight } totalRailcarWeight = {this.totalRailcarWeight} totalWeight = {this.totalWeight} />
 				</div>
 
 				<label className="control control--checkbox " style={{display:this.state.showEdit}}>Packaging Complete

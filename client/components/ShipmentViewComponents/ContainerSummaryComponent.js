@@ -107,11 +107,12 @@ class ContainerSummaryComponent extends Component {
 
 
                     if (this.notArrivedTruckersList.length > 0) {
-                        this.notArrivedTruckersTable = _.map(this.notArrivedTruckersList, (notArr, index) => {
+                      this.arr = ["anurag"]
+                        this.notArrivedTruckersTable = _.map(this.arr, (notArr, index) => {
                             return (<tr key={index}>
                                 <td>NOT ARRIVED</td>
-                                <td>{notArr.TCompany.name}</td>
-                                <td>{this.notArrivedTruckersCount[index]}</td>
+                                <td></td>
+                                <td>{this.unAllocatedContainers - this.arrivedTruckersCount}</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -239,11 +240,13 @@ class ContainerSummaryComponent extends Component {
                        // })
                     }
 
-                        if(this.notArrivedTruckersList.length > 0){this.notArrivedTruckersTable = _.map(this.notArrivedTruckersList,(notArr,index) => {
+                        if(this.notArrivedTruckersList.length > 0){
+                          this.arr = ["anurag"]
+                          this.notArrivedTruckersTable = _.map(this.arr,(notArr,index) => {
                                                     return(<tr key = {index}>
                                                                                                   <td>NOT ARRIVED</td>
-                                                                                                  <td>{notArr.TCompany.name}</td>
-                                                                                                  <td>{this.notArrivedTruckersCount[index]}</td>
+                                                                                                 <td></td>
+                                                                                                  <td>{this.unAllocatedContainers - this.arrivedTruckersCount}</td>
                                                                                                   <td></td>
                                                                                                   <td></td>
                                                                                                   <td></td>

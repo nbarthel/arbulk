@@ -381,7 +381,7 @@ onClickRow(e){
 
         var listData =  _.map(this.state.viewData,(view,index) => {
                 if(view.isDomestic == 1){
-                               if(view.TContainerDomestic.length > 0){
+                               if(view.TContainerDomestic && view.TContainerDomestic.length > 0){
                                  var bookingNumber = (view.TShipmentDomestic && view.TShipmentDomestic.length>0 )? view.TShipmentDomestic[0].bookingNumber : ''
                                  var count = index
                                    var shipType = view.isDomestic == 1 ? "DOMESTIC" : "INTERNATIONAL"
@@ -455,11 +455,11 @@ onClickRow(e){
                                  )}
                               }
                   else if(view.isDomestic == 0){
-                  if(view.TContainerInternational.length > 0) {
+                  if(view.TContainerInternational && view.TContainerInternational.length > 0) {
                   var shipType = view.isDomestic == 0 ? "INTERNATIONAL" : "DOMESTIC"
-                  var bookingNumber = view.TShipmentInternational[0].bookingNumber
-                  var type = view.TShipmentInternational[0].TContainerType ? view.TShipmentInternational[0].TContainerType.name:'N/A'
-                  var steamship = view.TShipmentInternational[0].TSteamshipLine? view.TShipmentInternational[0].TSteamshipLine.name : 'N/A'
+                  var bookingNumber = (view.TShipmentInternational && view.TShipmentInternational.length>0)? view.TShipmentInternational[0].bookingNumber : 'NA'
+                  var type = (view.TShipmentInternational && view.TShipmentInternational.length > 0 && view.TShipmentInternational[0].TContainerType) ? view.TShipmentInternational[0].TContainerType.name:'N/A'
+                  var steamship = (view.TShipmentInternational && view.TShipmentInternational.length > 0 && view.TShipmentInternational[0].TSteamshipLine)? view.TShipmentInternational[0].TSteamshipLine.name : 'N/A'
                   var count = index
                        return (
                            <tbody key={index}>

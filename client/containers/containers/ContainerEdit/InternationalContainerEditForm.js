@@ -10,12 +10,7 @@ import { hashHistory } from 'react-router'
 	constructor(props){
     super(props);
     this.state = {
-      trucker : [{"id": 1,
-                  "name":"Trucker1"},
-                  {"id": 2,
-                  "name":"Trucker2"}],
-
-        }
+  }
         this.IntPostObj = { }
         this.shipmentId = ''
         this.truckerId = ''
@@ -41,6 +36,35 @@ import { hashHistory } from 'react-router'
    this.onSave = this.onSave.bind(this)
   }
   componentWillMount() {
+
+    var PIview = createDataLoader(InternationalContainerEditForm,{
+        queries:[{
+            endpoint: 'TPackagingInstructions',
+            filter: {
+                include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
+            }
+        }]
+    })
+    console.log("I have recieved props")
+    //debugger
+
+    var base = 'TCompanies'
+    this.urlTrucker = PIview._buildUrl(base, {
+        "where" : {type : "TRUCKER" }
+    })
+
+  axios.get(this.urlTrucker).then((response) => {
+        this.setState({
+            trucker: response.data
+        })
+
+    })
+        .catch(function(err){
+            console.log('eroor>>>>' , err)
+        })
+
+
+
      axios.get(Base_Url +"TCompanies").then((response) => {
             this.setState({
                 customer: response.data
@@ -189,6 +213,7 @@ onSave(e){
   this.IntPostObj.containerTypeConfirmed = this.ContainerTypeConfirmed
   this.IntPostObj.containerSteamshipLineConfirmed = this.ContainerSteamLineConfirmed
   this.IntPostObj.containerArrived = this.ContainerArrivedInt
+  this.IntPostObj.status = this.ContainerArrivedInt ? "ARRIVED" : "NOT ARRIVED"
   this.IntPostObj.sealNumber
   this.IntPostObj.modifiedBy = this.userID
   this.IntPostObj.modifiedOn = today
@@ -397,7 +422,7 @@ this.value = e.target.value
 			</fieldset>
 
             <div className="text_left">
-			  <div className="pull-left padding-20-last-l "><button type="button"  className="btn  btn-gray">CANCEL </button>  </div>
+			  <div className="pull-left padding-20-last-l "><button type="button"  className="btn  btn-gray" onClick={hashHistory.goBack}>CANCEL </button>  </div>
 			  <div className="pull-left padding-20-all"><button type="button" className="btn  btn-primary" onClick = {this.onSave}> SAVE </button> </div>
 
 			</div>

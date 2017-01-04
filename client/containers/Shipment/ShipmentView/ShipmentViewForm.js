@@ -47,21 +47,21 @@ class  ShipmentViewForm extends React.Component
            showRet: "",
            showDoc: "",
            showStatus: "",
-           showTrucker: ""  
+           showTrucker: ""
     }
             this.status
             this.handleChange = this.handleChange.bind(this);
              this.handleChange1 = this.handleChange1.bind(this);
             this.buttonDisplay = [ ]
             this.checkedCustomer = [ ]
-            this.checkedStatus = [ ] 
+            this.checkedStatus = [ ]
             this.checkedCompany = [ ]
             this.Query = {}
             this.Where = { }
             this.qArray = []
             this.selected = null
             this.piID = null
-			this.conFirmID = null
+		      	this.conFirmID = null
              this.ShipmentType = this.ShipmentType.bind(this)
              this.getDates = this.getDates.bind(this)
             this.onClickli = this.onClickli.bind(this)
@@ -72,7 +72,7 @@ class  ShipmentViewForm extends React.Component
             this.onStatusFilter = this.onStatusFilter.bind(this)
             this.onRemove = this.onRemove.bind(this)
            // this.onClick = this.onClick.bind(this)
-            this.onButtonRemove = this.onButtonRemove.bind(this) 
+            this.onButtonRemove = this.onButtonRemove.bind(this)
             this.onSearch = this.onSearch.bind(this)
             this.onTextChange = this.onTextChange.bind(this)
             this.saveView = this.saveView.bind(this)
@@ -82,7 +82,7 @@ class  ShipmentViewForm extends React.Component
            // this.handleOptionChange = this.handleOptionChange.bind(this)
             //this.handleOptionChange1 = this.handleOptionChange.bind(this)
             //this.onEdit =this.onEdit.bind(this)
-            this.qArray = [] 
+            this.qArray = []
             this.addToQueue = this.addToQueue.bind(this)
             //this.headerCheckboxChange = this.headerCheckboxChange.bind(this)
     }
@@ -106,8 +106,8 @@ onViewClick(e){
 }
 
  componentWillMount() {
-       
-  
+
+
   axios.get(Base_Url+"TCustomViews").then(response=>{
          this.setState({
              savedViews : response.data
@@ -120,7 +120,7 @@ onViewClick(e){
     })
 })
 
- 
+
 
  }
 
@@ -131,7 +131,7 @@ onViewClick(e){
         if(e.target.checked){
             this.conFirmID = e.target.value
             this.selected = e.target.id
-            this.confId = data.id 
+            this.confId = data.id
             this.status = value.status
             this.shipId = value.id
         }
@@ -165,9 +165,9 @@ onViewClick(e){
 
 
        onTextChange(e){
- 
-         var idValue = e.target.id 
-        
+
+         var idValue = e.target.id
+
           this.Query[idValue] = e.target.value
           console.log(this.Query)
         }
@@ -208,7 +208,7 @@ onClickli(e){
             this.buttonDisplay.push(e.target.value)
             console.log(this.checkedCompany)
             //console.log(this.props.buttonDisplay)
-           
+
            }
             else if (!e.target.checked){
 
@@ -220,15 +220,15 @@ onClickli(e){
               //console.log(this.Where)
               delete this.Where.Company
              }
-                let value = e.target.value               
+                let value = e.target.value
                 let index = this.buttonDisplay.indexOf(e.target.value)
                 if(index !== -1)
-                this.buttonDisplay = _.without(this.buttonDisplay,value)       
-                 this.forceUpdate() 
+                this.buttonDisplay = _.without(this.buttonDisplay,value)
+                 this.forceUpdate()
                    }
         }
         onCustomerFilter(e,customer){
-            
+
             if(e.target.checked){
             this.forceUpdate()
             this.checkedCustomer.push(e.target.id)
@@ -252,11 +252,12 @@ onClickli(e){
                 let value = e.target.value
                 let index = this.buttonDisplay.indexOf(e.target.value)
                 if(index !== -1)
-                this.buttonDisplay = _.without(this.buttonDisplay,value)       
+                this.buttonDisplay = _.without(this.buttonDisplay,value)
                   this.forceUpdate()
                    }
         }
         onStatusFilter(e,status){
+
             if(e.target.checked){
 
             this.checkedStatus.push(e.target.value);
@@ -266,7 +267,7 @@ onClickli(e){
                                                       value:this.checkedStatus})
             this.buttonDisplay.push(e.target.value)
             this.forceUpdate()
-            
+
             //console.log(this.props.buttonDisplay)
            /* console.log(this.Where)
             console.log(this.checkedStatus)
@@ -286,8 +287,8 @@ onClickli(e){
             //let value = e.target.value
                 let index = this.buttonDisplay.indexOf(e.target.value)
                 if(index !== -1)
-                this.buttonDisplay = _.without(this.buttonDisplay,value) 
-                //console.log(this.buttonDisplay)      
+                this.buttonDisplay = _.without(this.buttonDisplay,value)
+                //console.log(this.buttonDisplay)
                   this.forceUpdate()
                   }
         }
@@ -297,21 +298,20 @@ onClickli(e){
 
 }
     onRemove(e){
-        debugger;
         console.log("clicked")
         console.log("WHERE",this.Where)
-         this.buttonDisplay = [];
-         
+            this.buttonDisplay = [];
             this.checkedCustomer = []
             this.checkedStatus = []
             this.checkedCompany = []
             this.Query = []
-            delete this.Where.Company 
-            delete this.Where.Customer 
-            delete this.Where.status  
+            delete this.Where.Company
+            delete this.Where.Customer
+            delete this.Where.status
             delete this.state.viewData
             delete this.Where.CutofFilter
             delete this.Where.shipMentType
+
            delete this.startdate
            delete this.endDate
         delete this.Where.Query
@@ -483,6 +483,21 @@ onClickli(e){
 
                         });
                     }
+
+
+                  else if(serachObjLots && serachObjLots.length > 0){
+
+                       this.url = PIview._buildUrl(base, {
+                           //include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational",{"relation" : "TPackagingInstructionLots" ,"scope":{"where":{"or":serachObjLots}}}}]
+
+                           include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":"TShipmentType","where":{"and":serachObjLots}}},{"relation" :"TShipmentInternational","scope":{"where" : {"and" : serachObjLots },"include":["TSteamshipLine"]}},{"relation" : "TShipmentLots" ,"scope":{"include":"TPackagingInstructionLots"}}],
+                           where: {
+                               "and": serachObj
+                           }
+
+                       });
+                   }
+
                     else {
                         this.url = PIview._buildUrl(base, {
                             //include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational",{"relation" : "TPackagingInstructionLots" ,"scope":{"where":{"or":serachObjLots}}}}]
@@ -553,14 +568,14 @@ onClickli(e){
         axios.post(Base_Url + "TCustomViews", saveCustomView).then(response=> {
         swal('Success' , "Successfully Saved..." , 'success');
         console.log("response", response)
-        
+
          axios.get(Base_Url+"TCustomViews").then(response=>{
          this.setState({
              savedViews : response.data
              })
          })
        })
-    
+
             }
        else {
         swal('Error' , "Please Select Filter Options First" , 'error');
@@ -818,7 +833,7 @@ debugger;
       if(this.conFirmID != undefined){
         hashHistory.push('/Shipment/shipmentedit/'+this.conFirmID)
       }
-    
+
     else
     {
       swal("Selection Missing","Please Select A Checkbox","error")
@@ -839,7 +854,7 @@ else{
     })
 }
  break;
- case "Customer" : 
+ case "Customer" :
    if(this.state.showCustomer == ""){
     this.setState({
         showCustomer : "none"
@@ -851,7 +866,7 @@ else{
     })
 }
 break;
- case "PO" : 
+ case "PO" :
    if(this.state.showPO == ""){
     this.setState({
         showPO : "none"
@@ -863,7 +878,7 @@ else{
     })
 }
 break;
- case "Release" : 
+ case "Release" :
  console.log(e.target.name)
   if(this.state.showRelease == ""){
     this.setState({
@@ -876,7 +891,7 @@ else{
     })
 }
 break;
- case "Lot" : 
+ case "Lot" :
  console.log(e.target.name)
   if(this.state.showLot == ""){
     this.setState({
@@ -889,7 +904,7 @@ else{
     })
 }
 break;
- case "Material" : 
+ case "Material" :
  console.log(e.target.name)
   if(this.state.showMaterial == ""){
     this.setState({
@@ -902,7 +917,7 @@ else{
     })
 }
 break;
- case "Confmd" : 
+ case "Confmd" :
  console.log(e.target.name)
   if(this.state.showConfmd == ""){
     this.setState({
@@ -915,7 +930,7 @@ else{
     })
 }
 break;
- case "Booking" : 
+ case "Booking" :
  console.log(e.target.name)
   if(this.state.showBooking == ""){
     this.setState({
@@ -928,7 +943,7 @@ else{
     })
 }
 break;
- case "ShipmentType" : 
+ case "ShipmentType" :
  console.log(e.target.name)
   if(this.state.showShipmentType == ""){
     this.setState({
@@ -941,7 +956,7 @@ else{
     })
 }
 break;
- case "Cutoff" : 
+ case "Cutoff" :
  console.log(e.target.name)
   if(this.state.showCutoff == ""){
     this.setState({
@@ -954,7 +969,7 @@ else{
     })
 }
 break;
- case "Forwarder" : 
+ case "Forwarder" :
  console.log(e.target.name)
   if(this.state.showForwarder == ""){
     this.setState({
@@ -967,7 +982,7 @@ else{
     })
 }
 break;
- case "CntrSize" : 
+ case "CntrSize" :
  console.log(e.target.name)
   if(this.state.showCntrSize == ""){
     this.setState({
@@ -980,7 +995,7 @@ else{
     })
 }
 break;
- case "InInvt" : 
+ case "InInvt" :
  console.log(e.target.name)
   if(this.state.showInInvt == ""){
     this.setState({
@@ -993,7 +1008,7 @@ else{
     })
 }
 break;
- case "Qty" : 
+ case "Qty" :
  console.log(e.target.name)
   if(this.state.showQty == ""){
     this.setState({
@@ -1006,7 +1021,7 @@ else{
     })
 }
 break;
- case "Alloc" : 
+ case "Alloc" :
  console.log(e.target.name)
   if(this.state.showAlloc == ""){
     this.setState({
@@ -1019,7 +1034,7 @@ else{
     })
 }
 break;
- case "Enough" : 
+ case "Enough" :
  console.log(e.target.name)
   if(this.state.showEno == ""){
     this.setState({
@@ -1032,7 +1047,7 @@ else{
     })
 }
 break;
- case "Bags" : 
+ case "Bags" :
  console.log(e.target.name)
   if(this.state.showBags == ""){
     this.setState({
@@ -1045,7 +1060,7 @@ else{
     })
 }
 break;
- case "ERD" : 
+ case "ERD" :
  console.log(e.target.name)
   if(this.state.showERD == ""){
     this.setState({
@@ -1058,7 +1073,7 @@ else{
     })
 }
 break;
- case "Vessel" : 
+ case "Vessel" :
  console.log(e.target.name)
   if(this.state.showVessel == ""){
     this.setState({
@@ -1071,7 +1086,7 @@ else{
     })
 }
 break;
- case "SteamShip" : 
+ case "SteamShip" :
  console.log(e.target.name)
   if(this.state.showSteamShip == ""){
     this.setState({
@@ -1084,7 +1099,7 @@ else{
     })
 }
 break;
-case "PU" : 
+case "PU" :
  console.log(e.target.name)
   if(this.state.showPU == ""){
     this.setState({
@@ -1097,7 +1112,7 @@ else{
     })
 }
 break;
- case "Ret" : 
+ case "Ret" :
  console.log(e.target.name)
   if(this.state.showRet == ""){
     this.setState({
@@ -1110,7 +1125,7 @@ else{
     })
 }
 break;
- case "Doc" : 
+ case "Doc" :
  console.log(e.target.name)
   if(this.state.showDoc == ""){
     this.setState({
@@ -1123,7 +1138,7 @@ else{
     })
 }
 break;
- case "Status" : 
+ case "Status" :
  console.log(e.target.name)
   if(this.state.showStatus == ""){
     this.setState({
@@ -1136,7 +1151,7 @@ else{
     })
 }
 break;
- case "Trucker" : 
+ case "Trucker" :
  console.log(e.target.name)
   if(this.state.showTrucker == ""){
     this.setState({
@@ -1196,31 +1211,31 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                                                                         </div>
 
                                                                         <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
-                 <a href="javascript:void(0)" name = "ARB" onClick = {(e) => {this.onHideColumn(e,name)}}>ARB</a> -- 
-                 <a href="javascript:void(0)" name = "Customer" onClick = {(e) => {this.onHideColumn(e)}}>Customer</a> --- 
-                 <a href="javascript:void(0)" name = "PO" onClick={(e) => {this.onHideColumn(e)}}>PO</a> -- 
-                 <a href="javascript:void(0)" name = "Release" onClick={(e) => {this.onHideColumn(e)}}>Release</a> -- 
-                 <a href="javascript:void(0)" name = "Lot" onClick={(e) => {this.onHideColumn(e)}}>Lot#</a> -- 
-                 <a href="javascript:void(0)" name = "Material" onClick={(e) => {this.onHideColumn(e)}}>Material</a> -- 
-                 <a href="javascript:void(0)" name = "Confmd" onClick={(e) => {this.onHideColumn(e)}}>Confmd</a> -- 
-                 <a href="javascript:void(0)" name = "Booking" onClick={(e) => {this.onHideColumn(e)}}>Booking</a> -- 
-                 <a href="javascript:void(0)" name = "ShipmentType" onClick={(e) => {this.onHideColumn(e)}}>ShipmentType</a> -- 
-                 <a href="javascript:void(0)" name = "Cutoff" onClick={(e) => {this.onHideColumn(e)}}>Cutoff</a> -- 
-                 <a href="javascript:void(0)" name = "Forwarder" onClick={(e) => {this.onHideColumn(e)}}>Forwarder</a> -- 
-                 <a href="javascript:void(0)" name = "CntrSize" onClick={(e) => {this.onHideColumn(e)}}>#CntrSize</a> -- 
-                 <a href="javascript:void(0)" name = "InInvt" onClick={(e) => {this.onHideColumn(e)}}>In.Invt.</a> -- 
-                 <a href="javascript:void(0)" name = "Qty"onClick={(e) => {this.onHideColumn(e)}}>Qty</a> -- 
-                 <a href="javascript:void(0)" name = "Alloc" onClick={(e) => {this.onHideColumn(e)}}>Allocated</a> -- 
-                 <a href="javascript:void(0)" name = "Enough" onClick={(e) => {this.onHideColumn(e)}}>Enough</a> -- 
-                 <a href="javascript:void(0)" name = "Bags" onClick={(e) => {this.onHideColumn(e)}}>Bags</a> -- 
-                 <a href="javascript:void(0)" name = "ERD" onClick={(e) => {this.onHideColumn(e)}}>ERD</a> -- 
-                 <a href="javascript:void(0)" name = "Vessel" onClick={(e) => {this.onHideColumn(e)}}>Vessel</a> -- 
-                 <a href="javascript:void(0)" name = "SteamShip" onClick={(e) => {this.onHideColumn(e)}}>SteamShipLine</a> -- 
-                 <a href="javascript:void(0)" name = "PU" onClick={(e) => {this.onHideColumn(e)}}>PU</a> -- 
-                 <a href="javascript:void(0)" name = "Ret" onClick={(e) => {this.onHideColumn(e)}}>Return</a> -- 
-                 <a href="javascript:void(0)" name = "Doc" onClick={(e) => {this.onHideColumn(e)}}>Doc</a> -- 
-                 <a href="javascript:void(0)" name = "Status" onClick={(e) => {this.onHideColumn(e)}}>Status</a> -- 
-                 <a href="javascript:void(0)" name = "Trucker" onClick={(e) => {this.onHideColumn(e)}}>Trucker</a> 
+                 <a href="javascript:void(0)" name = "ARB" onClick = {(e) => {this.onHideColumn(e,name)}}>ARB</a> --
+                 <a href="javascript:void(0)" name = "Customer" onClick = {(e) => {this.onHideColumn(e)}}>Customer</a> ---
+                 <a href="javascript:void(0)" name = "PO" onClick={(e) => {this.onHideColumn(e)}}>PO</a> --
+                 <a href="javascript:void(0)" name = "Release" onClick={(e) => {this.onHideColumn(e)}}>Release</a> --
+                 <a href="javascript:void(0)" name = "Lot" onClick={(e) => {this.onHideColumn(e)}}>Lot#</a> --
+                 <a href="javascript:void(0)" name = "Material" onClick={(e) => {this.onHideColumn(e)}}>Material</a> --
+                 <a href="javascript:void(0)" name = "Confmd" onClick={(e) => {this.onHideColumn(e)}}>Confmd</a> --
+                 <a href="javascript:void(0)" name = "Booking" onClick={(e) => {this.onHideColumn(e)}}>Booking</a> --
+                 <a href="javascript:void(0)" name = "ShipmentType" onClick={(e) => {this.onHideColumn(e)}}>ShipmentType</a> --
+                 <a href="javascript:void(0)" name = "Cutoff" onClick={(e) => {this.onHideColumn(e)}}>Cutoff</a> --
+                 <a href="javascript:void(0)" name = "Forwarder" onClick={(e) => {this.onHideColumn(e)}}>Forwarder</a> --
+                 <a href="javascript:void(0)" name = "CntrSize" onClick={(e) => {this.onHideColumn(e)}}>#CntrSize</a> --
+                 <a href="javascript:void(0)" name = "InInvt" onClick={(e) => {this.onHideColumn(e)}}>In.Invt.</a> --
+                 <a href="javascript:void(0)" name = "Qty"onClick={(e) => {this.onHideColumn(e)}}>Qty</a> --
+                 <a href="javascript:void(0)" name = "Alloc" onClick={(e) => {this.onHideColumn(e)}}>Allocated</a> --
+                 <a href="javascript:void(0)" name = "Enough" onClick={(e) => {this.onHideColumn(e)}}>Enough</a> --
+                 <a href="javascript:void(0)" name = "Bags" onClick={(e) => {this.onHideColumn(e)}}>Bags</a> --
+                 <a href="javascript:void(0)" name = "ERD" onClick={(e) => {this.onHideColumn(e)}}>ERD</a> --
+                 <a href="javascript:void(0)" name = "Vessel" onClick={(e) => {this.onHideColumn(e)}}>Vessel</a> --
+                 <a href="javascript:void(0)" name = "SteamShip" onClick={(e) => {this.onHideColumn(e)}}>SteamShipLine</a> --
+                 <a href="javascript:void(0)" name = "PU" onClick={(e) => {this.onHideColumn(e)}}>PU</a> --
+                 <a href="javascript:void(0)" name = "Ret" onClick={(e) => {this.onHideColumn(e)}}>Return</a> --
+                 <a href="javascript:void(0)" name = "Doc" onClick={(e) => {this.onHideColumn(e)}}>Doc</a> --
+                 <a href="javascript:void(0)" name = "Status" onClick={(e) => {this.onHideColumn(e)}}>Status</a> --
+                 <a href="javascript:void(0)" name = "Trucker" onClick={(e) => {this.onHideColumn(e)}}>Trucker</a>
 </div>
 
                                                                         <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -1252,7 +1267,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                         showStatus = {this.state.showStatus}
                         showTrucker = {this.state.showTrucker}
                         />
-                                                                               
+
                                                                             </div>
 
                                                                             <div className="row-fluid pddn-50-btm padding-top-btm-xs">
@@ -1301,4 +1316,3 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
             }
             }
             export default ShipmentViewForm;
-   

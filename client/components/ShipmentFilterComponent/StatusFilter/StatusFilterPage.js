@@ -4,13 +4,13 @@ class StatusFilterPage extends React.Component {
     constructor(props){
         super(props);
        this.status = [{name:"UNCONFIRMED",id: 0},
-        {name:"CONFIRMED",id:1}]
+        {name:"CONFIRMED",id:1},{name:"QUEUED",id:2},{name:"LOADED",id:3},{name:"COMPLETED",id:4}]
 
-        
+
         this.checkedStatus = { }
 
-    
-        
+
+
     }
     /*onClick(e,status){
         if(e.target.checked){
@@ -28,7 +28,7 @@ class StatusFilterPage extends React.Component {
         else if (!e.target.checked){
          delete this.props.checkedStatus[e.target.id]
          //console.log(this.props.checkedStatus)
-            
+
         }
     }*/
     render() {
@@ -46,8 +46,8 @@ class StatusFilterPage extends React.Component {
                         <h6 className="pull-left text_left">STATUS  </h6>
                    </div>
                     <ul className="scroll">
-                       {stats} 
-                       
+                       {stats}
+
                     </ul>
                 </div>
 

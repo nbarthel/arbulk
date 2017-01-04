@@ -129,7 +129,7 @@ bookingChange(e){
                            include : ['TPackagingInstructionLots'],
                         "where": {"po_number":  e.target.value }
                      } );
-                 
+
                  axios.get(pLotUrl).then((response)=>{
                    this.setState({
                     lotNumber: response.data
@@ -154,7 +154,7 @@ bookingChange(e){
     }
    /* customerChange(e){
         this.props.editData.customerId = e.target.value
-        
+
          if(e.target.value == "1"){
             axios.get(Base_Url+"TPackagingInstructions/getPoListID1").then((response)=>{
                 this.setState({
@@ -173,13 +173,14 @@ bookingChange(e){
                 this.poNumber = _.map(this.state.poNumber,(poNum,index)=>{
             return <option key={index} id={poNum} value={poNum.poNumber}>{poNum.poNumber}</option>})
                 console.log("poNumber",this.state.poNumber)
-            })                
-            
+            })
+
             }
             this.forceUpdate()
     }*/
 
 onSave(){
+
      this.SIObj.customerId = this.props.editData.customerId
      this.SIObj.releaseNumber = this.props.editData.releaseNumber
      this.SIObj.numberOfContainers = this.props.editData.numberOfContainers
@@ -187,17 +188,59 @@ onSave(){
      this.SIObj.id = this.props.editData.id
      this.SIObj.isDomestic = this.props.editData.isDomestic
      this.SIObj.loactionId = this.props.editData.loactionId
-        this.id = this.props.editData.id 
+        this.id = this.props.editData.id
         this.postObj.SI = this.SIObj
         this.postObj.Domestic = this.props.editData.TShipmentDomestic
         this.postObj.lotInformation = this.props.editData.TShipmentLots
         this.postObj.Address = this.props.editData.TShipmentAddress
         axios.post(Base_Url+"TShipmentents/updateShipMentEntry",this.postObj).then((resonse)=>{
-            hashHistory.push("/Shipment/shipmentview")
-            swal("success","Successfully Edited","success")
+            var Lilength = this.postObj.lotInformation.length
+            if(this.postObj.lotInformation.length > 1) {
+                    this.postObj.lotInformation.forEach(function (element, index) {
+                            if (parseInt(element.noOfBags) == parseInt(element.TPackagingInstructionLots.inInventory)) {
+                                    axios.put(Base_Url + "TPackagingInstructionLots/" + element.piLotsId, {status: "SHIPPED"}).then((response)=> {
 
+                                    }).then((response)=> {
+
+                                            if (Lilength == index + 1) {
+                                                    swal("Posted", "Success", "success")
+                                                    hashHistory.push("/Shipment/shipmentview")
+                                            }
+                                    })
+                            }
+                            else{
+                              debugger;
+                                    if (Lilength == index + 1) {
+                                            swal("Posted", "Success", "success")
+                                            hashHistory.push("/Shipment/shipmentview")
+                                    }
+                            }
+    });
+            }
+            else if(this.postObj.lotInformation.length == 1){
+               var data = {status: "SHIPPED"}
+               var lotId = this.postObj.lotInformation[0].piLotsId
+
+               if (parseInt(this.postObj.lotInformation[0].noOfBags) == parseInt(this.postObj.lotInformation[0].TPackagingInstructionLots.inInventory)) {
+                   axios.put(Base_Url + "TPackagingInstructionLots/" + lotId, {status: "SHIPPED"}).then((response)=> {
+                       swal("Posted", "Success", "success")
+                       hashHistory.push("/Shipment/shipmentview")
+                   }).then((response)=> {
+
+                       //if (Lilength == index + 1) {
+                       //    swal("Posted", "Success", "success")
+                       //    hashHistory.push("/Shipment/shipmentview")
+                       //}
+                   })
+               }
+               else{
+                   swal("Posted","Success","success")
+                   hashHistory.push("/Shipment/shipmentview")
+               }
+
+            }
         })
-        console.log("Post Data",this.postObj)
+        //console.log("POSTOBJ",this.postObj)
 }
 bagsChange(e){
         this.props.editData.numberOfBags = e.target.value
@@ -227,10 +270,10 @@ componentDidMount() {
                     var base = 'TPackagingInstructionLots';
 
                     var pLotUrl = MIView._buildUrl(base, {
-                          
+
                         "where": {"pi_id":  this.props.editData.TShipmentLots[0].sId }
                      } );
-                 
+
                  axios.get(pLotUrl).then((response)=>{
                    this.setState({
                     lotNumber: response.data
@@ -248,7 +291,7 @@ componentDidMount() {
                 this.SIObj.id = this.props.editData.id
                 this.SIObj.isDomestic = this.props.editData.isDomestic
                 this.SIObj.loactionId = this.props.editData.loactionId
-                
+
             if(this.props.editData.TShipmentDomestic[0].requestedShipDate){
               document.getElementById("requestedShipDate").value = moment(this.props.editData.TShipmentDomestic[0].requestedShipDate).format('YYYY-MM-DD')
             }
@@ -267,8 +310,8 @@ componentDidMount() {
            var Purl = MIView._buildUrl(baseUrl,{
             "where" : {"customer_id": this.props.editData.customerId}
            })
-         
-         
+
+
          axios.get(Purl).then((response)=>{
             this.setState({
                 poNumber: response.data
@@ -276,7 +319,7 @@ componentDidMount() {
         this.poNumber = _.map(this.state.poNumber,(poNum,index)=>{
             return <option key={index} value={poNum.id}>{poNum.po_number}</option>})
                 console.log("poNumber",this.state.poNumber)
-                this.forceUpdate()          
+                this.forceUpdate()
          })
             }
             componentWillMount() {
@@ -338,6 +381,7 @@ componentDidMount() {
 
 render()
 {
+    console.log(this.props.editData)
 var Shipment = _.map(this.state.ShipmentType,(Shipment) =>
         {
             return <option key={Shipment.id} id = {Shipment.id} value={Shipment.id}>{Shipment.shipmentType}</option>
@@ -443,12 +487,15 @@ return (
                                             <div className="error"><span></span></div>
                                         </div>
                                     </div>
-                        <div className="form-group">
-                            <label for="Lot_Number" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">No. of Bags  for Lot</label>
-                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
-                                <input type="text" onChange = {this.lotBagsChange} disabled value = {this.props.editData.TShipmentLots[0].TPackagingInstructionLots.InInventory != null ? this.props.editData.TShipmentLots[0].TPackagingInstructionLots.InInventory : 0 } className="form-control" id="Lot_Number" placeholder="No. of Bags  for Lot"/>
-                                <div className="error"><span></span></div>
-                            </div>
+                                    <div className="form-group">
+                                         <label htmlFor="Lot_Number"
+                                                className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label" >No. of Bags
+                                             for Lot</label>
+
+                                         <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                          <span style = {{color: "red"}}>{this.props.editData.TShipmentLots[0].TPackagingInstructionLots.inInventory ? this.props.editData.TShipmentLots[0].TPackagingInstructionLots.inInventory : 0 }</span>
+                                             <div className="error"><span></span></div>
+                                         </div>
                         </div>
                         {this.props.editData.TShipmentLots.length > 1 ? editableLot : ''}
                     </fieldset>

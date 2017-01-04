@@ -58,7 +58,7 @@ class ContainerDetailsPage  extends React.Component{
             <div className="wrapper-inner">
             <div className="content-inside">
             <Header routes = {this.props.routes}/>
-                <ContainerDetailsForm isDomestic={this.type}     containerTable ={this.state.result} containerId ={this.containerId} isDomestic = {this.props.params.isDomestic}/>
+                <ContainerDetailsForm isDomestic={this.type}  shipID = {(this.state.result && this.state.result.TShipmentent )?this.state.result.TShipmentent.id : undefined}   containerTable ={this.state.result} containerId ={this.containerId} isDomestic = {this.props.params.isDomestic}/>
   				</div>
 
                 <Footer />

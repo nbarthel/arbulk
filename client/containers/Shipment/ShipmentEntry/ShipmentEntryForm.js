@@ -1205,23 +1205,16 @@ onSubmitContainer(e){
 
 
                                     <div className="form-group">
-                                        <label htmlFor="Lot_Number"
-                                               className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">No. of Bags
-                                            for Lot</label>
+                                         <label htmlFor="Lot_Number"
+                                                className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label" >No. of Bags
+                                             for Lot</label>
 
-                                        <div className="col-lg-6    col-sm-11 col-xs-11 ">
-                                            <input type="text"
-                                                   className="form-control"
-                                                   id="Lot_Number"
-                                                   placeholder="No. of Bags  for Lot"
-                                                   name="noOfBags"
-                                                   disabled
-                                                   value = {this.inInventoryBags}
-                                                   />
+                                         <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                          <span style = {{color: "red"}}>{this.inInventoryBags ? this.inInventoryBags : '0'}</span>
 
 
-                                            <div className="error"><span></span></div>
-                                        </div>
+                                             <div className="error"><span></span></div>
+                                         </div>
                                         <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1 add_btn text_left">
                                             {this.state.materialInfoList.length> 0 ? <i className="fa-2x fa fa-minus base_color" onClick={this.onMinus} aria-hidden="true"></i> : null}
 
@@ -1602,12 +1595,11 @@ onSubmitContainer(e){
                                                             id="No_of_Bages_Pallat"
                                                             placeholder="Ship to Zip Code"
                                                             name="zipCode"
-                                                            onBlur = {this.onZipBlur}
+
                                                             onChange={this.DomesticChange1}
                                                          />
 
-                                                     <div className="error"><span>{this.zipCodeError != '' ? this.zipCodeError : ''}</span></div>
-                                                 </div>
+                                               </div>
                                                 {this.state.DomesticInfoList.length> 0 ? <i className="fa-2x fa fa-minus base_color" onClick={this.onDomesticShipMinus} aria-hidden="true"></i> : null}
                                             </div>
                                             <div className="form-group">

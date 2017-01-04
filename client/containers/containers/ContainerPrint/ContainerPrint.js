@@ -23,8 +23,7 @@ export default class ContainerPrint extends React.Component {
 
     }
     componentWillMount(){
-
-        var InventView = createDataLoader(ContainerPrint,{
+       var InventView = createDataLoader(ContainerPrint,{
             queries:[{
                 endpoint: 'TShipmentents',
                 filter: {
@@ -32,13 +31,13 @@ export default class ContainerPrint extends React.Component {
                 }
             }]
         })
-        console.log("I have recieved props")
+
         //debugger
 
         //var base = 'TPackagingInstructions'+'/'+this.props.params.id;
         var base = 'TContainerInternationals/'+this.id;
         this.url = InventView._buildUrl(base, {
-            "include" : {"relation": "TShipmentent","scope":{"include":["TShipmentDomestic" ,{"relation" :"TShipmentInternational" , "scope" :{"include" : "TSteamshipLine"}},"TShipmentLots","TCompany","TLocation"]}}
+            "include" : ["TContainerLoad",{"relation": "TShipmentent","scope":{"include":["TShipmentDomestic" ,{"relation" :"TShipmentInternational" , "scope" :{"include" : "TSteamshipLine"}},"TShipmentLots","TCompany","TLocation"]}}]
         })
         $.ajax({
             url: this.url,
@@ -57,6 +56,18 @@ export default class ContainerPrint extends React.Component {
 
 
     }
+
+ getSum(arr){
+    var total = 0
+    for ( var i = 0; i<arr.length; i++ ) {
+        total += arr[i].noOfBags
+    }
+    return total
+
+ }
+
+
+
     getPackagingInfo(PiLotId){
         var ShipmentView = createDataLoader(ContainerPrint,{
             queries:[{
@@ -67,7 +78,7 @@ export default class ContainerPrint extends React.Component {
             }]
         })
         this.url1 = ShipmentView._buildUrl('TPackagingInstructionLots/'+PiLotId, {
-            "include" : {"relation" :"TPackagingInstructions" ,"scope":{"include":"TPackagingMaterial"}}
+            "include" : {"relation" :"TPackagingInstructions" ,"scope":{"include":["TPackagingMaterial" ,"TPalletType"]}}
         })
         $.ajax({
             url: this.url1,
@@ -128,6 +139,14 @@ export default class ContainerPrint extends React.Component {
         //hashHistory.push('/Shipment/shipmentPrint/')
     }
     render(){
+      if(this.state.viewData && this.state.viewData.TContainerLoad && this.state.viewData.TContainerLoad.length > 0){
+        var totalBags = this.getSum(this.state.viewData.TContainerLoad)
+        var totalPallets = Math.ceil(totalBags / this.state.PIData.TPackagingInstructions.bags_per_pallet)
+        var gW = totalBags*(this.state.PIData.TPackagingInstructions.TPackagingMaterial.avarageMaterialWeight) + totalBags *(this.state.PIData.TPackagingInstructions.TPackagingMaterial.emptyWeight) + totalPallets *(this.state.PIData && this.state.PIData.TPackagingInstructions && this.state.PIData.TPackagingInstructions.TPalletType ? this.state.PIData.TPackagingInstructions.TPalletType.weight : 1)
+        var displaygW = gW + ""
+
+        console.log("Total Bagssssssssssssssssssssss" , totalBags , gW )
+      }
         return (
             <div style={{margin:'0 auto',textAlign :'center'}}>
                 <div className="bill-of-completed">
@@ -175,8 +194,8 @@ export default class ContainerPrint extends React.Component {
                                                     C/O {(this.state.viewData && this.state.viewData.TShipmentent && this.state.viewData.TShipmentent.TShipmentInternational && this.state.viewData.TShipmentent.TShipmentInternational.length > 0 && this.state.viewData.TShipmentent.TShipmentInternational[0].TSteamshipLine) ? this.state.viewData.TShipmentent.TShipmentInternational[0].TSteamshipLine.name : ""}
 
                                                     {" "}RETURN LOADS TO APM
-                                                    CONTAINER TARE WT: 3,810 KG
-                                                    VGM = 29,009 KG
+                                                    CONTAINER TARE WT: {this.state.viewData.tareWeight} KG,
+                                                    VGM = {this.state.viewData.tareWeight + gW} KG
                                                 </strong>
                                             </td>
                                         </tr>
@@ -237,17 +256,17 @@ export default class ContainerPrint extends React.Component {
                                             <td>WEIGHT (SUBJECT TO CORR.) </td>
                                         </tr>
                                         <tr className="bill_details_body " style={{borderBottom: '0px'}}>
-                                            <td className="border_right font-12"><p>{this.state.viewData.TShipmentent.numberOfBags}</p></td>
+                                            <td className="border_right font-12"><p>{totalBags}</p></td>
                                             <td className="border_right font-12">
-                                                <p>BAGS OF HDPE  {this.state.PIData.TPackagingInstructions.TPackagingMaterial.packagingName}<span>NW:</span> </p>
-                                                <p>LOT#&nbsp;{this.state.PIData.lot_number} <span>TW:</span></p>
+                                                <p>BAGS OF {this.state.PIData.TPackagingInstructions.material}<span>NW:</span> </p>
+                                                <p>LOT#&nbsp;{this.state.PIData.lot_number} <span>TW:{}</span></p>
                                                 <p><span>GW:</span></p>
                                                 <p>***BAGS ARE 25 KG NET WT***</p>
                                             </td>
                                             <td className="font-12 value" >
-                                                <span><NumberFormat value={parseInt(this.state.viewData.TShipmentent.numberOfBags)*25} displayType={'text'} thousandSeparator={true} suffix={' KG'}/></span>
-                                                <span><NumberFormat value={parseInt(this.state.PIData.weight)} displayType={'text'} thousandSeparator={true} suffix={' KG'}/></span>
-                                                <span><NumberFormat value={(parseInt(this.state.viewData.TShipmentent.numberOfBags)*25) + parseInt(this.state.PIData.weight)} displayType={'text'} thousandSeparator={true} suffix={' KG'}/></span>
+                                                <span>{totalBags * this.state.PIData.TPackagingInstructions.TPackagingMaterial.avarageMaterialWeight}KG</span>
+                                                <span>{this.state.viewData.tareWeight}KG</span>
+                                                <span>{gW}KG</span>
                                             </td>
                                         </tr>
                                     </tbody>

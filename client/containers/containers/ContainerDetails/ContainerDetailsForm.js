@@ -45,7 +45,104 @@ class ContainerDetailsForm extends React.Component {
         this.onRightClick = this.onRightClick.bind(this)
         this.onSaveClick = this.onSaveClick.bind(this)
         this.cIArray =[]
+        this.noOfContainers = undefined
+        this.domSum = undefined
+        this.intSum = undefined
+        this.statusArray = []
+        this.sameStatus = false
     }
+
+    allValuesSame(arr) {
+
+       for(var i = 1; i < arr.length; i++)
+       {
+           if(arr[i] !== arr[0])
+               return false;
+       }
+
+       return true;
+   }
+
+shipmentStatus(){
+  debugger;
+this.sID = this.props.shipID
+ var CDView = createDataLoader(ContainerDetailsForm, {
+     queries:[{
+         endpoint: 'TPackagingIntstructions',
+         filter:{
+             include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
+         }
+     }]
+ })
+
+var domStat = []
+var intStat = []
+  let base = "TShipmentents/"+this.props.shipID
+   this.containerUrl = CDView._buildUrl(base,{
+    "include": ["TContainerInternational" , "TContainerDomestic"]
+
+  })
+
+ console.log("container url" , this.containerUrl)
+
+
+ axios.get(this.containerUrl).then((response)=>{
+ this.noOfContainers = response.data.numberOfContainers
+ this.domSum = (response.data && response.data.TContainerDomestic) ? response.data.TContainerDomestic.length : 0
+ this.intSum = (response.data && response.data.TContainerInternational) ? response.data.TContainerInternational.length : 0
+ console.log("saasasa" ,this.noOfContainers ,this.domSum , this.intSum)
+if(this.domSum> 0){
+   domStat = response.data.TContainerDomestic.map(function(obj){
+    return (obj.status)
+
+
+  });
+
+}
+if(this.intSum){
+   intStat = response.data.TContainerInternational.map(function(obj){
+    return (obj.status)
+
+  });
+}
+
+this.statusArray  = domStat.concat(intStat)
+if(this.statusArray.length > 0){
+  this.sameStatus = this. allValuesSame(this.statusArray)
+}
+
+console.log("status Array..." , this.statusArray)
+if(this.sameStatus && (this.noOfContainers == parseInt(this.domSum) + parseInt(this.intSum)) )
+{
+if(this.props.isDomestic == "1"){
+  let shipId = this.props.containerTable.TShipmentent.TShipmentDomestic[0].id
+  var stat = this.statusArray[0] == "DELIVERED" ? "COMPLETED" : this.statusArray[0]
+  axios.put(Base_Url + "TShipmentDomestics/"+ shipId , {status : stat}).then((response)=>{
+    swal("Done" , "Saved Successfully" , "info")
+  //hashHistory.push('/Container/containerview')
+
+  })
+}
+else if(this.props.isDomestic == "0" ){
+  debugger;
+  let shipInt = this.props.containerTable.TShipmentent.TShipmentInternational[0].id
+    var stat = this.statusArray[0] == "DELIVERED" ? "COMPLETED" : this.statusArray[0]
+  axios.put(Base_Url + "TShipmentInternationals/"+ shipInt , {status : stat}).then((response)=>{
+    swal("Done" , "Saved Successfully" , "info")
+//  hashHistory.push('/Container/containerview')
+  })
+}
+else{
+  swal("Done" , "Saved Successfully" , "info")
+//  hashHistory.push('/Container/containerview')
+}
+}
+
+ })
+
+
+}
+
     onLeftClick(e){
 
     if(Object.keys(this.obj).length > 0){
@@ -65,6 +162,7 @@ class ContainerDetailsForm extends React.Component {
     }
     handleCheckbox(e){
 //"addloaded"
+debugger;
         console.log(this.props.containerTable.containerLoaded)
 
       if(e.target.checked){
@@ -80,8 +178,25 @@ class ContainerDetailsForm extends React.Component {
               return;
           }
 
+            if(e.target.name == "containerInTransit" && this.props.containerTable.containerLoaded)
+            {
+              this.SaveObj[e.target.name] = 1
+              this.SaveObj["containerLoaded"] = 1
+            }
+            if(e.target.name == "containerDelivered" && this.props.containerTable.containerInTransit)
+            {
+              this.SaveObj[e.target.name] = 1
+              this.SaveObj["containerLoaded"] = 1
+              this.SaveObj["containerInTransit"] = 1
+            }
 
-            this.SaveObj[e.target.name] = 1
+            if(e.target.name == "containerLoaded" && !this.props.containerTable.containerInTransit)
+            {
+              this.SaveObj[e.target.name] = 1
+
+            }
+
+            //this.SaveObj[e.target.name] = 1
           }
             else if(!e.target.checked){
               this.SaveObj[e.target.name] = 0
@@ -99,6 +214,11 @@ class ContainerDetailsForm extends React.Component {
     }
     componentDidMount(){
      this.containertable = this.props.containerTable
+
+
+
+
+
      //this.load_cont_Id  = this.props.containerTable.id
      //this.lotId = (this.props.containerTable && this.props.containerTable.TShipmentLots && this.props.containerTable.TShipmentLots.length>0 && this.props.containerTable.TShipmentLots[0].TPackagingInstructionsLots ) ? this.props.containerTable.TShipmentLots[0].TPackagingInstructionsLots.id : ''
       /*      this.url = Base_Url+"TInventoryLocations/addbagweight"
@@ -323,6 +443,7 @@ changeLot(e){
       }
     }
     onSaveClick(e){
+      debugger
       if(this.SaveObj.containerDelivered){
           this.SaveObj.status = "DELIVERED"
       }
@@ -337,6 +458,7 @@ changeLot(e){
 
             axios.put(Base_Url+"TContainerInternationals/" + this.props.containerTable.id ,this.SaveObj).then((response)=>{
                  swal("Done" , "Saved Successfully" , "info")
+                this.shipmentStatus()
                  hashHistory.push('/Container/containerview')
                 this.setState({
                     editing: false
@@ -345,7 +467,8 @@ changeLot(e){
         }
         else if(this.props.isDomestic == 1){
             axios.put(Base_Url+"TContainerDomestics/" + this.props.containerId ,this.SaveObj).then((response)=>{
-                 swal("Done" , "Saved Successfully" , "info")
+
+                  this.shipmentStatus()
                  hashHistory.push('/Container/containerview')
                 this.setState({
                     editing: false
@@ -489,7 +612,7 @@ changeLot(e){
             <div className=" col-lg-12 "><hr/></div>
                     <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <div className="text_left">
-                         <div className="pull-left margin-10-last-l"><button type="button" id="back" className="btn  btn-gray text-uppercase"> BACK</button> </div>
+                         <div className="pull-left margin-10-last-l"><button type="button" id="back" className="btn  btn-gray text-uppercase" onClick={hashHistory.goBack}> BACK</button> </div>
                             {
                                /* <div className="pull-left margin-10-all">
                                     <button type="button" className="btn  btn-gray text-uppercase">Add to queue</button>

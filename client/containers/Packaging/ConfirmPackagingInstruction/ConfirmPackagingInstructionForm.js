@@ -35,26 +35,54 @@ onClick(e){
 	}
 }
 onSubmit(e){
-	if(this.check.length < 12){
+	debugger;
+	if(this.props.data.TPackagingInstructions.TPackagingType.packagingType.toLowerCase() == "bags"  && this.check.length < 14)
+{
 		sweetAlert("Submit","Please Select All The Fields!!!","error")
+		return
 	}
+
+	else if(this.check.length < 13){
+		sweetAlert("Submit","Please Select All The Fields!!!","error")
+		return
+	}
+
 	else {
 		let confirmation = {status:"CONFIRMED"}
+		let confirmationReady = {status:"READY"}
 		//console.log(confirmation)
 		var putUrl = Base_Url + "TPackagingInstructionLots/"+this.props.id
-	axios.put(putUrl , confirmation).then((response)=>{
-		 swal({
-                      title: "Success",
-                      text: "Order has been Confirmed",
-                      type: "success",
-                      showCancelButton: true,
-      },
-              function(isConfirm){
-              hashHistory.push('/Packaging/packaginginstview/')
+		if(this.props.data.railcar_arrived_on!= null){
+			axios.put(putUrl , confirmationReady).then((response)=>{
+				 swal({
+													title: "Success",
+													text: "Order has been Confirmed",
+													type: "success",
+													showCancelButton: true,
+					},
+									function(isConfirm){
+									hashHistory.push('/Packaging/packaginginstview/')
 
-}
-);
-	})
+		}
+		);
+			})
+		}
+		else{
+			axios.put(putUrl , confirmation).then((response)=>{
+				 swal({
+													title: "Success",
+													text: "Order has been Confirmed",
+													type: "success",
+													showCancelButton: true,
+					},
+									function(isConfirm){
+									hashHistory.push('/Packaging/packaginginstview/')
+
+		}
+		);
+			})
+		}
+
 
 	}
 
@@ -319,14 +347,19 @@ render(){
 					<fieldset className="scheduler-border">
 						<legend className="scheduler-border">LABEL INFORMATION</legend>
 						<div>{this.props.data ? this.props.data.TPackagingInstructions.custom_label : ''} </div>
+
 					</fieldset>
+
 					<fieldset className="scheduler-border">
 						<legend className="scheduler-border">Notes</legend>
 						<div>{this.props.data ? this.props.data.TPackagingInstructions.notes : ''} </div>
 					</fieldset>
 				</div>
-				<div className=" col-lg-4 col-md-4 col-sm-4 col-xs-4 pddn-10-top">
-  	</div>
+				<div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">
+					<label className="control control--checkbox ">Confirmed
+						<input type="checkbox" onClick={this.onClick} id={this.props.data.TPackagingInstructions.custom_label}/><div className="control__indicator"></div>
+					</label>
+					</div>
 
 
 		<div className=" col-lg-4 col-md-4 col-sm-4 col-xs-8">

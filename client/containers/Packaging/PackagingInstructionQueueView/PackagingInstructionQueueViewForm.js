@@ -319,8 +319,7 @@ componentWillMount(){
         <div className="padding-top-btm-xs">
         <div className="padding-20-all pull-right"><button type="button" id="edit_btn" onClick={hashHistory.goBack}   className="btn  btn-gray">BACK</button></div>
 
-            <div className="padding-20-last-r pull-right"><button type="button"    className="btn  btn-primary">PRINT QUEUE</button></div>
-         <div className="padding-20-all pull-right"><button type="button" id="edit_btn" onClick={this.callonEdit}   className="btn  btn-gray">EDIT QUEUE</button></div>
+   <div className="padding-20-all pull-right"><button type="button" id="edit_btn" onClick={this.callonEdit}   className="btn  btn-gray">EDIT QUEUE</button></div>
 
         </div>
 

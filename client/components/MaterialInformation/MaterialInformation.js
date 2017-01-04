@@ -8,7 +8,7 @@ export default class MaterialInformation extends React.Component {
     this.lotNumber
     this.inInventoryBags = 0
     this.state = {
-       
+
     }
   }
    onPOChange(e){
@@ -29,32 +29,32 @@ export default class MaterialInformation extends React.Component {
                            include : ['TPackagingInstructionLots'],
                         "where": {"po_number":  e.target.value }
                      } );
-                 
+
                  //debugger
                  axios.get(pLotUrl).then((response)=>{
                this.setState({
                 propLotNum:response.data
                })
-            
+
         this.lotNumber = _.map(this.state.propLotNum[0].TPackagingInstructionLots,(lotNum,index) => {
             return <option key = {index} id = {lotNum.id} value = {lotNum.id}>{lotNum.lot_number}</option>
         })
       this.inInventoryBags = 0
-           this.forceUpdate() 
+           this.forceUpdate()
                  })
    }
    onLotChange(e){
         this.props.comPo.lot_id = e.target.value
         console.log("COMPPO",this.props.comPo)
-        let selectedValue = e.target.selectedIndex - 1 
-        this.inInventoryBags = this.state.propLotNum[0].TPackagingInstructionLots[selectedValue].inInventory 
+        let selectedValue = e.target.selectedIndex - 1
+        this.inInventoryBags = this.state.propLotNum[0].TPackagingInstructionLots[selectedValue].inInventory
         this.forceUpdate()
    }
     render(){
         var poNumber = _.map(this.props.poNumber,(poNum,index)=>{
             return <option key={index} id={poNum} value={poNum.poNumber}>{poNum.poNumber}</option>
         })
-        
+
        return (
             <div>
 
@@ -68,7 +68,7 @@ export default class MaterialInformation extends React.Component {
                                 defaultValue = ""
                                 onChange = {(e) => {this.onPOChange(e)}}>
                                 <option value = "" disabled>Purchase Order Number</option>
-                               
+
                            {this.props.poNumber}
                         </select>
                         <div className="error"><span></span></div>
@@ -116,4 +116,3 @@ export default class MaterialInformation extends React.Component {
         )
     }
 }
-

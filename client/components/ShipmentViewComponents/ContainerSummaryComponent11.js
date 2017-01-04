@@ -22,10 +22,10 @@ class ContainerSummaryComponent extends Component {
         this.notArrivedContainers = 0
     }
     componentWillReceiveProps(nextProps) {
-            if(nextProps.SId != null){     
-                    this.shipmentId = nextProps.SId 
-            
-                    
+            if(nextProps.SId != null){
+                    this.shipmentId = nextProps.SId
+
+
                                var CSView = createDataLoader(ContainerSummaryComponent,{
                               queries:[{
                                 endpoint: 'TPackagingInstructions',
@@ -36,7 +36,7 @@ class ContainerSummaryComponent extends Component {
                             })
                                var base = "TShipmentents" + '/' + this.shipmentId
                                this.url = CSView._buildUrl(base,{
-                                "include" : [{"relation": "TContainerDomestic","scope":{"include":"TCompany"}},{"relation": "TContainerInternational","scope":{"include":["TCompany","TContainerLoad"]}}]
+                                "include" : [{"relation": "TContainerAllocation","scope":{"relation":"TCompany" , "scope":{"where" : {"type":"TRUCKER"}}}},{"relation": "TContainerDomestic","scope":{"include":["TCompany","TContainerLoad"]}},{"relation": "TContainerInternational","scope":{"include":["TCompany","TContainerLoad"]}}]
                                })
                                console.log(this.url)
                                axios.get(this.url).then((response)=>{
@@ -44,8 +44,10 @@ class ContainerSummaryComponent extends Component {
                                     CSummaryData : response.data
                                 })
                                })
-            }            }    
+            }            }
 	render() {
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>" , this.arrivedTruckersList)
+        this.arrivedLength = (this.arrivedTruckersList && this.arrivedTruckersList.length > 0) ? this.arrivedTruckersList.length : 0
         this.allocatedTruckersTable
         this.arrivedTruckersTable
         this.notArrivedTruckersTable
@@ -56,197 +58,143 @@ class ContainerSummaryComponent extends Component {
         this.allocatedContainers = 0
         this.arrivedContainers = 0
         this.notArrivedContainers = 0
+        console.log("props" , this.props.allocated)
         if(this.props.SId != null){
             console.log("CSUMMDATA",this.state.CSummaryData)
-            if(this.state.CSummaryData != undefined && (this.state.CSummaryData.TContainerDomestic.length != 0 || this.state.CSummaryData.TContainerInternational.length != 0)){
-                if(this.props.isDomestic == 0){
-                    this.unAllocatedContainers = this.state.CSummaryData.numberOfContainers - this.state.CSummaryData.TContainerInternational.length
-                    this.truckerCount =_.toArray(_.countBy(this.state.CSummaryData.TContainerInternational,'truckerId'))
-                        this.sortedTruckerList = _.sortBy(this.state.CSummaryData.TContainerInternational,'truckerId')
-                       console.log("sorted",this.sortedTruckerList)
-                        for(var k = 0; k < this.sortedTruckerList.length; k++){
-                            if(this.sortedTruckerList[k].containerArrived == 0){
-                                this.notArrivedTruckers.push(this.sortedTruckerList[k]) 
-                            }
-                            else if(this.sortedTruckerList[k].containerArrived == 1){
-                                this.arrivedTruckers.push(this.sortedTruckerList[k])
-                            }
+            if(this.state.CSummaryData != undefined && (this.state.CSummaryData.TContainerDomestic.length == 0 || this.state.CSummaryData.TContainerInternational.length ==0) ){
+                this.unAllocatedContainers = this.state.CSummaryData.numberOfContainers
+            }
+
+            if(this.state.CSummaryData != undefined && (this.state.CSummaryData.TContainerDomestic.length != 0 || this.state.CSummaryData.TContainerInternational.length != 0 || this.props.allocatedTruckers.length > 0 || this.state.CSummaryData.TContainerAllocation.length>0)){
+                if(this.props.isDomestic == 0) {
+                   // this.unAllocatedContainers = this.state.CSummaryData.numberOfContainers - this.state.CSummaryData.TContainerInternational.length
+                    this.truckerCount = _.toArray(_.countBy(this.state.CSummaryData.TContainerInternational, 'truckerId'))
+                    this.sortedTruckerList = _.sortBy(this.state.CSummaryData.TContainerInternational, 'truckerId')
+                    console.log("sorted", this.sortedTruckerList)
+                    for (var k = 0; k < this.sortedTruckerList.length; k++) {
+                        if (this.sortedTruckerList[k].containerArrived == 0) {
+                            this.notArrivedTruckers.push(this.sortedTruckerList[k])
                         }
-                        this.arrivedTruckersCount = _.toArray(_.countBy(this.arrivedTruckers,'truckerId'))
-                        this.notArrivedTruckersCount = _.toArray(_.countBy(this.notArrivedTruckers,'truckerId'))
-                        this.notArrivedTruckersList = _.uniqBy(this.notArrivedTruckers,'truckerId')
-                        this.arrivedTruckersList = _.uniqBy(this.arrivedTruckers,'truckerId')
-                        console.log(this.notArrivedTruckers)
-                        this.allocatedTruckers = _.uniqBy(this.sortedTruckerList,'truckerId')
-                      
-                        console.log(this.allocatedTruckers,this.truckerCount)
-                       this.LoadedTruckerList = _.map(this.sortedTruckerList,(loadedArr,index) => { 
-                                                                                  
-                                                if(loadedArr.containerLoaded == 1 || loadedArr.containerInTransit == 1 || loadedArr.containerDelivered == 1){
-                                                  return(_.map(loadedArr.TContainerLoad,(contLoaded,loadedIndex) => {
-                                                                                                      return (<tr key = {loadedIndex}>
-                                                                                            <td>Loaded</td>
-                                                                                           <td>{loadedArr.TCompany.name}</td>
-                                                                                           <td>{1}</td>
-                                                                                           <td>{loadedArr.containerNumber}</td>
-                                                                                           <td>{loadedArr.chasisNumber}</td>
-                                                                                           <td>{loadedArr.sealNumber}</td>
-                                                                                           <td>{contLoaded.noOfBags}</td>
-                                                                                           <td>{contLoaded.weight}</td>
-                                                                                           <td></td>
-                                                                                           </tr> 
-                                                                                                        )
-                                                                                                    })
-                                                                                                  )}
-                       })
-                       this.InTransitTruckerList = _.map(this.sortedTruckerList,(inTransitArr,index) => { 
-                                                                                  
-                                                if(inTransitArr.containerInTransit == 1 || inTransitArr.containerDelivered == 1){
-                                                  return(_.map(inTransitArr.TContainerLoad,(contLoaded,loadedIndex) => {
-                                                                                                      return (<tr key = {loadedIndex}>
-                                                                                            <td>INTRANSIT</td>
-                                                                                           <td>{inTransitArr.TCompany.name}</td>
-                                                                                           <td>{1}</td>
-                                                                                           <td>{inTransitArr.containerNumber}</td>
-                                                                                           <td>{inTransitArr.chasisNumber}</td>
-                                                                                           <td>{inTransitArr.sealNumber}</td>
-                                                                                           <td>{contLoaded.noOfBags}</td>
-                                                                                           <td>{contLoaded.weight}</td>
-                                                                                           <td></td>
-                                                                                           </tr> 
-                                                                                                        )
-                                                                                                    })
-                                                                                                  )}
-                       })
-                         this.InTransitTruckerList = _.map(this.sortedTruckerList,(inTransitArr,index) => { 
-                                                                                  
-                                                if(inTransitArr.containerInTransit == 1 || inTransitArr.containerDelivered == 1){
-                                                  return(_.map(inTransitArr.TContainerLoad,(contLoaded,loadedIndex) => {
-                                                                                                      return (<tr key = {loadedIndex}>
-                                                                                            <td>INTRANSIT</td>
-                                                                                           <td>{inTransitArr.TCompany.name}</td>
-                                                                                           <td>{1}</td>
-                                                                                           <td>{inTransitArr.containerNumber}</td>
-                                                                                           <td>{inTransitArr.chasisNumber}</td>
-                                                                                           <td>{inTransitArr.sealNumber}</td>
-                                                                                           <td>{contLoaded.noOfBags}</td>
-                                                                                           <td>{contLoaded.weight}</td>
-                                                                                           <td></td>
-                                                                                           </tr> 
-                                                                                                        )
-                                                                                                    })
-                                                                                                  )}
-                       })
-                            this.InTransitTruckerList = _.map(this.sortedTruckerList,(inTransitArr,index) => { 
-                                                                                  
-                                                if(inTransitArr.containerInTransit == 1 || inTransitArr.containerDelivered == 1){
-                                                  return(_.map(inTransitArr.TContainerLoad,(contLoaded,loadedIndex) => {
-                                                                                                      return (<tr key = {loadedIndex}>
-                                                                                            <td>INTRANSIT</td>
-                                                                                           <td>{inTransitArr.TCompany.name}</td>
-                                                                                           <td>{1}</td>
-                                                                                           <td>{inTransitArr.containerNumber}</td>
-                                                                                           <td>{inTransitArr.chasisNumber}</td>
-                                                                                           <td>{inTransitArr.sealNumber}</td>
-                                                                                           <td>{contLoaded.noOfBags}</td>
-                                                                                           <td>{contLoaded.weight}</td>
-                                                                                           <td></td>
-                                                                                           </tr> 
-                                                                                                        )
-                                                                                                    })
-                                                                                                  )}
-                       })
-                             this.deliveredTruckerList = _.map(this.sortedTruckerList,(delivArr,index) => { 
-                                                                                  
-                                                if(delivArr.containerDelivered == 1){
-                                                  return(_.map(delivArr.TContainerLoad,(contLoaded,loadedIndex) => {
-                                                                                                      return (<tr key = {loadedIndex}>
-                                                                                            <td>DELIVERED</td>
-                                                                                           <td>{delivArr.TCompany.name}</td>
-                                                                                           <td>{1}</td>
-                                                                                           <td>{delivArr.containerNumber}</td>
-                                                                                           <td>{delivArr.chasisNumber}</td>
-                                                                                           <td>{delivArr.sealNumber}</td>
-                                                                                           <td>{contLoaded.noOfBags}</td>
-                                                                                           <td>{contLoaded.weight}</td>
-                                                                                           <td></td>
-                                                                                           </tr> 
-                                                                                                        )
-                                                                                                    })
-                                                                                                  )}
-                       })
-                        if(this.notArrivedTruckersList.length > 0){this.notArrivedTruckersTable = _.map(this.notArrivedTruckersList,(notArr,index) => {
-                                                    return(<tr key = {index}>
-                                                                                                  <td>NOT ARRIVED</td>
-                                                                                                  <td>{notArr.TCompany.name}</td>
-                                                                                                  <td>{this.notArrivedTruckersCount[index]}</td>
-                                                                                                  <td></td>
-                                                                                                  <td></td>
-                                                                                                  <td></td>
-                                                                                                  <td></td>
-                                                                                                  <td></td>
-                                                                                                  <td></td>
-                                                                                                  </tr>)
-                                                })}
+                        else if (this.sortedTruckerList[k].containerArrived == 1) {
+                            this.arrivedTruckers.push(this.sortedTruckerList[k])
+                        }
+                    }
+                    this.arrivedTruckersCount = _.toArray(_.countBy(this.arrivedTruckers, 'truckerId'))
+                    this.notArrivedTruckersCount = _.toArray(_.countBy(this.notArrivedTruckers, 'truckerId'))
+                    this.notArrivedTruckersList = _.uniqBy(this.notArrivedTruckers, 'truckerId')
+                    this.arrivedTruckersList = _.uniqBy(this.arrivedTruckers, 'truckerId')
+                    console.log(this.notArrivedTruckers)
+                    this.allocatedTruckers = _.uniqBy(this.sortedTruckerList, 'truckerId')
 
-                        if(this.arrivedTruckersList.length > 0){this.arrivedTruckersTable = _.map(this.arrivedTruckersList,(arrTr,index) => {
-                                                   return( <tr key = {index}>
-                                                                                                                             <td>ARRIVED</td>
-                                                                                                                             <td>{arrTr.TCompany.name}</td>
-                                                                                                                             <td>{this.arrivedTruckersCount[index]}</td>
-                                                                                                                             <td></td>
-                                                                                                                             <td></td>
-                                                                                                                             <td></td>
-                                                                                                                             <td></td>
-                                                                                                                             <td></td>
-                                                                                                                             <td></td>
-                                                                                                                             </tr>)
-                                                })}
-                       
-                        if(this.allocatedTruckers.length > 0){this.allocatedTruckersTable = _.map(this.allocatedTruckers,(allocTable,index) => {
-                                                      return(<tr key = {index}>
-                                                                                                  <td>ALLOCATED</td>
-                                                                                                  <td>{allocTable.TCompany.name}</td>
-                                                                                                  <td>{this.truckerCount[index]}</td>
-                                                                                                  <td></td>
-                                                                                                  <td></td>
-                                                                                                  <td></td>
-                                                                                                  <td></td>
-                                                                                                  <td></td>
-                                                                                                  <td></td>
-                                                                                                  </tr>)
-                                                })}
-                                this.CSummaryTable = _.map(this.state.CSummaryData.TContainerInternational,(CSumData,index)=>{
-                                    return (
-                                        <tr key = {index}>                                            
-                                                <td>N/A</td> 
-                                                <td>{CSumData.TCompany ? CSumData.TCompany.name : ''}</td>
-                                                <td>{this.state.CSummaryData.numberOfContainers ? this.state.CSummaryData.numberOfContainers : '' }</td>
-                                                <td>{CSumData.containerNumber ? CSumData.containerNumber : ''}</td>
-                                                <td>{CSumData.chasisNumber ? CSumData.chasisNumber : ''}</td>
-                                                <td>{CSumData.sealNumber ? CSumData.sealNumber : ''}</td>
-                                                <td>N/A</td>
-                                                <td>N/A</td>
-                                                <td>
-                                                    <label className="control control--checkbox">
-                                                        <input type="checkbox" id="row1"/>
 
-                                                        <div className="control__indicator"></div>
-                                                    </label>
-                                                </td>
-                                        </tr> 
-                                        )}
-                )
+                    if (this.state.CSummaryData && this.state.CSummaryData.TContainerInternational && this.state.CSummaryData.TContainerInternational.length > 0) {
+
+                        this.LoadedTruckerList = _.map(this.state.CSummaryData.TContainerInternational, (contLoaded, loadedIndex) => {
+                            return (<tr key={loadedIndex}>
+                                    <td>{contLoaded.status}</td>
+                                    <td>{contLoaded.TCompany.name}</td>
+                                    <td>{1}</td>
+                                    <td>{contLoaded.containerNumber}</td>
+                                    <td>{contLoaded.chasisNumber}</td>
+                                    <td>{contLoaded.sealNumber}</td>
+                                    <td>{contLoaded.TContainerLoad.length == 1 ? contLoaded.TContainerLoad[0].noOfBags : (contLoaded.TContainerLoad.length == 2 ? (parseInt(contLoaded.TContainerLoad[0].noOfBags) + parseInt(contLoaded.TContainerLoad[1].noOfBags) ) : (contLoaded.TContainerLoad.length == 3) ? (parseInt(contLoaded.TContainerLoad[0].noOfBags) + parseInt(contLoaded.TContainerLoad[1].noOfBags) ) + +parseInt(contLoaded.TContainerLoad[2].noOfBags) : (contLoaded.TContainerLoad.length == 4) ? (parseInt(contLoaded.TContainerLoad[0].noOfBags) + parseInt(contLoaded.TContainerLoad[1].noOfBags) ) + parseInt(contLoaded.TContainerLoad[2].noOfBags) + parseInt(contLoaded.TContainerLoad[3].noOfBags) : '')}</td>
+                                    <td>{contLoaded.TContainerLoad.length == 1 ? contLoaded.TContainerLoad[0].weight : (contLoaded.TContainerLoad.length == 2 ? (parseInt(contLoaded.TContainerLoad[0].weight) + parseInt(contLoaded.TContainerLoad[1].weight) ) : (contLoaded.TContainerLoad.length == 3) ? (parseInt(contLoaded.TContainerLoad[0].weight) + parseInt(contLoaded.TContainerLoad[1].weight) ) + +parseInt(contLoaded.TContainerLoad[2].weight) : (contLoaded.TContainerLoad.length == 4) ? (parseInt(contLoaded.TContainerLoad[0].weight) + parseInt(contLoaded.TContainerLoad[1].weight) ) + parseInt(contLoaded.TContainerLoad[2].weight) + parseInt(contLoaded.TContainerLoad[3].weight) : '')}</td>
+                                    <td></td>
+                                </tr>
+                            )
+                        })
+                    }
+
+
+                    if (this.notArrivedTruckersList.length > 0) {
+                      this.arr = ["anurag"]
+                        this.notArrivedTruckersTable = _.map(this.arr, (notArr, index) => {
+                            return (<tr key={index}>
+                                <td>NOT ARRIVED</td>
+                                <td></td>
+                                <td>{this.unAllocatedContainers - this.arrivedTruckersCount}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+
+                            </tr>)
+                        })
+                    }
+
+
+
+
+                    // if (this.arrivedTruckersList.length > 0) {
+                    //     this.arrivedTruckersTable = _.map(this.arrivedTruckersList, (arrTr, index) => {
+                    //         return ( <tr key={index}>
+                    //             <td>ARRIVED</td>
+                    //             <td>{arrTr.TCompany.name}</td>
+                    //             <td>{this.arrivedTruckersCount[index]}</td>
+                    //             <td></td>
+                    //             <td></td>
+                    //             <td></td>
+                    //             <td></td>
+                    //             <td></td>
+                    //
+                    //         </tr>)
+                    //     })
+                    // }
+
+
+                    if (this.props.allocatedTruckers.length == 0) {
+   console.log("alloctrucker", this.props.allocatedTruckers);
+   this.allocTruckers = []
+                        // if (this.state.CSummaryData != undefined && this.state.CSummaryData.TContainerAllocation.length > 0) {
+                        //       this.allocTruckers = _.map(this.state.CSummaryData.TContainerAllocation, (allocTruck, index)=> {
+                        //         return (<tr>
+                        //                 <td ></td>
+                        //                 <td></td>
+                        //                 <td></td>
+                        //               <td></td>
+                        //                 <td></td>
+                        //                 <td></td>
+                        //                 <td></td>
+                        //                 <td></td>
+                        //
+                        //             </tr>
+                        //         )
+                        //     })
+                        // }
+                    }
+                    else if (this.props.allocatedTruckers.length > 0) {
+
+                        this.state.CSummaryData.TContainerAllocation = []
+
+                            console.log("alloctrucker" , this.props.allocatedTruckers)
+                            this.allocatedTruckersTable = _.map(this.props.allocatedTruckers,(allocTable,index) => {
+                                return(<tr key = {allocTable.truckerId} >
+                                    <td >ALLOCATED</td>
+                                    <td>{allocTable.truckerName}</td>
+                                    <td>{allocTable.noOfContainer}</td>
+                                  <td><a style={{display : this.props.hide ==1 ? "block" : "none"}} href="javascript:void(0)"><i onClick={this.props.deleteClick} value={index} className="fa fa-times" aria-hidden="true"></i></a></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+
+                                </tr>)
+                            })
+
+                    }
+
+
                 }
                 else {
-                     this.unAllocatedContainers = this.state.CSummaryData.numberOfContainers - this.state.CSummaryData.TContainerDomestic.length
+                   //  this.unAllocatedContainers = this.state.CSummaryData.numberOfContainers - this.state.CSummaryData.TContainerDomestic.length
                        this.truckerCount =_.toArray(_.countBy(this.state.CSummaryData.TContainerDomestic,'truckerId'))
                         this.sortedTruckerList = _.sortBy(this.state.CSummaryData.TContainerDomestic,'truckerId')
                           console.log("sorted",this.sortedTruckerList)
                         for(var k = 0; k < this.sortedTruckerList.length; k++){
                           debugger
                             if(this.sortedTruckerList[k].containerArrived == 0){
-                                this.notArrivedTruckers.push(this.sortedTruckerList[k]) 
+                                this.notArrivedTruckers.push(this.sortedTruckerList[k])
                             }
                             else if(this.sortedTruckerList[k].containerArrived == 1){
                                 this.arrivedTruckers.push(this.sortedTruckerList[k])
@@ -258,51 +206,110 @@ class ContainerSummaryComponent extends Component {
                         this.arrivedTruckersList = _.uniqBy(this.arrivedTruckers,'truckerId')
                         console.log(this.notArrivedTruckers)
                         this.allocatedTruckers = _.uniqBy(this.sortedTruckerList,'truckerId')
-                      
+
                         console.log(this.allocatedTruckers,this.truckerCount)
-                        debugger
-                        if(this.notArrivedTruckersList.length > 0){this.notArrivedTruckersTable = _.map(this.notArrivedTruckersList,(notArr,index) => {
+                       if(this.state.CSummaryData && this.state.CSummaryData.TContainerDomestic && this.state.CSummaryData.TContainerDomestic.length > 0)
+                    {
+                      //  this.LoadedTruckerList = _.map(this.sortedTruckerList,(loadedArr,index) => {
+                        var addBags = []
+                        var addWeight = []
+
+                      for(var z in this.state.CSummaryData.TContainerDomestic.TContainerLoad){
+                          addBags.push(this.state.CSummaryData.TContainerDomestic.TContainerLoad[z].noOfBags)
+                          addWeight.push(this.state.CSummaryData.TContainerDomestic.TContainerLoad[z].weight)
+                      }
+                        console.log("addBags" , addBags)
+                        console.log("addBags" , addWeight)
+                         //   if(loadedArr.containerLoaded == 1 || loadedArr.containerInTransit == 1 || loadedArr.containerDelivered == 1){
+                            this.LoadedTruckerList =    _.map(this.state.CSummaryData.TContainerDomestic,(contLoaded,loadedIndex) => {
+                                        return (<tr key = {loadedIndex}>
+                                                <td>{contLoaded.status}</td>
+                                                <td>{contLoaded.TCompany.name}</td>
+                                                <td>{1}</td>
+                                                <td>{contLoaded.containerNumber}</td>
+                                                <td>{contLoaded.chasisNumber}</td>
+                                                <td>{contLoaded.sealNumber}</td>
+                                                <td>{contLoaded.TContainerLoad.length==1 ?contLoaded.TContainerLoad[0].noOfBags : (contLoaded.TContainerLoad.length ==2 ? (parseInt(contLoaded.TContainerLoad[0].noOfBags) + parseInt(contLoaded.TContainerLoad[1].noOfBags) ): (contLoaded.TContainerLoad.length ==3)?(parseInt(contLoaded.TContainerLoad[0].noOfBags) + parseInt(contLoaded.TContainerLoad[1].noOfBags) ) + + parseInt(contLoaded.TContainerLoad[2].noOfBags) :(contLoaded.TContainerLoad.length ==4)?(parseInt(contLoaded.TContainerLoad[0].noOfBags) + parseInt(contLoaded.TContainerLoad[1].noOfBags) ) + parseInt(contLoaded.TContainerLoad[2].noOfBags)  + parseInt(contLoaded.TContainerLoad[3].noOfBags) :'')}</td>
+                                                <td>{contLoaded.TContainerLoad.length==1 ?contLoaded.TContainerLoad[0].weight : (contLoaded.TContainerLoad.length ==2 ? (parseInt(contLoaded.TContainerLoad[0].weight) + parseInt(contLoaded.TContainerLoad[1].weight) ): (contLoaded.TContainerLoad.length ==3)?(parseInt(contLoaded.TContainerLoad[0].weight) + parseInt(contLoaded.TContainerLoad[1].weight) ) + + parseInt(contLoaded.TContainerLoad[2].weight) :(contLoaded.TContainerLoad.length ==4)?(parseInt(contLoaded.TContainerLoad[0].weight) + parseInt(contLoaded.TContainerLoad[1].weight) ) + parseInt(contLoaded.TContainerLoad[2].weight)  + parseInt(contLoaded.TContainerLoad[3].weight) :'')}</td>
+                                                <td></td>
+                                            </tr>
+                                        )
+                                    })
+
+                            //}
+                       // })
+                    }
+
+                        if(this.notArrivedTruckersList.length > 0){
+                          this.arr = ["anurag"]
+                          this.notArrivedTruckersTable = _.map(this.arr,(notArr,index) => {
                                                     return(<tr key = {index}>
                                                                                                   <td>NOT ARRIVED</td>
-                                                                                                  <td>{notArr.TCompany.name}</td>
-                                                                                                  <td>{this.notArrivedTruckersCount[index]}</td>
+                                                                                                 <td></td>
+                                                                                                  <td>{this.unAllocatedContainers - this.arrivedTruckersCount}</td>
                                                                                                   <td></td>
                                                                                                   <td></td>
                                                                                                   <td></td>
                                                                                                   <td></td>
                                                                                                   <td></td>
-                                                                                                  <td></td>
+
                                                                                                   </tr>)
                                                 })}
-                        if(this.arrivedTruckersList.length > 0){this.arrivedTruckersTable = _.map(this.arrivedTruckersList,(arrTr,index) => {
-                                                   return( <tr key = {index}>
-                                                                                                                             <td>ARRIVED</td>
-                                                                                                                             <td>{arrTr.TCompany.name}</td>
-                                                                                                                             <td>{this.arrivedTruckersCount[index]}</td>
-                                                                                                                             <td></td>
-                                                                                                                             <td></td>
-                                                                                                                             <td></td>
-                                                                                                                             <td></td>
-                                                                                                                             <td></td>
-                                                                                                                             <td></td>
-                                                                                                                             </tr>)
-                                                })}
-                        if(this.allocatedTruckers.length > 0){this.allocatedTruckersTable = _.map(this.allocatedTruckers,(allocTable,index) => {
-                                                      return(<tr key = {index}>
-                                                                                                  <td>ALLOCATED</td>
-                                                                                                  <td>{allocTable.TCompany.name}</td>
-                                                                                                  <td>{this.truckerCount[index]}</td>
-                                                                                                  <td></td>
-                                                                                                  <td></td>
-                                                                                                  <td></td>
-                                                                                                  <td></td>
-                                                                                                  <td></td>
-                                                                                                  <td></td>
-                                                                                                  </tr>)
-                                                })}
-                  
+
+  // if(this.arrivedTruckersList.length > 0){this.arrivedTruckersTable = _.map(this.arrivedTruckersList,(arrTr,index) => {
+  //                                                  return( <tr key = {index}>
+  //                                                                                                                            <td>ARRIVED</td>
+  //                                                                                                                            <td>{arrTr.TCompany.name}</td>
+  //                                                                                                                            <td>{this.arrivedTruckersCount[index]}</td>
+  //                                                                                                                            <td></td>
+  //                                                                                                                            <td></td>
+  //                                                                                                                            <td></td>
+  //                                                                                                                            <td></td>
+  //                                                                                                                            <td></td>
+  //
+  //                                                                                                                            </tr>)
+  //                                               })}
+                    if (this.props.allocatedTruckers.length == 0) {
+
+                        if (this.state.CSummaryData != undefined && this.state.CSummaryData.TContainerAllocation.length > 0) {
+                            this.allocTruckers = _.map(this.state.CSummaryData.TContainerAllocation, (allocTruck, index)=> {
+                                return (<tr >
+                                        <td ></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+
+                                    </tr>
+                                )
+                            })
+                        }
+                    }
+                    else if (this.props.allocatedTruckers.length > 0) {
+
+                        this.state.CSummaryData.TContainerAllocation = []
+
+                        console.log("alloctrucker" , this.props.allocatedTruckers)
+                        this.allocatedTruckersTable = _.map(this.props.allocatedTruckers,(allocTable,index) => {
+                            return(<tr key = {allocTable.truckerId}>
+                                <td >ALLOCATED</td>
+                                <td>{allocTable.truckerName}</td>
+                                <td>{allocTable.noOfContainer}</td>
+                                <td><a onClick={this.props.deleteClick}   style={{display : this.props.hide ==1 ? "block" : "none"}}   href="javascript:void(0)"><i  value={index} className="fa fa-times" aria-hidden="true"></i></a></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+
+                            </tr>)
+                        })
+
+                    }
                 }
-               
+
             }
         }
 		return (
@@ -317,26 +324,20 @@ class ContainerSummaryComponent extends Component {
                                                 <th>Seat #</th>
                                                 <th># of Bags</th>
                                                 <th>Weight</th>
-                                                <th>
-                                                    <label className="control control--checkbox">
-                                                        <input type="checkbox" id="row1"/>
-
-                                                        <div className="control__indicator"></div>
-                                                    </label>
-                                                </th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <tr>
-                                            <td>UNALLOCATED</td>
+                                          <td>UNALLOCATED</td>
                                             <td></td>
-                                            <td>{this.unAllocatedContainers}</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td style={{display :(this.props.allocated > 0) ?'block' : 'none' }}>{parseInt(this.unAllocatedContainers) - parseInt(this.props.allocated) }</td>
+                                            <td style={{display :(this.props.allocated == 0) ? 'block' : 'none' }}>{(this.props.total !=undefined && this.props.total !=0) ? (parseInt(this.unAllocatedContainers)-parseInt(this.props.total)):parseInt(this.unAllocatedContainers) - parseInt(this.props.allocated) }</td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
+                                            <td></td>
+                                            <td></td>
+
                                             </tr>
                                             <tr>
                                             <td>&nbsp;</td>
@@ -347,19 +348,10 @@ class ContainerSummaryComponent extends Component {
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
+
                                             </tr>
-                                            {this.allocatedTruckersTable ? this.allocatedTruckersTable :  <tr>
-                                                                          <td>ALLOCATED</td>
-                                                                          <td></td>
-                                                                          <td>0</td>
-                                                                          <td></td>
-                                                                          <td></td>
-                                                                          <td></td>
-                                                                          <td></td>
-                                                                          <td></td>
-                                                                          <td></td>
-                                                                          </tr>}
+                                            {(this.allocatedTruckersTable  && this.props.allocatedTruckers.length >0 ) ? this.allocatedTruckersTable :  ''}
+                                            {(this.allocTruckers && this.props.allocatedTruckers.length >0) ? this.allocTruckers :  ''}
                                             <tr>
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
@@ -369,18 +361,18 @@ class ContainerSummaryComponent extends Component {
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
+
                                             </tr>
                                             {this.notArrivedTruckersTable ? this.notArrivedTruckersTable : <tr>
                                                                           <td>NOT ARRIVED</td>
                                                                           <td></td>
-                                                                          <td>0</td>
+                                                                          <td>{(this.arrivedLength && this.arrivedLength >0) ? parseInt(this.unAllocatedContainers) - parseInt(this.arrivedLength) : this.unAllocatedContainers}</td>
                                                                           <td></td>
                                                                           <td></td>
                                                                           <td></td>
                                                                           <td></td>
                                                                           <td></td>
-                                                                          <td></td>
+
                                                                           </tr>}
                                             <tr>
                                             <td>&nbsp;</td>
@@ -391,9 +383,9 @@ class ContainerSummaryComponent extends Component {
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
+
                                             </tr>
-                                            {this.arrivedTruckersTable ? this.arrivedTruckersTable :  <tr>
+                                            {(this.props.CSummaryData && (this.props.CSummaryData.TContainerDomestic || this.props.CSummaryData.TContainerInternational) && (this.props.CSummaryData.TContainerDomestic.length == 0 && this.props.CSummaryData.TContainerInternational.length == 0)) ? <tr>
                                                                           <td>ARRIVED</td>
                                                                           <td></td>
                                                                           <td>0</td>
@@ -402,8 +394,8 @@ class ContainerSummaryComponent extends Component {
                                                                           <td></td>
                                                                           <td></td>
                                                                           <td></td>
-                                                                          <td></td>
-                                                                          </tr>}
+
+                                                                          </tr> : ''}
                                             <tr>
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
@@ -413,7 +405,7 @@ class ContainerSummaryComponent extends Component {
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
+
                                             </tr>
                                             {this.LoadedTruckerList}
                                             <tr>
@@ -425,7 +417,7 @@ class ContainerSummaryComponent extends Component {
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
+
                                             </tr>
                                             {this.InTransitTruckerList}
                                             <tr>
@@ -437,7 +429,7 @@ class ContainerSummaryComponent extends Component {
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
+
                                             </tr>
                                           {this.deliveredTruckerList}
                                             </tbody>

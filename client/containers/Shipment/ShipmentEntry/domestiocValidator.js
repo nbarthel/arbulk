@@ -27,8 +27,6 @@ export default function validateDomesticInput(data){
     }
     if (Validator.isNull(data.recipentTelNumber)){
         errorsd.recipentTelNumber = 'recipentTelNumber field is required';
-    }else if(data.recipentTelNumber.length != 11){
-        errorsd.recipentTelNumber = 'Please enter valid telephone number'
     }
     if (Validator.isNull(data.carrier))
     {

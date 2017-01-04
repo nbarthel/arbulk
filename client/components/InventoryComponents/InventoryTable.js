@@ -114,7 +114,7 @@ var moment = require('moment');
 								<td>{data.railcar_number}</td>
 								<td>{data.lot_number}</td>
 								<td>{data.material}</td>
-								<td>{data.status == 'CONFIRMED' ? 'YES': 'NO'}</td>
+								<td>{data.status == 'UNCONFIRMED' ? 'NO': 'YES'}</td>
 								<td>Y</td>
 								<td>{data.railcar_arrived_on != null ? 'YES' : 'NO'}</td>
 								<td>{(data.TShipmentInternational && data.TShipmentInternational.length>0) ?moment(data.TShipmentInternational[0].cargoCutoffDate).format('MM-DD-YYYY') : 'NA'}</td>

@@ -27,6 +27,8 @@ constructor(){
 	this.onCheckBoxChange = this.onCheckBoxChange.bind(this)
 	this.addToQueue =this.addToQueue.bind(this)
 	this.onStampConfirmed = this.onStampConfirmed.bind(this);
+	this.print = this.print.bind(this)
+	this.piID = null
 	//this.onCancel = this.onCancel.bind(this)
 	//this.onSaveChange = this.onSaveChange.bind(this)
 	}
@@ -46,6 +48,24 @@ debugger;
 				hashHistory.push('/Packaging/enterpackginginst/'+this.props.id)
 
 	}
+
+	print(e){
+		debugger;
+	  if(this.status == "UNCONFIRMED"){
+	    swal("" , "The Order is not confirmed yet" , "info")
+	    return
+	  }
+	        if(this.id != undefined){
+	            console.log('print view',this.piID+'/'+this.id)
+	            hashHistory.push('/Packaging/packagingInstFormPrint/'+this.props.id+'/'+this.id)
+	            //hashHistory.push('/Packaging/inventorycard/'+this.piID+'/'+this.selected)
+	        }
+	        else
+	        {
+	            swal("Selection Missing", "Please Select A Lot To View.","error")
+	        }
+	    }
+
 componentWillMount() {
 
         var PIview = createDataLoader(InventoryCardForm, {
@@ -296,7 +316,7 @@ componentWillMount() {
 			<div className=" col-lg-7 col-md-7 col-sm-7 col-xs-12" >
 				<div className="text_left">
 
-				 <div className="pull-left margin-10-last-l"><button type="button"  className="btn  btn-gray">Print Bagging Instruction</button> </div>
+				 <div className="pull-left margin-10-last-l"><button type="button" onClick = {(e)=>{this.print(e)}} className="btn  btn-gray">Print Packaging Instruction</button> </div>
 
 				 <div className="pull-left margin-10-all"><button type="button" onClick = {this.addToQueue}  className="btn  btn-gray">Add To Queue</button> </div>
 
@@ -325,13 +345,13 @@ componentWillMount() {
 	<div className="row pddn-40-top">
 
 	 <CurrentInventory key={this.state.index} length = {this.length}  onCancel = {this.onCancel} lid={this.props.lid} id = {this.props.id} lID={this.props.cId} checked = {this.checked} lotId = {this.id}  onCheckBoxChange = {this.onCheckBoxChange} onSaveChange = {this.onSaveChange} lots = {this.props.lots}/>
-	<InventoryHistory data = {this.props.viewData} />
+	<InventoryHistory pID ={this.props.id}/>
 
    </div>
 	<div className="row pddn-20-top">
 
-	 <InventoryLocationHistory id = {1} />
-	 <PendingShipment />
+	 <InventoryLocationHistory key={this.state.index} lid={this.props.lid} id = {this.props.id} lID={this.props.cId} checked = {this.checked} lotId = {this.id}  />
+	 <PendingShipment pID ={this.props.id} />
 
 	</div>
 

@@ -17,12 +17,14 @@ export default class ShipmentPrint extends React.Component {
         this.state = {
           loaded: true,
           piData:[],
+
           totalBags:0,
           myArray : [{name:"Ar"},{name:"Ar"},{name:"Ar"},{name:"Ar"},{name:"Ar"},{name:"Ar"},{name:"Ar"},{name:"Ar"},{name:"Ar"},{name:"Ar"}]
      };
         this.state.viewData={lot:{},packaging_status:'',custom_label:'',TCompany:{},TLocation:{},TPackagingType:{},TShipmentInternational:[{TSteamshipLine:{},TContainerType:{}}],TShipmentDomestic:[{TSteamshipLine:{},TContainerType:{}}]}
         this.createPDF = this.createPDF.bind(this);
         this.onPrint = this.onPrint.bind(this)
+        this.reportArray = []
        /* this.state.viewData={
             "customer": "abc",
             "trucker": "xyz",
@@ -52,7 +54,7 @@ export default class ShipmentPrint extends React.Component {
         //var base = 'TPackagingInstructions'+'/'+this.props.params.id;
         var base = 'TShipmentents/'+this.id;
         this.url = ShipmentView._buildUrl(base, {
-            "include" : ["TLocation" , "TCompany" , {"relation" :"TContainerInternational" , "scope":{"include" : ["TCompany",{"relation" : "TContainerLoad" ,"scope":{"include":["TPiInventory","TInventoryLocation"]}}]}} ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType","TPaymentType"]}},{"relation" :"TShipmentInternational","scope":{"include":["TSteamshipLine","TContainerType"]}},{"relation" : "TShipmentLots" ,"scope":{"include":["TPackagingInstructionLots"]}}]
+            "include" : ["TLocation" , "TCompany" ,{"relation" :"TContainerDomestic" , "scope":{"include" : ["TCompany",{"relation" : "TContainerLoad" ,"scope":{"include":["TPiInventory","TInventoryLocation"]}}] ,"where":{"id":this.props.params.contId}}}, {"relation" :"TContainerInternational" , "scope":{"include" : ["TCompany",{"relation" : "TContainerLoad" ,"scope":{"include":["TPiInventory","TInventoryLocation"]}}] ,"where":{"id":this.props.params.contId}}} ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType","TPaymentType"]}},{"relation" :"TShipmentInternational","scope":{"include":["TSteamshipLine","TContainerType"]}},{"relation" : "TShipmentLots" ,"scope":{"include":["TPackagingInstructionLots"]}}]
         })
 
         var lot='';var railcar='';var weight='';var label='';
@@ -77,8 +79,8 @@ export default class ShipmentPrint extends React.Component {
                     lot : data.TShipmentLots[0].TPackagingInstructionLots,
                     railcar:railcar,
                     weight:weight,
-                    chasis : (data.TContainerInternational && data.TContainerInternational.length > 0 ? data.TContainerInternational : ''),
-                    trucker :  (data.TContainerInternational && data.TContainerInternational.length > 0  && data.TContainerInternational[0].TCompany  ? data.TContainerInternational: '')
+                    chasis : (data.TContainerInternational && data.TContainerInternational.length > 0 ? data.TContainerInternational : data.TContainerDomestic),
+                    trucker :  (data.TContainerInternational && data.TContainerInternational.length > 0  && data.TContainerInternational[0].TCompany  ? data.TContainerInternational: data.TContainerDomestic)
 
                 })
 
@@ -89,6 +91,17 @@ export default class ShipmentPrint extends React.Component {
         })
 
     }
+
+
+    getSum(arr){
+       var total = 0
+       for ( var i = 0; i<arr.length; i++ ) {
+           total += arr[i].noOfBags
+       }
+       return total
+
+    }
+
 
     getPackagingInfo(PiLotId){
         var ShipmentView = createDataLoader(ShipmentPrint,{
@@ -106,15 +119,17 @@ export default class ShipmentPrint extends React.Component {
             url: this.url1,
             success:function(data){
                 console.log('lot ,po, location array>>>>>>>>>>>>>>>',data.TPiInventory);
-                var tBags=0;
-                data.TPiInventory.forEach(function(item){
-                    tBags=tBags+item.noOfBags;
-                })
+                // var tBags=0;
+                //
+                // data.TPiInventory.forEach(function(item){
+                //     tBags=tBags+item.noOfBags;
+                // })
                 this.setState({
                     printData : data,
                     piData:data.TPiInventory,
                     piDataPO:data.TPackagingInstructions,
-                    totalBags:tBags
+                    bagsPerpallet : data.TPackagingInstructions.bags_per_pallet
+
                 })
 
             }.bind(this)
@@ -171,8 +186,9 @@ export default class ShipmentPrint extends React.Component {
       window.print()
     }
     render(){
-      debugger;
+
         var tBags=0;
+      //  var bagsPerPallet = (this.state.piDataPO && this.state.piDataPO.bags_per_pallet) ? this.state.piDataPO.bags_per_pallet  : 50
         (this.state.viewData && this.state.viewData.TContainerInternational && this.state.viewData.TContainerInternational.length >0 && this.state.viewData.TContainerInternational[0].TContainerLoad)?
        this.state.viewData.TContainerInternational[0].TContainerLoad.forEach(function(item){
 
@@ -181,16 +197,27 @@ export default class ShipmentPrint extends React.Component {
 
    : ''
 
+ if(this.state.viewData && this.state.viewData.TContainerInternational && this.state.viewData.TContainerInternational.length >0){
+debugger;
+   this.reportArray = this.state.viewData.TContainerInternational
+ }
+ else if (this.state.viewData && this.state.viewData.TContainerDomestic && this.state.viewData.TContainerDomestic.length >0) {
+debugger;
+   this.reportArray = this.state.viewData.TContainerDomestic
+ }
 
-   var formData = _.map(this.state.viewData.TContainerInternational , (data , index)=>{
-     return(
-       <div className="warpper-inner_shipment">
+
+   var formData = _.map(this.reportArray , (data , index)=>{
+
+    var tBagsValue = this.getSum(data.TContainerLoad)
+        return(
+          <div className="warpper-inner_shipment">
                          <div className="content-inside_shipment">
                                  <table className="logoShipment">
                                      <tbody>
                                          <tr>
                                              <td className="img-responsive logo_icon_shipment"></td>
-                                             <td className="text">LOAD ORDER - {(this.state.piDataPO && this.state.piDataPO.TPackagingType && this.state.piDataPO.TPackagingType.packagingType == "Bags") ? "Bags" : "Boxes"}</td>
+                                             <td className="text">LOAD ORDER - {(this.state.piDataPO && this.state.piDataPO.TPackagingType && this.state.piDataPO.TPackagingType.packagingType == "BAGS") ? "BAGS" : "BOXES"}</td>
                                          </tr>
                                      </tbody>
                                  </table>
@@ -232,11 +259,11 @@ export default class ShipmentPrint extends React.Component {
                                  <div className="location">
                                      <h3>LOCATION</h3>
                                      <div className="location_data">
-                                         <table className="bg_striped">
+                                         <table className="bg_striped" style={{'display' : (this.state.viewData && this.state.viewData.TContainerInternational && this.state.viewData.TContainerInternational.length >0) ? 'table' : 'none'}}>
                                              <tr>
                                                  <td>LOCATION</td>
                                                  { (this.state.viewData && this.state.viewData.TContainerInternational && this.state.viewData.TContainerInternational.length >0 && this.state.viewData.TContainerInternational[0].TContainerLoad)?
-                                                     _.map(this.state.viewData.TContainerInternational[0].TContainerLoad,(obj,index)=>{
+                                                     _.map(this.state.viewData.TContainerInternational[index].TContainerLoad,(obj,idx)=>{
                                                              return(<td>{obj.TInventoryLocation.locationName}</td>)
 
                                                      })
@@ -246,7 +273,7 @@ export default class ShipmentPrint extends React.Component {
                                              <tr>
                                                  <td>PO #</td>
                                                  { (this.state.viewData && this.state.viewData.TContainerInternational && this.state.viewData.TContainerInternational.length >0 && this.state.viewData.TContainerInternational[0].TContainerLoad)?
-                                                     _.map(this.state.viewData.TContainerInternational[0].TContainerLoad,(obj,index)=>{
+                                                     _.map(this.state.viewData.TContainerInternational[index].TContainerLoad,(obj,index)=>{
                                                              return(<td>{this.state.piDataPO && this.state.piDataPO.po_number ? this.state.piDataPO.po_number : ''}</td>)
 
                                                      })
@@ -257,7 +284,7 @@ export default class ShipmentPrint extends React.Component {
                                              <tr>
                                                  <td>MATERIAL</td>
                                                  { (this.state.viewData && this.state.viewData.TContainerInternational && this.state.viewData.TContainerInternational.length >0 && this.state.viewData.TContainerInternational[0].TContainerLoad)?
-                                                     _.map(this.state.viewData.TContainerInternational[0].TContainerLoad,(obj,index)=>{
+                                                     _.map(this.state.viewData.TContainerInternational[index].TContainerLoad,(obj,index)=>{
                                                              return(<td>{this.state.piDataPO && this.state.piDataPO.material ? this.state.piDataPO.material : ''}</td>)
 
                                                      })
@@ -269,7 +296,7 @@ export default class ShipmentPrint extends React.Component {
                                                  <td>LOT #</td>
 
                                                  { (this.state.viewData && this.state.viewData.TContainerInternational && this.state.viewData.TContainerInternational.length >0 && this.state.viewData.TContainerInternational[0].TContainerLoad)?
-                                                     _.map(this.state.viewData.TContainerInternational[0].TContainerLoad,(obj,index)=>{
+                                                     _.map(this.state.viewData.TContainerInternational[index].TContainerLoad,(obj,index)=>{
                                                              return(<td>{this.state.lot ? this.state.lot.lot_number : "" }</td>)
 
                                                      })
@@ -280,7 +307,7 @@ export default class ShipmentPrint extends React.Component {
                                              <tr>
                                                  <td># OF BAGS</td>
                                                  { (this.state.viewData && this.state.viewData.TContainerInternational && this.state.viewData.TContainerInternational.length >0 && this.state.viewData.TContainerInternational[0].TContainerLoad)?
-                                                     _.map(this.state.viewData.TContainerInternational[0].TContainerLoad,(obj,index)=>{
+                                                     _.map(this.state.viewData.TContainerInternational[index].TContainerLoad,(obj,index)=>{
                                                              return(<td>{obj.TPiInventory.noOfBags}</td>)
 
                                                      })
@@ -292,8 +319,8 @@ export default class ShipmentPrint extends React.Component {
                                              <tr>
                                                  <td>BREAKDOWN</td>
                                                  { (this.state.viewData && this.state.viewData.TContainerInternational && this.state.viewData.TContainerInternational.length >0 && this.state.viewData.TContainerInternational[0].TContainerLoad)?
-                                                     _.map(this.state.viewData.TContainerInternational[0].TContainerLoad,(obj,index)=>{
-                                                             return(<td>{Math.ceil(obj.TPiInventory.noOfBags/50)}Pallets X 50 Bags</td>)
+                                                     _.map(this.state.viewData.TContainerInternational[index].TContainerLoad,(obj,index)=>{
+                                                             return(<td><p style={{"display" : (Math.floor(obj.TPiInventory.noOfBags/this.state.bagsPerpallet) >0)? "block" : "none" , "float" : "left" , "width" : "25%"}}>{Math.floor(obj.TPiInventory.noOfBags/this.state.bagsPerpallet)}Pallets X {this.state.bagsPerpallet} Bags</p> <p style={{"display" : (obj.TPiInventory.noOfBags/this.state.bagsPerpallet ==0 || obj.TPiInventory.noOfBags % this.state.bagsPerpallet > 0)? "block" : "none" , "float" : "left" , "width" : "25%"}}>1 Pallets X {obj.TPiInventory.noOfBags % this.state.bagsPerpallet} Bags</p></td>)
 
                                                      })
 
@@ -301,7 +328,85 @@ export default class ShipmentPrint extends React.Component {
 
                             </tr>
                                          </table>
-                                         <span> Total number of bags being shipped = <strong>{tBags}</strong></span>
+
+                                         <table className="bg_striped" style={{'display' : (this.state.viewData && this.state.viewData.TContainerDomestic && this.state.viewData.TContainerDomestic.length >0) ? 'table' : 'none'}}>
+                                                                                     <tr>
+                                                                                         <td>LOCATION</td>
+                                                                                         { (this.state.viewData && this.state.viewData.TContainerDomestic && this.state.viewData.TContainerDomestic.length >0 && this.state.viewData.TContainerDomestic[0].TContainerLoad)?
+                                                                                             _.map(this.state.viewData.TContainerDomestic[index].TContainerLoad,(obj,idx)=>{
+                                                                                                     return(<td>{obj.TInventoryLocation.locationName}</td>)
+
+                                                                                             })
+
+                                                                                        : ''  }
+                                                                                     </tr>
+                                                                                     <tr>
+                                                                                         <td>PO #</td>
+                                                                                         { (this.state.viewData && this.state.viewData.TContainerDomestic && this.state.viewData.TContainerDomestic.length >0 && this.state.viewData.TContainerDomestic[0].TContainerLoad)?
+                                                                                             _.map(this.state.viewData.TContainerDomestic[index].TContainerLoad,(obj,index)=>{
+                                                                                                     return(<td>{this.state.piDataPO && this.state.piDataPO.po_number ? this.state.piDataPO.po_number : ''}</td>)
+
+                                                                                             })
+
+                                                                                        : ''  }
+
+                                                                                     </tr>
+                                                                                     <tr>
+                                                                                         <td>MATERIAL</td>
+                                                                                         { (this.state.viewData && this.state.viewData.TContainerDomestic && this.state.viewData.TContainerDomestic.length >0 && this.state.viewData.TContainerDomestic[0].TContainerLoad)?
+                                                                                             _.map(this.state.viewData.TContainerDomestic[index].TContainerLoad,(obj,index)=>{
+                                                                                                     return(<td>{this.state.piDataPO && this.state.piDataPO.material ? this.state.piDataPO.material : ''}</td>)
+
+                                                                                             })
+
+                                                                                        : ''  }
+
+                                                                                     </tr>
+                                                                                     <tr>
+                                                                                         <td>LOT #</td>
+
+                                                                                         { (this.state.viewData && this.state.viewData.TContainerDomestic && this.state.viewData.TContainerDomestic.length >0 && this.state.viewData.TContainerDomestic[0].TContainerLoad)?
+                                                                                             _.map(this.state.viewData.TContainerDomestic[index].TContainerLoad,(obj,index)=>{
+                                                                                                     return(<td>{this.state.lot ? this.state.lot.lot_number : "" }</td>)
+
+                                                                                             })
+
+                                                                                        : ''  }
+
+                                                                                </tr>
+                                                                                     <tr>
+                                                                                         <td># OF BAGS</td>
+                                                                                         { (this.state.viewData && this.state.viewData.TContainerDomestic && this.state.viewData.TContainerDomestic.length >0 && this.state.viewData.TContainerDomestic[0].TContainerLoad)?
+                                                                                             _.map(this.state.viewData.TContainerDomestic[index].TContainerLoad,(obj,index)=>{
+                                                                                                     return(<td>{obj.TPiInventory.noOfBags}</td>)
+
+                                                                                             })
+
+                                                                                        : ''  }
+
+
+                                                                                     </tr>
+                                                                                     <tr>
+                                                                                         <td>BREAKDOWN</td>
+                                                                                         { (this.state.viewData && this.state.viewData.TContainerDomestic && this.state.viewData.TContainerDomestic.length >0 && this.state.viewData.TContainerDomestic[0].TContainerLoad)?
+                                                                                             _.map(this.state.viewData.TContainerDomestic[index].TContainerLoad,(obj,index)=>{
+                                                                                                     return(<td><p style={{"display" : (Math.floor(obj.TPiInventory.noOfBags/this.state.bagsPerpallet) >0)? "block" : "none" , "float" : "left" , "width" : "25%"}}>{Math.floor(obj.TPiInventory.noOfBags/this.state.bagsPerpallet)}Pallets X {this.state.bagsPerpallet} Bags</p> <p style={{"display" : (obj.TPiInventory.noOfBags/this.state.bagsPerpallet ==0 || obj.TPiInventory.noOfBags % this.state.bagsPerpallet > 0)? "block" : "none" ,"float" : "left" , "width" : "25%"}}>1 Pallets X {obj.TPiInventory.noOfBags % this.state.bagsPerpallet} Bags</p></td>)
+
+                                                                                             })
+
+                                                                                        : ''  }
+
+                                                                                </tr>
+                                                                                 </table>
+
+
+
+
+
+
+
+
+                                         <span> Total number of bags being shipped = <strong>{tBagsValue}</strong></span>
                                      </div>
                                  </div>
                                  <div className="verification">
@@ -314,8 +419,7 @@ export default class ShipmentPrint extends React.Component {
                                      </div>
                                  </div>
                          </div>
-                         <button id="create_print" type="button" className="create_btn_shipment" onClick = {this.onPrint} style={{"float" : "left"}}>Print </button>
-                        <button id="create_pdf" type="button" className="create_btn_shipment">CREATE PDF </button>
+
                      </div>
 
 
@@ -330,7 +434,8 @@ export default class ShipmentPrint extends React.Component {
             <div style={{marginLeft: '20%',marginRight: '18%'}}>
 
  {formData}
-
+ <button id="create_print" type="button" className="create_btn_shipment" onClick = {this.onPrint} style={{"float" : "left"}}>Print </button>
+<button id="create_pdf" type="button" className="create_btn_shipment">CREATE PDF </button>
             </div>
         );
 

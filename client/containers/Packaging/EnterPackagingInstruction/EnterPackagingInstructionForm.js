@@ -17,11 +17,11 @@ export default class EnterPackagingInstructionForm extends React.Component {
     	this.PI ={ }
     	this.obj = { }
     	this.railcarObj = { }
-		this.railObjects = []
-		this.rObjects = []
+		  this.railObjects = []
+	  	this.rObjects = []
     	this.PIedit = { }
     	this.railCarObjects = []
-      	this.labelLength = [{"arr" : 12} , {"see": 12}],
+
     	this.RailCarChange = { }
 	    this.state = {
 	    	railCarInfoList: [],
@@ -78,9 +78,6 @@ componentWillMount() {
 			}
 		}]
 	})
-	console.log("I have recieved props")
-	//debugger
-
 	var base = 'TCompanies'
 	this.urlCustomer = PIview._buildUrl(base, {
 		"where" : {type : "CUSTOMER" }
@@ -158,9 +155,6 @@ componentWillMount() {
 	})
 }
 
-/*onCancel(){
-	this.context.router.goBack()
-}*/
 
 handlePIChange(e){
 	this.obj[e.target.name] = e.target.value
@@ -299,12 +293,8 @@ handleRailcarChange(e){
  // 	})
    }
 onUpdate(e){
-	debugger;
-	//console.log(">>>>>>>>>>>>>>>>>>>>>>",this.PIedit)
-	//swal("Failed" , "Error occured please try later!" , "error");
-	console.log(">>>>>>>>>>>>>>>>>>>>>>>>.",this.props.data)
-	/*this.props.data.customer_id = 2;
-	this.props.data.TPackagingInstructionLots[0].lot_number = 5555*/
+
+
 	var postUrl = Base_Url+"TPackagingInstructions/updatePIEntry"
 
 
@@ -369,19 +359,22 @@ Object.defineProperty(this.Allobjs,"PI",{
                                         configurable:true,
 										value:this.obj})
 //if(this.state.customChecked == false){
- 	if(Object.keys(this.railcarObj).length !== 0){
+ 	if(Object.keys(this.railcarObj).length != 0){
  		this.addrailcarObject();
  	}
 //}
 
 console.log(this.railCarObjects)
-/*var Allobjs = {}*/
-	/*Object.defineProperty(this.Allobjs,"packagingLots",{
-													enumerable: true ,
-                                                      writable: true,
-                                                      configurable:true,
-													value:this.railCarObjects})
-	*/
+if(this.railCarObjects && this.railCarObjects.length > 1){
+  this.state.labelLength.push(this.obj.custom_label)
+  for(var i in this.railCarObjects){
+      this.railCarObjects[i].custom_label = JSON.stringify(this.state.labelLength[i])
+  }
+}
+
+if(this.state.labelLength && this.state.labelLength.length == 0){
+  this.railCarObjects.custom_label = this.obj.custom_label
+}
 
 this.Allobjs.packagingLots = this.railCarObjects
 
@@ -427,18 +420,15 @@ $.ajax({
 
     onMinus(e){
     	    	this.setState({
-    		railCarInfoList : [ ]
+    		railCarInfoList : [ ],
+        labelLength : []
     	})
+      this.railCarObjects.splice(this.railCarObjects.length-1 , 1)
+	   	this.Add = false
 
-		this.Add = false
-    	console.log(">>>>>?>>>>>?>>>>>?>>>>>>",this.railcarObj)
-    	console.log(this.railCarObjects)
-    	//React.unmountComponentAtNode(document.getElementById(''));
     }
 onAdd(e){
-	/*var railCarObjects = Object.assign({},this.railcarObj)
-	this.railCarObjects.push(railCarObjects)*/
-	//console.log(this.railcarObj)
+
 	this.Add = true
 	if(Object.keys(this.railcarObj).length !== 0){
 		this.addrailcarObject();
@@ -458,16 +448,13 @@ onAdd(e){
 }
 
 
-
 onChekBoxClick(e){
-
+debugger;
+  var labelArray = []
+  var obj1 = {}
 if(e.target.checked == true)
 {
-this.setState({
-  labelLength :[{"aaa" : 12} , {"sasa" : 12}]
-})
  var obj = ""
-
  var arrRail = []
  var mulrail = []
  var arrWeight = []
@@ -476,14 +463,11 @@ this.setState({
       this.state.rObjects.push(this.railcarObj)
 	}
 	else if(this.Add == true){
-
-     	mulrail.push(this.railcarObj)
+    mulrail.push(this.railcarObj)
 		this.state.rObjects.push(mulrail)
 		this.state.rObjects = [].concat.apply([], this.state.rObjects);
-
-		this.state.rObjects.push(this.railCarObjects)
+  	this.state.rObjects.push(this.railCarObjects)
 	}
- // railObjects.push(this.addrailcarObjectLabel())
 	this.state.rObjects = [].concat.apply([], this.state.rObjects);
 
  for(var i in this.state.origin){
@@ -495,13 +479,12 @@ this.setState({
 
 }
 
-
-
- for(var i in this.state.rObjects){
+for(var i in this.state.rObjects){
    arrRail.push(this.state.rObjects[i].railcar_number)
    arrWeight.push(this.state.rObjects[i].weight)
    arrlot.push(this.state.rObjects[i].lot_number)
  }
+ console.log("Arrayweight , Arrayrail , Arraylot" ,arrRail , arrWeight, arrlot)
 var uniqueRail = arrRail.filter(function(elem, index, self) {
     return index == self.indexOf(elem);
 })
@@ -514,10 +497,23 @@ var uniquelot = arrlot.filter(function(elem, index, self) {
 	var uniqueWeight = arrWeight.filter(function(elem, index, self) {
 		return index == self.indexOf(elem);
 	})
-
 var stampConfirm = localStorage.getItem('userName')
-var obj =  this.obj.po_number +'\n' + uniquelot.join() + '\n' + originName + '\n' + this.obj.material +'\n' + uniqueWeight.join()
+var count = 0
+console.log("asasasasasasa" ,uniqueWeight , uniquelot ,uniqueRail)
+for(var z in uniquelot){
 
+this.state.labelLength.push({"poNumber" : this.obj.po_number +'\n' ,"lotNumber" : uniquelot[z]+ '\n' ,"originName" : originName + '\n' ,"material" : this.obj.material +'\n' , "weight" :  uniqueWeight[z]})
+
+
+}
+//this.state.labelLength.push(labelArray)
+
+this.state.labelLength = [].concat.apply([],this.state.labelLength)
+this.state.labelLength.splice( 0 ,1)
+var obj =  this.obj.po_number +'\n'  + originName +'\n'  + this.obj.material +'\n'+ uniquelot[0] + '\n'  + uniqueWeight[0]
+
+
+console.log("labelArrayyyyyy777777777" , this.state.labelLength)
 	this.autolabel = obj
 	this.obj.custom_label = obj
 	this.setState({
@@ -528,9 +524,11 @@ var obj =  this.obj.po_number +'\n' + uniquelot.join() + '\n' + originName + '\n
 else{
   this.setState({
 		labelObject : null,
-		customChecked : true
+		customChecked : true,
+    labelLength : []
 	})
 	this.obj.custom_label = ""
+  this.state.labelLength = []
 }
 }
  addrailcarObjectLabel()
@@ -1029,13 +1027,13 @@ render() {
 
     {
 
-      _.map(this.state.rObjects , function(element , index){
-        debugger;
-        return(
-    <div className=" col-lg-3 col-md-3 col-sm-3 col-xs-12 pddn-10-top">
+
+      _.map(this.state.labelLength , function(element , index){
+      return(
+      <div className=" col-lg-3 col-md-3 col-sm-3 col-xs-12 pddn-10-top">
        <div className="form-group">
           {
-          (element.arr ==13) ?
+          (!element) ?
           <textarea
           className="form-control  textarea"
           name= "custom_label"
@@ -1052,7 +1050,8 @@ render() {
 
           rows="3"
           id="Notes"
-          value={"anuragagaga"}
+          value={element.poNumber+element.originName+element.material+element.lotNumber+element.weight
+}
           placeholder="Enter Custom Label information"></textarea>
         }
           <div className="error"><span>{}</span></div>

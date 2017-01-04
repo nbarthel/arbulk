@@ -22,7 +22,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 viewData : '',
                 dataView : '',
                 key : 0,
-                selectedOption: 'lbs',
+                selectedOption: 'kg',
                 index : 0,
                 selectedOption1: 'kg',
                 showARB:"",
@@ -1009,7 +1009,6 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                         </select>
                     </div>
 
-
                 </div>
             </div>
         </div>
@@ -1038,7 +1037,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
             </div>
 
             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12"  >
-                <div className=" table-responsive view_table viewLoad mega" style={{height: 300}}>
+                <div className=" table-responsive view_table  mega">
 
                       {this.props.id != undefined ? <ViewDataComponent
                         headerCheckboxChange = {this.headerCheckboxChange}

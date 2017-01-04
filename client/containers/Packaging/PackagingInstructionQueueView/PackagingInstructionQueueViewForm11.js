@@ -12,7 +12,7 @@ import ReactDOM from 'react-dom'
 //import '../../public/stylesheets/bootstrap.min.css';
 
 class  PackagingInstructionQueueViewForm extends React.Component
-{   
+{
     constructor(){
         super();
         //this.onDoubleClick = this.onDoubleClick.bind(this)
@@ -100,12 +100,12 @@ class  PackagingInstructionQueueViewForm extends React.Component
  })
 
             return(
-    
-<section className="view_table-queue">  
+
+<section className="view_table-queue">
     <div className="container-fluid">
     <div className="row-fluid">
-    
-    <div className="table-responsive "> 
+
+    <div className="table-responsive ">
         <table className="table table-striped sortable" id= "simpleList" >
             <thead className="base_bg">
               <tr >
@@ -123,7 +123,7 @@ class  PackagingInstructionQueueViewForm extends React.Component
                 <th>
                     <label className="control control--checkbox">
                       <input type="checkbox" id="row1"/><div className="control__indicator"></div>
-                    </label>                                    
+                    </label>
                 </th>
             </tr>
             </thead>
@@ -131,25 +131,23 @@ class  PackagingInstructionQueueViewForm extends React.Component
             {queueView}
             </tbody>
         </table>
-    </div>  
-    
-    
-    
+    </div>
+
+
+
    <div className="row-fluid pddn-50-btm">
     <hr/>
         <div className="padding-top-btm-xs">
-            <div className="padding-20-last-r pull-right"><button type="button"    className="btn  btn-primary">PRINT QUEUE</button></div>
-         <div className="padding-20-all pull-right"><button type="button" id="edit_btn"    className="btn  btn-gray">EDIT QUEUE</button></div>
-            
+   <div className="padding-20-all pull-right"><button type="button" id="edit_btn"    className="btn  btn-gray">EDIT QUEUE</button></div>
+
         </div>
-     
+
 </div>
 </div>
 </div>
-</section>  
+</section>
 
                 );
     }
 }
 export default PackagingInstructionQueueViewForm;
-

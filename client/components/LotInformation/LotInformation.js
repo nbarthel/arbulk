@@ -24,25 +24,25 @@ export default class LotInformation extends React.Component {
                     var base = 'TPackagingInstructionLots';
 
                     var pLotUrl = LIView._buildUrl(base, {
-                           
+
                         "where": {"pi_id":  lastSelectedPo }
                      } );
-                 
+
                  //debugger
                  axios.get(pLotUrl).then((response)=>{
                this.setState({
                 propLotNum:response.data
                })
-            
+
         this.lotNumber = _.map(this.state.propLotNum,(lotNum,index) => {
             return <option key = {index} id = {lotNum.id} value = {lotNum.id}>{lotNum.lot_number}</option>
        })
            this.inInventoryBags = 0
-           this.forceUpdate() 
+           this.forceUpdate()
       })
   }
   lotChange(e){
-    let selectedValue = e.target.selectedIndex - 1 
+    let selectedValue = e.target.selectedIndex - 1
     this.inInventoryBags = this.state.propLotNum[selectedValue].inInventory
     this.forceUpdate()
     this.props.comPo.lot_id = e.target.value
@@ -91,18 +91,16 @@ export default class LotInformation extends React.Component {
 
 
                 <div className="form-group">
-                    <label for="Lot_Number" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">No. of Bags  for Lot</label>
-                    <div className="col-lg-6    col-sm-11 col-xs-11 ">
-                        <input type="text"
-                               className="form-control"
-                               id="Lot_Number"
-                               placeholder="No. of Bags  for Lot"
-                               name="noofbagsperlot"
-                               disabled
-                               value = {this.inInventoryBags}/>
+                                         <label htmlFor="Lot_Number"
+                                                className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label" >No. of Bags
+                                             for Lot</label>
 
-                        <div className="error"><span></span></div>
-                    </div>
+                                         <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                          <span style = {{color: "red"}}>{this.inInventoryBags ? this.inInventoryBags : '0'}</span>
+
+
+                                             <div className="error"><span></span></div>
+                                         </div>
                 </div>
 
 
@@ -113,4 +111,3 @@ export default class LotInformation extends React.Component {
         )
     }
 }
-

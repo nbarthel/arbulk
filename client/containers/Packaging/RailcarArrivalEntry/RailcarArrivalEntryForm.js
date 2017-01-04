@@ -41,6 +41,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
             this.onSearch = this.onSearch.bind(this)
             this.onTextChange = this.onTextChange.bind(this)
             this.onTap = this.onTap.bind(this)
+						this.onChnage = this.onChnage.bind(this)
         }
          onformat(inputDate) {
         var datear = inputDate.split('-')
@@ -51,12 +52,12 @@ export default class RailcarArrivalEntryForm extends React.Component {
           console.log(this.Query)
         }
         handleChange1(x,event) {
-        	//debugger;
+
         	var dateValue = this.onformat(x.target.value)
-		// this.setState({
-		// 	startDate:dateValue
-		// });
+					console.log("date value is" , dateValue)
+
 		document.getElementById('row1'+ x.target.id).disabled = false
+
 		this.dateArray.push(dateValue)
 
 	}
@@ -306,16 +307,16 @@ onClickli(e){
                   this.forceUpdate()
                   }
         }
-         onRemove(e){
+      onRemove(e){
         console.log("clicked")
          this.buttonDisplay = [];
          //this.buttonDisplay = []
              this.checkedCustomer = []
              this.checkedStatus = []
              this.checkedCompany = []
-			 delete this.Where.Company
-			 delete this.Where.Customer
-			 delete this.Where.status
+			       delete this.Where.Company
+			       delete this.Where.Customer
+			      delete this.Where.status
              this.setState({
 				 key : this.state.key +1
 			 })
@@ -338,7 +339,7 @@ onClickli(e){
 		})
 	})
   }
-  	click(data,value,index)
+  click(data,value,index)
 	{
 
 		if(data.target.checked){
@@ -356,7 +357,7 @@ onClickli(e){
 		}
 
 		var cartDataArray = []
-		var dateArray = []
+	//	var dateArray = []
 		this.cartArray.push(value.id)
 
          this.lotOrderValue = value
@@ -380,7 +381,7 @@ onClickli(e){
   if(this.lotOrderValue.status == "CONFIRMED")
 {
    this.cartArray.forEach((id ,index)=>{
-    axios.put(Base_Url+"TPackagingInstructionLots/" + id , {railcar_arrived_on : this.dateArray[index] , status:"READY" , arrived : 1,railcar_status:"ARRIVED"}).then(function(response){
+	  axios.put(Base_Url+"TPackagingInstructionLots/" + id , {railcar_arrived_on : this.dateArray[index] , status:"READY" , arrived : 1,railcar_status:"ARRIVED"}).then(function(response){
          swal({
                       title: "Success",
                       text: "Arrival Submitted",
@@ -395,6 +396,28 @@ onClickli(e){
     })
  })
 }
+
+else if(this.lotOrderValue.status == "QUEUED")
+{
+ this.cartArray.forEach((id ,index)=>{
+	axios.put(Base_Url+"TPackagingInstructionLots/" + id , {railcar_arrived_on : this.dateArray[index], arrived : 1,railcar_status:"ARRIVED"}).then(function(response){
+			 swal({
+										title: "Success",
+										text: "Arrival Submitted",
+										type: "success",
+										showCancelButton: true,
+											},
+									 function(isConfirm){
+										hashHistory.push('/Packaging/packaginginstview/')
+							 });
+	}).catch(function(err){
+		 console.log("Error Is" + err)
+	})
+})
+}
+
+
+
 
 else if(this.lotOrderValue.status == "UNCONFIRMED")
 {
@@ -424,6 +447,11 @@ else{
 
 }
 
+
+
+onChnage(e){
+
+}
     render() {
 	//debugger;
 		var fiterData = undefined ;
@@ -439,17 +467,17 @@ else{
 							<td>{view.railcar_number ? view.railcar_number : ''}</td>
 							<td>{view.lot_number ? view.lot_number: ''}</td>
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.material : ''}</td>
-							<td> {view.status == "CONFIRMED"? "YES" : "NO"}</td>
-							<td > {view.arrived ==1 ? "YES" : "NO"}</td>
+							<td> {view.status == "UNCONFIRMED"? "NO" : "YES"}</td>
+								<td ref="arrived" id={"th"+index}> {view.arrived == 1 || this.checked==true ? "YES" : "NO"}</td>
 							<td>
 								<label className="control control--checkbox">
-									<input type="checkbox" id="row1" value={view} onChange={(e) => this.click(e,view)}/>
+								<input type="checkbox" id={"row1"+ index} value={view} onChange={(e) => this.click(e,view,index)} disabled/>
 
 									<div className="control__indicator"></div>
 								</label>
 							</td>
 							<td>
-							<input type="date" onChange={(e, x) => this.handleChange1(e,x)}  id={index}/>
+							<input type="date" onChange={(e, x,) => this.handleChange1(e,x)}  id={index}/>
 					</td>
 						</tr>
 					)
@@ -476,15 +504,11 @@ else{
 			})
 		}
 
-
-
-		const railCart = this.props.data
-
-
+  	const railCart = this.props.data
 		var railcartData = _.map(railCart , (view ,index)=>{
 		//debugger;
 
-			if(view.TPackagingInstructions && (view.status == "CONFIRMED" || view.status == "UNCONFIRMED")) {
+			if(view.TPackagingInstructions && (view.status == "CONFIRMED" || view.status == "UNCONFIRMED" || view.status == "QUEUED")) {
 		return(
 	              	<tr>
 							<td>{view.TPackagingInstructions.TCompany? view.TPackagingInstructions.TCompany.name : ''}</td>
@@ -492,7 +516,7 @@ else{
 							<td>{view.railcar_number ? view.railcar_number : ''}</td>
 							<td>{view.lot_number ? view.lot_number: ''}</td>
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.material : ''}</td>
-							<td> {view.status == "CONFIRMED" ? "YES" : "NO"}</td>
+							<td> {view.status == "UNCONFIRMED" ? "NO" : "YES"}</td>
 							<td ref="arrived" id={"th"+index}> {view.arrived == 1 || this.checked==true ? "YES" : "NO"}</td>
 							<td>
 								<label className="control control--checkbox">
@@ -502,7 +526,7 @@ else{
 								</label>
 							</td>
 							<td>
-							<input type="date" className="calender"   onChange={(e, x) => this.handleChange1(e,x)}  id={index}   />
+							<input type="date" className="calender"  onChange={(e, x) => this.handleChange1(e,x)}  id={index}   />
 					</td>
 						</tr>
 		)

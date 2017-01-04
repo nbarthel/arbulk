@@ -50,6 +50,7 @@ class  ShipmentDetailsForm extends React.Component {
         this.onSaveChange = this.onSaveChange.bind(this)
         this.deleteAllocate = this.deleteAllocate.bind(this)
         this.onDeleteFunction = this.onDeleteFunction.bind(this)
+        this.onEditClick = this.onEditClick.bind(this)
     }
     componentDidMount() {
        console.log("aloc",this.props.allocShipment)
@@ -83,11 +84,13 @@ class  ShipmentDetailsForm extends React.Component {
       })
     }
     tableCheckBoxChange(e,value){
+      debugger;
         if(e.target.checked) {
         console.log("value", value)
         this.sID = value.shipmentId
         this.shipmentId = value.shipmentId
         this.piLotId = value.TPackagingInstructionLots.id
+        this.confid = value.id
         this.getCurrentInventry(this.piLotId)
         this.state.CI = true
         /*this.forceUpdate()*/
@@ -455,9 +458,7 @@ bArray = this.b
 
                   this.b.push(_.cloneDeep(this.truckerDetail))
 
-
-                  }
-
+      }
    }
  }
 else{
@@ -509,12 +510,7 @@ this.b.push(_.cloneDeep(this.truckerDetail))
         this.forceUpdate()
       }
 
-
 }
-
-
-
-
 
 deleteAllocate(e){
   debugger;
@@ -554,6 +550,25 @@ deleteAllocate(e){
   }
 }
 
+onConfirmClick(e){
+  if(this.props.id != null){
+          hashHistory.push('/Shipment/shipmentConfirmation/'+this.confid)}
+          else{
+            swal("Selection Missing","Please Select A Shipment Lot","info")
+          }
+}
+
+onEditClick(e){
+  if(this.props.id != undefined){
+    hashHistory.push('/Shipment/shipmentedit/'+this.props.id)
+  }
+
+else
+{
+  swal("Selection Missing","Please Select A Checkbox","error")
+}
+}
+
     render() {
         return (
             <section className="shipment">
@@ -583,13 +598,12 @@ deleteAllocate(e){
                         <div className="text_left">
                          <div className="pull-right margin-10-last-r"><button type="button" id="back" className="btn  btn-gray text-uppercase" onClick = {hashHistory.goBack}> BACK</button> </div>
 
-                         <div className="pull-left margin-10-last-l"><button type="button"  className="btn  btn-gray text-uppercase">Allocate Containers</button> </div>
 
 
-                         <div className="pull-left margin-10-all"><Link to="shipmentconfirm"><button type="button" id="confirm" className="btn  btn-success text-uppercase">Confirm</button></Link> </div>
+                         <div className="pull-left margin-10-all"><button type="button" id="confirm" className="btn  btn-success text-uppercase" onClick = {(e) => {this.onConfirmClick(e)}}>Confirm</button> </div>
 
 
-                          <div className="pull-left margin-10-all"><Link to="shipmentconfirm"><button type="button" id="edit_shipment"  className="btn  btn-orange text-uppercase">Edit</button></Link> </div>
+                          <div className="pull-left margin-10-all"><button type="button" id="edit_shipment"  className="btn  btn-orange text-uppercase" onClick={this.onEditClick}>Edit</button> </div>
                         </div>
                     </div>
                     <div className=" col-lg-12 "><hr/></div>

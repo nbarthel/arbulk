@@ -509,10 +509,7 @@ render(){
 
               this.sameValue = this.allValuesSame(this.statusArray)
 
-
-
-
-                  if(view.isDomestic == 0){
+                   if(view.isDomestic == 0){
                     var vessel = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? view.TShipmentInternational[0].steamshipVessel :''
                     var freightForwarder = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? view.TShipmentInternational[0].freightForwarder : ''
                     var erd = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? moment(view.TShipmentInternational[0].earliestReturnDate).format("YYYY-MM-DD") : ''
@@ -521,14 +518,14 @@ render(){
                     var returnLocation = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? view.TShipmentInternational[0].containerReturnLocation : ''
                     var docCutoff = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? moment(view.TShipmentInternational[0].docCutoffDate).format("YYYY-MM-DD") : ''
                     var steamShipline = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? view.TShipmentInternational[0].TSteamshipLine.name : ''
-                    var status = (view.numberOfContainers == this.statusArray.length && this.sameValue) ? "COMPLETED" :(view.TShipmentInternational && view.TShipmentInternational.length >0) ? view.TShipmentInternational[0].status : ''
+                    var status = (view.TShipmentInternational && view.TShipmentInternational.length > 0 ) ?view.TShipmentInternational[0].status : 'NA'
                     var CType = ((view.TShipmentInternational && view.TShipmentInternational.length > 0) ? (view.TShipmentInternational[0].TContainerType ? view.TShipmentInternational[0].TContainerType.name : "N/A"):"N/A")
                     var confd = (view.TShipmentInternational && view.TShipmentInternational.length > 0)? (view.TShipmentInternational[0].status == "CONFIRMED" ? "YES" : "NO"):"NO"
 
 
                   }
                   else if(view.isDomestic == 1){
-                    var status = (view.numberOfContainers == this.statusArray.length && this.sameValue) ? "COMPLETED" : (view.TShipmentDomestic && view.TShipmentDomestic.length >0) ? view.TShipmentDomestic[0].status : ''
+                    var status = (view.TShipmentDomestic && view.TShipmentDomestic.length > 0 ) ?view.TShipmentDomestic[0].status : 'NA'
                     var confd = (view.TShipmentDomestic && view.TShipmentDomestic.length > 0)? (view.TShipmentDomestic[0].status == "CONFIRMED" ? "YES" : "NO"):"NO"
 
                   }
