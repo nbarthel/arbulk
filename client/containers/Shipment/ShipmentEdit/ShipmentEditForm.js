@@ -180,7 +180,7 @@ bookingChange(e){
     }*/
 
 onSave(){
-
+  debugger;
      this.SIObj.customerId = this.props.editData.customerId
      this.SIObj.releaseNumber = this.props.editData.releaseNumber
      this.SIObj.numberOfContainers = this.props.editData.numberOfContainers

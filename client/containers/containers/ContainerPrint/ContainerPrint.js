@@ -143,6 +143,8 @@ export default class ContainerPrint extends React.Component {
         var totalBags = this.getSum(this.state.viewData.TContainerLoad)
         var totalPallets = Math.ceil(totalBags / this.state.PIData.TPackagingInstructions.bags_per_pallet)
         var gW = totalBags*(this.state.PIData.TPackagingInstructions.TPackagingMaterial.avarageMaterialWeight) + totalBags *(this.state.PIData.TPackagingInstructions.TPackagingMaterial.emptyWeight) + totalPallets *(this.state.PIData && this.state.PIData.TPackagingInstructions && this.state.PIData.TPackagingInstructions.TPalletType ? this.state.PIData.TPackagingInstructions.TPalletType.weight : 1)
+        var tw = totalBags *(this.state.PIData.TPackagingInstructions.TPackagingMaterial.emptyWeight) + totalPallets *(this.state.PIData && this.state.PIData.TPackagingInstructions && this.state.PIData.TPackagingInstructions.TPalletType ? this.state.PIData.TPackagingInstructions.TPalletType.weight : 1)
+      
         var displaygW = gW + ""
 
         console.log("Total Bagssssssssssssssssssssss" , totalBags , gW )
@@ -265,7 +267,7 @@ export default class ContainerPrint extends React.Component {
                                             </td>
                                             <td className="font-12 value" >
                                                 <span>{totalBags * this.state.PIData.TPackagingInstructions.TPackagingMaterial.avarageMaterialWeight}KG</span>
-                                                <span>{this.state.viewData.tareWeight}KG</span>
+                                                <span>{tw}KG</span>
                                                 <span>{gW}KG</span>
                                             </td>
                                         </tr>

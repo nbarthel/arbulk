@@ -501,7 +501,7 @@ render(){
                    <td style ={{display : this.props.showArrvd}}>{data.railcar_arrived_on != null ? 'YES' : 'NO'}</td>
                    <td style ={{display : this.props.showRecd}}>{(data.TShipmentLots && data.TShipmentLots.length>0 && data.status!= "SHIPPED") ? "YES" : "NO"}</td>
                    <td style ={{display : this.props.showCutoff}}>{(data.TShipmentLots && data.TShipmentLots.length>0 && data.TShipmentLots[0].TShipmentent && data.TShipmentLots[0].TShipmentent.TShipmentInternational && data.TShipmentLots[0].TShipmentent.TShipmentInternational.length>0 )?moment(data.TShipmentLots[0].TShipmentent.TShipmentInternational[0].cargoCutoffDate).format("YYYY-MM-DD"):'NA'}</td>
-                   <td style ={{display : this.props.showWeight}}>{selectedWeight == 'kg' ? data.weight:(data.weight * 2.20462).toFixed(2)}</td>
+                   <td style ={{display : this.props.showWeight}}>{selectedWeight == 'lbs' ? data.weight:(data.weight / 2.20462).toFixed(2)}</td>
                        <td style ={{display : this.props.showBag}}>{(data.TShipmentLots && data.TShipmentLots.length > 0 && data.TShipmentLots[data.TShipmentLots.length-1].noOfBags)?data.TShipmentLots[data.TShipmentLots.length -1].noOfBags : 'NA'}</td>
                        <td style ={{display : this.props.showInInvt}}>{(data.inInventory && (data.TShipmentLots && data.TShipmentLots.length>0)) ?(data.inInventory - data.TShipmentLots[data.TShipmentLots.length -1].noOfBags ):data.inInventory }</td>
 

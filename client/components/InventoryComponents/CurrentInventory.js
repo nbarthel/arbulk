@@ -927,7 +927,7 @@ var calcWeight = this.state.weightBox
                 </div>
 				<div className="form-group">
 					<div className=" col-md-3 col-sm-6 col-xs-6">
-					  <input type="number" id="weightBox" value= {this.state.weightBox ? this.state.weightBox.toFixed(2) : ''} onChange={this.handleInputChange} ref = "weight" onBlur = {(e) => {this.validateWeight(e)}} className={this.state.errors.noOfBags ? "form-control has error" : "form-control"} id="weight" placeholder="Weight"/>
+					  <input type="text" id="weightBox" value= {this.state.weightBox ? ((this.state.weightBox.toFixed(2))+' kg') : ''} onChange={this.handleInputChange} ref = "weight" onBlur = {(e) => {this.validateWeight(e)}} className={this.state.errors.noOfBags ? "form-control has error" : "form-control"} id="weight" placeholder="Weight" style={{"borderStyle":"none"}}/>
 					  <div className="error"><span></span></div>
 					</div>
                 </div>
@@ -943,7 +943,7 @@ var calcWeight = this.state.weightBox
 						  <tr >
 							<th>Inv. Location</th>
 							<th>Bags</th>
-							<th>Weight</th>
+							<th>Weight(kg)</th>
 							<th>Lot #</th>
 							<th style={{display: this.state.showEdit}}>Action </th>
 						</tr>

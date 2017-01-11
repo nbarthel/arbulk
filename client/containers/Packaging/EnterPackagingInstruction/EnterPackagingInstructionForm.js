@@ -9,6 +9,8 @@ import {Base_Url} from '../../../constants';
 var Spinner = require('react-spinkit');
 import  validateInput  from './PIValidator';
 import { createDataLoader } from 'react-loopback';
+var flagsc = true;
+var flagnj = true;
 export default class EnterPackagingInstructionForm extends React.Component {
     constructor(props)
     	{
@@ -162,12 +164,47 @@ handlePIChange(e){
 		this.setState({
 			display : 'block'
 		})
+	if(this.obj.location_id!=="" && (flagsc || flagnj)&& this.obj.location_id!== undefined)
+    {
+      if(this.obj.location_id==1 && flagnj)
+      {
+        flagnj = false;
+        flagsc = true;
+        this.state.numberofbagsorpallets = "55";
+        this.obj.bags_per_pallet = this.state.numberofbagsorpallets
+      }
+      else if(this.obj.location_id==2 && flagsc) {
+        flagsc = false;
+        flagnj = true;
+        this.state.numberofbagsorpallets = "60";
+        this.obj.bags_per_pallet = this.state.numberofbagsorpallets
+      }
+      else {
+        if((this.obj.location_id==2 && !flagsc)||(this.obj.location_id==1 && !flagnj))
+        {
+          this.state.numberofbagsorpallets = e.target.value
+        }
+        this.state.numberofbagsorpallets = (this.obj.bags_per_pallet==="")?this.state.numberofbagsorpallets:this.obj.bags_per_pallet
+      }
+    }
 	}
 	else if(this.obj.bag_id != 1){
 		this.setState({
 			display : 'none'
 		})
+        flagnj = true;
+    	flagsc = true;
 		this.obj.packaging_material_id = 1
+     	this.obj[e.target.name] = e.target.value
+    if(e.target.name==="bags_per_pallet")
+    {
+      this.state.numberofbagsorpallets = e.target.value//(this.obj.bags_per_pallet==="")?this.state.numberofbagsorpallets:this.obj.bags_per_pallet
+      this.obj.bags_per_pallet = this.state.numberofbagsorpallets
+    }
+    else {
+      this.state.numberofbagsorpallets = ''
+      this.obj.bags_per_pallet = this.state.numberofbagsorpallets
+    }
 	}
 	console.log(this.obj)
 }
@@ -924,7 +961,7 @@ render() {
 					  className="form-control"
 					  id="No_of_Bages_Pallet"
 					  placeholder="No of Bags/Pallet"
-					  onChange={this.handlePIChange}
+					  onChange={(e)=>{this.handleNumberofbagsChange(e)}}
 					  name="bags_per_pallet"
 					  value={this.state.numberofbagsorpallets} />
 					}

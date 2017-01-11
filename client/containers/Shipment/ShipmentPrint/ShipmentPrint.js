@@ -24,6 +24,7 @@ export default class ShipmentPrint extends React.Component {
         this.state.viewData={lot:{},packaging_status:'',custom_label:'',TCompany:{},TLocation:{},TPackagingType:{},TShipmentInternational:[{TSteamshipLine:{},TContainerType:{}}],TShipmentDomestic:[{TSteamshipLine:{},TContainerType:{}}]}
         this.createPDF = this.createPDF.bind(this);
         this.onPrint = this.onPrint.bind(this)
+        this.createPdfClick = this.createPdfClick.bind(this)
         this.reportArray = []
        /* this.state.viewData={
             "customer": "abc",
@@ -138,12 +139,13 @@ export default class ShipmentPrint extends React.Component {
         return
     }
 
-    componentDidMount() {
-      (function(){
+  
+  createPdfClick(){
+	 (function(){
             var
                 form = $('.warpper-inner_shipment'),
                 cache_width = form.width(),
-                a4  =[ 595.28,  841.89]; // for a4 size paper width and height
+                a3  =[ 595.28,  1041.89]; // for a4 size paper width and height
 
             $('#create_pdf').on('click',function(){
                 console.log('call create pdf');
@@ -153,29 +155,99 @@ export default class ShipmentPrint extends React.Component {
             });
 //create pdf
             function createPDF(){
+		debugger
                 getCanvas().then(function(canvas){
+                debugger
+            
                     var
                         img = canvas.toDataURL("image/png"),
                         doc = new jsPDF({
                             unit:'px',
-                            format:'a4'
+                            format:'a3'
                         });
-                    doc.addImage(img, 'JPEG', 10, 10);
+                   // doc.addImage(img, 'JPEG', 10, 10);
+                    doc.addHTML(document.body , {pagesplit : true} ,function(){
                     doc.save('shipment.pdf');
-                    form.width(cache_width);
+                    })
+		   // doc.addPage();
+                //doc.addImage(img, 'JPEG', 10, 10);
+                  //  doc.save('shipment.pdf');
+                    //form.width(cache_width);
                 });
             }
 
 // create canvas object
             function getCanvas(){
-                form.width((a4[0]*1.33333) -80).css('max-width','none');
-                return html2canvas(form,{
+		     debugger;
+                form.width((a3[0]*1.33333) -200).css('max-width','none');
+                return html2canvas(document.body,{
                     imageTimeout:2000,
                     removeContainer:true
                 });
             }
 
         }());
+
+ 
+
+     
+
+      }
+  
+  
+  
+    componentDidMount() {
+    (function(){
+      var
+                form = $('.warpper-inner_shipment'),
+                cache_width = form.width(),
+                a3  =[ 595.28,  841.89]; // for a4 size paper width and height
+
+            $('#create_pdf').on('click',function(){
+                console.log('call create pdf');
+                $('html,body').scrollTop(0);
+               // $(window).scrollTop();
+                createPDF();
+            });
+//create pdf
+            function createPDF(){
+		debugger
+                getCanvas().then(function(canvas){
+                canvas.fillStyle = "#FFFFFF";
+                    var
+                        img = canvas.toDataURL("image/png",1.0),
+                        doc = new jsPDF({
+                            unit:'pt',
+                            format:'a3',
+							page:1
+                        });
+					doc.internal.scaleFactor = 1.0;
+                   // doc.addImage(img, 'JPEG', 10, 10);
+                    doc.addHTML(document.body , {format:'png',pagesplit : true} ,function(){
+                    doc.save('shipment.pdf');
+                    })
+		   
+                });
+            }
+
+// create canvas object
+            function getCanvas(){
+		debugger;
+                form.width((a3[0]*1.33333) -80).css('max-width','none');
+                return html2canvas(document.body,{
+                    imageTimeout:2000,
+                    removeContainer:false
+                });
+            }
+
+        }());
+
+      
+      
+      
+      
+      
+      
     }
     createPDF(e){
         console.log('print view')
@@ -320,7 +392,7 @@ debugger;
                                                  <td>BREAKDOWN</td>
                                                  { (this.state.viewData && this.state.viewData.TContainerInternational && this.state.viewData.TContainerInternational.length >0 && this.state.viewData.TContainerInternational[0].TContainerLoad)?
                                                      _.map(this.state.viewData.TContainerInternational[index].TContainerLoad,(obj,index)=>{
-                                                             return(<td><p style={{"display" : (Math.floor(obj.TPiInventory.noOfBags/this.state.bagsPerpallet) >0)? "block" : "none" , "float" : "left" , "width" : "25%"}}>{Math.floor(obj.TPiInventory.noOfBags/this.state.bagsPerpallet)}Pallets X {this.state.bagsPerpallet} Bags</p> <p style={{"display" : (obj.TPiInventory.noOfBags/this.state.bagsPerpallet ==0 || obj.TPiInventory.noOfBags % this.state.bagsPerpallet > 0)? "block" : "none" , "float" : "left" , "width" : "25%"}}>1 Pallets X {obj.TPiInventory.noOfBags % this.state.bagsPerpallet} Bags</p></td>)
+                                                          return(<td><p style={{"display" : (Math.floor(obj.TPiInventory.noOfBags/this.state.bagsPerpallet) >0)? "block" : "none" , "float" : "left" , "width" : "25%"}}>{Math.floor(obj.TPiInventory.noOfBags/this.state.bagsPerpallet)}Pallets X {this.state.bagsPerpallet} Bags</p> <p style={{"display" : (obj.TPiInventory.noOfBags/this.state.bagsPerpallet ==0 || obj.TPiInventory.noOfBags % this.state.bagsPerpallet > 0)? "block" : "none" , "float" : "left" , "width" : "25%" ,"marginLeft" : "30px"}}>,1 Pallets X {obj.TPiInventory.noOfBags % this.state.bagsPerpallet} Bags</p></td>)
 
                                                      })
 
@@ -434,8 +506,8 @@ debugger;
             <div style={{marginLeft: '20%',marginRight: '18%'}}>
 
  {formData}
- <button id="create_print" type="button" className="create_btn_shipment" onClick = {this.onPrint} style={{"float" : "left"}}>Print </button>
-<button id="create_pdf" type="button" className="create_btn_shipment">CREATE PDF </button>
+  <button id="create_print" type="button" className="create_btn_shipment" onClick = {this.onPrint} style={{"float" : "left"}} data-html2canvas-ignore="true">Print </button>
+<button id="create_pdf" type="button" className="create_btn_shipment"  data-html2canvas-ignore="true">CREATE PDF </button>
             </div>
         );
 

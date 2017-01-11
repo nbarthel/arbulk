@@ -263,7 +263,7 @@ componentWillMount() {
 					<legend className="scheduler-border">PACKAGING Info </legend>
 					<div className="col-lg-5 col-sm-5 col-xs-5">Bag Type</div>
 					<div  className="col-lg-2 col-sm-2 col-xs-2 ">:</div>
-					<div className="col-lg-5 col-sm-5 col-xs-5"><b>{this.props.viewData ? (this.props.viewData[0].TPackagingType ? this.props.viewData[0].TPackagingType.packagingType : '') : ''}</b></div>
+					<div className="col-lg-5 col-sm-5 col-xs-5"><b>{this.props.viewData ? (this.props.viewData[0].TPackagingMaterial ? this.props.viewData[0].TPackagingMaterial.packagingName : '') : ''}</b></div>
 
 					<div className="col-lg-5 col-sm-5 col-xs-5">Pallet Type</div>
 					<div  className="col-lg-2 col-sm-2 col-xs-2">:</div>

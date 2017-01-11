@@ -60,11 +60,11 @@ debugger;
 
 	render() {
     var PO_number = this.state.historyData && this.state.historyData.po_number ? this.state.historyData.po_number : ''
-    var inventoryBags = (this.state.historyData && this.state.historyData.TPackagingInstructionLots && this.state.historyData.TPackagingInstructionLots.length > 0 )?this.state.historyData.TPackagingInstructionLots[0].inInventory : 0
-
+    var inventoryBags = (this.state.historyData && this.state.historyData.TPackagingInstructionLots && this.state.historyData.TPackagingInstructionLots.length > 0 )?this.state.historyData.TPackagingInstructionLots[this.state.historyData.TPackagingInstructionLots.length -1].inInventory : 0
+   
     if(this.state.historyData && this.state.historyData.TPackagingInstructionLots && this.state.historyData.TPackagingInstructionLots.length > 0 && this.state.historyData.TPackagingInstructionLots[0].TShipmentLots)
     {
-		var history = _.map(this.state.historyData.TPackagingInstructionLots[0].TShipmentLots , function(view , index){
+		var history = _.map(this.state.historyData.TPackagingInstructionLots[this.state.historyData.TPackagingInstructionLots.length - 1].TShipmentLots , function(view , index){
       debugger;
     return(
       <tr key={index}>

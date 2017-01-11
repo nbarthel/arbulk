@@ -64,9 +64,9 @@ var moment = require('moment');
 							<th>ARB </th>
 							<th>Customer</th>
 							<th>PO </th>
+          					<th>Material </th>
 							<th>Railcar# </th>
 							<th>Lot# </th>
-							<th>Material </th>
 							<th>Confmd </th>
 							<th>Arrvd </th>
 							<th>Recd </th>
@@ -85,9 +85,9 @@ var moment = require('moment');
       					 		<th > {view.TLocation ? view.TLocation.locationName : ''} </th>
           						 <th >{view.TCompany ? view.TCompany.name : ''}</th>
            						 <th>{view.po_number} </th>
+                                 <th>{view.material}</th>
 						          <th></th>
 						          <th></th>
-						          <th>{view.material}</th>
 						          <th></th>
 						          <th></th>
 						          <th></th>
@@ -119,8 +119,8 @@ var moment = require('moment');
 								<td>{data.railcar_arrived_on != null ? 'YES' : 'NO'}</td>
 								<td>{(data.TShipmentInternational && data.TShipmentInternational.length>0) ?moment(data.TShipmentInternational[0].cargoCutoffDate).format('MM-DD-YYYY') : 'NA'}</td>
 								<td>{data.weight}</td>
-								<td>{(data.TShipmentLots && data.TShipmentLots.length > 0) ?data.TShipmentLots[data.TShipmentLots.length - 1].noOfBags : 'NA'}</td>
-								<td>{data.inInventory}</td>
+								<td>{(data.TShipmentLots && data.TShipmentLots.length > 0) ?data.TShipmentLots[data.TShipmentLots.length - 1].noOfBags  : "NA"}</td>
+								<td>{(data.inInventory && (data.TShipmentLots && data.TShipmentLots.length>0)) ?(data.inInventory - data.TShipmentLots[data.TShipmentLots.length -1].noOfBags ):data.inInventory }</td>
 								<td>{data.status?data.status : ''}</td>
 								<td>
 									<label className="control control--checkbox" id={data.status}>
@@ -146,7 +146,7 @@ var moment = require('moment');
 								<td>{(data.TShipmentInternational && data.TShipmentInternational.length>0) ?moment(data.TShipmentInternational[0].cargoCutoffDate).format('MM-DD-YYYY') : 'NA'}</td>
 								<td>{data.weight}</td>
 								<td>{(data.TShipmentLots && data.TShipmentLots.length>0) ?data.TShipmentLots[data.TShipmentLots.length - 1].noOfBags  : 'NA'}</td>
-								<td>{data.inInventory}</td>
+								<td>{(data.inInventory && (data.TShipmentLots && data.TShipmentLots.length>0)) ?(data.inInventory - data.TShipmentLots[data.TShipmentLots.length -1].noOfBags ):data.inInventory }</td>
 								<td>{data.status?data.status : ''}</td>
 								<td>
 									<label className="control control--checkbox">

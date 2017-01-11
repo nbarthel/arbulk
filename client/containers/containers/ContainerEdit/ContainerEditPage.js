@@ -24,7 +24,7 @@ var Loader = require('react-loader')
        var base = 'TShipmentents'+ '/' + this.id;
         //TPackagingInstructionLots
         this.url = CIview._buildUrl(base, {
-             "include" : [{"relation" : "TContainerDomestic" ,"scope" : {"where" :{"id" : this.props.params.contId}}} , {"relation" : "TContainerDomestic" ,"scope" : {"where" :{"id" :this.props.params.contId}}} ,"TContainerInternational","TCompany" ,"TLocation","TShipmentDomestic",{"relation":"TShipmentInternational","scope":{"include":["TContainerType" , "TSteamshipLine"]}}]
+             "include" : [{"relation" : "TContainerDomestic" ,"scope" : {"where" :{"id" : this.props.params.contId}}} , {"relation" : "TContainerInternational" ,"scope" : {"where" :{"id" :this.props.params.contId}}},"TCompany" ,"TLocation","TShipmentDomestic",{"relation":"TShipmentInternational","scope":{"include":["TContainerType" , "TSteamshipLine"]}}]
   });
         console.log('sdsddsdsdssdssssssssssd' , this.url);
       $.ajax({

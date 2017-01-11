@@ -7,13 +7,13 @@ export class TotalComponent extends Component {
 	render() {
 		let totalRailCarWeight = this.props.totalRailcarWeight
 		let totalPackagedWeight = this.props.totalWeight
-		let totalGainOrLoss = totalRailCarWeight - totalPackagedWeight
+		let totalGainOrLoss = (totalRailCarWeight/2.20).toFixed(2) - totalPackagedWeight
 		return (
 			<table className="table table-striped">
 						<thead className="base_bg">
 						  <tr >
-							<th>Weight(lbs)</th>
-							<th>{(this.props.weightLBS*2.20).toFixed(2)}</th>
+							<th>Weight</th>
+							<th>lbs</th>
 						</tr>
 						</thead>
 						<tbody>
@@ -23,11 +23,11 @@ export class TotalComponent extends Component {
 							</tr>
 							<tr>
 								<td>Packaged Weight </td>
-								<td>{totalPackagedWeight} </td>
+								<td>{(totalPackagedWeight*2.20).toFixed(2)} </td>
 							</tr>
 							<tr>
 								<td>Gain / Loss</td>
-								<td>{totalGainOrLoss ? totalGainOrLoss : 0 } </td>
+								<td>{totalGainOrLoss ? (totalGainOrLoss*2.20).toFixed(2) : 0 } </td>
 							</tr>
 
 						</tbody>

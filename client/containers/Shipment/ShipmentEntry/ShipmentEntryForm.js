@@ -1595,11 +1595,12 @@ onSubmitContainer(e){
                                                             id="No_of_Bages_Pallat"
                                                             placeholder="Ship to Zip Code"
                                                             name="zipCode"
-
+                                                           
                                                             onChange={this.DomesticChange1}
                                                          />
 
-                                               </div>
+                                                  
+                                                 </div>
                                                 {this.state.DomesticInfoList.length> 0 ? <i className="fa-2x fa fa-minus base_color" onClick={this.onDomesticShipMinus} aria-hidden="true"></i> : null}
                                             </div>
                                             <div className="form-group">

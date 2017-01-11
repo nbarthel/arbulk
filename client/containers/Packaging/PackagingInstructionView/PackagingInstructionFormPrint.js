@@ -1,4 +1,3 @@
-
 import React from 'react';
 //import EnterPackagingInstructionForm from './EnterPackagingInstructionForm';
 import { createDataLoader } from 'react-loopback';
@@ -107,6 +106,7 @@ export default class PrintPackaging extends React.Component {
 
                 this.setState({
                     viewData : data,
+                    packType : data.TPackagingType.packagingType,
                     lots : data.TPackagingInstructionLots,
                     lot:lot,
                     railcar:railcar,
@@ -266,18 +266,18 @@ export default class PrintPackaging extends React.Component {
                                         <table>
                                             <tr>
                                                 <td>A.</td>
-                                                <td>____ Full Boxes</td>
-                                                <td>X  ____ Weight per Box  </td>
-                                                <td>= ____Total Weight of Full Boxes</td>
+                                                <td>____ Full {this.state.packType}</td>
+                                                <td>X  ____ Weight per {this.state.packType}  </td>
+                                                <td>= ____Total Weight of Full {this.state.packType}</td>
                                             </tr>
                                             <tr>
                                                 <td>B.</td>
-                                                <td>____ Partial Boxes</td>
-                                                <td>X  ____ Weight per Box  </td>
-                                                <td> = ____Total Weight of Partial Boxes</td>
+                                                <td>____ Partial {this.state.packType}</td>
+                                                <td>X  ____ Weight per {this.state.packType}  </td>
+                                                <td> = ____Total Weight of Partial {this.state.packType}</td>
                                             </tr>
                                             <tr>
-                                                <td colSpan="4" className="total">____Total Boxes (A+B)</td>
+                                                <td colSpan="4" className="total">____Total {this.state.packType} (A+B)</td>
                                             </tr>
                                         </table>
                                         <div className="info">
@@ -293,14 +293,14 @@ export default class PrintPackaging extends React.Component {
                                     <div className="location_data">
                                         <table>
                                             <tr>
-                                                <td>_______ Boxes in  Location # _______</td>
-                                                <td>_______ Boxes in  Location # _______</td>
-                                                <td>_______ Boxes in  Location # _______</td>
+                                                <td>_______ {this.state.packType} in  Location # _______</td>
+                                                <td>_______ {this.state.packType} in  Location # _______</td>
+                                                <td>_______ {this.state.packType} in  Location # _______</td>
                                             </tr>
                                             <tr>
-                                                <td>_______ Boxes in  Location # _______</td>
-                                                <td>_______ Boxes in  Location # _______</td>
-                                                <td>_______ Boxes in  Location # _______</td>
+                                                <td>_______ {this.state.packType} in  Location # _______</td>
+                                                <td>_______ {this.state.packType} in  Location # _______</td>
+                                                <td>_______ {this.state.packType} in  Location # _______</td>
                                             </tr>
 
                                         </table>
