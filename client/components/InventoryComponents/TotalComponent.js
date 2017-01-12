@@ -12,7 +12,7 @@ export class TotalComponent extends Component {
 			<table className="table table-striped">
 						<thead className="base_bg">
 						  <tr >
-							<th>Weight</th>
+							<th></th>
 							<th>lbs</th>
 						</tr>
 						</thead>
@@ -23,11 +23,11 @@ export class TotalComponent extends Component {
 							</tr>
 							<tr>
 								<td>Packaged Weight </td>
-								<td>{(totalPackagedWeight*2.20).toFixed(2)} </td>
+								<td>{(totalPackagedWeight*2.20).toFixed(0)} </td>
 							</tr>
 							<tr>
 								<td>Gain / Loss</td>
-								<td>{totalGainOrLoss ? (totalGainOrLoss*2.20).toFixed(2) : 0 } </td>
+								<td>{totalGainOrLoss ? (totalGainOrLoss*2.20).toFixed(0) : 0 } </td>
 							</tr>
 
 						</tbody>
@@ -51,3 +51,4 @@ export class TotalComponent extends Component {
 		);
 	}
 }
+
