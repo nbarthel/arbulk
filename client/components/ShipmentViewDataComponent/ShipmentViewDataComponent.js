@@ -512,11 +512,11 @@ render(){
                    if(view.isDomestic == 0){
                     var vessel = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? view.TShipmentInternational[0].steamshipVessel :''
                     var freightForwarder = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? view.TShipmentInternational[0].freightForwarder : ''
-                    var erd = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? moment(view.TShipmentInternational[0].earliestReturnDate).format("YYYY-MM-DD") : ''
-                    var cutOff = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? moment(view.TShipmentInternational[0].cargoCutoffDate).format("YYYY-MM-DD") : ''
+                    var erd = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? moment(view.TShipmentInternational[0].earliestReturnDate).format("MM-DD-YYYY") : ''
+                    var cutOff = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? moment(view.TShipmentInternational[0].cargoCutoffDate).format("MM-DD-YYYY") : ''
                     var puLocation = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? view.TShipmentInternational[0].containerPickupLocation : ''
                     var returnLocation = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? view.TShipmentInternational[0].containerReturnLocation : ''
-                    var docCutoff = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? moment(view.TShipmentInternational[0].docCutoffDate).format("YYYY-MM-DD") : ''
+                    var docCutoff = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? moment(view.TShipmentInternational[0].docCutoffDate).format("MM-DD-YYYY") : ''
                     var steamShipline = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? view.TShipmentInternational[0].TSteamshipLine.name : ''
                     var status = (view.TShipmentInternational && view.TShipmentInternational.length > 0 ) ?view.TShipmentInternational[0].status : 'NA'
                     var CType = ((view.TShipmentInternational && view.TShipmentInternational.length > 0) ? (view.TShipmentInternational[0].TContainerType ? view.TShipmentInternational[0].TContainerType.name : "N/A"):"N/A")
@@ -765,3 +765,4 @@ render(){
   }
 }
 export default ShipmentViewDataComponent;
+
