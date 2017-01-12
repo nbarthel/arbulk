@@ -178,7 +178,7 @@ export default class PrintPackaging extends React.Component {
                      <div className="packaging_data ">
                          <table width="100%" className="bg_striped">
                              <tbody>
-                             <tr><td>DATE:</td> <td>{moment(this.state.viewData.TCompany.createdOn).format("YYYY-MM-DD")}</td></tr>
+                             <tr><td>DATE:</td> <td>{moment(this.state.viewData.created_on).format("MM-DD-YYYY")}</td></tr>
                              <tr><td>CUSTOMER:</td> <td>{this.state.viewData.TCompany.name}</td></tr>
                              <tr><td>PO#: </td> <td>{this.state.viewData.po_number}</td></tr>
                              <tr><td>RAILCAR#: </td> <td>{this.state.railcar}</td></tr>
@@ -197,7 +197,7 @@ export default class PrintPackaging extends React.Component {
                      <div className="packaging_data ">
                          <table width="100%" className="bg_striped">
                              <tbody>
-                             <tr><td>DATE:</td> <td>{moment(this.state.viewData.TCompany.createdOn).format("YYYY-MM-DD")}</td></tr>
+                             <tr><td>DATE:</td> <td>{moment(this.state.viewData.created_on).format("MM-DD-YYYY")}</td></tr>
                              <tr><td>CUSTOMER:</td> <td>{this.state.viewData.TCompany.name}</td></tr>
                              <tr><td>PO#: </td> <td>{this.state.viewData.po_number}</td></tr>
                              <tr><td>RAILCAR#: </td> <td>{this.state.railcar}</td></tr>
@@ -327,3 +327,4 @@ export default class PrintPackaging extends React.Component {
 );
     }
 }
+
