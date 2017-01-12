@@ -478,8 +478,8 @@ render(){
           _.map(view.TPackagingInstructionLots,(data,index)=>{
             let diff;
             if(data.railcar_arrived_on != null && data.railcar_departed_on != null){
-            let start = new Date(moment(data.railcar_arrived_on).format("YYYY-MM-DD"))
-            let end = new Date(moment(data.railcar_departed_on).format("YYYY-MM-DD"))
+            let start = new Date(moment(data.railcar_arrived_on).format("MM-DD-YYYY"))
+            let end = new Date(moment(data.railcar_departed_on).format("MM-DD-YYYY"))
              diff = parseInt((end-start ) / (1000*60*60*24))
           }
 
@@ -500,16 +500,16 @@ render(){
                    <td style ={{display : this.props.showConfmd}}>{data.status == "UNCONFIRMED" ? 'NO': 'YES'}</td>
                    <td style ={{display : this.props.showArrvd}}>{data.railcar_arrived_on != null ? 'YES' : 'NO'}</td>
                    <td style ={{display : this.props.showRecd}}>{(data.TShipmentLots && data.TShipmentLots.length>0 && data.status!= "SHIPPED") ? "YES" : "NO"}</td>
-                   <td style ={{display : this.props.showCutoff}}>{(data.TShipmentLots && data.TShipmentLots.length>0 && data.TShipmentLots[0].TShipmentent && data.TShipmentLots[0].TShipmentent.TShipmentInternational && data.TShipmentLots[0].TShipmentent.TShipmentInternational.length>0 )?moment(data.TShipmentLots[0].TShipmentent.TShipmentInternational[0].cargoCutoffDate).format("YYYY-MM-DD"):'NA'}</td>
+                   <td style ={{display : this.props.showCutoff}}>{(data.TShipmentLots && data.TShipmentLots.length>0 && data.TShipmentLots[0].TShipmentent && data.TShipmentLots[0].TShipmentent.TShipmentInternational && data.TShipmentLots[0].TShipmentent.TShipmentInternational.length>0 )?moment(data.TShipmentLots[0].TShipmentent.TShipmentInternational[0].cargoCutoffDate).format("MM-DD-YYYY"):'NA'}</td>
                    <td style ={{display : this.props.showWeight}}>{selectedWeight == 'lbs' ? data.weight:(data.weight / 2.20462).toFixed(2)}</td>
                        <td style ={{display : this.props.showBag}}>{(data.TShipmentLots && data.TShipmentLots.length > 0 && data.TShipmentLots[data.TShipmentLots.length-1].noOfBags)?data.TShipmentLots[data.TShipmentLots.length -1].noOfBags : 'NA'}</td>
                        <td style ={{display : this.props.showInInvt}}>{(data.inInventory && (data.TShipmentLots && data.TShipmentLots.length>0)) ?(data.inInventory - data.TShipmentLots[data.TShipmentLots.length -1].noOfBags ):data.inInventory }</td>
 
                    <td style ={{display : this.props.showStatus}}>{data.status ? data.status : '' }</td>
                    <td style ={{display : this.props.showRailcarArr}}>{data.arrived != null && data.arrived == 1 ? "Yes" : "No"}</td>
-                   <td style ={{display : this.props.showRailcarArrD}}>{data.railcar_arrived_on != null ? moment(data.railcar_arrived_on).format("YYYY-MM-DD") : "N/A"}</td>
+                   <td style ={{display : this.props.showRailcarArrD}}>{data.railcar_arrived_on != null ? moment(data.railcar_arrived_on).format("MM-DD-YYYY") : "N/A"}</td>
                    <td style ={{display : this.props.showRailcarDep}}>{data.railcar_departed_on != null ? "YES" : "NO"}</td>
-                   <td style ={{display : this.props.showRailcarDepDate}}>{data.railcar_departed_on != null ? moment(data.railcar_departed_on).format("YYYY-MM-DD") : "N/A"}</td>
+                   <td style ={{display : this.props.showRailcarDepDate}}>{data.railcar_departed_on != null ? moment(data.railcar_departed_on).format("MM-DD-YYYY") : "N/A"}</td>
                    <td style ={{display : this.props.showDaysPresent}}>{diff ? diff +1 : 'N/A'}</td>
                    <td style ={{display : this.props.showRailcarStatus}}>{data.railcar_status ? data.railcar_status : ''}</td>
 
@@ -682,3 +682,4 @@ render(){
   }
 }
 export default ViewDataComponent;
+
