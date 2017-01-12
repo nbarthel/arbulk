@@ -139,7 +139,7 @@ export default class ShipmentPrint extends React.Component {
         return
     }
 
-  
+
   createPdfClick(){
 	 (function(){
             var
@@ -158,7 +158,7 @@ export default class ShipmentPrint extends React.Component {
 		debugger
                 getCanvas().then(function(canvas){
                 debugger
-            
+
                     var
                         img = canvas.toDataURL("image/png"),
                         doc = new jsPDF({
@@ -188,14 +188,14 @@ export default class ShipmentPrint extends React.Component {
 
         }());
 
- 
 
-     
+
+
 
       }
-  
-  
-  
+
+
+
     componentDidMount() {
     (function(){
       var
@@ -226,7 +226,7 @@ export default class ShipmentPrint extends React.Component {
                     doc.addHTML(document.body , {format:'png',pagesplit : true} ,function(){
                     doc.save('shipment.pdf');
                     })
-		   
+
                 });
             }
 
@@ -242,12 +242,12 @@ export default class ShipmentPrint extends React.Component {
 
         }());
 
-      
-      
-      
-      
-      
-      
+
+
+
+
+
+
     }
     createPDF(e){
         console.log('print view')
@@ -299,7 +299,7 @@ debugger;
                                      <div className="loadOrder_data ">
                                          <table width="100%" className="bg_striped">
                                              <tbody>
-                                             <tr><td>DATE</td> <td>{moment(this.state.viewData.createdOn).format("YYYY-MM-DD")}</td></tr>
+                                             <tr><td>DATE</td> <td>{moment(this.state.viewData.createdOn).format("MM-DD-YYYY")}</td></tr>
                                              <tr><td>CUSTOMER</td> <td>{this.state.viewData.TCompany.name}</td></tr>
                                              <tr><td>TRUCKER </td> <td>{this.state.trucker[index].TCompany.name}</td></tr>
                                              <tr><td>CONTAINER # </td> <td>{this.state.chasis[index].containerNumber}</td></tr>
@@ -513,3 +513,4 @@ debugger;
 
     }
 }
+
