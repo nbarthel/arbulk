@@ -7,6 +7,8 @@ import './formPrint.css';
 import { hashHistory } from 'react-router'
 
 var Loader = require('react-loader');
+var lot;
+var weight;
 export default class PrintPackaging extends React.Component {
     constructor(props){
         super(props);
@@ -169,7 +171,8 @@ export default class PrintPackaging extends React.Component {
     render(){
     var lengthLabel =  this.state.viewData.custom_label.split("\n").length
    this.dataList =   _.map(this.state.viewData.TPackagingType.packagingType , (status,index)=>{
-
+		lot = this.state.lot
+        weight = this.state.weight
          if(status!=''){
            debugger;
            console.log("boxesssssssssssss" , status)
@@ -244,7 +247,7 @@ export default class PrintPackaging extends React.Component {
                                         {this.state.viewData.custom_label.split("\n").map(function(item ,index) {
                                             return (
                                                 <span>
-                                                    {item}
+                                                    {(index!=1&&index!=4)?item:(index==1?('lot# ' +lot):('weight:'+weight))}
 
                                                   <br/>
 
@@ -327,4 +330,3 @@ export default class PrintPackaging extends React.Component {
 );
     }
 }
-

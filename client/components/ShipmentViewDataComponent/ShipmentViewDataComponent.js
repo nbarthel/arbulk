@@ -516,7 +516,7 @@ render(){
                     var cutOff = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? moment(view.TShipmentInternational[0].cargoCutoffDate).format("MM-DD-YYYY") : ''
                     var puLocation = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? view.TShipmentInternational[0].containerPickupLocation : ''
                     var returnLocation = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? view.TShipmentInternational[0].containerReturnLocation : ''
-                    var docCutoff = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? moment(view.TShipmentInternational[0].docCutoffDate).format("MM-DD-YYYY") : ''
+                    var docCutoff = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? moment(view.TShipmentInternational[0].docCutoffDate).format("MM-DD-YYY") : ''
                     var steamShipline = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? view.TShipmentInternational[0].TSteamshipLine.name : ''
                     var status = (view.TShipmentInternational && view.TShipmentInternational.length > 0 ) ?view.TShipmentInternational[0].status : 'NA'
                     var CType = ((view.TShipmentInternational && view.TShipmentInternational.length > 0) ? (view.TShipmentInternational[0].TContainerType ? view.TShipmentInternational[0].TContainerType.name : "N/A"):"N/A")
@@ -765,4 +765,3 @@ render(){
   }
 }
 export default ShipmentViewDataComponent;
-

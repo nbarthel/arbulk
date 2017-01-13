@@ -139,7 +139,7 @@ export default class ShipmentPrint extends React.Component {
         return
     }
 
-
+  
   createPdfClick(){
 	 (function(){
             var
@@ -158,7 +158,7 @@ export default class ShipmentPrint extends React.Component {
 		debugger
                 getCanvas().then(function(canvas){
                 debugger
-
+            
                     var
                         img = canvas.toDataURL("image/png"),
                         doc = new jsPDF({
@@ -188,14 +188,14 @@ export default class ShipmentPrint extends React.Component {
 
         }());
 
+ 
 
-
-
+     
 
       }
-
-
-
+  
+  
+  
     componentDidMount() {
     (function(){
       var
@@ -226,7 +226,7 @@ export default class ShipmentPrint extends React.Component {
                     doc.addHTML(document.body , {format:'png',pagesplit : true} ,function(){
                     doc.save('shipment.pdf');
                     })
-
+		   
                 });
             }
 
@@ -242,12 +242,12 @@ export default class ShipmentPrint extends React.Component {
 
         }());
 
-
-
-
-
-
-
+      
+      
+      
+      
+      
+      
     }
     createPDF(e){
         console.log('print view')
@@ -513,4 +513,3 @@ debugger;
 
     }
 }
-

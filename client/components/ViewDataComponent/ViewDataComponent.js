@@ -682,4 +682,3 @@ render(){
   }
 }
 export default ViewDataComponent;
-

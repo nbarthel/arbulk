@@ -68,7 +68,7 @@ debugger;
       debugger;
     return(
       <tr key={index}>
-      <td>{moment(view.createdOn).format("YYYY-MM-DD")}	</td>
+      <td>{moment(view.createdOn).format("MM-DD-YYYY")}	</td>
       <td>{PO_number}</td>
       <td> {view.TShipmentent.releaseNumber}</td>
       <td>{view.noOfBags}</td>

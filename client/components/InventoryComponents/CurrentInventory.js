@@ -921,22 +921,20 @@ var calcWeight = this.state.weightBox
                 </div>
 				<div className="form-group">
 					<div className=" col-md-3 col-sm-6 col-xs-6">
-					<input type="number" onChange = {this.handleInputChange} ref="noOfBags" onBlur = {(e) => {this.valdiateNoOfBags(e)}} className={this.state.errors.noOfBags ? "form-control has error" : "form-control"} id="noOfBags" placeholder="#Bags" />
-
+					  <input type="number" onChange = {this.handleInputChange} ref="noOfBags" onBlur = {(e) => {this.valdiateNoOfBags(e)}} className={this.state.errors.noOfBags ? "form-control has error" : "form-control"} id="noOfBags" placeholder="#Bags" />
 					  <div className="error"><span></span></div>
 					</div>
                 </div>
 				<div className="form-group">
 					<div className=" col-md-3 col-sm-6 col-xs-6">
 					  <input type="text" id="weightBox" value= {this.state.weightBox ? (this.state.weightBox).toFixed(0) : ''} onChange={this.handleInputChange} ref = "weight" onBlur = {(e) => {this.validateWeight(e)}} className={this.state.errors.noOfBags ? "form-control has error" : "form-control"} id="weight" placeholder="Weight" style={{"borderStyle":"none"}}/>
-
 					  <div className="error"><span></span></div>
 					</div>
                 </div>
-								<div className="form-group ">
-								<span style={{"float":"left","margin-top":"5"}}>{this.state.weightBox?'kg':''}</span>
-								</div>
-				<div className="form-group " >
+                <div className="form-group ">
+					<span style={{"float":"left","margin-top":"5"}}>{this.state.weightBox?'kg':''}</span>
+				</div>
+				<div className="form-group ">
 					<div className="col-md-3 col-sm-6 col-xs-6 text_right  " style={{"width":"12","margin-left":"10"}}>
 					 <button type="button" onClick={this.onAdd}  className="btn btn-primary btn_right_no_margin">ADD</button>
 				</div>
@@ -988,4 +986,3 @@ var calcWeight = this.state.weightBox
 	}
 }
 export default CurrentInventory;
-

@@ -107,7 +107,7 @@ componentDidMount() {
 				<td>{invent.TInventoryLocation.locationName}</td>
 				<td>{invent.noOfBags}</td>
 				<td>{invent.weight}</td>
-				<td>{moment(invent.createdOn).format("YYYY-MM-DD")}</td>
+				<td>{moment(invent.createdOn).format("MM-DD-YYYY")}</td>
 				<td>{invent.notes}</td>
 				</tr>)
 		})
