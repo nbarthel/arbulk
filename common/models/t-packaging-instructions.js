@@ -197,7 +197,7 @@ module.exports = function(Tpackaginginstructions) {
 	                                 var yyyy = today.getFullYear();
 	                                if(dd<10){
 		                           dd = '0'+dd
-	                              }
+	                              } 
 	                    if(mm<10){
 	                 	mm = '0'+mm
 	                   }
@@ -244,7 +244,7 @@ module.exports = function(Tpackaginginstructions) {
 	                                 var yyyy = today.getFullYear();
 	                                if(dd<10){
 		                           dd = '0'+dd
-	                              }
+	                              } 
 	                    if(mm<10){
 	                 	mm = '0'+mm
 	                   }
@@ -279,7 +279,7 @@ module.exports = function(Tpackaginginstructions) {
                         });
                     }
                     else if(tpackaging.TPackagingInstructionLots.length >1){
-
+    
                         console.log("started updating packahing instruction lots table")
                         for(var i in tpackaging.TPackagingInstructionLots) {
                             PackagingLots.upsert({

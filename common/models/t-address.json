@@ -75,6 +75,22 @@
       },
       "_selectable": true
     },
+    "stateId": {
+      "type": "Number",
+      "required": false,
+      "length" : null,
+      "precision" : 10,
+      "scale" : 0,
+      "mysql": {
+        "columnName":"state_id",
+        "dataType": "int",
+        "dataLength" : null,
+        "dataPrecision": 10,
+        "dataScale" : 0,
+        "nullable": "Y"
+      },
+      "_selectable":true
+    },
     "zipCode": {
       "type": "String",
       "required": false,
@@ -92,16 +108,16 @@
       "_selectable": true
     },
     "billingAddress": {
-      "type": "Number",
+      "type": "String",
       "required": false,
-      "length": null,
-      "precision": 3,
-      "scale": 0,
+      "length": 200,
+      "precision": null,
+      "scale": null,
       "mysql": {
         "columnName": "billing_address",
-        "dataType": "tinyint",
-        "dataLength": null,
-        "dataPrecision": 3,
+        "dataType": "varchar",
+        "dataLength": 200,
+        "dataPrecision": null,
         "dataScale": 0,
         "nullable": "Y"
       },
@@ -189,7 +205,13 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "TCompany":{
+      "type":"belongsTo",
+      "model":"TCompany",
+      "foreignKey":"companyId"
+    }
+  },
   "acls": [],
   "methods": {}
 }

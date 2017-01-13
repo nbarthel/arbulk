@@ -221,7 +221,13 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+  "TAddress":{
+      "type":"hasMany",
+      "model":"TAddress",
+      "foreignKey":"companyId"
+    }
+  },
   "acls": [],
   "methods": {}
 }

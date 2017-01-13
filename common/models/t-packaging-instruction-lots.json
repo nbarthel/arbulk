@@ -219,6 +219,22 @@
       },
       "_selectable": true
     },
+       "custom_label": {
+      "type": "String",
+      "required": false,
+      "length": 4294967295,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "custom_label",
+        "dataType": "longtext",
+        "dataLength": 4294967295,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      },
+      "_selectable": true
+    },
     "createdOn": {
       "type": "Date",
       "required": false,

@@ -283,7 +283,6 @@
       "model": "TContainerAllocation",
       "foreignKey": "shipment_id"
     }
-
   },
   "acls": [],
   "methods": {}

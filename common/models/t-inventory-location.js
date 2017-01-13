@@ -8,6 +8,7 @@ module.exports = function(Tinventorylocation) {
 
     Tinventorylocation.addbagweight = function(tinventory, cb) {
         var inventoryData = Tinventorylocation.app.models.TPiInventory;
+      	var InventoryHistoryLog = Tinventorylocation.app.models.TPiInventoryHistory;
         console.log(tinventory , '>>>>>>');
         var ds = Tinventorylocation.dataSource;
         var customErr = new Error();
@@ -44,6 +45,7 @@ module.exports = function(Tinventorylocation) {
                                 "piLotId": tinventory.Tinventory.piLotId,
                                 "inventoryLocationId": obj.id,
                                 "noOfBags": tinventory.Tinventory.noOfBags,
+                                "notes" : tinventory.Tinventory.notes,
                                 "weight": tinventory.Tinventory.weight,
                                 "createdOn": "2016-10-03",
                                 "createdBy": 1,
@@ -60,6 +62,29 @@ module.exports = function(Tinventorylocation) {
                                     console.log("lots Object" , lotsObj)
                                 }
                             });
+                          InventoryHistoryLog.create({
+
+                        "id": 0,
+                        "piLotId": tinventory.Tinventory.piLotId,
+                        "inventoryLocationId": obj.id,
+                        "noOfBags": tinventory.Tinventory.noOfBags,
+                        "notes" : tinventory.Tinventory.notes,
+                        "weight": tinventory.Tinventory.weight,
+                        "createdOn": "2016-10-03",
+                        "createdBy": 1,
+                        "modifiedOn": "2016-10-03",
+                        "modifiedBy": 1,
+                        "active": 1
+
+                    },function(err , lotsObj){
+                        if (err) {
+                            // logger.error(err);
+                            return cb(null, {errors: err});
+                        }
+                        else{
+                            console.log("history Object" , lotsObj)
+                        }
+                    });
                         }
 
                         cb(null,obj);
@@ -73,6 +98,7 @@ module.exports = function(Tinventorylocation) {
 
     Tinventorylocation.deleteLocation = function(tinventory, cb) {
         var inventoryData = Tinventorylocation.app.models.TPiInventory;
+      	var InventoryHistoryLog = Tinventorylocation.app.models.TPiInventoryHistory;
         var ds = Tinventorylocation.dataSource;
         var customErr = new Error();
         customErr.statusCode = 422;
@@ -109,6 +135,29 @@ module.exports = function(Tinventorylocation) {
                                 console.log("lots Object" , lotsObj)
                             }
                         });
+                      InventoryHistoryLog.create({
+
+                        "id": 0,
+                        "piLotId": tinventory.Tinventory.piLotId,
+                        "inventoryLocationId": obj.id,
+                        "noOfBags": tinventory.Tinventory.noOfBags,
+                        "notes" : tinventory.Tinventory.notes,
+                        "weight": tinventory.Tinventory.weight,
+                        "createdOn": "2016-10-03",
+                        "createdBy": 1,
+                        "modifiedOn": "2016-10-03",
+                        "modifiedBy": 1,
+                        "active": 1
+
+                    },function(err , lotsObj){
+                        if (err) {
+                            // logger.error(err);
+                            return cb(null, {errors: err});
+                        }
+                        else{
+                            console.log("history Object" , lotsObj)
+                        }
+                    });
                     }
 
                     cb(null,obj);
@@ -127,6 +176,7 @@ module.exports = function(Tinventorylocation) {
 
     Tinventorylocation.updatebagweight = function(tinventory, cb) {
         var inventoryData = Tinventorylocation.app.models.TPiInventory;
+      	var InventoryHistoryLog = Tinventorylocation.app.models.TPiInventoryHistory;
         console.log(tinventory , '>>>>>>');
         var ds = Tinventorylocation.dataSource;
         var customErr = new Error();
@@ -158,6 +208,7 @@ module.exports = function(Tinventorylocation) {
                             "piLotId": tinventory.Tinventory.piLotId,
                             "inventoryLocationId": obj.id,
                             "noOfBags": tinventory.Tinventory.noOfBags,
+                            "notes" : tinventory.Tinventory.notes,
                             "weight": tinventory.Tinventory.weight,
                             "createdOn": "2016-10-03",
                             "createdBy": 1,
@@ -171,6 +222,29 @@ module.exports = function(Tinventorylocation) {
                                 return cb(null, {errors: err});
                             }
                         });
+                      InventoryHistoryLog.create({
+
+                        "id": 0,
+                        "piLotId": tinventory.Tinventory.piLotId,
+                        "inventoryLocationId": obj.id,
+                        "noOfBags": tinventory.Tinventory.noOfBags,
+                        "notes" : tinventory.Tinventory.notes,
+                        "weight": tinventory.Tinventory.weight,
+                        "createdOn": "2016-10-03",
+                        "createdBy": 1,
+                        "modifiedOn": "2016-10-03",
+                        "modifiedBy": 1,
+                        "active": 1
+
+                    },function(err , lotsObj){
+                        if (err) {
+                            // logger.error(err);
+                            return cb(null, {errors: err});
+                        }
+                        else{
+                            console.log("history Object" , lotsObj)
+                        }
+                    });
                     }
 
                     cb(null,obj);

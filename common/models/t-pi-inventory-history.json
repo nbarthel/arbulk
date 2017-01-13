@@ -75,6 +75,23 @@
       },
       "_selectable": true
     },
+      "notes": {
+      "type": "String",
+      "required": false,
+      "length": null,
+      "precision": 10,
+      "scale": 0,
+      "mysql": {
+        "columnName": "notes",
+        "dataType": "varchar",
+        "dataLength": 500,
+        "dataPrecision": null,
+        "dataScale": 0,
+        "nullable": "Y"
+      },
+      "_selectable": true
+    },
+    
     "weight": {
       "type": "Number",
       "required": false,
@@ -83,7 +100,7 @@
       "scale": 0,
       "mysql": {
         "columnName": "weight",
-        "dataType": "int",
+        "dataType": "decimal",
         "dataLength": null,
         "dataPrecision": 10,
         "dataScale": 0,
@@ -122,6 +139,54 @@
         "nullable": "Y"
       },
       "_selectable": true
+    },
+    "modifiedOn": {
+      "type": "Date",
+      "required": true,
+      "length": null,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "modified_on",
+        "dataType": "timestamp",
+        "dataLength": null,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      },
+      "_selectable": false
+    },
+    "modifiedBy": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 10,
+      "scale": 0,
+      "mysql": {
+        "columnName": "modified_by",
+        "dataType": "int",
+        "dataLength": null,
+        "dataPrecision": 10,
+        "dataScale": 0,
+        "nullable": "Y"
+      },
+      "_selectable": true
+    },
+    "active": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "active",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "Y"
+      },
+      "_selectable": true
     }
   },
   "validations": [],
@@ -130,6 +195,11 @@
       "type": "belongsTo",
       "model": "TInventoryLocation",
       "foreignKey": "inventory_location_id"
+    },
+    "TPackagingInstructionLots": {
+      "type": "belongsTo",
+      "model": "TPackagingInstructionLots",
+      "foreignKey": "piLotId"
     }
   },
   "acls": [],

@@ -186,7 +186,7 @@
       "model": "TInventoryLocation",
       "foreignKey": "invLocId"
     },
-    "TPiInventory": {
+      "TPiInventory": {
       "type": "belongsTo",
       "model": "TPiInventory",
       "foreignKey": "piInventId"

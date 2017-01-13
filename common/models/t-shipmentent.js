@@ -336,7 +336,7 @@ module.exports = function(Tshipmentent) {
                                     "id": tshipment.lotInformation[0].id,
                                     "shipmentId": obj.id,
                                     "piLotsId": tshipment.lotInformation[0].lot_id,
-                                    "noOfBags":obj.numberOfBags,
+                                    "noOfBags":tshipment.lotInformation[0].noOfBags,
                                     "confirmedOn": "2016-10-26T00:00:00.000Z",
                                     "confirmedBy": 0,
                                     "queueSequence": 0,
@@ -354,7 +354,7 @@ module.exports = function(Tshipmentent) {
                                         "id": tshipment.lotInformation[i].id,
                                         "shipmentId": obj.id,
                                         "piLotsId": tshipment.lotInformation[i].lot_id,
-                                        "noOfBags":obj.numberOfBags,
+                                        "noOfBags":tshipment.lotInformation[i].noOfBags,
                                         "confirmedOn": "2016-10-26T00:00:00.000Z",
                                         "confirmedBy": 1,
                                         "queueSequence": 0,
@@ -372,13 +372,14 @@ module.exports = function(Tshipmentent) {
                             }
                             else if(tshipment.Address.length ==1){
 
-                                ShipmentAddress.create({
+                                console.log("Addressssssssss")
+                                ShipmentAddress.upsert({
                                     "id":  tshipment.Address[0].id,
-                                    "shipmentId": obj.id,
-                                    "shipToAddress": tshipment.Address[0].shippingAddress,
-                                    "shipToCity": tshipment.Address[0].shippingCity,
-                                    "shipToZip": tshipment.Address[0].zipCode,
-                                    "shipToState": tshipment.Address[0].shippingState,
+                                    "shipmentId": tshipment.Address[0].shipmentId,
+                                    "shipToAddress": tshipment.Address[0].shipToAddress,
+                                    "shipToCity": tshipment.Address[0].shipToCity,
+                                    "shipToZip": tshipment.Address[0].shipToZip,
+                                    "shipToState": tshipment.Address[0].shipToState,
                                     "active": 1
                                 },function(err){
                                     if(err){
@@ -388,14 +389,14 @@ module.exports = function(Tshipmentent) {
                             }
                             else if(tshipment.Address.length >1){
                                 for(var i in tshipment.Address){
-                                    shipmentAddress.create({
-                                        "id": tshipment.Address[i].id,
-                                        "shipmentId": obj.id,
-                                        "shipToAddress": tshipment.Address[i].shippingAddress,
-                                        "shipToCity": tshipment.Address[i].shippingCity,
-                                        "shipToZip": tshipment.Address[i].zipCode,
-                                        "shipToState": tshipment.Address[i].shippingState,
-                                        "active": 1
+                                  ShipmentAddress.upsert({
+                                      "id":  tshipment.Address[0].id,
+                                      "shipmentId": tshipment.Address[0].shipmentId,
+                                      "shipToAddress": tshipment.Address[0].shipToAddress,
+                                      "shipToCity": tshipment.Address[0].shipToCity,
+                                      "shipToZip": tshipment.Address[0].shipToZip,
+                                      "shipToState": tshipment.Address[0].shipToState,
+                                      "active": 1
                                     },function(err){
                                         if(err){
                                             return cb(null , err)
