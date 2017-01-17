@@ -42,8 +42,8 @@ constructor(props){
              <ul className="dropdown-menu">
                <li><a href="javascript:void(0)">PACKAGING</a></li>
                <li role="separator" className="divider"></li>
-              <li><Link to="/Packaging/enterpackginginst/" >Enter Packaging Instructions</Link></li>
-               <li><Link to="/Packaging/packaginginstview/">View Packaging Instructions</Link></li>         
+              <li><Link to="/Packaging/enterpackginginst/" >Enter RailCars</Link></li>
+               <li><Link to="/Packaging/packaginginstview/">View RailCars</Link></li>         
                <li role="separator" className="divider"></li>
                <li><Link to="/Packaging/railcararrival">Mark Railcar Arrivals </Link></li>
                <li><Link to="/Packaging/railcardeparte">Mark Railcar Departures </Link></li>

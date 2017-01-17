@@ -14,21 +14,18 @@ class InventoryLocationHistory extends Component {
 	   	let lotId = this.props.lotId
 	   	var PIview = createDataLoader(InventoryLocationHistory, {
 	            queries: [{
-	                endpoint: 'TPiInventories',
-	                filter:
-	                {"include" : ["TInventoryLocation","TPackagingInstructionLots"]
-	            }
+	                endpoint: 'TPiInventoryHistories'
+	                
 
 	            }]
 	        });
 	//"include": {"relation": "classes", "scope": {"include": ["teachers","students"]}}
-		      var base1 = 'TPackagingInstructionLots/'+ nextProps.lotId;
+		      var base1 = 'TPiInventoryHistories';
 	          this.urlnew = PIview._buildUrl(base1, {
-	           include: {"relation": "TPiInventory", "scope": {"include": ["TInventoryLocation"]}}
+	           "where":{"piLotId":id},
+				"include":['TInventoryLocation']
 	           //include : ['TPiInventory',{"relation":'TPiInventory',"scope":{"include":["TInventoryLocation"]}}]
 	        });
-	           	console.log("new URl value>>>>>> bhiya jara dekh ke",this.urlnew)
-
 
 	           	 $.ajax({
 	            url: this.urlnew,
@@ -41,7 +38,7 @@ class InventoryLocationHistory extends Component {
 	              //	console.log("lengthandindexandarr",length,index,arr)
 	                this.setState({
 	                	InvtLocationHistory : data,
-	                	rows : data.TPiInventory
+	                	rows : data.TInventoryLocation
 	                })
 	                if(this.orignalTble === undefined){
 
@@ -98,9 +95,9 @@ componentDidMount() {
 
 		//console.log("INVTLOCATIONHISTORY>>>>>>>>>>>>>>>>>>>>",this.state.InvtLocationHistory)
 		var invt ;
-		if(this.state.InvtLocationHistory && this.state.InvtLocationHistory.TPiInventory)
+		if(this.state.InvtLocationHistory )
 		{
-		 invt = _.map(this.state.InvtLocationHistory.TPiInventory,(invent)=>{
+		 invt = _.map(this.state.InvtLocationHistory,(invent)=>{
 			debugger
 			return (
 				<tr key={invent.id}>
@@ -122,7 +119,7 @@ componentDidMount() {
 				<th>Inv. Location</th>
 				<th>Bags</th>
 				<th>Weight</th>
-				<th>Time</th>
+				<th>Date</th>
 				<th>Note</th>
             </tr>
 			</thead>

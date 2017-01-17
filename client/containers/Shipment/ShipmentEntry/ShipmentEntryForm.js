@@ -101,6 +101,7 @@ class ShipmentEntryForm extends React.Component {
         this.onDomesticShipMinus=this.onDomesticShipMinus.bind(this)
         this.onCancel = this.onCancel.bind(this)
         this.onZipBlur = this.onZipBlur.bind(this)
+        this.GetTotalbags = this.GetTotalbags.bind(this)
        // this.onDomestiCarearMinus=this.onDomestiCarearMinus.bind(this);
         //this.onCancel = this.onCancel.bind(this)
         this.isValid = this.isValid.bind(this)
@@ -316,14 +317,47 @@ class ShipmentEntryForm extends React.Component {
         this.SIObj[e.target.name] = e.target.value
         console.log("SICHANGES",this.SIObj)
     }
-    handleLIChange(e){
+    GetTotalbags(event,next)
+    {
+      var bags;
+      var totalAllocatedbags=0;
+      var MIView = createDataLoader(ShipmentEntryForm, {
+                  queries: [{
+                      endpoint: 'TShipmentLots'
+                  }]
+              });
+    var base = 'TShipmentLots';
+      var pLotUrl = MIView._buildUrl(base, {
 
-        this.LIobj[e.target.name] = e.target.value
-        this.comPo.lot_id = e.target.value
-        let selectedValue = e.target.selectedIndex - 1
-        this.inInventoryBags = this.state.lotNumber[selectedValue].inInventory
-        this.comPo.inInventorybags = this.state.lotNumber[selectedValue].inInventory
-        this.forceUpdate()
+          "where": {"piLotsId":  event.target.value }
+       } );
+       
+      axios.get(pLotUrl).then(function(response){
+        bags=response.data;
+          for(var i =0;i<bags.length;i++)
+          {
+            totalAllocatedbags += bags[i].noOfBags;
+          }
+            return next({totalBags:totalAllocatedbags});
+
+      })
+    }
+      
+    handleLIChange(e){
+		
+        var lot_name=e.target.name;
+        var lot_value=e.target.value;
+        var selectedIndex=e.target.selectedIndex;
+        var obj=this;
+        this.GetTotalbags(e,function(values){
+          var bags=values;
+          obj.LIobj[lot_name] = lot_value;
+          obj.comPo.lot_id = lot_value;
+          let selectedValue = selectedIndex - 1
+          obj.inInventoryBags = obj.state.lotNumber[selectedValue].inInventory - bags['totalBags']
+          obj.comPo.inInventorybags = obj.state.lotNumber[selectedValue].inInventory - bags['totalBags']
+          obj.forceUpdate()
+        });
 
     }
     handleMIChange(e){
