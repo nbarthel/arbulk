@@ -79,9 +79,9 @@ import { hashHistory } from 'react-router'
                 </div>
 
 				<div className="form-group ">
-					<div className="col-lg-3 "><label htmlFor="Rail_Car_Number" className=" control-label">Purchase Order Number</label></div>
+					<div className="col-lg-3 "><label htmlFor="Rail_Car_Number" className=" control-label">Purchase Order #</label></div>
 					<div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-					  <input type="text" disabled className="form-control" value = {this.props.data.TPackagingInstructions.po_number} id="Rail_Car_Number" placeholder="Purchase Order Number"/>
+					  <input type="text" disabled className="form-control" value = {this.props.data.TPackagingInstructions.po_number} id="Rail_Car_Number" placeholder="Purchase Order #"/>
 					  <div className="error"><span></span></div>
 					</div>
 					<div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">
@@ -91,9 +91,9 @@ import { hashHistory } from 'react-router'
 				    </div>
                 </div>
 			    <div className="form-group">
-					<div className="col-lg-3 "><label htmlFor="Lot_Number" className="control-label">Lot Number</label></div>
+					<div className="col-lg-3 "><label htmlFor="Lot_Number" className="control-label">Lot #</label></div>
 					<div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-					     <input type="text" className="form-control" disabled value = {this.props.data.TPackagingInstructionLots.lot_number} id="Lot_Number" placeholder="Lot Number"/>
+					     <input type="text" className="form-control" disabled value = {this.props.data.TPackagingInstructionLots.lot_number} id="Lot_Number" placeholder="Lot #"/>
 					  <div className="error"><span></span></div>
 					</div>
 					<div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">
@@ -119,7 +119,7 @@ import { hashHistory } from 'react-router'
 						</div>
 
 						<div className="form-group ">
-							<div className="col-lg-3 "><label htmlFor="Material" className="control-label">Number of Containers</label></div>
+							<div className="col-lg-3 "><label htmlFor="Material" className="control-label"># Containers</label></div>
 							<div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
 							   <select className="form-control" disabled  id="Type_of_Packaging" name="Type_of_Packaging">
 								<option value = {this.props.data.TShipmentent.numberOfContainers}>{this.props.data.TShipmentent.numberOfContainers}</option>
@@ -134,9 +134,9 @@ import { hashHistory } from 'react-router'
 						</div>
 
 						<div className="form-group">
-							<div className="col-lg-3 "><label htmlFor="" className=" control-label">Number of Bags</label></div>
+							<div className="col-lg-3 "><label htmlFor="" className=" control-label"># Bags</label></div>
 							<div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-							   <input type="text" disabled value = {this.props.data.noOfBags} className="form-control" id="" placeholder="Number of Bags"/>
+							   <input type="text" disabled value = {this.props.data.noOfBags} className="form-control" id="" placeholder="# Bags"/>
 							  <div className="error"><span></span></div>
 							</div>
 							<div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">
@@ -162,9 +162,9 @@ import { hashHistory } from 'react-router'
 				</div>
 
 				<div className="form-group">
-					<div className="col-lg-3 "><label htmlFor="" className=" control-label">Booking Number</label></div>
+					<div className="col-lg-3 "><label htmlFor="" className=" control-label">Booking #</label></div>
 					<div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-					  <input type="text" className="form-control" value = {this.props.data.TShipmentent.TShipmentDomestic[0].bookingNumber} disabled id="" placeholder="Booking Numbere"/>
+					  <input type="text" className="form-control" value = {this.props.data.TShipmentent.TShipmentDomestic[0].bookingNumber} disabled id="" placeholder="Booking #"/>
 					  <div className="error"><span></span></div>
 					</div>
 					<div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">
@@ -191,9 +191,9 @@ import { hashHistory } from 'react-router'
                 </div>
 
 				<div className="form-group">
-					<div className="col-lg-3 "><label htmlFor="Type_of_Bag" className=" control-label">Shipping Ref Number</label></div>
+					<div className="col-lg-3 "><label htmlFor="Type_of_Bag" className=" control-label">Shipping Ref #</label></div>
 					<div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-					  <input type="text" className="form-control" value = {this.props.data.TShipmentent.TShipmentDomestic[0].shippingReferenceNumber} disabled id="" placeholder="Shipping Ref Number"/>
+					  <input type="text" className="form-control" value = {this.props.data.TShipmentent.TShipmentDomestic[0].shippingReferenceNumber} disabled id="" placeholder="Shipping Ref #"/>
 					  <div className="error"><span></span></div>
 					</div>
 					<div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">
@@ -314,9 +314,9 @@ import { hashHistory } from 'react-router'
                 </div>
 
 				<div className="form-group">
-					<div className="col-lg-3 "><label htmlFor="" className=" control-label">Carrier Account Number</label></div>
+					<div className="col-lg-3 "><label htmlFor="" className=" control-label">Carrier Account #</label></div>
 					<div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-					    <input type="text" className="form-control" id="" value = {this.props.data.TShipmentent.TShipmentDomestic[0].carrierAcNumber} disabled  placeholder="Carrier Account Number"/>
+					    <input type="text" className="form-control" id="" value = {this.props.data.TShipmentent.TShipmentDomestic[0].carrierAcNumber} disabled  placeholder="Carrier Account #"/>
 					  <div className="error"><span></span></div>
 					</div>
 					<div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">

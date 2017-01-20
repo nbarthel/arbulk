@@ -477,9 +477,10 @@ onClickli(e){
                             //include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational",{"relation" : "TPackagingInstructionLots" ,"scope":{"where":{"or":serachObjLots}}}}]
 
                             include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational","scope":{"where" : {"or" : cutofFilter },"include":["TSteamshipLine"]}},{"relation" : "TShipmentLots" ,"scope":{"include":"TPackagingInstructionLots"}}],
-                            where: {
-                                "and": serachObj
-                            }
+                            where: {"and":[
+                              {"or":customer},
+                              {"or":company}
+                            ]}
 
                         });
                     }
@@ -491,9 +492,10 @@ onClickli(e){
                            //include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational",{"relation" : "TPackagingInstructionLots" ,"scope":{"where":{"or":serachObjLots}}}}]
 
                            include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":"TShipmentType","where":{"and":serachObjLots}}},{"relation" :"TShipmentInternational","scope":{"where" : {"and" : serachObjLots },"include":["TSteamshipLine"]}},{"relation" : "TShipmentLots" ,"scope":{"include":"TPackagingInstructionLots"}}],
-                           where: {
-                               "and": serachObj
-                           }
+                          where: {"and":[
+                              {"or":customer},
+                              {"or":company}
+                            ]}
 
                        });
                    }
@@ -512,13 +514,14 @@ onClickli(e){
                                 "relation": "TShipmentLots",
                                 "scope": {"include": "TPackagingInstructionLots", "where": {"lot_number": "wewff"}}
                             }],
-                            where: {
-                                "and": serachObj
-                            }
+                       where: {"and":[
+                              {"or":customer},
+                              {"or":company}
+                            ]}
 
                         });
                     }
-        console.log('sdsddsdsdssdssssssssssd' , this.url);
+       
       $.ajax({
             url: this.url,
             success:function(data){
@@ -584,8 +587,7 @@ onClickli(e){
     }
 
  viewChange(e){
-   //var index = e.target.selectedIndex ;
-debugger;
+
           var blob = e.target.value
          //var changedView = this.state.savedViews[index -1]
         this.Where = JSON.parse(blob)
@@ -724,9 +726,10 @@ debugger;
                  //include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational",{"relation" : "TPackagingInstructionLots" ,"scope":{"where":{"or":serachObjLots}}}}]
 
                  include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational","scope":{"where" : {"or" : cutofFilter },"include":["TSteamshipLine"]}},{"relation" : "TShipmentLots" ,"scope":{"include":["TPackagingInstructionLots","TPackagingInstructions"]}}],
-                 where: {
-                     "and": serachObj
-                 }
+               where: {"and":[
+                 {"or":customer},
+                 {"or":company}
+               ]}
 
              });
          }
@@ -746,13 +749,14 @@ debugger;
                         // , "where": {"lot_number": "wewff"}
                      }
                  }],
-                 where: {
-                     "and": serachObj
-                 }
+               where: {"and":[
+                 {"or":customer},
+                 {"or":company}
+               ]}
 
              });
          }
-         console.log('sdsddsdsdssdssssssssssd' , this.url);
+        
          $.ajax({
              url: this.url,
              success:function(data){

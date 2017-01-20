@@ -8,7 +8,7 @@ class StatusFilterPage extends React.Component {
         {name:"READY",id:2},
         {name:"QUEUED",id:3},
         {name:"PARTIALLYPACKED",id:4},
-        {name:"ININVENTORY",id:5},
+        {name:"In Inventory",id:5},
         {name:"SHIPPED",id:6}]
         
         this.checkedStatus = { }

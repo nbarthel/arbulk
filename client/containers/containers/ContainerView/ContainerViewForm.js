@@ -474,7 +474,11 @@ debugger;
                         "relation": "TContainerInternational",
                         "scope": {"where": {"or": serachObjLots}}
                     }, "TCompany", "TLocation", "TShipmentDomestic","TShipmentInternational"],
-                    where: {"and": serachObj}
+                   where: {"and":[
+                      {"or":customer},
+                      {"or":company}
+                    ]
+                    }
 
                 });
             }
@@ -487,7 +491,11 @@ debugger;
                         "relation": "TContainerInternational",
                         "scope": {"include":"TCompany","where": {"or": intl}}
                     }, "TCompany", "TLocation", "TShipmentDomestic", "TShipmentInternational"],
-                    where: {"and": serachObj}
+                   where: {"and":[
+                      {"or":customer},
+                      {"or":company}
+                    ]
+                    }
 
                 });
             }
@@ -535,7 +543,11 @@ debugger;
             {
                 this.url = PIview._buildUrl(base, {
                     "include" : ["TContainerDomestic","TContainerInternational","TCompany" ,"TLocation","TShipmentDomestic","TShipmentInternational"],
-                    where: {"and": serachObj}
+                where: {"and":[
+                      {"or":customer},
+                      {"or":company}
+                    ]
+                    }
 
 
                 });
@@ -679,7 +691,11 @@ debugger;
                         "relation": "TContainerInternational",
                         "scope": {"where": {"or": serachObjLots}}
                     }, "TCompany", "TLocation", "TShipmentDomestic", "TShipmentInternational"],
-                    where: {"and": serachObj}
+                  where: {"and":[
+                      {"or":customer},
+                      {"or":company}
+                    ]
+                    }
 
                 });
             }
@@ -692,7 +708,11 @@ debugger;
                         "relation": "TContainerInternational",
                         "scope": {"where": {"or": intl}}
                     }, "TCompany", "TLocation", "TShipmentDomestic", "TShipmentInternational"],
-                    where: {"and": serachObj}
+                  where: {"and":[
+                      {"or":customer},
+                      {"or":company}
+                    ]
+                    }
 
                 });
             }
@@ -740,7 +760,11 @@ debugger;
             {
                 this.url = PIview._buildUrl(base, {
                     "include" : ["TContainerDomestic","TContainerInternational","TCompany" ,"TLocation","TShipmentDomestic","TShipmentInternational"],
-                    where: {"and": serachObj}
+               where: {"and":[
+                      {"or":customer},
+                      {"or":company}
+                    ]
+                    }
 
 
                 });

@@ -8,6 +8,13 @@ import axios from 'axios'
 import { Base_Url} from '../../../constants'
 import { createDataLoader } from 'react-loopback';
 
+var Scroll  = require('react-scroll');
+var scroll     = Scroll.animateScroll;
+var i =0;
+var clickOnEdit = false
+var initialY = 0;
+var goTop = true;
+var goDown = false;
 class  PackagingInstructionQueueViewForm extends React.Component
 {
     constructor(){
@@ -17,6 +24,7 @@ class  PackagingInstructionQueueViewForm extends React.Component
            selectedOption1: 'kg',
            viewRailcartData : undefined
      }
+        this._throttledMouseMove = _.throttle(this._throttledMouseMove.bind(this));
         this.handleSortableUpdate  = this.handleSortableUpdate.bind(this)
         this.callonEdit = this.callonEdit.bind(this)
         this.handleOptionChange = this.handleOptionChange.bind(this)
@@ -24,6 +32,8 @@ class  PackagingInstructionQueueViewForm extends React.Component
         this.onCompanyFilter = this.onCompanyFilter.bind(this)
         this.locationFilter = []
         this.locId = {}
+        this.ScrollUp = this.ScrollUp.bind(this)
+
  }
 
 componentWillMount(){
@@ -35,7 +45,57 @@ componentWillMount(){
   .catch(function(err){
       console.log(err)
   })
+
 }
+_throttledMouseMove(e){
+
+   if(clickOnEdit&&e.buttons){
+
+     if(initialY==0)
+     {
+       initialY = e.clientY
+     }
+if(i>4){
+     if(initialY - e.clientY > 300){
+
+       this.ScrollUp(e.clientY-initialY-150)
+       initialY = e.clientY
+       i =0;
+       goTop = true;
+       goDown = false;
+     }
+      else if(e.clientY-initialY > 300){
+
+            this.ScrollUp(initialY-e.clientY+250)
+            initialY = e.clientY
+            i =0;
+            goTop = false;
+            goDown = true;
+      }
+      else if(i>4){
+        i++;
+        if(i>12){
+        if(goTop){
+          this.ScrollUp(-200)
+        }
+        else{
+          this.ScrollUp(200)
+        }
+      }
+      }
+
+    }
+    else {
+      i++;
+    }
+ }
+ }
+ScrollUp(a)
+{
+  scroll.scrollMore(a);
+
+}
+
   handleOptionChange1(e) {
 
         this.setState({
@@ -57,6 +117,7 @@ componentWillMount(){
     }
 
     callonEdit(){
+      clickOnEdit = true;
          $(ReactDOM.findDOMNode(this)).sortable({
             items: 'tr',
             update: this.handleSortableUpdate
@@ -65,7 +126,8 @@ componentWillMount(){
 
 
     handleSortableUpdate() {
-        debugger;
+        // clickOnEdit = false;
+        initialY = 0;
         var newItems = _.clone(this.props.data, true);
         var $node = $(ReactDOM.findDOMNode(this));
         var ids = $node.sortable('toArray', { attribute: 'data-id' });
@@ -244,7 +306,7 @@ componentWillMount(){
 
     return(
 
-<section className="view_table-queue">
+<section className="view_table-queue" onMouseMove={this._onMouseMove}>
 
  <div className=" margin-30-right" style={{"float" : "left"}}>
                  <label className="control control--radio ">LBS
@@ -280,7 +342,7 @@ componentWillMount(){
 
 
 
-    <div className="container-fluid">
+    <div className="container-fluid" onMouseMove={this._throttledMouseMove}>
 
     <div className="row-fluid">
 

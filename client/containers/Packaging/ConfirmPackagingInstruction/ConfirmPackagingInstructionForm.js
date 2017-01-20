@@ -155,7 +155,7 @@ render(){
 				    </div>
                 </div>
 				<div className="form-group">
-					<div className="col-lg-3 "><label htmlFor="Rail_Car_Number" className=" control-label">Rail Car Number</label></div>
+					<div className="col-lg-3 "><label htmlFor="Rail_Car_Number" className=" control-label">Railcar #</label></div>
 					<div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
 					  <input
 					  type="text"
@@ -172,7 +172,7 @@ render(){
 				    </div>
                 </div>
 			    <div className="form-group">
-					<div className="col-lg-3 "><label htmlFor="Lot_Number" className="control-label">Lot Number</label></div>
+					<div className="col-lg-3 "><label htmlFor="Lot_Number" className="control-label">Lot #</label></div>
 					<div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
 					     <input type="text"
 					     className="form-control"
@@ -296,7 +296,7 @@ render(){
                 </div>
 
 				<div className="form-group">
-					<div className="col-lg-3 "><label htmlFor="No_of_Bages_Pallat" className=" control-label">No of Bages/Pallat</label></div>
+					<div className="col-lg-3 "><label htmlFor="No_of_Bages_Pallat" className=" control-label"># Bages per Pallat</label></div>
 					<div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
 					 <select className="form-control" id="No_of_Bages_Pallat" name="No_of_Bages_Pallat" disabled>
 						<option value={this.props.data.TPackagingInstructions ? this.props.data.TPackagingInstructions.bags_per_pallet : ''}>{this.props.data.TPackagingInstructions ? this.props.data.TPackagingInstructions.bags_per_pallet : ''}</option>

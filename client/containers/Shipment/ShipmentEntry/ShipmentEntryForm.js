@@ -79,7 +79,7 @@ class ShipmentEntryForm extends React.Component {
         this.handleSIChange = this.handleSIChange.bind(this);
         this.handleLIChange = this.handleLIChange.bind(this);
         this.onSubmitContainer = this.onSubmitContainer.bind(this)
-        //this.handleOptionChange= this.handleOptionChange.bind(this);
+        //this.HandleAllAction= this.HandleAllAction.bind(this);
         //this.handleOptionChange1= this.handleOptionChange1.bind(this);
         this.RequestedShipDate = this. RequestedShipDate.bind(this);
         this.RequestedDeliveryDate = this.RequestedDeliveryDate.bind(this);
@@ -169,7 +169,7 @@ class ShipmentEntryForm extends React.Component {
             }]
         })
         console.log("I have recieved props")
-        //debugger
+        debugger
 
         var base = 'TCompanies'
         this.urlCustomer = PIview._buildUrl(base, {
@@ -331,7 +331,7 @@ class ShipmentEntryForm extends React.Component {
 
           "where": {"piLotsId":  event.target.value }
        } );
-       
+       console.log(pLotUrl)
       axios.get(pLotUrl).then(function(response){
         bags=response.data;
           for(var i =0;i<bags.length;i++)
@@ -342,9 +342,8 @@ class ShipmentEntryForm extends React.Component {
 
       })
     }
-      
+
     handleLIChange(e){
-		
         var lot_name=e.target.name;
         var lot_value=e.target.value;
         var selectedIndex=e.target.selectedIndex;
@@ -357,7 +356,10 @@ class ShipmentEntryForm extends React.Component {
           obj.inInventoryBags = obj.state.lotNumber[selectedValue].inInventory - bags['totalBags']
           obj.comPo.inInventorybags = obj.state.lotNumber[selectedValue].inInventory - bags['totalBags']
           obj.forceUpdate()
-        });
+      });
+
+
+
 
     }
     handleMIChange(e){
@@ -1115,14 +1117,13 @@ onSubmitContainer(e){
 
                                     <div className="form-group">
                                         <label htmlFor="Purchase_Order"
-                                               className={this.state.errors.numberOfContainers ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>No. of
-                                            Containers</label>
+                                               className={this.state.errors.numberOfContainers ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}># Containers</label>
 
                                         <div className="col-lg-6    col-sm-11 col-xs-11 ">
                                             <input type="text"
                                                    className="form-control"
                                                    id="No. of Containers"
-                                                   placeholder="No. of Containers"
+                                                   placeholder="# Containers"
                                                    name="numberOfContainers"
                                                    onChange={this.handleSIChange}
                                                    value={this.state.noofContainers}
@@ -1169,7 +1170,7 @@ onSubmitContainer(e){
                                     <div className="form-group ">
                                         <label htmlFor="Rail_Car_Number"
                                                className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Purchase
-                                            Order Number</label>
+                                            Order #</label>
 
                                         <div className="col-lg-6  col-sm-11  col-xs-11">
                                             <select className="form-control"
@@ -1177,7 +1178,7 @@ onSubmitContainer(e){
                                                     name="po_number"
                                                     onChange={this.handleMIChange}
                                                     defaultValue = "">
-                                                    <option value="" disabled >Purchase Order Number</option>
+                                                    <option value="" disabled >Purchase Order #</option>
                                                     {this.poNumber}
 
                                             </select>
@@ -1240,7 +1241,7 @@ onSubmitContainer(e){
 
                                     <div className="form-group">
                                          <label htmlFor="Lot_Number"
-                                                className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label" >No. of Bags
+                                                className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label" ># Bags
                                              for Lot</label>
 
                                          <div className="col-lg-6    col-sm-11 col-xs-11 ">
@@ -1282,13 +1283,13 @@ onSubmitContainer(e){
                                         <div className="form-group ">
                                             <label htmlFor="Material"
                                                    className={this.state.errorsI.bookingNumber ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Booking
-                                                Number</label>
+                                                #</label>
 
                                             <div className="col-lg-6  col-sm-11 col-xs-11 ">
                                                 <input type="text"
                                                        className="form-control"
                                                        id="Material"
-                                                       placeholder="Booking Number"
+                                                       placeholder="Booking #"
                                                        name="bookingNumber"
                                                        onChange={this.InternationalChange}
                                                     />
@@ -1486,12 +1487,12 @@ onSubmitContainer(e){
 
                                     <fieldset className="scheduler-border tab-pane " id="Domestic">
                                      <div className="form-group ">
-                                        <label for="" className={this.state.errorsd.bookingNumber ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Booking Number</label>
+                                        <label for="" className={this.state.errorsd.bookingNumber ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Booking #</label>
                                         <div className="col-lg-6  col-sm-11 col-xs-11 ">
                                           <input type="text"
                                            className="form-control"
                                             id=""
-                                            placeholder="Booking Number"
+                                            placeholder="Booking #"
                                             name = "bookingNumber"
                                             onChange={this.DomesticChange}
                                             />
@@ -1520,13 +1521,13 @@ onSubmitContainer(e){
                                         <div className="form-group">
                                             <label htmlFor="Origin"
                                                    className={this.state.errorsd.shippingReferenceNumber ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Shipping
-                                                Ref Number</label>
+                                                Ref #</label>
 
                                             <div className="col-lg-6    col-sm-11 col-xs-11 ">
                                                 <input type="text"
                                                        className="form-control"
                                                        id=""
-                                                       placeholder="Shipping Ref Number"
+                                                       placeholder="Shipping Ref #"
                                                        name="shippingReferenceNumber"
                                                        onChange={this.DomesticChange}
 
@@ -1629,11 +1630,11 @@ onSubmitContainer(e){
                                                             id="No_of_Bages_Pallat"
                                                             placeholder="Ship to Zip Code"
                                                             name="zipCode"
-                                                           
+
                                                             onChange={this.DomesticChange1}
                                                          />
 
-                                                  
+
                                                  </div>
                                                 {this.state.DomesticInfoList.length> 0 ? <i className="fa-2x fa fa-minus base_color" onClick={this.onDomesticShipMinus} aria-hidden="true"></i> : null}
                                             </div>
@@ -1700,13 +1701,13 @@ onSubmitContainer(e){
                                             <div className="form-group">
                                                 <label htmlFor="Stretch_wrap"
                                                        className={this.state.errorsd.carrierAcNumber ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Carrier
-                                                    Account Number</label>
+                                                    Account #</label>
 
                                                 <div className="col-lg-6   col-sm-11 col-xs-11 ">
                                                     <input type="text"
                                                            className="form-control"
                                                            id="No_of_Bages_Pallat"
-                                                           placeholder="Carrier Account Number"
+                                                           placeholder="Carrier Account #"
                                                            name="carrierAcNumber"
                                                            onChange={this.DomesticChange}
 

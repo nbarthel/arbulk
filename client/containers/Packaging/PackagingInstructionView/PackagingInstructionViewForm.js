@@ -210,8 +210,10 @@ onSearch(e){
                             }
                                }
                             ],
-                            where : {
-                                "and": serachObj
+                          where: {"and":[
+                              {"or":customer},
+                              {"or":company}
+                            ]
                             }
                         });
                     }
@@ -219,8 +221,10 @@ onSearch(e){
                     else {
                         this.urlSearch = PIview._buildUrl(base, {
                             include: ["TLocation", "TCompany", "TPackagingInstructionLots"],
-                            where: {
-                                "and": serachObj
+                            where: {"and":[
+                              {"or":customer},
+                              {"or":company}
+                            ]
                             }
                  });
                     }
@@ -437,18 +441,22 @@ onSearch(e){
                     }
                     }
                     ],
-                    where : {
-                        "and": serachObj
-                    }
+                  where: {"and":[
+                    {"or":customer},
+                    {"or":company}
+                  ]
+                  }
                 });
             }
 
             else {
                 this.urlSearch = PIview._buildUrl(base, {
                     include: ["TLocation", "TCompany", "TPackagingInstructionLots"],
-                    where: {
-                        "and": serachObj
-                    }
+                     where: {"and":[
+                       {"or":customer},
+                       {"or":company}
+                            ]
+                            }
                 });
             }
 

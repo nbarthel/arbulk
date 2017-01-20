@@ -23,7 +23,8 @@ export default class RailcarArrivalEntryPage extends React.Component {
         var base = 'TPackagingInstructionLots';
         //TPackagingInstructionLots
         this.url = PIview._buildUrl(base, {
-            include : ['TPackagingInstructions',{"relation": "TPackagingInstructions", "scope": {"include": ["TLocation","TCompany"]}}]
+            include : ['TPackagingInstructions',{"relation": "TPackagingInstructions", "scope": {"include": ["TLocation","TCompany"]}}],
+            "where" : {"railcar_status": {"neq":"ARRIVED"}}
         });
 
         console.log('sdsddsdsdsdsd' , this.url);

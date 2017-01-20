@@ -403,23 +403,12 @@ onClickRow(e){
             //$('#Packaging_Instruction_View').find('.'+aa).toggleClass('hide')
 
 
-      if($('#Packaging_Instruction_View').find('.'+aa).length > 2)
+      if($('#Packaging_Instruction_View').find('.'+aa).length >= 2)
       {
-        $('#Packaging_Instruction_View').find('.'+aa).each(function(index){
            $('#Packaging_Instruction_View').find('.'+aa).toggleClass('hide')
-
-
-        })
       }
 
-        else if($('#Packaging_Instruction_View').find('.'+aa).length ==2)
-{
-        for(var i in $('#Packaging_Instruction_View').find('.'+aa))
-        {
-
-         $('#Packaging_Instruction_View').find('.'+aa).toggleClass('hide')
-             }
-         }
+       
          else{
            $('#Packaging_Instruction_View').find('.'+aa).toggleClass('hide')
          }

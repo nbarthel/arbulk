@@ -58,6 +58,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
 	   	this.handleWeightEdit = this.handleWeightEdit.bind(this)
 	   	this.onMinus = this.onMinus.bind(this)
 	   	this.onChekBoxClick = this.onChekBoxClick.bind(this)
+      this.handleNumberofbagsChange = this.handleNumberofbagsChange.bind(this)
 			this.Add = false
 	   	//this.onCancel = this.onCancel.bind(this)
 	   //	this.onSaveChange = this.onSaveChange.bind(this)
@@ -159,6 +160,7 @@ componentWillMount() {
 
 
 handlePIChange(e){
+  debugger
 	this.obj[e.target.name] = e.target.value
 	if(this.obj.bag_id == 1){
 		this.setState({
@@ -201,10 +203,10 @@ handlePIChange(e){
       this.state.numberofbagsorpallets = e.target.value//(this.obj.bags_per_pallet==="")?this.state.numberofbagsorpallets:this.obj.bags_per_pallet
       this.obj.bags_per_pallet = this.state.numberofbagsorpallets
     }
-    else {
-      this.state.numberofbagsorpallets = ''
-      this.obj.bags_per_pallet = this.state.numberofbagsorpallets
-    }
+    // else {
+    //   this.state.numberofbagsorpallets = ''
+    //   this.obj.bags_per_pallet = this.state.numberofbagsorpallets
+    // }
 	}
 	console.log(this.obj)
 }
@@ -272,8 +274,17 @@ this.forceUpdate()
 console.log(this.props.data)
 }
 handleNumberofbagsChange(e){
-	this.props.data.bags_per_pallet = e.target.value
+  debugger
+  if(this.props.data!==undefined)
+	{
+    this.props.data.bags_per_pallet = e.target.value
+  }
+  else {
+
+    this.state.numberofbagsorpallets = e.target.value;
+  }
 	//this.props.data.number_of_bags =  this.refs.bagsNumber.value
+  this.obj[e.target.name] = e.target.value
 	this.forceUpdate()
 	console.log(this.props.data)
 }
@@ -460,9 +471,12 @@ $.ajax({
     		railCarInfoList : [ ],
         labelLength : []
     	})
-      this.railCarObjects.splice(this.railCarObjects.length-1 , 1)
+      this.railCarObjects.splice(1,this.railCarObjects.length-1)
 	   	this.Add = false
-
+      this.state.rObjects = []
+      this.railcarObj = this.railCarObjects[0]
+      this.state.index = 0;
+      this.railCarObjects=[]
     }
 onAdd(e){
 
@@ -486,24 +500,43 @@ onAdd(e){
 
 
 onChekBoxClick(e){
-debugger;
   var labelArray = []
   var obj1 = {}
+  var flag = false
 if(e.target.checked == true)
 {
+  if(this.props.data!==undefined){
+    var flag = true
+    this.railcarObj = []
+    for(var i=0;i<this.props.data.TPackagingInstructionLots.length;i++){
+
+      var object = {}
+      object.lot_number = this.props.data.TPackagingInstructionLots[i].lot_number
+      object.railcar_number = this.props.data.TPackagingInstructionLots[i].railcar_number
+      object.weight = this.props.data.TPackagingInstructionLots[i].weight
+      this.railcarObj.push(object)
+    }
+    this.obj.origin_id = this.props.data.origin_id
+    this.obj.po_number = this.props.data.po_number
+    this.obj.material = this.props.data.material
+  }
  var obj = ""
  var arrRail = []
  var mulrail = []
  var arrWeight = []
  var arrlot= []
+ this.state.rObjects = []
 	if(this.Add == false) {
       this.state.rObjects.push(this.railcarObj)
+      if(flag){
+        this.railcarObj = this.railcarObj[0]
+      }
 	}
 	else if(this.Add == true){
     mulrail.push(this.railcarObj)
+    this.state.rObjects.push(this.railCarObjects)
 		this.state.rObjects.push(mulrail)
-		this.state.rObjects = [].concat.apply([], this.state.rObjects);
-  	this.state.rObjects.push(this.railCarObjects)
+
 	}
 	this.state.rObjects = [].concat.apply([], this.state.rObjects);
 
@@ -549,6 +582,9 @@ this.state.labelLength = [].concat.apply([],this.state.labelLength)
 this.state.labelLength.splice( 0 ,1)
 var obj =  this.obj.po_number +'\n'  + originName +'\n'  + this.obj.material +'\n'+ uniquelot[0] + '\n'  + uniqueWeight[0]
 
+if(this.props.data!==undefined){
+this.props.data.custom_label = obj
+}
 
 console.log("labelArrayyyyyy777777777" , this.state.labelLength)
 	this.autolabel = obj
@@ -566,6 +602,9 @@ else{
 	})
 	this.obj.custom_label = ""
   this.state.labelLength = []
+  if(this.props.data!==undefined){
+  this.props.data.custom_label = ''
+  }
 }
 }
  addrailcarObjectLabel()
@@ -710,7 +749,7 @@ render() {
 				<div>
 				<div className="bages_estimated col-lg-11 col-md-11 col-sm-11 col-xs-11"><span></span></div>
          		<div className="form-group ">
-					<label htmlFor="Rail_Car_Number" className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label">Rail Car Number</label>
+					<label htmlFor="Rail_Car_Number" className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label">Railcar #</label>
 					<div className="col-lg-7    col-sm-11 col-xs-11 ">
 					{this.props.lotInfo != undefined ?
 					  <input
@@ -718,7 +757,7 @@ render() {
 					  name="railcar_number"
 					  className="form-control"
 					  id="Rail_Car_Number"
-					  placeholder="Rail Car Number"
+					  placeholder="Railcar #"
 					  onChange={this.handleRailcarChange}
 					  value ={this.props.lotInfo[0].railcar_number} />
 					  :
@@ -727,7 +766,7 @@ render() {
 					  name="railcar_number"
 					  className="form-control"
 					  id="Rail_Car_Number"
-					  placeholder="Rail Car Number"
+					  placeholder="Railcar #"
 					  onChange={this.handleRailcarChange}
 					  value ={this.state.railcarnumber} />	}
 					  <div className="error"><span></span></div>
@@ -738,14 +777,14 @@ render() {
 				</div>
 
 				<div className="form-group">
-					<label htmlFor="Lot_Number" className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label">Lot Number</label>
+					<label htmlFor="Lot_Number" className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label">Lot #</label>
 					<div className="col-lg-7    col-sm-11 col-xs-11 ">
 					     {this.props.lotInfo != undefined ?
 					     <input
 					     type="text"
 					     className="form-control"
 					     id="Lot_Number"
-					     placeholder="Lot Number"
+					     placeholder="Lot #"
 					     name="lot_number"
 					     onChange={this.handleRailcarChange}
 					     value={this.props.lotInfo[0].lot_number}/>
@@ -754,7 +793,7 @@ render() {
 					     type="text"
 					     className="form-control"
 					     id="Lot_Number"
-					     placeholder="Lot Number"
+					     placeholder="Lot #"
 					     name="lot_number"
 					     onChange={this.handleRailcarChange}
 					     value={this.state.lotnumber}/>
@@ -858,7 +897,7 @@ render() {
                 </div>
 
 				<div className="form-group">
-					<label htmlFor="Type_of_Packaging" className= { this.state.errors.bag_id ? "col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label has error" : "col-lg-4 col-md-4 col-sm-11 col-xs-11 control-label" } >Type of Packaging</label>
+					<label htmlFor="Type_of_Packaging" className= { this.state.errors.bag_id ? "col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label has error" : "col-lg-4 col-md-4 col-sm-11 col-xs-11 control-label" } >Unit of Packaging</label>
 					<div className="col-lg-7    col-sm-11 col-xs-11 ">
 					 {
 					 this.props.data !=undefined ?
@@ -877,7 +916,7 @@ render() {
 					  id="Type_of_Packaging"
 					  name="bag_id"
 					  onChange={this.handlePIChange}>
-					  <option value="Please Select An Option" disabled selected>Type of Packaging</option>
+					  <option value="Please Select An Option" disabled selected>Unit of Packaging</option>
 						{packagingtypes}
 					  </select>
 					  }
@@ -887,7 +926,7 @@ render() {
                 </div>
 
 				<div className="form-group" style={{display : this.state.display}}>
-					<label htmlFor="Type_of_Unit" className = {this.state.errors.packaging_material_id ? "col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label has error" : "col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label"} >Type of Unit</label>
+					<label htmlFor="Type_of_Unit" className = {this.state.errors.packaging_material_id ? "col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label has error" : "col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label"} >Type of Packaging</label>
 					<div className="col-lg-7    col-sm-11 col-xs-11 ">
 					  {this.props.data != undefined ?
 					  <select
@@ -907,7 +946,7 @@ render() {
 					    name="packaging_material_id"
 					    disabled = {this.state.disabled}
 					    onChange={this.handlePIChange}>
-					    <option value="Please Select An Option" disabled selected>Type Of Unit</option>
+					    <option value="Please Select An Option" disabled selected>Type Of Packaging</option>
 						{unittypes}
 					  </select>
 					}
@@ -943,14 +982,14 @@ render() {
                 </div>
 
 				<div className="form-group">
-					<label htmlFor="No_of_Bags_Pallet" className= {this.state.errors.bags_per_pallet ? "col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label has error" : "col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label"}>No of Bags/Pallet</label>
+					<label htmlFor="No_of_Bags_Pallet" className= {this.state.errors.bags_per_pallet ? "col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label has error" : "col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label"}># Bags per Pallet</label>
 					<div className="col-lg-7    col-sm-11 col-xs-11 ">
 					  {this.props.data != undefined ?
 					  <input
 					  type="number"
 					  className="form-control"
 					  id="No_of_Bages_Pallet"
-					  placeholder="No of Bags/Pallet"
+					  placeholder="# Bags per Pallet"
 					  ref="bagsNumber"
 					  onChange={(e)=>{this.handleNumberofbagsChange(e)}}
 					  name="bags_per_pallet"
@@ -960,7 +999,7 @@ render() {
 					  type="number"
 					  className="form-control"
 					  id="No_of_Bages_Pallet"
-					  placeholder="No of Bags/Pallet"
+					  placeholder="# Bags per Pallet"
 					  onChange={(e)=>{this.handleNumberofbagsChange(e)}}
 					  name="bags_per_pallet"
 					  value={this.state.numberofbagsorpallets} />

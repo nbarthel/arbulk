@@ -84,9 +84,9 @@ class  ShipmentConfirmationForm extends React.Component {
                 </div>
 
                 <div className="form-group ">
-                    <div className="col-lg-3 "><label for="Rail_Car_Number" className=" control-label">Purchase Order Number</label></div>
+                    <div className="col-lg-3 "><label for="Rail_Car_Number" className=" control-label">Purchase Order #</label></div>
                     <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-                      <input type="text" className="form-control" value = {this.props.data.TPackagingInstructions.po_number} disabled id="Rail_Car_Number" placeholder="Purchase Order Number"/>
+                      <input type="text" className="form-control" value = {this.props.data.TPackagingInstructions.po_number} disabled id="Rail_Car_Number" placeholder="Purchase Order #"/>
                       <div className="error"><span></span></div>
                     </div>
                     <div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">
@@ -96,9 +96,9 @@ class  ShipmentConfirmationForm extends React.Component {
                     </div>
                 </div>
                 <div className="form-group">
-                    <div className="col-lg-3 "><label for="Lot_Number" className="control-label">Lot Number</label></div>
+                    <div className="col-lg-3 "><label for="Lot_Number" className="control-label">Lot #</label></div>
                     <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-                         <input type="text" className="form-control" disabled value = {this.props.data.TPackagingInstructionLots.lot_number} id="Lot_Number" placeholder="Lot Number"/>
+                         <input type="text" className="form-control" disabled value = {this.props.data.TPackagingInstructionLots.lot_number} id="Lot_Number" placeholder="Lot #"/>
                       <div className="error"><span></span></div>
                     </div>
                     <div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">
@@ -124,7 +124,7 @@ class  ShipmentConfirmationForm extends React.Component {
                         </div>
 
                         <div className="form-group ">
-                            <div className="col-lg-3 "><label for="Material" className="control-label">Number of Containers</label></div>
+                            <div className="col-lg-3 "><label for="Material" className="control-label"># Containers</label></div>
                             <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
                                <select disabled className="form-control" id="Type_of_Packaging" name="Type_of_Packaging">
                                 <option >{this.props.data.TShipmentent.numberOfContainers}</option>
@@ -139,9 +139,9 @@ class  ShipmentConfirmationForm extends React.Component {
                         </div>
 
                         <div className="form-group">
-                            <div className="col-lg-3 "><label for="" className=" control-label">Number of Bags</label></div>
+                            <div className="col-lg-3 "><label for="" className=" control-label"># Bags</label></div>
                             <div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
-                               <input type="text" className="form-control" value = {this.props.data.noOfBags} disabled id="" placeholder="Number of Bags"/>
+                               <input type="text" className="form-control" value = {this.props.data.noOfBags} disabled id="" placeholder="# Bags"/>
                               <div className="error"><span></span></div>
                             </div>
                             <div className=" col-lg-2 col-md-2 col-sm-4 col-xs-2 pddn-10-top">

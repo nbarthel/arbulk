@@ -545,7 +545,7 @@ var calcWeight = this.state.weightBox
 			if(this.addPostArray.length == 0 && this.editPostArray.length == 0 && this.splitAddPostArray.length == 0 && this.splitPostArray.length == 0 && this.addPostArray.length == 0 && this.deletePostArray.length == 0){
 
 				if(packStatus == 'true'){
-						axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"ININVENTORY"})
+						axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"In Inventory"})
 						swal("Edited","Data Has Been Successfully Edited","success")
 						localStorage.removeItem('packagingFlag')
 						window.location.reload()
@@ -591,7 +591,7 @@ var calcWeight = this.state.weightBox
 				//localStorage.removeItem('packagingFlag')
 			}
 			if(packStatus == 'true' ){
-					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"ININVENTORY",inInventory:this.totalBags})
+					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"In Inventory",inInventory:this.totalBags})
 					swal("Edited","Data Has Been Successfully Edited","success")
 					localStorage.removeItem('packagingFlag')
 				}else {
@@ -662,7 +662,7 @@ var calcWeight = this.state.weightBox
 				}
 
 			if(packStatus == 'true'){
-					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"ININVENTORY",inInventory:this.totalBags})
+					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"In Inventory",inInventory:this.totalBags})
 					swal("Edited","Data Has Been Successfully Edited","success")
 					localStorage.removeItem('packagingFlag')
 				}else {
@@ -720,7 +720,7 @@ var calcWeight = this.state.weightBox
 					//localStorage.removeItem('packagingFlag')
 				}
 			if(packStatus == 'true'){
-					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"ININVENTORY",inInventory:this.totalBags})
+					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"In Inventory",inInventory:this.totalBags})
 					swal("Edited","Data Has Been Successfully Edited","success")
 					localStorage.removeItem('packagingFlag')
 				}else {
@@ -758,7 +758,7 @@ var calcWeight = this.state.weightBox
 			}
 
 			if(packStatus == 'true'){
-					axios.put(Base_Url + "TPackagingInstructionLots/"+	this.CID,{status:"ININVENTORY",inInventory:this.totalBags})
+					axios.put(Base_Url + "TPackagingInstructionLots/"+	this.CID,{status:"In Inventory",inInventory:this.totalBags})
 					swal("Edited","Data Has Been Successfully Edited","success")
 					localStorage.removeItem('packagingFlag')
 

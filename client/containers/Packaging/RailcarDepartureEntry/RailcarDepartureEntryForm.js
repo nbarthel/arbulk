@@ -398,7 +398,7 @@ onClickli(e){
 
 		if(fiterData != undefined){
 			var railCarFilterData = _.map(fiterData , (view ,index)=>{
-					if(view.TPackagingInstructions && (view.status == "ININVENTORY") ){
+					if(view.TPackagingInstructions && (view.status == "In Inventory") ){
 			
 					return (
 						<tr key={index}>
@@ -446,7 +446,7 @@ onClickli(e){
 
 
 		var railcartData = _.map(railCart , (view , index)=>{
-			if(view.TPackagingInstructions && (view.status == "ININVENTORY") ){
+			if(view.TPackagingInstructions && (view.status == "In Inventory") ){
 			return(
 
 				<tr key={index}>

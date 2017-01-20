@@ -25,7 +25,8 @@ export default class RailcarArrivalEntryForm extends React.Component {
 		    this.dateArray = [ ]
 		this.state = {
 			startDate : '',
-			key:0
+			key:0,
+            selectedOption: 'lbs'
 		}
 		this.updateCartArrival = this.updateCartArrival.bind(this);
 		this.handleChange1 = this.handleChange1.bind(this)
@@ -41,7 +42,9 @@ export default class RailcarArrivalEntryForm extends React.Component {
             this.onSearch = this.onSearch.bind(this)
             this.onTextChange = this.onTextChange.bind(this)
             this.onTap = this.onTap.bind(this)
-						this.onChnage = this.onChnage.bind(this)
+			this.onChnage = this.onChnage.bind(this)
+            this.handleOptionChange = this.handleOptionChange.bind(this)
+			this.handleOptionChange1 = this.handleOptionChange1.bind(this)
         }
          onformat(inputDate) {
         var datear = inputDate.split('-')
@@ -215,7 +218,18 @@ onClickli(e){
 		}
 	}
 
-
+  	handleOptionChange(changeEvent) {
+    	var selectedOption = changeEvent.target.value
+    	this.setState({
+			selectedOption: changeEvent.target.value
+			});
+		console.log( selectedOption);
+	}
+	handleOptionChange1(e) {
+      this.setState({
+        	selectedOption: e.target.value
+			});
+	}
 
     onCompanyFilter(e,location){
             if(e.target.checked){
@@ -465,6 +479,7 @@ onChnage(e){
 							<td>{view.TPackagingInstructions.TCompany? view.TPackagingInstructions.TCompany.name : ''}</td>
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.po_number : ''}</td>
 							<td>{view.railcar_number ? view.railcar_number : ''}</td>
+                      		<td>{view.weight?(this.state.selectedOption=='lbs'?view.weight:(view.weight/2.54).toFixed(2)):''}</td>
 							<td>{view.lot_number ? view.lot_number: ''}</td>
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.material : ''}</td>
 							<td> {view.status == "UNCONFIRMED"? "NO" : "YES"}</td>
@@ -514,6 +529,7 @@ onChnage(e){
 							<td>{view.TPackagingInstructions.TCompany? view.TPackagingInstructions.TCompany.name : ''}</td>
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.po_number : ''}</td>
 							<td>{view.railcar_number ? view.railcar_number : ''}</td>
+          					<td>{view.weight?(this.state.selectedOption=='lbs'?view.weight:(view.weight/2.54).toFixed(2)):''}</td>
 							<td>{view.lot_number ? view.lot_number: ''}</td>
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.material : ''}</td>
 							<td> {view.status == "UNCONFIRMED" ? "NO" : "YES"}</td>
@@ -545,8 +561,30 @@ onChnage(e){
 <div className="container">
 	<div className="row-fluid">
 <FilterComponent key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter}/>	 	<div id="filter-grid">
-		<div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
-
+	<div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
+		<div className="pull-right margin-30-right">
+			<label className="control control--radio ">LBS
+                <input id="Modify_User" name="Modify_User" type="radio"
+                type="radio"
+                id="ADDCustomers"
+                name="ADDCustomers"
+                value="lbs"
+                onChange={this.handleOptionChange}
+                checked={this.state.selectedOption==='lbs'}/>
+      			<div className="control__indicator"></div>
+			</label>
+		</div>
+    <div className="pull-right margin-30-right">
+      	<label className="control control--radio ">Kg
+      		<input id="Modify_User" name="Modify_User" type="radio"
+            id="ADDCustomers"
+            name="ADDCustomers"
+            value="kg"
+            onChange={this.handleOptionChange1}
+            checked={this.state.selectedOption==='kg'}/>
+      			<div className="control__indicator"></div>
+      </label>
+   </div>
 			<div className="row">
 			<FilterButton buttonDisplay = {this.buttonDisplay} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
 				<div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs">
@@ -564,6 +602,7 @@ onChnage(e){
 							<th>Customer</th>
 							<th>PO# </th>
 							<th>Railcar# </th>
+      						<th>weight</th>
 							<th>Lot# </th>
 							<th>Material </th>
 							<th>Confirmed</th>
