@@ -33,13 +33,14 @@ module.exports = function(Tshipmentent) {
                 "createdOn": tshipment.SI.created_on,
                 "midifiedBy": 0,
                 "modifiedOn": null,
-                "active": 0
+                "active": 1
             },
             function (err, obj) {
                 if (err) {
-                    //logger.error(err);
-                    console.log(err)
-                    return cb(null, {errors: err});
+                      if(err.code.includes("ER_DUP_ENTRY")){
+                      customErr.code = "Release Number Already Exist"
+                    }
+                    return cb(null, {errors: customErr});
                 }
                 if(obj!= null){
 
@@ -66,13 +67,16 @@ module.exports = function(Tshipmentent) {
                             "status" : "UNCONFIRMED",
                             "modifiedOn": tshipment.Domestic.created_on,
                             "modifiedBy": 0,
-                            "active": 0
+                            "active": 1
 
                         },function(err , lotsObj){
                             if (err) {
                                 // logger.error(err);
                                 console.log(err)
-                                return cb(null, {errors: err});
+                                if(err.code == "ER_DUP_ENTRY"){
+                                  customErr.code == "Booking Number Already Exist"
+                                }
+                                return cb(null, {errors: customErr});
                             }
                             if(lotsObj && tshipment.lotInformation.length==1){
                                 console.log("inside lots lotsObj" ,lotsObj);
@@ -186,11 +190,13 @@ module.exports = function(Tshipmentent) {
                             "active": 1
 
                         },function(err , lotsObj){
-                            // if (err) {
-                            //     // logger.error(err);
-                            //     console.log(err)
-                            //     return cb(null, {errors: err});
-                            // }
+                          if(err){
+                          if(err.code == "ER_DUP_ENTRY"){
+                            customErr.code == "Booking Number Already Exist"
+                            
+                          }
+                          return cb(null, {errors: customErr});
+                          }
                             console.log("tshipment.lotInformation.length" , tshipment.lotInformation.length)
                             if(lotsObj && tshipment.lotInformation.length==1){
                                 console.log("inside lots" ,obj.id)
@@ -289,12 +295,15 @@ module.exports = function(Tshipmentent) {
                 "createdOn": tshipment.SI.created_on,
                 "midifiedBy": 0,
                 "modifiedOn": null,
-                "active": 0
+                "active": 1
             },
             function (err, obj) {
                 if (err) {
                     //logger.error(err);
                     console.log(err)
+                    if(err.code == "ER_DUP_ENTRY"){
+                      err.code == "Release Number Already Exist"
+                    }
                     return cb(null, {errors: err});
                 }
                 if(obj!= null){
@@ -321,12 +330,15 @@ module.exports = function(Tshipmentent) {
                             "status" : "UNCONFIRMED",
                             "modifiedOn": "2016-10-26T00:00:00.000Z",
                             "modifiedBy": 0,
-                            "active": 0
+                            "active": 1
 
                         },function(err , lotsObj){
                             if (err) {
                                 // logger.error(err);
                                 console.log(err)
+                                if(err.code == "ER_DUP_ENTRY"){
+                                  err.code == "Booking Number Already Exist"
+                                }
                                 return cb(null, {errors: err});
                             }
                             if(lotsObj && tshipment.lotInformation.length==1){
@@ -437,6 +449,9 @@ module.exports = function(Tshipmentent) {
                             if (err) {
                                 // logger.error(err);
                                 console.log(err)
+                                if(err.code == "ER_DUP_ENTRY"){
+                                  err.code == "Booking Number Already Exist"
+                                }
                                 return cb(null, {errors: err});
                             }
                             if(lotsObj && tshipment.lotInformation.length==1){

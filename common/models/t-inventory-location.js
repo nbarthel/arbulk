@@ -4,9 +4,16 @@ var dateFormat = require('dateformat');
 var ModelBuilder = require('loopback-datasource-juggler').ModelBuilder;
 var modelBuilder = new ModelBuilder();
 var dsConfig = require('../../server/datasources.json');
-module.exports = function(Tinventorylocation) {
 
+module.exports = function(Tinventorylocation) {
+	
+  
     Tinventorylocation.addbagweight = function(tinventory, cb) {
+      var d = new Date();
+	  var date_with_time =     d.getFullYear()+"-"+d.getMonth()+1+"-"+d.getDate()+" "
+                              +d.getHours()+":"
+                              +d.getMinutes()+":"+d.getSeconds()
+      	console.log("Here is the date",date_with_time)
         var inventoryData = Tinventorylocation.app.models.TPiInventory;
       	var InventoryHistoryLog = Tinventorylocation.app.models.TPiInventoryHistory;
         console.log(tinventory , '>>>>>>');
@@ -63,16 +70,15 @@ module.exports = function(Tinventorylocation) {
                                 }
                             });
                           InventoryHistoryLog.create({
-
                         "id": 0,
                         "piLotId": tinventory.Tinventory.piLotId,
                         "inventoryLocationId": obj.id,
                         "noOfBags": tinventory.Tinventory.noOfBags,
                         "notes" : tinventory.Tinventory.notes,
                         "weight": tinventory.Tinventory.weight,
-                        "createdOn": "2016-10-03",
+                        "createdOn": date_with_time,
+                        "modifiedOn": date_with_time,
                         "createdBy": 1,
-                        "modifiedOn": "2016-10-03",
                         "modifiedBy": 1,
                         "active": 1
 
@@ -97,6 +103,11 @@ module.exports = function(Tinventorylocation) {
 
 
     Tinventorylocation.deleteLocation = function(tinventory, cb) {
+        var d = new Date();
+	  	var date_with_time =     d.getFullYear()+"-"+d.getMonth()+1+"-"+d.getDate()+" "
+                              +d.getHours()+":"
+                              +d.getMinutes()+":"+d.getSeconds()
+      	console.log("Here is the date",date_with_time)
         var inventoryData = Tinventorylocation.app.models.TPiInventory;
       	var InventoryHistoryLog = Tinventorylocation.app.models.TPiInventoryHistory;
         var ds = Tinventorylocation.dataSource;
@@ -143,9 +154,9 @@ module.exports = function(Tinventorylocation) {
                         "noOfBags": tinventory.Tinventory.noOfBags,
                         "notes" : tinventory.Tinventory.notes,
                         "weight": tinventory.Tinventory.weight,
-                        "createdOn": "2016-10-03",
+                         "createdOn": date_with_time,
+                        "modifiedOn": date_with_time,
                         "createdBy": 1,
-                        "modifiedOn": "2016-10-03",
                         "modifiedBy": 1,
                         "active": 1
 
@@ -175,6 +186,11 @@ module.exports = function(Tinventorylocation) {
 
 
     Tinventorylocation.updatebagweight = function(tinventory, cb) {
+        var d = new Date();
+        var date_with_time =     d.getFullYear()+"-"+d.getMonth()+1+"-"+d.getDate()+" "
+                              +d.getHours()+":"
+                              +d.getMinutes()+":"+d.getSeconds()
+      	console.log("Here is the date",date_with_time)
         var inventoryData = Tinventorylocation.app.models.TPiInventory;
       	var InventoryHistoryLog = Tinventorylocation.app.models.TPiInventoryHistory;
         console.log(tinventory , '>>>>>>');
@@ -230,9 +246,9 @@ module.exports = function(Tinventorylocation) {
                         "noOfBags": tinventory.Tinventory.noOfBags,
                         "notes" : tinventory.Tinventory.notes,
                         "weight": tinventory.Tinventory.weight,
-                        "createdOn": "2016-10-03",
+                         "createdOn": date_with_time,
+                        "modifiedOn": date_with_time,
                         "createdBy": 1,
-                        "modifiedOn": "2016-10-03",
                         "modifiedBy": 1,
                         "active": 1
 

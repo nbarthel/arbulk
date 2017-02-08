@@ -1,5 +1,5 @@
 'use strict';
 
-module.exports = function(Tpiinventoryhistory) {
+module.exports = function(TpiInventoryhistory) {
 
 };

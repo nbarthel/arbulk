@@ -70,7 +70,6 @@ module.exports = function(Tpackaginginstructions) {
         customErr.message=null;
 
         console.log("tapackaging lots entry array check" , tpackaging  ,tpackaging.packagingLots )
-
         Tpackaginginstructions.create({
                 customer_id: tpackaging.PI.customer_id,
                 location_id:tpackaging.PI.location_id ,
@@ -128,7 +127,8 @@ module.exports = function(Tpackaginginstructions) {
                                 modifedOn:  tpackaging.PI.created_on ,
                                 active: 1,
                                 arrived: 0,
-                                railcar_status : 'INTRANSIT'
+                                railcar_status : 'INTRANSIT',
+                          		custom_label: tpackaging.packagingLots[0].custom_label
                         },function(err , lotsObj){
                             if (err) {
                                // logger.error(err);
@@ -162,7 +162,8 @@ module.exports = function(Tpackaginginstructions) {
                                 modifedOn:  tpackaging.PI.created_on ,
                                 active: 1,
                                 arrived: 0,
-                                railcar_status : 'INTRANSIT'
+                                railcar_status : 'INTRANSIT',
+                                custom_label: tpackaging.packagingLots[i].custom_label
 
                             }, function (err, lotsObj) {
                                 if (err) {
@@ -177,8 +178,7 @@ module.exports = function(Tpackaginginstructions) {
                     cb(null,obj);
                 }
             })
-
-       };
+     };
 
 
     Tpackaginginstructions.updatePIEntry = function(tpackaging, cb) {
@@ -197,7 +197,7 @@ module.exports = function(Tpackaginginstructions) {
 	                                 var yyyy = today.getFullYear();
 	                                if(dd<10){
 		                           dd = '0'+dd
-	                              } 
+	                              }
 	                    if(mm<10){
 	                 	mm = '0'+mm
 	                   }
@@ -244,7 +244,7 @@ module.exports = function(Tpackaginginstructions) {
 	                                 var yyyy = today.getFullYear();
 	                                if(dd<10){
 		                           dd = '0'+dd
-	                              } 
+	                              }
 	                    if(mm<10){
 	                 	mm = '0'+mm
 	                   }
@@ -269,7 +269,8 @@ module.exports = function(Tpackaginginstructions) {
                                 modifedOn: today,
                                 active: 1,
                             arrived: 0,
-                            railcar_status : tpackaging.TPackagingInstructionLots[0].railcar_status
+                            railcar_status : tpackaging.TPackagingInstructionLots[0].railcar_status,
+                          custom_label: tpackaging.TPackagingInstructionLots[0].custom_label
 
                         },function(err , lotsObj){
                             if (err) {
@@ -279,7 +280,7 @@ module.exports = function(Tpackaginginstructions) {
                         });
                     }
                     else if(tpackaging.TPackagingInstructionLots.length >1){
-    
+
                         console.log("started updating packahing instruction lots table")
                         for(var i in tpackaging.TPackagingInstructionLots) {
                             PackagingLots.upsert({
@@ -300,7 +301,8 @@ module.exports = function(Tpackaginginstructions) {
                                 modifedOn: today,
                                 active: 1,
                                 arrived: 0,
-                                railcar_status : tpackaging.TPackagingInstructionLots[i].railcar_status
+                                railcar_status : tpackaging.TPackagingInstructionLots[i].railcar_status,
+                              	custom_label: tpackaging.TPackagingInstructionLots[i].custom_label
 
                             }, function (err, lotsObj) {
                                 if (err) {
