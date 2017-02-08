@@ -9,27 +9,37 @@ class InventoryLocationHistory extends Component {
 	}
 	componentWillReceiveProps(nextProps) {
 
-
+debugger
    	let id = this.props.lID
 	   	let lotId = this.props.lotId
 	   	var PIview = createDataLoader(InventoryLocationHistory, {
 	            queries: [{
 	                endpoint: 'TPiInventoryHistories'
-	                
+
 
 	            }]
 	        });
 	//"include": {"relation": "classes", "scope": {"include": ["teachers","students"]}}
-		      var base1 = 'TPiInventoryHistories';
+	var base1 = 'TPiInventoryHistories';
+	if(this.props.lotIdArray.length>0){
+		this.urlnew = PIview._buildUrl(base1, {
+		 "where":{"piLotId":{"inq":this.props.lotIdArray}},
+"include":['TInventoryLocation']
+		 //include : ['TPiInventory',{"relation":'TPiInventory',"scope":{"include":["TInventoryLocation"]}}]
+	});
+	}
+	else{
 	          this.urlnew = PIview._buildUrl(base1, {
-	           "where":{"piLotId":id},
+	           "where":{"piLotId":"-1"},
 				"include":['TInventoryLocation']
 	           //include : ['TPiInventory',{"relation":'TPiInventory',"scope":{"include":["TInventoryLocation"]}}]
 	        });
+				}
 
 	           	 $.ajax({
 	            url: this.urlnew,
 	            success:function(data){
+								debugger
 	            	console.log('ajax>>>>>>>>>>>>>> ',data);
 
 	              	if(data.stamp_confirmed){
@@ -104,7 +114,7 @@ componentDidMount() {
 				<td>{invent.TInventoryLocation.locationName}</td>
 				<td>{invent.noOfBags}</td>
 				<td>{invent.weight}</td>
-				<td>{moment(invent.createdOn).format("MM-DD-YYYY")}</td>
+				<td>{moment(invent.createdOn).format("MM-DD-YYYY HH:MM")}</td>
 				<td>{invent.notes}</td>
 				</tr>)
 		})

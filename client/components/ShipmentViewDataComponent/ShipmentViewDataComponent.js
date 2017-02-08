@@ -18,7 +18,9 @@ var moment = require('moment');
 import './js/tableHeadFixer';
 /*import './stylesheet/jquery.dataTables.min.css'*/
 var Loader = require('react-loader');
-//var shipmentViewData = require('./ShpmentViewData.json');
+var sortedDataflag = false
+var sortedData = []
+var flagSorting = false
 class ShipmentViewDataComponent extends React.Component{
 
     constructor(props){
@@ -59,7 +61,12 @@ componentWillMount(){
       $.ajax({
             url: this.url,
             success:function(data){
-                console.log('ajax ',data);
+            for(var i in data){
+              debugger
+              if(data[i].TShipmentInternational.length==0){
+                data.splice(i,1)
+              }
+            }
               this.setState({
                   viewData : [data],
                   loaded:true
@@ -85,15 +92,41 @@ componentWillMount(){
       queries:[{
         endpoint: 'TPackagingInstructions',
         filter: {
-          include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
+          include: ['TPackagingInstructionLots',
+                   {"relation":"TPackagingInstructions",
+                               "scope":{"include":
+                                       ["TLocation"]
+                                       }
+                  }]
         }
       }]
     })
        var base = 'TShipmentents';
-        //TPackagingInstructionLots
-        this.url = PIview._buildUrl(base, {
-                    "include" : ["TLocation" ,"TContainerAllocation", "TCompany" ,{"relation" : "TContainerDomestic","scope":{"include" : "TCompany"}},{"relation" : "TContainerInternational","scope":{"include" : "TCompany"}},{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational","scope":{"include":["TSteamshipLine" ,"TContainerType"]}},{"relation" : "TShipmentLots" ,"scope":{"include":["TPackagingInstructionLots","TPackagingInstructions"]}}]
 
+        this.url = PIview._buildUrl(base, {
+                    "include" : ["TLocation" ,"TContainerAllocation","TCompany",
+
+                                 {"relation" : "TContainerDomestic",
+                                               "scope":{"include" : "TCompany"}
+                                 },
+
+                                {"relation" : "TContainerInternational",
+                                              "scope":{"include" : "TCompany"}
+                                },
+
+                                {"relation" :"TShipmentDomestic",
+                                              "scope":{"include":["TShipmentType"],"where":{"active":"1"}}
+                                },
+
+                                {"relation" :"TShipmentInternational",
+                                "scope":{"include":["TSteamshipLine" ,"TContainerType"],"where":{"active":"1"}}
+                                },
+
+                                {"relation" : "TShipmentLots" ,
+                                              "scope":{"include":["TPackagingInstructionLots","TPackagingInstructions"],
+                                                      "where":{"active":"1"}
+                                                    }
+                                }],
         });
 
       $.ajax({
@@ -103,6 +136,12 @@ componentWillMount(){
               debugger;
                 console.log('ajax ',data);
                 debugger
+                for(var i in data){
+                  debugger
+                  if(data[i].TShipmentInternational.length==0){
+                    data.splice(i,1)
+                  }
+                }
                this.setState(
                    {
                        viewData : data,
@@ -143,202 +182,204 @@ checkclick(data , value)
 
 
 onAscending(e,head){
-   var sortedData;
-   if(this.isAsc == false)
-    {
-    var switchvalue = head;
-var PIview = createDataLoader(ShipmentViewDataComponent,{
-      queries:[{
-        endpoint: 'TPackagingInstructions',
-        filter: {
-          include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
-        }
-      }]
-    })
-       var base = 'TPackagingInstructions';
-        //TPackagingInstructionLots
-        this.url = PIview._buildUrl(base, {
-            include : ['TPackagingInstructionLots',"TLocation" , "TCompany"]
-
-
-        });
-        console.log('sdsddsdsdssdssssssssssd' , this.url);
-      $.ajax({
-            url: this.url,
-            success:function(data){
-                console.log('ajax ',data);
-                debugger
-               this.sortedadta =
-                   {
-                       viewData : data
-                   }
-
-               this.isAsc = true;
+  debugger
+  sortedDataflag = true;
+  flagSorting = true;
+  var switchvalue = head;
 
                             switch(switchvalue) {
                             case 'po_number':
-                           sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
+                           sortedData = _.sortBy(this.state.viewData, function(item) {
                             return item.po_number;
                            });
-                           this.setState({
-                           viewData  : sortedData
-                                   })
                              break;
                    case 'lot_number':
-                     sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                     return (item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].lot_number : '');
+                     sortedData = _.sortBy(this.state.viewData, function(item) {
+                     return (item.TPackagingInstructionLots!=undefined?(item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].lot_number : ''):'');
                      });
-                     this.setState({
-                           viewData  : sortedData
-                                   })
                        break;
                                case 'railcar_number':
-                                sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                                return (item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].railcar_number : '');
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                return (item.TPackagingInstructionLots!=undefined?(item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].railcar_number : ''):'');
                                 });
-                      this.setState({
-                           viewData  : sortedData
-                                   })
                       break;
                        case 'weight':
-                                sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                                return (item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].weight : '');
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                return (item.TPackagingInstructionLots!=undefined?(item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].weight : ''):'');
                                 });
-                      this.setState({
-                           viewData  : sortedData
-                                   })
                       break;
                       case 'location':
-                                sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
                                 return item.TLocation.locationName;
                                 });
-                      this.setState({
-                           viewData  : sortedData
-                                   })
                       break;
                       case 'company':
-                                sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
                                 return item.TCompany.name;
                                 });
-                      this.setState({
-                           viewData  : sortedData
-                                   })
+                      break;
+                      case 'ShipmentType':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.isDomestic==1){
+                                    return item
+                                  }
+                                });
+                      break;
+                      case 'Material':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.TShipmentLots.length>0 && item.TShipmentLots[0].TPackagingInstructions!=undefined){
+                                  return item.TShipmentLots[0].TPackagingInstructions.material
+                                }
+                                });
+                      break;
+                      case 'Confmd':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.TShipmentInternational && item.TShipmentInternational.length > 0){
+                                    //if(item.TShipmentInternational[0].status == "CONFIRMED"){
+                                      return item.TShipmentInternational[0].status
+                                    //}
+                                }
+                                else if(item.TShipmentDomestic && item.TShipmentDomestic.length > 0){
+                                  //if(item.TShipmentDomestic[0].status == "CONFIRMED"){
+                                    return item.TShipmentDomestic[0].status
+                                  //}
+                              }
+                              return item;
+                                });
+                      break;
+                      case 'Forwarder':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+
+                                  if(item.TShipmentInternational && item.TShipmentInternational.length > 0){
+                                      return item.TShipmentInternational[0].freightForwarder
+                                }
+                              return item;
+                                });
+                      break;
+                      case 'CntrSize':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+
+                                  if(item.TShipmentInternational.length > 0 && item.TShipmentInternational[0].TContainerType){
+                                      return item.TShipmentInternational[0].TContainerType.name
+                                }
+                              return item;
+                                });
+                      break;
+                      case 'Qty':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  return item.numberOfContainers
+                                });
+                      break;
+                      case 'Allocated':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.TContainerAllocation.length>0){
+                                    return item.TContainerAllocation[0]
+                                  }
+                                });
+                      break;
+                      case 'Enough':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  var total = 0
+                                  for (var i=0;i<item.TContainerAllocation.length;i++){
+                                    total = total+ item.TContainerAllocation[i].noOfContainer
+                                  }
+                                  if(total == item.numberOfContainers){
+                                    return item
+                                  }
+                                });
+                      break;
+                      case 'bags':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  data.noOfBags
+                                  if(item.TShipmentLots.length>0){
+                                    return item.TShipmentLots[0].noOfBags
+                                  }
+
+                                });
+                      break;
+                      case 'ERD':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.TShipmentInternational.length>0){
+                                  return item.TShipmentInternational[0].earliestReturnDate
+                                }
+                                });
+                      break;
+                      case 'cuttOff':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.TShipmentInternational.length>0){
+                                  return item.TShipmentInternational[0].cargoCutoffDate
+                                }
+                                });
+                      break;
+                      case 'Vessel':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.TShipmentInternational.length>0){
+                                  return item.TShipmentInternational[0].steamshipVessel
+                                }
+                                });
+                      break;
+                      case 'SteamshipLine':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.TShipmentInternational.length>0){
+                                    return item.TShipmentInternational[0].TSteamshipLine.name
+                                  }
+                                  else if(item.TShipmentDomestic.length>0){
+                                    return item
+                                  }
+                                  return item
+                                });
+                      break;
+                      case 'PULocation':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.TShipmentInternational.length>0){
+                                  return item.TShipmentInternational[0].containerPickupLocation
+                                }
+                                });
+                      break;
+                      case 'ReturnLocation':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.TShipmentInternational.length>0){
+                                  return item.TShipmentInternational[0].containerReturnLocation
+                                }
+                                });
+                      break;
+                      case 'DocsCutoff':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.TShipmentInternational.length>0){
+                                  return item.TShipmentInternational[0].docCutoffDate
+                                }
+                                });
+                      case 'Status':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.TShipmentInternational.length>0){
+                                  return item.TShipmentInternational[0].status
+                                }
+                                else if(item.TShipmentDomestic.length>0){
+                                return item.TShipmentDomestic[0].status
+                              }
+                              else{
+                                return item
+                              }
+                                });
                       break;
     default:
-        this.state.viewData
-}
-
-
-
-        }.bind(this)
-        })
-
-    axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
-
-    this.setState({
-        queue_Sequence : response.data
-    })
-})
-}
-
-else{
-
-var switchvalue = head;
-var PIview = createDataLoader(ShipmentViewDataComponent,{
-      queries:[{
-        endpoint: 'TPackagingInstructions',
-        filter: {
-          include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
-        }
-      }]
-    })
-       var base = 'TPackagingInstructions';
-        //TPackagingInstructionLots
-        this.url = PIview._buildUrl(base, {
-            include : ['TPackagingInstructionLots',"TLocation" , "TCompany"]
-
-
+        sortedData = _.sortBy(this.state.viewData, function(item) {
+                return item.id
         });
-        console.log('sdsddsdsdssdssssssssssd' , this.url);
-      $.ajax({
-            url: this.url,
-            success:function(data){
-                console.log('ajax ',data);
-                debugger
-               this.sortedadta =
-                   {
-                       viewData : data
-                   }
-
-               this.isAsc = false;
-
-                            switch(switchvalue) {
-                            case 'po_number':
-                           sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                            return item.po_number;
-                           });
-                           this.setState({
-                           viewData  : sortedData.reverse()
-                                   })
-                             break;
-                   case 'lot_number':
-                     sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                     return (item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].lot_number : '');
-                     });
-                     this.setState({
-                           viewData  : sortedData.reverse()
-                                   })
-                       break;
-                      case 'railcar_number':
-                      sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                     return (item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].railcar_number : '');
-});
-                      this.setState({
-                           viewData  : sortedData.reverse()
-                                   })
-                      break;
-                      case 'weight':
-                                sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                                return (item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].weight : '');
-                                });
-                      this.setState({
-                           viewData  : sortedData.reverse()
-                                   })
-                      break;
-                       case 'location':
-                                sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                                return item.TLocation.locationName;
-                                });
-                      this.setState({
-                           viewData  : sortedData.reverse()
-                                   })
-                      break;
-                      case 'company':
-                                sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                                return item.TCompany.name;
-                                });
-                      this.setState({
-                           viewData  : sortedData.reverse()
-                                   })
-                      break;
-    default:
-        this.state.viewData
 }
 
-
-
-        }.bind(this)
-        })
-
-    axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
-
-    this.setState({
-        queue_Sequence : response.data
-    })
-})
+if(this.isAsc == false)
+{
+  this.isAsc = true;
 }
+else{
+  sortedData = sortedData.reverse()
+  this.isAsc = false;
 }
-
+this.setState({
+     viewData  : sortedData
+             })
+}
 
 onToggel(e ,elm){
 console.log('>>>>>>' , $(elm))
@@ -393,21 +434,30 @@ onClickRow(e){
 
 render(){
 
+  var filterData
+  if(!flagSorting){
+  filterData = this.props.filterData
 
-       var filterData = this.props.filterData ;
+   if(filterData.constructor === Array)
+   {
+   this.state.viewData = filterData
+   }
+ }
+ else{
+   filterData = sortedData
 
-      if(filterData.constructor === Array)
-      {
-           this.state.viewData = filterData
-       }
+   flagSorting =false
+ }
 
       var selectedWeight = this.props.weight;
 
       console.log("<<<<<^^>>>>>",this.state.viewData)
       // const data = this.state.xyz
       var listData =  _.map(this.state.viewData,(view,index)=>{
+        if( sortedDataflag || (view.TShipmentInternational!=undefined&&view.TShipmentInternational.length>0) || (view.TShipmentInternational!=undefined&&view.TShipmentDomestic.length>0)){
         var alloc = "No"
         var count = index
+        debugger
         if(view.TContainerAllocation && view.TContainerAllocation.length > 0){
           alloc = "Yes"
 
@@ -419,6 +469,7 @@ render(){
          containerCount = containerCount + view.TContainerAllocation[i].noOfContainer
        }
          if(containerCount == view.numberOfContainers){
+           debugger
            eno = "YES"
          }else{
            eno = "NO"
@@ -435,11 +486,11 @@ render(){
            </th>
            <th style ={{display : this.props.showARB}}> <i className="fa fa-chevron-down" aria-hidden="false" data-target ={count}  onClick={(e) => {this.onClickRow(e)}}></i> {view.TLocation ? view.TLocation.locationName : ''} </th>
            <th style ={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</th>
-           <th style ={{display : this.props.showRelease}}></th>
+           <th style ={{display : this.props.showRelease}}>{view.releaseNumber ? view.releaseNumber : ''}</th>
+           <th style ={{display : this.props.showShipmentType}}>{view.isDomestic == 1 ? 'DOMESTIC' : 'INTERNATIONAL'}</th>
            <th style ={{display : this.props.showBooking}}></th>
            <th style ={{display : this.props.showPO}}></th>
            <th style ={{display : this.props.showLot}}></th>
-           <th style ={{display : this.props.showShipmentType}}></th>
            <th style ={{display : this.props.showMaterial}}></th>
            <th style ={{display : this.props.showConfmd}}></th>
            <th style ={{display : this.props.showForwarder}}></th>
@@ -464,11 +515,11 @@ render(){
        <td></td>
        <td style ={{display : this.props.showARB}}></td>
        <td style ={{display : this.props.showCustomer}}></td>
-       <td style ={{display : this.props.showRelease}}>{view.releaseNumber ? view.releaseNumber : ''}</td>
+       <td style ={{display : this.props.showRelease}}></td>
+       <td style ={{display : this.props.showShipmentType}}></td>
        <td style ={{display : this.props.showBooking}}></td>
        <td style ={{display : this.props.showPO}}></td>
        <td style ={{display : this.props.showLot}}></td>
-       <td style ={{display : this.props.showShipmentType}}>{view.isDomestic == 1 ? 'DOMESTIC' : 'INTERNATIONAL'}</td>
        <td style ={{display : this.props.showMaterial}}></td>
        <td style ={{display : this.props.showConfmd}}></td>
        <td style ={{display : this.props.showForwarder}}></td>
@@ -493,8 +544,8 @@ render(){
        {
 
           _.map(view.TShipmentLots,(data,index)=>{
-            debugger;
 
+            if( sortedDataflag || (view.TShipmentInternational!=undefined&&view.TShipmentInternational.length>0) || (view.TShipmentInternational!=undefined&&view.TShipmentDomestic.length>0)){
             this.statusArray = []
             if(view.TContainerDomestic && view.TContainerDomestic.length > 0){
                 for(var k in view.TContainerDomestic){
@@ -513,10 +564,10 @@ render(){
                     var vessel = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? view.TShipmentInternational[0].steamshipVessel :''
                     var freightForwarder = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? view.TShipmentInternational[0].freightForwarder : ''
                     var erd = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? moment(view.TShipmentInternational[0].earliestReturnDate).format("MM-DD-YYYY") : ''
-                    var cutOff = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? moment(view.TShipmentInternational[0].cargoCutoffDate).format("MM-DD-YYYY") : ''
+                    var cutOff = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? moment(view.TShipmentInternational[0].cargoCutoffDate).format("MM-DD-YYYY HH:MM") : ''
                     var puLocation = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? view.TShipmentInternational[0].containerPickupLocation : ''
                     var returnLocation = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? view.TShipmentInternational[0].containerReturnLocation : ''
-                    var docCutoff = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? moment(view.TShipmentInternational[0].docCutoffDate).format("MM-DD-YYY") : ''
+                    var docCutoff = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? moment(view.TShipmentInternational[0].docCutoffDate).format("MM-DD-YYY HH:MM") : ''
                     var steamShipline = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? view.TShipmentInternational[0].TSteamshipLine.name : ''
                     var status = (view.TShipmentInternational && view.TShipmentInternational.length > 0 ) ?view.TShipmentInternational[0].status : 'NA'
                     var CType = ((view.TShipmentInternational && view.TShipmentInternational.length > 0) ? (view.TShipmentInternational[0].TContainerType ? view.TShipmentInternational[0].TContainerType.name : "N/A"):"N/A")
@@ -539,10 +590,10 @@ render(){
                    <td style ={{display : this.props.showARB}}> </td>
                    <td style ={{display : this.props.showCustomer}}> </td>
                    <td style ={{display : this.props.showRelease}}> </td>
+                   <td style ={{display : this.props.showShipmentType}}>{}</td>
                    <td style ={{display : this.props.showBooking}}>{(view.isDomestic == 1 && view.TShipmentDomestic && view.TShipmentDomestic.length>0)?view.TShipmentDomestic[0].bookingNumber :((view.TShipmentInternational && view.TShipmentInternational.length>0) ?view.TShipmentInternational[0].bookingNumber : '')}</td>
                    <td style ={{display : this.props.showPO}}>{data.TPackagingInstructions ? data.TPackagingInstructions.po_number : 'N/A'}</td>
                    <td style ={{display : this.props.showLot}}>{data.TPackagingInstructionLots.length != 0 ? data.TPackagingInstructionLots.lot_number : 'N/A'}</td>
-                   <td style ={{display : this.props.showShipmentType}}>{}</td>
                    <td style ={{display : this.props.showMaterial}}>{data.TPackagingInstructions ? data.TPackagingInstructions.material : ''}</td>
                    <td style ={{display : this.props.showConfmd}}>{confd ? confd : "NO"}</td>
                    <td style ={{display : this.props.showForwarder}}>{view.isDomestic ==1 ? 'N/A' : freightForwarder}</td>
@@ -564,14 +615,15 @@ render(){
 
                    </tr>
                   )
-            }
+            }}
          )
-       }
+      //  }})
+    }
 
        </tbody>
 
 
-    )}
+    )}}
   )
  return(
  <Loader loaded={this.state.loaded}>
@@ -595,14 +647,21 @@ render(){
                 </span>
 
                </th>
-               <th style = {{display : this.props.showRelease}} onClick={(e)=> this.onAscending(e,'company')}>Release
+               <th style = {{display : this.props.showRelease}} onClick={(e)=> this.onAscending(e,'Release')}>Release
 
                         <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
                </th>
-               <th style = {{display : this.props.showBooking}} onClick={(e)=> this.onAscending(e,'company')}>Booking
+              <th style ={{display : this.props.showShipmentType}} onClick={(e)=> this.onAscending(e,'ShipmentType')}>Shipment Type
+              <span className="fa-stack ">
+                      <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                      <i className="fa fa-sort-desc fa-stack-1x"></i>
+              </span>
+
+             </th>
+               <th style = {{display : this.props.showBooking}} onClick={(e)=> this.onAscending(e,'Booking')}>Booking
 
                         <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
@@ -622,62 +681,56 @@ render(){
                 </span>
 
                </th>
-                 <th style ={{display : this.props.showShipmentType}} onClick={(e)=> this.onAscending(e,'lot_number')}>Shipment Type
-                <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
 
-               </th>
-               <th style ={{display : this.props.showMaterial}} onClick={(e)=> this.onAscending(e,'po_number')}>Material
+               <th style ={{display : this.props.showMaterial}} onClick={(e)=> this.onAscending(e,'Material')}>Material
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
                </th>
-               <th style ={{display : this.props.showConfmd}} onClick={(e)=> this.onAscending(e,'po_number')}>Confmd
+               <th style ={{display : this.props.showConfmd}} onClick={(e)=> this.onAscending(e,'Confmd')}>Confmd
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
                </th>
-                <th style ={{display : this.props.showForwarder}} onClick={(e)=> this.onAscending(e,'lot_number')}>Forwarder
+                <th style ={{display : this.props.showForwarder}} onClick={(e)=> this.onAscending(e,'Forwarder')}>Forwarder
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
                </th>
-                <th style ={{display : this.props.showCntrSize}} onClick={(e)=> this.onAscending(e,'lot_number')}>Cntr Size
+                <th style ={{display : this.props.showCntrSize}} onClick={(e)=> this.onAscending(e,'CntrSize')}>Cntr Size
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
                </th>
-                <th style ={{display : this.props.showQty}} onClick={(e)=> this.onAscending(e,'lot_number')}>Qty
+                <th style ={{display : this.props.showQty}} onClick={(e)=> this.onAscending(e,'Qty')}>Qty
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
                </th>
-                <th style ={{display : this.props.showAlloc}} onClick={(e)=> this.onAscending(e,'lot_number')}>Allocated
+                <th style ={{display : this.props.showAlloc}} onClick={(e)=> this.onAscending(e,'Allocated')}>Allocated
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
                </th>
-               <th style ={{display : this.props.showEno}} onClick={(e)=> this.onAscending(e,'po_number')}>Enough?
+               <th style ={{display : this.props.showEno}} onClick={(e)=> this.onAscending(e,'Enough')}>Enough?
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
                </th>
-               <th style ={{display : this.props.showBags}} onClick={(e)=> this.onAscending(e,'po_number')}>#Bags(To Ship)
+               <th style ={{display : this.props.showBags}} onClick={(e)=> this.onAscending(e,'Bags')}>#Bags(To Ship)
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -693,14 +746,14 @@ render(){
 
                </th>
              */}
-               <th style ={{display : this.props.showERD}} onClick={(e)=> this.onAscending(e,'po_number')}>ERD
+               <th style ={{display : this.props.showERD}} onClick={(e)=> this.onAscending(e,'ERD')}>ERD
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
                </th>
-               <th style ={{display : this.props.showCutoff}} onClick={(e)=> this.onAscending(e,'weight')}>CutOff
+               <th style ={{display : this.props.showCutoff}} onClick={(e)=> this.onAscending(e,'CutOff')}>CutOff
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -708,41 +761,41 @@ render(){
 
 
                </th>
-               <th style ={{display : this.props.showVessel}} onClick={(e)=> this.onAscending(e,'po_number')}>Vessel
+               <th style ={{display : this.props.showVessel}} onClick={(e)=> this.onAscending(e,'Vessel')}>Vessel
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
                </th>
-                <th style ={{display : this.props.showSteamShip}} onClick={(e)=> this.onAscending(e,'po_number')}>Steamship Line
+                <th style ={{display : this.props.showSteamShip}} onClick={(e)=> this.onAscending(e,'SteamshipLine')}>Steamship Line
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
                </th>
-                <th style ={{display : this.props.showPU}} onClick={(e)=> this.onAscending(e,'po_number')}>PU Location
-               <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
-
-               </th>
-                <th style ={{display : this.props.showRet}} onClick={(e)=> this.onAscending(e,'po_number')}>Return Location
+                <th style ={{display : this.props.showPU}} onClick={(e)=> this.onAscending(e,'PULocation')}>PU Location
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
                </th>
-                <th style ={{display : this.props.showDoc}} onClick={(e)=> this.onAscending(e,'po_number')}>Docs Cutoff
+                <th style ={{display : this.props.showRet}} onClick={(e)=> this.onAscending(e,'ReturnLocation')}>Return Location
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
                </th>
-               <th style ={{display : this.props.showStatus}} >Status
+                <th style ={{display : this.props.showDoc}} onClick={(e)=> this.onAscending(e,'DocsCutoff')}>Docs Cutoff
+               <span className="fa-stack ">
+                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                        <i className="fa fa-sort-desc fa-stack-1x"></i>
+                </span>
+
+               </th>
+               <th style ={{display : this.props.showStatus}} onClick={(e)=> this.onAscending(e,'Status')} >Status
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>

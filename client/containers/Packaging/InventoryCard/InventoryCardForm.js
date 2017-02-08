@@ -28,7 +28,11 @@ constructor(){
 	this.addToQueue =this.addToQueue.bind(this)
 	this.onStampConfirmed = this.onStampConfirmed.bind(this);
 	this.print = this.print.bind(this)
+	this.onDelete = this.onDelete.bind(this)
+	this.checkConfirmation = this.checkConfirmation.bind(this)
 	this.piID = null
+	this.lotIdArray = []
+	this.flagforceUpdate = false
 	//this.onCancel = this.onCancel.bind(this)
 	//this.onSaveChange = this.onSaveChange.bind(this)
 	}
@@ -47,6 +51,46 @@ debugger;
 
 				hashHistory.push('/Packaging/enterpackginginst/'+this.props.id)
 
+	}
+	checkConfirmation()
+	{
+		var msg="None";
+		var flag = false;
+		for(var i in this.props.lots){
+			if(this.id==this.props.lots[i].id){
+				if(this.props.lots[i].status =="SHIPPED"){
+					alert("Can not delete a shipped order")
+					flag = true;
+				}
+			}
+		}
+		if(flag){
+			return false;
+		}
+		return (confirm("Are you sure you Want to delete")==true?true:false)
+
+	}
+	onDelete(e){
+		if(this.checkConfirmation()){
+
+				var PIview = createDataLoader(InventoryCardForm, {
+            queries: [{
+                endpoint: 'TPackagingInstructionLots'
+            }]
+        });
+				  var base = Base_Url+"TPackagingInstructionLots/setInActive"
+					var obj = {id:this.id}
+					debugger
+					        $.ajax({
+										type:"POST",
+					            url: base,
+											data:obj,
+					            success:function(data){
+										hashHistory.push('/Packaging/packaginginstview/')
+					            }.bind(this)
+
+					        })
+		}
 	}
 
 	print(e){
@@ -186,17 +230,53 @@ componentWillMount() {
 			console.log("IWASCALLED")
 		}*/
 
-    onCheck(e,status){
+    onCheck(e,status,when){
 			debugger;
-    this.status = status
-	if(e.target.checked){
+			if(e!=null){
+			if(!this.flagforceUpdate){
+			if(when==1 ){
+				e.checked = true
+				e.target={}
+				e.target.id = e.id
+				e.target.checked = true
+				this.id = e.target.id
+				if(this.lotIdArray.indexOf(e.target.id)==-1){
+				this.lotIdArray.push(e.target.id)
+			}
+			}
+		}
+  this.status = status
+	if(e.target.checked && when ==0){
 	this.id = e.target.id
-	console.log(">>>>>>>>>>>>>>>>>>",this.id)}
-	else if(!e.target.checked){
+	console.log(">>>>>>>>>>>>>>>>>>",this.id)
+	if(this.lotIdArray.indexOf(e.target.id)==-1){
+	this.lotIdArray.push(e.target.id)
+}
+}
+	else if(!e.target.checked && when ==0){
 		this.id = undefined
 	console.log(">>>>>>>>>>>>>>>>",this.id)
+	var len = this.lotIdArray.length
+	for(var i =0;i<len;i++){
+		var index = this.lotIdArray.indexOf(e.target.id)
+		if(index!=-1){
+			this.lotIdArray.splice(index,1)
+		}
+		else{
+			this.id = this.lotIdArray[0]
+			break
+		}
 	}
+	}
+}
+else{
+	return
+}
+if(when==0 ){
 	this.forceUpdate()
+	this.flagforceUpdate = true;
+}
+
 }
 	onStampConfirmed(e){
 
@@ -233,6 +313,7 @@ componentWillMount() {
 	render(){
 
 		//console.log("ThisLength",this.length)
+		console.log("status",this.props)
 		if(this.props.lots != undefined){
 			console.log("status",this.props.lots[0].status)
 		}
@@ -285,16 +366,14 @@ componentWillMount() {
 			</div>
 
 
-
-
-
-
-
 					<div className=" col-lg-4 col-md-4 col-sm-6 col-xs-12">
-						<fieldset className="scheduler-border">
+						<fieldset className="scheduler-border custom-LABEL">
 							<legend className="scheduler-border">PACKAGING LABEL </legend>
-							<div>{this.props.viewData? this.props.viewData[0].custom_label : ''} </div>
-
+							<p>{this.props.viewData? this.props.viewData[0].custom_label.split('\n')[0] : ''}</p>
+							<p>{this.props.viewData? this.props.viewData[0].custom_label.split('\n')[1] : ''}</p>
+							<p>{this.props.viewData? this.props.viewData[0].custom_label.split('\n')[2] : ''}</p>
+							<p>{this.props.viewData? this.props.viewData[0].custom_label.split('\n')[3] : ''}</p>
+							<p>{this.props.viewData? this.props.viewData[0].custom_label.split('\n')[4] : ''}</p>
 						</fieldset>
 					</div>
 					<div className=" col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
@@ -324,6 +403,7 @@ componentWillMount() {
 
 
 				  <div className="pull-left margin-10-all"><button type="button" id="edit_btn" onClick={this.onEdit} className="btn  btn-orange">Edit</button> </div>
+					<div className="pull-left margin-10-all"><button type="button" id="edit_btn" onClick={this.onDelete} className="btn  btn-orange">Delete</button> </div>
 				</div>
 			</div>
 			<div className=" col-lg-5 col-md-5 col-sm-5 col-xs-12">
@@ -344,13 +424,13 @@ componentWillMount() {
 	<div >
 	<div className="row pddn-40-top">
 
-	 <CurrentInventory key={this.state.index} length = {this.length}  onCancel = {this.onCancel} lid={this.props.lid} id = {this.props.id} lID={this.props.cId} checked = {this.checked} lotId = {this.id}  onCheckBoxChange = {this.onCheckBoxChange} onSaveChange = {this.onSaveChange} lots = {this.props.lots}/>
+	 <CurrentInventory key={this.state.index} length = {this.length}  onCancel = {this.onCancel} lid={this.props.lid} id = {this.props.id} lID={this.props.cId} checked = {this.checked} lotId = {this.id}  onCheckBoxChange = {this.onCheckBoxChange} onSaveChange = {this.onSaveChange} lots = {this.props.lots} lotIdArray = {this.lotIdArray}/>
 	<InventoryHistory pID ={this.props.id}/>
 
    </div>
 	<div className="row pddn-20-top">
 
-	 <InventoryLocationHistory key={this.state.index} lid={this.props.lid} id = {this.props.id} lID={this.props.cId} checked = {this.checked} lotId = {this.id}  />
+	 <InventoryLocationHistory key={this.state.index} lid={this.props.lid} id = {this.props.id} lID={this.props.cId!=null||this.props.cId!=""||this.props.cId!="null"?this.lotIdArray[0]:this.props.cId} checked = {this.checked} lotId = {this.id}  lotIdArray={this.lotIdArray}/>
 	 <PendingShipment pID ={this.props.id} />
 
 	</div>

@@ -51,6 +51,9 @@ class  ShipmentDetailsForm extends React.Component {
         this.deleteAllocate = this.deleteAllocate.bind(this)
         this.onDeleteFunction = this.onDeleteFunction.bind(this)
         this.onEditClick = this.onEditClick.bind(this)
+        this.onDelete = this.onDelete.bind(this)
+        this.checkConfirmation = this.checkConfirmation.bind(this)
+        this.onAllocateContainer = this.onAllocateContainer.bind(this)
     }
     componentDidMount() {
        console.log("aloc",this.props.allocShipment)
@@ -83,9 +86,67 @@ class  ShipmentDetailsForm extends React.Component {
         this.forceUpdate()
       })
     }
+  
+ checkConfirmation(){
+      var status;
+      var id;
+      if(this.props.data.isDomestic==0){
+        status = this.props.data.TShipmentInternational[0].status
+        id = this.props.data.TShipmentInternational[0].id
+      }
+      else{
+        status = this.props.data.TShipmentDomestic[0].status
+        id = this.props.data.TShipmentDomestic[0].id
+      }
+
+        if(status == 'UNCONFIRMED' || status == "CONFIRMED"){
+          return (confirm("Are you sure you Want to delete")==true?{"shpid":id,"res":true}:{"shpid":id,"res":false})
+        }
+        else{
+          alert("order with status " + status + " can not be deleted")
+          return {"shpid":id,"res":false}
+        }
+  	}
+  
+  onAllocateContainer(){
+      this.setState({
+                   hideEdit: 'block',
+                   showEdit: 'none'
+               });
+    }
+  
+  onDelete(){
+      var response=this.checkConfirmation();
+      if(response.res){
+        var tableName = "TShipmentInternationals";
+        if(this.props.data.isDomestic!=0){
+				tableName = "TShipmentDomestics"
+        }
+        var PIview = createDataLoader(ShipmentDetailsForm, {
+            queries: [{
+                endpoint: 'TPackagingInstructionLots'
+            }]
+        });
+          var base = Base_Url+tableName+"/DeleteTemp"
+          var obj = {id:response.shpid}
+          debugger
+                  $.ajax({
+                    type:"POST",
+                      url: base,
+                      data:obj,
+                      success:function(data){
+                      hashHistory.push('/Shipment/shipmentview')
+                      }.bind(this)
+
+                  })
+
+      }
+    }
+  
     tableCheckBoxChange(e,value){
       debugger;
         if(e.target.checked) {
+        document.getElementById("ContainerSummary").style.display = "table"
         console.log("value", value)
         this.sID = value.shipmentId
         this.shipmentId = value.shipmentId
@@ -125,7 +186,7 @@ class  ShipmentDetailsForm extends React.Component {
         this.setState({
             CI : false
         })
-
+	document.getElementById("ContainerSummary").style.display = "none"
     }
 
     }
@@ -601,10 +662,12 @@ else
 
 
                          <div className="pull-left margin-10-all"><button type="button" id="confirm" className="btn  btn-success text-uppercase" onClick = {(e) => {this.onConfirmClick(e)}}>Confirm</button> </div>
+                         <div className="pull-left margin-10-all"><button type="button" id="allocateContainer" className="btn  btn-success text-uppercase" onClick = {(e) => {this.onAllocateContainer(e)}}>Allocate Container</button> </div>
 
 
                           <div className="pull-left margin-10-all"><button type="button" id="edit_shipment"  className="btn  btn-orange text-uppercase" onClick={this.onEditClick}>Edit</button> </div>
-                        </div>
+ 						  <div className="pull-left margin-10-all"><button type="button" id="delete_shipment"  className="btn  btn-orange text-uppercase" onClick={this.onDelete}>Delete</button> </div>                       
+                          </div>
                     </div>
                     <div className=" col-lg-12 "><hr/></div>
             </div>

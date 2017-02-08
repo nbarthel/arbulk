@@ -6,6 +6,13 @@ import { Base_Url} from '../../../constants';
 import ReactDOM from 'react-dom'
 import axios from 'axios'
 import { hashHistory } from 'react-router'
+var Scroll  = require('react-scroll');
+var scroll     = Scroll.animateScroll;
+var i =0;
+var clickOnEdit = false
+var initialY = 0;
+var goTop = true;
+var goDown = false;
 
 class  ContainerQueueViewForm extends React.Component {
     constructor(props){
@@ -13,12 +20,14 @@ class  ContainerQueueViewForm extends React.Component {
 
         this.handleSortableUpdate  = this.handleSortableUpdate.bind(this)
         this.callonEdit = this.callonEdit.bind(this)
+        this._throttledMouseMove = _.throttle(this._throttledMouseMove.bind(this));
     }
     componentDidMount(){
 
     }
 
     callonEdit(){
+        clickOnEdit = true;
         $(ReactDOM.findDOMNode(this)).sortable({
             items: 'tr',
             update: this.handleSortableUpdate
@@ -28,6 +37,7 @@ class  ContainerQueueViewForm extends React.Component {
 
     handleSortableUpdate(e , selected , swapped) {
         debugger;
+        initialY = 0;
         var newItems = _.clone(this.props.queueData, true);
         var $node = $(ReactDOM.findDOMNode(this));
         var ids = $node.sortable('toArray', { attribute: 'data-id' });
@@ -54,7 +64,55 @@ class  ContainerQueueViewForm extends React.Component {
         // this.forceUpdate();
 
     }
+    _throttledMouseMove(e){
+    debugger
 
+       if(clickOnEdit&&e.buttons){
+
+         if(initialY==0)
+         {
+           initialY = e.clientY
+         }
+    if(i>4){
+         if(initialY - e.clientY > 300){
+
+           this.ScrollUp(e.clientY-initialY-150)
+           initialY = e.clientY
+           i =0;
+           goTop = true;
+           goDown = false;
+         }
+          else if(e.clientY-initialY > 300){
+
+                this.ScrollUp(initialY-e.clientY+250)
+                initialY = e.clientY
+                i =0;
+                goTop = false;
+                goDown = true;
+          }
+          else if(i>4){
+            i++;
+            if(i>12){
+            if(goTop){
+              this.ScrollUp(-200)
+            }
+            else{
+              this.ScrollUp(200)
+            }
+          }
+          }
+
+        }
+        else {
+          i++;
+        }
+     }
+     }
+    ScrollUp(a)
+    {
+      scroll.scrollMore(a);
+
+    }
 
 
 
@@ -97,7 +155,7 @@ class  ContainerQueueViewForm extends React.Component {
 
         return (
             <section className="view_table-queue">
-                <div className="container-fluid">
+                <div className="container-fluid" onMouseMove={this._throttledMouseMove}>
                     <div className="row-fluid">
 
                         <div className="table-responsive ">

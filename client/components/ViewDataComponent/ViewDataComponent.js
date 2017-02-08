@@ -18,7 +18,9 @@ import './js/tableHeadFixer.js'
 import './js/jquery.dataTables.min.js'
 //import './js/fixed.js'
 var Loader = require('react-loader');
-
+var sortedDataflag = false
+var sortedData = []
+var flagSorting = false
 class ViewDataComponent extends React.Component{
 
     constructor(props){
@@ -38,13 +40,15 @@ class ViewDataComponent extends React.Component{
       }
 
 componentWillMount(){
+
    let id = this.props.id
       if(this.props.id != undefined){
         var PIview = createDataLoader(ViewDataComponent,{
            queries:[{
            endpoint: 'TPackagingInstructions',
               filter: {
-              include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
+              include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]},"where":{"active":"1"}}
+              ]
              }
         }]
       })
@@ -86,7 +90,10 @@ componentWillMount(){
       queries:[{
         endpoint: 'TPackagingInstructions',
         filter: {
-          include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
+          include: ['TPackagingInstructionLots',
+                    {"relation":"TPackagingInstructions",
+                      "scope":{"include":["TLocation"]},
+                      "where":{"active":"1"}}]
         }
       }]
     })
@@ -94,7 +101,19 @@ componentWillMount(){
         //TPackagingInstructionLots
         this.url = PIview._buildUrl(base, {
            // include : [{"relation":"TPackagingInstructionLots" ,"scope":{"include" :["TShipmentLots" ,"TShipmentInternational"]}},"TLocation" , "TCompany"]
-            include : [{"relation":"TPackagingInstructionLots" ,"scope":{"include" :{"relation" : "TShipmentLots" , "scope":{"include":{"relation":"TShipmentent" , "scope":{"include" : "TShipmentInternational"}}}}}},"TLocation" , "TCompany"]
+            include : [
+          {"relation":"TPackagingInstructionLots" ,
+          "scope":{
+          "include" :{
+          "relation" : "TShipmentLots" ,
+          "scope":{
+          "include":{
+          "relation":"TShipmentent" ,
+          "scope":{"include" : "TShipmentInternational"}}}},
+          "where":{active:1}
+          }},
+          "TLocation" ,
+          "TCompany"]
 
 
         });
@@ -126,16 +145,10 @@ componentWillMount(){
   }
 componentDidMount() {
   $(function () {
-    setTimeout(function(){debugger;
+    setTimeout(function(){
       $("#Packaging_Instruction_View").tableHeadFixer({'head' : true})
-    $('#Packaging_Instruction_View').DataTable( {
 
-          paging:     false,
-          colReorder: true
-    });
-
-  }, 1000);
-      //$(".Packaging_Instruction_View").tableHeadFixer({'head' : true});
+  }, 2000);
   });
 
 }
@@ -150,257 +163,215 @@ checkclick(data , value)
 }
 
 onAscending(e,head){
-var sortedData;
-if(this.isAsc == false)
-{
-var switchvalue = head;
-var PIview = createDataLoader(ViewDataComponent,{
-      queries:[{
-        endpoint: 'TPackagingInstructions',
-        filter: {
-          include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
-        }
-      }]
-    })
-       var base = 'TPackagingInstructions';
-        //TPackagingInstructionLots
-        this.url = PIview._buildUrl(base, {
-            include : ['TPackagingInstructionLots',"TLocation" , "TCompany"]
 
+  sortedDataflag = true;
+  flagSorting = true;
+  var switchvalue = head;
 
-        });
-        console.log('sdsddsdsdssdssssssssssd' , this.url);
-      $.ajax({
-            url: this.url,
-            success:function(data){
-                console.log('ajax ',data);
-                //debugger
-               this.sortedadta =
-                   {
-                       viewData : data
-                   }
-
-               this.isAsc = true;
-
-                            switch(switchvalue) {
-                            case 'po_number':
-                           sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                            return item.po_number;
-                           });
-                           this.setState({
-                           viewData  : sortedData
-                                   })
-                             break;
-                   case 'lot_number':
-                     sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                     return (item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].lot_number : '');
-                     });
-                     this.setState({
-                           viewData  : sortedData
-                                   })
+  switch(switchvalue) {
+                       case 'location':
+                              sortedData = _.sortBy(this.state.viewData, function(item) {
+                              return item.TLocation.locationName;
+                              });
                        break;
-                               case 'railcar_number':
-                                sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                                return (item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].railcar_number : '');
-                                });
-                      this.setState({
-                           viewData  : sortedData
-                                   })
-                      break;
-                       case 'weight':
-                                sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                                return (item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].weight : '');
-                                });
-                      this.setState({
-                           viewData  : sortedData
-                                   })
-                      break;
-                      case 'location':
-                                sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                                return item.TLocation.locationName;
-                                });
-                      this.setState({
-                           viewData  : sortedData
-                                   })
-                      break;
-                      case 'company':
-                                sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                                return item.TCompany.name;
-                                });
-                      this.setState({
-                           viewData  : sortedData
-                                   })
-                      break;
-    default:
-        this.state.viewData
-}
-
-
-
-        }.bind(this)
-        })
-
-    axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
-
-    this.setState({
-        queue_Sequence : response.data
-    })
-})
-}
-
-else{
-
-var switchvalue = head;
-var PIview = createDataLoader(ViewDataComponent,{
-      queries:[{
-        endpoint: 'TPackagingInstructions',
-        filter: {
-          include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
-        }
-      }]
-    })
-       var base = 'TPackagingInstructions';
-        //TPackagingInstructionLots
-        this.url = PIview._buildUrl(base, {
-            include : ['TPackagingInstructionLots',"TLocation" , "TCompany"]
-
-
-        });
-        console.log('sdsddsdsdssdssssssssssd' , this.url);
-      $.ajax({
-            url: this.url,
-            success:function(data){
-                console.log('ajax ',data);
-                //debugger
-               this.sortedadta =
-                   {
-                       viewData : data
-                   }
-
-               this.isAsc = false;
-
-                            switch(switchvalue) {
-                            case 'po_number':
-                           sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                            return item.po_number;
-                           });
-                           this.setState({
-                           viewData  : sortedData.reverse()
-                                   })
-                             break;
-                   case 'lot_number':
-                     sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                     return (item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].lot_number : '');
-                     });
-                     this.setState({
-                           viewData  : sortedData.reverse()
-                                   })
+                       case 'company':
+                                 sortedData = _.sortBy(this.state.viewData, function(item) {
+                                 return item.TCompany.name;
+                                 });
                        break;
-                      case 'railcar_number':
-                      sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                     return (item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].railcar_number : '');
-});
-                      this.setState({
-                           viewData  : sortedData.reverse()
-                                   })
+                       case 'po_number':
+                               sortedData = _.sortBy(this.state.viewData, function(item) {
+                                return item.po_number;
+                               });
+                       break;
+                       case 'railcar_number':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                return (item.TPackagingInstructionLots!=undefined?(item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].railcar_number : ''):'');
+                              });
+                       break;
+                       case 'lot_number':
+                               sortedData = _.sortBy(this.state.viewData, function(item) {
+                               return (item.TPackagingInstructionLots!=undefined?(item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].lot_number : ''):'');
+                               });
+                       break;
+                      case 'Material':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  return item.material
+                                });
+                      break;
+                      case 'Confmd':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.TPackagingInstructionLots.length > 0){
+                                    if(item.TPackagingInstructionLots[0].status != "UNCONFIRMED"){
+                                      return item.TPackagingInstructionLots[0]
+                                    }
+                                  }
+                                });
+                      break;
+                      case 'Arrvd':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+
+                                  if(item.TPackagingInstructionLots.length > 0){
+                                    if(item.TPackagingInstructionLots[0].railcar_arrived_on !=null)
+                                      return item.TPackagingInstructionLots[0]
+                                }
+                                });
+                      break;
+                      case 'Recd':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.TPackagingInstructionLots.length > 0){
+                                    if(item.TPackagingInstructionLots[0].status == "SHIPPED"){
+                                      return item.TPackagingInstructionLots[0]
+                                    }
+                                  }
+                                });
+                      break;
+                      case 'cuttoff':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  TShipmentLots[0].TShipmentent.TShipmentInternational[0].cargoCutoffDate
+                                  if(item.TPackagingInstructionLots.length > 0 && item.TPackagingInstructionLots[0].TShipmentLots.length > 0){
+                                    if(item.TPackagingInstructionLots[0].TShipmentLots.TShipmentent!=undefined && item.TPackagingInstructionLots[0].TShipmentLots.TShipmentent.TShipmentInternational.length>0){
+                                      return item.TPackagingInstructionLots[0].TShipmentLots[0].TShipmentent.TShipmentInternational[0].cargoCutoffDate
+                                    }
+                                  }
+                                });
                       break;
                       case 'weight':
-                                sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                                return (item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].weight : '');
+                               sortedData = _.sortBy(this.state.viewData, function(item) {
+                               return (item.TPackagingInstructionLots!=undefined?(item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].weight : ''):'');
+                               });
+                     break;
+                      case 'Bags':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+
+                                  var len,sum=0;
+                                  if(item.TPackagingInstructionLots.length > 0 && item.TPackagingInstructionLots[0].TShipmentLots.length > 0){
+                                    len = item.TPackagingInstructionLots[0].TShipmentLots.length
+                                    for(var i =0;i<len;i++)
+                                    {
+                                      sum = sum + item.TPackagingInstructionLots[0].TShipmentLots[i].noOfBags
+                                    }
+                                  }
+                                  else{
+                                    return 0;
+                                  }
+                                  return sum
                                 });
-                      this.setState({
-                           viewData  : sortedData.reverse()
-                                   })
                       break;
-                       case 'location':
-                                sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                                return item.TLocation.locationName;
+                      case 'InInvt':
+                                sortedData = _.sortBy(this.state.viewData, 'Number',function(item) {
+                                  var len,sum=0;
+                                  if(item.TPackagingInstructionLots.length > 0 && item.TPackagingInstructionLots[0].TShipmentLots.length > 0){
+                                    len = item.TPackagingInstructionLots[0].TShipmentLots.length
+                                    for(var i =0;i<len;i++)
+                                    {
+                                      sum = sum + item.TPackagingInstructionLots[0].TShipmentLots[i].noOfBags
+                                    }
+                                  }
+                                  else{
+
+                                    return 0
+                                  }
+                                  return item.TPackagingInstructionLots[0].inInventory - sum
                                 });
-                      this.setState({
-                           viewData  : sortedData.reverse()
-                                   })
                       break;
-                      case 'company':
-                                sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                                return item.TCompany.name;
+                      case 'Status':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.TPackagingInstructionLots.length > 0 ){
+                                  return item.TPackagingInstructionLots[0].status
+                                }
+                                return 'A'
                                 });
-                      this.setState({
-                           viewData  : sortedData.reverse()
-                                   })
                       break;
-    default:
-        this.state.viewData
+                      case 'RailcarArrival':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.TPackagingInstructionLots.length > 0 && item.TPackagingInstructionLots[0].TShipmentLots.length > 0){
+                                   if(item.TPackagingInstructionLots[0].arrived != 1){
+                                    return 0
+                                  }
+                                }
+                                return 1
+                                });
+                      break;
+                      case 'RailcarArrivalDate':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.TPackagingInstructionLots.length>0 && item.TPackagingInstructionLots[0].railcar_arrived_on !=null){
+
+                                    return item.TPackagingInstructionLots[0].railcar_arrived_on
+                                  }
+                                  return "01-01-0001";
+                                });
+                      break;
+                      case 'RailcarDeparture':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.TPackagingInstructionLots.length>0 && item.TPackagingInstructionLots[0].railcar_departed_on !=null){
+
+                                  return "Yes"
+                                }
+                                return "No"
+                                });
+                      break;
+                      case 'RailcarDepartureDate':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.TPackagingInstructionLots.length>0 && item.TPackagingInstructionLots[0].railcar_departed_on !=null){
+                                  return item.TPackagingInstructionLots[0].railcar_departed_on
+                                }
+                                return "01-01-0001";
+                                });
+                      break;
+                      case 'RailcarDaysPresent':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.TPackagingInstructionLots.length>0){
+                                    if(item.TPackagingInstructionLots[0].railcar_arrived_on != null && item.TPackagingInstructionLots[0].railcar_departed_on != null){
+                                    let start = new Date(moment(item.TPackagingInstructionLots[0].railcar_arrived_on).format("MM-DD-YYYY"))
+                                    let end = new Date(moment(item.TPackagingInstructionLots[0].railcar_departed_on).format("MM-DD-YYYY"))
+                                     var diff = parseInt((end-start ) / (1000*60*60*24))
+                                     return diff
+                                  }
+                                  return 0
+                                }
+                                });
+                      break;
+                      case 'RailcarStatus':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.TPackagingInstructionLots.length>0){
+                                  return item.TPackagingInstructionLots[0].railcar_status
+                                }
+                                });
+                     break;
+                     default:
+                                 sortedData = _.sortBy(this.state.viewData, function(item) {
+                                      return item.id
+                                });
 }
 
-
-
-        }.bind(this)
-        })
-
-    axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
-
-    this.setState({
-        queue_Sequence : response.data
-    })
-})
+if(this.isAsc == false)
+{
+  this.isAsc = true;
 }
+else{
+  sortedData = sortedData.reverse()
+  this.isAsc = false;
 }
-/*onDescending(e,h){
-  console.log(">>>>",h)
-var PIview = createDataLoader(ViewDataComponent,{
-      queries:[{
-        endpoint: 'TPackagingInstructions',
-        filter: {
-          include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
-        }
-      }]
-    })
-       var base = 'TPackagingInstructions';
-        //TPackagingInstructionLots
-        this.url = PIview._buildUrl(base, {
-            include : ['TPackagingInstructionLots',"TLocation" , "TCompany"]
-
-
-        });
-        console.log('sdsddsdsdssdssssssssssd' , this.url);
-      $.ajax({
-            url: this.url,
-            success:function(data){
-                console.log('ajax ',data);
-                //debugger
-               this.setState(
-                   {
-                       viewData : data,
-                       loaded:true
-                   }
-               )
-               //console.log( this.state.xyz)
-        }.bind(this)
-        })
-
-     axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
-    //debugger;
-    this.setState({
-        queue_Sequence : response.data
-    })
-})
-}*/
+this.setState({
+     viewData  : sortedData
+             })
+}
 
 onToggel(e ,elm){
 console.log('>>>>>>' , $(elm))
 
-  //debugger;
   $( "button" ).click(function() {
   $( "p" ).slideToggle( "slow" );
 });
 }
 
 onClickRow(e){
-
+console.log("hi")
            var rowObj = $(this.refs.clickable)
-            //var aa= rowObj.attr('data-target')
+
             var aa = e.target.getAttribute('data-target')
-            //$('#Packaging_Instruction_View').find('.'+aa).toggleClass('hide')
+
 
 
       if($('#Packaging_Instruction_View').find('.'+aa).length >= 2)
@@ -408,7 +379,7 @@ onClickRow(e){
            $('#Packaging_Instruction_View').find('.'+aa).toggleClass('hide')
       }
 
-       
+
          else{
            $('#Packaging_Instruction_View').find('.'+aa).toggleClass('hide')
          }
@@ -417,17 +388,24 @@ onClickRow(e){
 
 
 render(){
-  //debugger;
 
-       var filterData = this.props.filterData ;
 
-      if(filterData.constructor === Array)
-      {
-           this.state.viewData = filterData
-       }
+  var filterData
+  if(!flagSorting){
+  filterData = this.props.filterData
+
+   if(filterData.constructor === Array)
+   {
+   this.state.viewData = filterData
+   }
+ }
+ else{
+   filterData = sortedData
+
+   flagSorting =false
+ }
 
       var selectedWeight = this.props.weight;
-
       var listData =  _.map(this.state.viewData,(view,index)=>{
 
       var count = index
@@ -466,11 +444,50 @@ render(){
        {
           _.map(view.TPackagingInstructionLots,(data,index)=>{
             let diff;
+
+            var sdate = document.getElementById('startDate').value
+            var edate = document.getElementById('endDate').value
+            if( (sdate == "" || edate == "") || data.TShipmentLots.length>0 ){
+              var t =false;
+              var c= false;
+              if(sdate != "" || edate != ""){
+                t= true;
+                if(
+                  data.TShipmentLots[0].TShipmentent!=undefined
+                  &&
+                  data.TShipmentLots[0].TShipmentent.TShipmentInternational!=undefined
+                  &&
+                  data.TShipmentLots[0].TShipmentent.TShipmentInternational.length>0
+                ){
+                  if(
+                    new Date(data.TShipmentLots[0].TShipmentent.TShipmentInternational[0].cargoCutoffDate)>=new Date(sdate)
+                    &&
+                    new Date(data.TShipmentLots[0].TShipmentent.TShipmentInternational[0].cargoCutoffDate)<=new Date(edate)
+                  ){
+                    c=true
+                  }
+                }
+                else if(data.TShipmentLots[0].TShipmentent!=undefined && data.TShipmentLots[0].TShipmentent.TShipmentDomestic!=undefined &&
+                data.TShipmentLots[0].TShipmentent.TShipmentDomestic.length>0){
+                  if(new Date(data.TShipmentLots[0].TShipmentent.TShipmentDomestic[0].cargoCutoffDate)>=new Date(sdate)&&new Date(data.TShipmentLots[0].TShipmentent.TShipmentDomestic[0].cargoCutoffDate)<=new Date(edate)){
+                    c=true;
+                  }
+                }
+              }
+            if((t && c)||(!t))
+            {
             if(data.railcar_arrived_on != null && data.railcar_departed_on != null){
             let start = new Date(moment(data.railcar_arrived_on).format("MM-DD-YYYY"))
             let end = new Date(moment(data.railcar_departed_on).format("MM-DD-YYYY"))
              diff = parseInt((end-start ) / (1000*60*60*24))
           }
+
+          var bagShipped=0;
+          if(data.TShipmentLots && data.TShipmentLots.length>0){
+            for(var tempi in data.TShipmentLots){
+                    bagShipped += data.TShipmentLots[tempi].noOfBags
+                  }
+        }
 
            //debugger
            return(
@@ -491,8 +508,8 @@ render(){
                    <td style ={{display : this.props.showRecd}}>{(data.TShipmentLots && data.TShipmentLots.length>0 && data.status!= "SHIPPED") ? "YES" : "NO"}</td>
                    <td style ={{display : this.props.showCutoff}}>{(data.TShipmentLots && data.TShipmentLots.length>0 && data.TShipmentLots[0].TShipmentent && data.TShipmentLots[0].TShipmentent.TShipmentInternational && data.TShipmentLots[0].TShipmentent.TShipmentInternational.length>0 )?moment(data.TShipmentLots[0].TShipmentent.TShipmentInternational[0].cargoCutoffDate).format("MM-DD-YYYY"):'NA'}</td>
                    <td style ={{display : this.props.showWeight}}>{selectedWeight == 'lbs' ? data.weight:(data.weight / 2.20462).toFixed(2)}</td>
-                       <td style ={{display : this.props.showBag}}>{(data.TShipmentLots && data.TShipmentLots.length > 0 && data.TShipmentLots[data.TShipmentLots.length-1].noOfBags)?data.TShipmentLots[data.TShipmentLots.length -1].noOfBags : 'NA'}</td>
-                       <td style ={{display : this.props.showInInvt}}>{(data.inInventory && (data.TShipmentLots && data.TShipmentLots.length>0)) ?(data.inInventory - data.TShipmentLots[data.TShipmentLots.length -1].noOfBags ):data.inInventory }</td>
+                   <td style ={{display : this.props.showBag}}>{(data.TShipmentLots && data.TShipmentLots.length > 0 )?bagShipped : 'NA'}</td>
+                   <td style ={{display : this.props.showInInvt}}>{(data.inInventory && (data.TShipmentLots && data.TShipmentLots.length>0)) ?(data.inInventory - bagShipped ):data.inInventory }</td>
 
                    <td style ={{display : this.props.showStatus}}>{data.status ? data.status : '' }</td>
                    <td style ={{display : this.props.showRailcarArr}}>{data.arrived != null && data.arrived == 1 ? "Yes" : "No"}</td>
@@ -504,7 +521,8 @@ render(){
 
                </tr>
                   )
-            }
+            }}
+          }
          )
        }
 
@@ -556,34 +574,34 @@ render(){
                        </span>
 
                       </th>
-                      <th style ={{display : this.props.showMaterial}} onClick={(e)=> this.onAscending(e,'po_number')}>Material
+                      <th style ={{display : this.props.showMaterial}} onClick={(e)=> this.onAscending(e,'Material')}>Material
                       <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x" ></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
 
                       </th>
-                      <th style ={{display : this.props.showConfmd}} onClick={(e)=> this.onAscending(e,'po_number')}>Confmd
+                      <th style ={{display : this.props.showConfmd}} onClick={(e)=> this.onAscending(e,'Confmd')}>Confmd
                       <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x" ></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
                       </th>
-                      <th style ={{display : this.props.showArrvd}} onClick={(e)=> this.onAscending(e,'po_number')}>Arrvd
+                      <th style ={{display : this.props.showArrvd}} onClick={(e)=> this.onAscending(e,'Arrvd')}>Arrvd
                        <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x" ></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
 
                       </th>
-                      <th style ={{display : this.props.showRecd}} onClick={(e)=> this.onAscending(e,'po_number')}>Recd
+                      <th style ={{display : this.props.showRecd}} onClick={(e)=> this.onAscending(e,'Recd')}>Recd
                        <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x" ></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
 
                       </th>
-                      <th style ={{display : this.props.showCutoff}} onClick={(e)=> this.onAscending(e,'po_number')}>Cutoff
+                      <th style ={{display : this.props.showCutoff}} onClick={(e)=> this.onAscending(e,'Cutoff')}>Cutoff
                        <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x" ></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -598,58 +616,58 @@ render(){
 
 
                       </th>
-                      <th style ={{display : this.props.showBag}} onClick={(e)=> this.onAscending(e,'po_number')}>#Bags
+                      <th style ={{display : this.props.showBag}} onClick={(e)=> this.onAscending(e,'Bags')}>#Bags
                       <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x" ></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
 
                       </th>
-                      <th style ={{display : this.props.showInInvt}} onClick={(e)=> this.onAscending(e,'po_number')}>(In Invt.)
+                      <th style ={{display : this.props.showInInvt}} onClick={(e)=> this.onAscending(e,'InInvt')}>(In Invt.)
                       <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x" ></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
 
                       </th>
-                      <th style ={{display : this.props.showStatus}} >Status
+                      <th style ={{display : this.props.showStatus}} onClick={(e)=> this.onAscending(e,'Status')}>Status
                       <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x" ></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
                       </th>
 
-                       <th style ={{display : this.props.showRailcarArr}} >Railcar Arrival
+                       <th style ={{display : this.props.showRailcarArr}} onClick={(e)=> this.onAscending(e,'RailcarArrival')}>Railcar Arrival
                       <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x" ></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
                       </th>
-                       <th style ={{display : this.props.showRailcarArrD}} >Railcar Arrival Date
+                       <th style ={{display : this.props.showRailcarArrD}} onClick={(e)=> this.onAscending(e,'RailcarArrivalDate')} >Railcar Arrival Date
                       <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x" ></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
                       </th>
-                      <th style ={{display : this.props.showRailcarDep}} >Railcar Departure
+                      <th style ={{display : this.props.showRailcarDep}} onClick={(e)=> this.onAscending(e,'RailcarDeparture')}>Railcar Departure
                       <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x" ></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
                       </th>
-                      <th style ={{display : this.props.showRailcarDepDate}} >Railcar Departure Date
+                      <th style ={{display : this.props.showRailcarDepDate}} onClick={(e)=> this.onAscending(e,'RailcarDepartureDate')}>Railcar Departure Date
                       <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x" ></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
                       </th>
-                        <th style ={{display : this.props.showDaysPresent}} >Railcar Days Present
+                        <th style ={{display : this.props.showDaysPresent}} onClick={(e)=> this.onAscending(e,'RailcarDaysPresent')}>Railcar Days Present
                       <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x" ></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
                       </th>
-                        <th style ={{display : this.props.showRailcarStatus}} >Railcar Status
+                        <th style ={{display : this.props.showRailcarStatus}} onClick={(e)=> this.onAscending(e,'RailcarStatus')}>Railcar Status
                       <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x" ></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -661,10 +679,7 @@ render(){
                   {listData}
                </table>
 
-               {/*<table id="Packaging_Instruction_View" className="table table-expandable" cellSpacing="0">
-
-
-                      </table>*/}
+               {}
 
 
         </Loader>)

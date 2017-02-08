@@ -9,6 +9,7 @@ import { createDataLoader } from 'react-loopback';
 import '../../../containers/Shipment/ShipmentPrint/shipmentPrint.css';
 
 var Loader = require('react-loader');
+var dummyobject = false
 export default class ShipmentPrint extends React.Component {
     constructor(props){
         super(props);
@@ -17,7 +18,6 @@ export default class ShipmentPrint extends React.Component {
         this.state = {
           loaded: true,
           piData:[],
-
           totalBags:0,
           myArray : [{name:"Ar"},{name:"Ar"},{name:"Ar"},{name:"Ar"},{name:"Ar"},{name:"Ar"},{name:"Ar"},{name:"Ar"},{name:"Ar"},{name:"Ar"}]
      };
@@ -139,7 +139,7 @@ export default class ShipmentPrint extends React.Component {
         return
     }
 
-  
+
   createPdfClick(){
 	 (function(){
             var
@@ -158,7 +158,7 @@ export default class ShipmentPrint extends React.Component {
 		debugger
                 getCanvas().then(function(canvas){
                 debugger
-            
+
                     var
                         img = canvas.toDataURL("image/png"),
                         doc = new jsPDF({
@@ -188,14 +188,14 @@ export default class ShipmentPrint extends React.Component {
 
         }());
 
- 
 
-     
+
+
 
       }
-  
-  
-  
+
+
+
     componentDidMount() {
     (function(){
       var
@@ -226,7 +226,7 @@ export default class ShipmentPrint extends React.Component {
                     doc.addHTML(document.body , {format:'png',pagesplit : true} ,function(){
                     doc.save('shipment.pdf');
                     })
-		   
+
                 });
             }
 
@@ -242,12 +242,12 @@ export default class ShipmentPrint extends React.Component {
 
         }());
 
-      
-      
-      
-      
-      
-      
+
+
+
+
+
+
     }
     createPDF(e){
         console.log('print view')
@@ -270,18 +270,62 @@ export default class ShipmentPrint extends React.Component {
    : ''
 
  if(this.state.viewData && this.state.viewData.TContainerInternational && this.state.viewData.TContainerInternational.length >0){
-debugger;
    this.reportArray = this.state.viewData.TContainerInternational
+   dummyobject = false
  }
  else if (this.state.viewData && this.state.viewData.TContainerDomestic && this.state.viewData.TContainerDomestic.length >0) {
-debugger;
    this.reportArray = this.state.viewData.TContainerDomestic
+   dummyobject = false
  }
 
+if(this.reportArray.length ==0){
+  this.reportArray[0] = {
+active:1,
+chasisNumber:"",
+containerArrived:0,
+containerDelivered:0,
+containerInTransit:0,
+containerLoaded:0,
+containerNumber:"",
+containerSteamshipLineConfirmed:"",
+containerTypeConfirmed:"",
+createdBy:"",
+createdOn:"",
+id:"",
+isqueued:"",
+modifiedBy:null,
+modifiedOn:"",
+pickupTruckerId:"",
+sealNumber:"",
+sequence:"",
+shipmentId:"",
+status:"",
+tareWeight:"",
+truckerId:"",
+trucker_id:""}
+
+var tcom = {
+      active:0,
+      createdBy:0,
+      createdOn:"",
+      emailAddress:"string",
+      id:"0",
+      modifiedBy:0,
+      modifiedOn:"",
+      name:"",
+      notes:"",
+      phoneNumber:"",
+      primaryContactName:"",
+      secondaryContactName:"",
+      type:"TRUCKER"}
+this.reportArray[0].TCompany = tcom
+dummyobject = true
+}
+debugger
 
    var formData = _.map(this.reportArray , (data , index)=>{
 
-    var tBagsValue = this.getSum(data.TContainerLoad)
+    var tBagsValue = dummyobject?0:this.getSum(data.TContainerLoad)
         return(
           <div className="warpper-inner_shipment">
                          <div className="content-inside_shipment">
@@ -301,13 +345,13 @@ debugger;
                                              <tbody>
                                              <tr><td>DATE</td> <td>{moment(this.state.viewData.createdOn).format("MM-DD-YYYY")}</td></tr>
                                              <tr><td>CUSTOMER</td> <td>{this.state.viewData.TCompany.name}</td></tr>
-                                             <tr><td>TRUCKER </td> <td>{this.state.trucker[index].TCompany.name}</td></tr>
-                                             <tr><td>CONTAINER # </td> <td>{this.state.chasis[index].containerNumber}</td></tr>
-                                             <tr><td>CHASSIS # </td> <td>{this.state.chasis[index].chasisNumber}</td></tr>
-                                             <tr><td>STEAMSHIP LINE</td> <td>{this.state.viewData.TShipmentInternational[0].TSteamshipLine.name ? this.state.viewData.TShipmentInternational[0].TSteamshipLine.name : this.state.viewData.TShipmentDomestic[0].TSteamshipLine.name}</td></tr>
-                                             <tr><td>RELEASE #</td> <td>{this.state.viewData.releaseNumber}</td></tr>
-                                             <tr><td>BOOKING # </td> <td>{this.state.viewData.TShipmentInternational[0].bookingNumber}</td></tr>
-                                             <tr><td>ORIGIN </td> <td>{(this.state.piDataPO && this.state.piDataPO.TOrigin) ?  this.state.piDataPO.TOrigin.origin : ''}</td></tr>
+                                             <tr><td>TRUCKER </td> <td>{dummyobject?"":this.state.trucker[index].TCompany.name}</td></tr>
+                                             <tr><td>CONTAINER # </td> <td>{dummyobject?"":this.state.chasis[index].containerNumber}</td></tr>
+                                             <tr><td>CHASSIS # </td> <td>{dummyobject?"":this.state.chasis[index].chasisNumber}</td></tr>
+                                             <tr><td>STEAMSHIP LINE</td> <td>{dummyobject?"":this.state.viewData.TShipmentInternational[0].TSteamshipLine.name ? this.state.viewData.TShipmentInternational[0].TSteamshipLine.name : this.state.viewData.TShipmentDomestic[0].TSteamshipLine.name}</td></tr>
+                                             <tr><td>RELEASE #</td> <td>{dummyobject?"":this.state.viewData.releaseNumber}</td></tr>
+                                             <tr><td>BOOKING # </td> <td>{dummyobject?"":this.state.viewData.TShipmentInternational[0].bookingNumber}</td></tr>
+                                             <tr><td>ORIGIN </td> <td>{dummyobject?"":(this.state.piDataPO && this.state.piDataPO.TOrigin) ?  this.state.piDataPO.TOrigin.origin : ''}</td></tr>
                                              <tr className="spacel"><td>SPECIAL INSTRUCTIONS </td> <td>None</td></tr>
                                              </tbody>
 
@@ -331,7 +375,7 @@ debugger;
                                  <div className="location">
                                      <h3>LOCATION</h3>
                                      <div className="location_data">
-                                         <table className="bg_striped" style={{'display' : (this.state.viewData && this.state.viewData.TContainerInternational && this.state.viewData.TContainerInternational.length >0) ? 'table' : 'none'}}>
+                                         <table className={dummyobject?"bg_striped SetWidhOfTD":"bg_striped"} style={{'display' : ((this.state.viewData && this.state.viewData.TContainerInternational && this.state.viewData.TContainerInternational.length >0)||dummyobject) ? 'table' : 'none'}}>
                                              <tr>
                                                  <td>LOCATION</td>
                                                  { (this.state.viewData && this.state.viewData.TContainerInternational && this.state.viewData.TContainerInternational.length >0 && this.state.viewData.TContainerInternational[0].TContainerLoad)?
@@ -340,7 +384,8 @@ debugger;
 
                                                      })
 
-                                                : ''  }
+                                                : dummyobject?<td></td>:''  }
+
                                              </tr>
                                              <tr>
                                                  <td>PO #</td>
@@ -350,7 +395,7 @@ debugger;
 
                                                      })
 
-                                                : ''  }
+                                                : dummyobject?<td></td>:''  }
 
                                              </tr>
                                              <tr>
@@ -361,7 +406,7 @@ debugger;
 
                                                      })
 
-                                                : ''  }
+                                                : dummyobject?<td></td>:''  }
 
                                              </tr>
                                              <tr>
@@ -373,7 +418,7 @@ debugger;
 
                                                      })
 
-                                                : ''  }
+                                                : dummyobject?<td></td>:''  }
 
                                        </tr>
                                              <tr>
@@ -384,7 +429,7 @@ debugger;
 
                                                      })
 
-                                                : ''  }
+                                                : dummyobject?<td></td>:''  }
 
 
                                              </tr>
@@ -396,7 +441,7 @@ debugger;
 
                                                      })
 
-                                                : ''  }
+                                                : dummyobject?<td></td>:''  }
 
                             </tr>
                                          </table>

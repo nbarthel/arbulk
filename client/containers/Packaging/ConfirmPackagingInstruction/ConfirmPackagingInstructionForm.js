@@ -17,6 +17,7 @@ constructor(props){
 	this.userId = localStorage.getItem('userId')
 }
 componentDidMount() {
+	debugger
 	if(this.props.data.TPackagingInstructions.bag_id == 1){
 		this.setState({
 			display: 'block'
@@ -35,7 +36,7 @@ onClick(e){
 	}
 }
 onSubmit(e){
-	debugger;
+
 	if(this.props.data.TPackagingInstructions.TPackagingType.packagingType.toLowerCase() == "bags"  && this.check.length < 14)
 {
 		sweetAlert("Submit","Please Select All The Fields!!!","error")
@@ -88,7 +89,7 @@ onSubmit(e){
 
 }
 render(){
-
+debugger
 		return(
 
 
@@ -155,7 +156,7 @@ render(){
 				    </div>
                 </div>
 				<div className="form-group">
-					<div className="col-lg-3 "><label htmlFor="Rail_Car_Number" className=" control-label">Railcar #</label></div>
+					<div className="col-lg-3 "><label htmlFor="Rail_Car_Number" className=" control-label">RailCar #</label></div>
 					<div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
 					  <input
 					  type="text"
@@ -296,7 +297,7 @@ render(){
                 </div>
 
 				<div className="form-group">
-					<div className="col-lg-3 "><label htmlFor="No_of_Bages_Pallat" className=" control-label"># Bages per Pallat</label></div>
+					<div className="col-lg-3 "><label htmlFor="No_of_Bages_Pallat" className=" control-label">{this.props.data.TPackagingInstructions.TPackagingType.packagingType=="BOXES"?"# Boxes per Pallet":"# Bags per Pallat"}</label></div>
 					<div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
 					 <select className="form-control" id="No_of_Bages_Pallat" name="No_of_Bages_Pallat" disabled>
 						<option value={this.props.data.TPackagingInstructions ? this.props.data.TPackagingInstructions.bags_per_pallet : ''}>{this.props.data.TPackagingInstructions ? this.props.data.TPackagingInstructions.bags_per_pallet : ''}</option>
@@ -344,9 +345,14 @@ render(){
  </div>
 	<div className="label_info row" >
 				<div className=" col-lg-4 col-md-4 col-sm-4 col-xs-12">
-					<fieldset className="scheduler-border">
+					<fieldset className="scheduler-border custom-LABEL">
 						<legend className="scheduler-border">LABEL INFORMATION</legend>
-						<div>{this.props.data ? this.props.data.TPackagingInstructions.custom_label : ''} </div>
+
+						<p>{this.props.data.TPackagingInstructions? this.props.data.TPackagingInstructions.custom_label.split('\n')[0] : ''}</p>
+						<p>{this.props.data.TPackagingInstructions? this.props.data.TPackagingInstructions.custom_label.split('\n')[1] : ''}</p>
+						<p>{this.props.data.TPackagingInstructions? this.props.data.TPackagingInstructions.custom_label.split('\n')[2] : ''}</p>
+						<p>{this.props.data.TPackagingInstructions? this.props.data.TPackagingInstructions.custom_label.split('\n')[3] : ''}</p>
+						<p>{this.props.data.TPackagingInstructions? this.props.data.TPackagingInstructions.custom_label.split('\n')[4] : ''}</p>
 
 					</fieldset>
 

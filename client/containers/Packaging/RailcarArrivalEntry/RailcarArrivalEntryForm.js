@@ -26,7 +26,8 @@ export default class RailcarArrivalEntryForm extends React.Component {
 		this.state = {
 			startDate : '',
 			key:0,
-            selectedOption: 'lbs'
+			selectedOption: 'lbs',
+			selectedOption1: 'lbs',
 		}
 		this.updateCartArrival = this.updateCartArrival.bind(this);
 		this.handleChange1 = this.handleChange1.bind(this)
@@ -42,9 +43,9 @@ export default class RailcarArrivalEntryForm extends React.Component {
             this.onSearch = this.onSearch.bind(this)
             this.onTextChange = this.onTextChange.bind(this)
             this.onTap = this.onTap.bind(this)
-			this.onChnage = this.onChnage.bind(this)
-            this.handleOptionChange = this.handleOptionChange.bind(this)
-			this.handleOptionChange1 = this.handleOptionChange1.bind(this)
+						this.onChnage = this.onChnage.bind(this)
+						this.handleOptionChange = this.handleOptionChange.bind(this)
+						this.handleOptionChange1 = this.handleOptionChange1.bind(this)
         }
          onformat(inputDate) {
         var datear = inputDate.split('-')
@@ -91,7 +92,7 @@ onClickli(e){
 }
 
 	onSearch(e){
-		//debugger;
+		debugger;
 		if(this.Query != undefined){
 			Object.defineProperty(this.Where,"Query",{enumerable:true ,
 				writable: true,
@@ -158,7 +159,10 @@ onClickli(e){
 				queries: [{
 					endpoint: 'TPackagingInstructions',
 					filter: {
-						include : ['TPackagingInstructionLots',{"relation": "TPackagingInstructions", "scope": {"include": ["TLocation"]}}]
+						include : ['TPackagingInstructionLots',
+						{"relation": "TPackagingInstructions",
+						"scope": {"include": ["TLocation"]}
+						}]
 					}
 				}]
 			});
@@ -169,11 +173,16 @@ onClickli(e){
 				//debugger;
 				this.urlSearch = PIview._buildUrl(base, {
 
-					include : {"relation": "TPackagingInstructions", "scope":{  where:{  "or":serachObj} ,"include": ["TOrigin" , "TCompany"]}},
-					//       where:
-					// {  "or":
-					// 	[ {'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}},{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
-					// }
+					"include" : {"relation": "TPackagingInstructions",
+											 "scope":{
+												 				where:     {"and":[
+																									{  "or":serachObj},
+																									{"railcar_status": {"neq":"ARRIVED"}}
+																								  ]
+																					 } ,
+																"include": ["TOrigin" , "TCompany"]
+															}
+											}
 				})
 			}
 			else if(serachObjLots.length > 0 && serachObj.length > 0) {
@@ -182,7 +191,10 @@ onClickli(e){
 					include : {"relation": "TPackagingInstructions", "scope":{where:{  "or":serachObj} ,"include": ["TOrigin" , "TCompany"]}},
 					"where":
 					{  "or":
-						[ {'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}},{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
+						[ {'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}},
+						  {'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}
+						],
+						"and":{"railcar_status": {"neq":"ARRIVED"}}
 					}
 				});
 			}
@@ -192,8 +204,8 @@ onClickli(e){
 					include : {"relation": "TPackagingInstructions", "scope":{"include": ["TOrigin" , "TCompany"]}},
 					"where":
 					{
-						"or":
-						serachObjLots
+						"or":serachObjLots,
+						"and":{"railcar_status": {"neq":"ARRIVED"}}
 							//[ {'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}},{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
 					}
 				});
@@ -211,6 +223,7 @@ onClickli(e){
 							viewData : data
 						}
 					)
+				this.forceUpdate()
 					console.log( "ajax>>>>>>>")
 				}.bind(this)
 
@@ -218,18 +231,20 @@ onClickli(e){
 		}
 	}
 
-  	handleOptionChange(changeEvent) {
-    	var selectedOption = changeEvent.target.value
-    	this.setState({
-			selectedOption: changeEvent.target.value
-			});
-		console.log( selectedOption);
+	handleOptionChange(changeEvent) {
+		var selectedOption = changeEvent.target.value
+		this.setState({
+					selectedOption: changeEvent.target.value
+	});
+			 console.log( selectedOption);
 	}
 	handleOptionChange1(e) {
-      this.setState({
-        	selectedOption: e.target.value
+				 this.setState({
+					selectedOption: e.target.value
 			});
 	}
+
+
 
     onCompanyFilter(e,location){
             if(e.target.checked){
@@ -355,26 +370,40 @@ onClickli(e){
   }
   click(data,value,index)
 	{
+		debugger
 
 		if(data.target.checked){
 			//this.checked = true
 
 			document.getElementById('th'+ index).value = "YES"
-			this.props.data[index].arrived = 1
-			this.forceUpdate()
+			document.getElementById('th'+ index).innerText = "YES"
+			for(var i=0;i<this.props.data.length;i++){
+				if(this.props.data[i].TPackagingInstructions.po_number == value.TPackagingInstructions.po_number){
+					this.props.data[i].arrived = 1
+					break;
+				}
+			}
+
+			//this.forceUpdate()
 		}
 		else if(!data.target.checked){
 			// this.checked = false
 			document.getElementById('th'+index).value = "NO"
-			this.props.data[index].arrived = 0
-			this.forceUpdate()
+			document.getElementById('th'+ index).innerText = "NO"
+			for(var i=0;i<this.props.data.length;i++){
+				if(this.props.data[i].TPackagingInstructions.po_number == value.TPackagingInstructions.po_number){
+					this.props.data[i].arrived = 0
+					break;
+				}
+			}
+			//this.forceUpdate()
 		}
 
 		var cartDataArray = []
 	//	var dateArray = []
 		this.cartArray.push(value.id)
 
-         this.lotOrderValue = value
+    this.lotOrderValue = value
 
 		console.log("clicked" , data , value)
 	};
@@ -473,13 +502,14 @@ onChnage(e){
 
         if(fiterData != undefined){
 			var railCarFilterData = _.map(fiterData , (view ,index)=>{
-				if(view.TPackagingInstructions && (view.status == "CONFIRMED" || view.status == "UNCONFIRMED"|| view.status == "READY") ){
+				debugger
+				if(view.TPackagingInstructions && (view.status == "CONFIRMED" || view.status == "UNCONFIRMED"|| view.status == "READY") && (view.arrived != 1) ){
 					return (
 						<tr>
 							<td>{view.TPackagingInstructions.TCompany? view.TPackagingInstructions.TCompany.name : ''}</td>
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.po_number : ''}</td>
 							<td>{view.railcar_number ? view.railcar_number : ''}</td>
-                      		<td>{view.weight?(this.state.selectedOption=='lbs'?view.weight:(view.weight/2.54).toFixed(2)):''}</td>
+							<td>{view.weight?(this.state.selectedOption=='lbs'?view.weight:(view.weight/2.20).toFixed(2)):''}</td>
 							<td>{view.lot_number ? view.lot_number: ''}</td>
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.material : ''}</td>
 							<td> {view.status == "UNCONFIRMED"? "NO" : "YES"}</td>
@@ -521,15 +551,16 @@ onChnage(e){
 
   	const railCart = this.props.data
 		var railcartData = _.map(railCart , (view ,index)=>{
-		//debugger;
+		debugger;
 
 			if(view.TPackagingInstructions && (view.status == "CONFIRMED" || view.status == "UNCONFIRMED" || view.status == "QUEUED")) {
+debugger
 		return(
 	              	<tr>
 							<td>{view.TPackagingInstructions.TCompany? view.TPackagingInstructions.TCompany.name : ''}</td>
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.po_number : ''}</td>
 							<td>{view.railcar_number ? view.railcar_number : ''}</td>
-          					<td>{view.weight?(this.state.selectedOption=='lbs'?view.weight:(view.weight/2.54).toFixed(2)):''}</td>
+							<td>{view.weight?(this.state.selectedOption=='lbs'?view.weight:(view.weight/2.54).toFixed(2)):''}</td>
 							<td>{view.lot_number ? view.lot_number: ''}</td>
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.material : ''}</td>
 							<td> {view.status == "UNCONFIRMED" ? "NO" : "YES"}</td>
@@ -560,31 +591,31 @@ onChnage(e){
 	</div>
 <div className="container">
 	<div className="row-fluid">
-<FilterComponent key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter}/>	 	<div id="filter-grid">
-	<div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
+<FilterComponent key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter} parent={"RailcarArrivalEntry"}/>	 	<div id="filter-grid">
+		<div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
 		<div className="pull-right margin-30-right">
-			<label className="control control--radio ">LBS
-                <input id="Modify_User" name="Modify_User" type="radio"
-                type="radio"
-                id="ADDCustomers"
-                name="ADDCustomers"
-                value="lbs"
-                onChange={this.handleOptionChange}
-                checked={this.state.selectedOption==='lbs'}/>
-      			<div className="control__indicator"></div>
-			</label>
-		</div>
-    <div className="pull-right margin-30-right">
-      	<label className="control control--radio ">Kg
-      		<input id="Modify_User" name="Modify_User" type="radio"
-            id="ADDCustomers"
-            name="ADDCustomers"
-            value="kg"
-            onChange={this.handleOptionChange1}
-            checked={this.state.selectedOption==='kg'}/>
-      			<div className="control__indicator"></div>
-      </label>
-   </div>
+				<label className="control control--radio ">LBS
+						<input id="Modify_User" name="Modify_User" type="radio"
+									 type="radio"
+									 id="ADDCustomers"
+									 name="ADDCustomers"
+									 value="lbs"
+									 onChange={this.handleOptionChange}
+									 checked={this.state.selectedOption==='lbs'}
+								/><div className="control__indicator"></div>
+						</label>
+				</div>
+				<div className="pull-right margin-30-right">
+						<label className="control control--radio ">Kg
+								<input id="Modify_User" name="Modify_User" type="radio"
+											 id="ADDCustomers"
+											 name="ADDCustomers"
+											 value="kg"
+											 onChange={this.handleOptionChange1}
+											 checked={this.state.selectedOption==='kg'}
+										/><div className="control__indicator"></div>
+								</label>
+						</div>
 			<div className="row">
 			<FilterButton buttonDisplay = {this.buttonDisplay} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
 				<div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs">
@@ -602,7 +633,7 @@ onChnage(e){
 							<th>Customer</th>
 							<th>PO# </th>
 							<th>Railcar# </th>
-      						<th>weight</th>
+							<th>weight</th>
 							<th>Lot# </th>
 							<th>Material </th>
 							<th>Confirmed</th>

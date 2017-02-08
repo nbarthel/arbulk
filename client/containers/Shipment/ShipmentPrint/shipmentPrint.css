@@ -22,8 +22,11 @@ h3{margin:0px; padding:0px; font-weight:600;}
 .loadOrder .quantity table td{padding: 6px 10px;font-size: 14px;white-space: nowrap;overflow:  hidden;text-overflow: ellipsis;  vertical-align: middle; border:1px solid #000; line-height:8px}
 .bg_striped tr:nth-child(odd) {border:1px solid #000; }
 .bg_striped td:nth-child(odd){ border-right:1px solid #000;}
-
-
+.SetWidhOfTD tr td:first-child{
+  width:22%;
+  max-width:100px;
+  text-align: left !important;
+}
 .location{ border-top:1px solid #000; width:100%; clear:both; padding-bottom: 50px;}
 .location .location_data{ width:100%; display:inline-black;}
 .location .location_data span strong{ font-weight:600; font-size:16px;}

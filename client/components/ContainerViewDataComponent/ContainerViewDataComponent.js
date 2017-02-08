@@ -16,6 +16,8 @@ import { Base_Url } from '../../constants'
 var moment = require('moment');
 import './js/tableHeadFixer.js'
 //*import './stylesheet/jquery.dataTables.min.css'*/
+var flagSorting = false
+var sortedData = []
 var Loader = require('react-loader');
 
 class ContainerViewDataComponent extends React.Component{
@@ -81,7 +83,16 @@ componentWillMount(){
        var base = 'TShipmentents';
         //TPackagingInstructionLots
         this.url = PIview._buildUrl(base, {
-             "include" : [{"relation":"TContainerDomestic" ,"scope":{"include" : "TCompany"}},{"relation":"TContainerInternational" ,"scope":{"include" : "TCompany"}},"TCompany" ,"TLocation","TShipmentDomestic",{"relation":"TShipmentInternational" , "scope":{"include":["TContainerType" , "TSteamshipLine"]}}]
+             "include" : [
+               {"relation":"TContainerDomestic" ,
+                            "scope":{"include" : "TCompany"}},
+                {"relation":"TContainerInternational" ,
+                            "scope":{"include" : "TCompany"}},
+                "TCompany" ,
+                "TLocation",
+                "TShipmentDomestic",
+                {"relation":"TShipmentInternational" ,
+                            "scope":{"include":["TContainerType" , "TSteamshipLine"]}}]
 
 
         });
@@ -128,201 +139,154 @@ checkclick(data , value)
 }
 
 onAscending(e,head){
-var sortedData;
-if(this.isAsc == false)
-{
+  debugger
+  flagSorting = true;
+
+
 var switchvalue = head;
-var PIview = createDataLoader(ContainerViewDataComponent,{
-      queries:[{
-        endpoint: 'TPackagingInstructions',
-        filter: {
-          include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
-        }
-      }]
-    })
-       var base = 'TPackagingInstructions';
-        //TPackagingInstructionLots
-        this.url = PIview._buildUrl(base, {
-            include : ['TPackagingInstructionLots',"TLocation" , "TCompany"]
-
-
-        });
-
-      $.ajax({
-            url: this.url,
-            success:function(data){
-                console.log('ajax ',data);
-                debugger
-               this.sortedadta =
-                   {
-                       viewData : data
-                   }
-
-               this.isAsc = true;
 
                             switch(switchvalue) {
                             case 'po_number':
-                           sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                            return item.po_number;
+                           sortedData = _.sortBy(this.state.viewData, function(item) {
+                            return item.releaseNumber;
                            });
-                           this.setState({
-                           viewData  : sortedData
-                                   })
+
                              break;
                    case 'lot_number':
-                     sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                     return (item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].lot_number : '');
+                     sortedData = _.sortBy(this.state.viewData, function(item) {
+                     if(item.TContainerDomestic.length>0){
+                       return item.TContainerDomestic[0].containerNumber
+                     }
+                     else if(item.TContainerInternational.length>0){
+                       return item.TContainerInternational[0].containerNumber
+                     }
                      });
-                     this.setState({
-                           viewData  : sortedData
-                                   })
+
                        break;
                                case 'railcar_number':
-                                sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                                return (item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].railcar_number : '');
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.TShipmentInternational.length>0){
+                                    return item.TShipmentInternational[0].bookingNumber
+                                  }
+                                  else if(item.TShipmentDomestic.length>0){
+                                    return item.TShipmentDomestic[0].bookingNumber
+                                  }
                                 });
-                      this.setState({
-                           viewData  : sortedData
-                                   })
+
                       break;
                        case 'weight':
-                                sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
                                 return (item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].weight : '');
                                 });
-                      this.setState({
-                           viewData  : sortedData
-                                   })
+
                       break;
                       case 'location':
-                                sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
                                 return item.TLocation.locationName;
                                 });
-                      this.setState({
-                           viewData  : sortedData
-                                   })
+
                       break;
                       case 'company':
-                                sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
                                 return item.TCompany.name;
                                 });
-                      this.setState({
-                           viewData  : sortedData
-                                   })
+
+                      break;
+                      case 'Trucker':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  if(item.TContainerDomestic.length>0){
+                                    return item.TContainerDomestic[0].TCompany.name
+                                  }
+                                  else if(item.TContainerInternational.length>0){
+                                    return item.TContainerInternational[0].TCompany.name
+                                  }
+                                  else{
+                                    return item
+                                  }
+
+
+                                });
+                      break;
+                      case 'Arrived':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                if(item.TContainerDomestic.length>0){
+                                return item.TContainerDomestic[0].containerArrived
+                              }
+                              else if(item.TContainerInternational.length>0){
+                                return item.TContainerInternational[0].containerArrived
+                              }
+                              else{
+                                return item
+                              }
+                                });
+
+                      break;//view.TShipmentInternational[0].TSteamshipLine
+                      case 'SteamshipLine':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  debugger
+                                if(item.TShipmentInternational.length>0){
+                                  return item.TShipmentInternational[0].TSteamshipLine.name
+                                }
+                                else if(item.TShipmentDomestic.length>0){
+                                  return item
+                                }
+                                return item
+                                });
+
+                      break;
+                      case 'Type':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  debugger
+                                if(item.TContainerInternational.length>0){
+                                  return item.TContainerInternational[0].staus
+                                }
+                                else{
+                                  return item
+                                }
+
+                                });
+
+                      break;
+                      case 'status':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  debugger
+                                if(item.TShipmentInternational.length>0){
+                                  return item.TShipmentInternational[0].TSteamshipLine.name
+                                }
+                                else if(item.TShipmentDomestic.length>0){
+                                  return item
+                                }
+                                return item
+                                });
+
+                      break;
+                      case 'shipmentType':
+                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                                  debugger
+                                if(item.isDomestic==1){
+                                  return item
+                                }
+                              });
+
                       break;
     default:
         this.state.viewData
 }
 
-
-
-        }.bind(this)
-        })
-
-    axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
-
-    this.setState({
-        queue_Sequence : response.data
-    })
-})
+if(this.isAsc == false)
+{
+  this.isAsc = true;
 }
-
 else{
-
-var switchvalue = head;
-var PIview = createDataLoader(ContainerViewDataComponent,{
-      queries:[{
-        endpoint: 'TPackagingInstructions',
-        filter: {
-          include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
-        }
-      }]
-    })
-       var base = 'TPackagingInstructions';
-        //TPackagingInstructionLots
-        this.url = PIview._buildUrl(base, {
-            include : ['TPackagingInstructionLots',"TLocation" , "TCompany"]
-
-
-        });
-        console.log('sdsddsdsdssdssssssssssd' , this.url);
-      $.ajax({
-            url: this.url,
-            success:function(data){
-                console.log('ajax ',data);
-                debugger
-               this.sortedadta =
-                   {
-                       viewData : data
-                   }
-
-               this.isAsc = false;
-
-                            switch(switchvalue) {
-                            case 'po_number':
-                           sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                            return item.po_number;
-                           });
-                           this.setState({
-                           viewData  : sortedData.reverse()
-                                   })
-                             break;
-                   case 'lot_number':
-                     sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                     return (item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].lot_number : '');
-                     });
-                     this.setState({
-                           viewData  : sortedData.reverse()
-                                   })
-                       break;
-                      case 'railcar_number':
-                      sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                     return (item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].railcar_number : '');
-});
-                      this.setState({
-                           viewData  : sortedData.reverse()
-                                   })
-                      break;
-                      case 'weight':
-                                sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                                return (item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].weight : '');
-                                });
-                      this.setState({
-                           viewData  : sortedData.reverse()
-                                   })
-                      break;
-                       case 'location':
-                                sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                                return item.TLocation.locationName;
-                                });
-                      this.setState({
-                           viewData  : sortedData.reverse()
-                                   })
-                      break;
-                      case 'company':
-                                sortedData = _.sortBy(this.sortedadta.viewData, function(item) {
-                                return item.TCompany.name;
-                                });
-                      this.setState({
-                           viewData  : sortedData.reverse()
-                                   })
-                      break;
-    default:
-        this.state.viewData
+  sortedData = sortedData.reverse()
+  this.isAsc = false;
+}
+this.setState({
+     viewData  : sortedData
+             })
 }
 
 
-
-        }.bind(this)
-        })
-
-    axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
-
-    this.setState({
-        queue_Sequence : response.data
-    })
-})
-}
-}
 onToggel(e ,elm){
 console.log('>>>>>>' , $(elm))
 
@@ -366,13 +330,20 @@ onClickRow(e){
 
     render(){
         debugger;
-
-        var filterData = this.props.filterData
+        var filterData
+        if(!flagSorting){
+        filterData = this.props.filterData
 
          if(filterData.constructor === Array)
          {
          this.state.viewData = filterData
          }
+       }
+       else{
+         filterData = sortedData
+
+         flagSorting =false
+       }
 
         var selectedWeight = this.props.weight;
 
@@ -490,6 +461,7 @@ onClickRow(e){
                            </tr>
                            {
                           _.map(view.TContainerInternational , (data ,index)=>{
+                            debugger
                              if(data.containerArrived == 1){
                                       var Arr = 'YES'
                                           } else{
@@ -579,41 +551,41 @@ onClickRow(e){
                 </span>
 
                         </th>
-                        <th style ={{display : this.props.showTrucker}} onClick={(e)=> this.onAscending(e,'po_number')}>Trucker
+                        <th style ={{display : this.props.showTrucker}} onClick={(e)=> this.onAscending(e,'Trucker')}>Trucker
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
                         </th>
-                        <th style ={{display : this.props.showArrived}} onClick={(e)=> this.onAscending(e,'po_number')}>Arrived?
+                        <th style ={{display : this.props.showArrived}} onClick={(e)=> this.onAscending(e,'Arrived')}>Arrived?
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
                         </th>
-                        <th style ={{display : this.props.showSteamShip}} onClick={(e)=> this.onAscending(e,'po_number')}>Steamship Line
+                        <th style ={{display : this.props.showSteamShip}} onClick={(e)=> this.onAscending(e,'SteamshipLine')}>Steamship Line
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
                         </th>
-                        <th style ={{display : this.props.showType}} onClick={(e)=> this.onAscending(e,'po_number')}>Type
+                        <th style ={{display : this.props.showType}} onClick={(e)=> this.onAscending(e,'Type')}>Type
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
                         </th>
-                        <th style ={{display : this.props.showType}} onClick={(e)=> this.onAscending(e,'po_number')}>Status
+                        <th style ={{display : this.props.showType}} onClick={(e)=> this.onAscending(e,'status')}>Status
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
                         </th>
-                        <th style ={{display : this.props.showType}} onClick={(e)=> this.onAscending(e,'po_number')}>Shipment Type
+                        <th style ={{display : this.props.showType}} onClick={(e)=> this.onAscending(e,'shipmentType')}>Shipment Type
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x" ></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>

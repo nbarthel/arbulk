@@ -6,7 +6,7 @@ export default class RailcarInformation extends React.Component {
 		/*this.obj= {}
     	this.railCarObjects=[]
    		this.state={ railCarInfoList: [],
-    	index:0, 
+    	index:0,
     	tempArray:[]}
     	this.onChange=this.onChange.bind(this);*/
     	this.state = { }
@@ -41,92 +41,93 @@ export default class RailcarInformation extends React.Component {
 
 
 	  render() {
+			debugger
 	   return (
     	<div>
        		<div className="form-group ">
 					<label htmlFor="Rail_Car_Number" className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label">Rail Car Number</label>
 					<div className="col-lg-7    col-sm-11 col-xs-11 ">
 					 {
-					 this.props.data != undefined ? 
-					  <input 
+					 this.props.data != undefined ?
+					  <input
 					  type="text"
-					  name="railcar_number" 
-					  className="form-control" 
-					  id="Rail_Car_Number"
+					  name="railcar_number"
+					  className="form-control"
+						id={this.props.idd!==undefined?"Rail_Car_Number"+this.props.idd:"Rail_Car_Number"}
 					  ref={this.props.id}
 					  placeholder="Rail Car Number"
 					  onChange={this.props.handleRailCarNumberEdit}
 					  value={this.props.data.railcar_number}
 					   />
 					   :
-					  <input 
+					  <input
 					  type="text"
-					  name="railcar_number" 
-					  className="form-control" 
-					  id="Rail_Car_Number" 
+					  name="railcar_number"
+					  className="form-control"
+					  id={this.props.idd!==undefined?"Rail_Car_Number"+this.props.idd:"Rail_Car_Number"}
 					  placeholder="Rail Car Number"
 					  onChange={this.props.onChange}
 					  value={this.state.railcarnumber}
-					   /> 
-					}																																
+					   />
+					}
 					  <div className="error"><span></span></div>
 					</div>
             </div>
-				
+
 				<div className="form-group">
 					<label htmlFor="Lot_Number" className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label">Lot Number</label>
 					<div className="col-lg-7    col-sm-11 col-xs-11 ">
-					    {this.props.data != undefined ? 
-					     <input 
-					     type="text" 
-					     className="form-control" 
-					     id="Lot_Number"
+					    {this.props.data != undefined ?
+					     <input
+					     type="text"
+					     className="form-control"
+					     id={this.props.idd!==undefined?"Lot_Number"+this.props.idd:"Lot_Number"}
 					     ref={this.props.id}
 					     placeholder="Lot Number"
-					     name="lot_number" 
+					     name="lot_number"
 					     onChange={this.props.handleLotNumberEdit}
 					     value={this.props.data.lot_number}/>
 					     :
-					     <input 
-					     type="text" 
-					     className="form-control" 
-					     id="Lot_Number" 
+					     <input
+					     type="text"
+					     className="form-control"
+					     id={this.props.idd!==undefined?"Lot_Number"+this.props.idd:"Lot_Number"}
 					     placeholder="Lot Number"
-					     name="lot_number" 
+					     name="lot_number"
 					     onChange={this.props.onChange}
-					     value={this.state.lotnumber}/> 
+					     value={this.state.lotnumber}/>
 					 }
 					  <div className="error"><span></span></div>
 					</div>
                 </div>
-				
+
 				<div className="form-group">
 					<label htmlFor="Weight" className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label">Weight</label>
 					<div className="col-lg-7    col-sm-11 col-xs-11 ">
-					    {this.props.data != undefined ? 
-					    <input 
+					    {this.props.data != undefined ?
+					    <input
 					    type="number"
-					    className="form-control" 
-					    id="Weight"
-					    ref={this.props.id} 
-					    placeholder="Enter in lbs"
-					    name="weight" 
+					    className="form-control"
+					    id={this.props.idd!==undefined?"Weight"+this.props.idd:"Weight"}
+					    ref={this.props.id}
+					    placeholder="Enter Weight"
+					    name="weight"
 					    onChange={this.props.handleWeightEdit}
-					    value={this.props.data.weight} /> 
+					    value={this.props.data.weight} />
 					    :
-					    <input 
+					    <input
 					    type="number"
-					    className="form-control" 
-					    id="Weight" 
-					    placeholder="Enter in lbs"
-					    name="weight" 
+					    className="form-control"
+					    id={this.props.idd!==undefined?"Weight"+this.props.idd:"Weight"}
+					    placeholder="Enter Weight"
+					    name="weight"
 					    onChange={this.props.onChange}
-					    value={this.state.weight} /> 
+					    value={this.state.weight} />
 					}
 					  <div className="error"><span></span></div>
 					</div>
 				</div>
-		
+
 			</div>
     );
   }

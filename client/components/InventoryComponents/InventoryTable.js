@@ -64,7 +64,7 @@ var moment = require('moment');
 							<th>ARB </th>
 							<th>Customer</th>
 							<th>PO </th>
-          					<th>Material </th>
+          	  <th>Material </th>
 							<th>Railcar# </th>
 							<th>Lot# </th>
 							<th>Confmd </th>
@@ -85,7 +85,7 @@ var moment = require('moment');
       					 		<th > {view.TLocation ? view.TLocation.locationName : ''} </th>
           						 <th >{view.TCompany ? view.TCompany.name : ''}</th>
            						 <th>{view.po_number} </th>
-                                 <th>{view.material}</th>
+                      <th>{view.material}</th>
 						          <th></th>
 						          <th></th>
 						          <th></th>
@@ -111,9 +111,9 @@ var moment = require('moment');
 								<td> </td>
 								<td> </td>
 								<td> </td>
+                <td> </td>
 								<td>{data.railcar_number}</td>
 								<td>{data.lot_number}</td>
-								<td>{data.material}</td>
 								<td>{data.status == 'UNCONFIRMED' ? 'NO': 'YES'}</td>
 								<td>Y</td>
 								<td>{data.railcar_arrived_on != null ? 'YES' : 'NO'}</td>
@@ -124,7 +124,7 @@ var moment = require('moment');
 								<td>{data.status?data.status : ''}</td>
 								<td>
 									<label className="control control--checkbox" id={data.status}>
-									  <input type="checkbox" onClick={(e) => {this.props.onCheck(e,data.status)}} value={data.status?data.status : ''} id={data.id}/><div className="control__indicator"></div>
+									  <input type="checkbox" ref={(e) => {this.props.onCheck(e,data.status,"1")}} onClick={(e) => {this.props.onCheck(e,data.status,"0")}} value={data.status?data.status : ''} id={data.id}/><div className="control__indicator"></div>
 									</label>
 								</td>
 							</tr>
@@ -137,9 +137,9 @@ var moment = require('moment');
 								<td> </td>
 								<td> </td>
 								<td> </td>
+                <td> </td>
 								<td>{data.railcar_number}</td>
 								<td>{data.lot_number}</td>
-								<td>{data.material}</td>
 								<td>{data.status == 'CONFIRMED' ? 'YES': 'NO'}</td>
 								<td>Y</td>
 								<td>{data.railcar_arrived_on != null ? 'YES' : 'NO'}</td>
@@ -150,7 +150,7 @@ var moment = require('moment');
 								<td>{data.status?data.status : ''}</td>
 								<td>
 									<label className="control control--checkbox">
-									  <input type="checkbox" onClick={(e) => {this.props.onCheck(e,data.status)}}  id={data.id}/><div className="control__indicator"></div>
+									  <input type="checkbox" ref={(e) => {this.props.onCheck(e,data.status,"1")}} onClick={(e) => {this.props.onCheck(e,data.status,"0")}}  id={data.id}/><div className="control__indicator"></div>
 									</label>
 								</td>
 							</tr>

@@ -278,7 +278,7 @@ ScrollUp(a)
          <td>{queueView.TPackagingInstructions.material}</td>
          <td>{}</td>
          <td>{}</td>
-         <td>{queueView.weight ? (this.state.selectedOption=='kg' ?queueView.weight :queueView.weight * 2.04) : ''}</td>
+         <td>{queueView.weight ? (this.state.selectedOption=='kg' ?queueView.weight :queueView.weight * 2.20) : ''}</td>
          <td>{queueView.bags_to_ship}</td>
          <td>{}</td>
          <td>

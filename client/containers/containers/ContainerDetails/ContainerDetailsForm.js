@@ -45,11 +45,13 @@ class ContainerDetailsForm extends React.Component {
         this.onRightClick = this.onRightClick.bind(this)
         this.onSaveClick = this.onSaveClick.bind(this)
         this.cIArray =[]
+        this.removeArray = []
         this.noOfContainers = undefined
         this.domSum = undefined
         this.intSum = undefined
         this.statusArray = []
         this.sameStatus = false
+        this.sealNumber = ''
     }
 
     allValuesSame(arr) {
@@ -143,21 +145,29 @@ else{
 
 }
 
-    onLeftClick(e){
-
-    if(Object.keys(this.obj).length > 0){
-      axios.post(Base_Url+"TContainerLoads",this.obj).then((response)=>{
-      axios.put(Base_Url+"TPiInventories/"+this.delObject.pInventoryId,{active:0})
+  onLeftClick(e){
+      debugger
+      var temObj,tempDelObj;
+    if(this.cIArray.length > 0){
+      for(var i in this.cIArray){
+        tempDelObj = new Object()
+        temObj = JSON.parse(JSON.stringify(this.cIArray[i]))
+        tempDelObj.pInventoryId = this.cIArray[i].piInventId
+        tempDelObj.locationId = this.cIArray[i].invLocId
+      axios.put(Base_Url+"TPiInventories/"+tempDelObj.pInventoryId,{active:0})
+      axios.post(Base_Url+"TContainerLoads",temObj).then((response)=>{
        }).then((response)=>{
          this.loadNewData()
          swal("","Loaded","success")
+         this.cIArray=[]
        })
 
 
-      }
+     }}
       else{
           swal("Missing","Please Select A Inventory","info")
           }
+           this.cIArray=[]
 
     }
     handleCheckbox(e){
@@ -204,14 +214,27 @@ debugger;
             console.log(this.SaveObj)
     }
 
-    onRightClick(e){
-      axios.delete(Base_Url+"TContainerLoads/"+this.contLoadid).then((response)=>{
-        axios.put(Base_Url+"TPiInventories/"+this.pInventId,{active:1}).then((response)=>{
+  onRightClick(e){
+      var temp;
+      if(this.removeArray.length>0){
+        for(var i in this.removeArray){
+        temp = new Object();
+        temp.contLoadid = this.removeArray[i].contLoadid
+        temp.pInventId = this.removeArray[i].pInventId
+        axios.put(Base_Url+"TPiInventories/"+temp.pInventId,{active:1})
+        axios.delete(Base_Url+"TContainerLoads/"+temp.contLoadid).then((response)=>{
+        // axios.put(Base_Url+"TPiInventories/"+temp.pInventId,{active:1}).then((response)=>{
           this.loadNewData()
           swal("","Removed","success")
-        })
+          this.removeArray = []
+        // })
       })
+    }}
+    else{
+      swal("please select a row")
+      return
     }
+  }
     componentDidMount(){
      this.containertable = this.props.containerTable
 
@@ -230,8 +253,21 @@ onCancelClick(e){
   })
 }
 handleContainerLoadChecks(e,data){
+  if(e.target.checked){
  this.contLoadid = data.id
  this.pInventId = data.piInventId
+ var temp = new Object();
+ temp.contLoadid = JSON.parse(JSON.stringify(data.id))
+ temp.pInventId = JSON.parse(JSON.stringify(data.piInventId))
+ this.removeArray.push(temp)
+ }
+ else{
+   for(var i in this.removeArray){
+     if(this.removeArray[i].contLoadid = data.id && this.removeArray[i].pInventId == data.piInventId){
+       this.removeArray.splice(i,1);
+     }
+   }
+ }
 }
 handleCurrentInvChecks(e,data){
   if(e.target.checked){
@@ -256,10 +292,18 @@ handleCurrentInvChecks(e,data){
     this.obj.piInventId = data.id
     this.delObject.locationId = data.inventoryLocationId
     this.delObject.pInventoryId = data.id
-    this.cIArra.push(this.obj)
+    var temp = new Object()
+    temp = JSON.parse(JSON.stringify(this.obj));
+    this.cIArray.push(temp)
     console.log("object",this.obj,this.delObject)
   }
   else if(!e.target.checked){
+    for(var i in this.cIArray){
+      if(this.cIArray[i].invLocId==data.inventoryLocationId && this.cIArray[i].piInventId == data.id){
+        this.cIArray.splice(i,1);
+        break;
+      }
+    }
     // this.obj.id = 0
     // this.obj.invLocId = data.inventoryLocationId
     // this.obj.noOfBags =  data.noOfBags
@@ -444,6 +488,18 @@ changeLot(e){
     }
     onSaveClick(e){
       debugger
+      var flagToDecideStatus = false;
+      var flagToSaveSealNumber = false;
+      if(this.sealNumber==''){
+        this.sealNumber = this.props.containerTable?this.props.containerTable.sealNumber:''
+        if(this.sealNumber==''){
+        swal("Please Enter Seal Number");
+        return
+      }
+      }
+      else{
+        flagToSaveSealNumber = true
+      }
       if(this.SaveObj.containerDelivered){
           this.SaveObj.status = "DELIVERED"
       }
@@ -452,29 +508,77 @@ changeLot(e){
       }
       else if(this.SaveObj.containerLoaded){
           this.SaveObj.status = "LOADED"
+          flagToDecideStatus = true;
       }
-
+		
+     if(flagToDecideStatus){
+        var array =[]
+        array[0] = this.state.contLoadData[0].lotId
+        for(var i in this.state.contLoadData){
+          if(array.indexOf(this.state.contLoadData[i].lotId)==-1){
+            array.push(this.state.contLoadData[i].lotId)
+          }
+        }}
+      
         if(this.props.isDomestic == 0){
 
             axios.put(Base_Url+"TContainerInternationals/" + this.props.containerTable.id ,this.SaveObj).then((response)=>{
+            if(flagToSaveSealNumber){
+            axios.put(Base_Url+"TContainerInternationals/"+this.props.containerTable.id,{sealNumber:this.sealNumber}).then((response)=>{
+            })}
+              if(!flagToDecideStatus){
                  swal("Done" , "Saved Successfully" , "info")
                 this.shipmentStatus()
                  hashHistory.push('/Container/containerview')
                 this.setState({
                     editing: false
                 })
+              }
             })
         }
         else if(this.props.isDomestic == 1){
             axios.put(Base_Url+"TContainerDomestics/" + this.props.containerId ,this.SaveObj).then((response)=>{
+            if(flagToSaveSealNumber){
+            axios.put(ase_Url+"TContainerDomestics/"+this.props.containerTable.id,{sealNumber:this.sealNumber}).then((response)=>{
 
+            })}
+			if(!flagToDecideStatus){
                   this.shipmentStatus()
                  hashHistory.push('/Container/containerview')
                 this.setState({
                     editing: false
-                })
+                })}
             })
         }
+      if(flagToDecideStatus){
+        for(var i in array){
+          var sum =0;
+          var temp=0
+          for(var k in this.state.contLoadData){
+            if(array[i]==this.state.contLoadData[k].lotId){
+              sum =parseInt(sum)+parseInt(this.state.contLoadData[i].noOfBags)
+              temp =k;
+            }
+          }
+          if(sum==this.state.contLoadData[temp].TPackagingInstructionLots.inInventory || this.state.currentIntObject.TPiInventory.length<=0){
+            axios.put(Base_Url + "TPackagingInstructionLots/" + array[i], {status: "SHIPPED"}).then((response)=> {
+              if(i==array.length-1){
+                swal("Done" , "Saved Successfully" , "info")
+                hashHistory.push('/Container/containerview')
+                this.setState({
+                  editing: false
+                })
+              }
+            })
+          }
+        }
+  }
+    if(flagToDecideStatus){
+        swal("Done" , "Saved Successfully" , "info")
+        hashHistory.push('/Container/containerview')
+       this.setState({
+           editing: false
+       })}
   }
     render() {
       if(this.props.containerTable && this.props.containerTable.TShipmentent && this.props.containerTable.TShipmentent.TShipmentLots && this.props.containerTable.TShipmentent.TShipmentLots.length>0){
@@ -535,20 +639,21 @@ changeLot(e){
                     <div className="table-responsive">
                         <ContainerLoadComponent key = {this.state.ContainerLoadKey} handleContainerLoadChecks = {this.handleContainerLoadChecks} contLoadData = {this.state.contLoadData} />
                     </div>
+					
+          			
+          		  <div className="form-group" >
+                      <label htmlFor="SealNumber" className="col-lg-6 control-label">Seal #</label>
+                    <div className="col-lg-6" >
+                       <input type="text" className="form-control s_width" onChange={this.getSeal}   id="SealNumber" placeholder="Seal Number" />
+                    <div className="error"><span></span></div>
+                       </div>
+                   </div>
 
 
-
-                    <ul className={this.state.editing ? "no-space" : "no-space hidden"}>
-
-                    <li >
-                      <div className="form-group">
-                         <input type="text" className="form-control s_width" value = {this.props.containerTable ? (this.props.containerTable.sealNumber ? this.props.containerTable.sealNumber : ''): ''} disabled  id="SealNumber" placeholder="Seal Number"/>
-                         <div className="error"><span></span></div>
-                     </div>
-                   </li>
+                    <ul className={this.state.editing ? "no-space" : "no-space hidden"} style={{"margin-top":"20"}}>
                     <li >
                        <label className="control control--checkbox ">Confirmed Loaded?
-                          <input type="checkbox" onChange={this.handleCheckbox} name = "containerLoaded" /><div className="control__indicator"></div>
+                          <input type="checkbox" onChange={this.handleCheckbox} name = "containerLoaded" /><div className="control__indicator" style={{"margin-top":"15"}}></div>
                         </label>
                     </li>
                     <li >

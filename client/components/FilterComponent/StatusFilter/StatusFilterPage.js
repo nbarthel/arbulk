@@ -10,11 +10,11 @@ class StatusFilterPage extends React.Component {
         {name:"PARTIALLYPACKED",id:4},
         {name:"In Inventory",id:5},
         {name:"SHIPPED",id:6}]
-        
+
         this.checkedStatus = { }
 
-    
-        
+
+
     }
     /*onClick(e,status){
         if(e.target.checked){
@@ -25,10 +25,11 @@ class StatusFilterPage extends React.Component {
         else if (!e.target.checked){
          delete this.props.checkedStatus[e.target.id]
          //console.log(this.props.checkedStatus)
-            
+
         }
     }*/
     render() {
+      if((this.props.parent && this.props.parent !="RailcarArrivalEntry" && this.props.parent !="RailcarDeparture")||this.props.parent==undefined){
         var stats = _.map(this.status,(status) => {
             return (<li key={status.id}>
                      <label className="control control--checkbox">{status.name}
@@ -43,13 +44,17 @@ class StatusFilterPage extends React.Component {
                         <h6 className="pull-left text_left">STATUS  </h6>
                    </div>
                     <ul className="scroll">
-                       {stats} 
-                       
+                       {stats}
+
                     </ul>
                 </div>
 
 
         )
     }
+  else{
+    return(<div></div>)
+  }
+}
 }
 export default StatusFilterPage;

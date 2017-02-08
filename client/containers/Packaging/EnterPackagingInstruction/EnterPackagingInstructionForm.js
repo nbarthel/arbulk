@@ -9,8 +9,12 @@ import {Base_Url} from '../../../constants';
 var Spinner = require('react-spinkit');
 import  validateInput  from './PIValidator';
 import { createDataLoader } from 'react-loopback';
+var ReactDOM = require('react-dom');
 var flagsc = true;
 var flagnj = true;
+var weightinLBS = true;
+var isWeightconverted = false;
+var flagBoxesSet = false
 export default class EnterPackagingInstructionForm extends React.Component {
     constructor(props)
     	{
@@ -33,10 +37,12 @@ export default class EnterPackagingInstructionForm extends React.Component {
 	    	isLoading : false,
 	    	errors : { },
 			rObjects:[],
-      labelLength : []
+      labelLength : [],
+      selectedOption: 'lbs'
 	    }
 	    this.userId = localStorage.getItem('userId')
 	    //this.index = 0
+
 	    this.handleRailcarChange = this.handleRailcarChange.bind(this);
 	   	this.obj = {
 	   		customer_id : '',
@@ -60,11 +66,16 @@ export default class EnterPackagingInstructionForm extends React.Component {
 	   	this.onChekBoxClick = this.onChekBoxClick.bind(this)
       this.handleNumberofbagsChange = this.handleNumberofbagsChange.bind(this)
 			this.Add = false
+      this.handleOptionChange = this.handleOptionChange.bind(this)
+      this.handleOptionChange1 = this.handleOptionChange1.bind(this)
+      this.convertWeightToLBS = this.convertWeightToLBS.bind(this)
+      this.convertWeightToKG = this.convertWeightToKG.bind(this)
 	   	//this.onCancel = this.onCancel.bind(this)
 	   //	this.onSaveChange = this.onSaveChange.bind(this)
 	   // this.handlePIeditChange = this.handlePIeditChange.bind(this)
 }
 componentDidMount() {
+  debugger
 	if(this.props.data.bag_id == 1){
 		this.setState({
 			display : "block"
@@ -158,11 +169,45 @@ componentWillMount() {
 	})
 }
 
+handleOptionChange(changeEvent) {
+  debugger;
+
+  var selectedOption = changeEvent.target.value
+  this.setState({
+        selectedOption: changeEvent.target.value
+});
+// weightinLBS = true;
+// if( weightinLBS && isWeightconverted){
+//    this.convertWeightToLBS(this.railcarObj)
+//    this.convertWeightToLBS(this.railCarObjects)
+//   //  if(this.props.data!==undefined){
+//   //    this.convertWeightToLBS(this.props.data.TPackagingInstructionLots)
+//   //  }
+// }
+//isWeightconverted = false;
+}
+handleOptionChange1(e) {
+  debugger;
+
+       this.setState({
+        selectedOption: e.target.value
+    });
+    // weightinLBS = false;
+    // if( !weightinLBS && !isWeightconverted){
+    //     this.convertWeightToKG(this.railcarObj)
+    //     this.convertWeightToKG(this.railCarObjects)
+    //     // if(this.props.data!==undefined){
+    //     //   this.convertWeightToKG(this.props.data.TPackagingInstructionLots)
+    //     // }
+    // }
+    // isWeightconverted = true;
+}
 
 handlePIChange(e){
   debugger
 	this.obj[e.target.name] = e.target.value
 	if(this.obj.bag_id == 1){
+    flagBoxesSet = false
 		this.setState({
 			display : 'block'
 		})
@@ -190,7 +235,15 @@ handlePIChange(e){
       }
     }
 	}
+  else if(!flagBoxesSet && this.obj.bag_id == 2){
+    debugger
+    this.state.numberofbagsorpallets = "1"
+    this.obj.bags_per_pallet = this.state.numberofbagsorpallets
+    flagBoxesSet = true
+    this.forceUpdate()
+  }
 	else if(this.obj.bag_id != 1){
+    flagBoxesSet = false
 		this.setState({
 			display : 'none'
 		})
@@ -245,6 +298,7 @@ handleOriginEditChange(e){
 	console.log(this.props.data)
 }
 handleTypeOfPackagingEditChange(e){
+  debugger
 	this.props.data.bag_id = e.target.value
 	//this.props.data.packaging_material_id = this.refs.packagingType.value
 	if(e.target.value != 1){
@@ -330,8 +384,18 @@ handleWeightEdit(e,index){
 }
 
 handleRailcarChange(e){
-   	//debugger;
-   	this.railcarObj[e.target.name] = e.target.value;
+   	debugger;
+    var number = e.target.id[e.target.id.length-1]
+    if((!isNaN(number) && this.railCarObjects.length>number)||(isNaN(number) && this.railCarObjects.length>0)){
+      if(isNaN(number)){
+        number = 0
+      }
+      this.railCarObjects[number][e.target.name] = e.target.value;
+    }
+    else{
+      this.railcarObj[e.target.name] = e.target.value;
+    }
+
 
    	console.log(this.railcarObj)
    /*	this.state.tempArray[this.state.index]=this.obj
@@ -342,7 +406,7 @@ handleRailcarChange(e){
    }
 onUpdate(e){
 
-
+debugger
 	var postUrl = Base_Url+"TPackagingInstructions/updatePIEntry"
 
 
@@ -411,25 +475,41 @@ Object.defineProperty(this.Allobjs,"PI",{
  		this.addrailcarObject();
  	}
 //}
-
+debugger
 console.log(this.railCarObjects)
 if(this.railCarObjects && this.railCarObjects.length > 1){
-  this.state.labelLength.push(this.obj.custom_label)
+  this.state.labelLength.unshift(this.obj.custom_label)
+
   for(var i in this.railCarObjects){
-      this.railCarObjects[i].custom_label = JSON.stringify(this.state.labelLength[i])
+      let tempcustomlabel = this.state.labelLength[i]
+      if(i>0){
+        tempcustomlabel = tempcustomlabel.poNumber+tempcustomlabel.lotNumber+tempcustomlabel.originName+tempcustomlabel.material+tempcustomlabel.weight
+      }
+      this.railCarObjects[i].custom_label = tempcustomlabel
   }
 }
-
+if(this.state.selectedOption == 'kg'){
+  var flag = true;
+  for(var i=0;i<this.railCarObjects.length;i++){
+    this.railCarObjects[i].weight = this.railCarObjects[i].weight*2.20
+  }
+}
 if(this.state.labelLength && this.state.labelLength.length == 0){
-  this.railCarObjects.custom_label = this.obj.custom_label
+  this.railCarObjects[0].custom_label = this.obj.custom_label
 }
 
-this.Allobjs.packagingLots = this.railCarObjects
+this.Allobjs.packagingLots = JSON.parse(JSON.stringify(this.railCarObjects))
 
 console.log(this.Allobjs)
 
 var postUrl = Base_Url+"TPackagingInstructions/createPiEntry"
 if(this.railCarObjects== 0){
+  if(flag){
+    for(var i=0;i<this.railCarObjects.length;i++){
+      this.railCarObjects[i].weight = this.railCarObjects[i].weight/2.20
+    }
+  }
+  this.state.labelLength.shift()
 	swal("Error","Please enter railcar Information","error")
 	return;
 }
@@ -437,6 +517,7 @@ console.log(this.Allobjs)
 if(this.Allobjs.PI.po_number == "" || this.Allobjs.PI.po_number === undefined){
 	this.Allobjs.PI.po_number = this.Allobjs.packagingLots[0].lot_number
 }
+debugger
 $.ajax({
 	type:"POST",
 	url: postUrl,
@@ -446,11 +527,18 @@ $.ajax({
 		hashHistory.push('/Packaging/packaginginstview/')
 	},
 	error:function(err){
+    if(flag){
+      for(var i=0;i<this.railCarObjects.length;i++){
+        this.railCarObjects[i].weight = this.railCarObjects[i].weight/2.20
+      }
+    }
+    this.state.labelLength.shift()
 		swal("Error","Please enter all the fields","error")
 
 	}
 
 	})
+  this.railCarObjects.splice(this.railCarObjects.length-1,1)
 
 }
 	else{
@@ -488,7 +576,8 @@ onAdd(e){
 		this.setState
 		({
 				index:count,
-				railCarInfoList	: railCarInfoList.concat(<RailcarInformation key={railCarInfoList.length} onChange={this.handleRailcarChange.bind(this)} />)
+				railCarInfoList	: railCarInfoList.concat(<RailcarInformation key={railCarInfoList.length} onChange={this.handleRailcarChange.bind(this)} idd = {count} />),
+
 	    })
 	    console.log(this.state.railCarInfoList.length)
 	    	/*this.railcarObj = {}*/
@@ -497,9 +586,35 @@ onAdd(e){
 		swal("Empty Fields","Please Enter All The Fields Before Adding New Lots.","error")
 	}
 }
+convertWeightToLBS(object){
 
+    if(Array.isArray(object)){
+
+      for(var i =0;i<object.length;i++){
+        object[i].weight = object[i].weight / 2.20
+      }
+    }
+    else{
+      object.weight = object.weight / 2.20
+    }
+
+}
+convertWeightToKG(object){
+
+    if(Array.isArray(object)){
+
+      for(var i =0;i<object.length;i++){
+        object[i].weight = object[i].weight * 2.20
+      }
+    }
+    else{
+      object.weight = object.weight * 2.20
+    }
+
+}
 
 onChekBoxClick(e){
+  debugger
   var labelArray = []
   var obj1 = {}
   var flag = false
@@ -526,6 +641,18 @@ if(e.target.checked == true)
  var arrWeight = []
  var arrlot= []
  this.state.rObjects = []
+ // if(this.state.selectedOption=='lbs' && isWeightconverted ){
+ //   this.convertWeightToLBS(this.railcarObj)
+ //   this.convertWeightToLBS(this.railCarObjects)
+ //   isWeightconverted = false
+ //   weightinLBS = false
+ // }
+ // else if(this.state.selectedOption=='kg' && !isWeightconverted ){
+ //   this.convertWeightToKG(this.railcarObj)
+ //   this.convertWeightToKG(this.railCarObjects)
+ //   isWeightconverted = true;
+ // }
+
 	if(this.Add == false) {
       this.state.rObjects.push(this.railcarObj)
       if(flag){
@@ -533,6 +660,7 @@ if(e.target.checked == true)
       }
 	}
 	else if(this.Add == true){
+
     mulrail.push(this.railcarObj)
     this.state.rObjects.push(this.railCarObjects)
 		this.state.rObjects.push(mulrail)
@@ -550,9 +678,11 @@ if(e.target.checked == true)
 }
 
 for(var i in this.state.rObjects){
+  if(!isNaN(i)){
    arrRail.push(this.state.rObjects[i].railcar_number)
    arrWeight.push(this.state.rObjects[i].weight)
    arrlot.push(this.state.rObjects[i].lot_number)
+ }
  }
  console.log("Arrayweight , Arrayrail , Arraylot" ,arrRail , arrWeight, arrlot)
 var uniqueRail = arrRail.filter(function(elem, index, self) {
@@ -567,9 +697,14 @@ var uniquelot = arrlot.filter(function(elem, index, self) {
 	var uniqueWeight = arrWeight.filter(function(elem, index, self) {
 		return index == self.indexOf(elem);
 	})
+  if(this.state.selectedOption == 'kg'){
+    for(var i =0 ;i<uniqueWeight.length;i++){
+      uniqueWeight[i] = uniqueWeight[i] * 2.20
+    }
+  }
 var stampConfirm = localStorage.getItem('userName')
 var count = 0
-console.log("asasasasasasa" ,uniqueWeight , uniquelot ,uniqueRail)
+
 for(var z in uniquelot){
 
 this.state.labelLength.push({"poNumber" : this.obj.po_number +'\n' ,"lotNumber" : uniquelot[z]+ '\n' ,"originName" : originName + '\n' ,"material" : this.obj.material +'\n' , "weight" :  uniqueWeight[z]})
@@ -579,13 +714,19 @@ this.state.labelLength.push({"poNumber" : this.obj.po_number +'\n' ,"lotNumber" 
 //this.state.labelLength.push(labelArray)
 
 this.state.labelLength = [].concat.apply([],this.state.labelLength)
-this.state.labelLength.splice( 0 ,1)
+
 var obj =  this.obj.po_number +'\n'  + originName +'\n'  + this.obj.material +'\n'+ uniquelot[0] + '\n'  + uniqueWeight[0]
 
 if(this.props.data!==undefined){
 this.props.data.custom_label = obj
+var tempObj = this.state.labelLength
+for (var i=0;i< this.props.lotInfo.length;i++){
+  let tempCustomlabelobj;
+  tempCustomlabelobj = tempObj[i].poNumber+tempObj[i].lotNumber+tempObj[i].originName+tempObj[i].material+tempObj[i].weight
+  this.props.lotInfo[i].custom_label = tempCustomlabelobj
 }
-
+}
+this.state.labelLength.splice( 0 ,1)
 console.log("labelArrayyyyyy777777777" , this.state.labelLength)
 	this.autolabel = obj
 	this.obj.custom_label = obj
@@ -604,6 +745,9 @@ else{
   this.state.labelLength = []
   if(this.props.data!==undefined){
   this.props.data.custom_label = ''
+  }
+  if(this.props.data!==undefined){
+    this.props.lotInfo[0].custom_label = ''
   }
 }
 }
@@ -649,10 +793,37 @@ render() {
     }
     return (
 <section className="edit_Packaging">
+{this.props.data == undefined?
+<div className="pull-right "  style={{"margin-right":"170","margin-top":"-33"}}>
+<label className="control control--radio ">LBS
+    <input id="Modify_User" name="Modify_User" type="radio"
+           type="radio"
+           id="ADDCustomers"
+           name="ADDCustomers"
+           value="lbs"
+           onChange={this.handleOptionChange}
+           checked={this.state.selectedOption==='lbs'}
+          /><div className="control__indicator"></div>
+    </label>
+</div>:''}
+{this.props.data == undefined?
+<div className="pull-right " style={{"margin-right":"10","margin-top":"-33"}}>
+    <label className="control control--radio ">Kg
+        <input id="Modify_User" name="Modify_User" type="radio"
+               id="ADDCustomers"
+               name="ADDCustomers"
+               value="kg"
+               onChange={this.handleOptionChange1}
+               checked={this.state.selectedOption==='kg'}
+            /><div className="control__indicator"></div>
+        </label>
+    </div>:''}
 <div className="container">
+
 <div className="row">
 <form className="form-horizontal">
 	<div className=" col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
 
 
 			<fieldset className="scheduler-border no-right-border">
@@ -807,14 +978,14 @@ render() {
                 </div>
 
 				<div className="form-group">
-					<label htmlFor="Weight" className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label">Weight</label>
+					<label htmlFor="Weight" className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label">{ this.state.selectedOption=='lbs'?'Weight(lbs)':'Weight(kg)'}</label>
 					<div className="col-lg-7    col-sm-11 col-xs-11 ">
 					    {this.props.lotInfo != undefined ?
 					    <input
 					    type="number"
 					    className="form-control"
 					    id="Weight"
-					    placeholder="Enter in lbs"
+					    placeholder="Enter Weight"
 					    name="weight"
 					    onChange={this.handleRailcarChange}
 					    value={this.props.lotInfo[0].weight} />
@@ -823,7 +994,7 @@ render() {
 					    type="number"
 					    className="form-control"
 					    id="Weight"
-					    placeholder="Enter in lbs"
+					    placeholder="Enter Weight"
 					    name="weight"
 					    onChange={this.handleRailcarChange}
 					    value={this.state.weight} />
@@ -982,7 +1153,7 @@ render() {
                 </div>
 
 				<div className="form-group">
-					<label htmlFor="No_of_Bags_Pallet" className= {this.state.errors.bags_per_pallet ? "col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label has error" : "col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label"}># Bags per Pallet</label>
+					<label htmlFor="No_of_Bags_Pallet" className= {this.state.errors.bags_per_pallet ? "col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label has error" : "col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label"}>{(this.obj.bag_id==2 || (this.props!=undefined && this.props.data!=undefined && this.props.data.bag_id==2))?"# Boxes per Pallet":"# Bags per Pallet"}</label>
 					<div className="col-lg-7    col-sm-11 col-xs-11 ">
 					  {this.props.data != undefined ?
 					  <input
@@ -1074,7 +1245,7 @@ render() {
       <div className=" col-lg-3 col-md-3 col-sm-3 col-xs-12 pddn-10-top">
          <div className="form-group">
             {
-            this.props.data != undefined ?
+            this.props.lotInfo != undefined ?
             <textarea
             className="form-control  textarea"
             name= "custom_label"
@@ -1082,7 +1253,7 @@ render() {
             ref="customLabel"
             rows="3"
             id="Notes"
-            value = {this.props.data.custom_label}
+            value = {this.props.lotInfo[0].custom_label}
             placeholder="Enter Custom Label information"></textarea>
             :
             <textarea
@@ -1105,6 +1276,7 @@ render() {
 
 
       _.map(this.state.labelLength , function(element , index){
+        debugger
       return(
       <div className=" col-lg-3 col-md-3 col-sm-3 col-xs-12 pddn-10-top">
        <div className="form-group">

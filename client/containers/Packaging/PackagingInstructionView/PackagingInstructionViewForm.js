@@ -45,6 +45,8 @@ export default class PackagingInstructionViewForm extends React.Component {
                 showRailcarDepDate:"",
                 showDaysPresent:"",
                 showRailcarStatus:"",
+              	startDate:'',
+                endDate:''
             }
             this.status
             this.buttonDisplay = [ ]
@@ -202,17 +204,22 @@ onSearch(e){
                         this.urlSearch = PIview._buildUrl(base, {
                             include : ["TLocation" , "TCompany" ,{"relation": "TPackagingInstructionLots", "scope":
                             {
-                                "where":
-                            {  "or":
-                                serachObjLots
-                              // [ {'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}},{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
-                            }
+                              "include" :{
+                              "relation" : "TShipmentLots" ,
+                              "scope":{
+                              "include":{
+                              "relation":"TShipmentent" ,
+                              "scope":{"include" : "TShipmentInternational"
+                              //"scope":{"where" : {"or" : cutofFilter }}
+                            }}}},
+                                "where":{ "and": [{"or":serachObjLots},{active:1}]}
                             }
                                }
                             ],
-                          where: {"and":[
+                            where: {"and":[
                               {"or":customer},
-                              {"or":company}
+                              {"or":company},
+                              {"or":serachObjLots}
                             ]
                             }
                         });
@@ -220,10 +227,25 @@ onSearch(e){
 
                     else {
                         this.urlSearch = PIview._buildUrl(base, {
-                            include: ["TLocation", "TCompany", "TPackagingInstructionLots"],
+                          include : [
+                        {"relation":"TPackagingInstructionLots" ,
+                        "scope":{
+                        "include" :{
+                        "relation" : "TShipmentLots" ,
+                        "scope":{
+                        "include":{
+                        "relation":"TShipmentent" ,
+                        "scope":{"include" : "TShipmentInternational"
+                        //"scope":{"where" : {"or" : cutofFilter }}
+                      }}}},
+                        "where":{active:1}
+                        }},
+                        "TLocation" ,
+                        "TCompany"],
                             where: {"and":[
                               {"or":customer},
-                              {"or":company}
+                              {"or":company},
+                              {"or":serachObj}
                             ]
                             }
                  });
@@ -235,7 +257,16 @@ onSearch(e){
                         success:function(data){
 
                             console.log('ajax ',data);
-
+    						var st = this.startDate,
+                            ed = this.endDate
+                            if(this.startDate!=undefined&&this.endDate!=undefined){
+                              this.setState(
+                                  {
+                                      startDate : st,
+                                      endDate :ed
+                                  }
+                              )
+                            }
                             this.setState(
                                 {
                                     viewData : data
@@ -638,7 +669,7 @@ onButtonRemove(index,button){
 
           status : "QUEUED"
       }
-      if(this.status == "READY" || this.status == "CONFIRMED"){
+      if(this.status == "READY" ){
       if(queueArray && queueArray.length > 0 && qArray!= null){
           queueArray.forEach((id , index)=>{
               axios.put( Base_Url+"TPackagingInstructionLots/"+id , {queue_sequence : option.queue_sequence + parseInt(index) , status : "QUEUED"}).then(function(response){

@@ -20,11 +20,15 @@ class ContainerTable extends Component {
         var cutOffDate = (this.props.table && this.props.table.TShipmentent && this.props.table.TShipmentent.TShipmentInternational && this.props.table.TShipmentent.TShipmentInternational.length>0) ? this.props.table.TShipmentent.TShipmentInternational[0].cargoCutoffDate : 'NA'
         var inInventory = (this.props.table && this.props.table.TShipmentent && this.props.table.TShipmentent.TShipmentLots && this.props.table.TShipmentent.TShipmentLots.length>0 && this.props.table.TShipmentent.TShipmentLots[0].TPackagingInstructionLots) ? this.props.table.TShipmentent.TShipmentLots[0].TPackagingInstructionLots.status : 'NA'
         if(this.props.table && this.props.table.TShipmentent && this.props.table.TShipmentent.TShipmentLots && this.props.table.TShipmentent.TShipmentLots.length > 0){
-             QtyReq = this.props.table.TShipmentent.TShipmentLots[this.props.table.TShipmentent.TShipmentLots.length -1].TPackagingInstructionLots.inInventory
+               for(var i in this.props.table.TShipmentent.TShipmentLots){
+                QtyShip = QtyShip + this.props.table.TShipmentent.TShipmentLots[i].noOfBags
+            }
          }
 
          if(this.props.table && this.props.table.TShipmentent && this.props.table.TShipmentent.TShipmentLots &&  this.props.table.TShipmentent.TShipmentLots.length > 0){
-             QtyShip = this.props.table.TShipmentent.TShipmentLots[0].noOfBags
+                  for(var i in this.props.table.TShipmentent.TShipmentLots){
+                 QtyReq = parseInt(QtyReq) + parseInt(this.props.table.TShipmentent.TShipmentLots[i].TPackagingInstructionLots.inInventory)
+             }
          }
 
         return (

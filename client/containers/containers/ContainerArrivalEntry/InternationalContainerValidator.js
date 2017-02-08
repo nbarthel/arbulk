@@ -8,9 +8,9 @@ export default function validateIntInput(data){
 	if(Validator.isNull(data.containerNumber)){
 		intErrors.containerNumber = "Must be a Number";
 	}
-	if(Validator.isNull(data.sealNumber)){
-		intErrors.sealNumber = "Required"
-	}
+	//if(Validator.isNull(data.sealNumber)){
+	//	intErrors.sealNumber = "Required"
+	//}
 	if(Validator.isNull(data.truckerId)){
 		intErrors.truckerId = "Required"
 	}

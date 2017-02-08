@@ -89,7 +89,7 @@ onClickli(e){
 		console.log(this.Where)
 		var serachObj = []
 		 var serachObjLots =[]
-		
+
 		if (this.Where != undefined && this.Where!= null)
 		{
 			if(this.Where.Customer && this.Where.Customer.length >0){
@@ -371,10 +371,10 @@ onClickli(e){
       railcar_departed_on : parseInt(this.state.startDate._d.getMonth()) +1 +'/'+this.state.startDate._d.getDate()+'/' +this.state.startDate._d.getFullYear()
    }
 
-   
+
    this.cartArray.forEach((id)=>{
       axios.put(Base_Url+"TPackagingInstructionLots/" + id , option).then(function(response){
-         
+
           swal({
                       title: "Success",
                       text: "Departure Submitted",
@@ -384,7 +384,7 @@ onClickli(e){
                      function(isConfirm){
                       hashHistory.push('/Packaging/packaginginstview/')
                  });
-        
+
       }).catch(function(err){
          console.log("Error Is" + err)
       })
@@ -399,7 +399,7 @@ onClickli(e){
 		if(fiterData != undefined){
 			var railCarFilterData = _.map(fiterData , (view ,index)=>{
 					if(view.TPackagingInstructions && (view.status == "In Inventory") ){
-			
+
 					return (
 						<tr key={index}>
 							<td>{view.TPackagingInstructions.TCompany? view.TPackagingInstructions.TCompany.name : ''}</td>
@@ -478,14 +478,14 @@ onClickli(e){
 				</div>
 				<div className="container">
 					<div className="row-fluid">
-   					 <FilterComponent key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter}/>        
+   					 <FilterComponent key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter} parent={"RailcarDeparture"}/>
 						<div id="filter-grid">
 							<div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
 
 								<div className="row">
 									<FilterButton buttonDisplay = {this.buttonDisplay} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
 									<div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs">
-										
+
 									</div>
 
 									<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 "><hr/></div>

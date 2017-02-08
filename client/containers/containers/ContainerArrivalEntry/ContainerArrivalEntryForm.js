@@ -10,6 +10,7 @@ import { hashHistory } from 'react-router'
 var moment = require('moment');
 import validateInput from './DomesticContainerValidator'
 import validateIntInput from './InternationalContainerValidator'
+var isDomesticTab = false;
 class  ContainerArrivalEntryForm extends React.Component {
   constructor(props){
     super(props);
@@ -72,6 +73,8 @@ class  ContainerArrivalEntryForm extends React.Component {
     this.handleContainerSteamLineCheck = this.handleContainerSteamLineCheck.bind(this)
     //this.getPonumber = this.getPonumber.bind(this)
     this.onSealChange = this.onSealChange.bind(this)
+    this.onDomestic = this.onDomestic.bind(this)
+    this.onInternational = this.onInternational.bind(this)
   }
 
 
@@ -219,6 +222,59 @@ class  ContainerArrivalEntryForm extends React.Component {
 /*onIntSave(e){
   this.IntpostObj.
 }*/
+onDomestic(){
+  if(!isDomesticTab || this.state.bookingNumbers==undefined){
+  isDomesticTab = true;
+  //debugger
+  var base = "TShipmentents"
+  var CIView = createDataLoader(ContainerArrivalEntryForm,{
+                 queries:[{
+                   endpoint: 'TShipmentents',
+                   filter:{
+                     include:["TShipmentDomestic"]
+                   }
+                 }]
+   })
+
+    this.url = CIView._buildUrl(base, {
+           include : ["TShipmentDomestic"]
+
+    })
+      axios.get(this.url).then((response) => {
+        debugger
+       this.setState({
+         bookingNumbers : response.data
+       })
+
+     })
+   }
+}
+onInternational(){
+  if(isDomesticTab || this.state.bookingNumbers==undefined){
+  isDomesticTab = false;
+  var base = "TShipmentents"
+  var CIView = createDataLoader(ContainerArrivalEntryForm,{
+                 queries:[{
+                   endpoint: 'TShipmentents',
+                   filter:{
+                     include:["TShipmentInternational"]
+                   }
+                 }]
+   })
+
+    this.url = CIView._buildUrl(base, {
+           include : ["TShipmentInternational"]
+
+    })
+      axios.get(this.url).then((response) => {
+        debugger
+       this.setState({
+         bookingNumbers : response.data
+       })
+
+     })
+   }
+}
 onBookingChange(e){
 
     var dataView = createDataLoader(ContainerArrivalEntryForm,{
@@ -476,66 +532,79 @@ if(e.target.checked){
 }
 }
   onCustomerChange(e){
- //debugger
- var CIView = createDataLoader(ContainerArrivalEntryForm,{
-                queries:[{
-                  endpoint: 'TShipmentents',
-                  filter:{
-                    include:["TShipmentDomestic"]
-                  }
-                }]
-  })
- if(e.target.id == "customer_domestic" ){
- this.customerValue = e.target.value
-  var base = "TShipmentents"
-  this.url = CIView._buildUrl(base, {
-         include : ["TShipmentDomestic"],
-        "where":{"customerId":this.customerValue}
-  })
-   axios.get(this.url).then((response) => {
-    this.setState({
-      bookingNumbers : response.data
-    })
+ // debugger
+ // var base = "TShipmentents"
+ // var CIView = createDataLoader(ContainerArrivalEntryForm,{
+ //                queries:[{
+ //                  endpoint: 'TShipmentents',
+ //                  filter:{
+ //                    include:["TShipmentDomestic","TShipmentInternational"]
+ //                  }
+ //                }]
+ //  })
+ //
+ //   this.url = CIView._buildUrl(base, {
+ //          include : ["TShipmentDomestic","TShipmentInternational"]
+ //
+ //   })
+ //     axios.get(this.url).then((response) => {
+ //      this.setState({
+ //        bookingNumbers : response.data
+ //      })
+ //
+ //    })
 
-  })
-    if(e.target.value == "1"){
-            axios.get(Base_Url+"TPackagingInstructions/getPoListID1").then((response)=>{
-                this.setState({
-                    poNumber:response.data
-                })
-                 this.poNumber = _.map(this.state.poNumber,(poNum,index)=>{
-            return <option key={index} id={poNum} value={poNum.poNumber}>{poNum.poNumber}</option>})
-                console.log("poNumber",this.state.poNumber)
-                this.forceUpdate()
-            })
-            }
-            else if(e.target.value == "2"){
-                 axios.get(Base_Url+"TPackagingInstructions/getPoListID2").then((response)=>{
-                this.setState({
-                    poNumber:response.data
-                })
-                this.poNumber = _.map(this.state.poNumber,(poNum,index)=>{
-            return <option key={index} id={poNum} value={poNum.poNumber}>{poNum.poNumber}</option>})
-                console.log("poNumber",this.state.poNumber)
-            })
-
-            }
-
- }else if(e.target.id == "customer_international"){
-  debugger
-this.value = e.target.value
-  var base = "TShipmentents"
-  this.url = CIView._buildUrl(base, {
-         include : ["TShipmentInternational"],
-        "where":{"customerId":this.value}
-  })
-   axios.get(this.url).then((response) => {
-    this.setState({
-      bookingNumbers : response.data
-    })
-
-  })
- }
+ // if(e.target.id == "customer_domestic" ){
+ // this.customerValue = e.target.value
+ //  var base = "TShipmentents"
+ //  this.url = CIView._buildUrl(base, {
+ //         include : ["TShipmentDomestic"],
+ //        "where":{"customerId":this.customerValue}
+ //  })
+ //   axios.get(this.url).then((response) => {
+ //    this.setState({
+ //      bookingNumbers : response.data
+ //    })
+ //
+ //  })
+ //    if(e.target.value == "1"){
+ //            axios.get(Base_Url+"TPackagingInstructions/getPoListID1").then((response)=>{
+ //                this.setState({
+ //                    poNumber:response.data
+ //                })
+ //                 this.poNumber = _.map(this.state.poNumber,(poNum,index)=>{
+ //            return <option key={index} id={poNum} value={poNum.poNumber}>{poNum.poNumber}</option>})
+ //                console.log("poNumber",this.state.poNumber)
+ //                this.forceUpdate()
+ //            })
+ //            }
+ //            else if(e.target.value == "2"){
+ //                 axios.get(Base_Url+"TPackagingInstructions/getPoListID2").then((response)=>{
+ //                this.setState({
+ //                    poNumber:response.data
+ //                })
+ //                this.poNumber = _.map(this.state.poNumber,(poNum,index)=>{
+ //            return <option key={index} id={poNum} value={poNum.poNumber}>{poNum.poNumber}</option>})
+ //                console.log("poNumber",this.state.poNumber)
+ //            })
+ //
+ //            }
+ //
+ // }else if(e.target.id == "customer_international"){
+//  debugger
+// this.value = e.target.value
+//   var base = "TShipmentents"
+//   this.url = CIView._buildUrl(base, {
+//          include : ["TShipmentInternational"],
+//         "where":{"customerId":this.value}
+//   })
+//    axios.get(this.url).then((response) => {
+//     this.setState({
+//       bookingNumbers : response.data
+//     })
+//
+//   })
+//  }
   }
 
   toogleTab(e){
@@ -594,11 +663,8 @@ this.value = e.target.value
 
     render() {
         debugger;
-
-
-
-
          var trucker
+
          if(this.state.trucker){
           trucker = _.map(this.state.trucker,(truck,index)=>{
             return <option key = {index} value ={truck.id}>{truck.name}</option>
@@ -608,11 +674,12 @@ this.value = e.target.value
             return <option key = {index} value = {cust.id} id = {cust.id}>{cust.name}</option>
           })
 
-          if(this.state.bookingNumbers != undefined ){debugger
+          if(this.state.bookingNumbers != undefined ){
+            debugger
             console.log(this.state.bookingNumbers)
                     var bookingNumbers = _.map(this.state.bookingNumbers,(book,index) => {
                       if(book.isDomestic == 1 && book.TShipmentDomestic != undefined && book.TShipmentDomestic.length > 0){
-                                  return <option key ={index}  onChange = {(e)=> this.onHandleDomesticChange(e,book)}   value = {book.id +',' +book.TShipmentDomestic[0].id +','+book.isDomestic}>{book.TShipmentDomestic[0].bookingNumber}</option>}
+                          return <option key ={index}  onChange = {(e)=> this.onHandleDomesticChange(e,book)}   value = {book.id +',' +book.TShipmentDomestic[0].id +','+book.isDomestic+','+book.TShipmentDomestic[0].bookingNumber}>{book.releaseNumber}</option>}
                                   else if(book.isDomestic == 0 && book.TShipmentInternational != undefined && book.TShipmentInternational.length > 0){
                                     return <option key = {index} onChange = {(e)=> this.onHandleIntlChange(e,book)}  value = {book.id +','+book.TShipmentInternational[0].id +','+book.isDomestic}>{book.TShipmentInternational[0].bookingNumber}</option>
                                   }
@@ -626,7 +693,7 @@ this.value = e.target.value
             <div className="  col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
             <ul className="nav nav-pills nav-justified tab-bg text-uppercase " onClick = {this.toogleTab} id="tabs">
              <li className={this.IsInternational ? 'active' :''}><a data-target="#International" data-toggle="tab">Container Arrival Entry International</a></li>
-             <li className={this.IsDomestic ? 'active' :''} ><a  data-toggle="tab" data-target="#Domestic">Container Arrival Entry Domestic</a></li>
+             <li className={this.IsDomestic ? 'active' :''} ><a data-toggle="tab" data-target="#Domestic">Container Arrival Entry Domestic</a></li>
             </ul>
             </div>
              <div className="tab-content">
@@ -634,23 +701,11 @@ this.value = e.target.value
                          <div className=" col-lg-6 col-md-6 col-sm-6 col-xs-12">
                           <fieldset className="scheduler-border   sameHeight" >
                             <legend className="scheduler-border">Container INFO</legend>
-                             <div className="form-group">
-                                <label htmlFor="Customer" className="col-lg-6 control-label">Customer</label>
-
-                                <div className="col-lg-6">
-                                   <select ref = "international" className="form-control" onChange = {this.onCustomerChange} id="customer_international">
-                                   <option value = ""  selected disabled >{this.CustomerNameInt ?this.CustomerNameInt :"Customer"}</option>
-                                   {customers}
-                                  </select>
-                                  <div className="error"><span></span></div>
-                                </div>
-                            </div>
-
 
                             <div className="form-group">
                                     <div  className="col-lg-6"><label htmlFor="Booking" className=" control-label">Booking #</label></div>
                                     <div className="col-lg-6">
-                                     <select className="form-control" id="Booking" onChange = {this.onBookingChange} name="Booking">
+                                     <select className="form-control" id="Booking" onMouseOver={this.onInternational} onChange = {this.onBookingChange} name="Booking">
                                         <option value="Select Booking" disabled selected>{this.bookingNumberInt ? this.bookingNumberInt : "Select an Option"}</option>
                                         {bookingNumbers}
                                         </select>
@@ -679,17 +734,6 @@ this.value = e.target.value
                                        <div className="error"><span></span></div>
                                      </div>
                                  </div>
-
-                              <div className="form-group ">
-
-                                  <label htmlFor="Container" className={this.state.intErrors.sealNumber ? "col-lg-6 control-label has error" : "col-lg-6 control-label"}>Seal #</label>
-                                  <div className="col-lg-6">
-                                      <input type="text" className="form-control" onChange = {this.onSealChange}  id="Container_int" placeholder="Seal #" />
-                                      <div className="error"><span></span></div>
-                                  </div>
-                              </div>
-
-
 
                                <div className="form-group ">
 
@@ -726,7 +770,10 @@ this.value = e.target.value
                                     </div>
 
                                     <div className="col-lg-6 col-md-4 col-sm-6 col-xs-12 text_right">
-                                     <label htmlFor="Container_Type"  className="">Container Type</label>
+                                     <label htmlFor="Container_Type"  className="">
+                                    {(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?"Container Type: "+this.state.IntlData.TShipmentInternational[0].TContainerType.name : "Container Type"}
+                                     </label>
+
                                     </div>
                                 </div>
 
@@ -738,7 +785,10 @@ this.value = e.target.value
                                     </div>
 
                                   <div className="col-lg-6 col-md-4 col-sm-6 col-xs-12 text_right">
-                                     <label htmlFor="Steamship_Line" className=" ">Steamship Line</label>
+                                     <label htmlFor="Steamship_Line" className=" ">
+                                     {(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?"Steamship Line: "+this.state.IntlData.TShipmentInternational[0].TSteamshipLine.name : "Steamship Line"}
+
+                                     </label>
                                     </div>
                                 </div>
 
@@ -820,22 +870,11 @@ this.value = e.target.value
                           <fieldset className="scheduler-border   sameHeight" >
                             <legend className="scheduler-border">Container INFO</legend>
 
-                            <div className="form-group">
-                                <label htmlFor="Customer" className="col-lg-6 control-label">Customer</label>
-                                <div className="col-lg-6">
-                                   <select ref = "domestic" className="form-control" onChange = {this.onCustomerChange} id="customer_domestic">
-                                   <option value = "" selected disabled >{this.CustomerName ? this.CustomerName:"Customer"}</option>
-                                   {customers}
-                                  </select>
-                                  <div className="error"><span></span></div>
-                                </div>
-                            </div>
-
                             <div className="form-group ">
-                                <div  className="col-lg-6"><label htmlFor="Booking" className=" control-label">Domestic Booking</label></div>
+                                <div  className="col-lg-6"><label htmlFor="Booking" id="domesticBooking" className=" control-label">Release #</label></div>
                                 <div className="col-lg-6">
-                                 <select className="form-control" id="Booking" onChange = {this.onBookingChange} name="Booking">
-                                    <option disabled selected value="">{this.bookingNumber? this.bookingNumber : "Booking"} </option>
+                                 <select className="form-control" id="ReleaseNumberForDomestic" onMouseOver = {this.onDomestic} onChange = {this.onBookingChange} name="Release Number For Domestic">
+                                    <option disabled selected value="">{this.bookingNumber? this.bookingNumber : "Release Number"} </option>
                                     {bookingNumbers}
                                   </select>
                                   <div className="error"><span></span></div>
@@ -879,15 +918,6 @@ this.value = e.target.value
                                        <div className="error"><span></span></div>
                                      </div>
                                  </div>
-
-                              <div className="form-group ">
-
-                                  <label htmlFor="Container" className={this.state.domesticErrors.sealNumber ? "col-lg-6 control-label has error" : "col-lg-6 control-label"}>Seal #</label>
-                                  <div className="col-lg-6">
-                                      <input type="text" className="form-control" onChange = {this.onSealChange}  id="Container_int" placeholder="Seal #" />
-                                      <div className="error"><span></span></div>
-                                  </div>
-                              </div>
 
                             <div className="form-group">
                                 <label htmlFor="Container_#" className={this.state.domesticErrors.containerNumber ? "col-lg-6 control-label has error" : "col-lg-6 control-label"}>Container #</label>

@@ -9,6 +9,7 @@ import { hashHistory } from 'react-router'
 var Loader = require('react-loader');
 var lot;
 var weight;
+var tempcustom_label;
 export default class PrintPackaging extends React.Component {
     constructor(props){
         super(props);
@@ -59,7 +60,7 @@ export default class PrintPackaging extends React.Component {
                       lot=lot+data.TPackagingInstructionLots[a].lot_number+',';
                       railcar=railcar+data.TPackagingInstructionLots[a].railcar_number+',';
                       weight=data.TPackagingInstructionLots[a].weight+',';
-
+					  tempcustom_label = data.TPackagingInstructionLots[a].custom_label;
 
                     }
                 }
@@ -71,6 +72,7 @@ export default class PrintPackaging extends React.Component {
                       lot=lot+data.TPackagingInstructionLots[a].lot_number+',';
                       railcar=railcar+data.TPackagingInstructionLots[a].railcar_number+',';
                       weight=data.TPackagingInstructionLots[a].weight+',';
+                      tempcustom_label = data.TPackagingInstructionLots[a].custom_label;
                     }
 
                     }
@@ -105,7 +107,7 @@ export default class PrintPackaging extends React.Component {
                     var noBox='<div><tr><td>BAG TYPE:</td> <td></td></tr><tr><td>BAGS PER PALLET:</td> <td>{this.state.viewData.bags_per_pallet}</td></tr><tr><td>STRETCH WRAP:</td> <td>{this.state.viewData.TWrapType.name}</td></tr></div>'
                 }
                 else{var noBox=''}
-
+				data.custom_label = tempcustom_label;
                 this.setState({
                     viewData : data,
                     packType : data.TPackagingType.packagingType,
@@ -176,12 +178,12 @@ export default class PrintPackaging extends React.Component {
          if(status!=''){
            debugger;
            console.log("boxesssssssssssss" , status)
-             if(status=='Boxes'){
+             if(status=='BOXES'){
                  return(
-                     <div className="packaging_data ">
+                     <div className="packaging_data " style={{"text-align":"center"}}>
                          <table width="100%" className="bg_striped">
                              <tbody>
-                             <tr><td>DATE:</td> <td>{moment(this.state.viewData.created_on).format("MM-DD-YYYY")}</td></tr>
+                             <tr><td>DATE:</td> <td></td></tr>
                              <tr><td>CUSTOMER:</td> <td>{this.state.viewData.TCompany.name}</td></tr>
                              <tr><td>PO#: </td> <td>{this.state.viewData.po_number}</td></tr>
                              <tr><td>RAILCAR#: </td> <td>{this.state.railcar}</td></tr>
@@ -195,12 +197,12 @@ export default class PrintPackaging extends React.Component {
                      </div>
                  )
              }
-             else if(status!='Boxes'){
+             else if(status!='BOXES'){
                  return(
-                     <div className="packaging_data ">
+                     <div className="packaging_data " style={{"text-align":"center"}}>
                          <table width="100%" className="bg_striped">
                              <tbody>
-                             <tr><td>DATE:</td> <td>{moment(this.state.viewData.created_on).format("MM-DD-YYYY")}</td></tr>
+                             <tr><td>DATE:</td> <td></td></tr>
                              <tr><td>CUSTOMER:</td> <td>{this.state.viewData.TCompany.name}</td></tr>
                              <tr><td>PO#: </td> <td>{this.state.viewData.po_number}</td></tr>
                              <tr><td>RAILCAR#: </td> <td>{this.state.railcar}</td></tr>
@@ -229,25 +231,25 @@ export default class PrintPackaging extends React.Component {
                 <div>
                     <div className="warpper-inner">
                         <div className="content-inside">
-                            <div className="logo">
+                            <div className="logo" style={{"margin-left":"290"}}>
                                 <div className="img"><span className="img-responsive logo_icon"></span></div>
-                                    <div className="text"> PACKAGING INSTRUCTIONS - {(this.state.viewData && this.state.viewData.TPackagingType && this.state.viewData.TPackagingType.packagingType && this.state.viewData.TPackagingType.packagingType.length > 1 && this.state.viewData.TPackagingType.packagingType[0] == 'Boxes')? 'Boxes' : 'Bags'} </div>
+                                    <div className="text" style={{"margin-top":"15","margin-left":"-200","clear":"both","margin-right":"490","font-size":"15"}}> PACKAGING INSTRUCTIONS - {(this.state.viewData && this.state.viewData.TPackagingType && this.state.viewData.TPackagingType.packagingType && this.state.viewData.TPackagingType.packagingType.length > 1 && this.state.viewData.TPackagingType.packagingType[0] == 'Boxes')? 'Boxes' : 'Bags'} </div>
                                 </div>
-                                <div className="packaging_details ">
+                                <div className="packaging_details " style={{"margin":"0","text-align":"center","margin-left":"150"}}>
                                     {
                                       this.dataList
                                     }
 
                                 </div>
-                                <div className="label_confirmation" >
+                                <div className="label_confirmation" style={{"margin-top" : "-25"}}>
                                     <h3>LABEL CONFIRMATION</h3>
                                     <p>SAMPLE LABEL</p>
 
-                                    <div className="info" style={{"float":"left" , "margin-top" : 50}}>
+                                    <div className="info" style={{"float":"left" , "margin-top" : 30}}>
                                         {this.state.viewData.custom_label.split("\n").map(function(item ,index) {
                                             return (
                                                 <span>
-                                                    {(index!=1&&index!=4)?item:(index==1?('lot# ' +lot):('weight:'+weight))}
+                                                    {(index!=3&&index!=4)?item:(index==3?('lot# ' +lot):('weight:'+weight))}
 
                                                   <br/>
 
@@ -263,7 +265,7 @@ export default class PrintPackaging extends React.Component {
                                 </div>
 
 
-                                <div className="inventry" style={{"float":"left" , "margin-top" : 50}}>
+                                <div className="inventry" style={{"float":"left" , "margin-top" : "5"}}>
                                     <h3>INVENTORY</h3>
                                     <div className="inventry_data">
                                         <table>
@@ -291,7 +293,7 @@ export default class PrintPackaging extends React.Component {
                                     </div>
                                 </div>
 
-                                <div className="location">
+                                <div className="location" style={{"margin-top" : "-25"}}>
                                     <h3>LOCATION</h3>
                                     <div className="location_data">
                                         <table>
@@ -310,10 +312,11 @@ export default class PrintPackaging extends React.Component {
                                     </div>
                                 </div>
 
-                                <div className="qtyVerification">
+                                <div className="qtyVerification" style={{"margin-top" : "-35"}}>
+                                  <h3>QUANTITY VERIFICATION</h3>
+                                    <div style={{"margin-top" : "15"}}>
                                     <table>
                                         <tr>
-                                            <td>Quantity Verification:</td>
                                             <td>1) ________________</td>
                                             <td>2)  ____________________________</td>
                                         </tr>
@@ -322,6 +325,7 @@ export default class PrintPackaging extends React.Component {
                                             <td>_______________________________</td>
                                         </tr>
                                     </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>

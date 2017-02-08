@@ -12,6 +12,7 @@ import React, { Component } from 'react';
     render() {
         if(this.props.tabledata){
                  this.Table = _.map(this.props.tabledata.TShipmentLots,(tble,index) =>{
+                   var releaseNumber = this.props.tabledata.releaseNumber
                     if(this.props.tabledata.isDomestic == 1){
                         var bookingNumber = this.props.tabledata.TShipmentDomestic[0].bookingNumber
                         var cutOff = 'N/A'
@@ -25,7 +26,7 @@ import React, { Component } from 'react';
                               <tr>
                                                  <td>{this.props.tabledata ? this.props.tabledata.TLocation.locationName : ''}</td>
                                                 <td>{this.props.tabledata ? this.props.tabledata.TCompany.name : ''}</td>
-                                                <td>{tble.TPackagingInstructionLots ? tble.TPackagingInstructionLots.railcar_number : ''}</td>
+                                                <td>{releaseNumber}</td>
                                                 <td>{bookingNumber}</td>
                                                 <td>{tble.TPackagingInstructions ? tble.TPackagingInstructions.po_number : ''}</td>
                                                 <td>{tble.TPackagingInstructions ? tble.TPackagingInstructions.material : ''}</td>
@@ -47,7 +48,7 @@ import React, { Component } from 'react';
                                     <tr >
                                         <th>ARB</th>
                                         <th>Customer</th>
-                                        <th>Railcar#</th>
+                                        <th>Release#</th>
                                         <th>Booking#</th>
                                         <th>PO</th>
                                         <th>Material</th>

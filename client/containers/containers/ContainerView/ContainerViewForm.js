@@ -346,7 +346,7 @@ debugger;
 }
 
     onSearch(e){
-
+      debugger
       Object.defineProperty(this.Where,"Query",{enumerable:true ,
             writable: true,
             configurable: true,
@@ -360,6 +360,7 @@ debugger;
         var isDomestic
         var intl = []
         var arrival = []
+        var arrivedtemp,steamtemp
         if(this.shipMentType){
             Object.defineProperty(this.Where,"shipMentType",{enumerable:true ,
                 writable: true,
@@ -430,16 +431,19 @@ debugger;
                 var lotSearch = [{'releaseNumber': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
                 serachObj.push(lotSearch)
             }
+            var arrivalData = {"containerArrived":-1}
             if(this.Where.Arrival =="1" || this.Where.Arrival =="0"){
 
-                var arrivalData = {"containerArrived" : parseInt(this.Where.Arrival)}
+                arrivalData = {"containerArrived" : parseInt(this.Where.Arrival)}
                 arrival.push(arrivalData)
                 intl.push(arrivalData)
             }
+            var tempsteamp = -1
             if(this.Where.SteamLine =="1" || this.Where.SteamLine =="0"){
                 var steam = []
                 var steamdata = {"containerSteamshipLineConfirmed" : this.Where.SteamLine }
                 intl.push(steamdata)
+                tempsteamp = parseInt(this.Where.SteamLine)
             }
 
             serachObj = [].concat.apply([], serachObj);
@@ -460,11 +464,13 @@ debugger;
  if((containerSearch && containerSearch.length > 0)){
 
    this.url = PIview._buildUrl(base, {
-       "include": ["TContainerInternational", "TCompany", "TLocation", "TShipmentDomestic", {"relation":"TShipmentInternational" , "scope":{"include" : "TContainerType" , "where":{"or":containerSearch}}}]
+       "include": ["TContainerInternational", "TCompany", "TLocation", "TShipmentDomestic",
+        {"relation":"TShipmentInternational" ,"include":["TContainerType" , "TSteamshipLine"], "scope":{"include" : "TContainerType" , "where":{"or":containerSearch}}}]
        //where: {"and": serachObj}
 
    });
  }
+
   if(serachObjLots && serachObjLots.length>0){
                 this.url = PIview._buildUrl(base, {
                     "include": [{
@@ -472,88 +478,120 @@ debugger;
                         "scope": {"where": {"or": serachObjLots}}
                     }, {
                         "relation": "TContainerInternational",
-                        "scope": {"where": {"or": serachObjLots}}
-                    }, "TCompany", "TLocation", "TShipmentDomestic","TShipmentInternational"],
-                   where: {"and":[
+                        "scope": {"include" : "TCompany","where": {"or": serachObjLots}}
+                    }, "TCompany", "TLocation", "TShipmentDomestic",
+                    {"relation":"TShipmentInternational" ,
+                                "scope":{"include":["TContainerType" , "TSteamshipLine"]}}],
+                    where: {"and":[
                       {"or":customer},
-                      {"or":company}
+                      {"or":company},
+                      {"or":lotSearch}
                     ]
                     }
 
                 });
             }
-            if(intl.length >0 && serachObj.length > 0  && arrival.length>0 && serachObjLots.length ==0) {
+            if(tempsteamp!=-1 && serachObj.length > 0  && arrival.length>0 && serachObjLots.length ==0) {
                 this.url = PIview._buildUrl(base, {
                     "include": [{
                         "relation": "TShipmentDomestic",
-                        "scope": {"include":"TCompany","where": {"or": arrival}}
+                        "scope": {"where": {"containerArrived": arrivalData.containerArrived}}
                     }, {
                         "relation": "TContainerInternational",
-                        "scope": {"include":"TCompany","where": {"or": intl}}
-                    }, "TCompany", "TLocation", "TShipmentDomestic", "TShipmentInternational"],
-                   where: {"and":[
+                        "scope": {"include":"TCompany","where": {"and":[{"containerArrived": arrivalData.containerArrived},
+                                                                        {"containerSteamshipLineConfirmed":tempsteamp}
+                                                                            ]}}
+                    }, "TCompany", "TLocation", "TShipmentDomestic",   {"relation":"TShipmentInternational" ,
+                                  "scope":{"include":["TContainerType" , "TSteamshipLine"]}}],
+                    where: {"and":[
                       {"or":customer},
-                      {"or":company}
+                      {"or":company},
+                      {"or":lotSearch}
+
                     ]
                     }
 
                 });
             }
 
-           else if(intl.length >0 && serachObj.length == 0  &&  arrival.length==0 && serachObjLots.length ==0) {
+           else if(tempsteamp!=-1 && serachObj.length == 0  &&  arrival.length==0 && serachObjLots.length ==0) {
                 debugger;
                 this.url = PIview._buildUrl(base, {
-                    "include": ["TShipmentDomestic",
-                      {
+                    "include": [ {
                         "relation": "TContainerInternational",
-                        "scope": {"include":"TCompany","where": {"or": intl}}
-                    }, "TCompany", "TLocation", "TShipmentDomestic", "TShipmentInternational"],
-                   // where: {"and": serachObj}
+                        "scope": {"include":"TCompany","where":{"containerSteamshipLineConfirmed":tempsteamp}}
+                    }, "TCompany", "TLocation", "TShipmentDomestic",   {"relation":"TShipmentInternational" ,
+                                  "scope":{"include":["TContainerType" , "TSteamshipLine"]}}]
 
                 });
             }
 
-            else if(intl.length >0 &&  arrival.length > 0 && serachObj.length == 0  && serachObjLots.length ==0) {
+            else if(tempsteamp!=-1 &&  arrival.length > 0 && serachObj.length == 0  && serachObjLots.length ==0) {
                 debugger;
                 this.url = PIview._buildUrl(base, {
                     "include": [{
                         "relation": "TContainerDomestic",
-                        "scope": {"include":"TCompany","where": {"or": arrival}}
+                        "scope": {"include":"TCompany","where": {"containerArrived": arrivalData.containerArrived}}
                     }, {
                         "relation": "TContainerInternational",
-                        "scope": {"include":"TCompany","where": {"or": intl}}
-                    }, "TCompany", "TLocation", "TShipmentDomestic", "TShipmentInternational"]
+                        "scope": {"include":"TCompany","where": {"and":[{"containerArrived": arrivalData.containerArrived},
+                                                                        {"containerSteamshipLineConfirmed":tempsteamp}
+                                                                            ]}}
+                    }, "TCompany", "TLocation", "TShipmentDomestic",   {"relation":"TShipmentInternational" ,
+                                  "scope":{"include":["TContainerType" , "TSteamshipLine"]}}]
                     //where: {"and": serachObj}
 
                 });
             }
 
-            else if( arrival.length>0 && intl.length ==0 && serachObj.length == 0 && serachObjLots.length ==0) {
+            else if( arrival.length>0 && tempsteamp==-1 && serachObj.length == 0 && serachObjLots.length ==0) {
                 this.url = PIview._buildUrl(base, {
                     "include": [{
                         "relation": "TContainerDomestic",
-                        "scope": {"where": {"containerArrived":1}}
-                    },  "TContainerInternational",
-                     "TCompany", "TLocation", "TShipmentDomestic", "TShipmentInternational"]
+                        "scope": {"where": {"containerArrived":arrivalData.containerArrived}}
+                    },  {"relation":"TContainerInternational","scope": {"include" : "TCompany","where": {"containerArrived":arrivalData.containerArrived}}},
+                     "TCompany", "TLocation", "TShipmentDomestic",   {"relation":"TShipmentInternational" ,
+                                   "scope":{"include":["TContainerType" , "TSteamshipLine"]}}]
                     //where: {"and": serachObj}
 
                 });
             }
-            else if(intl.length ==0 && serachObj.length > 0  && arrival.length==0 && serachObjLots.length ==0)
+            else if(tempsteamp==-1 && serachObj.length > 0  && arrival.length==0 && serachObjLots.length ==0)
             {
                 this.url = PIview._buildUrl(base, {
-                    "include" : ["TContainerDomestic","TContainerInternational","TCompany" ,"TLocation","TShipmentDomestic","TShipmentInternational"],
-                where: {"and":[
+                    "include" : [{"relation":"TContainerDomestic","scope":{"include" : "TCompany"}},{"relation":"TContainerInternational","scope":{"include" : "TCompany"}},"TCompany" ,"TLocation","TShipmentDomestic",
+                    {"relation":"TShipmentInternational" ,
+                                "scope":{"include":["TContainerType" , "TSteamshipLine"]}}],
+                    where: {"and":[
                       {"or":customer},
-                      {"or":company}
+                      {"or":company},
+                      {"or":lotSearch}
                     ]
                     }
 
 
                 });
             }
+            else if(tempsteamp==-1 && serachObj.length > 0  && arrival.length>=0 && serachObjLots.length ==0)
+            {
+              this.url = PIview._buildUrl(base, {
+                  "include": [{
+                      "relation": "TContainerDomestic",
+                      "scope": {"where": {"containerArrived":arrivalData.containerArrived}}
+                  },  {"relation":"TContainerInternational","scope": {"include":"TCompany","where": {"containerArrived":arrivalData.containerArrived}}},
+                   "TCompany", "TLocation", "TShipmentDomestic",
+                   {"relation":"TShipmentInternational" ,
+                               "scope":{"include":["TContainerType" , "TSteamshipLine"]}}],
+                   where: {"and":[
+                     {"or":customer},
+                     {"or":company},
+                     {"or":lotSearch}
+                   ]
+                   }
+                  //where: {"and": serachObj}
 
-
+              });
+            }
             $.ajax({
                 url: this.url,
                 success:function(data){
@@ -563,6 +601,8 @@ debugger;
                         viewData : data,
                         loaded:true
                     })
+                    this.forceUpdate()
+
                 }.bind(this)
 
             })
@@ -691,7 +731,7 @@ debugger;
                         "relation": "TContainerInternational",
                         "scope": {"where": {"or": serachObjLots}}
                     }, "TCompany", "TLocation", "TShipmentDomestic", "TShipmentInternational"],
-                  where: {"and":[
+                    where: {"and":[
                       {"or":customer},
                       {"or":company}
                     ]
@@ -708,7 +748,7 @@ debugger;
                         "relation": "TContainerInternational",
                         "scope": {"where": {"or": intl}}
                     }, "TCompany", "TLocation", "TShipmentDomestic", "TShipmentInternational"],
-                  where: {"and":[
+                    where: {"and":[
                       {"or":customer},
                       {"or":company}
                     ]
@@ -760,7 +800,7 @@ debugger;
             {
                 this.url = PIview._buildUrl(base, {
                     "include" : ["TContainerDomestic","TContainerInternational","TCompany" ,"TLocation","TShipmentDomestic","TShipmentInternational"],
-               where: {"and":[
+                    where: {"and":[
                       {"or":customer},
                       {"or":company}
                     ]
@@ -798,7 +838,7 @@ debugger;
 
     saveView(e){
 
-        debugger;
+
         var saveCustomView = {
             "id": 0,
             "screenName": "CONTAINER",
@@ -1014,7 +1054,7 @@ onViewClick(e){
                 <option value="Please Select An Option" disabled selected>Select custom view</option>
                 {
                     _.map(this.state.savedViews , (views,index)=>{
-                        debugger;
+
                         if(views.screenName == "CONTAINER")
                         {
                             return(
