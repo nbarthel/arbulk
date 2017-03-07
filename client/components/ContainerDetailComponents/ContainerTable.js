@@ -10,6 +10,8 @@ class ContainerTable extends Component {
     }
 
 	render() {
+    debugger
+      var isOrdercnfd = "NO"
        var QtyShip = 0
       var QtyReq = 0
         var railcar_Number = (this.props.table && this.props.table.TShipmentent && this.props.table.TShipmentent.TShipmentLots && this.props.table.TShipmentent.TShipmentLots.length>0 && this.props.table.TShipmentent.TShipmentLots[0].TPackagingInstructionLots) ? this.props.table.TShipmentent.TShipmentLots[0].TPackagingInstructionLots.railcar_number : 'NA'
@@ -20,15 +22,21 @@ class ContainerTable extends Component {
         var cutOffDate = (this.props.table && this.props.table.TShipmentent && this.props.table.TShipmentent.TShipmentInternational && this.props.table.TShipmentent.TShipmentInternational.length>0) ? this.props.table.TShipmentent.TShipmentInternational[0].cargoCutoffDate : 'NA'
         var inInventory = (this.props.table && this.props.table.TShipmentent && this.props.table.TShipmentent.TShipmentLots && this.props.table.TShipmentent.TShipmentLots.length>0 && this.props.table.TShipmentent.TShipmentLots[0].TPackagingInstructionLots) ? this.props.table.TShipmentent.TShipmentLots[0].TPackagingInstructionLots.status : 'NA'
         if(this.props.table && this.props.table.TShipmentent && this.props.table.TShipmentent.TShipmentLots && this.props.table.TShipmentent.TShipmentLots.length > 0){
-               for(var i in this.props.table.TShipmentent.TShipmentLots){
+
+          for(var i in this.props.table.TShipmentent.TShipmentLots){
                 QtyShip = QtyShip + this.props.table.TShipmentent.TShipmentLots[i].noOfBags
             }
+            //  QtyReq = this.props.table.TShipmentent.TShipmentLots[this.props.table.TShipmentent.TShipmentLots.length -1].TPackagingInstructionLots.inInventory
          }
 
          if(this.props.table && this.props.table.TShipmentent && this.props.table.TShipmentent.TShipmentLots &&  this.props.table.TShipmentent.TShipmentLots.length > 0){
-                  for(var i in this.props.table.TShipmentent.TShipmentLots){
+          if(this.props.table.TShipmentent.TShipmentLots[0].TPackagingInstructionLots.status!="UNCONFIRMED"){
+            isOrdercnfd = "YES"
+          }
+           for(var i in this.props.table.TShipmentent.TShipmentLots){
                  QtyReq = parseInt(QtyReq) + parseInt(this.props.table.TShipmentent.TShipmentLots[i].TPackagingInstructionLots.inInventory)
              }
+
          }
 
         return (
@@ -56,8 +64,8 @@ class ContainerTable extends Component {
                                         <td>{(booking_Number == "NA") ? booking_Number_Int : booking_Number}</td>
                                         <td>{PO}</td>
                                         <td>{material}</td>
-                                        <td>{'NO'}</td>
-                                        <td>{(inInventory == "ININVENTORY")? 'YES' : 'NO'}</td>
+                                        <td>{isOrdercnfd}</td>
+                                        <td>{(inInventory.toUpperCase() == "IN INVENTORY" || inInventory.toUpperCase() =="SHIPPED")? 'YES' : 'NO'}</td>
                                         <td>{(cutOffDate!= "NA") ? moment(cutOffDate).format('MM-DD-YYYY'):"NA"}</td>
                                         <td>{QtyReq} Bags</td>
                                         <td>{QtyShip} Bags</td>

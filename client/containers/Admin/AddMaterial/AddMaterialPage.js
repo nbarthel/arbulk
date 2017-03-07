@@ -20,8 +20,8 @@ class AddMaterialPage extends Component {
               }
           }]
       })
-      
-      
+
+
 
       var base = 'TCompanies'
       this.url = AddView._buildUrl(base, {
@@ -51,12 +51,13 @@ class AddMaterialPage extends Component {
 			showBags: false,
 			showSeal: false,
 			showPallet:false,
-			showWrap:false 
-				
+			showWrap:false
+
 		}
 		this.onPackagingTypeSelect = this.onPackagingTypeSelect.bind(this)
 	}
 	onPackagingTypeSelect(e){
+		debugger
 			this.selectedPackType = e.target.value
 			if(e.target.value == 1 || e.target.value == 2 || e.target.value == 3 ){
 				const packagingForm = this.state.packagingForm
@@ -78,6 +79,7 @@ class AddMaterialPage extends Component {
 				})
 			}
 			else if(e.target.value == 4){
+				const packagingForm = this.state.packagingForm
 				this.setState({
 					showPallet:true,
 					showSeal:false,
@@ -86,6 +88,7 @@ class AddMaterialPage extends Component {
 				})
 			}
 			else if(e.target.value == 6){
+				const packagingForm = this.state.packagingForm
 				this.setState({
 					showWrap:true,
 					showPallet:false,
@@ -93,6 +96,7 @@ class AddMaterialPage extends Component {
 					showBags:false,
 				})
 			}
+			this.forceUpdate()
 	}
 	render() {
 		if(this.state.packagingType){
@@ -101,29 +105,29 @@ class AddMaterialPage extends Component {
 				})
 			}
 		return (
-			
+
 			<div className="wrapper-inner">
       			<div className="content-inside">
             	<AdminHeader routes = {this.props.routes}/>
-            	  <section className="admin"> 
-            	  <div className="container-fluid"> 
+            	  <section className="admin">
+            	  <div className="container-fluid">
 			    	<div className=" col-lg-6 col-md-6 col-sm-6 col-xs-12">
             	  <form className="form-horizontal">
             	  <fieldset className="scheduler-border no-right-border">
                   <legend className="scheduler-border">Add Packaging Material</legend>
 						<div className=" col-lg-12 col-md-12 col-sm-12 col-xs-12">
-						
+
 							<div className="form-group">
-								<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12"><label htmlFor="usr" >Packaging Type</label></div>	
+								<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12"><label htmlFor="usr" >Packaging Type</label></div>
 									<div className=" col-lg-6 col-md-6 col-sm-6 col-xs-12">
 								<select onChange = {this.onPackagingTypeSelect} className="form-control" id="" name="">
 										<option value="">Select Packaging Type</option>
-										{this.packagingType}									
+										{this.packagingType}
 									</select>
 									 <div className="error"><span></span></div>
-									</div>	
+									</div>
 							</div>
-							{this.state.showBags ? <AddMaterialBags packagingTypeId = {this.selectedPackType} location = {this.state.location} companyData = {this.state.companyData}/> : null}
+							{this.state.showBags ? <AddMaterialBags unitType={this.state.packagingType} packagingTypeId = {this.selectedPackType} location = {this.state.location} companyData = {this.state.companyData}/> : null}
 							{this.state.showPallet ? <AddMaterialPallet packagingTypeId = {this.selectedPackType} location = {this.state.location} companyData = {this.state.companyData}/> : null}
 							{this.state.showSeal ? <AddMaterialSeal packagingTypeId = {this.selectedPackType} location = {this.state.location} companyData = {this.state.companyData}/> : null}
 							{this.state.showWrap ? <AddMaterialShrinkWrap packagingTypeId = {this.selectedPackType} location = {this.state.location} companyData = {this.state.companyData}/> : null}

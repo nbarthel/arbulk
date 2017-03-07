@@ -16,6 +16,7 @@ class ContainerQueueViewPage  extends React.Component{
 
     }
     componentWillMount(){
+      debugger
         var seq = 0
         var CDView = createDataLoader(ContainerQueueViewPage, {
             queries:[{

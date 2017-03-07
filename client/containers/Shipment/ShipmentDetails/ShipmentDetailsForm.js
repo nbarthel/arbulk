@@ -86,8 +86,8 @@ class  ShipmentDetailsForm extends React.Component {
         this.forceUpdate()
       })
     }
-  
- checkConfirmation(){
+    checkConfirmation()
+  	{
       var status;
       var id;
       if(this.props.data.isDomestic==0){
@@ -98,53 +98,86 @@ class  ShipmentDetailsForm extends React.Component {
         status = this.props.data.TShipmentDomestic[0].status
         id = this.props.data.TShipmentDomestic[0].id
       }
-
+      var data = this.props.data.isDomestic
+      var tempthis = this
         if(status == 'UNCONFIRMED' || status == "CONFIRMED"){
-          return (confirm("Are you sure you Want to delete")==true?{"shpid":id,"res":true}:{"shpid":id,"res":false})
+
+          swal({
+            title:"Are you sure?",
+			      text:"Want to Delete Shipment",
+			      type:"warning",
+			      showCancelButton: true,
+			      confirmButtonColor: "#DD6B55",
+  		      confirmButtonText: "Yes, delete it!",
+  		      closeOnConfirm: false
+          },
+        function(isConfirm){
+          debugger
+          if(isConfirm){
+
+            var tableName = "TShipmentInternationals";
+            if(data!=0){
+                  tableName = "TShipmentDomestics"
+            }
+            var PIview = createDataLoader(ShipmentDetailsForm, {
+                queries: [{
+                    endpoint: 'TPackagingInstructionLots'
+                }]
+            });
+              var base = Base_Url+tableName+"/DeleteTemp"
+              var obj = {id:id}
+              debugger
+                      $.ajax({
+                        type:"POST",
+                          url: base,
+                          data:obj,
+                          success:function(data){
+                            debugger
+                          swal({
+                            title:"Info",
+                            text:"Deleted Successfully",
+                            type:"info"
+                          },function(){
+                            debugger
+                              hashHistory.push('/Shipment/shipmentview')
+                          })
+
+                          }
+
+                      })
+          }
+          else{
+            return {"shpid":id,"res":false}
+          }
+        })
+
         }
         else{
-          alert("order with status " + status + " can not be deleted")
-          return {"shpid":id,"res":false}
+          swal({
+            title:"Info",
+            text:"order with status " + status + " can not be deleted",
+            type:"info"
+          },
+        function(){
+            return {"shpid":id,"res":false}
+        })
         }
   	}
-  
-  onAllocateContainer(){
+
+    onAllocateContainer(){
       this.setState({
                    hideEdit: 'block',
                    showEdit: 'none'
                });
     }
-  
-  onDelete(){
-      var response=this.checkConfirmation();
-      if(response.res){
-        var tableName = "TShipmentInternationals";
-        if(this.props.data.isDomestic!=0){
-				tableName = "TShipmentDomestics"
-        }
-        var PIview = createDataLoader(ShipmentDetailsForm, {
-            queries: [{
-                endpoint: 'TPackagingInstructionLots'
-            }]
-        });
-          var base = Base_Url+tableName+"/DeleteTemp"
-          var obj = {id:response.shpid}
-          debugger
-                  $.ajax({
-                    type:"POST",
-                      url: base,
-                      data:obj,
-                      success:function(data){
-                      hashHistory.push('/Shipment/shipmentview')
-                      }.bind(this)
 
-                  })
-
-      }
+    onDelete(){
+      this.checkConfirmation(function(res){
+      });
     }
-  
     tableCheckBoxChange(e,value){
       debugger;
+
         if(e.target.checked) {
         document.getElementById("ContainerSummary").style.display = "table"
         console.log("value", value)
@@ -186,7 +219,7 @@ class  ShipmentDetailsForm extends React.Component {
         this.setState({
             CI : false
         })
-	document.getElementById("ContainerSummary").style.display = "none"
+        document.getElementById("ContainerSummary").style.display = "none"
     }
 
     }
@@ -439,7 +472,7 @@ onDeleteFunction(deleteArray){
  }
 
  onAdd(e){
-
+debugger
      var bArray = []
      this.flag = "false"
 if(this.length > 0){
@@ -664,10 +697,9 @@ else
                          <div className="pull-left margin-10-all"><button type="button" id="confirm" className="btn  btn-success text-uppercase" onClick = {(e) => {this.onConfirmClick(e)}}>Confirm</button> </div>
                          <div className="pull-left margin-10-all"><button type="button" id="allocateContainer" className="btn  btn-success text-uppercase" onClick = {(e) => {this.onAllocateContainer(e)}}>Allocate Container</button> </div>
 
-
                           <div className="pull-left margin-10-all"><button type="button" id="edit_shipment"  className="btn  btn-orange text-uppercase" onClick={this.onEditClick}>Edit</button> </div>
- 						  <div className="pull-left margin-10-all"><button type="button" id="delete_shipment"  className="btn  btn-orange text-uppercase" onClick={this.onDelete}>Delete</button> </div>                       
-                          </div>
+                          <div className="pull-left margin-10-all"><button type="button" id="delete_shipment"  className="btn  btn-orange text-uppercase" onClick={this.onDelete}>Delete</button> </div>
+                        </div>
                     </div>
                     <div className=" col-lg-12 "><hr/></div>
             </div>

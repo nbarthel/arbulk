@@ -10,6 +10,7 @@ import '../../../containers/Shipment/ShipmentPrint/shipmentPrint.css';
 
 var Loader = require('react-loader');
 var dummyobject = false
+var unitOfPackaging = ""
 export default class ShipmentPrint extends React.Component {
     constructor(props){
         super(props);
@@ -26,22 +27,6 @@ export default class ShipmentPrint extends React.Component {
         this.onPrint = this.onPrint.bind(this)
         this.createPdfClick = this.createPdfClick.bind(this)
         this.reportArray = []
-       /* this.state.viewData={
-            "customer": "abc",
-            "trucker": "xyz",
-            "container": 123,
-            "chasis": "97879",
-            "steamshipline": "234234",
-            "release": 123,
-            "booking": "97879",
-            "origin": "USA",
-            "lotpallet":[{"id":1,"lot":"12312","pallet":"234234"},
-                {"id":2,"lot":"12312","pallet":"234234"},
-                {"id":3,"lot":"234324","pallet":"234234"}],
-            "locations":[{"location":"asdf","material":"dfsd","po":"12312","lot":"24323","bags":"12","breakdown":"20x23"},
-                {"location":"asdf","material":"dfsd","po":"12312","lot":"24323","bags":"12","breakdown":"20x23"},
-                {"location":"asdf","material":"dfsd","po":"12312","lot":"24323","bags":"12","breakdown":"20x23"}]
-        }*/
     }
     componentWillMount(){
         var ShipmentView = createDataLoader(ShipmentPrint,{
@@ -52,18 +37,56 @@ export default class ShipmentPrint extends React.Component {
                 }
             }]
         })
-        //var base = 'TPackagingInstructions'+'/'+this.props.params.id;
         var base = 'TShipmentents/'+this.id;
         this.url = ShipmentView._buildUrl(base, {
-            "include" : ["TLocation" , "TCompany" ,{"relation" :"TContainerDomestic" , "scope":{"include" : ["TCompany",{"relation" : "TContainerLoad" ,"scope":{"include":["TPiInventory","TInventoryLocation"]}}] ,"where":{"id":this.props.params.contId}}}, {"relation" :"TContainerInternational" , "scope":{"include" : ["TCompany",{"relation" : "TContainerLoad" ,"scope":{"include":["TPiInventory","TInventoryLocation"]}}] ,"where":{"id":this.props.params.contId}}} ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType","TPaymentType"]}},{"relation" :"TShipmentInternational","scope":{"include":["TSteamshipLine","TContainerType"]}},{"relation" : "TShipmentLots" ,"scope":{"include":["TPackagingInstructionLots"]}}]
+            "include" : ["TLocation" , "TCompany" ,
+                        {"relation" :"TContainerDomestic" , "scope":
+                                      {"include" : ["TCompany",
+                                                   {"relation" : "TContainerLoad" ,
+                                                                  "scope":{"include":["TPiInventory","TInventoryLocation"]}
+                                                   }] ,
+                                      "where":{"id":this.props.params.contId}
+                                      }
+                        },
+                        {"relation" :"TContainerInternational" ,
+                                     "scope":{"include" : ["TCompany",{
+                                                                        "relation" : "TContainerLoad" ,
+                                                                                      "scope":{"include":["TPiInventory","TInventoryLocation"]}
+                                                                      }
+                                                           ] ,
+                                              "where":{"id":this.props.params.contId}
+                                              }
+                        } ,
+                        {"relation" :"TShipmentDomestic",
+                                     "scope":{"include":["TShipmentType","TPaymentType"]}
+                        },
+                        {"relation" :"TShipmentInternational",
+                                      "scope":{"include":["TSteamshipLine","TContainerType"]}
+                        },
+                        {"relation" : "TShipmentLots" ,"scope":{
+                                                                  "include":"TPackagingInstructionLots",
+                                                                  "scope":{"relation":"TPackagingInstructions"}
+                                                               }
+                       }
+
+                      ]
         })
 
         var lot='';var railcar='';var weight='';var label='';
+        var tempThis = this
         $.ajax({
             url: this.url,
             success:function(data){
-
-            console.log("dataaa" , data)
+              var base = 'TPackagingInstructions'+'/'+data.TShipmentLots[0].TPackagingInstructionLots.pi_id;
+              this.url = ShipmentView._buildUrl(base, {
+                include: ["TPackagingMaterial","TPalletType","TWrapType","TOrigin","TPackagingType"]
+              })
+              $.ajax({
+                    url: this.url,
+                    success:function(data){
+                      unitOfPackaging = data.TPackagingType.packagingType
+                    }
+                  })
                 if(data.TShipmentInternational.length==0){
                     data.TShipmentInternational= [{TSteamshipLine:{},TContainerType:{}}];
                     data.TShipmentDomestic= [{TSteamshipLine:{},TContainerType:{}}];
@@ -185,17 +208,8 @@ export default class ShipmentPrint extends React.Component {
                     removeContainer:true
                 });
             }
-
         }());
-
-
-
-
-
       }
-
-
-
     componentDidMount() {
     (function(){
       var
@@ -209,7 +223,6 @@ export default class ShipmentPrint extends React.Component {
                // $(window).scrollTop();
                 createPDF();
             });
-//create pdf
             function createPDF(){
 		debugger
                 getCanvas().then(function(canvas){
@@ -222,7 +235,6 @@ export default class ShipmentPrint extends React.Component {
 							page:1
                         });
 					doc.internal.scaleFactor = 1.0;
-                   // doc.addImage(img, 'JPEG', 10, 10);
                     doc.addHTML(document.body , {format:'png',pagesplit : true} ,function(){
                     doc.save('shipment.pdf');
                     })
@@ -232,7 +244,6 @@ export default class ShipmentPrint extends React.Component {
 
 // create canvas object
             function getCanvas(){
-		debugger;
                 form.width((a3[0]*1.33333) -80).css('max-width','none');
                 return html2canvas(document.body,{
                     imageTimeout:2000,
@@ -241,13 +252,6 @@ export default class ShipmentPrint extends React.Component {
             }
 
         }());
-
-
-
-
-
-
-
     }
     createPDF(e){
         console.log('print view')
@@ -391,6 +395,7 @@ debugger
                                                  <td>PO #</td>
                                                  { (this.state.viewData && this.state.viewData.TContainerInternational && this.state.viewData.TContainerInternational.length >0 && this.state.viewData.TContainerInternational[0].TContainerLoad)?
                                                      _.map(this.state.viewData.TContainerInternational[index].TContainerLoad,(obj,index)=>{
+                                                       debugger
                                                              return(<td>{this.state.piDataPO && this.state.piDataPO.po_number ? this.state.piDataPO.po_number : ''}</td>)
 
                                                      })
@@ -422,7 +427,7 @@ debugger
 
                                        </tr>
                                              <tr>
-                                                 <td># OF BAGS</td>
+                                                 <td>{unitOfPackaging!=""?"# "+unitOfPackaging:""}</td>
                                                  { (this.state.viewData && this.state.viewData.TContainerInternational && this.state.viewData.TContainerInternational.length >0 && this.state.viewData.TContainerInternational[0].TContainerLoad)?
                                                      _.map(this.state.viewData.TContainerInternational[index].TContainerLoad,(obj,index)=>{
                                                              return(<td>{obj.TPiInventory.noOfBags}</td>)
@@ -437,7 +442,7 @@ debugger
                                                  <td>BREAKDOWN</td>
                                                  { (this.state.viewData && this.state.viewData.TContainerInternational && this.state.viewData.TContainerInternational.length >0 && this.state.viewData.TContainerInternational[0].TContainerLoad)?
                                                      _.map(this.state.viewData.TContainerInternational[index].TContainerLoad,(obj,index)=>{
-                                                          return(<td><p style={{"display" : (Math.floor(obj.TPiInventory.noOfBags/this.state.bagsPerpallet) >0)? "block" : "none" , "float" : "left" , "width" : "25%"}}>{Math.floor(obj.TPiInventory.noOfBags/this.state.bagsPerpallet)}Pallets X {this.state.bagsPerpallet} Bags</p> <p style={{"display" : (obj.TPiInventory.noOfBags/this.state.bagsPerpallet ==0 || obj.TPiInventory.noOfBags % this.state.bagsPerpallet > 0)? "block" : "none" , "float" : "left" , "width" : "25%" ,"marginLeft" : "30px"}}>,1 Pallets X {obj.TPiInventory.noOfBags % this.state.bagsPerpallet} Bags</p></td>)
+                                                          return(<td><p style={{"display" : (Math.floor(obj.TPiInventory.noOfBags/this.state.bagsPerpallet) >0)? "block" : "none" , "float" : "left" , "width" : "25%"}}>{Math.floor(obj.TPiInventory.noOfBags/this.state.bagsPerpallet)}Pallets X {this.state.bagsPerpallet} {unitOfPackaging}</p> <p style={{"display" : (obj.TPiInventory.noOfBags/this.state.bagsPerpallet ==0 || obj.TPiInventory.noOfBags % this.state.bagsPerpallet > 0)? "block" : "none" , "float" : "left" , "width" : "25%" ,"marginLeft" : "30px"}}>1 Pallets X {obj.TPiInventory.noOfBags % this.state.bagsPerpallet} {unitOfPackaging}</p></td>)
 
                                                      })
 

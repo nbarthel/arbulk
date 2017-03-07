@@ -45,7 +45,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 showRailcarDepDate:"",
                 showDaysPresent:"",
                 showRailcarStatus:"",
-              	startDate:'',
+                startDate:'',
                 endDate:''
             }
             this.status
@@ -80,6 +80,9 @@ export default class PackagingInstructionViewForm extends React.Component {
             this.qArray = []
             this.addToQueue = this.addToQueue.bind(this)
             this.headerCheckboxChange = this.headerCheckboxChange.bind(this)
+            this.EndDate = ''
+            this.StartDate = ''
+            this.getdt = this.getdt.bind(this)
         }
     componentWillMount() {
 
@@ -89,7 +92,11 @@ export default class PackagingInstructionViewForm extends React.Component {
              savedViews : response.data
          })
      })
-
+ axios.get(Base_Url+"TContainerLoads").then(response=>{
+   this.setState({
+     contanerLoad : response.data
+   }).bind(this)
+ })
       axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
     this.setState({
         queue_Sequence : response.data
@@ -100,7 +107,9 @@ export default class PackagingInstructionViewForm extends React.Component {
 
  }
         //this.state.queue_Sequence[0].max_mark
-
+getdt(a){
+a.id=="1"?this.startDate = a.tempDate:this.endDate=a.tempDate;
+}
      onTextChange(e){
 
          var idValue = e.target.id
@@ -128,6 +137,26 @@ onClickli(e){
 }
 
 onSearch(e){
+  debugger;
+  var cutofFilter = []
+  if(this.startDate && this.endDate) {
+      // var startDate = moment(this.startDate.format('MM-DD-YYYY')),
+      //     endDate = moment(this.endDate.format('MM-DD-YYYY'));
+      var cutoffDate = []
+      cutoffDate.push(this.startDate)
+      cutoffDate.push(this.endDate)
+
+      var objdate = {}
+      for(var j in cutoffDate){
+          objdate = {"cargoCutoffDate" : cutoffDate[j]}
+          cutofFilter.push(objdate)
+      }
+      Object.defineProperty(this.Where,"CutofFilter",{enumerable:true ,
+          writable: true,
+          configurable: true,
+          value:cutofFilter})
+
+  }
            if(this.Query != undefined){
                 Object.defineProperty(this.Where,"Query",{enumerable:true ,
                     writable: true,
@@ -209,8 +238,8 @@ onSearch(e){
                               "scope":{
                               "include":{
                               "relation":"TShipmentent" ,
-                              "scope":{"include" : "TShipmentInternational"
-                              //"scope":{"where" : {"or" : cutofFilter }}
+                              "scope":{"include" : "TShipmentInternational",
+                              "scope":{"where" : {"or" : cutofFilter }}
                             }}}},
                                 "where":{ "and": [{"or":serachObjLots},{active:1}]}
                             }
@@ -235,8 +264,8 @@ onSearch(e){
                         "scope":{
                         "include":{
                         "relation":"TShipmentent" ,
-                        "scope":{"include" : "TShipmentInternational"
-                        //"scope":{"where" : {"or" : cutofFilter }}
+                        "scope":{"include" : "TShipmentInternational",
+                        "scope":{"where" : {"or" : cutofFilter }}
                       }}}},
                         "where":{active:1}
                         }},
@@ -255,10 +284,11 @@ onSearch(e){
                     $.ajax({
                         url: this.urlSearch,
                         success:function(data){
-
+                          var flag = false;
                             console.log('ajax ',data);
-    						var st = this.startDate,
-                            ed = this.endDate
+                            var st = this.startDate,
+                                ed = this.endDate
+                            debugger
                             if(this.startDate!=undefined&&this.endDate!=undefined){
                               this.setState(
                                   {
@@ -267,6 +297,49 @@ onSearch(e){
                                   }
                               )
                             }
+                            // if(this.startDate!=undefined&&this.endDate!=undefined){
+                            //   debugger
+                            //   for(var i=0;i<data.length;i++){
+                            //     if(data[i].TPackagingInstructionLots.length<=0){
+                            //       data.splice(i,1)
+                            //       i=0
+                            //       continue
+                            //     }
+                            //       for(var k in data[i].TPackagingInstructionLots){
+                            //         if(data[i].TPackagingInstructionLots[k].TShipmentLots.length<=0){
+                            //           data.splice(i,1)
+                            //           i=0
+                            //           break
+                            //           flag = true;
+                            //         }
+                            //         for(var j in data[i].TPackagingInstructionLots[k].TShipmentLots){
+                            //           if(!(data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0] &&
+                            //               new Date(data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0].cargoCutoffDate)>=new Date(this.startDate) &&
+                            //               new Date(data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0].cargoCutoffDate) <= new Date(this.endDate))){
+                            //           data.splice(i,1);
+                            //           i=0
+                            //           flag = true;
+                            //           break;
+                            //         }
+                            //         else if(!data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0] && data[i].TPackagingInstructionLots[k].TShipmentLots[j]){
+                            //           data.splice(i,1);
+                            //           i=0
+                            //           flag = true;
+                            //           break;
+                            //         }
+                            //         if(flag){
+                            //           break;
+                            //         }
+                            //         }
+                            //         if(flag){
+                            //           break;
+                            //         }
+                            //       }
+                            //       flag = false;
+                            //
+                            //   }
+                            // }
+
                             this.setState(
                                 {
                                     viewData : data
@@ -472,22 +545,22 @@ onSearch(e){
                     }
                     }
                     ],
-                  where: {"and":[
-                    {"or":customer},
-                    {"or":company}
-                  ]
-                  }
+                    where: {"and":[
+                      {"or":customer},
+                      {"or":company}
+                    ]
+                    }
                 });
             }
 
             else {
                 this.urlSearch = PIview._buildUrl(base, {
                     include: ["TLocation", "TCompany", "TPackagingInstructionLots"],
-                     where: {"and":[
-                       {"or":customer},
-                       {"or":company}
-                            ]
-                            }
+                    where: {"and":[
+                      {"or":customer},
+                      {"or":company}
+                    ]
+                    }
                 });
             }
 
@@ -634,7 +707,6 @@ onButtonRemove(index,button){
   }
 
   onEdit(){
-
     if(this.piID != null && this.piID != undefined && this.selected == null){
 
              hashHistory.push('/Packaging/enterpackginginst/'+this.piID)
@@ -669,7 +741,7 @@ onButtonRemove(index,button){
 
           status : "QUEUED"
       }
-      if(this.status == "READY" ){
+      if(this.status == "READY" || this.status == "CONFIRMED"){
       if(queueArray && queueArray.length > 0 && qArray!= null){
           queueArray.forEach((id , index)=>{
               axios.put( Base_Url+"TPackagingInstructionLots/"+id , {queue_sequence : option.queue_sequence + parseInt(index) , status : "QUEUED"}).then(function(response){
@@ -963,6 +1035,10 @@ break;
 }
 }
 print(e){
+  if(this.status==undefined || this.status==null){
+    swal("" , "Please Select a single Lot" , "info")
+    return
+  }
   if(this.status == "UNCONFIRMED"){
     swal("" , "The Order is not confirmed yet" , "info")
     return
@@ -975,6 +1051,7 @@ print(e){
         else
         {
             swal("Selection Missing", "Please Select A Lot To View.","error")
+            return
         }
     }
   render() {
@@ -999,7 +1076,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
    <div className="container">
     <div className="row-fluid">
 
-    <FilterComponent key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter}/>
+    <FilterComponent getdt = {this.getdt} startDate = {this.StartDate} endDate = {this.EndDate} key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter}/>
         <div id="filter-grid">
          <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
              <div className="pull-right margin-30-right">
@@ -1104,7 +1181,8 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                         key={this.state.index}
                         filterData = {filterData}
                         id = {this.props.id}
-                        weight={this.state.selectedOption}/>
+                        weight={this.state.selectedOption}
+                        contanerLoad = {this.state.contanerLoad}/>
                         :
                         <ViewDataComponent
                         checkboxChange = {this.checkboxChange}
@@ -1132,7 +1210,8 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                         showDaysPresent = {this.state.showDaysPresent}
                         showRailcarStatus = {this.state.showRailcarStatus}
                         filterData = {filterData}
-                        weight={this.state.selectedOption} />}
+                        weight={this.state.selectedOption}
+                        contanerLoad = {this.state.contanerLoad}/>}
 
                   </div>
 

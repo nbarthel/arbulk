@@ -9,8 +9,8 @@ import _ from 'lodash';
 import  { PropTypes } from 'react';
 import { createDataLoader } from 'react-loopback';
 //import PackagingInstructionViewForm from '../../containers/Packaging/PackagingInstructionView/PackagingInstructionViewForm';
-import HeadBody from './HeadBody';
-import NestedRows from './NestedRows'
+// import HeadBody from './HeadBody';
+// import NestedRows from './NestedRows'
 import request from '../../utils/request';
 import { Base_Url } from '../../constants'
 var moment = require('moment');
@@ -171,39 +171,41 @@ onAscending(e,head){
   switch(switchvalue) {
                        case 'location':
                               sortedData = _.sortBy(this.state.viewData, function(item) {
-                              return item.TLocation.locationName;
+                              return item.TLocation.locationName.toLowerCase();
                               });
                        break;
                        case 'company':
                                  sortedData = _.sortBy(this.state.viewData, function(item) {
-                                 return item.TCompany.name;
+                                 return item.TCompany.name.toLowerCase();
                                  });
                        break;
                        case 'po_number':
                                sortedData = _.sortBy(this.state.viewData, function(item) {
-                                return item.po_number;
+                                 if(item.po_number!=""){
+                                   return item.po_number.toLowerCase();;
+                                 }
                                });
                        break;
                        case 'railcar_number':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
-                                return (item.TPackagingInstructionLots!=undefined?(item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].railcar_number : ''):'');
+                                return (item.TPackagingInstructionLots!=undefined?(item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].railcar_number.toLowerCase() : ''):'');
                               });
                        break;
                        case 'lot_number':
                                sortedData = _.sortBy(this.state.viewData, function(item) {
-                               return (item.TPackagingInstructionLots!=undefined?(item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].lot_number : ''):'');
+                               return (item.TPackagingInstructionLots!=undefined?(item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].lot_number.toLowerCase() : ''):'');
                                });
                        break;
                       case 'Material':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
-                                  return item.material
+                                  return item.material.toLowerCase();
                                 });
                       break;
                       case 'Confmd':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
                                   if(item.TPackagingInstructionLots.length > 0){
                                     if(item.TPackagingInstructionLots[0].status != "UNCONFIRMED"){
-                                      return item.TPackagingInstructionLots[0]
+                                      return item.TPackagingInstructionLots[0].toLowerCase();
                                     }
                                   }
                                 });
@@ -213,7 +215,7 @@ onAscending(e,head){
 
                                   if(item.TPackagingInstructionLots.length > 0){
                                     if(item.TPackagingInstructionLots[0].railcar_arrived_on !=null)
-                                      return item.TPackagingInstructionLots[0]
+                                      return item.TPackagingInstructionLots[0].toLowerCase();
                                 }
                                 });
                       break;
@@ -221,7 +223,7 @@ onAscending(e,head){
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
                                   if(item.TPackagingInstructionLots.length > 0){
                                     if(item.TPackagingInstructionLots[0].status == "SHIPPED"){
-                                      return item.TPackagingInstructionLots[0]
+                                      return item.TPackagingInstructionLots[0].toLowerCase();
                                     }
                                   }
                                 });
@@ -278,7 +280,7 @@ onAscending(e,head){
                       case 'Status':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
                                   if(item.TPackagingInstructionLots.length > 0 ){
-                                  return item.TPackagingInstructionLots[0].status
+                                  return item.TPackagingInstructionLots[0].status.toLowerCase();
                                 }
                                 return 'A'
                                 });
@@ -335,7 +337,7 @@ onAscending(e,head){
                       case 'RailcarStatus':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
                                   if(item.TPackagingInstructionLots.length>0){
-                                  return item.TPackagingInstructionLots[0].railcar_status
+                                  return item.TPackagingInstructionLots[0].railcar_status.toLowerCase();
                                 }
                                 });
                      break;
@@ -407,7 +409,7 @@ render(){
 
       var selectedWeight = this.props.weight;
       var listData =  _.map(this.state.viewData,(view,index)=>{
-
+      if(view.TPackagingInstructionLots.length>0){
       var count = index
       return (
 
@@ -444,7 +446,14 @@ render(){
        {
           _.map(view.TPackagingInstructionLots,(data,index)=>{
             let diff;
-
+            var bagsallocated =0
+            if(this.props.contanerLoad!=undefined){
+              for(var i=0;i<this.props.contanerLoad.length;i++){
+                if(this.props.contanerLoad[i].lotId == data.id){
+                  bagsallocated = bagsallocated+this.props.contanerLoad[i].noOfBags
+                }
+              }
+            }
             var sdate = document.getElementById('startDate').value
             var edate = document.getElementById('endDate').value
             if( (sdate == "" || edate == "") || data.TShipmentLots.length>0 ){
@@ -508,8 +517,8 @@ render(){
                    <td style ={{display : this.props.showRecd}}>{(data.TShipmentLots && data.TShipmentLots.length>0 && data.status!= "SHIPPED") ? "YES" : "NO"}</td>
                    <td style ={{display : this.props.showCutoff}}>{(data.TShipmentLots && data.TShipmentLots.length>0 && data.TShipmentLots[0].TShipmentent && data.TShipmentLots[0].TShipmentent.TShipmentInternational && data.TShipmentLots[0].TShipmentent.TShipmentInternational.length>0 )?moment(data.TShipmentLots[0].TShipmentent.TShipmentInternational[0].cargoCutoffDate).format("MM-DD-YYYY"):'NA'}</td>
                    <td style ={{display : this.props.showWeight}}>{selectedWeight == 'lbs' ? data.weight:(data.weight / 2.20462).toFixed(2)}</td>
-                   <td style ={{display : this.props.showBag}}>{(data.TShipmentLots && data.TShipmentLots.length > 0 )?bagShipped : 'NA'}</td>
-                   <td style ={{display : this.props.showInInvt}}>{(data.inInventory && (data.TShipmentLots && data.TShipmentLots.length>0)) ?(data.inInventory - bagShipped ):data.inInventory }</td>
+                   <td style ={{display : this.props.showBag}}>{bagsallocated>0?bagsallocated : 'NA'}</td>
+                   <td style ={{display : this.props.showInInvt}}>{(data.inInventory && bagsallocated > 0) ?(data.inInventory - bagsallocated ):data.inInventory }</td>
 
                    <td style ={{display : this.props.showStatus}}>{data.status ? data.status : '' }</td>
                    <td style ={{display : this.props.showRailcarArr}}>{data.arrived != null && data.arrived == 1 ? "Yes" : "No"}</td>
@@ -530,7 +539,7 @@ render(){
 
 
            )
-       }
+       }}
   )
  return(
  <Loader loaded={this.state.loaded}>

@@ -10,7 +10,7 @@ class  ShipmentArrivalEntryForm extends React.Component {
                     <div className="row">
                         <form className="form-horizontal">
                             <div className=" col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                
+
                                 <div className="  col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
                                     <fieldset className="scheduler-border sameHeight">
                                         <legend className="scheduler-border">SHIPMENT INFO</legend>
@@ -133,7 +133,7 @@ class  ShipmentArrivalEntryForm extends React.Component {
 
                                             </div>
                                         </div>
-                                        
+
 
                                         <div className=" col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                             <div className=" col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -200,4 +200,3 @@ class  ShipmentArrivalEntryForm extends React.Component {
     }
 }
 export default ShipmentArrivalEntryForm;
-           

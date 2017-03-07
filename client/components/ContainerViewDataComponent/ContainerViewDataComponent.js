@@ -148,17 +148,17 @@ var switchvalue = head;
                             switch(switchvalue) {
                             case 'po_number':
                            sortedData = _.sortBy(this.state.viewData, function(item) {
-                            return item.releaseNumber;
+                            return item.releaseNumber.toLowerCase();
                            });
 
                              break;
                    case 'lot_number':
                      sortedData = _.sortBy(this.state.viewData, function(item) {
                      if(item.TContainerDomestic.length>0){
-                       return item.TContainerDomestic[0].containerNumber
+                       return item.TContainerDomestic[0].containerNumber.toLowerCase()
                      }
                      else if(item.TContainerInternational.length>0){
-                       return item.TContainerInternational[0].containerNumber
+                       return item.TContainerInternational[0].containerNumber.toLowerCase()
                      }
                      });
 
@@ -166,10 +166,10 @@ var switchvalue = head;
                                case 'railcar_number':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
                                   if(item.TShipmentInternational.length>0){
-                                    return item.TShipmentInternational[0].bookingNumber
+                                    return item.TShipmentInternational[0].bookingNumber.toLowerCase()
                                   }
                                   else if(item.TShipmentDomestic.length>0){
-                                    return item.TShipmentDomestic[0].bookingNumber
+                                    return item.TShipmentDomestic[0].bookingNumber.toLowerCase()
                                   }
                                 });
 
@@ -182,23 +182,23 @@ var switchvalue = head;
                       break;
                       case 'location':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
-                                return item.TLocation.locationName;
+                                return item.TLocation.locationName.toLowerCase();
                                 });
 
                       break;
                       case 'company':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
-                                return item.TCompany.name;
+                                return item.TCompany.name.toLowerCase();
                                 });
 
                       break;
                       case 'Trucker':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
                                   if(item.TContainerDomestic.length>0){
-                                    return item.TContainerDomestic[0].TCompany.name
+                                    return item.TContainerDomestic[0].TCompany.name.toLowerCase()
                                   }
                                   else if(item.TContainerInternational.length>0){
-                                    return item.TContainerInternational[0].TCompany.name
+                                    return item.TContainerInternational[0].TCompany.name.toLowerCase()
                                   }
                                   else{
                                     return item
@@ -225,7 +225,7 @@ var switchvalue = head;
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
                                   debugger
                                 if(item.TShipmentInternational.length>0){
-                                  return item.TShipmentInternational[0].TSteamshipLine.name
+                                  return item.TShipmentInternational[0].TSteamshipLine.name.toLowerCase()
                                 }
                                 else if(item.TShipmentDomestic.length>0){
                                   return item
@@ -251,7 +251,7 @@ var switchvalue = head;
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
                                   debugger
                                 if(item.TShipmentInternational.length>0){
-                                  return item.TShipmentInternational[0].TSteamshipLine.name
+                                  return item.TShipmentInternational[0].TSteamshipLine.name.toLowerCase()
                                 }
                                 else if(item.TShipmentDomestic.length>0){
                                   return item
@@ -362,7 +362,7 @@ onClickRow(e){
                                             {
                                                 <th>
                                                 <label className="control control--checkbox">
-                                                    <input type="checkbox" onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
+                                                    <input type="checkbox" onChange={(e)=>{this.props.onCheckboxChange(e,view)}}
                                                            value={view.id} id={view.id}/>
 
                                                     <div className="control__indicator"></div>
@@ -437,7 +437,7 @@ onClickRow(e){
                            <tr className="base_bg clickable" ref="clickable" style={{"backgroundColor": "#e5e5ff"}}>
                                <th>
                                    <label className="control control--checkbox">
-                                       <input type="checkbox" onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
+                                       <input type="checkbox" onChange={(e)=>{this.props.onCheckboxChange(e,view)}}
                                               value={view.id} id={view.id}/>
 
                                        <div className="control__indicator"></div>

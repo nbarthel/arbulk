@@ -125,7 +125,7 @@ export default function createRoutes(store) {
 		}
 	},
 	{
-		path:'/Shipment/shipmentedit/(:id)',
+		path:'/Shipment/shipmentedit/(:id)/(:lotId)',
 		name: <span>Shipment<i className="fa fa-angle-double-right"/>Edit Shipment</span>,
 		getComponent(nextState,cb){
 			System.import('./containers/Shipment/ShipmentEdit/ShipmentEditPage')
@@ -258,6 +258,25 @@ export default function createRoutes(store) {
 			.then(loadModule(cb))
 			.catch(errorLoading)
 		}
+	},
+	{
+		path: '/Admin/viewMaterial',
+		name: <span>Admin<i className="fa fa-angle-double-right"/>View Material</span>,
+		getComponent(nextState, cb){
+			System.import('./containers/Admin/UpdateMaterial/ViewPackagingMaterial')
+			.then(loadModule(cb))
+			.catch(errorLoading)
+		}
+	},
+	{
+		path: '/Admin/UpdateMaterial/(:id)',
+		name: <span>Packaging<i className="fa fa-angle-double-right"/>Update Material</span>,
+		getComponent(nextState, cb){
+			System.import('./containers/Admin/UpdateMaterial/UpdateMaterialPage')
+			.then(loadModule(cb))
+			.catch(errorLoading)
+		}
+
 	},
 
 	{

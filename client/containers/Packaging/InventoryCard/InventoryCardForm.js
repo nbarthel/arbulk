@@ -9,6 +9,7 @@ import { createDataLoader } from 'react-loopback'
 import { hashHistory } from 'react-router'
 import axios from 'axios'
 import { Base_Url } from '../../../constants'
+
 class InventoryCardForm extends React.Component{
 constructor(){
 	super();
@@ -33,19 +34,17 @@ constructor(){
 	this.piID = null
 	this.lotIdArray = []
 	this.flagforceUpdate = false
+	this.flagStampconfirm = false
 	//this.onCancel = this.onCancel.bind(this)
 	//this.onSaveChange = this.onSaveChange.bind(this)
 	}
 	onConfirm(e){
-debugger;
 		 if(this.status == "UNCONFIRMED"){
 				hashHistory.push('/Packaging/confirmpckginst/'+this.id)
            }
-
                  else{
                   swal("Error","Please select unconfirmed order","error")
                 }
-
 	}
 	onEdit(e){
 
@@ -67,34 +66,56 @@ debugger;
 		if(flag){
 			return false;
 		}
-		return (confirm("Are you sure you Want to delete")==true?true:false)
-
-	}
-	onDelete(e){
-		if(this.checkConfirmation()){
-
+var tempThis = this
+		swal({
+			title:"Are you sure?",
+			text:"Want to Delete Order",
+			type:"warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+  		confirmButtonText: "Yes, delete it!",
+  		closeOnConfirm: false
+		},
+		function(isConfirm){
+			if(isConfirm){
 				var PIview = createDataLoader(InventoryCardForm, {
             queries: [{
                 endpoint: 'TPackagingInstructionLots'
             }]
         });
-				  var base = Base_Url+"TPackagingInstructionLots/setInActive"
-					var obj = {id:this.id}
-					debugger
-					        $.ajax({
-										type:"POST",
-					            url: base,
-											data:obj,
-					            success:function(data){
-										hashHistory.push('/Packaging/packaginginstview/')
-					            }.bind(this)
+				var base = Base_Url+"TPackagingInstructionLots/setInActive"
+				var obj = {id:tempThis.id}
+				$.ajax({
+					type:"POST",
+						url: base,
+						data:obj,
+						success:function(data){
+						swal({
+							title:"Info",
+							text:"Deleted Successfully",
+							type:"info"
+						},function(){
+								hashHistory.push('/Packaging/packaginginstview/')
+						})
 
-					        })
+						}
+				})
+
+			}
+			else{
+				return false;
+			}
+		}
+	)
+	}
+	onDelete(e){
+		if(this.checkConfirmation()){
+
 		}
 	}
 
 	print(e){
-		debugger;
+
 	  if(this.status == "UNCONFIRMED"){
 	    swal("" , "The Order is not confirmed yet" , "info")
 	    return
@@ -111,7 +132,6 @@ debugger;
 	    }
 
 componentWillMount() {
-
         var PIview = createDataLoader(InventoryCardForm, {
             queries: [{
                 endpoint: 'TPackagingInstructionLots',
@@ -198,40 +218,37 @@ componentWillMount() {
 }
 
     onCheckBoxChange(e){
-			debugger;
-			//console.log(this.checked)
-
 			if(e.target.checked){
 				this.checkedPI = true
 				localStorage.setItem('packagingFlag' , 'true')
-				console.log(this.checked)
 			}
 			else if(!e.target.checked){
 				this.checkedPI = false
 				localStorage.setItem('packagingFlag' , 'false')
-				console.log(this.checked)
 			}
-			//this.forceUpdate()
+
 		}
 	onSaveChange(e){
-		console.log("I was Called")
 			if (this.checked){
-				//swal("Saved","Data Saved",'success')
-				// this.setState({
-				// 	key: this.state.key + 1
-				// })
 			}
 			else {
 				swal("Failed","Please Check Packaging Complete","error")
 			}
 
 		}
-		/*onSave(e){
-			console.log("IWASCALLED")
-		}*/
 
-    onCheck(e,status,when){
-			debugger;
+    onCheck(e,status,when,stampConfirmed,NumberOfRows){
+			if(this.lotIdArray.length>0){
+				for(var i=0;i<this.lotIdArray.length; i++){
+					this.lotIdArray[i]=parseInt(this.lotIdArray[i])
+				}
+			}
+			if(NumberOfRows && when ==1){
+					if(stampConfirmed==1){
+						localStorage.setItem('stamp' , true)
+						document.getElementById("rowstamp").checked = true;
+					}
+			}
 			if(e!=null){
 			if(!this.flagforceUpdate){
 			if(when==1 ){
@@ -240,8 +257,8 @@ componentWillMount() {
 				e.target.id = e.id
 				e.target.checked = true
 				this.id = e.target.id
-				if(this.lotIdArray.indexOf(e.target.id)==-1){
-				this.lotIdArray.push(e.target.id)
+				if(this.lotIdArray.indexOf(parseInt(e.target.id))==-1){
+				this.lotIdArray.push(parseInt(e.target.id))
 			}
 			}
 		}
@@ -249,8 +266,8 @@ componentWillMount() {
 	if(e.target.checked && when ==0){
 	this.id = e.target.id
 	console.log(">>>>>>>>>>>>>>>>>>",this.id)
-	if(this.lotIdArray.indexOf(e.target.id)==-1){
-	this.lotIdArray.push(e.target.id)
+	if(this.lotIdArray.indexOf(parseInt(e.target.id))==-1){
+	this.lotIdArray.push(parseInt(e.target.id))
 }
 }
 	else if(!e.target.checked && when ==0){
@@ -258,7 +275,7 @@ componentWillMount() {
 	console.log(">>>>>>>>>>>>>>>>",this.id)
 	var len = this.lotIdArray.length
 	for(var i =0;i<len;i++){
-		var index = this.lotIdArray.indexOf(e.target.id)
+		var index = this.lotIdArray.indexOf(parseInt(e.target.id))
 		if(index!=-1){
 			this.lotIdArray.splice(index,1)
 		}
@@ -282,32 +299,23 @@ if(when==0 ){
 
 		let id = this.props.cId
 		var stamp ;
+		var tempThis = this
 		if(e.target.checked) {
 			 stamp = true
 			if(localStorage.getItem('stamp')){
 				localStorage.removeItem('stamp')
 			}
 			localStorage.setItem('stamp' , true)
+			if(!tempThis.flagStampconfirm){
 			axios.put( Base_Url+"TPackagingInstructionLots/"+id , {"stamp_confirmed" : 1}).then(function(response){
-
+					tempThis.flagStampconfirm = true
+					tempThis.forceUpdate()
 			})
-
+}
 		}
-		//else if(!e.target.checked){
-		//	 stamp =false
-		//	if(localStorage.getItem('stamp')){
-		//		localStorage.removeItem('stamp')
-		//	}
-		//	localStorage.setItem('stamp' , false)
-			//axios.put( Base_Url+"TPackagingInstructionLots/"+id , {"stamp_confirmed" : 0}).then(function(response){
-            //
-			//})
-
-		//}
-
-
-
-		this.forceUpdate()
+		else{
+			document.getElementById('rowstamp').checked = 0
+		}
 	}
 
 	render(){
@@ -321,6 +329,7 @@ if(when==0 ){
 		console.log("OOOOOOOO_____OOOOOOOOO",this.props.viewData)
 		console.log("sssfsdsdsadasdas",this.state.viewInventoryCardData)
 		console.log(">>>>>>>>>>>>>>>>>>>>>...",this.state.currentInventory)
+		debugger
 		return(
 
 
@@ -330,7 +339,7 @@ if(when==0 ){
 		<div className="row pddn-20-top">
 			<div className="col-lg-12">
 
-		<InventoryTable id = {this.props.id} lotId = {this.props.cId} onCheck = {this.onCheck} viewData = {this.props.viewData} />
+		<InventoryTable id = {this.props.id} lotId = {this.props.cId} onCheck = {this.onCheck} viewData = {this.props.viewData} containerLoadData = {this.props.containerLoadData}/>
 
 	</div>
 		</div>
@@ -342,7 +351,11 @@ if(when==0 ){
 			<div className=" col-lg-4 col-md-4 col-sm-6 col-xs-12">
 				<fieldset className="scheduler-border">
 					<legend className="scheduler-border">PACKAGING Info </legend>
-					<div className="col-lg-5 col-sm-5 col-xs-5">Bag Type</div>
+					<div className="col-lg-5 col-sm-5 col-xs-5">Unit of Packaging</div>
+					<div  className="col-lg-2 col-sm-2 col-xs-2 ">:</div>
+					<div className="col-lg-5 col-sm-5 col-xs-5"><b>{this.props.viewData ? (this.props.viewData[0].TPackagingType ? this.props.viewData[0].TPackagingType.packagingType : '') : ''}</b></div>
+
+					<div className="col-lg-5 col-sm-5 col-xs-5">Type of Packaging</div>
 					<div  className="col-lg-2 col-sm-2 col-xs-2 ">:</div>
 					<div className="col-lg-5 col-sm-5 col-xs-5"><b>{this.props.viewData ? (this.props.viewData[0].TPackagingMaterial ? this.props.viewData[0].TPackagingMaterial.packagingName : '') : ''}</b></div>
 
@@ -424,14 +437,14 @@ if(when==0 ){
 	<div >
 	<div className="row pddn-40-top">
 
-	 <CurrentInventory key={this.state.index} length = {this.length}  onCancel = {this.onCancel} lid={this.props.lid} id = {this.props.id} lID={this.props.cId} checked = {this.checked} lotId = {this.id}  onCheckBoxChange = {this.onCheckBoxChange} onSaveChange = {this.onSaveChange} lots = {this.props.lots} lotIdArray = {this.lotIdArray}/>
-	<InventoryHistory pID ={this.props.id}/>
+	 <CurrentInventory viewData = {this.props.viewData} key={this.state.index} length = {this.length}  onCancel = {this.onCancel} lid={this.props.lid} id = {this.props.id} lID={this.props.cId} checked = {this.checked} lotId = {this.id}  onCheckBoxChange = {this.onCheckBoxChange} onSaveChange = {this.onSaveChange} lots = {this.props.lots} lotIdArray = {this.lotIdArray}/>
+	<InventoryHistory pID ={this.props.id} lotIdArray = {this.lotIdArray}/>
 
    </div>
 	<div className="row pddn-20-top">
 
 	 <InventoryLocationHistory key={this.state.index} lid={this.props.lid} id = {this.props.id} lID={this.props.cId!=null||this.props.cId!=""||this.props.cId!="null"?this.lotIdArray[0]:this.props.cId} checked = {this.checked} lotId = {this.id}  lotIdArray={this.lotIdArray}/>
-	 <PendingShipment pID ={this.props.id} />
+	 <PendingShipment pID ={this.props.id} lotIdArray={this.lotIdArray} />
 
 	</div>
 

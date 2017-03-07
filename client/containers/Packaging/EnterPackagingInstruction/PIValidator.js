@@ -24,10 +24,9 @@ debugger
 	if (Validator.isNull(data.bag_id)){
 		errors.bag_id = "Type field is required"
 	}
-	if(data.bag_id == '1'){
-	if (Validator.isNull(data.packaging_material_id)){
+
+	if (Validator.isNull(data.packaging_material_id.toString())){
 		errors.packaging_material_id = "Type field is required"
-	}
 	}
 	if (Validator.isNull(data.pallet_type_id)){
 		errors.pallet_type_id = "Type field is required"
@@ -41,7 +40,7 @@ debugger
 	if(Validator.isNull(data.custom_label)){
 		errors.custome_label = "Custom label is required"
 	}
-	
+
 	return {
 		errors,
 		isValid: isEmpty(errors)

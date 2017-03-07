@@ -32,14 +32,14 @@ class ContainerDetailsPage  extends React.Component{
         if(this.type == 1){
         var base = "TContainerDomestics" + '/' + this.containerId
             this.url = CDView._buildUrl(base,{
-                "include": {"relation":"TShipmentent" ,"scope":{"include" :["TCompany" ,{"relation" : "TShipmentDomestic" , "scope" : {"include" : "TPaymentType"}},"TShipmentAddress", "TLocation",{"relation" : "TShipmentLots" ,"scope":{"include" : ["TPackagingInstructionLots" ,{"relation":"TPackagingInstructions" , "scope":{"include":["TOrigin","TPalletType","TWrapType","TPackagingType"]}}]} }]}}
+                "include": {"relation":"TShipmentent" ,"scope":{"include" :["TCompany" ,{"relation" : "TShipmentDomestic" , "scope" : {"include" : "TPaymentType"}},"TShipmentAddress", "TLocation",{"relation" : "TShipmentLots" ,"scope":{"include" : ["TPackagingInstructionLots" ,{"relation":"TPackagingInstructions" , "scope":{"include":["TOrigin","TPalletType","TWrapType","TPackagingType","TPackagingMaterial"]}}]} }]}}
             })
             console.log(this.url)
         }
         else if(this.type == 0){
             var base = "TContainerInternationals" +'/'+this.containerId
             this.url = CDView._buildUrl(base,{
-            "include":{"relation":"TShipmentent" ,"scope":{"include" :["TCompany" ,{"relation":"TShipmentInternational" , "scope":{"include" : ["TContainerType","TSteamshipLine"]}}, "TLocation",{"relation" : "TShipmentLots" ,"scope":{"include" : ["TPackagingInstructionLots" ,{"relation":"TPackagingInstructions" , "scope":{"include":["TOrigin","TPalletType","TWrapType","TPackagingType"]}}]} }]}}
+            "include":{"relation":"TShipmentent" ,"scope":{"include" :["TCompany" ,{"relation":"TShipmentInternational" , "scope":{"include" : ["TContainerType","TSteamshipLine"]}}, "TLocation",{"relation" : "TShipmentLots" ,"scope":{"include" : ["TPackagingInstructionLots" ,{"relation":"TPackagingInstructions" , "scope":{"include":["TOrigin","TPalletType","TWrapType","TPackagingType","TPackagingMaterial"]}}]} }]}}
             })
             console.log(this.url)
         }

@@ -7,6 +7,7 @@ export default class LotInformation extends React.Component {
     this.state = { }
     this.inInventoryBags = 0
     this.lotNumber
+    this.GetTotalbags = this.GetTotalbags.bind(this)
   }
   componentWillReceiveProps(nextProps) {
     console.log(nextProps)
@@ -41,12 +42,46 @@ export default class LotInformation extends React.Component {
            this.forceUpdate()
       })
   }
+  GetTotalbags(event,next)
+  {
+    var bags;
+    var totalAllocatedbags=0;
+    var MIView = createDataLoader(LotInformation, {
+                queries: [{
+                    endpoint: 'TShipmentLots'
+                }]
+            });
+  var base = 'TShipmentLots';
+    var pLotUrl = MIView._buildUrl(base, {
+
+        "where": {"piLotsId":  event.target.value }
+     } );
+     console.log(pLotUrl)
+    axios.get(pLotUrl).then(function(response){
+      bags=response.data;
+        for(var i =0;i<bags.length;i++)
+        {
+          totalAllocatedbags += bags[i].noOfBags;
+        }
+          return next({totalBags:totalAllocatedbags});
+
+    })
+  }
   lotChange(e){
-    let selectedValue = e.target.selectedIndex - 1
-    this.inInventoryBags = this.state.propLotNum[selectedValue].inInventory
-    this.forceUpdate()
-    this.props.comPo.lot_id = e.target.value
-      this.props.comPo.inInventorybags = this.state.propLotNum[selectedValue].inInventory
+    let selectedValue1 = e.target.selectedIndex - 1
+    let value = e.target.value
+    var obj = this;
+    this.GetTotalbags(e,function(values){
+      var bags=values;
+      let selectedValue = selectedValue1
+      obj.inInventoryBags = obj.state.propLotNum[selectedValue].inInventory
+      obj.props.comPo.lot_id = value
+      obj.props.comPo.inInventorybags = obj.state.propLotNum[selectedValue].inInventory - bags['totalBags']
+      obj.inInventoryBags = obj.state.propLotNum[selectedValue].inInventory - bags['totalBags']
+      obj.forceUpdate()
+
+  });
+
   }
     render(){
        return(

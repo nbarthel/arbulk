@@ -11,6 +11,9 @@ import FilterComponent from '../../../components/FilterComponent';
 import FilterButton from '../../../components/FilterComponent/FilterButton';
 import SweetAlert from 'sweetalert-react';
 import '../../../public/stylesheets/sweetalert.css'
+import './js/tableHeadFixer.js'
+import './js/jquery.dataTables.min.js'
+import '../../../public/stylesheets/style.css'
 import { hashHistory } from 'react-router'
 export default class RailcarArrivalEntryForm extends React.Component {
 	 constructor(props){
@@ -410,7 +413,7 @@ onClickli(e){
 
 
 	updateCartArrival(){
-	//debugger;
+	//zdebugger;
       if(this.cartArray.length < 1 && (this.state.startDate=null || this.state.startDate=== undefined || this.state.startDate=== '' || this.state.startDate=== false)){
          swal('Info' , 'Please select arrival Date and or row' , 'info')
          return
@@ -490,7 +493,15 @@ else{
 
 }
 
+componentDidMount() {
+  $(function () {
+    setTimeout(function(){
+      $("#tableRailCarArrival").tableHeadFixer({'head' : true})
 
+  }, 2000);
+  });
+
+}
 
 onChnage(e){
 
@@ -560,7 +571,7 @@ debugger
 							<td>{view.TPackagingInstructions.TCompany? view.TPackagingInstructions.TCompany.name : ''}</td>
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.po_number : ''}</td>
 							<td>{view.railcar_number ? view.railcar_number : ''}</td>
-							<td>{view.weight?(this.state.selectedOption=='lbs'?view.weight:(view.weight/2.54).toFixed(2)):''}</td>
+							<td>{view.weight?(this.state.selectedOption=='lbs'?view.weight:(view.weight/2.20).toFixed(2)):''}</td>
 							<td>{view.lot_number ? view.lot_number: ''}</td>
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.material : ''}</td>
 							<td> {view.status == "UNCONFIRMED" ? "NO" : "YES"}</td>
@@ -625,11 +636,10 @@ debugger
 			<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 "><hr/></div>
 
 			<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-				<div className="table-responsive ">
-					<table className="table table-striped">
-						<thead className="base_bg">
-						  <tr >
-
+				<div className="table-responsive view_table  mega" style={{"max-height":"550","overflow-y":"scroll"}}>
+					<table id="tableRailCarArrival" className="table table-expandable" cellSpacing="0">
+						<thead id="headerRailCarArrival" className="table_head header-fixed header red">
+						  <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
 							<th>Customer</th>
 							<th>PO# </th>
 							<th>Railcar# </th>
@@ -646,7 +656,7 @@ debugger
 							</th>
 						</tr>
 						</thead>
-						<tbody>
+						<tbody >
 							{fiterData != undefined ? railCarFilterData :  railcartData}
 						</tbody>
 					</table>

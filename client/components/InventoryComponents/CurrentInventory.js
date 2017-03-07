@@ -53,17 +53,28 @@ class CurrentInventory extends Component {
 	this.isSplitPresent = false
 	this.deletePostArray = [ ]
 	this.lotIdArray = []
+	this.tempWeight = 0
+	this.tempTotalBags = 0
+	this.isBag = true;
 }
 
 
 componentWillReceiveProps(nextProps) {
-	debugger
+
    	var stamp = this.props.stamp
     this.stamp = stamp
    	let id = this.props.lID
    	let lotId = nextProps.lotId
 		this.lotIdArray = nextProps.lotIdArray
 
+		for(var i=0;i<this.lotIdArray.length; i++){
+			if(this.lotIdArray[i]=="null" || this.lotIdArray[i]==null){
+				this.lotIdArray.splice(i,1)
+			}
+		}
+		for(var i=0;i<this.lotIdArray.length; i++){
+			this.lotIdArray[i]=parseInt(this.lotIdArray[i])
+		}
    	var PIview = createDataLoader(InventoryHistory, {
             queries: [{
                 endpoint: 'TPiInventories',
@@ -73,20 +84,21 @@ componentWillReceiveProps(nextProps) {
 
             }]
         });
-//"include": {"relation": "classes", "scope": {"include": ["teachers","students"]}}
+
 	      var base1 = 'TPackagingInstructionLots';
           this.urlnew = PIview._buildUrl(base1, {
-           include: {"relation": "TPiInventory", "scope": {"include": ["TInventoryLocation"]}},
+           include: {"relation": "TPiInventory",
+					 "scope": {"include": ["TInventoryLocation"],
+				 						 "where":{"logs":0}}
+									 },
 					 where:{"id":{"inq":this.lotIdArray}}
-           //include : ['TPiInventory',{"relation":'TPiInventory',"scope":{"include":["TInventoryLocation"]}}]
-        });
-           	console.log("new URl value>>>>>> bhiya jara dekh ke",this.urlnew)
 
+        });
 
            	 $.ajax({
             url: this.urlnew,
             success:function(data){
-							debugger
+
 							var tempData=[]
 							for(var i =0;i<data.length;i++){
 								for(var j=0;j<data[i].TPiInventory.length;j++){
@@ -99,7 +111,7 @@ componentWillReceiveProps(nextProps) {
               	if(data.stamp_confirmed){
                      document.getElementById('rowstamp').checked = true
 				}
-              //	console.log("lengthandindexandarr",length,index,arr)
+
                 this.setState({
                 	currentInventory : data[0],
                 	rows : tempData
@@ -111,7 +123,12 @@ componentWillReceiveProps(nextProps) {
                 console.log("OrignalTable",this.orignalTble)
                }.bind(this)
 
+
         })
+
+				if(this.props.viewData && this.props.viewData[0].bag_id!=1){
+					this.isBag = false;
+				}
 }
 	onEdit(index){
 		this.index = index
@@ -171,19 +188,31 @@ else{
 }
 
 		onClick(){
-			debugger;
+
 			if(this.lotIdArray.length > 1 ){
 				swal("Please Select a Single Lot")
 				return
 			}
+			if(!document.getElementById('rowstamp').checked){
+				swal("","The lot order is not stamped ","info")
+				return;
+			}
 			var stamp = localStorage.getItem('stamp')
-			localStorage.removeItem('stamp')
-     		if(this.props.lotId){
+			if(stamp == null){
+				if(document.getElementById('rowstamp').checked==1){
+					localStorage.setItem('stamp' , true)
+					stamp = localStorage.getItem('stamp')
+				}
+			}
+     		if(this.props.lotId || this.lotIdArray.length>0){
 			if(this.state.currentInventory.status == "UNCONFIRMED" || this.state.currentInventory.status == "CONFIRMED" || this.state.currentInventory.status == "READY"){
 				swal("","The lot order cannot be edited","info")
 				return
 			}
-
+			if(this.PILots[0].railcar_status=="INTRANSIT"){
+				swal("","Railcar has not been arrived can't edit inventory","info")
+				return
+			}
 			if(stamp == null){
 				if(!this.state.currentInventory.stamp_confirmed){
 					swal("","The lot order is not stamped ","info")
@@ -244,7 +273,7 @@ else{
 
 		    }
 		    else if(this.delete){
-		    	debugger
+
 		    	this.setState({
 		    		rows : _.cloneDeep(this.orignalTble)
 		    	})
@@ -273,28 +302,31 @@ else{
 			}
 
 	handleInputChange(e){
-debugger;
+		let avgweight = 0
+		for(var i=0;i<this.props.viewData.length;i++){
+			if(parseInt(this.lotIdArray[0])==parseInt(this.props.viewData[i].TPackagingInstructionLots[0].id)){
+				avgweight = this.props.viewData[i].TPackagingMaterial.avarageMaterialWeight
+			}
+		}
 				if(this.index != undefined){
 				this.selectedRow[e.target.id] =  e.target.value
 				if(e.target.id == "noOfBags"){
 					let val = e.target.value
-				//	debugger;
-					//this.addrow.weight = val * 24.99
+
 				 this.setState({
-					 weightBox : val * 25
+					 weightBox : val * avgweight
 				 })
 				}
 				console.log(this.addRow)
 				}
 				else{
-
 					this.addRow[e.target.id] = e.target.value
 					if(e.target.id == "noOfBags"){
 						let val = e.target.value
-					//	debugger;
+					//	 ;
 						//this.addrow.weight = val * 24.99
            this.setState({
-						 weightBox : val * 25
+						 weightBox : val * avgweight
 					 })
 					}
 					console.log(this.addRow)
@@ -317,7 +349,7 @@ debugger;
 				}
 			}
 		onAdd(){
-debugger;
+ ;
 var calcWeight = this.state.weightBox
  if(this.state.weightBox){
 	 this.state.weightBox = ''
@@ -327,7 +359,7 @@ var calcWeight = this.state.weightBox
 				this.isPresent = false
 				console.log("BEFORE EDIT ADD",this.orignalTble)
 				this.state.rows[this.index] = this.selectedRow
-				debugger
+
 				if(this.refs.noOfBags.value != "" && this.refs.locationName.value != "" && this.refs.weight.value != ""){
 				if(this.refs.noOfBags.value != "0" && this.refs.weight != "0"){
 
@@ -367,7 +399,7 @@ var calcWeight = this.state.weightBox
 			}
 		}
 			else if(this.splRow) {
-			debugger
+
 			this.isSplitPresent = false
 			this.refs.weight.value = calcWeight
 			this.selectedRow.weight = calcWeight
@@ -392,7 +424,7 @@ var calcWeight = this.state.weightBox
 				let InvObj1 = _.omit(this.selectedRow,'TInventoryLocation')
 				this.postObj1.Tinventory = InvObj1
 				this.postObj1.Tpinventory = InvtLocation1
-				debugger
+
 				if(this.splitPostArray.length != 0){
 					for(let k = 0; k < this.splitPostArray.length; k++){
 						if(this.splitPostArray[k].Tinventory.id == this.postObj.Tinventory.id && this.splitPostArray[k].Tpinventory.locationName == this.postObj.Tpinventory.locationName){
@@ -443,7 +475,7 @@ var calcWeight = this.state.weightBox
 		}
 
 	}
-	else {//debugger
+	else {//
 		 this.rowAdd = true
 
 		//  if(this.refs.noOfBags.value != "" &&	this.refs.locationName.value != "" && this.refs.weight.value != "")
@@ -489,7 +521,7 @@ var calcWeight = this.state.weightBox
 			//console.log("qwertyqwertyqwerty",this.selectedRow)
 		}*/
 		onDelete(index){
-			debugger
+
 				if(this.prevTble == undefined){
 				this.prevTble = _.cloneDeep(this.state.rows)
 			}
@@ -499,8 +531,14 @@ var calcWeight = this.state.weightBox
 			let InvtLocation = _.cloneDeep(this.deletedRow.TInventoryLocation)
 				let InvObj = _.omit(this.state.rows[index],'TInventoryLocation')
 				this.deleteArray.splice(0,0,this.postObj)
+				// this.actualDeleteObj.Tpinventory = _.cloneDeep(InvtLocation.id)
+				// this.actualDeleteObj.Tinventory = _.cloneDeep(InvObj.id)
 				this.actualDeleteObj.Tpinventory = _.cloneDeep(InvtLocation.id)
 				this.actualDeleteObj.Tinventory = _.cloneDeep(InvObj.id)
+				this.actualDeleteObj.piLotId = _.cloneDeep(InvObj.piLotId)
+				this.actualDeleteObj.weight = _.cloneDeep(InvObj.weight)
+				this.actualDeleteObj.noOfBags = _.cloneDeep(InvObj.noOfBags)
+				this.actualDeleteObj.inventoryLocationId = _.cloneDeep(InvObj.inventoryLocationId)
 				console.log("THe DELETE OBJECT",this.actualDeleteObj)
 				if(!this.deletedRow.added){
 				this.deletePostArray.splice(0,0,this.actualDeleteObj)
@@ -529,12 +567,13 @@ var calcWeight = this.state.weightBox
 		this.index = undefined
 	}
 		calculateWeight(){
-			//debugger
+			debugger
 			this.totalBags = 0
 			this.totalWeight = 0
 			this.totalRailcarWeight = 0
 			//console.log("AllData",this.allData)
 			for(let i=0;i<this.state.rows.length;i++){
+
 				this.totalBags = parseInt(this.totalBags)+parseInt(this.state.rows[i].noOfBags)
    				this.totalWeight = parseInt(this.totalWeight)+parseInt(this.state.rows[i].weight)
    				console.log("BAGSBAGSBAGS",this.totalBags)
@@ -554,19 +593,30 @@ var calcWeight = this.state.weightBox
 	}
 
 		onSaveChange(e){
-      debugger;
+			debugger
+
 			var stamp = localStorage.getItem('stamp')
 	    this.CID = this.props.lID == "null" ? this.props.lotId : this.props.lID
 			var packStatus = localStorage.getItem('packagingFlag') ? localStorage.getItem('packagingFlag')  :'false' ;
 			if(this.addPostArray.length == 0 && this.editPostArray.length == 0 && this.splitAddPostArray.length == 0 && this.splitPostArray.length == 0 && this.addPostArray.length == 0 && this.deletePostArray.length == 0){
-
+				var tempThis = this
 				if(packStatus == 'true'){
 						axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"In Inventory"})
-						swal("Edited","Data Has Been Successfully Edited","success")
-						localStorage.removeItem('packagingFlag')
-						window.location.reload()
-						this.forceUpdate()
-						return
+						swal({
+							title:"Edited",
+							text:"Data Has Been Successfully Edited",
+							type:"info"},
+							function(isConfirm){
+
+								if(isConfirm){
+								localStorage.removeItem('packagingFlag')
+								window.location.reload()
+								tempThis.forceUpdate()
+								tempThis.forceUpdate()
+								return
+							}
+							}
+					)
 					}
 
 						swal("","Please press add before save","info")
@@ -594,8 +644,6 @@ var calcWeight = this.state.weightBox
 				url:urledit,
 				data: data,
 				success:function(){
-					window.location.reload();
-					this.forceUpdate()
 				},
 				Error:function(err){
 					swal("Error","Error Occured. Please Try Again","error")
@@ -603,7 +651,7 @@ var calcWeight = this.state.weightBox
 			})
 				})
 			if(stamp == "true"){
-				alert("www" , stamp)
+
 				axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{stamp_confirmed:1})
 				//swal("Edited","Data Has Been Successfully Edited","success")
 				//localStorage.removeItem('packagingFlag')
@@ -611,16 +659,9 @@ var calcWeight = this.state.weightBox
 			if(packStatus == 'true' ){
 					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"In Inventory",inInventory:this.totalBags})
 					swal("Edited","Data Has Been Successfully Edited","success")
-					localStorage.removeItem('packagingFlag')
-					window.location.reload();
-					this.forceUpdate()
 				}else {
 					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"PARTIALLYPACKED",inInventory:this.totalBags})
-					swal("Edited","Data Has Been Successfully Edited","success")
-					window.location.reload();
-					this.forceUpdate()
 				}
-			this.forceUpdate()
 			this.edit = false
 			this.editPostArray = [ ]
 			this.postObj = { }
@@ -642,10 +683,10 @@ var calcWeight = this.state.weightBox
 				if(this.state.notes != null)
 				{
 				for(var j in splitarr1){
+					if(!isNaN(j)){
 						 splitarr1[j].Tinventory["notes"] = this.state.notes
-						  splitarr2[j].Tinventory["notes"] = this.state.notes
-
-
+						 splitarr2[j].Tinventory["notes"] = this.state.notes
+						}
 							 }
 						 }
 				splitarr1.forEach(function(data){
@@ -654,23 +695,17 @@ var calcWeight = this.state.weightBox
 				url:spliturl1,
 				data: data,
 				success:function(){
-					window.location.reload();
-					this.forceUpdate()
 				},
 			})
 				})
 			this.url1 = Base_Url+"TInventoryLocations/addbagweight"
 			let spliturl2 = Base_Url+"TInventoryLocations/addbagweight"
-
-
 			splitarr2.forEach(function(data){
 				$.ajax({
 				type:"POST",
 				url: spliturl2,
 				data: data,
 				success:function(){
-					window.location.reload();
-					this.forceUpdate()
 				},
 				Error:function(err){
 					swal("Error","Error Occured. Please Try Again","error")
@@ -679,7 +714,7 @@ var calcWeight = this.state.weightBox
 			})
 
 				if(stamp == "true"){
-					alert("www" , stamp)
+
 					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{stamp_confirmed:1})
 					//swal("Edited","Data Has Been Successfully Edited","success")
 					//localStorage.removeItem('packagingFlag')
@@ -688,21 +723,16 @@ var calcWeight = this.state.weightBox
 			if(packStatus == 'true'){
 					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"In Inventory",inInventory:this.totalBags})
 					swal("Edited","Data Has Been Successfully Edited","success")
-					localStorage.removeItem('packagingFlag')
-					this.forceUpdate()
 				}else {
 					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"PARTIALLYPACKED",inInventory:this.totalBags})
 					swal("Edited","Data Has Been Successfully Edited","success")
-					this.forceUpdate()
 				}
-			this.forceUpdate()
 			this.splRow = false
 			this.postObj = { }
 			this.splitPostArray = [ ]
 			this.splitAddPostArray = [ ]
 			console.log(this.splRow)
 			console.log("empty",this.postObj)
-
 			this.setState({
 					hideEdit : 'block',
 					showEdit : 'none',
@@ -711,8 +741,6 @@ var calcWeight = this.state.weightBox
 
 			}
 			else if(!this.edit && !this.splRow && this.addPostArray.length != 0){
-
-
 				this.CID = this.props.lID == "null" ? this.props.lotId : this.props.lID
 				this.checked = this.props.checked
 				console.log("ADDPOSTARRAY",this.addPostArray)
@@ -720,8 +748,9 @@ var calcWeight = this.state.weightBox
 				if(this.state.notes != null)
 				{
 				for(var j in postArray){
+					if(!isNaN(j)){
              postArray[j].Tinventory["notes"]= this.state.notes
-
+					 }
                }
 						 }
 			this.url = Base_Url+"TInventoryLocations/addbagweight"
@@ -732,8 +761,6 @@ var calcWeight = this.state.weightBox
 				url: urladd,
 				data: data,
 				success:function(){
-					window.location.reload();
-					this.forceUpdate()
 				},
 				Error:function(err){
 					swal("Error","Error Occured. Please Try Again","error")
@@ -741,28 +768,20 @@ var calcWeight = this.state.weightBox
 			})
 			})
 				if(stamp == "true"){
-					alert("www" , stamp)
+
 					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{stamp_confirmed:1})
 					//swal("Edited","Data Has Been Successfully Edited","success")
 					//localStorage.removeItem('packagingFlag')
 				}
 			if(packStatus == 'true'){
 					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"In Inventory",inInventory:this.totalBags}).then((response)=>{
-						swal("Edited","Data Has Been Successfully Edited","success")
-						localStorage.removeItem('packagingFlag')
-						window.location.reload()
-						this.forceUpdate()
 					})
 
 				}else {
 					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"PARTIALLYPACKED",inInventory : this.totalBags}).then((response)=>{
-						swal("Edited","Data Has Been Successfully Edited","success")
-						window.location.reload()
-						this.forceUpdate()
 					})
 
 				}
-			this.forceUpdate()
 			this.rowAdd = false
 			this.addPostArray = [ ]
 			this.postObj = { }
@@ -773,40 +792,93 @@ var calcWeight = this.state.weightBox
 				})
 			}
 			else if(this.deletePostArray.length != 0){
+				var obj = {
+										"id": 0,
+										"piLotId": '',
+										"inventoryLocationId": '',
+										"noOfBags": '',
+										"notes" : this.state.notes,
+										"weight": '',
+										"createdOn": moment(new Date()).format('YYYY-MM-DD'),
+										"modifiedOn": moment(new Date()).format('YYYY-MM-DD'),
+										"createdBy": 1,
+										"modifiedBy": 1,
+										"active": 1
+									}
     		this.CID = this.props.lID == "null" ? this.props.lotId : this.props.lID
 				let deleteArr = this.deletePostArray
 				let deleteurl = Base_Url+"TInventoryLocations/deleteLocation"
 				deleteArr.forEach(function(data){
+					debugger
+				var tempObj = JSON.parse(JSON.stringify(obj))
+				tempObj.weight = data.weight
+				tempObj.piLotId = data.piLotId
+				tempObj.noOfBags = data.noOfBags
+				tempObj.inventoryLocationId = data.Tpinventory
+				//tempObj.inventoryLocationId	= data.inventoryLocationId
+				// axios.post(Base_Url+"TPiInventoryHistories",{data:tempObj}).then((response)=>{
+				// 	debugger
+				// })
+				$.ajax({
+					type:'POST',
+					url:Base_Url+"TPiInventoryHistories",
+					data:tempObj,
+					success:function(){
+						debugger
+					},
+					Error:function(err){
+						swal("Error","Error Occured. Please Try Again","error")
+					}
+				})
 				axios.delete(Base_Url+"TPiInventories/"+data.Tinventory).then((response)=>{
-				axios.delete(Base_Url+"TInventoryLocations/"+data.Tpinventory).then((response)=>{
-					window.location.reload()
-					this.forceUpdate()
-				})
-
+					debugger
 
 				})
-
+				// axios.delete(Base_Url+"TInventoryLocations/"+data.Tpinventory).then((response)=>{
+				// 	debugger
+				//
+				// })
 							})
 		this.setState({
 					hideEdit : 'block',
 					showEdit : 'none',
 				})
 			}
-
+var tempThis = this
 			if(packStatus == 'true'){
 					axios.put(Base_Url + "TPackagingInstructionLots/"+	this.CID,{status:"In Inventory",inInventory:this.totalBags}).then((response)=>{
-						swal("Edited","Data Has Been Successfully Edited","success")
-						localStorage.removeItem('packagingFlag')
-						window.location.reload()
-						this.forceUpdate()
+						swal({
+							text:"Data Has Been Successfully Edited",
+							title:"Edited",
+							type:"info"},
+							function(isConfirm){
+
+								if(isConfirm){
+								localStorage.removeItem('packagingFlag')
+								window.location.reload()
+								tempThis.forceUpdate()
+								tempThis.forceUpdate()
+							}
+							}
+					)
 					})
-
-
 				}else {
+
 					axios.put(Base_Url + "TPackagingInstructionLots/"+	this.CID,{status:"PARTIALLYPACKED",inInventory : this.totalBags}).then((response)=>{
-					swal("Edited","Data Has Been Successfully Edited","success")
-					window.location.reload()
-					this.forceUpdate()
+						swal({
+							title:"Edited",
+							text:"Data Has Been Successfully Edited",
+							type:"info"},
+							function(isConfirm){
+
+								if(isConfirm){
+								localStorage.removeItem('packagingFlag')
+								window.location.reload()
+								tempThis.forceUpdate()
+								tempThis.forceUpdate()
+							}
+							}
+					)
 				})
 				}
 			console.log("AddPOSTARRAY",this.addPostArray)
@@ -818,8 +890,6 @@ var calcWeight = this.state.weightBox
 			this.orignalTble = _.cloneDeep(this.state.rows)
 			this.index = undefined
 
-			//this.props.onSave()
-
 		}
 		noteChange(e)
 		{
@@ -830,9 +900,9 @@ var calcWeight = this.state.weightBox
 
 
 		valdiateNoOfBags(e){
-			debugger;
+			 ;
 			this.addRow['weight'] = this.state.weightBox
-		/*	debugger
+		/*
 			if(this.index == undefined){
 			if(Validator.isNull(this.addRow.noOfBags)){
 				let error = {noOfBags: "Must be a number"}
@@ -896,7 +966,7 @@ var calcWeight = this.state.weightBox
 
 
 	render() {
-		debugger
+
 		console.log("State Rows",this.state.rows)
 		if(this.rows == undefined){
 		this.rows = _.cloneDeep(this.state.rows)
@@ -912,9 +982,14 @@ var calcWeight = this.state.weightBox
 
 		if(this.state.rows != undefined){
 			if(this.state.showEdit != 'none'){
+		var tempWeight=0,tempTotalBags=0
 		var inventory = _.map(this.state.rows,(invent,index) => {
-			if(invent.TInventoryLocation)
-			{      	return (
+			debugger
+			if(invent.TInventoryLocation && (invent.active==1 || invent.added))
+			{
+				tempWeight = tempWeight + parseInt(invent.weight)
+				tempTotalBags = tempTotalBags + parseInt(invent.noOfBags)
+				return (
 					<tr key={index}>
 					<td>{invent.TInventoryLocation? invent.TInventoryLocation.locationName : ''}</td>
 					<td>{invent.noOfBags}</td>
@@ -929,11 +1004,16 @@ var calcWeight = this.state.weightBox
 			}
 
 		})
+		this.tempTotalBags = tempTotalBags
+		this.tempWeight = tempWeight
 	}
 	else {
+		var tempWeight=0,tempTotalBags=0
 				var inventory = _.map(this.state.rows,(invent,index) => {
-			if(invent.TInventoryLocation)
-			{      	return (
+			if(invent.TInventoryLocation && invent.active==1){
+			tempWeight = tempWeight + parseInt(invent.weight)
+			tempTotalBags = tempTotalBags + parseInt(invent.noOfBags)
+			     	return (
 					<tr key={index}>
 					<td>{invent.TInventoryLocation? invent.TInventoryLocation.locationName : ''}</td>
 					<td>{invent.noOfBags}</td>
@@ -944,6 +1024,8 @@ var calcWeight = this.state.weightBox
 			}
 
 		})
+		this.tempTotalBags = tempTotalBags
+		this.tempWeight = tempWeight
 	}
 
 
@@ -964,7 +1046,7 @@ var calcWeight = this.state.weightBox
                 </div>
 				<div className="form-group">
 					<div className=" col-md-3 col-sm-6 col-xs-6">
-					  <input type="number" onChange = {this.handleInputChange} ref="noOfBags" onBlur = {(e) => {this.valdiateNoOfBags(e)}} className={this.state.errors.noOfBags ? "form-control has error" : "form-control"} id="noOfBags" placeholder="#Bags" />
+					  <input type="number" onChange = {this.handleInputChange} ref="noOfBags" onBlur = {(e) => {this.valdiateNoOfBags(e)}} className={this.state.errors.noOfBags ? "form-control has error" : "form-control"} id="noOfBags" placeholder={this.isBag?"#Bags":"#Boxes"} />
 					  <div className="error"><span></span></div>
 					</div>
                 </div>
@@ -975,7 +1057,7 @@ var calcWeight = this.state.weightBox
 					</div>
                 </div>
                 <div className="form-group ">
-					<span style={{"float":"left","margin-top":"5"}}>{this.state.weightBox?'kg':''}</span>
+					<span style={{"float":"left","margin-top":"5"}}>{this.state.weightBox?(this.isBag?"kg":"lbs"):" "}</span>
 				</div>
 				<div className="form-group ">
 					<div className="col-md-3 col-sm-6 col-xs-6 text_right  " style={{"width":"12","margin-left":"10"}}>
@@ -988,8 +1070,8 @@ var calcWeight = this.state.weightBox
 						<thead className="base_bg">
 						  <tr >
 							<th>Inv. Location</th>
-							<th>Bags</th>
-							<th>Weight(kg)</th>
+							<th>{this.isBag?"Bags":"Boxes"}</th>
+							<th>{this.isBag?"Weight(kg)":"Weight(lbs)"}</th>
 							<th>Lot #</th>
 							<th style={{display: this.state.showEdit}}>Action </th>
 						</tr>
@@ -998,8 +1080,8 @@ var calcWeight = this.state.weightBox
 							{inventory}
 							<tr>
 							<th>Total</th>
-							<th>{this.totalBags}</th>
-							<th>{this.totalWeight}</th>
+							<th>{this.tempTotalBags}</th>
+							<th>{this.tempWeight}</th>
 							<th></th>
 							<th style={{display:this.state.showEdit}}></th>
 							</tr>
@@ -1015,7 +1097,7 @@ var calcWeight = this.state.weightBox
 			<div className=" col-lg-5 col-md-5 col-sm-5 col-xs-12">
 				<div className="table-responsive">
 				 <h5>&nbsp; </h5>
-					<TotalComponent notesChange={this.noteChange}  weightLBS = {this.state.weightBox? this.state.weightBox : this.totalWeight } totalRailcarWeight = {this.totalRailcarWeight} totalWeight = {this.totalWeight} lotIdArray = {this.lotIdArray} />
+					<TotalComponent notesChange={this.noteChange}  weightLBS = {this.state.weightBox? this.state.weightBox : this.totalWeight } totalRailcarWeight = {this.totalRailcarWeight} totalWeight = {this.totalWeight} lotIdArray = {this.lotIdArray} isBag = {this.isBag} />
 				</div>
 
 				<label className="control control--checkbox " style={{display:this.state.showEdit}}>Packaging Complete

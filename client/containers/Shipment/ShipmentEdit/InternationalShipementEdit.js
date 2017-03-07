@@ -170,6 +170,7 @@ class InternationalShipementEdit extends React.Component {
 
     }
 	componentDidMount() {
+		debugger
             var MIView = createDataLoader(InternationalShipementEdit, {
                         queries: [{
                             endpoint: 'TPackagingInstructions',
@@ -292,6 +293,10 @@ class InternationalShipementEdit extends React.Component {
             }
      onSave(e){
 			 debugger;
+			 if(this.props.editData.TShipmentLots[0].TPackagingInstructionLots.inInventory<this.props.editData.TShipmentLots[0].noOfBags){
+		     swal("Shipped bags must not be greater than Inventory bags")
+		     return;
+		   }
      	this.SIObj.customerId = this.props.editData.customerId
         this.SIObj.releaseNumber = this.props.editData.releaseNumber
         this.SIObj.numberOfContainers = this.props.editData.numberOfContainers
@@ -399,7 +404,7 @@ class InternationalShipementEdit extends React.Component {
                             </div>
                         </div>
                         <div className="form-group">
-                            <label for="Purchase_Order" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">No. of Containers</label>
+                            <label for="Purchase_Order" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"># Containers</label>
                             <div className="col-lg-6    col-sm-11 col-xs-11 ">
                                 <input type="text"
                                 className="form-control"
@@ -419,7 +424,7 @@ class InternationalShipementEdit extends React.Component {
 				<legend className="scheduler-border">Material Info</legend>
 				 <div className="bages_estimated col-lg-11 col-md-11 col-sm-11 col-xs-11"><span></span></div>
                         <div className="form-group ">
-                            <label for="Rail_Car_Number" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Purchase Order Number</label>
+                            <label for="Rail_Car_Number" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Purchase Order #</label>
                             <div className="col-lg-6  col-sm-11  col-xs-11">
                                 <select disabled onChange = {this.poChange} value = {this.props.editData.TShipmentLots[0].sId}  className="form-control" id="" >
                                  <option>{this.props.editData.TShipmentLots[0].TPackagingInstructions.po_number}</option>
@@ -428,10 +433,10 @@ class InternationalShipementEdit extends React.Component {
                             </div>
                         </div>
                         <div className="form-group">
-                            <label for="Weight" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Lot Number</label>
+                            <label for="Weight" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Lot #</label>
                             <div className="col-lg-6    col-sm-11 col-xs-11 ">
                                 <select
-                                value = {this.props.editData.TShipmentLots[0].TPackagingInstructionLots.id}
+                                value = {this.props.lotId}
                                 className="form-control" id="" >
 
                                 {this.lotNumber}
@@ -456,7 +461,7 @@ class InternationalShipementEdit extends React.Component {
                                         </div>
                                     </div>
                         <div className="form-group">
-                            <label for="Lot_Number" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">No. of Bags  for Lot</label>
+                            <label for="Lot_Number" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"># Bags  for Lot</label>
                             <div className="col-lg-6    col-sm-11 col-xs-11 ">
                                 <input type="text" onChange = {this.lotBagsChange} disabled value = {this.props.editData.TShipmentLots[0].TPackagingInstructionLots.inInventory != null ? this.props.editData.TShipmentLots[0].TPackagingInstructionLots.inInventory : 0} className="form-control" id="Lot_Number" placeholder="No. of Bags  for Lot"/>
                                 <div className="error"><span></span></div>
@@ -472,7 +477,7 @@ class InternationalShipementEdit extends React.Component {
 	    <fieldset className="scheduler-border  tab-pane active " id="International">
 		<legend className="scheduler-border">Shipment Info International</legend>
 			<div className="form-group ">
-					<label for="" className="col-lg-5 col-md-5 col-sm-11  col-xs-11 control-label">Booking Number</label>
+					<label for="" className="col-lg-5 col-md-5 col-sm-11  col-xs-11 control-label">Booking #</label>
 					<div className="col-lg-6  col-sm-11 col-xs-11 ">
 					  <input type="text" onChange = {this.bookingChange} value = {this.props.editData.TShipmentInternational[0].bookingNumber} className="form-control" id="" placeholder="Booking Number"/>
 					  <div className="error"><span></span></div>
@@ -510,7 +515,7 @@ class InternationalShipementEdit extends React.Component {
                 </div>
 
 				<div className="form-group">
-					<label for="" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Steamship Vessel</label>
+					<label for="" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Vessel</label>
 					<div className="col-lg-6 col-sm-11 col-xs-11 ">
 					 <input type="text" className="form-control" onChange = {this.vesselChange} value = {this.props.editData.TShipmentInternational[0].steamshipVessel} id="SteamshipVessel" placeholder="Steamship Vessel"/>
 					  <div className="error"><span></span></div>

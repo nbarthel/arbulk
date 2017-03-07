@@ -36,7 +36,7 @@ hr {height: 1px; background: #ccc;border: none;margin: 15px 0 15px 0;}
 .bold{ font-weight:bold;}
 .error{color:red;}
 .pos-absolute-b{ position:absolute;bottom:0;left:0;}
-.pos-relative-b{ position:relative;bottom:0;left:0;}
+.pos-relative-b{ position:fixed;bottom:0;left:0;}
 .pos-fixed-b{ position:fixed;bottom:0;left:0;}
 .table> thead> tr> th{z-index: 99}
 /*input::-webkit-datetime-edit{ color: transparent; }*/
@@ -398,7 +398,9 @@ legend.scheduler-border { text-transform:uppercase !important;font-weight: bold 
 .custom-LABEL p{
 	margin-bottom : 2px !important
 }
-
+.SetWidhOfTD td{
+	width : 10px !important
+}
 @media (min-width: 100px) and (max-width: 768px) {
 #filter-grid{margin-left:0px; }
 #filter-menu{min-width:220px; width:100%; height:100%; float:left;}

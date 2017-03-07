@@ -15,12 +15,12 @@ constructor(props){
   this.state = {}
 }
 componentWillReceiveProps(next){
-debugger;
+
   var PIview = createDataLoader(InventoryHistory,{
       queries:[{
         endpoint: 'TPackagingInstructions',
         filter: {
-          include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
+          include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation","TPiInventory"]}}]
         }
       }]
     })
@@ -28,7 +28,23 @@ debugger;
         //TPackagingInstructionLots
         this.url = PIview._buildUrl(base, {
            // include : [{"relation":"TPackagingInstructionLots" ,"scope":{"include" :["TShipmentLots" ,"TShipmentInternational"]}},"TLocation" , "TCompany"]
-            include : [{"relation":"TPackagingInstructionLots" ,"scope":{"include" :{"relation" : "TShipmentLots" , "scope":{"include":{"relation":"TShipmentent" , "scope":{"include" : "TShipmentInternational"}}}}}},"TLocation" , "TCompany"]
+            include : [{"relation":"TPackagingInstructionLots" ,
+                        "scope":{
+                                  "include":{"relation":"TPiInventory",
+                                   "scope":{"include":{"relation":"TPackagingInstructionLots",
+                                   "scope":{"include" :{
+                                                        "relation" : "TShipmentLots",
+                                                        "scope":{
+                                                                 "include":{
+                                                                             "relation":"TShipmentent" ,
+                                                                             "scope":{
+                                                                                       "include" : ["TShipmentInternational","TShipmentDomestic"]
+                                                                                      }
+                                                                            }
+                                                                 }
+                                                        }  }} }}
+                                }
+                      },"TLocation" , "TCompany"]
 
 
         });
@@ -37,7 +53,7 @@ debugger;
             url: this.url,
             success:function(data){
                 console.log('ajax ',data);
-                //debugger
+                  debugger
                this.setState(
                    {
                        historyData : data,
@@ -53,30 +69,34 @@ debugger;
 
 }
 
-
-
-
-
-
 	render() {
     var PO_number = this.state.historyData && this.state.historyData.po_number ? this.state.historyData.po_number : ''
-    var inventoryBags = (this.state.historyData && this.state.historyData.TPackagingInstructionLots && this.state.historyData.TPackagingInstructionLots.length > 0 )?this.state.historyData.TPackagingInstructionLots[this.state.historyData.TPackagingInstructionLots.length -1].inInventory : 0
-   
-    if(this.state.historyData && this.state.historyData.TPackagingInstructionLots && this.state.historyData.TPackagingInstructionLots.length > 0 && this.state.historyData.TPackagingInstructionLots[0].TShipmentLots)
+    if(this.state.historyData && this.state.historyData.TPackagingInstructionLots && this.state.historyData.TPackagingInstructionLots.length > 0)
     {
-		var history = _.map(this.state.historyData.TPackagingInstructionLots[this.state.historyData.TPackagingInstructionLots.length - 1].TShipmentLots , function(view , index){
-      debugger;
-    return(
-      <tr key={index}>
-      <td>{moment(view.createdOn).format("MM-DD-YYYY")}	</td>
-      <td>{PO_number}</td>
-      <td> {view.TShipmentent.releaseNumber}</td>
-      <td>{view.noOfBags}</td>
-      <td>{inventoryBags -view.noOfBags}</td>
-    </tr>
+      var bagBalnce = 0
+      var tempthis = this
+		var history = _.map(this.state.historyData.TPackagingInstructionLots , function(view , index){
+    return _.map(view.TPiInventory,function(viewI,index){
+      var releaseNumber
+      if(tempthis!=undefined && tempthis.props!=undefined && tempthis.props.lotIdArray.length > 0 &&  tempthis.props.lotIdArray.indexOf(parseInt(viewI.piLotId))!=-1 ){
+      if(viewI.TPackagingInstructionLots && viewI.TPackagingInstructionLots.TShipmentLots.length>0 && viewI.TPackagingInstructionLots.TShipmentLots[0].TShipmentent){
+        releaseNumber = viewI.TPackagingInstructionLots.TShipmentLots[0].TShipmentent.releaseNumber
+      }
+        bagBalnce = viewI.noOfBags + bagBalnce
+        return(
+          <tr key={index}>
+          <td>{moment(view.createdOn).format("MM-DD-YYYY")}	</td>
+          <td>{PO_number}</td>
+          <td>{view.lot_number}</td>
+          <td> {releaseNumber?releaseNumber:""}</td>
+          <td>{viewI.noOfBags>0?"+ "+viewI.noOfBags:viewI.noOfBags}</td>
+          <td>{bagBalnce>0?"+ "+bagBalnce:bagBalnce}</td>
+        </tr>
 
-)
+    )
+  }
 
+  })
     })
   }
 		return (
@@ -87,7 +107,8 @@ debugger;
 			<thead className="base_bg">
 			  <tr >
 				<th>Date</th>
-				<th>PO</th>
+				<th>PO#</th>
+        <th>Lot #</th>
 				<th>Release#</th>
 				<th># of Bags</th>
 				<th>Bag Balance</th>

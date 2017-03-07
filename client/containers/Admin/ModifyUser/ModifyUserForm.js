@@ -23,15 +23,15 @@ class ModifyUserForm extends React.Component {
     onDelete(e){debugger
         var delId = e.target.id
 
-     swal({   
-            title: "You are about to delete a entry?", 
-            text: "Are You Sure ?", 
-            type: "warning", 
-            showCancelButton: true,  
-            confirmButtonColor: "#DD6B55",  
-            confirmButtonText: "Yes, delete it!",  
-            closeOnConfirm: false }, 
-              function(){ 
+     swal({
+            title: "You are about to delete a entry?",
+            text: "Are You Sure ?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!",
+            closeOnConfirm: false },
+              function(){
                  axios.delete(Base_Url+"TUsers/"+delId).then((response)=>{
                      swal({
                       title: "Success",
@@ -41,18 +41,18 @@ class ModifyUserForm extends React.Component {
       },
               function(isConfirm){
             window.location.reload();
-                 
-}
-);  
 
-                 })     
+}
+);
+
+                 })
                 }
 
 
                 );
 
-                    
-       
+
+
     }
     handleRadio(e){
         this.total = 0
@@ -95,16 +95,16 @@ class ModifyUserForm extends React.Component {
             })
             this.forceUpdate();
         }
-        
+
     }
     render() {
-       
+
         if(this.props.userData && this.rad == false){
-           
+
             this.usersTable = _.map(this.props.userData,(user,index)=>{
                 this.total = this.total + 1
                 return (
-                    
+
                                         <tr key = {index}>
                                             <td>{user.email}</td>
                                             <td>{user.firstName  +" "+  user.lastName}</td>
@@ -114,7 +114,7 @@ class ModifyUserForm extends React.Component {
                                                 <span className="text-danger" id = {user.id} onClick = {this.onDelete} ><i className="fa fa-times"  aria-hidden="true" ></i> Delete</span>
                                             </td>
                                         </tr>
-                    
+
                     )
             })
         }
@@ -168,4 +168,3 @@ class ModifyUserForm extends React.Component {
             }
             }
             export default ModifyUserForm;
-

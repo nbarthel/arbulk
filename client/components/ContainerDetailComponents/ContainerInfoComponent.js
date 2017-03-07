@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class ContainerInfoComponent extends Component {
 	render() {
-
+				var isDomestic = (this.props.info && this.props.info.TShipmentent?this.props.info.TShipmentent.isDomestic:0)
         var chasis_number  = (this.props.info && this.props.info.chasisNumber) ? this.props.info.chasisNumber : 'NA'
         var seal_number  = (this.props.info && this.props.info.sealNumber) ? this.props.info.sealNumber : 'NA'
         var materialNetWeight  = (this.props.info && this.props.info.tareWeight) ? parseInt(this.props.info.tareWeight) * 25 : 'NA'
@@ -32,10 +32,10 @@ class ContainerInfoComponent extends Component {
 			 <fieldset className="scheduler-border sameHeight">
                                     <legend className="scheduler-border">Container Info</legend>
                                     <ul className="no-space">
-                                        <li>Chassis #  <b>{chasis_number}</b></li>
+                                        <li>{isDomestic==0?'Chassis #':"" }<b>{isDomestic==0?chasis_number:""}</b></li>
                                         <li>Seal #    <b>{seal_number}</b></li>
                                         <li> Material  Net Weight     <b>{containerTareWeight}</b></li>
-                                        <li> Container Tare Weight<b>{containerTareWeight}</b></li>
+                                        <li> {isDomestic==0?"Container Tare Weight":""}<b>{isDomestic==0?containerTareWeight:""}</b></li>
                                         <li className=" pddn-10-top">
                                             <label className="control control--checkbox " >Container Type Confirmed?
                                                 <input type="checkbox"  id="cType"/><div className="control__indicator"></div>

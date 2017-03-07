@@ -50,7 +50,7 @@ componentWillMount(){
         }]
       })
     console.log("I have recieved props")
-    //debugger
+    //
 
     var base = 'TPackagingInstructions'+'/'+id;
     this.url = PIview._buildUrl(base, {
@@ -61,12 +61,6 @@ componentWillMount(){
       $.ajax({
             url: this.url,
             success:function(data){
-            for(var i in data){
-              debugger
-              if(data[i].TShipmentInternational.length==0){
-                data.splice(i,1)
-              }
-            }
               this.setState({
                   viewData : [data],
                   loaded:true
@@ -76,7 +70,7 @@ componentWillMount(){
         })
 
    axios.get(Base_Url+"TShipmentLots/getMaxQueue").then(response=>{
-    debugger;
+     ;
     this.setState({
         queue_Sequence : response.data
     })
@@ -87,7 +81,7 @@ componentWillMount(){
 
     }
    else {
-    debugger
+
   var PIview = createDataLoader(ShipmentViewDataComponent,{
       queries:[{
         endpoint: 'TPackagingInstructions',
@@ -114,17 +108,26 @@ componentWillMount(){
                                               "scope":{"include" : "TCompany"}
                                 },
 
-                                {"relation" :"TShipmentDomestic",
-                                              "scope":{"include":["TShipmentType"],"where":{"active":"1"}}
+                                {
+                                  "relation" :"TShipmentDomestic",
+                                              "scope":{
+                                                        "include":["TShipmentType"],
+                                                        "where":{"active":"1"}
+                                                      }
                                 },
 
-                                {"relation" :"TShipmentInternational",
-                                "scope":{"include":["TSteamshipLine" ,"TContainerType"],"where":{"active":"1"}}
+                                {
+                                  "relation" :"TShipmentInternational",
+                                  "scope":{
+                                            "include":["TSteamshipLine" ,"TContainerType"],
+                                            "where":{"active":"1"}
+                                          }
                                 },
 
                                 {"relation" : "TShipmentLots" ,
-                                              "scope":{"include":["TPackagingInstructionLots","TPackagingInstructions"],
-                                                      "where":{"active":"1"}
+                                              "scope":{
+                                                        "include":["TPackagingInstructionLots","TPackagingInstructions"],
+                                                        "where":{"active":"1"}
                                                     }
                                 }],
         });
@@ -132,13 +135,10 @@ componentWillMount(){
       $.ajax({
             url: this.url,
             success:function(data){
-
-              debugger;
                 console.log('ajax ',data);
                 debugger
                 for(var i in data){
-                  debugger
-                  if(data[i].TShipmentInternational.length==0){
+                  if(data[i].TShipmentInternational.length==0 && data[i].TShipmentDomestic.length==0){
                     data.splice(i,1)
                   }
                 }
@@ -148,41 +148,30 @@ componentWillMount(){
                        loaded:true
                    }
                )
-               //console.log( this.state.xyz)
         }.bind(this)
         })
 
      axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
-    debugger;
     this.setState({
         queue_Sequence : response.data
     })
 })
-
-
     }
   }
   componentDidMount() {
     $(function () {
-      setTimeout(function(){debugger;$("#Packaging_Instruction_View").tableHeadFixer({'head' : true})}, 2000);
-        //$(".Packaging_Instruction_View").tableHeadFixer({'head' : true});
+      setTimeout(function(){ ;$("#Packaging_Instruction_View").tableHeadFixer({'head' : true})}, 2000);
     });
-
   }
 checkclick(data , value)
 {
-
     var queueArray = []
     this.qArray.push(value.id)
     localStorage.setItem('qArray',this.qArray)
     localStorage.setItem('queue_Sequence',this.state.queue_Sequence[0].max_mark)
 
 }
-
-
-
 onAscending(e,head){
-  debugger
   sortedDataflag = true;
   flagSorting = true;
   var switchvalue = head;
@@ -190,15 +179,26 @@ onAscending(e,head){
                             switch(switchvalue) {
                             case 'po_number':
                            sortedData = _.sortBy(this.state.viewData, function(item) {
-                            return item.po_number;
+                             if(item.po_number){
+                               return item.po_number.toLowerCase();
+                             }
+
                            });
                              break;
+                    case 'Release':
+                      sortedData = _.sortBy(this.state.viewData, function(item) {
+                      if(item.releaseNumber){
+                        return item.releaseNumber.toLowerCase();
+                      }
+
+                    });
+                      break;
                    case 'lot_number':
                      sortedData = _.sortBy(this.state.viewData, function(item) {
                      return (item.TPackagingInstructionLots!=undefined?(item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].lot_number : ''):'');
                      });
                        break;
-                               case 'railcar_number':
+                               case 'railcar_number.toLowerCase()':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
                                 return (item.TPackagingInstructionLots!=undefined?(item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].railcar_number : ''):'');
                                 });
@@ -210,12 +210,12 @@ onAscending(e,head){
                       break;
                       case 'location':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
-                                return item.TLocation.locationName;
+                                return item.TLocation.locationName.toLowerCase();
                                 });
                       break;
                       case 'company':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
-                                return item.TCompany.name;
+                                return item.TCompany.name.toLowerCase();
                                 });
                       break;
                       case 'ShipmentType':
@@ -228,7 +228,7 @@ onAscending(e,head){
                       case 'Material':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
                                   if(item.TShipmentLots.length>0 && item.TShipmentLots[0].TPackagingInstructions!=undefined){
-                                  return item.TShipmentLots[0].TPackagingInstructions.material
+                                  return item.TShipmentLots[0].TPackagingInstructions.material.toLowerCase()
                                 }
                                 });
                       break;
@@ -236,12 +236,12 @@ onAscending(e,head){
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
                                   if(item.TShipmentInternational && item.TShipmentInternational.length > 0){
                                     //if(item.TShipmentInternational[0].status == "CONFIRMED"){
-                                      return item.TShipmentInternational[0].status
+                                      return item.TShipmentInternational[0].status.toLowerCase()
                                     //}
                                 }
                                 else if(item.TShipmentDomestic && item.TShipmentDomestic.length > 0){
                                   //if(item.TShipmentDomestic[0].status == "CONFIRMED"){
-                                    return item.TShipmentDomestic[0].status
+                                    return item.TShipmentDomestic[0].status.toLowerCase()
                                   //}
                               }
                               return item;
@@ -251,7 +251,7 @@ onAscending(e,head){
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
 
                                   if(item.TShipmentInternational && item.TShipmentInternational.length > 0){
-                                      return item.TShipmentInternational[0].freightForwarder
+                                      return item.TShipmentInternational[0].freightForwarder.toLowerCase()
                                 }
                               return item;
                                 });
@@ -260,7 +260,7 @@ onAscending(e,head){
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
 
                                   if(item.TShipmentInternational.length > 0 && item.TShipmentInternational[0].TContainerType){
-                                      return item.TShipmentInternational[0].TContainerType.name
+                                      return item.TShipmentInternational[0].TContainerType.name.toLowerCase()
                                 }
                               return item;
                                 });
@@ -314,7 +314,7 @@ onAscending(e,head){
                       case 'Vessel':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
                                   if(item.TShipmentInternational.length>0){
-                                  return item.TShipmentInternational[0].steamshipVessel
+                                  return item.TShipmentInternational[0].steamshipVessel.toLowerCase()
                                 }
                                 });
                       break;
@@ -332,14 +332,14 @@ onAscending(e,head){
                       case 'PULocation':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
                                   if(item.TShipmentInternational.length>0){
-                                  return item.TShipmentInternational[0].containerPickupLocation
+                                  return item.TShipmentInternational[0].containerPickupLocation.toLowerCase()
                                 }
                                 });
                       break;
                       case 'ReturnLocation':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
                                   if(item.TShipmentInternational.length>0){
-                                  return item.TShipmentInternational[0].containerReturnLocation
+                                  return item.TShipmentInternational[0].containerReturnLocation.toLowerCase()
                                 }
                                 });
                       break;
@@ -352,10 +352,10 @@ onAscending(e,head){
                       case 'Status':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
                                   if(item.TShipmentInternational.length>0){
-                                  return item.TShipmentInternational[0].status
+                                  return item.TShipmentInternational[0].status.toLowerCase()
                                 }
                                 else if(item.TShipmentDomestic.length>0){
-                                return item.TShipmentDomestic[0].status
+                                return item.TShipmentDomestic[0].status.toLowerCase()
                               }
                               else{
                                 return item
@@ -384,7 +384,7 @@ this.setState({
 onToggel(e ,elm){
 console.log('>>>>>>' , $(elm))
 
-  debugger;
+   ;
   $( "button" ).click(function() {
   $( "p" ).slideToggle( "slow" );
 });
@@ -457,10 +457,9 @@ render(){
         if( sortedDataflag || (view.TShipmentInternational!=undefined&&view.TShipmentInternational.length>0) || (view.TShipmentInternational!=undefined&&view.TShipmentDomestic.length>0)){
         var alloc = "No"
         var count = index
-        debugger
+
         if(view.TContainerAllocation && view.TContainerAllocation.length > 0){
           alloc = "Yes"
-
         }
         var eno = 'N/A'
        if(view.TContainerAllocation && view.TContainerAllocation.length > 0){
@@ -469,13 +468,17 @@ render(){
          containerCount = containerCount + view.TContainerAllocation[i].noOfContainer
        }
          if(containerCount == view.numberOfContainers){
-           debugger
+
            eno = "YES"
          }else{
            eno = "NO"
          }
        }
       var count = index
+      debugger
+      if(view.TShipmentLots.length>0){
+
+
       return (
        <tbody key={index} >
        <tr  className="base_bg clickable" ref ="clickable" style={{"backgroundColor": "#e5e5ff"}}>
@@ -571,13 +574,13 @@ render(){
                     var steamShipline = (view.TShipmentInternational && view.TShipmentInternational.length >0) ? view.TShipmentInternational[0].TSteamshipLine.name : ''
                     var status = (view.TShipmentInternational && view.TShipmentInternational.length > 0 ) ?view.TShipmentInternational[0].status : 'NA'
                     var CType = ((view.TShipmentInternational && view.TShipmentInternational.length > 0) ? (view.TShipmentInternational[0].TContainerType ? view.TShipmentInternational[0].TContainerType.name : "N/A"):"N/A")
-                    var confd = (view.TShipmentInternational && view.TShipmentInternational.length > 0)? (view.TShipmentInternational[0].status == "CONFIRMED" ? "YES" : "NO"):"NO"
+                    var confd = (view.TShipmentInternational && view.TShipmentInternational.length > 0)? (view.TShipmentInternational[0].status == "UNCONFIRMED" ? "NO" : "YES"):"NO"
 
 
                   }
                   else if(view.isDomestic == 1){
                     var status = (view.TShipmentDomestic && view.TShipmentDomestic.length > 0 ) ?view.TShipmentDomestic[0].status : 'NA'
-                    var confd = (view.TShipmentDomestic && view.TShipmentDomestic.length > 0)? (view.TShipmentDomestic[0].status == "CONFIRMED" ? "YES" : "NO"):"NO"
+                    var confd = (view.TShipmentDomestic && view.TShipmentDomestic.length > 0)? (view.TShipmentDomestic[0].status == "UNCONFIRMED" ? "NO" : "YES"):"NO"
 
                   }
            return(
@@ -617,13 +620,14 @@ render(){
                   )
             }}
          )
-      //  }})
+
     }
 
        </tbody>
 
 
     )}}
+  }
   )
  return(
  <Loader loaded={this.state.loaded}>

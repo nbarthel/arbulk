@@ -15,6 +15,7 @@ var flagnj = true;
 var weightinLBS = true;
 var isWeightconverted = false;
 var flagBoxesSet = false
+var objectPushed = false
 export default class EnterPackagingInstructionForm extends React.Component {
     constructor(props)
     	{
@@ -27,13 +28,17 @@ export default class EnterPackagingInstructionForm extends React.Component {
 	  	this.rObjects = []
     	this.PIedit = { }
     	this.railCarObjects = []
-
     	this.RailCarChange = { }
+      this.RailCarArray = []
+      var temobj = new Object();
+      this.RailCarArray.push(temobj)
+      this.AddRailCarForProps = this.AddRailCarForProps.bind(this)
+      this.ChangeRailCarForProps = this.ChangeRailCarForProps.bind(this)
+      this.MinusRailCarFromProps = this.MinusRailCarFromProps.bind(this)
 	    this.state = {
 	    	railCarInfoList: [],
 	    	customChecked : false,
 	    	index: 0,
-	    	display: 'none',
 	    	isLoading : false,
 	    	errors : { },
 			rObjects:[],
@@ -70,20 +75,12 @@ export default class EnterPackagingInstructionForm extends React.Component {
       this.handleOptionChange1 = this.handleOptionChange1.bind(this)
       this.convertWeightToLBS = this.convertWeightToLBS.bind(this)
       this.convertWeightToKG = this.convertWeightToKG.bind(this)
-	   	//this.onCancel = this.onCancel.bind(this)
-	   //	this.onSaveChange = this.onSaveChange.bind(this)
-	   // this.handlePIeditChange = this.handlePIeditChange.bind(this)
+      this.ValidateRailCar = this.ValidateRailCar.bind(this)
+      this.SetUnitType = this.SetUnitType.bind(this)
 }
 componentDidMount() {
-  debugger
-	if(this.props.data.bag_id == 1){
-		this.setState({
-			display : "block"
-		})
-	}
 }
 componentWillMount() {
-
 	var PIview = createDataLoader(EnterPackagingInstructionForm,{
 		queries:[{
 			endpoint: 'TPackagingInstructions',
@@ -161,8 +158,22 @@ componentWillMount() {
 
 	axios.get(Base_Url+"TPackagingMaterials").then((response) => {
 		this.setState({
-			unittype : response.data
+			tempUnitType : response.data
 		})
+    debugger
+    if(this.props.data){
+      var tempObj=[]
+      for(var i =0;i<response.data.length;i++){
+        if(this.props.data.bag_id==response.data[i].packagingTypeId &&
+           this.props.data.location_id == response.data[i].locationId &&
+           this.props.data.customer_id == response.data[i].customerId ){
+          tempObj.push(response.data[i])
+        }
+      }
+      this.setState({
+  			unittype : tempObj
+  		})
+    }
 	})
 	.catch(function(err){
 		console.log(err)
@@ -202,15 +213,53 @@ handleOptionChange1(e) {
     // }
     // isWeightconverted = true;
 }
+SetUnitType(name){
 
-handlePIChange(e){
   debugger
+  var check=false
+  var tempObj=[]
+  if(this.obj.bag_id!=""&&this.obj.customer_id!=""&&this.obj.location_id!=""){
+      check = true;
+  }
+  if(this.props.data){
+    check = true;
+    this.props.data.packaging_material_id=""
+  }
+  if(check){
+    if(this.props.data){
+      for(var i =0;i<this.state.tempUnitType.length;i++){
+        if(this.props.data.bag_id == this.state.tempUnitType[i].packagingTypeId &&
+           this.props.data.location_id == this.state.tempUnitType[i].locationId &&
+           this.props.data.customer_id == this.state.tempUnitType[i].customerId ){
+          tempObj.push(this.state.tempUnitType[i])
+        }
+      }
+    }
+    else{
+      for(var i=0;i<this.state.tempUnitType.length;i++){
+        if(this.state.tempUnitType[i].locationId==parseInt(this.obj.location_id) &&
+           this.state.tempUnitType[i].customerId==parseInt(this.obj.customer_id) &&
+           this.state.tempUnitType[i].packagingTypeId==parseInt(this.obj.bag_id)){
+             tempObj.push(this.state.tempUnitType[i])
+           }
+      }
+    }
+    var dummyObject={}
+    if(Object.keys(tempObj[0]).length>0){
+      for(var props in tempObj[0]){
+        dummyObject[props] = ""
+      }
+    }
+    tempObj.unshift(dummyObject)
+    this.setState({
+      unittype:tempObj
+    })
+  }
+}
+handlePIChange(e){
 	this.obj[e.target.name] = e.target.value
 	if(this.obj.bag_id == 1){
     flagBoxesSet = false
-		this.setState({
-			display : 'block'
-		})
 	if(this.obj.location_id!=="" && (flagsc || flagnj)&& this.obj.location_id!== undefined)
     {
       if(this.obj.location_id==1 && flagnj)
@@ -244,40 +293,31 @@ handlePIChange(e){
   }
 	else if(this.obj.bag_id != 1){
     flagBoxesSet = false
-		this.setState({
-			display : 'none'
-		})
         flagnj = true;
     	flagsc = true;
-		this.obj.packaging_material_id = 1
      	this.obj[e.target.name] = e.target.value
     if(e.target.name==="bags_per_pallet")
     {
       this.state.numberofbagsorpallets = e.target.value//(this.obj.bags_per_pallet==="")?this.state.numberofbagsorpallets:this.obj.bags_per_pallet
       this.obj.bags_per_pallet = this.state.numberofbagsorpallets
     }
-    // else {
-    //   this.state.numberofbagsorpallets = ''
-    //   this.obj.bags_per_pallet = this.state.numberofbagsorpallets
-    // }
 	}
+  this.SetUnitType(e.target.name)
 	console.log(this.obj)
 }
 handleCustomerEditChange(e){
 	this.props.data.customer_id = e.target.value
-	//this.props.data.customer_id = this.refs.customerPicker.value
+  this.SetUnitType()
 	this.forceUpdate()
-console.log(this.props.data)
 }
 handleLocationEditChange(e){
 	this.props.data.location_id = e.target.value
-	//this.props.data.location_id = this.refs.locationPicker.value
+	this.SetUnitType()
 	this.forceUpdate()
-	console.log(this.props.data)
 }
 handlePOEditChange(e){
 	this.props.data.po_number = e.target.value
-	//this.props.data.po_number = this.refs.purchaseOrder.value
+
 	this.forceUpdate()
 	console.log(this.props.data)
 }
@@ -300,24 +340,11 @@ handleOriginEditChange(e){
 handleTypeOfPackagingEditChange(e){
   debugger
 	this.props.data.bag_id = e.target.value
-	//this.props.data.packaging_material_id = this.refs.packagingType.value
-	if(e.target.value != 1){
-		this.setState({
-			display : "none"
-		})
-		//this.props.data.packaging_material_id = 0
-	}
-	else {
-		this.setState({
-			display : "block"
-		})
-	}
+  this.SetUnitType()
 	this.forceUpdate()
-	console.log(this.props.data)
 }
 handleTypeofUnitEditChange(e){
 this.props.data.packaging_material_id = e.target.value
-//this.props.data.bag_id = this.refs.unitType.value
 this.forceUpdate()
 console.log(this.props.data)
 }
@@ -364,6 +391,7 @@ handleLabelChange(e){
 handleRailCarNumberEdit(e,index){
 	/*this.RailCarChange[e.target.name] = e.target.value*/
 	//console.log(">>>>>>>>>>>>>>..",this.props.id)
+  debugger
 	this.props.data.TPackagingInstructionLots[index].railcar_number = e.target.value
 	this.forceUpdate()
 	console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>...",this.props.data.TPackagingInstructionLots)
@@ -386,30 +414,63 @@ handleWeightEdit(e,index){
 handleRailcarChange(e){
    	debugger;
     var number = e.target.id[e.target.id.length-1]
-    if((!isNaN(number) && this.railCarObjects.length>number)||(isNaN(number) && this.railCarObjects.length>0)){
-      if(isNaN(number)){
-        number = 0
-      }
-      this.railCarObjects[number][e.target.name] = e.target.value;
+    var propertyName = e.target.name
+    if(!isNaN(number) && this.RailCarArray.length>1){
+      this.RailCarArray[number][propertyName] = e.target.value;
     }
     else{
-      this.railcarObj[e.target.name] = e.target.value;
+      this.RailCarArray[0][propertyName] = e.target.value;
     }
-
-
    	console.log(this.railcarObj)
-   /*	this.state.tempArray[this.state.index]=this.obj
-   	var count = this.state.index+1
-   	this.setState({
-   		index:count,tempArray:this.state.tempArray*/
- // 	})
    }
 onUpdate(e){
 
-debugger
+  this.obj = {
+    customer_id : this.props.data.customer_id.toString(),
+    location_id : this.props.data.location_id.toString(),
+    po_number : this.props.data.po_number.toString(),
+    material : this.props.data.material.toString(),
+    origin_id : this.props.data.origin_id.toString(),
+    packaging_material_id : this.props.data.packaging_material_id.toString(),
+    pallet_type_id : this.props.data.pallet_type_id.toString(),
+    bags_per_pallet : this.props.data.bags_per_pallet.toString(),
+    wrap_type_id : this.props.data.wrap_type_id.toString(),
+    bag_id : this.props.data.bag_id.toString(),
+    custom_label : this.props.data.custom_label.toString(),
+   }
+   if(this.isValid() != true){
+     return
+   }
+var isError = false;
+for(var i=0;i<this.props.data.TPackagingInstructionLots.length;i++){
+  var lot_number = this.props.data.TPackagingInstructionLots[i].lot_number
+  var railcar_number = this.props.data.TPackagingInstructionLots[i].railcar_number
+  var weight = this.props.data.TPackagingInstructionLots[i].weight
+  if(lot_number==" " || lot_number==null || lot_number == undefined || lot_number==""){
+    swal("Lot Number can't be empty")
+    isError = true;
+    return
+  }
+  if(railcar_number==" " || railcar_number==null || railcar_number == undefined || railcar_number==""){
+    swal("Railcar Number can't be empty")
+    isError = true;
+    return
+  }
+  if(weight==" " || weight==null || weight == undefined || weight==0 || weight==""){
+    swal("Weight can't be empty or 0")
+    isError = true;
+    return
+  }
+}
+if(!document.getElementById('row1').checked){
+  swal("Error","Please check the Create Label Check Box","info")
+  isError = true
+  return
+}
+if(isError){
+  return
+}
 	var postUrl = Base_Url+"TPackagingInstructions/updatePIEntry"
-
-
 	$.ajax({
 	type:"POST",
 	url: postUrl,
@@ -437,7 +498,6 @@ isValid(){
 
 
 onSubmit(e){
-
 	var checkPo = []
 	for(var i in this.state.polList){
 		checkPo.push(this.state.polList[i].poNumber)
@@ -449,6 +509,14 @@ onSubmit(e){
 	}
 	}
 	if(this.isValid() == true){
+
+    if(!document.getElementById('row1').checked){
+      swal("Error","Please check the Create Label Check Box")
+      return
+    }
+    if(this.ValidateRailCar()){
+      return
+    }
 	console.log("PI Object",this.obj)
 	let today = new Date();
 	let dd = today.getDate();
@@ -471,11 +539,11 @@ Object.defineProperty(this.Allobjs,"PI",{
                                         configurable:true,
 										value:this.obj})
 //if(this.state.customChecked == false){
- 	if(Object.keys(this.railcarObj).length != 0){
- 		this.addrailcarObject();
- 	}
+ // 	if(Object.keys(this.railcarObj).length != 0){
+ // 		this.addrailcarObject();
+ // 	}
 //}
-debugger
+this.railCarObjects = this.RailCarArray
 console.log(this.railCarObjects)
 if(this.railCarObjects && this.railCarObjects.length > 1){
   this.state.labelLength.unshift(this.obj.custom_label)
@@ -483,7 +551,7 @@ if(this.railCarObjects && this.railCarObjects.length > 1){
   for(var i in this.railCarObjects){
       let tempcustomlabel = this.state.labelLength[i]
       if(i>0){
-        tempcustomlabel = tempcustomlabel.poNumber+tempcustomlabel.lotNumber+tempcustomlabel.originName+tempcustomlabel.material+tempcustomlabel.weight
+        tempcustomlabel = tempcustomlabel.poNumber+tempcustomlabel.lotNumber+tempcustomlabel.material+tempcustomlabel.originName+tempcustomlabel.weight
       }
       this.railCarObjects[i].custom_label = tempcustomlabel
   }
@@ -491,7 +559,7 @@ if(this.railCarObjects && this.railCarObjects.length > 1){
 if(this.state.selectedOption == 'kg'){
   var flag = true;
   for(var i=0;i<this.railCarObjects.length;i++){
-    this.railCarObjects[i].weight = this.railCarObjects[i].weight*2.20
+    this.railCarObjects[i].weight = this.railCarObjects[i].weight*2.20462
   }
 }
 if(this.state.labelLength && this.state.labelLength.length == 0){
@@ -506,7 +574,7 @@ var postUrl = Base_Url+"TPackagingInstructions/createPiEntry"
 if(this.railCarObjects== 0){
   if(flag){
     for(var i=0;i<this.railCarObjects.length;i++){
-      this.railCarObjects[i].weight = this.railCarObjects[i].weight/2.20
+      this.railCarObjects[i].weight = this.railCarObjects[i].weight/2.20462
     }
   }
   this.state.labelLength.shift()
@@ -517,7 +585,12 @@ console.log(this.Allobjs)
 if(this.Allobjs.PI.po_number == "" || this.Allobjs.PI.po_number === undefined){
 	this.Allobjs.PI.po_number = this.Allobjs.packagingLots[0].lot_number
 }
-debugger
+swal({
+  title: "Submitting",
+  text: "Please Wait",
+  timer: 2500,
+  showConfirmButton: false
+})
 $.ajax({
 	type:"POST",
 	url: postUrl,
@@ -529,7 +602,7 @@ $.ajax({
 	error:function(err){
     if(flag){
       for(var i=0;i<this.railCarObjects.length;i++){
-        this.railCarObjects[i].weight = this.railCarObjects[i].weight/2.20
+        this.railCarObjects[i].weight = this.railCarObjects[i].weight/2.20462
       }
     }
     this.state.labelLength.shift()
@@ -549,9 +622,10 @@ $.ajax({
 
 
   addrailcarObject(){
-   	var railCarObjects = Object.assign({},this.railcarObj)
-	this.railCarObjects.push(railCarObjects)
-	console.log(this.railCarObjects)
+   	var railCarObjects = new Object()
+    this.RailCarArray.push(railCarObjects)
+	  console.log(this.railCarObjects)
+    return this.RailCarArray.length
     }
 
     onMinus(e){
@@ -565,37 +639,74 @@ $.ajax({
       this.railcarObj = this.railCarObjects[0]
       this.state.index = 0;
       this.railCarObjects=[]
+      this.RailCarArray.splice(1,this.RailCarArray.length-1)
+    }
+    ValidateRailCar(RailCarByProps){
+      debugger
+      var isError = false;
+      var obj = [];
+      if(RailCarByProps && RailCarByProps==1){
+        var tempObj = {railCar:'',lot:'',weight:''}
+        for(var i=0;i<this.props.lotInfo.length;i++){
+          tempObj.railCar = JSON.parse(JSON.stringify(this.props.lotInfo[i].lot_number))
+          tempObj.lot = JSON.parse(JSON.stringify(this.props.lotInfo[i].railcar_number))
+          tempObj.weight = JSON.parse(JSON.stringify(this.props.lotInfo[i].weight))
+          obj.push(JSON.parse(JSON.stringify(tempObj)))
+        }
+      }
+      else{
+        obj = JSON.parse(JSON.stringify(this.RailCarArray))
+      }
+
+      for(var i =0; i <obj.length;i++){
+        if(Object.keys(obj[i]).length<3){
+          swal("","Please Enter all fields of Railcar: "+i,"info")
+          isError = true;
+          break
+        }
+        for(var prop in obj[i]){
+          if (obj[i].hasOwnProperty(prop)) {
+            if(obj[i][prop] =="" || obj[i][prop] == null){
+              swal("","Please Enter all fields of Railcar: "+i,"info")
+              isError = true;
+              break
+            }
+        }}
+        if(isError){
+          break
+        }
+
+      }
+      return isError
     }
 onAdd(e){
+  debugger
+  var position = 0;
 
-	this.Add = true
-	if(Object.keys(this.railcarObj).length !== 0){
-		this.addrailcarObject();
+  if(this.ValidateRailCar()){
+    return
+  }
+
+		position = this.addrailcarObject();
 		const railCarInfoList = this.state.railCarInfoList;
 		var count = this.state.index+1
 		this.setState
 		({
 				index:count,
-				railCarInfoList	: railCarInfoList.concat(<RailcarInformation key={railCarInfoList.length} onChange={this.handleRailcarChange.bind(this)} idd = {count} />),
+				railCarInfoList	: railCarInfoList.concat(<RailcarInformation key={railCarInfoList.length} onChange={this.handleRailcarChange.bind(this)} idd = {position-1} />),
 
 	    })
-	    console.log(this.state.railCarInfoList.length)
-	    	/*this.railcarObj = {}*/
-	}
-	else {
-		swal("Empty Fields","Please Enter All The Fields Before Adding New Lots.","error")
-	}
 }
 convertWeightToLBS(object){
 
     if(Array.isArray(object)){
 
       for(var i =0;i<object.length;i++){
-        object[i].weight = object[i].weight / 2.20
+        object[i].weight = object[i].weight / 2.20462
       }
     }
     else{
-      object.weight = object.weight / 2.20
+      object.weight = object.weight / 2.20462
     }
 
 }
@@ -604,33 +715,90 @@ convertWeightToKG(object){
     if(Array.isArray(object)){
 
       for(var i =0;i<object.length;i++){
-        object[i].weight = object[i].weight * 2.20
+        object[i].weight = object[i].weight * 2.20462
       }
     }
     else{
-      object.weight = object.weight * 2.20
+      object.weight = object.weight * 2.20462
     }
 
 }
-
+ChangeRailCarForProps(){
+  debugger
+  swal("value changed")
+}
+MinusRailCarFromProps(e){
+  var id = parseInt(e.target.id.substring(10,e.target.id.length))
+  this.props.lotInfo.splice(id,1)
+  this.forceUpdate()
+}
+AddRailCarForProps(){
+  debugger
+  var a = JSON.parse(JSON.stringify(this.props.lotInfo[0]))
+  if(this.ValidateRailCar(1)){
+    return
+  }
+  a.lot_number = ""
+  a.railcar_number = ""
+  a.weight = ""
+  a.id = 0
+  a.railcar_status = "INTRANSIT"
+  a.status ="UNCONFIRMED"
+  a.bags_to_ship = 0
+  a.arrived = 0
+  a.createdOn = new Date()
+  this.props.lotInfo.push(a)
+  this.forceUpdate()
+}
 onChekBoxClick(e){
   debugger
   var labelArray = []
   var obj1 = {}
   var flag = false
+  var weightForLabel = -10
+  var weightUnit = 'Kg'
 if(e.target.checked == true)
 {
+  if(this.props.data){
+      for(var i=0;i<this.state.unittype.length;i++){
+      if(this.props.data.packaging_material_id==this.state.unittype[i].id){
+        weightForLabel = this.state.unittype[i].avarageMaterialWeight
+        if(this.props.data.bag_id!="1"){
+          weightUnit = 'lbs'
+        }
+        break;
+      }
+      }
+    }
+    else{
+      for(var i=0;i<this.state.unittype.length;i++){
+        if(this.state.unittype[i].id==parseInt(this.obj.packaging_material_id)){
+          weightForLabel = this.state.unittype[i].avarageMaterialWeight
+          if(this.obj.bag_id!=1){
+            weightUnit = 'lbs'
+          }
+          break;
+        }
+      }
+    }
+    if(weightForLabel==""){
+      weightForLabel = -1
+    }
   if(this.props.data!==undefined){
     var flag = true
     this.railcarObj = []
+    this.RailCarArray=[]
     for(var i=0;i<this.props.data.TPackagingInstructionLots.length;i++){
 
-      var object = {}
+      var object = new Object()
       object.lot_number = this.props.data.TPackagingInstructionLots[i].lot_number
       object.railcar_number = this.props.data.TPackagingInstructionLots[i].railcar_number
       object.weight = this.props.data.TPackagingInstructionLots[i].weight
       this.railcarObj.push(object)
+      this.RailCarArray.push(object)
+      this.state.rObjects.push(object)
     }
+    objectPushed = true
     this.obj.origin_id = this.props.data.origin_id
     this.obj.po_number = this.props.data.po_number
     this.obj.material = this.props.data.material
@@ -640,30 +808,18 @@ if(e.target.checked == true)
  var mulrail = []
  var arrWeight = []
  var arrlot= []
- this.state.rObjects = []
- // if(this.state.selectedOption=='lbs' && isWeightconverted ){
- //   this.convertWeightToLBS(this.railcarObj)
- //   this.convertWeightToLBS(this.railCarObjects)
- //   isWeightconverted = false
- //   weightinLBS = false
- // }
- // else if(this.state.selectedOption=='kg' && !isWeightconverted ){
- //   this.convertWeightToKG(this.railcarObj)
- //   this.convertWeightToKG(this.railCarObjects)
- //   isWeightconverted = true;
- // }
+ this.state.rObjects = objectPushed ? this.RailCarArray : []
 
 	if(this.Add == false) {
-      this.state.rObjects.push(this.railcarObj)
-      if(flag){
-        this.railcarObj = this.railcarObj[0]
-      }
+    this.railcarObj = this.RailCarArray[0]
+    this.state.rObjects.push(this.railcarObj);
 	}
 	else if(this.Add == true){
 
-    mulrail.push(this.railcarObj)
-    this.state.rObjects.push(this.railCarObjects)
-		this.state.rObjects.push(mulrail)
+    for(var i =0 ;i<this.RailCarArray.length;i++){
+      var obj = JSON.parse(JSON.stringify(this.RailCarArray[i]))
+      this.state.rObjects.push(obj)
+    }
 
 	}
 	this.state.rObjects = [].concat.apply([], this.state.rObjects);
@@ -699,35 +855,49 @@ var uniquelot = arrlot.filter(function(elem, index, self) {
 	})
   if(this.state.selectedOption == 'kg'){
     for(var i =0 ;i<uniqueWeight.length;i++){
-      uniqueWeight[i] = uniqueWeight[i] * 2.20
+      uniqueWeight[i] = uniqueWeight[i] * 2.20462
     }
   }
 var stampConfirm = localStorage.getItem('userName')
 var count = 0
 
 for(var z in uniquelot){
-
-this.state.labelLength.push({"poNumber" : this.obj.po_number +'\n' ,"lotNumber" : uniquelot[z]+ '\n' ,"originName" : originName + '\n' ,"material" : this.obj.material +'\n' , "weight" :  uniqueWeight[z]})
+if(weightForLabel>-1){
+  this.state.labelLength.push({"poNumber" : this.obj.po_number +'\n' ,"material" : this.obj.material +'\n' ,"lotNumber" : uniquelot[z]+ '\n' , "weight" :  weightForLabel+" "+weightUnit +" Net \n","originName" : "Made in "+originName })
+}
+else{
+  this.state.labelLength.push({"poNumber" : this.obj.po_number +'\n' ,"material" : this.obj.material +'\n',"lotNumber" : uniquelot[z]+ '\n' ,"originName" : "Made in "+originName })
+}
 
 
 }
 //this.state.labelLength.push(labelArray)
 
 this.state.labelLength = [].concat.apply([],this.state.labelLength)
+if(weightForLabel>-1){
+  var obj =  this.obj.po_number +'\n'+ this.obj.material +'\n' + uniquelot[0] + '\n'  +  weightForLabel+ " "+weightUnit+ " Net \n" + "Made in "+originName
+}
+else{
+  var obj =  this.obj.po_number +'\n'+ this.obj.material +'\n' + uniquelot[0] + '\n'   + "Made in "+ originName
+}
 
-var obj =  this.obj.po_number +'\n'  + originName +'\n'  + this.obj.material +'\n'+ uniquelot[0] + '\n'  + uniqueWeight[0]
 
 if(this.props.data!==undefined){
 this.props.data.custom_label = obj
 var tempObj = this.state.labelLength
 for (var i=0;i< this.props.lotInfo.length;i++){
   let tempCustomlabelobj;
-  tempCustomlabelobj = tempObj[i].poNumber+tempObj[i].lotNumber+tempObj[i].originName+tempObj[i].material+tempObj[i].weight
+  if(weightForLabel>-1){
+    tempCustomlabelobj = tempObj[i].poNumber+tempObj[i].material+tempObj[i].lotNumber+tempObj[i].weight+tempObj[i].originName
+  }
+  else{
+    tempCustomlabelobj = tempObj[i].poNumber+tempObj[i].material+tempObj[i].lotNumber+tempObj[i].originName
+  }
+
   this.props.lotInfo[i].custom_label = tempCustomlabelobj
 }
 }
 this.state.labelLength.splice( 0 ,1)
-console.log("labelArrayyyyyy777777777" , this.state.labelLength)
 	this.autolabel = obj
 	this.obj.custom_label = obj
 	this.setState({
@@ -753,11 +923,9 @@ else{
 }
  addrailcarObjectLabel()
  {
-   	var railCarObjects = Object.assign({},this.railcarObj)
-	this.railCarObjects.push(railCarObjects)
-	console.log(this.railCarObjects)
-     return this.railCarObjects
-    }
+   var obj = new Object
+   this.RailCarArray.push(obj)
+ }
 render() {
 	   var customers = _.map(this.state.customer,(customer) =>
     	{
@@ -788,7 +956,7 @@ render() {
     		var editableLots = []
     		var index= 0
     	editableLots = _.map(this.props.lotInfo,(lotInfo,index) => {
-    		return <RailcarInformation key={index} id = {index} data = {lotInfo} handleRailCarNumberEdit = {(e)=>{this.handleRailCarNumberEdit(e,index)}} handleWeightEdit = {(e)=>{this.handleWeightEdit(e,index) }} handleLotNumberEdit = {(e)=>{this.handleLotNumberEdit(e,index)}} />
+    		return <RailcarInformation lotInfo={this.props.lotInfo} MinusRailCarFromProps = {this.MinusRailCarFromProps} onChange={this.ChangeRailCarForProps} haveProps = {"1"} idForadd={"add"+index} idForminus={"minus"+index} AddRailCarForProps = {this.AddRailCarForProps} key={index} id = {index} data = {lotInfo} handleRailCarNumberEdit = {(e)=>{this.handleRailCarNumberEdit(e,index)}} handleWeightEdit = {(e)=>{this.handleWeightEdit(e,index) }} handleLotNumberEdit = {(e)=>{this.handleLotNumberEdit(e,index)}}/>
     	})
     }
     return (
@@ -1005,7 +1173,10 @@ render() {
 				{this.state.railCarInfoList}
 				</div>
 				:
-				<div>{editableLots}</div> }
+				<div>
+       <div>{editableLots}</div>
+       </div>
+          }
      	</fieldset>
     </div>
 
@@ -1096,7 +1267,7 @@ render() {
 					</div>
                 </div>
 
-				<div className="form-group" style={{display : this.state.display}}>
+				<div className="form-group">
 					<label htmlFor="Type_of_Unit" className = {this.state.errors.packaging_material_id ? "col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label has error" : "col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label"} >Type of Packaging</label>
 					<div className="col-lg-7    col-sm-11 col-xs-11 ">
 					  {this.props.data != undefined ?
@@ -1112,7 +1283,6 @@ render() {
 					  :
 					<select
 					   className="form-control"
-
 					    id="Type_of_Unit"
 					    name="packaging_material_id"
 					    disabled = {this.state.disabled}
@@ -1237,8 +1407,12 @@ render() {
 		<div className=" col-lg-4 col-md-4 col-sm-4 col-xs-4 pddn-10-top">
 					<label className="control control--checkbox ">Create Label
 					  <input type="checkbox" onClick = {this.onChekBoxClick}  id="row1"/><div className="control__indicator"></div>
-					</label>
+<br/>
+<span className="error">{this.state.errors.custome_label}</span>
+          </label>
+
 	</div>
+  <span className="clearfix"></span>
    <div className="container">
       <h4>CUSTOM LABEL</h4><hr/>
       {
@@ -1265,7 +1439,7 @@ render() {
             value={ this.obj.custom_label }
             placeholder="Enter Custom Label information"></textarea>
         	}
-            <div className="error"><span>{this.state.errors.custom_label}</span></div>
+            <div className="error"><span>{this.state.errors.custome_label}</span></div>
 
          </div>
 
@@ -1298,8 +1472,7 @@ render() {
 
           rows="3"
           id="Notes"
-          value={element.poNumber+element.originName+element.material+element.lotNumber+element.weight
-}
+          value={Object.keys(element).length==5?(element.poNumber+element.material+element.lotNumber+element.weight+element.originName):(element.poNumber+element.material+element.lotNumber+element.originName)}
           placeholder="Enter Custom Label information"></textarea>
         }
           <div className="error"><span>{}</span></div>
@@ -1333,6 +1506,7 @@ render() {
  	</div>
  	</div>
 </section>
+
 
 )}
 }

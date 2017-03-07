@@ -11,11 +11,25 @@ import React, { Component } from 'react';
     }
     render() {
         if(this.props.tabledata){
+          var statusConfirmed = 'UNCONFIRMED'
+
+
+          if(this.props.tabledata.isDomestic ==0 && this.props.tabledata.TShipmentInternational.length > 0){
+            statusConfirmed = this.props.tabledata.TShipmentInternational[0].status
+          }
+          else if(this.props.tabledata.isDomestic ==1 && this.props.tabledata.TShipmentDomestic.length > 0){
+            statusConfirmed = this.props.tabledata.TShipmentDomestic[0].status
+          }
                  this.Table = _.map(this.props.tabledata.TShipmentLots,(tble,index) =>{
+                   var inInventory = 'UNCONFIRMED'
+                   if(tble.TPackagingInstructionLots!=undefined){
+                     inInventory = tble.TPackagingInstructionLots.status
+                   }
                    var releaseNumber = this.props.tabledata.releaseNumber
                     if(this.props.tabledata.isDomestic == 1){
                         var bookingNumber = this.props.tabledata.TShipmentDomestic[0].bookingNumber
                         var cutOff = 'N/A'
+
                     }
                     else
                     {
@@ -30,8 +44,8 @@ import React, { Component } from 'react';
                                                 <td>{bookingNumber}</td>
                                                 <td>{tble.TPackagingInstructions ? tble.TPackagingInstructions.po_number : ''}</td>
                                                 <td>{tble.TPackagingInstructions ? tble.TPackagingInstructions.material : ''}</td>
-                                                <td>{tble.TPackagingInstructionLots ? (tble.TPackagingInstructionLots.status == "UNCONFIRMED" ? 'N' : 'Y') : ''}</td>
-                                                <td>Y</td>
+                                                <td>{statusConfirmed == "UNCONFIRMED" ? 'N' : 'Y'}</td>
+                                                <td>{(inInventory.toUpperCase() == "IN INVENTORY" || inInventory.toUpperCase() =="SHIPPED")? 'Y' : 'N'}</td>
                                                 <td>{cutOff}</td>
                                                 <td>{tble.TPackagingInstructionLots ? (tble.TPackagingInstructionLots.inInventory ? tble.TPackagingInstructionLots.inInventory : '') : ''} Bags</td>
                                                   <td>{tble.noOfBags ? tble.noOfBags : ''} Bags</td>

@@ -181,6 +181,10 @@ bookingChange(e){
 
 onSave(){
   debugger;
+  if(this.props.editData.TShipmentLots[0].TPackagingInstructionLots.inInventory<this.props.editData.TShipmentLots[0].noOfBags){
+    swal("Shipped bags must not be greater than Inventory bags")
+    return;
+  }
      this.SIObj.customerId = this.props.editData.customerId
      this.SIObj.releaseNumber = this.props.editData.releaseNumber
      this.SIObj.numberOfContainers = this.props.editData.numberOfContainers
@@ -435,7 +439,7 @@ return (
                             </div>
                         </div>
                         <div className="form-group">
-                            <label for="Purchase_Order" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">No. of Containers</label>
+                            <label for="Purchase_Order" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"># Containers</label>
                             <div className="col-lg-6    col-sm-11 col-xs-11 ">
                                 <input type="text"
                                 className="form-control"
@@ -461,9 +465,9 @@ return (
                             </div>
                         </div>
                         <div className="form-group">
-                            <label for="Weight" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Lot Number</label>
+                            <label for="Weight" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Lot #</label>
                             <div className="col-lg-6    col-sm-11 col-xs-11 ">
-                                <select value ={this.props.editData.TShipmentLots[0].TPackagingInstructionLots.id} className="form-control" id="" >
+                                <select value ={this.props.lotId} className="form-control" id="" >
                                 {this.lotNumber}
                                 </select>
                                 <div className="error"><span></span></div>
@@ -489,7 +493,7 @@ return (
                                     </div>
                                     <div className="form-group">
                                          <label htmlFor="Lot_Number"
-                                                className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label" >No. of Bags
+                                                className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label" ># Bags
                                              for Lot</label>
 
                                          <div className="col-lg-6    col-sm-11 col-xs-11 ">
@@ -504,7 +508,7 @@ return (
                     <fieldset className="scheduler-border no-right-border">
                         <legend className="scheduler-border">Shipment Info</legend>
                         <div className="form-group ">
-                            <label for="" className="col-lg-5 col-md-5 col-sm-11  col-xs-11 control-label">Booking Number</label>
+                            <label for="" className="col-lg-5 col-md-5 col-sm-11  col-xs-11 control-label">Booking #</label>
                             <div className="col-lg-6  col-sm-11 col-xs-11 ">
                                 <input type="text"
                                 className="form-control"

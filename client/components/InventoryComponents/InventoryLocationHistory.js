@@ -8,8 +8,6 @@ class InventoryLocationHistory extends Component {
 		this.state = { }
 	}
 	componentWillReceiveProps(nextProps) {
-
-debugger
    	let id = this.props.lID
 	   	let lotId = this.props.lotId
 	   	var PIview = createDataLoader(InventoryLocationHistory, {
@@ -39,7 +37,7 @@ debugger
 	           	 $.ajax({
 	            url: this.urlnew,
 	            success:function(data){
-								debugger
+
 	            	console.log('ajax>>>>>>>>>>>>>> ',data);
 
 	              	if(data.stamp_confirmed){
@@ -108,7 +106,7 @@ componentDidMount() {
 		if(this.state.InvtLocationHistory )
 		{
 		 invt = _.map(this.state.InvtLocationHistory,(invent)=>{
-			debugger
+
 			return (
 				<tr key={invent.id}>
 				<td>{invent.TInventoryLocation.locationName}</td>

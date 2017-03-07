@@ -73,10 +73,10 @@ class CreateUserForm extends React.Component {
                             <div className="col-lg-6  col-md-6 col-sm-6 col-xs-12">
                                 <div className={this.state.errors.lastName ? "form-group has error" : "form-group"}>
                                     <label htmlFor="Last_Name">Last Name</label>
-                                    <input type="text" 
-                                    className="form-control" 
+                                    <input type="text"
+                                    className="form-control"
                                     onChange = {this.onUserInfoChange}
-                                    id="lastName" 
+                                    id="lastName"
                                     placeholder="Enter Last Name"/>
                                     <div className="error"><span>{this.state.errors.lastName ? this.state.errors.lastName : ''}</span></div>
                                 </div>
@@ -84,10 +84,10 @@ class CreateUserForm extends React.Component {
                             <div className="col-lg-6  col-md-6 col-sm-6 col-xs-12">
                                 <div className={this.state.errors.emailAddr ?  "form-group has error" : "form-group"}>
                                     <label htmlFor="">Email Address</label>
-                                    <input type="email" 
-                                    className="form-control" 
+                                    <input type="email"
+                                    className="form-control"
                                     onChange = {this.onUserInfoChange}
-                                    id="email" 
+                                    id="email"
 
                                     placeholder="Enter Email Address"/>
                                     <div className="error"><span>{this.state.errors.emailAddr ? this.state.errors.emailAddr : ''}</span></div>
@@ -96,10 +96,10 @@ class CreateUserForm extends React.Component {
                             <div className="col-lg-6  col-md-6 col-sm-6 col-xs-12">
                                 <div className = {this.state.errors.confirmEmail ? "form-group has error" : "form-group"}>
                                     <label htmlFor="">Confirm Email Address</label>
-                                    <input type="email" 
-                                    className="form-control" 
+                                    <input type="email"
+                                    className="form-control"
                                     onChange = {this.onUserInfoChange}
-                                    id="confirmEmail" 
+                                    id="confirmEmail"
                                     placeholder="Confirm Email Address"/>
                                     <div className="error"><span>{this.state.errors.confirmEmail ? this.state.errors.confirmEmail : ''}</span></div>
                                 </div>
@@ -107,10 +107,10 @@ class CreateUserForm extends React.Component {
                              <div className="col-lg-6  col-md-6 col-sm-6 col-xs-12">
                                 <div className = {this.state.errors.password ? "form-group has error" : "form-group"}>
                                     <label htmlFor="">Password</label>
-                                    <input type="password" 
-                                    className="form-control" 
+                                    <input type="password"
+                                    className="form-control"
                                     onChange = {this.onUserInfoChange}
-                                    id="password" 
+                                    id="password"
                                     placeholder="Password"/>
                                     <div className="error"><span>{this.state.errors.password ? this.state.errors.passowrd : ''}</span></div>
                                 </div>
@@ -118,10 +118,10 @@ class CreateUserForm extends React.Component {
                             <div className="col-lg-6  col-md-6 col-sm-6 col-xs-12">
                                 <div className = {this.state.errors.confirmPassword ? "form-group has error" : "form-group"}>
                                     <label htmlFor="">Confrim Password</label>
-                                    <input type="password" 
-                                    className="form-control" 
+                                    <input type="password"
+                                    className="form-control"
                                     onChange = {this.onUserInfoChange}
-                                    id="confirmPassword" 
+                                    id="confirmPassword"
                                     placeholder="Confirm Password"/>
                                     <div className="error"><span>{this.state.errors.confirmPassword ? this.state.errors.confirmPassword : ''}</span></div>
                                 </div>

@@ -1,51 +1,42 @@
 import React from 'react';
-
 export default class RailcarInformation extends React.Component {
 	constructor(props){
 		super(props);
-		/*this.obj= {}
-    	this.railCarObjects=[]
-   		this.state={ railCarInfoList: [],
-    	index:0,
-    	tempArray:[]}
-    	this.onChange=this.onChange.bind(this);*/
     	this.state = { }
-    	//this.handleRailCarNumberChange = this.handleRailCarNumberChange.bind(this)
+			this.add = this.add.bind(this)
+			this.minus = this.minus.bind(this)
+
+	}
+	add(){
+		this.props.AddRailCarForProps()
+	}
+	minus(e){
+		this.props.MinusRailCarFromProps(e)
 	}
 
-/*	handleRailCarNumberChange(e){
-		this.props.handleRailCarNumberEdit(e,this.props.id)
-	} */
-   	//this.props.onChange(e.target.value)
-   	/*
-   	this.obj[e.target.name]=e.target.value;
-   	this.state.tempArray[this.state.index]=this.obj
-   	var count = this.state.index+1
-   	this.setState({
-   		index:count,tempArray:this.state.tempArray
-   	})
-   	console.log(this.state.tempArray)*/
-   //}
-  /* onAdd(e) {
-	this.railCarObjects.push(this.obj)
-	console.log(this.railCarObjects)
-	const railCarInfoList = this.state.railCarInfoList;
-	this.state.tempArray[this.state.index]=this.obj
-   	var count = this.state.index+1
-	this.setState({
-		index:count,
-		tempArray:this.state.tempArray,
-		railCarInfoList	: railCarInfoList.concat(<RailcarInformation key={railCarInfoList.length}/>)
-		})*/
-
-
+componentDidMount(){
+	var i =1
+	document.getElementById('minus'+0).style.display = 'none'
+	while(true){
+		if(document.getElementById('add'+i)){
+			document.getElementById('add'+i).style.display = 'none'
+			if(this.props.lotInfo[i].id!=0){
+				document.getElementById('minus'+i).style.display = 'none'
+			}
+			i++
+		}
+		else{
+			i=0
+			break
+		}
+	}
+}
 
 	  render() {
-			debugger
 	   return (
     	<div>
        		<div className="form-group ">
-					<label htmlFor="Rail_Car_Number" className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label">Rail Car Number</label>
+					<label htmlFor="Rail_Car_Number" className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label">Railcar #</label>
 					<div className="col-lg-7    col-sm-11 col-xs-11 ">
 					 {
 					 this.props.data != undefined ?
@@ -55,7 +46,7 @@ export default class RailcarInformation extends React.Component {
 					  className="form-control"
 						id={this.props.idd!==undefined?"Rail_Car_Number"+this.props.idd:"Rail_Car_Number"}
 					  ref={this.props.id}
-					  placeholder="Rail Car Number"
+					  placeholder="Railcar #"
 					  onChange={this.props.handleRailCarNumberEdit}
 					  value={this.props.data.railcar_number}
 					   />
@@ -65,17 +56,30 @@ export default class RailcarInformation extends React.Component {
 					  name="railcar_number"
 					  className="form-control"
 					  id={this.props.idd!==undefined?"Rail_Car_Number"+this.props.idd:"Rail_Car_Number"}
-					  placeholder="Rail Car Number"
+					  placeholder="Railcar #"
 					  onChange={this.props.onChange}
 					  value={this.state.railcarnumber}
 					   />
 					}
+
 					  <div className="error"><span></span></div>
-					</div>
+					  	</div>
+						 {this.props.haveProps=="1"?
+							<div id={this.props.idForadd} className="col-lg-1 col-md-1 col-sm-1 col-xs-1 add_btn text_left">
+						 <i className="fa-2x fa fa-plus base_color" onClick={this.add} aria-hidden="true"></i>
+						</div>:<div>
+						</div>}
+						{
+							this.props.haveProps=="1"?
+							<div className="col-lg-1 col-md-1 col-sm-1 col-xs-1 add_btn text_left" id={this.props.idForminus}>
+								<i className="fa-2x fa fa-minus base_color" id={"click"+this.props.idForminus} onClick={this.minus} aria-hidden="true"></i>
+							</div>:<div></div>
+						}
+
             </div>
 
 				<div className="form-group">
-					<label htmlFor="Lot_Number" className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label">Lot Number</label>
+					<label htmlFor="Lot_Number" className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label">Lot #</label>
 					<div className="col-lg-7    col-sm-11 col-xs-11 ">
 					    {this.props.data != undefined ?
 					     <input
@@ -83,7 +87,7 @@ export default class RailcarInformation extends React.Component {
 					     className="form-control"
 					     id={this.props.idd!==undefined?"Lot_Number"+this.props.idd:"Lot_Number"}
 					     ref={this.props.id}
-					     placeholder="Lot Number"
+					     placeholder="Lot #"
 					     name="lot_number"
 					     onChange={this.props.handleLotNumberEdit}
 					     value={this.props.data.lot_number}/>
@@ -92,7 +96,7 @@ export default class RailcarInformation extends React.Component {
 					     type="text"
 					     className="form-control"
 					     id={this.props.idd!==undefined?"Lot_Number"+this.props.idd:"Lot_Number"}
-					     placeholder="Lot Number"
+					     placeholder="Lot #"
 					     name="lot_number"
 					     onChange={this.props.onChange}
 					     value={this.state.lotnumber}/>

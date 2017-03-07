@@ -25,6 +25,7 @@ import { hashHistory } from 'react-router'
 var Promise = require('bluebird');
 var totalBagsInPO =0;
 var totalBagsOrderForPO = 0
+var tempDate = new Date()
 class ShipmentEntryForm extends React.Component {
     constructor(props) {
         super(props);
@@ -42,9 +43,9 @@ class ShipmentEntryForm extends React.Component {
         this.DomesticCarearobj={ }
         this.deliveryDate=''
         this.shipDate=''
-        this.internationalEarliestReturnDate=''
-        this.internationalCargoCutOffDate=''
-        this.DocCutoffDate=''
+        this.internationalEarliestReturnDate=tempDate.getFullYear()+"-"+(parseInt(tempDate.getMonth())+1)+"-"+tempDate.getDate()
+        this.internationalCargoCutOffDate=tempDate.getFullYear()+"-"+(parseInt(tempDate.getMonth())+1)+"-"+tempDate.getDate()+" "+tempDate.getHours()+":"+(tempDate.getMinutes()<10?"0"+tempDate.getMinutes():tempDate.getMinutes())
+        this.DocCutoffDate=tempDate.getFullYear()+"-"+(parseInt(tempDate.getMonth())+1)+"-"+tempDate.getDate()+" "+tempDate.getHours()+":"+(tempDate.getMinutes()<10?"0"+tempDate.getMinutes():tempDate.getMinutes())
         this.minus=0;
         this.lotminus=0;
         this.poNumber
@@ -254,6 +255,7 @@ class ShipmentEntryForm extends React.Component {
 
     }
     InternationalReturnDate(date){
+      debugger
         var startdate=this.convertDate(date)
         this.setState({
             EarliestReturnDate:date
@@ -263,6 +265,7 @@ class ShipmentEntryForm extends React.Component {
 
     }
     convertDate(date){
+      debugger
       var temp =[]
       temp = date.split('-');
       var tempYear = temp[2].split(' ')
@@ -372,6 +375,7 @@ class ShipmentEntryForm extends React.Component {
 
     }
     handleMIChange(e){
+            debugger
             totalBagsInPO =0
             totalBagsOrderForPO = 0
           if(e.target.name == "po_number"){
@@ -392,6 +396,7 @@ class ShipmentEntryForm extends React.Component {
                      } );
 
                  axios.get(pLotUrl).then((response)=>{
+                   debugger
                    this.setState({
                     lotNumber: response.data,
                     len:response.data.length-1
@@ -408,6 +413,7 @@ class ShipmentEntryForm extends React.Component {
                      this.Total = inventoryBags.reduce(function(a,b){return parseInt(a)+parseInt(b) ;},0)
 
                 this.lotNumber = _.map(this.state.lotNumber,(lotNum,index) => {
+                   debugger
                   if(isNaN(lotNum.inInventory) || lotNum.inInventory == null){
                     lotNum.inInventory = 0;
                   }
@@ -696,10 +702,9 @@ class ShipmentEntryForm extends React.Component {
     }
 
     onSubmit(e){
-
         if(!(this.isValid())){
-            swal("" , "Please fill red marked fields" , "error")
-            return
+            // swal("" , "Please fill red marked fields" , "error")
+            // return
         }
 
         if(this.isDomestic) {
@@ -718,11 +723,9 @@ class ShipmentEntryForm extends React.Component {
                 return
             }
         }
-        debugger
 
         if(parseInt(this.comPo.bagsToShip) > parseInt(this.comPo.inInventorybags)){
-            swal("" , "Shipped bags must not be greater than Inventory bags" , "info")
-            return
+            //swal("" , "Shipped bags must not be greater than Inventory bags" , "info")
         }
         var flagToDecideLotNumber = false;
         if(this.comPo.lot_id == ''){
@@ -738,28 +741,42 @@ class ShipmentEntryForm extends React.Component {
           flagToDecideLotNumber = true
         }
         if(!flagToDecideLotNumber){
+          debugger
           let bagsAdded = 0;
           let bagsrequested = parseInt(this.comPo.bagsToShip)
           let bagsLeft = bagsrequested - bagsAdded
           var obj = {};
+          var flag = false
           obj.pi_id = this.comPo.pi_id
           for(var i in this.state.lotNumber){
+            flag = false
             if(parseInt(bagsLeft)>0){
-              if(parseInt(bagsLeft)>=parseInt(this.state.lotNumber[i].inInventory)){
+              if(parseInt(bagsLeft)>=parseInt(this.state.lotNumber[i].inInventory) && parseInt(this.state.lotNumber[i].inInventory) >0){
                 obj.bagsToShip = this.state.lotNumber[i].inInventory
                 bagsAdded = parseInt(bagsAdded)+parseInt(this.state.lotNumber[i].inInventory);
+                flag = true
               }
-            else{
+            else if(parseInt(bagsLeft)<parseInt(this.state.lotNumber[i].inInventory) && parseInt(this.state.lotNumber[i].inInventory)>0){
               obj.bagsToShip = bagsLeft
               bagsAdded = parseInt(bagsAdded) + parseInt(bagsLeft)
+              flag = true
             }
-            obj.lot_id = this.state.lotNumber[i].id
-            obj.inInventorybags = this.state.lotNumber[i].inInventory
-            this.LIObjects.push(_.cloneDeep(obj));
-            bagsLeft = this.comPo.bagsToShip - bagsAdded
+            if(flag){
+              obj.lot_id = this.state.lotNumber[i].id
+              obj.inInventorybags = this.state.lotNumber[i].inInventory
+              this.LIObjects.push(_.cloneDeep(obj));
+              bagsLeft = this.comPo.bagsToShip - bagsAdded
+            }
+
           }
           else{
             break;
+          }
+          if(i==this.state.lotNumber.length-1 && this.LIObjects.length<1){
+            obj.lot_id = this.state.lotNumber[0].id
+            obj.inInventorybags = this.state.lotNumber[0].inInventory
+            obj.bagsToShip = bagsrequested
+            this.LIObjects.push(_.cloneDeep(obj));
           }
           }
 
@@ -901,7 +918,7 @@ class ShipmentEntryForm extends React.Component {
    }
   //  hashHistory.push('/Container/containerarrivalentry/'+response.data.id+'/'+this.SIObj.isDomestic )
 onSubmitContainer(e){
-debugger
+  debugger
   if(!(this.isValid())){
          swal("" , "Please fill red marked fields" , "error")
          return
@@ -925,8 +942,8 @@ debugger
      }
      debugger
      if(parseInt(this.comPo.bagsToShip) > parseInt(this.comPo.inInventorybags)){
-         swal("" , "Shipped bags must not be greater than Inventory bags" , "info")
-         return
+         //swal("" , "Shipped bags must not be greater than Inventory bags" , "info")
+         //return
      }
 
      var flagToDecideLotNumber = false;
@@ -943,28 +960,42 @@ debugger
        flagToDecideLotNumber = true
      }
      if(!flagToDecideLotNumber){
+       debugger
        let bagsAdded = 0;
        let bagsrequested = parseInt(this.comPo.bagsToShip)
        let bagsLeft = bagsrequested - bagsAdded
        var obj = {};
+       var flag = false
        obj.pi_id = this.comPo.pi_id
        for(var i in this.state.lotNumber){
+         flag = false
          if(parseInt(bagsLeft)>0){
-           if(parseInt(bagsLeft)>=parseInt(this.state.lotNumber[i].inInventory)){
+           if(parseInt(bagsLeft)>=parseInt(this.state.lotNumber[i].inInventory) && parseInt(this.state.lotNumber[i].inInventory) >0){
              obj.bagsToShip = this.state.lotNumber[i].inInventory
              bagsAdded = parseInt(bagsAdded)+parseInt(this.state.lotNumber[i].inInventory);
+             flag = true
            }
-         else{
+         else if(parseInt(bagsLeft)<parseInt(this.state.lotNumber[i].inInventory) && parseInt(this.state.lotNumber[i].inInventory)>0){
            obj.bagsToShip = bagsLeft
            bagsAdded = parseInt(bagsAdded) + parseInt(bagsLeft)
+           flag = true
          }
-         obj.lot_id = this.state.lotNumber[i].id
-         obj.inInventorybags = this.state.lotNumber[i].inInventory
-         this.LIObjects.push(_.cloneDeep(obj));
-         bagsLeft = this.comPo.bagsToShip - bagsAdded
+         if(flag){
+           obj.lot_id = this.state.lotNumber[i].id
+           obj.inInventorybags = this.state.lotNumber[i].inInventory
+           this.LIObjects.push(_.cloneDeep(obj));
+           bagsLeft = this.comPo.bagsToShip - bagsAdded
+         }
+
        }
        else{
          break;
+       }
+       if(i==this.state.lotNumber.length-1 && this.LIObjects.length<1){
+         obj.lot_id = this.state.lotNumber[0].id
+         obj.inInventorybags = this.state.lotNumber[0].inInventory
+         obj.bagsToShip = bagsrequested
+         this.LIObjects.push(_.cloneDeep(obj));
        }
        }
 
@@ -1509,7 +1540,10 @@ debugger
                                                 className = "form-control"
                                                 dateFormat="MM-DD-YYYY"
                                                 forceValidDate={true}
-                                                defaultValue={1485859095406}
+                                                updateOnDateClick={true}
+                                                collapseOnDateClick={true}
+                                                defaultValue={1486619937042}
+                                                showClock={false}
                                                 onChange={this.InternationalReturnDate}
                                                 selected={this.state.EarliestReturnDate}
                                                 >
@@ -1517,7 +1551,10 @@ debugger
                                                         className = "form-control"
                                                         navigation={true}
                                                         locale="en"
-                                                        forceValidDate={true}/>
+                                                        highlightToday={true}
+                                                        forceValidDate={true}
+                                                        footer={false}
+                                                        selected={this.state.internationalEarliestReturnDate}/>
                                               </DateField>
                                                 </div>
                                                 <div className="error"><span></span></div>
@@ -1532,9 +1569,12 @@ debugger
                                             <div className="right-inner-addon "><i className="fa fa-calendar" aria-hidden="true"></i>
                                    <DateField
                                      className = "form-control"
-                                     dateFormat="MM-DD-YYYY HH:mm:ss"
+                                     dateFormat="MM-DD-YYYY HH:mm"
                                      forceValidDate={true}
-                                     defaultValue={1485859095406}
+                                     updateOnDateClick={true}
+                                     collapseOnDateClick={true}
+                                     defaultValue={1486619937042}
+                                     showClock={false}
                                      onChange={this.DocCutOffDate}
                                      selected={this.state.DocCutoffDate}
                                    >
@@ -1543,6 +1583,8 @@ debugger
                                        navigation={true}
                                        locale="en"
                                        forceValidDate={true}
+                                       highlightToday={true}
+                                       footer={false}
                                        selected={this.state.DocCutoffDate}
                                      />
                                    </DateField>
@@ -1563,9 +1605,12 @@ debugger
                                                                                        aria-hidden="true"></i>
                                              <DateField
                                                className = "form-control"
-                                               dateFormat="MM-DD-YYYY HH:mm:ss"
+                                               dateFormat="MM-DD-YYYY HH:mm"
                                                forceValidDate={true}
-                                               defaultValue={1485859095406}
+                                               updateOnDateClick={true}
+                                               collapseOnDateClick={true}
+                                               defaultValue={1486619937042}
+                                               showClock={false}
                                                onChange={this.InternationalCargoDate}
                                                selected={this.state.InternationalCargoDate}
                                              >
@@ -1573,7 +1618,9 @@ debugger
                                                         className = "form-control"
                                                         navigation={true}
                                                         locale="en"
+                                                        highlightToday={true}
                                                         forceValidDate={true}
+                                                        footer={false}
                                                     />
                                             </DateField>
                                                 </div>

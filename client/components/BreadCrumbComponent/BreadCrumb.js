@@ -4,16 +4,18 @@ import routes from '../../routes';
 export default class BreadCrumb extends React.Component {
  componentDidMount() {
    console.log("Routes",this.props)
+
  }
 
    render() {
+
      return (
-      <section className="breadcrumb_bg">  
+      <section className="breadcrumb_bg">
 	    <div className="container">
-             <div id="row">  
+             <div id="row">
             <strong>{this.props.routes[1].name.props.children[2]!="Enter Packaging Instruction" && this.props.routes[1].name.props.children[2]!= "Packaging Instruction View"?this.props.routes[1].name : (this.props.routes[1].name.props.children[2]=="Enter Packaging Instruction"?"Packaging >> Enter RailCars":"Packaging >> View RailCars")}</strong>
-            </div>	
-	    </div>	
+            </div>
+	    </div>
     </section>
     );
   }

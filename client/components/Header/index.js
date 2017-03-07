@@ -16,7 +16,7 @@ constructor(props){
     localStorage.removeItem('userName');
     localStorage.removeItem('userId');
     hashHistory.push('/')
-  } 
+  }
      render() {
        return (
         <div>
@@ -43,7 +43,7 @@ constructor(props){
                <li><a href="javascript:void(0)">PACKAGING</a></li>
                <li role="separator" className="divider"></li>
               <li><Link to="/Packaging/enterpackginginst/" >Enter RailCars</Link></li>
-               <li><Link to="/Packaging/packaginginstview/">View RailCars</Link></li>         
+               <li><Link to="/Packaging/packaginginstview/">View RailCars</Link></li>
                <li role="separator" className="divider"></li>
                <li><Link to="/Packaging/railcararrival">Mark Railcar Arrivals </Link></li>
                <li><Link to="/Packaging/railcardeparte">Mark Railcar Departures </Link></li>
@@ -57,7 +57,7 @@ constructor(props){
                <li><a href="javascript:void(0)">Shipments</a></li>
                <li role="separator" className="divider"></li>
                <li><Link to="/Shipment/shipmententry">Enter Shipments</Link></li>
-               <li><Link to="/Shipment/shipmentview">Shipment View</Link></li>            
+               <li><Link to="/Shipment/shipmentview">Shipment View</Link></li>
              </ul>
            </li>
            <li className="dropdown">

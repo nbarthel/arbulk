@@ -9,8 +9,6 @@ class ConfirmPackagingInstructionForm extends React.Component{
 constructor(props){
 	super(props);
 	this.check = [ ]
-	this.state = {
-	display : 'none' }
 	this.onClick = this.onClick.bind(this)
 	this.onSubmit = this.onSubmit.bind(this)
 	this.userName = localStorage.getItem('userName')
@@ -18,11 +16,6 @@ constructor(props){
 }
 componentDidMount() {
 	debugger
-	if(this.props.data.TPackagingInstructions.bag_id == 1){
-		this.setState({
-			display: 'block'
-		})
-	}
 }
 onClick(e){
 	if(e.target.checked){
@@ -37,13 +30,8 @@ onClick(e){
 }
 onSubmit(e){
 
-	if(this.props.data.TPackagingInstructions.TPackagingType.packagingType.toLowerCase() == "bags"  && this.check.length < 14)
+	if(this.check.length < 14)
 {
-		sweetAlert("Submit","Please Select All The Fields!!!","error")
-		return
-	}
-
-	else if(this.check.length < 13){
 		sweetAlert("Submit","Please Select All The Fields!!!","error")
 		return
 	}
@@ -89,7 +77,6 @@ onSubmit(e){
 
 }
 render(){
-debugger
 		return(
 
 
@@ -266,7 +253,7 @@ debugger
 				    </div>
                 </div>
 
-				<div className="form-group" style = {{display : this.state.display}}>
+				<div className="form-group" >
 					<div className="col-lg-3 "><label htmlFor="Type_of_Bag" className=" control-label">Type of Bag</label></div>
 					<div className="col-lg-6 col-md-6 col-sm-8 col-xs-12 ">
 					  <select className="form-control" id="Type_of_Bag" name="Type_of_Bag" disabled>

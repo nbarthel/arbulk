@@ -1025,6 +1025,10 @@ break;
 
     }
 onViewClick(e){
+    if(this.contId==undefined){
+      swal("Info","Selection Missing","info")
+      return
+    }
         hashHistory.push('/Conatainer/containerDetails/'+this.contId + '/'+ this.type)
     }
     render(){

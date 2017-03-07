@@ -84,6 +84,7 @@ class  ShipmentViewForm extends React.Component
             //this.onEdit =this.onEdit.bind(this)
             this.qArray = []
             this.addToQueue = this.addToQueue.bind(this)
+            this.tempLotId = ""
             //this.headerCheckboxChange = this.headerCheckboxChange.bind(this)
     }
     allocateContainer(e){
@@ -134,12 +135,14 @@ onViewClick(e){
             this.confId = data.id
             this.status = value.status
             this.shipId = value.id
+            this.tempLotId = data.piLotsId
         }
         else if(!e.target.checked){
             this.selected = null
             this.confId = null
             this.selected = null
             this.conFirmID = null
+            this.tempLotId = null
             //this.piID = null
 
         }
@@ -327,6 +330,8 @@ onClickli(e){
     onSearch(e){
         debugger;
         var cutofFilter = []
+        var lotFlag = false
+        var poFlag = false
         if(this.startdate && this.endDate) {
             var startDate = moment(this.startdate.format('MM-DD-YYYY')),
                 endDate = moment(this.endDate.format('MM-DD-YYYY'));
@@ -358,15 +363,10 @@ onClickli(e){
                 writable: true,
                 configurable: true,
                 value:this.shipMentType})
-
-
-
         }
 
 
         if(this.Where.shipMentType && this.Where.shipMentType == "Domestic") {
-
-
             isDomestic = true
             var objShip = {"isDomestic" : 1}
             serachObj.push(objShip)
@@ -375,11 +375,11 @@ onClickli(e){
             var objShip = {"isDomestic" : 0}
             serachObj.push(objShip)
         }
+        var customer = []
             if (this.Where != undefined && this.Where!= null)
                 {
                     if(this.Where.Customer && this.Where.Customer.length >0){
-                        var customer = []
-                        var obj = {}
+                                                var obj = {}
                         for(var i in this.Where.Customer){
                             obj = {"customerId" : this.Where.Customer[i] }
                             customer.push(obj);
@@ -397,9 +397,10 @@ onClickli(e){
                         }
                         serachObj.push(company)
                     }
+                      var Railstatus = [{"status":"UNCONFIRMED"},{"staus":"CONFIRMED"},{"status":"QUEUED"},{"status":"LOADED"},{"status":"COMPLETED"}];
 
                     if(this.Where.status && this.Where.status.length){
-                        var Railstatus = [];
+                        Railstatus = [];
                         var objStatus = {};
                         for(var z in this.Where.status){
                             objStatus = {"status" : this.Where.status[z]}
@@ -408,20 +409,34 @@ onClickli(e){
                          serachObjLots.push(Railstatus)
                     }
 
-                    if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.POSearch && this.Where.Query.POSearch!= undefined ){
-                        var poSearch =  [ {'po_number': {"like": "%" + this.Where.Query.POSearch + "%"}}]
-                        serachObj.push(poSearch)
-                    }
+                    var poSearch = {}
+                    var railSearch = {}
+                    var lotSearch = {}
 
+                    if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.POSearch && this.Where.Query.POSearch!= undefined ){
+                        poSearch =  [ {'po_number': {"like": "%" + this.Where.Query.POSearch + "%"}}]
+                        serachObj.push(poSearch)
+                        poFlag = true
+                    }
+                    else{
+                      poSearch =  [ {'po_number': {"like": "%" + "%"}}]
+                      serachObj.push(poSearch)
+                    }
 
                     if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.railcarSearch && this.Where.Query.railcarSearch!= undefined ){
-                        var railSearch = [{'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}}]
+                         railSearch = [{'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}}]
                          serachObjLots.push(railSearch)
                     }
+
 
                     if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.LotSearch && this.Where.Query.LotSearch!= undefined ){
                         var lotSearch =  [{'releaseNumber': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
                         serachObj.push(lotSearch)
+                        lotFlag = true
+                    }
+                    else{
+                      var lotSearch =  [{'releaseNumber': {"like": "%"  + "%"}}]
+                      serachObj.push(lotSearch)
                     }
 
                      serachObj = [].concat.apply([], serachObj);
@@ -431,56 +446,72 @@ onClickli(e){
       queries:[{
         endpoint: 'TPackagingInstructions',
         filter: {
-          include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
+          include: ['TPackagingInstructionLots',{
+                                                  "relation":"TPackagingInstructions",
+                                                  "scope":{"include":["TLocation"]}
+                                                }
+                   ]
         }
       }]
     })
        var base = 'TShipmentents';
-        //TPackagingInstructionLots
-        //            if(isDomestic){
-        //                this.url = PIview._buildUrl(base, {
-        //                    //include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational",{"relation" : "TPackagingInstructionLots" ,"scope":{"where":{"or":serachObjLots}}}}]
-        //
-        //                    include: ["TLocation", "TCompany", {
-        //                        "relation": "TShipmentDomestic",
-        //                        "scope": {"include": ["TShipmentType"]}
-        //                    }, {
-        //                        "relation": "TShipmentLots",
-        //                        "scope": {"include": "TPackagingInstructionLots", "where": {"lot_number": "wewff"}}
-        //                    }],
-        //                    where: {
-        //                        "and": serachObj
-        //                    }
-        //
-        //                });
-        //            }
-        //            else if(!isDomestic){
-        //                this.url = PIview._buildUrl(base, {
-        //                    //include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational",{"relation" : "TPackagingInstructionLots" ,"scope":{"where":{"or":serachObjLots}}}}]
-        //
-        //                    include: ["TLocation", "TCompany",  {
-        //                        "relation": "TShipmentInternational",
-        //                        "scope": {"include": ["TSteamshipLine"]}
-        //                    }, {
-        //                        "relation": "TShipmentLots",
-        //                        "scope": {"include": "TPackagingInstructionLots", "where": {"lot_number": "wewff"}}
-        //                    }],
-        //                    where: {
-        //                        "and": serachObj
-        //                    }
-        //
-        //                });
-        //            }
+
                      if(this.Where.CutofFilter && this.Where.CutofFilter.length > 0){
 
                         this.url = PIview._buildUrl(base, {
-                            //include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational",{"relation" : "TPackagingInstructionLots" ,"scope":{"where":{"or":serachObjLots}}}}]
 
-                            include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational","scope":{"where" : {"or" : cutofFilter },"include":["TSteamshipLine"]}},{"relation" : "TShipmentLots" ,"scope":{"include":"TPackagingInstructionLots"}}],
+                            include : ["TLocation" ,"TContainerAllocation", "TCompany" ,
+
+                                                                 {"relation" : "TContainerDomestic",
+                                                                                "scope":{"include" : "TCompany"}
+                                                                 },
+
+                                                                 {"relation" : "TContainerInternational",
+                                                                               "scope":{"include" : "TCompany"}
+                                                                 },
+                                                                 {
+                                                                  "relation" :"TShipmentDomestic",
+                                                                  "scope":{"include":"TShipmentType",
+                                                                  "where":{"or":Railstatus}}
+                                                                 },
+                                                                 {
+                                                                  "relation" :"TShipmentInternational",
+                                                                  "scope":{
+                                                                            "include":["TSteamshipLine","TContainerType"],
+                                                                            "where" : {"and":[{"cargoCutoffDate":
+                                                                                                                  {
+                                                                                                                      "between" : [new Date(cutofFilter[0].cargoCutoffDate),new Date(cutofFilter[cutofFilter.length-1].cargoCutoffDate)]
+                                                                                                                  }
+                                                                                              },
+                                                                                              {
+                                                                                                  "or":Railstatus
+                                                                                              }]
+
+                                                                                      }
+                                                                         }
+                                                                  },
+                                                                  {
+                                                                      "relation": "TShipmentLots",
+                                                                      "scope":{
+                                                                                "include":["TPackagingInstructionLots",{
+                                                                                                                          "relation":"TPackagingInstructions",
+                                                                                                                          "scope":{"where":{"and":[
+                                                                                                                                                    {"or":poSearch}
+                                                                                                                                                  ]
+                                                                                                                                           }
+                                                                                                                                  }
+                                                                                                                       }
+                                                                                          ],
+                                                                                "where":{"active":"1"}
+                                                                              }
+                                                                  }
+                                      ],
                             where: {"and":[
-                              {"or":customer},
-                              {"or":company}
-                            ]}
+                                           {"or":customer},
+                                           {"or":company},
+                                           {"active":1}
+                                          ]
+                                   }
 
                         });
                     }
@@ -489,44 +520,244 @@ onClickli(e){
                   else if(serachObjLots && serachObjLots.length > 0){
 
                        this.url = PIview._buildUrl(base, {
-                           //include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational",{"relation" : "TPackagingInstructionLots" ,"scope":{"where":{"or":serachObjLots}}}}]
 
-                           include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":"TShipmentType","where":{"and":serachObjLots}}},{"relation" :"TShipmentInternational","scope":{"where" : {"and" : serachObjLots },"include":["TSteamshipLine"]}},{"relation" : "TShipmentLots" ,"scope":{"include":"TPackagingInstructionLots"}}],
-                          where: {"and":[
-                              {"or":customer},
-                              {"or":company}
-                            ]}
+                           include : ["TLocation" ,"TContainerAllocation", "TCompany" ,
+                                                                {
+                                                                  "relation" : "TContainerDomestic",
+                                                                   "scope":{"include" : "TCompany"}
+                                                                },
+
+                                                                {
+                                                                  "relation" : "TContainerInternational",
+                                                                  "scope":{"include" : "TCompany"}
+                                                                },
+
+                                                                {
+                                                                  "relation" :"TShipmentDomestic",
+                                                                  "scope":{"include":"TShipmentType",
+                                                                  "where":{"and":serachObjLots}}
+                                                                },
+
+                                                                {
+                                                                  "relation" :"TShipmentInternational",
+                                                                  "scope":{"where" : {
+                                                                                        "and" : serachObjLots
+                                                                                      },
+                                                                  "include":["TSteamshipLine","TContainerType"]}
+                                                                },
+
+                                                                {
+                                                                    "relation": "TShipmentLots",
+                                                                    "scope":{
+                                                                              "include":["TPackagingInstructionLots",{
+                                                                                                                        "relation":"TPackagingInstructions",
+                                                                                                                        "scope":{"where":{"and":[
+                                                                                                                                                  {"and":poSearch}
+                                                                                                                                                ]
+                                                                                                                                         }
+                                                                                                                                }
+                                                                                                                     }
+                                                                                        ],
+                                                                              "where":{"active":"1"}
+                                                                            }
+                                                                }
+                                    ],
+                           where: {"and":[
+                             {"or":customer},
+                             {"or":company},
+                             {"or":serachObjLots}
+                           ]}
+
 
                        });
                    }
 
                     else {
-                        this.url = PIview._buildUrl(base, {
-                            //include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational",{"relation" : "TPackagingInstructionLots" ,"scope":{"where":{"or":serachObjLots}}}}]
+                      if(objShip==undefined)
+                        {
+                          this.url = PIview._buildUrl(base, {
+                            include: ["TLocation","TContainerAllocation","TCompany",
+                                                              {
+                                                                  "relation" : "TContainerDomestic",
+                                                                  "scope":{"include" : "TCompany"}
+                                                              },
 
-                            include: ["TLocation", "TCompany", {
-                                "relation": "TShipmentDomestic",
-                                "scope": {"include": ["TShipmentType"]}
-                            }, {
-                                "relation": "TShipmentInternational",
-                                "scope": {"include": ["TSteamshipLine"]}
-                            }, {
-                                "relation": "TShipmentLots",
-                                "scope": {"include": "TPackagingInstructionLots", "where": {"lot_number": "wewff"}}
-                            }],
-                       where: {"and":[
+                                                              {
+                                                                  "relation" : "TContainerInternational",
+                                                                  "scope":{"include" : "TCompany"}
+                                                              },
+                                                              {
+                                                                  "relation": "TShipmentDomestic",
+                                                                  "scope": {"include": ["TShipmentType"]}
+                                                              },
+
+                                                              {
+                                                                  "relation": "TShipmentInternational",
+                                                                  "scope": {"include": ["TSteamshipLine","TContainerType"]}
+                                                              },
+
+                                                              {
+                                                                  "relation": "TShipmentLots",
+                                                                  "scope":{
+                                                                            "include":["TPackagingInstructionLots",{
+                                                                                                                      "relation":"TPackagingInstructions",
+                                                                                                                      "scope":{"where":{"and":[
+                                                                                                                                                {"and":poSearch}
+                                                                                                                                              ]
+                                                                                                                                       }
+                                                                                                                              }
+                                                                                                                   }
+                                                                                      ],
+                                                                            "where":{"active":"1"}
+                                                                          }
+                                                              }
+                                    ]
+                                    ,
+                            where: {
+                              //"active":1
+                              "and":[
                               {"or":customer},
-                              {"or":company}
-                            ]}
-
+                              {"or":company},
+                              {"or":lotSearch}
+                            ]
+                          }
                         });
+                      }
+                      else if(objShip.isDomestic==0){
+                        this.url = PIview._buildUrl(base, {
+                          include: ["TLocation", "TContainerAllocation", "TCompany",
+                                                            {
+                                                                "relation" : "TContainerDomestic",
+                                                                "scope":{"include" : "TCompany"}
+                                                            },
+
+                                                            {
+                                                                "relation" : "TContainerInternational",
+                                                                "scope":{"include" : "TCompany"}
+                                                            },
+
+                                                            {
+                                                                "relation": "TShipmentDomestic",
+                                                                "scope": {"include": ["TShipmentType"]}
+                                                            },
+
+                                                            {
+                                                                "relation": "TShipmentInternational",
+                                                                "scope": {"include": ["TSteamshipLine","TContainerType"]}
+                                                            },
+
+                                                            {
+                                                                "relation": "TShipmentLots",
+                                                                "scope":{
+                                                                          "include":["TPackagingInstructionLots",{
+                                                                                                                    "relation":"TPackagingInstructions",
+                                                                                                                    "scope":{"where":{"and":[
+                                                                                                                                              {"and":poSearch}
+                                                                                                                                            ]
+                                                                                                                                     }
+                                                                                                                            }
+                                                                                                                 }
+                                                                                    ],
+                                                                          "where":{"active":"1"}
+                                                                        }
+                                                            }
+                                   ],
+                          where: {"and":[
+                            {"or":customer},
+                            {"or":company},
+                            {"or":lotSearch},
+                            {"isDomestic":0}
+                          ]}
+
+
+                      });
+                      }
+                      else{
+                        this.url = PIview._buildUrl(base, {
+                          //include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational",{"relation" : "TPackagingInstructionLots" ,"scope":{"where":{"or":serachObjLots}}}}]
+
+                          include: ["TLocation", "TContainerAllocation", "TCompany",
+                                                                          {
+                                                                              "relation" : "TContainerDomestic",
+                                                                              "scope":{"include" : "TCompany"}
+                                                                          },
+
+                                                                          {
+                                                                              "relation" : "TContainerInternational",
+                                                                              "scope":{"include" : "TCompany"}
+                                                                          },
+
+                                                                          {
+                                                                              "relation": "TShipmentDomestic",
+                                                                              "scope": {"include": ["TShipmentType"]}
+                                                                          },
+
+                                                                          {
+                                                                              "relation": "TShipmentInternational",
+                                                                              "scope": {"include": ["TSteamshipLine","TContainerType"]}
+                                                                          },
+                                                                          {
+                                                                              "relation": "TShipmentLots",
+                                                                              "scope":{
+                                                                                        "include":["TPackagingInstructionLots",{
+                                                                                                                                  "relation":"TPackagingInstructions",
+                                                                                                                                  "scope":{"where":{"and":[
+                                                                                                                                                            {"and":poSearch}
+                                                                                                                                                          ]
+                                                                                                                                                   }
+                                                                                                                                          }
+                                                                                                                               }
+                                                                                                  ],
+                                                                                        "where":{"active":"1"}
+                                                                                      }
+                                                                          }
+                        ],
+                          where: {"and":[
+                            {"or":customer},
+                            {"or":company},
+                            {"or":lotSearch},
+                            {"isDomestic":1}
+                          ]}
+
+
+                      });
+                      }
                     }
-       
+        console.log('sdsddsdsdssdssssssssssd' , this.url);
       $.ajax({
             url: this.url,
             success:function(data){
-
               debugger;
+              var i =0
+
+              if(poFlag){
+                while(poFlag){
+                  if(i<data.length && data[i].TShipmentLots.length > 0 && data[i].TShipmentLots[0].TPackagingInstructions==undefined ){
+                    data.splice(i,1)
+                  }
+                  else if(i>=data.length-1){
+                    poFlag = false;
+                  }
+                  else{
+                    i++
+                  }
+                }
+              }
+              i = 0
+              if(lotFlag){
+                while(lotFlag){
+                  if(i<data.length && data.length > 0 && !data[i].releaseNumber.toUpperCase().includes(this.Where.Query.LotSearch.toUpperCase())){
+                    data.splice(i,1)
+                  }
+                  else if(i>=data.length-1){
+                    lotFlag = false;
+                  }
+                  else{
+                    i++
+                  }
+                }
+              }
+
                 console.log('ajax ',data);
                 debugger
                this.setState(
@@ -587,35 +818,17 @@ onClickli(e){
     }
 
  viewChange(e){
+    var blob = e.target.value
+    this.Where = JSON.parse(blob)
 
-          var blob = e.target.value
-         //var changedView = this.state.savedViews[index -1]
-        this.Where = JSON.parse(blob)
-
-         //if(this.Query != undefined){
-         //       Object.defineProperty(this.Where,"Query",{enumerable:true ,
-         //           writable: true,
-         //           configurable: true,
-         //           value:this.Query})
-         //   }
-     var serachObj = []
+   var serachObj = []
      var serachObjLots =[]
      var shipType = []
      var isDomestic
-     //if(this.shipMentType){
-     //    Object.defineProperty(this.Where,"shipMentType",{enumerable:true ,
-     //        writable: true,
-     //        configurable: true,
-     //        value:this.shipMentType})
-     //
-     //
-     //
-     //}
-
-
-     if(this.Where.shipMentType && this.Where.shipMentType == "Domestic") {
-
-
+     var cutofFilter = []
+     var lotFlag = false
+     var poFlag = false
+   if(this.Where.shipMentType && this.Where.shipMentType == "Domestic") {
          isDomestic = true
          var objShip = {"isDomestic" : 1}
          serachObj.push(objShip)
@@ -624,57 +837,72 @@ onClickli(e){
          var objShip = {"isDomestic" : 0}
          serachObj.push(objShip)
      }
-     if (this.Where != undefined && this.Where!= null)
-     {
-         if(this.Where.Customer && this.Where.Customer.length >0){
-             var customer = []
-             var obj = {}
-             for(var i in this.Where.Customer){
-                 obj = {"customerId" : this.Where.Customer[i] }
-                 customer.push(obj);
-             }
-             serachObj.push(customer)
-         }
-
-         if(this.Where.Company && this.Where.Company.length > 0){
-             var company = [] ;
-             var objCompany = {}
-             for(var j in this.Where.Company)
+     var customer = []
+         if (this.Where != undefined && this.Where!= null)
              {
-                 objCompany = {"locationId" : this.Where.Company[j] }
-                 company.push(objCompany);
-             }
-             serachObj.push(company)
-         }
+                 if(this.Where.Customer && this.Where.Customer.length >0){
+                                             var obj = {}
+                     for(var i in this.Where.Customer){
+                         obj = {"customerId" : this.Where.Customer[i] }
+                         customer.push(obj);
+                     }
+                     serachObj.push(customer)
+                 }
 
-         if(this.Where.status && this.Where.status.length){
-             var Railstatus = [];
-             var objStatus = {};
-             for(var z in this.Where.status){
-                 objStatus = {"status" : this.Where.status[z]}
-                 Railstatus.push(objStatus)
-             }
-             serachObjLots.push(Railstatus)
-         }
+                 if(this.Where.Company && this.Where.Company.length > 0){
+                     var company = [] ;
+                     var objCompany = {}
+                     for(var j in this.Where.Company)
+                     {
+                         objCompany = {"locationId" : this.Where.Company[j] }
+                         company.push(objCompany);
+                     }
+                     serachObj.push(company)
+                 }
+                 var Railstatus = [{"status":"UNCONFIRMED"},{"staus":"CONFIRMED"},{"status":"QUEUED"},{"status":"LOADED"},{"status":"COMPLETED"}];
 
-         if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.POSearch && this.Where.Query.POSearch!= undefined ){
-             var poSearch =  [ {'po_number': {"like": "%" + this.Where.Query.POSearch + "%"}}]
-             serachObj.push(poSearch)
-         }
+                 if(this.Where.status && this.Where.status.length){
+                     Railstatus = [];
+                     var objStatus = {};
+                     for(var z in this.Where.status){
+                         objStatus = {"status" : this.Where.status[z]}
+                         Railstatus.push(objStatus)
+                     }
+                      serachObjLots.push(Railstatus)
+                 }
+
+                 var poSearch = {}
+                 var railSearch = {}
+                 var lotSearch = {}
+
+                 if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.POSearch && this.Where.Query.POSearch!= undefined ){
+                     poSearch =  [ {'po_number': {"like": "%" + this.Where.Query.POSearch + "%"}}]
+                     serachObj.push(poSearch)
+                     poFlag = true
+                 }
+                 else{
+                   poSearch =  [ {'po_number': {"like": "%" + "%"}}]
+                   serachObj.push(poSearch)
+                 }
+
+                 if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.railcarSearch && this.Where.Query.railcarSearch!= undefined ){
+                      railSearch = [{'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}}]
+                      serachObjLots.push(railSearch)
+                 }
 
 
-         if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.railcarSearch && this.Where.Query.railcarSearch!= undefined ){
-             var railSearch = [{'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}}]
-             serachObjLots.push(railSearch)
-         }
+                 if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.LotSearch && this.Where.Query.LotSearch!= undefined ){
+                     var lotSearch =  [{'releaseNumber': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
+                     serachObj.push(lotSearch)
+                     lotFlag = true
+                 }
+                 else{
+                   var lotSearch =  [{'releaseNumber': {"like": "%"  + "%"}}]
+                   serachObj.push(lotSearch)
+                 }
 
-         if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.LotSearch && this.Where.Query.LotSearch!= undefined ){
-             var lotSearch =  [{'releaseNumber': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
-             serachObj.push(lotSearch)
-         }
-
-         serachObj = [].concat.apply([], serachObj);
-         serachObjLots = [].concat.apply([], serachObjLots);
+                  serachObj = [].concat.apply([], serachObj);
+                   serachObjLots = [].concat.apply([], serachObjLots);
 
          var PIview = createDataLoader(ShipmentViewForm,{
              queries:[{
@@ -685,94 +913,328 @@ onClickli(e){
              }]
          })
          var base = 'TShipmentents';
-         //TPackagingInstructionLots
-         //            if(isDomestic){
-         //                this.url = PIview._buildUrl(base, {
-         //                    //include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational",{"relation" : "TPackagingInstructionLots" ,"scope":{"where":{"or":serachObjLots}}}}]
-         //
-         //                    include: ["TLocation", "TCompany", {
-         //                        "relation": "TShipmentDomestic",
-         //                        "scope": {"include": ["TShipmentType"]}
-         //                    }, {
-         //                        "relation": "TShipmentLots",
-         //                        "scope": {"include": "TPackagingInstructionLots", "where": {"lot_number": "wewff"}}
-         //                    }],
-         //                    where: {
-         //                        "and": serachObj
-         //                    }
-         //
-         //                });
-         //            }
-         //            else if(!isDomestic){
-         //                this.url = PIview._buildUrl(base, {
-         //                    //include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational",{"relation" : "TPackagingInstructionLots" ,"scope":{"where":{"or":serachObjLots}}}}]
-         //
-         //                    include: ["TLocation", "TCompany",  {
-         //                        "relation": "TShipmentInternational",
-         //                        "scope": {"include": ["TSteamshipLine"]}
-         //                    }, {
-         //                        "relation": "TShipmentLots",
-         //                        "scope": {"include": "TPackagingInstructionLots", "where": {"lot_number": "wewff"}}
-         //                    }],
-         //                    where: {
-         //                        "and": serachObj
-         //                    }
-         //
-         //                });
-         //            }
          if(this.Where.CutofFilter && this.Where.CutofFilter.length > 0){
+           var startDate = moment(this.Where.CutofFilter[0].cargoCutoffDate),
+               endDate = moment(this.Where.CutofFilter[this.Where.CutofFilter.length-1].cargoCutoffDate);
+           var cutoffDate = this.getDates(startDate, endDate)
+           var objdate = {}
+           for(var j in cutoffDate){
+               objdate = {"cargoCutoffDate" : cutoffDate[j]}
+               cutofFilter.push(objdate)
+           }
 
-             this.url = PIview._buildUrl(base, {
-                 //include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational",{"relation" : "TPackagingInstructionLots" ,"scope":{"where":{"or":serachObjLots}}}}]
+           this.url = PIview._buildUrl(base, {
 
-                 include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational","scope":{"where" : {"or" : cutofFilter },"include":["TSteamshipLine"]}},{"relation" : "TShipmentLots" ,"scope":{"include":["TPackagingInstructionLots","TPackagingInstructions"]}}],
+               include : ["TLocation" ,"TContainerAllocation", "TCompany" ,
+
+                                                    {"relation" : "TContainerDomestic",
+                                                                   "scope":{"include" : "TCompany"}
+                                                    },
+
+                                                    {"relation" : "TContainerInternational",
+                                                                  "scope":{"include" : "TCompany"}
+                                                    },
+                                                    {
+                                                     "relation" :"TShipmentDomestic",
+                                                     "scope":{"include":"TShipmentType",
+                                                     "where":{"or":Railstatus}}
+                                                    },
+                                                    {
+                                                     "relation" :"TShipmentInternational",
+                                                     "scope":{
+                                                               "include":["TSteamshipLine","TContainerType"],
+                                                               "where" : {"and":[{"cargoCutoffDate":
+                                                                                                     {
+                                                                                                         "between" : [new Date(cutofFilter[0].cargoCutoffDate),new Date(cutofFilter[cutofFilter.length-1].cargoCutoffDate)]
+                                                                                                     }
+                                                                                 },
+                                                                                 {
+                                                                                     "or":Railstatus
+                                                                                 }]
+
+                                                                         }
+                                                            }
+                                                     },
+                                                     {
+                                                         "relation": "TShipmentLots",
+                                                         "scope":{
+                                                                   "include":["TPackagingInstructionLots",{
+                                                                                                             "relation":"TPackagingInstructions",
+                                                                                                             "scope":{"where":{"and":[
+                                                                                                                                       {"or":poSearch}
+                                                                                                                                     ]
+                                                                                                                              }
+                                                                                                                     }
+                                                                                                          }
+                                                                             ],
+                                                                   "where":{"active":"1"}
+                                                                 }
+                                                     }
+                         ],
+               where: {"and":[
+                              {"or":customer},
+                              {"or":company},
+                              {"active":1}
+                             ]
+                      }
+
+           });
+        }
+
+
+      else if(serachObjLots && serachObjLots.length > 0){
+
+           this.url = PIview._buildUrl(base, {
+
+               include : ["TLocation" ,"TContainerAllocation", "TCompany" ,
+                                                    {
+                                                      "relation" : "TContainerDomestic",
+                                                       "scope":{"include" : "TCompany"}
+                                                    },
+
+                                                    {
+                                                      "relation" : "TContainerInternational",
+                                                      "scope":{"include" : "TCompany"}
+                                                    },
+
+                                                    {
+                                                      "relation" :"TShipmentDomestic",
+                                                      "scope":{"include":"TShipmentType",
+                                                      "where":{"and":serachObjLots}}
+                                                    },
+
+                                                    {
+                                                      "relation" :"TShipmentInternational",
+                                                      "scope":{"where" : {
+                                                                            "and" : serachObjLots
+                                                                          },
+                                                      "include":["TSteamshipLine","TContainerType"]}
+                                                    },
+
+                                                    {
+                                                        "relation": "TShipmentLots",
+                                                        "scope":{
+                                                                  "include":["TPackagingInstructionLots",{
+                                                                                                            "relation":"TPackagingInstructions",
+                                                                                                            "scope":{"where":{"and":[
+                                                                                                                                      {"and":poSearch}
+                                                                                                                                    ]
+                                                                                                                             }
+                                                                                                                    }
+                                                                                                         }
+                                                                            ],
+                                                                  "where":{"active":"1"}
+                                                                }
+                                                    }
+                        ],
                where: {"and":[
                  {"or":customer},
-                 {"or":company}
+                 {"or":company},
+                 {"or":serachObjLots}
                ]}
 
-             });
-         }
-         else {
-             this.url = PIview._buildUrl(base, {
-                 //include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational",{"relation" : "TPackagingInstructionLots" ,"scope":{"where":{"or":serachObjLots}}}}]
 
-                 include: ["TLocation", "TCompany", {
-                     "relation": "TShipmentDomestic",
-                     "scope": {"include": ["TShipmentType"]}
-                 }, {
-                     "relation": "TShipmentInternational",
-                     "scope": {"include": ["TSteamshipLine"]}
-                 }, {
-                     "relation": "TShipmentLots",
-                     "scope": {"include": ["TPackagingInstructionLots","TPackagingInstructions"]
-                        // , "where": {"lot_number": "wewff"}
-                     }
-                 }],
-               where: {"and":[
-                 {"or":customer},
-                 {"or":company}
-               ]}
+           });
+       }
 
-             });
-         }
-        
-         $.ajax({
-             url: this.url,
-             success:function(data){
+        else {
+          if(objShip==undefined)
+            {
+              this.url = PIview._buildUrl(base, {
+                include: ["TLocation","TContainerAllocation","TCompany",
+                                                  {
+                                                      "relation" : "TContainerDomestic",
+                                                      "scope":{"include" : "TCompany"}
+                                                  },
 
-                 debugger;
-                 console.log('ajax ',data);
-                 debugger
-                 this.setState(
-                     {
-                         viewData : data,
-                         loaded:true
-                     }
-                 )
-                 //console.log( this.state.xyz)
-             }.bind(this)
-         })
+                                                  {
+                                                      "relation" : "TContainerInternational",
+                                                      "scope":{"include" : "TCompany"}
+                                                  },
+                                                  {
+                                                      "relation": "TShipmentDomestic",
+                                                      "scope": {"include": ["TShipmentType"]}
+                                                  },
+
+                                                  {
+                                                      "relation": "TShipmentInternational",
+                                                      "scope": {"include": ["TSteamshipLine","TContainerType"]}
+                                                  },
+
+                                                  {
+                                                      "relation": "TShipmentLots",
+                                                      "scope":{
+                                                                "include":["TPackagingInstructionLots",{
+                                                                                                          "relation":"TPackagingInstructions",
+                                                                                                          "scope":{"where":{"and":[
+                                                                                                                                    {"and":poSearch}
+                                                                                                                                  ]
+                                                                                                                           }
+                                                                                                                  }
+                                                                                                       }
+                                                                          ],
+                                                                "where":{"active":"1"}
+                                                              }
+                                                  }
+                        ]
+                        ,
+                where: {
+                  //"active":1
+                  "and":[
+                  {"or":customer},
+                  {"or":company},
+                  {"or":lotSearch}
+                ]
+              }
+            });
+          }
+          else if(objShip.isDomestic==0){
+            this.url = PIview._buildUrl(base, {
+              include: ["TLocation", "TContainerAllocation", "TCompany",
+                                                {
+                                                    "relation" : "TContainerDomestic",
+                                                    "scope":{"include" : "TCompany"}
+                                                },
+
+                                                {
+                                                    "relation" : "TContainerInternational",
+                                                    "scope":{"include" : "TCompany"}
+                                                },
+
+                                                {
+                                                    "relation": "TShipmentDomestic",
+                                                    "scope": {"include": ["TShipmentType"]}
+                                                },
+
+                                                {
+                                                    "relation": "TShipmentInternational",
+                                                    "scope": {"include": ["TSteamshipLine","TContainerType"]}
+                                                },
+
+                                                {
+                                                    "relation": "TShipmentLots",
+                                                    "scope":{
+                                                              "include":["TPackagingInstructionLots",{
+                                                                                                        "relation":"TPackagingInstructions",
+                                                                                                        "scope":{"where":{"and":[
+                                                                                                                                  {"and":poSearch}
+                                                                                                                                ]
+                                                                                                                         }
+                                                                                                                }
+                                                                                                     }
+                                                                        ],
+                                                              "where":{"active":"1"}
+                                                            }
+                                                }
+                       ],
+              where: {"and":[
+                {"or":customer},
+                {"or":company},
+                {"or":lotSearch},
+                {"isDomestic":0}
+              ]}
+
+
+          });
+          }
+          else{
+            this.url = PIview._buildUrl(base, {
+              //include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational",{"relation" : "TPackagingInstructionLots" ,"scope":{"where":{"or":serachObjLots}}}}]
+
+              include: ["TLocation", "TContainerAllocation", "TCompany",
+                                                              {
+                                                                  "relation" : "TContainerDomestic",
+                                                                  "scope":{"include" : "TCompany"}
+                                                              },
+
+                                                              {
+                                                                  "relation" : "TContainerInternational",
+                                                                  "scope":{"include" : "TCompany"}
+                                                              },
+
+                                                              {
+                                                                  "relation": "TShipmentDomestic",
+                                                                  "scope": {"include": ["TShipmentType"]}
+                                                              },
+
+                                                              {
+                                                                  "relation": "TShipmentInternational",
+                                                                  "scope": {"include": ["TSteamshipLine","TContainerType"]}
+                                                              },
+                                                              {
+                                                                  "relation": "TShipmentLots",
+                                                                  "scope":{
+                                                                            "include":["TPackagingInstructionLots",{
+                                                                                                                      "relation":"TPackagingInstructions",
+                                                                                                                      "scope":{"where":{"and":[
+                                                                                                                                                {"and":poSearch}
+                                                                                                                                              ]
+                                                                                                                                       }
+                                                                                                                              }
+                                                                                                                   }
+                                                                                      ],
+                                                                            "where":{"active":"1"}
+                                                                          }
+                                                              }
+            ],
+              where: {"and":[
+                {"or":customer},
+                {"or":company},
+                {"or":lotSearch},
+                {"isDomestic":1}
+              ]}
+
+
+          });
+          }
+        }
+console.log('sdsddsdsdssdssssssssssd' , this.url);
+$.ajax({
+url: this.url,
+success:function(data){
+  debugger;
+  var i =0
+
+  if(poFlag){
+    while(poFlag){
+      if(i<data.length && data[i].TShipmentLots.length > 0 && data[i].TShipmentLots[0].TPackagingInstructions==undefined ){
+        data.splice(i,1)
+      }
+      else if(i>=data.length-1){
+        poFlag = false;
+      }
+      else{
+        i++
+      }
+    }
+  }
+  i = 0
+  if(lotFlag){
+    while(lotFlag){
+      if(i<data.length && data.length > 0 && !data[i].releaseNumber.toUpperCase().includes(this.Where.Query.LotSearch.toUpperCase())){
+        data.splice(i,1)
+      }
+      else if(i>=data.length-1){
+        lotFlag = false;
+      }
+      else{
+        i++
+      }
+    }
+  }
+
+    console.log('ajax ',data);
+    debugger
+   this.setState(
+       {
+           viewData : data,
+           loaded:true
+       }
+   )
+   //console.log( this.state.xyz)
+}.bind(this)
+})
+
 
 
 
@@ -820,6 +1282,7 @@ onClickli(e){
     }
 
     print(e){
+      debugger
         if(this.selected != undefined || this.conFirmID != undefined){
             console.log('print view',this.conFirmID+'/'+this.selected)
             hashHistory.push('/Shipment/shipmentPrint/'+this.conFirmID)
@@ -834,8 +1297,9 @@ onClickli(e){
     }
 
     onEditClick(e){
+      debugger
       if(this.conFirmID != undefined){
-        hashHistory.push('/Shipment/shipmentedit/'+this.conFirmID)
+        hashHistory.push('/Shipment/shipmentedit/'+this.conFirmID+"/"+this.tempLotId)
       }
 
     else

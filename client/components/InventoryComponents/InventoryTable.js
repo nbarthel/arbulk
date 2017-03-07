@@ -1,11 +1,14 @@
-import React, { Component } from 'react';
+ import React, { Component } from 'react';
 import _ from 'lodash';
 import { createDataLoader } from 'react-loopback';
+import axios from 'axios';
+import { Base_Url } from '../../constants'
 var moment = require('moment');
  class InventoryTable extends Component {
  constructor(props){
  	super(props);
- 	this.state = { }
+ 	this.state = {
+  containerLoadData : '' }
  	//this.onCheck =  this.onCheck.bind(this);
  }
 
@@ -19,7 +22,7 @@ var moment = require('moment');
         }]
       })
     console.log("I have recieved props",)
-    //debugger
+    //
 
     var base = 'TPackagingInstructions'+'/'+this.props.id;
     this.url = InventView._buildUrl(base, {
@@ -55,8 +58,6 @@ var moment = require('moment');
 
  	console.log("props>>>>>>>",this.props.viewData)
  	var tableData = _.map(this.props.viewData,(view,index)=>{
-
- 		debugger
  		return(
  			<table key={index}  className="table table-expandable table-striped" cellSpacing="0" >
  			<thead className="base_bg">
@@ -103,7 +104,15 @@ var moment = require('moment');
 				</thead>
 				{
 					_.map(view.TPackagingInstructionLots,(data,index)=>{
+            var bagsLoadedInContainer = 0
+            if(this.props.containerLoadData && this.props.containerLoadData.length>0){
+            for(var i=0;i<this.props.containerLoadData.length;i++){
+              if(data.id==this.props.containerLoadData[i].lotId){
+                bagsLoadedInContainer = bagsLoadedInContainer + this.props.containerLoadData[i].noOfBags
+              }
+            }}
 						if(this.props.lotId == "null"){
+debugger
 					return(
 
 					<tbody key={index}  id="head1" className="collapseIn">
@@ -115,16 +124,16 @@ var moment = require('moment');
 								<td>{data.railcar_number}</td>
 								<td>{data.lot_number}</td>
 								<td>{data.status == 'UNCONFIRMED' ? 'NO': 'YES'}</td>
-								<td>Y</td>
 								<td>{data.railcar_arrived_on != null ? 'YES' : 'NO'}</td>
+								<td>{data.status == "SHIPPED" ? 'YES' : 'NO'}</td>
 								<td>{(data.TShipmentInternational && data.TShipmentInternational.length>0) ?moment(data.TShipmentInternational[0].cargoCutoffDate).format('MM-DD-YYYY') : 'NA'}</td>
 								<td>{data.weight}</td>
-								<td>{(data.TShipmentLots && data.TShipmentLots.length > 0) ?data.TShipmentLots[data.TShipmentLots.length - 1].noOfBags  : "NA"}</td>
-								<td>{(data.inInventory && (data.TShipmentLots && data.TShipmentLots.length>0)) ?(data.inInventory - data.TShipmentLots[data.TShipmentLots.length -1].noOfBags ):data.inInventory }</td>
+								<td>{bagsLoadedInContainer>0? bagsLoadedInContainer : "NA"}</td>
+								<td>{data.inInventory ?(data.inInventory - bagsLoadedInContainer ):data.inInventory }</td>
 								<td>{data.status?data.status : ''}</td>
 								<td>
 									<label className="control control--checkbox" id={data.status}>
-									  <input type="checkbox" ref={(e) => {this.props.onCheck(e,data.status,"1")}} onClick={(e) => {this.props.onCheck(e,data.status,"0")}} value={data.status?data.status : ''} id={data.id}/><div className="control__indicator"></div>
+									  <input type="checkbox" ref={(e) => {this.props.onCheck(e,data.status,"1",data.stamp_confirmed,false)}} onClick={(e) => {this.props.onCheck(e,data.status,"0")}} value={data.status?data.status : ''} id={data.id}/><div className="control__indicator"></div>
 									</label>
 								</td>
 							</tr>
@@ -140,17 +149,17 @@ var moment = require('moment');
                 <td> </td>
 								<td>{data.railcar_number}</td>
 								<td>{data.lot_number}</td>
-								<td>{data.status == 'CONFIRMED' ? 'YES': 'NO'}</td>
+								<td>{data.status == 'UNCONFIRMED' ? 'NO': 'YES'}</td>
 								<td>Y</td>
 								<td>{data.railcar_arrived_on != null ? 'YES' : 'NO'}</td>
 								<td>{(data.TShipmentInternational && data.TShipmentInternational.length>0) ?moment(data.TShipmentInternational[0].cargoCutoffDate).format('MM-DD-YYYY') : 'NA'}</td>
 								<td>{data.weight}</td>
-								<td>{(data.TShipmentLots && data.TShipmentLots.length>0) ?data.TShipmentLots[data.TShipmentLots.length - 1].noOfBags  : 'NA'}</td>
-								<td>{(data.inInventory && (data.TShipmentLots && data.TShipmentLots.length>0)) ?(data.inInventory - data.TShipmentLots[data.TShipmentLots.length -1].noOfBags ):data.inInventory }</td>
+								<td>{bagsLoadedInContainer>0? bagsLoadedInContainer : "NA"}</td>
+								<td>{data.inInventory ?(data.inInventory - bagsLoadedInContainer ):data.inInventory }</td>
 								<td>{data.status?data.status : ''}</td>
 								<td>
 									<label className="control control--checkbox">
-									  <input type="checkbox" ref={(e) => {this.props.onCheck(e,data.status,"1")}} onClick={(e) => {this.props.onCheck(e,data.status,"0")}}  id={data.id}/><div className="control__indicator"></div>
+									  <input type="checkbox" ref={(e) => {this.props.onCheck(e,data.status,"1",data.stamp_confirmed,true)}} onClick={(e) => {this.props.onCheck(e,data.status,"0")}}  id={data.id}/><div className="control__indicator"></div>
 									</label>
 								</td>
 							</tr>

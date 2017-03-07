@@ -11,6 +11,7 @@ var Loader = require('react-loader');
         loaded: true}
   }
    componentWillMount(){
+     debugger
     if(this.props.params.id != undefined){
       this.setState({
         loaded:false
@@ -32,7 +33,7 @@ var Loader = require('react-loader');
       else{
     var base = 'TPackagingInstructions'+'/'+this.props.params.id;
     this.url = PIview._buildUrl(base, {
-      include: ['TPackagingInstructionLots']
+      include: {"relation":'TPackagingInstructionLots',"scope":{"where":{"active":1}}}
     })
   }
     console.log(this.url,"<<<<<<<<<<<<<<<<<<<<URL")
@@ -59,6 +60,7 @@ var Loader = require('react-loader');
       /*console.log("The recived data is :->>>>>. ",this.state.entryInfo)
         console.log("LOTSSSSSSSS>>>>>>>.<<<<<<<<",this.state.lotInfo)*/
           return (
+      <div>
       <div className="wrapper-inner">
       <div className="content-inside">
       <Header routes = {this.props.routes} />
@@ -66,7 +68,9 @@ var Loader = require('react-loader');
       <EnterPackagingInstructionForm data = {this.state.entryInfo} lotInfo = {this.state.lotInfo}/>
      	</Loader>
       </div>
-      <Footer />
+        <Footer />
+      </div>
+
       </div>
 
     );

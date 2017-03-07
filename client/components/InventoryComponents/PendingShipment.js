@@ -27,12 +27,12 @@ class PendingShipment extends Component {
 	        }
 	      }]
 	    })
-	       var base = 'TPackagingInstructions/' + next.pID;
-	        //TPackagingInstructionLots
+	       var base = 'TPackagingInstructions/'
+
 	        this.url = PIview._buildUrl(base, {
 	           // include : [{"relation":"TPackagingInstructionLots" ,"scope":{"include" :["TShipmentLots" ,"TShipmentInternational"]}},"TLocation" , "TCompany"]
-	            include : [{"relation":"TPackagingInstructionLots" ,"scope":{"include" :{"relation" : "TShipmentLots" , "scope":{"include":{"relation":"TShipmentent" , "scope":{"include" : "TShipmentInternational"}}}}}},"TLocation" , "TCompany"]
-
+	            include : [{"relation":"TPackagingInstructionLots" ,"scope":{"include" :{"relation" : "TShipmentLots" , "scope":{"include":{"relation":"TShipmentent" , "scope":{"include" : "TShipmentInternational"}}}}}},"TLocation" , "TCompany"],
+							"where":{"id": next.pID}
 
 	        });
 	        console.log('sdsddsdsdssdssssssssssd' , this.url);
@@ -40,7 +40,7 @@ class PendingShipment extends Component {
 	            url: this.url,
 	            success:function(data){
 	                console.log('ajax ',data);
-	                //debugger
+	                debugger
 	               this.setState(
 	                   {
 	                       historyData : data,
@@ -58,22 +58,38 @@ class PendingShipment extends Component {
 
 	render() {
 
-		var inventoryBags = (this.state.historyData && this.state.historyData.TPackagingInstructionLots && this.state.historyData.TPackagingInstructionLots.length > 0 )?this.state.historyData.TPackagingInstructionLots[this.state.historyData.TPackagingInstructionLots.length - 1].inInventory : 0
+		//var inventoryBags = (this.state.historyData && this.state.historyData[0].TPackagingInstructionLots && this.state.historyData[0].TPackagingInstructionLots.length > 0 )?this.state.historyData[0].TPackagingInstructionLots[this.state.historyData[0].TPackagingInstructionLots.length - 1].inInventory : 0
 
-		if(this.state.historyData && this.state.historyData.TPackagingInstructionLots && this.state.historyData.TPackagingInstructionLots.length > 0 && this.state.historyData.TPackagingInstructionLots[0].TShipmentLots && this.state.historyData.TPackagingInstructionLots[this.state.historyData.TPackagingInstructionLots.length - 1].status != "SHIPPED")
+		if(this.state.historyData && this.state.historyData[0].TPackagingInstructionLots && this.state.historyData[0].TPackagingInstructionLots.length > 0 && this.state.historyData[0].TPackagingInstructionLots[0].TShipmentLots )
 		{
-		var history = _.map(this.state.historyData.TPackagingInstructionLots[this.state.historyData.TPackagingInstructionLots.length - 1].TShipmentLots , function(view , index){
-			debugger;
-		return(
-			<tr key={index}>
-			<td>{moment(view.createdOn).format("MM-DD-YYYY")}	</td>
-			<td> {view.TShipmentent.releaseNumber}</td>
-			<td>{view.noOfBags}</td>
-			<td>{inventoryBags -view.noOfBags}</td>
-		</tr>
+			var PO_number = this.state.historyData && this.state.historyData[0].po_number ? this.state.historyData[0].po_number : ''
+			var tempthis = this
+			var inventoryBags=0
+			var history = _.map(this.state.historyData[0].TPackagingInstructionLots , function(view , index){
+			var temp = view.inInventory
+			debugger
+			if(tempthis!=undefined && tempthis.props!=undefined && tempthis.props.lotIdArray.length > 0 &&  tempthis.props.lotIdArray.indexOf(parseInt(view.id))!=-1 ){
+			if(!isNaN(parseInt(temp))){
+				inventoryBags =parseInt(temp)+ inventoryBags
+			}
+			else{
+				inventoryBags = inventoryBags + 0
+			}
+			return _.map(view.TShipmentLots,function(viewTShipLot,index){
+				inventoryBags = inventoryBags - viewTShipLot.noOfBags
+				return(
+					<tr key={index}>
+					<td>{moment(viewTShipLot.createdOn).format("MM-DD-YYYY")}	</td>
+					<td>{PO_number}</td>
+					<td>{view.lot_number}</td>
+					<td> {viewTShipLot.TShipmentent.releaseNumber}</td>
+					<td>{"- "+viewTShipLot.noOfBags}</td>
+					<td>{inventoryBags}</td>
+				</tr>
 
-	)
-
+			)
+			})
+		}
 		})
 	}
 
@@ -87,6 +103,8 @@ class PendingShipment extends Component {
 			<thead className="base_bg">
 			  <tr >
 				<th>Date Entered</th>
+				<th>PO#</th>
+				<th>Lot#</th>
 				<th>Release#</th>
 				<th># of Bags</th>
 				<th>Bag Balance</th>

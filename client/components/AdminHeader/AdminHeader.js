@@ -10,13 +10,13 @@ import BreadCrumb from '../BreadCrumbComponent/BreadCrumb';
 export default class AdminHeader extends React.Component {
 	constructor(props){
 		super(props);
-      this.logOut = this.logOut.bind(this)
+		this.logOut = this.logOut.bind(this)
 	}
-  	logOut(){
-	localStorage.removeItem('userName');
+	logOut(){
+		localStorage.removeItem('userName');
     localStorage.removeItem('userId');
     hashHistory.push('/')
-	window.location.reload()
+		window.location.reload()
 	}
   render() {
     return (
@@ -40,6 +40,7 @@ export default class AdminHeader extends React.Component {
 						<li><Link to="/Admin/modifyUser">Modify User</Link></li>
 						<li><Link to = "/Admin/CustAndTruck">Customers & Truckers</Link></li>
 						<li><Link to ="/Admin/AddMaterial">Add Material</Link></li>
+						<li><Link to ="/Admin/viewMaterial">View Material</Link></li>
 						<li><Link to = "/Admin/UploadData">Upload Data</Link></li>
 						<li><a href="#">Change Histroy</a></li>
 						   <li><a href="#" onclick={this.logOut}>LOGOUT <i className="fa fa-unlock-alt" aria-hidden="true"></i></a></li>

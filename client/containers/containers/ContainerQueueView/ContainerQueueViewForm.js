@@ -65,7 +65,6 @@ class  ContainerQueueViewForm extends React.Component {
 
     }
     _throttledMouseMove(e){
-    debugger
 
        if(clickOnEdit&&e.buttons){
 
@@ -119,6 +118,7 @@ class  ContainerQueueViewForm extends React.Component {
 
 
     render() {
+        debugger
         var propsdata = (this.props.queueData && this.props.queueData.length > 0 )?this.props.queueData.reverse() : []
         var arrPropsdata = _.sortBy(propsdata, 'sequence', function(n) {
              return Math.sin(n);
@@ -129,6 +129,7 @@ class  ContainerQueueViewForm extends React.Component {
     return parseFloat(a.sequence) - parseFloat(b.sequence);
 });
         this.queueViewList = _.map(arrPropsdataSorted , (data , index) =>{
+          debugger
             if(data.sequence != null){
                 return(
                     <tr key={data.sequence} id = {data.sequence} data-id={data.id} className="item">

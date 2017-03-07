@@ -27,13 +27,14 @@ h3{margin:0px; padding:0px; font-weight:600;}
   max-width:100px;
   text-align: left !important;
 }
+
 .location{ border-top:1px solid #000; width:100%; clear:both; padding-bottom: 50px;}
 .location .location_data{ width:100%; display:inline-black;}
 .location .location_data span strong{ font-weight:600; font-size:16px;}
 .location table{ width:100%; border:1px solid #000;  border-collapse: collapse; margin-top: 30px; margin-bottom: 20px;}
 .location table tr{line-height: 15px;}
 .location table tr td{padding: 6px 7px;font-size: 13px;white-space: nowrap;overflow:  hidden;text-overflow: ellipsis;  vertical-align: middle; border:1px solid #000; text-align:left;}
-.location table tr td:first-child{text-align:right;}
+.location table tr td:first-child{text-align:right; }
 
 .verification{ border-top:1px solid #000; width:100%; clear:both; padding-bottom: 50px;}
 .verification .verification_data{ width:60%;}

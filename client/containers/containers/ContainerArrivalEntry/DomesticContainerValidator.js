@@ -8,9 +8,9 @@ export default function validateInput(data){
 	if(Validator.isNull(data.containerNumber)){
 		domesticErrors.containerNumber = "Must be a Number";
 	}
-	//if(Validator.isNull(data.sealNumber)){
-	//	domesticErrors.sealNumber = "Required"
-	//}
+	// if(Validator.isNull(data.sealNumber)){
+	// 	domesticErrors.sealNumber = "Required"
+	// }
 	if(Validator.isNull(data.trackingNumber)){
 		domesticErrors.trackingNumber = "Required"
 	}

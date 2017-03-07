@@ -12,6 +12,8 @@ import FilterButton from '../../../components/FilterComponent/FilterButton';
 import SweetAlert from 'sweetalert-react';
 import { hashHistory } from 'react-router'
 import '../../../public/stylesheets/sweetalert.css';
+import '../RailcarArrivalEntry/js/tableHeadFixer.js'
+import '../RailcarArrivalEntry/js/jquery.dataTables.min.js'
 export default class RailcarArrivalEntryForm extends React.Component {
 	constructor(props){
 		super(props);
@@ -206,7 +208,15 @@ onClickli(e){
 		}
 	}
 
+	componentDidMount() {
+	  $(function () {
+	    setTimeout(function(){
+	      $("#tableRailCarDeparture").tableHeadFixer({'head' : true})
 
+	  }, 2000);
+	  });
+
+	}
 	onCompanyFilter(e,location){
 		if(e.target.checked){
 			this.forceUpdate()
@@ -491,10 +501,10 @@ onClickli(e){
 									<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 "><hr/></div>
 
 									<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-										<div className="table-responsive ">
-											<table className="table table-striped">
-												<thead className="base_bg">
-												<tr >
+										<div className="table-responsive view_table  mega" style={{"max-height":"550px","overflowY":"scroll"}}>
+											<table id="tableRailCarDeparture" className="table table-expandable" cellSpacing="0">
+												<thead className="table_head header-fixed header red">
+												<tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
 
 													<th>Customer</th>
 													<th>PO# </th>

@@ -9,6 +9,7 @@ class ShipmentEditPage  extends React.Component{
 	constructor(props){
 		super(props);
 		 this.id = this.props.params.id
+		 this.lotId = this.props.routeParams.lotId
         this.state = {loaded : true,
         }
 	}
@@ -24,7 +25,31 @@ class ShipmentEditPage  extends React.Component{
        var base = 'TShipmentents'+'/'+this.id;
         //TPackagingInstructionLots
         this.url = PIview._buildUrl(base, {
-                    "include" : ["TLocation" , "TCompany" ,"TShipmentAddress",{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType","TPaymentType"]}},{"relation" :"TShipmentInternational","scope":{"include":["TSteamshipLine","TContainerType"]}},{"relation" : "TShipmentLots" ,"scope":{"include":["TPackagingInstructionLots","TPackagingInstructions"]}}]
+                    "include" : ["TLocation" ,
+																 "TCompany" ,
+																 "TShipmentAddress",
+																 {"relation" :"TShipmentDomestic",
+																 							"scope":
+																							{"include":["TShipmentType",
+																													"TPaymentType"]
+																							}
+																 },
+																 {"relation" :"TShipmentInternational",
+																 							"scope":
+																							{"include":["TSteamshipLine",
+																													"TContainerType"
+																												 ]
+																							}
+																},
+																{"relation" : "TShipmentLots" ,
+																							"scope":
+																							{"include":["TPackagingInstructionLots",
+																													"TPackagingInstructions"
+																												 ],
+																								"where":{"piLotsId":this.lotId}
+																							}
+																}
+															]
 
         });
         console.log('sdsddsdsdssdssssssssssd' , this.url);
@@ -48,7 +73,7 @@ class ShipmentEditPage  extends React.Component{
             <div className="wrapper">
             <Header routes = {this.props.routes}/>
               <Loader loaded = {this.state.loaded}>
-                {this.state.editData != undefined ? (this.state.editData.isDomestic == 1 ? <ShipmentEditForm editData = {this.state.editData}/> : <InternationalShipementEdit editData = {this.state.editData}/>) : null}
+                {this.state.editData != undefined ? (this.state.editData.isDomestic == 1 ? <ShipmentEditForm editData = {this.state.editData} lotId = {this.lotId}/> : <InternationalShipementEdit editData = {this.state.editData} lotId = {this.lotId}/>) : null}
                 </Loader>
                 <Footer />
             </div>

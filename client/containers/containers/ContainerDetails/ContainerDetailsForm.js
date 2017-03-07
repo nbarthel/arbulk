@@ -45,12 +45,13 @@ class ContainerDetailsForm extends React.Component {
         this.onRightClick = this.onRightClick.bind(this)
         this.onSaveClick = this.onSaveClick.bind(this)
         this.cIArray =[]
-        this.removeArray = []
+        this.removeArray =  []
         this.noOfContainers = undefined
         this.domSum = undefined
         this.intSum = undefined
         this.statusArray = []
         this.sameStatus = false
+        this.getSeal = this.getSeal.bind(this)
         this.sealNumber = ''
     }
 
@@ -145,22 +146,35 @@ else{
 
 }
 
-  onLeftClick(e){
+getSeal(e){
+  debugger
+  this.sealNumber = e.target.value;
+}
+    onLeftClick(e){
       debugger
-      var temObj,tempDelObj;
-    if(this.cIArray.length > 0){
-      for(var i in this.cIArray){
+      var temObj,tempDelObj,len=this.cIArray.length;
+    if(len > 0){
+      for(var i=0;i<len;i++){
         tempDelObj = new Object()
         temObj = JSON.parse(JSON.stringify(this.cIArray[i]))
         tempDelObj.pInventoryId = this.cIArray[i].piInventId
         tempDelObj.locationId = this.cIArray[i].invLocId
-      axios.put(Base_Url+"TPiInventories/"+tempDelObj.pInventoryId,{active:0})
-      axios.post(Base_Url+"TContainerLoads",temObj).then((response)=>{
-       }).then((response)=>{
-         this.loadNewData()
-         swal("","Loaded","success")
-         this.cIArray=[]
-       })
+        var id = {id:JSON.parse(JSON.stringify(this.cIArray[i].piInventId))}
+      axios.put(Base_Url+"TPiInventories/"+id.id,{active:0})
+      axios.post(Base_Url+"TContainerLoads",temObj)
+      axios.post(Base_Url+"TPiInventories/SubtractInventory",id).then((response) => {
+           if(i>=len-1){
+             debugger
+             this.loadNewData()
+             swal("","Loaded","success")
+             this.removeArray = []
+           }
+         }).catch(function (error) {
+           debugger
+             console.log(error);
+             this.loadNewData()
+           });
+
 
 
      }}
@@ -214,21 +228,27 @@ debugger;
             console.log(this.SaveObj)
     }
 
-  onRightClick(e){
-      var temp;
-      if(this.removeArray.length>0){
-        for(var i in this.removeArray){
+    onRightClick(e){
+      debugger
+      var temp,len = this.removeArray.length;
+      if(len>0){
+        for(var i=0;i<len;i++){
         temp = new Object();
         temp.contLoadid = this.removeArray[i].contLoadid
         temp.pInventId = this.removeArray[i].pInventId
         axios.put(Base_Url+"TPiInventories/"+temp.pInventId,{active:1})
-        axios.delete(Base_Url+"TContainerLoads/"+temp.contLoadid).then((response)=>{
-        // axios.put(Base_Url+"TPiInventories/"+temp.pInventId,{active:1}).then((response)=>{
-          this.loadNewData()
-          swal("","Removed","success")
-          this.removeArray = []
-        // })
-      })
+        axios.delete(Base_Url+"TContainerLoads/"+temp.contLoadid)
+        axios.post(Base_Url+"TPiInventories/AddInventory",{id:temp.pInventId}).then((response) => {
+          if(i>=len-1){
+            this.loadNewData()
+            swal("","Removed","success")
+            this.removeArray = []
+          }
+        }).catch(function (error) {
+            console.log(error);
+            this.loadNewData()
+          });
+
     }}
     else{
       swal("please select a row")
@@ -253,6 +273,7 @@ onCancelClick(e){
   })
 }
 handleContainerLoadChecks(e,data){
+  debugger
   if(e.target.checked){
  this.contLoadid = data.id
  this.pInventId = data.piInventId
@@ -270,6 +291,8 @@ handleContainerLoadChecks(e,data){
  }
 }
 handleCurrentInvChecks(e,data){
+  debugger
+
   if(e.target.checked){
     this.obj.id = 0
     this.obj.invLocId = data.inventoryLocationId
@@ -488,6 +511,7 @@ changeLot(e){
     }
     onSaveClick(e){
       debugger
+      var bagsLoadedInContainer =0
       var flagToDecideStatus = false;
       var flagToSaveSealNumber = false;
       if(this.sealNumber==''){
@@ -500,18 +524,24 @@ changeLot(e){
       else{
         flagToSaveSealNumber = true
       }
+      for(var i in this.state.contLoadData){
+        bagsLoadedInContainer+=this.state.contLoadData[i].noOfBags
+      }
       if(this.SaveObj.containerDelivered){
           this.SaveObj.status = "DELIVERED"
       }
         else if(this.SaveObj.containerInTransit){
           this.SaveObj.status = "INTRANSIT"
+          // if(bagsLoadedInContainer = this.state.currentIntObject.inInventory){
+          //  flagToDecideStatus = true;
+          // }
       }
       else if(this.SaveObj.containerLoaded){
           this.SaveObj.status = "LOADED"
           flagToDecideStatus = true;
       }
-		
-     if(flagToDecideStatus){
+
+      if(flagToDecideStatus){
         var array =[]
         array[0] = this.state.contLoadData[0].lotId
         for(var i in this.state.contLoadData){
@@ -519,59 +549,67 @@ changeLot(e){
             array.push(this.state.contLoadData[i].lotId)
           }
         }}
-      
-        if(this.props.isDomestic == 0){
 
+        if(this.props.isDomestic == 0){
             axios.put(Base_Url+"TContainerInternationals/" + this.props.containerTable.id ,this.SaveObj).then((response)=>{
-            if(flagToSaveSealNumber){
+          if(flagToSaveSealNumber){
             axios.put(Base_Url+"TContainerInternationals/"+this.props.containerTable.id,{sealNumber:this.sealNumber}).then((response)=>{
             })}
-              if(!flagToDecideStatus){
-                 swal("Done" , "Saved Successfully" , "info")
-                this.shipmentStatus()
-                 hashHistory.push('/Container/containerview')
-                this.setState({
-                    editing: false
-                })
-              }
+          // if(flagToDecideStatus){
+          //   for(var i in array){
+          //         axios.put(Base_Url + "TPackagingInstructionLots/" + array[i], {status: "SHIPPED"}).then((response)=> {
+          //
+          //                 }).then((response)=> {
+          //
+                 this.shipmentStatus()
+          //        })
+          //     }
+          if(!flagToDecideStatus){
+                swal("Done" , "Saved Successfully" , "info")
+                hashHistory.push('/Container/containerview')
+               this.setState({
+                   editing: false
+               })
+            }
             })
         }
         else if(this.props.isDomestic == 1){
             axios.put(Base_Url+"TContainerDomestics/" + this.props.containerId ,this.SaveObj).then((response)=>{
             if(flagToSaveSealNumber){
-            axios.put(ase_Url+"TContainerDomestics/"+this.props.containerTable.id,{sealNumber:this.sealNumber}).then((response)=>{
+            axios.put(Base_Url+"TContainerDomestics/"+this.props.containerTable.id,{sealNumber:this.sealNumber}).then((response)=>{
 
             })}
-			if(!flagToDecideStatus){
                   this.shipmentStatus()
+                  if(!flagToDecideStatus){
                  hashHistory.push('/Container/containerview')
                 this.setState({
                     editing: false
                 })}
             })
         }
-      if(flagToDecideStatus){
-        for(var i in array){
-          var sum =0;
-          var temp=0
-          for(var k in this.state.contLoadData){
-            if(array[i]==this.state.contLoadData[k].lotId){
-              sum =parseInt(sum)+parseInt(this.state.contLoadData[i].noOfBags)
-              temp =k;
-            }
+          if(flagToDecideStatus){
+            debugger
+               for(var i in array){
+                 var sum =0;
+                 var temp=0
+                 for(var k in this.state.contLoadData){
+                   if(array[i]==this.state.contLoadData[k].lotId){
+                     sum =parseInt(sum)+parseInt(this.state.contLoadData[i].noOfBags)
+                     temp =k;
+                   }
+                 }
+                 if(sum==this.state.contLoadData[temp].TPackagingInstructionLots.inInventory || this.state.currentIntObject.TPiInventory.length<=0){
+                   axios.put(Base_Url + "TPackagingInstructionLots/" + array[i], {status: "SHIPPED"}).then((response)=> {
+                            if(i==array.length-1){
+                              swal("Done" , "Saved Successfully" , "info")
+                              hashHistory.push('/Container/containerview')
+                             this.setState({
+                                 editing: false
+                             })
+                            }
+                   })
+                 }
           }
-          if(sum==this.state.contLoadData[temp].TPackagingInstructionLots.inInventory || this.state.currentIntObject.TPiInventory.length<=0){
-            axios.put(Base_Url + "TPackagingInstructionLots/" + array[i], {status: "SHIPPED"}).then((response)=> {
-              if(i==array.length-1){
-                swal("Done" , "Saved Successfully" , "info")
-                hashHistory.push('/Container/containerview')
-                this.setState({
-                  editing: false
-                })
-              }
-            })
-          }
-        }
   }
     if(flagToDecideStatus){
         swal("Done" , "Saved Successfully" , "info")
@@ -579,8 +617,10 @@ changeLot(e){
        this.setState({
            editing: false
        })}
-  }
+
+}
     render() {
+      debugger
       if(this.props.containerTable && this.props.containerTable.TShipmentent && this.props.containerTable.TShipmentent.TShipmentLots && this.props.containerTable.TShipmentent.TShipmentLots.length>0){
     var lotList = _.map(this.props.containerTable.TShipmentent.TShipmentLots , (data ,index)=>{
         debugger;
@@ -639,21 +679,19 @@ changeLot(e){
                     <div className="table-responsive">
                         <ContainerLoadComponent key = {this.state.ContainerLoadKey} handleContainerLoadChecks = {this.handleContainerLoadChecks} contLoadData = {this.state.contLoadData} />
                     </div>
-					
-          			
-          		  <div className="form-group" >
-                      <label htmlFor="SealNumber" className="col-lg-6 control-label">Seal #</label>
-                    <div className="col-lg-6" >
+
+                    <div className="form-group" >
+                      <label htmlFor="SealNumber" className="col-lg-2 control-label"style={{"padding-top":"10"}}>Seal #</label>
+                      <div className="col-lg-10" >
                        <input type="text" className="form-control s_width" onChange={this.getSeal}   id="SealNumber" placeholder="Seal Number" />
-                    <div className="error"><span></span></div>
+                       <div className="error"><span></span></div>
                        </div>
                    </div>
-
 
                     <ul className={this.state.editing ? "no-space" : "no-space hidden"} style={{"margin-top":"20"}}>
                     <li >
                        <label className="control control--checkbox ">Confirmed Loaded?
-                          <input type="checkbox" onChange={this.handleCheckbox} name = "containerLoaded" /><div className="control__indicator" style={{"margin-top":"15"}}></div>
+                          <input type="checkbox" style={{"margin-top":"10"}} onChange={this.handleCheckbox} name = "containerLoaded" /><div className="control__indicator" style={{"margin-top":"15"}}></div>
                         </label>
                     </li>
                     <li >

@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 var moment = require('moment')
  class ShipmentSummaryComponent extends Component {
 	render() {
-
+        debugger
         var containerType = (this.props.shipInfo && this.props.shipInfo.TShipmentent && this.props.shipInfo.TShipmentent.TShipmentInternational &&  this.props.shipInfo.TShipmentent.TShipmentInternational.length > 0 && this.props.shipInfo.TShipmentent.TShipmentInternational[0].TContainerType) ? this.props.shipInfo.TShipmentent.TShipmentInternational[0].TContainerType.name : 'NA'
         var numberOfContainer = (this.props.shipInfo && this.props.shipInfo.TShipmentent) ? this.props.shipInfo && this.props.shipInfo.TShipmentent.numberOfContainers : 'NA'
-        var numberOfBags = (this.props.shipInfo && this.props.shipInfo.TShipmentent) ? this.props.shipInfo && this.props.shipInfo.TShipmentent.numberOfBags : 'NA'
+        //var numberOfBags = (this.props.shipInfo && this.props.shipInfo.TShipmentent) ? this.props.shipInfo && this.props.shipInfo.TShipmentent.numberOfBags : 'NA'
         var shipMentLine = (this.props.shipInfo && this.props.shipInfo.TShipmentent && this.props.shipInfo.TShipmentent.TShipmentInternational &&  this.props.shipInfo.TShipmentent.TShipmentInternational.length > 0 && this.props.shipInfo.TShipmentent.TShipmentInternational[0].TSteamshipLine) ? this.props.shipInfo.TShipmentent.TShipmentInternational[0].TSteamshipLine.name : 'NA'
         var shipvessel = (this.props.shipInfo && this.props.shipInfo.TShipmentent && this.props.shipInfo.TShipmentent.TShipmentInternational && this.props.shipInfo.TShipmentent.TShipmentInternational.length>0 ) ? this.props.shipInfo.TShipmentent.TShipmentInternational[0].steamshipVessel : 'NA'
         var FrFor = (this.props.shipInfo && this.props.shipInfo.TShipmentent && this.props.shipInfo.TShipmentent.TShipmentInternational && this.props.shipInfo.TShipmentent.TShipmentInternational.length>0 ) ? this.props.shipInfo.TShipmentent.TShipmentInternational[0].freightForwarder : 'NA'
@@ -24,7 +24,13 @@ var moment = require('moment')
 
 
         if(this.props.shipInfo && this.props.shipInfo.TShipmentent.TShipmentLots) {
+          var numberOfBags = 0
+          var bagType = ""
+          var noOfBagsPerPallet
             var list = _.map(this.props.shipInfo.TShipmentent.TShipmentLots, (data, index)=> {
+              numberOfBags = numberOfBags + data.noOfBags
+              bagType = data.TPackagingInstructions.TPackagingMaterial.packagingName
+              noOfBagsPerPallet = data.TPackagingInstructions.bags_per_pallet
                 return (
                     <li>{data.TPackagingInstructionLots.lot_number}</li>
                 )
@@ -79,9 +85,9 @@ var moment = require('moment')
 
                                     <div className=" col-lg-3 col-md-3 col-sm-6 col-xs-12 ">
                                         <ul className="no-space">
-                                            <li>Body Type: <b>Ravago Bag</b></li>
+                                            <li>Body Type: <b>{bagType}</b></li>
                                             <li>Pallet Type:<b> {palletType}</b></li>
-                                            <li>Bags per Pallet:<b> 60</b></li>
+                                            <li>Bags per Pallet:<b> {noOfBagsPerPallet}</b></li>
                                             <li>Stretch Wrap: <b>{wrap}</b></li>
                                             <li>Origin: <b>Made in {origin}</b></li>
                                             <li className=" pddn-20-top">
