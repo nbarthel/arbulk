@@ -7,7 +7,7 @@ class CompanyNameFilterPage extends React.Component{
         super(props);
         this.checkedCompany = this.props.checkedCompany
         this.state = {
-          
+
          }
          /*this.location = [{locationName:"UK",id: 0},
         {locationName:"US",id:1},
@@ -30,7 +30,7 @@ class CompanyNameFilterPage extends React.Component{
 
 
     }
-        
+
 
    /* onClick(e,location){
         if(e.target.checked){
@@ -44,7 +44,7 @@ class CompanyNameFilterPage extends React.Component{
             let value = e.target.value
             let index = this.props.buttonDisplay.indexOf(e.target.value)
             if(index !== -1)
-             this.props.buttonDisplay = _.without(this.props.buttonDisplay,value)       
+             this.props.buttonDisplay = _.without(this.props.buttonDisplay,value)
                   console.log(this.props.buttonDisplay)
                    }
     }
@@ -53,7 +53,7 @@ class CompanyNameFilterPage extends React.Component{
     render(){
 
     let locations = _.map(this.state.location,(location) => {
-            return ( 
+            return (
                 <li key={location.id}>
                             <label className="control control--checkbox">{location.locationName}
                                 <input type="checkbox" value={location.locationName} onChange={(e) => this.props.onCompanyFilter(e,location)} id={location.id}/><div className="control__indicator"></div>
@@ -68,7 +68,7 @@ class CompanyNameFilterPage extends React.Component{
                 <hr className=" hidden-xs"/>
                     <div className="head_bg">
                         <h6 className="pull-left">AR BULK  </h6>
-                        <a href=""  className="pull-right text_right"> Show All</a>
+                        <a href="javascript:void(0)"  className="pull-right text_right"> Show All</a>
                     </div>
                     <ul>
                        {locations}

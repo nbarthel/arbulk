@@ -14,20 +14,20 @@ class FilterComponent extends React.Component {
 	}
     render() {
         return (
-            	
+
         <div className="">
  			<div className="well filter_bg collapse navbar-collapse" id="filter-menu">
                 <h4 className=" hidden-xs"> REFINE YOUR RESULT </h4>
                 <CompanyNameFilterPage onCompanyFilter = {this.props.onCompanyFilter}/>
                 <CustomerNameFilterPage onCustomerFilter = {this.props.onCustomerFilter} />
-                <POSearchFilterPage onTextChange = {this.props.onTextChange}  />
-                <RailCarFilterPage  onTextChange = {this.props.onTextChange} />
-                <LotSearchFilterPage  onTextChange = {this.props.onTextChange}/>
-                <CutOffDateFilterPage />
-                <StatusFilterPage onStatusFilter = {this.props.onStatusFilter}/>
+                <POSearchFilterPage onClickPo = {this.props.onClickPo}  onTextChange = {this.props.onTextChange}  />
+                <RailCarFilterPage onClickli={this.props.onClickli}  onTextChange = {this.props.onTextChange} />
+                <LotSearchFilterPage lotSearch = {this.props.lotSearch} onTextChange = {this.props.onTextChange}/>
+                <CutOffDateFilterPage startDate = {this.props.StartDate} endDate = {this.props.EndDate} getdt={this.props.getdt} parent={this.props.parent} />
+                <StatusFilterPage onStatusFilter = {this.props.onStatusFilter} parent={this.props.parent}/>
             </div>
         </div>
-              
+
         )
     }
 }

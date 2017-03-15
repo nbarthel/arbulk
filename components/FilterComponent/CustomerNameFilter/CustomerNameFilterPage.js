@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 import _ from  'lodash';
 import {Base_Url} from '../../../constants';
+import { createDataLoader } from 'react-loopback';
 class CustomerNameFilterPage extends React.Component {
     constructor(props){
         super(props);
@@ -11,16 +12,38 @@ class CustomerNameFilterPage extends React.Component {
         }           
     }
     componentDidMount() {
-        axios.get( Base_Url +"TCompanies").then((response) => {
-        this.setState({
-            name: response.data
+        var PIview = createDataLoader(CustomerNameFilterPage,{
+            queries:[{
+                endpoint: 'TPackagingInstructions',
+                filter: {
+                    include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
+                }
+            }]
         })
-    })
-    .catch(function(err){
-        console.log('eroor>>>>' , err)
-    })
+        console.log("I have recieved props")
+        //debugger
 
-           
+        var base = 'TCompanies'
+        this.urlCustomer = PIview._buildUrl(base, {
+            "where" : {type : "CUSTOMER" }
+        })
+
+
+
+
+
+        axios.get( this.urlCustomer).then((response) => {
+            this.setState({
+                name: response.data
+            })
+        })
+            .catch(function(err){
+                console.log('eroor>>>>' , err)
+            })
+
+
+
+
 
     }
 
@@ -49,9 +72,9 @@ return  (<li key={customer.id}>
                 <hr/>
                     <div className="head_bg">
                         <h6 className="pull-left text_left">CUSTOMER  </h6>
-                        <a href=""  className="pull-right text_right"> Show All</a>
+                        <a href="javascript:void()"  className="pull-right text_right"> Show All</a>
                     </div>
-                    <ul className="scroll">
+                    <ul className=" ht">
                         {customers}
                     </ul>
                 </div>

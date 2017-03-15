@@ -1,16 +1,27 @@
 import React from 'react';
 
 import { Link } from 'react-router';
-
+import { hashHistory } from 'react-router'
 import '../../public/stylesheets/bootstrap.min.css'
 import '../../public/stylesheets/font-awesome.min.css'
 import BreadCrumb from '../BreadCrumbComponent/BreadCrumb';
 
 
 export default class AdminHeader extends React.Component {
+	constructor(props){
+		super(props);
+		this.logOut = this.logOut.bind(this)
+	}
+	logOut(){
+		localStorage.removeItem('userName');
+    localStorage.removeItem('userId');
+    hashHistory.push('/')
+		window.location.reload()
+	}
   render() {
     return (
-      <header className="admin-menu-font text-uppercase"> 
+    	<div>
+      <header className="admin-menu-font text-uppercase">
 			<nav className="navbar navbar-default navbar-fixed-top  ">
 				  <div className="container-fluid">
 					<div className="navbar-header">
@@ -20,23 +31,26 @@ export default class AdminHeader extends React.Component {
 						<span className="icon-bar"></span>
 						<span className="icon-bar"></span>
 					  </button>
-					  <a className="navbar-brand" href="index.html"> <img src="../../public/img/logo_inner.png" className="img-responsive" /></a>
+					  <span className="navbar-brand imgbg" ></span>
 					</div>
 
 				 <div className="collapse navbar-collapse" id="navigation-menu">
-					 <ul className="nav navbar-nav navbar-right top_nav">      
+					 <ul className="nav navbar-nav navbar-right top_nav">
 						<li><Link to="/Admin/createusr">Create User</Link></li>
-						<li><Link to="/Admin/modifyusr">Modify User</Link></li>
-						<li><a href="#">Customers & Truckers  </a></li>
-						<li><a href="#">Add Material  </a></li>
-						<li><a href="#">Upload Data</a></li>
+						<li><Link to="/Admin/modifyUser">Modify User</Link></li>
+						<li><Link to = "/Admin/CustAndTruck">Customers & Truckers</Link></li>
+						<li><Link to ="/Admin/AddMaterial">Add Material</Link></li>
+						<li><Link to ="/Admin/viewMaterial">View Material</Link></li>
+						<li><Link to = "/Admin/UploadData">Upload Data</Link></li>
 						<li><a href="#">Change Histroy</a></li>
-						   <li><a href="signin.html">LOGOUT <i className="fa fa-unlock-alt" aria-hidden="true"></i></a></li>
+						   <li><a href="#" onclick={this.logOut}>LOGOUT <i className="fa fa-unlock-alt" aria-hidden="true"></i></a></li>
 					  </ul>
 					</div>
 				  </div>
 				</nav>
     </header>
+    <BreadCrumb routes = {this.props.routes} />
+    </div>
     );
   }
 }

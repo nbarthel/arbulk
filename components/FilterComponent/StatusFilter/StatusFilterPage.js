@@ -3,16 +3,18 @@ import _ from 'lodash';
 class StatusFilterPage extends React.Component {
     constructor(props){
         super(props);
-        this.status = [{name:"Unconfirmed",id: 0},
-        {name:"Confirmed",id:1},
-        {name:"Arrived",id:2},
-        {name:"Queued",id:3},
-        {name:"Partially Packaged",id:4},
+       this.status = [{name:"UNCONFIRMED",id: 0},
+        {name:"CONFIRMED",id:1},
+        {name:"READY",id:2},
+        {name:"QUEUED",id:3},
+        {name:"PARTIALLYPACKED",id:4},
         {name:"In Inventory",id:5},
-        {name:"Shipped",id:6}]
+        {name:"SHIPPED",id:6}]
 
         this.checkedStatus = { }
-        
+
+
+
     }
     /*onClick(e,status){
         if(e.target.checked){
@@ -23,10 +25,11 @@ class StatusFilterPage extends React.Component {
         else if (!e.target.checked){
          delete this.props.checkedStatus[e.target.id]
          //console.log(this.props.checkedStatus)
-            
+
         }
     }*/
     render() {
+      if((this.props.parent && this.props.parent !="RailcarArrivalEntry" && this.props.parent !="RailcarDeparture")||this.props.parent==undefined){
         var stats = _.map(this.status,(status) => {
             return (<li key={status.id}>
                      <label className="control control--checkbox">{status.name}
@@ -39,16 +42,19 @@ class StatusFilterPage extends React.Component {
                 <hr/>
                     <div className="head_bg">
                         <h6 className="pull-left text_left">STATUS  </h6>
-                        <a href=""  className="pull-right text_right"> Show All</a>
-                    </div>
+                   </div>
                     <ul className="scroll">
-                       {stats} 
-                       
+                       {stats}
+
                     </ul>
                 </div>
 
 
         )
     }
+  else{
+    return(<div></div>)
+  }
+}
 }
 export default StatusFilterPage;
