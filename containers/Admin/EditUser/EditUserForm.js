@@ -16,7 +16,7 @@ class EditUserForm extends React.Component {
                                 <div className="col-lg-6  col-md-6 col-sm-6 col-xs-12">
                                     <div className="form-group ">
                                         <label for="First_Name">First Name</label>
-                                        <input type="text" className="form-control" id="First_Name" placeholder="Joe" disabled/>
+                                        <input type="text" className="form-control" id="First_Name" placeholder="Joe" />
                                             <div className="error"><span></span></div>
                                         </div>
                                     </div>
@@ -24,21 +24,21 @@ class EditUserForm extends React.Component {
                                     <div className="col-lg-6  col-md-6 col-sm-6 col-xs-12">
                                         <div className="form-group ">
                                             <label for="Last_Name">Last Name</label>
-                                            <input type="text" className="form-control" id="Last_Name" placeholder="Smith" disabled/>
+                                            <input type="text" className="form-control" id="Last_Name" placeholder="Smith" />
                                                 <div className="error"><span></span></div>
                                             </div>
                                         </div>
                                         <div className="col-lg-6  col-md-6 col-sm-6 col-xs-12">
                                             <div className="form-group ">
                                                 <label for="">Email Address</label>
-                                                <input type="email" className="form-control" id="" placeholder="Sample@sample.com" disabled/>
+                                                <input type="email" className="form-control" id="" placeholder="Sample@sample.com" />
                                                     <div className="error"><span></span></div>
                                                 </div>
                                             </div>
                                             <div className="col-lg-6  col-md-6 col-sm-6 col-xs-12">
                                                 <div className="form-group ">
                                                     <label for="">Confirm Email Address</label>
-                                                    <input type="email" className="form-control" id="" placeholder="Sample@sample.com" disabled/>
+                                                    <input type="email" className="form-control" id="" placeholder="Sample@sample.com" />
                                                         <div className="error"><span></span></div>
                                                     </div>
                                                 </div>

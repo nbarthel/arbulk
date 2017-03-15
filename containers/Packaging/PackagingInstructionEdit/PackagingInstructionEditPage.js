@@ -6,11 +6,9 @@ class PackagingInstructionEditPage extends React.Component{
 
 	render(){
 		return(
-		<div className="wrapper-inner">
-		<div className="content-inside">
+		<div className="wrapper">
 		<Header />
 		<PackagingInstructionEditForm />
-		</div>
 		<Footer />
 		</div>
 			)

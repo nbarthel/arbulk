@@ -23,13 +23,11 @@ export default class RailcarArrivalEntryPage extends React.Component {
         var base = 'TPackagingInstructionLots';
         //TPackagingInstructionLots
         this.url = PIview._buildUrl(base, {
-            include : ['TPackagingInstructions',{"relation": "TPackagingInstructions", "scope": {"include": ["TLocation","TCompany"]}}]
-
-
+            include : ['TPackagingInstructions',{"relation": "TPackagingInstructions", "scope": {"include": ["TLocation","TCompany"]}}],
+            "where" : {"railcar_status": {"neq":"ARRIVED"},"active":1}
         });
 
         console.log('sdsddsdsdsdsd' , this.url);
-
 
         $.ajax({
             url: this.url,
@@ -45,16 +43,15 @@ export default class RailcarArrivalEntryPage extends React.Component {
             }.bind(this)
 
         })
+        debugger
     }
-
-    
 
     render() {
       const viewRailData = this.state.viewRailcartData
     return (
       <div className="wrapper-inner">
       <div className="content-inside">
-      <Header />
+      <Header routes = {this.props.routes}/>
       <RailcarArrivalEntryForm key="0" data={viewRailData}/>
       </div>
       <Footer />

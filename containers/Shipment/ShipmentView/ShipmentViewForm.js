@@ -3,505 +3,1776 @@ import React from 'react';
 //import '../../public/stylesheets/bootstrap.min.css';
 //import '../../public/stylesheets/font.css';
 //import '../../public/stylesheets/font-awesome.min.css';
-import { Link } from 'react-router';
+ import SweetAlert from 'sweetalert-react';
+ import '../../../public/stylesheets/sweetalert.css';
+import { createDataLoader } from 'react-loopback';
+import { hashHistory } from 'react-router';
+import ShipmentViewDataComponent from '../../../components/ShipmentViewDataComponent/ShipmentViewDataComponent'
+import FilterComponent from '../../../components/ShipmentFilterComponent';
+import FilterButton from '../../../components/ShipmentFilterComponent/FilterButton';
+import axios from 'axios'
+import {Base_Url} from '../../../constants';
+var moment = require('moment')
+//import './moment.js'
 class  ShipmentViewForm extends React.Component
 {
+    constructor(props){
+        super(props);
+        this.state= {  viewData : '',
+                key : 0,
+                index : 0,
+            startDate: null,
+            endDate : null,
+   		   showARB:"",
+           showCustomer:"",
+           showPO:"",
+           showRelease:"",
+           showLot:"",
+           showMaterial:"",
+           showConfmd:"",
+           showBooking:"",
+           showShipmentType:"",
+           showCutoff:"",
+           showForwarder:"",
+           showCntrSize:"",
+           showInInvt:"",
+           showQty:"",
+           showAlloc:"",
+           showEno:"",
+           showBags:"",
+           showERD:"",
+           showVessel:"",
+           showSteamShip:"",
+           showPU: "",
+           showRet: "",
+           showDoc: "",
+           showStatus: "",
+           showTrucker: ""
+    }
+            this.status
+            this.handleChange = this.handleChange.bind(this);
+             this.handleChange1 = this.handleChange1.bind(this);
+            this.buttonDisplay = [ ]
+            this.checkedCustomer = [ ]
+            this.checkedStatus = [ ]
+            this.checkedCompany = [ ]
+            this.Query = {}
+            this.Where = { }
+            this.qArray = []
+            this.selected = null
+            this.piID = null
+		      	this.conFirmID = null
+             this.ShipmentType = this.ShipmentType.bind(this)
+             this.getDates = this.getDates.bind(this)
+            this.onClickli = this.onClickli.bind(this)
+            this.onClickPo = this.onClickPo.bind(this)
+            this.lotSearch = this.lotSearch.bind(this)
+            this.onCompanyFilter = this.onCompanyFilter.bind(this)
+            this.onCustomerFilter =  this.onCustomerFilter.bind(this)
+            this.onStatusFilter = this.onStatusFilter.bind(this)
+            this.onRemove = this.onRemove.bind(this)
+           // this.onClick = this.onClick.bind(this)
+            this.onButtonRemove = this.onButtonRemove.bind(this)
+            this.onSearch = this.onSearch.bind(this)
+            this.onTextChange = this.onTextChange.bind(this)
+            this.saveView = this.saveView.bind(this)
+            this.handleTextChange = this.handleTextChange.bind(this)
+            this.viewChange = this.viewChange.bind(this)
+            this.checkboxChange = this.checkboxChange.bind(this)
+           // this.handleOptionChange = this.handleOptionChange.bind(this)
+            //this.handleOptionChange1 = this.handleOptionChange.bind(this)
+            //this.onEdit =this.onEdit.bind(this)
+            this.qArray = []
+            this.addToQueue = this.addToQueue.bind(this)
+            this.tempLotId = ""
+            this.PrintScreen = this.PrintScreen.bind(this)
+            //this.headerCheckboxChange = this.headerCheckboxChange.bind(this)
+    }
+    allocateContainer(e){
+        hashHistory.push('/Container/containerarrivalentry')
+    }
+    onConfirmClick(e){
+      if(this.confId != null || undefined){
+              hashHistory.push('/Shipment/shipmentConfirmation/'+this.confId)}
+              else{
+                swal("Selection Missing","Please Select A Shipment Lot","info")
+              }
+    }
+
+onViewClick(e){
+      if(this.conFirmID != null || undefined){
+          hashHistory.push('/Shipment/shipmentDetails/'+this.conFirmID);
+    }else{
+      swal("Selection Missing","Please Select A Shipment Lot","info")
+    }
+}
+
+ componentWillMount() {
+
+
+  axios.get(Base_Url+"TCustomViews").then(response=>{
+         this.setState({
+             savedViews : response.data
+         })
+     })
+
+      axios.get(Base_Url+"TShipmentLots/getMaxQueue").then(response=>{
+    this.setState({
+        queue_Sequence : response.data
+    })
+})
+
+
+
+ }
+PrintScreen(){
+  var scrollLeft = document.getElementsByClassName("loadedContent")[0].scrollLeft
+  document.getElementsByClassName('pos-relative-b')[0].style.display = 'none'
+  document.getElementsByClassName('filter-btn')[0].style.display = 'none'
+  document.getElementById("nonPrintable").style.display = "none"
+  document.getElementById("row").style.display = "none"
+  document.getElementById("hide1").style.display = "none"
+  // document.getElementById("hide2").style.display = "none"
+  // document.getElementById("hide3").style.display = "none"
+  document.getElementById("hide4").style.display = "none"
+  document.getElementById("hide5").style.display = "none"
+  document.getElementById("customer_name").style.display = "none"
+  document.getElementsByClassName("loadedContent")[0].style.cssText=""
+  document.getElementsByClassName("loadedContent")[0].style.height="100%"
+  document.getElementsByClassName("loadedContent")[0].style.overflowX='auto'
+  document.getElementsByClassName("loadedContent")[0].scrollLeft = scrollLeft
+  var printContent = document.getElementById('Packaging_Instruction_View').innerHtml
+  document.body.innerHtml = printContent
+  window.print()
+  window.location.reload()
+}
+
+    checkboxChange(e,value,data){
+        debugger
+        console.log(value,data)
+        if(e.target.checked){
+            this.conFirmID = e.target.value
+            this.selected = e.target.id
+            this.confId = data.id
+            this.status = value.status
+            this.shipId = value.id
+            this.tempLotId = data.piLotsId
+        }
+        else if(!e.target.checked){
+            this.selected = null
+            this.confId = null
+            this.selected = null
+            this.conFirmID = null
+            this.tempLotId = null
+            //this.piID = null
+
+        }
+        console.log("SelectedID >>>>>>>>>>>>.",this.selected)
+        console.log("ConfirmID><^><^><^>^<^>^<",this.conFirmID)
+    }
+
+    allocateContainer(e){
+        hashHistory.push('/Shipment/shipmentDetails/'+this.shipId+'/'+ 1 )
+    }
+
+
+    addToQueue(e){
+        debugger;
+      var option = {
+          "queueSequence" : parseInt(this.state.queue_Sequence[0].max_mark) +1
+      }
+    axios.put(Base_Url+"TShipmentLots/"+this.shipLotid ,option).then((response)=>{
+        swal("" , "Successfully added to the queue" , 'success')
+    })
+
+    }
+
+
+       onTextChange(e){
+
+         var idValue = e.target.id
+
+          this.Query[idValue] = e.target.value
+          console.log(this.Query)
+        }
+
+      onClickPo(e){
+        debugger;
+           this.Query[e.target.id] = e.target.getAttribute('value')
+
+          document.getElementById('POSearch').value = e.target.getAttribute('value')
+           console.log(this.Query)
+           console.log('>>>>>> target Value' , e.target.value)
+      }
+
+      lotSearch(e){
+          debugger;
+           this.Query[e.target.id] = e.target.getAttribute('value')
+           console.log(this.Query)
+           document.getElementById('LotSearch').value = e.target.getAttribute('value')
+           console.log('>>>>>> target Value' , e.target.value)
+      }
+
+onClickli(e){
+  this.Query[e.target.id] = e.target.getAttribute('value')
+
+    document.getElementById('railcarSearch').value = e.target.getAttribute('value')
+  console.log(this.Query)
+  console.log('>>>>>> target Value' , e.target.value)
+}
+ onCompanyFilter(e,location){
+
+            if(e.target.checked){
+            this.forceUpdate()
+            this.checkedCompany.push(e.target.id)
+            Object.defineProperty(this.Where,"Company",{enumerable: true ,
+                                                      writable: true,
+                                                      configurable:true,
+                                                      value:this.checkedCompany})
+            this.buttonDisplay.push(e.target.value)
+            console.log(this.checkedCompany)
+            //console.log(this.props.buttonDisplay)
+
+           }
+            else if (!e.target.checked){
+
+            let id = e.target.id
+            this.checkedCompany = _.without(this.checkedCompany,id)
+            this.Where.Company = this.checkedCompany
+            if(Object.keys(this.Where.Company).length === 0){
+              this.Where.Company = undefined
+              //console.log(this.Where)
+              delete this.Where.Company
+             }
+                let value = e.target.value
+                let index = this.buttonDisplay.indexOf(e.target.value)
+                if(index !== -1)
+                this.buttonDisplay = _.without(this.buttonDisplay,value)
+                 this.forceUpdate()
+                   }
+        }
+        onCustomerFilter(e,customer){
+
+            if(e.target.checked){
+            this.forceUpdate()
+            this.checkedCustomer.push(e.target.id)
+            Object.defineProperty(this.Where,"Customer",{enumerable: true ,
+                                                      writable: true,
+                                                      configurable:true,
+                                                      value:this.checkedCustomer})
+            this.buttonDisplay.push(e.target.value)
+            //console.log(this.props.checkedCompany)
+            //console.log(this.props.buttonDisplay)
+            console.log(this.checkedCustomer)
+           }
+            else if (!e.target.checked){
+            let id = e.target.id
+            this.checkedCustomer = _.without(this.checkedCustomer,id)
+            this.Where.Customer = this.checkedCustomer
+            if(Object.keys(this.Where.Customer).length === 0){
+              this.Where.Customer = undefined
+              delete this.Where.Customer
+            }
+                let value = e.target.value
+                let index = this.buttonDisplay.indexOf(e.target.value)
+                if(index !== -1)
+                this.buttonDisplay = _.without(this.buttonDisplay,value)
+                  this.forceUpdate()
+                   }
+        }
+        onStatusFilter(e,status){
+
+            if(e.target.checked){
+
+            this.checkedStatus.push(e.target.value);
+            Object.defineProperty(this.Where,"status",{enumerable: true ,
+                                                      writable: true,
+                                                      configurable:true,
+                                                      value:this.checkedStatus})
+            this.buttonDisplay.push(e.target.value)
+            this.forceUpdate()
+
+            //console.log(this.props.buttonDisplay)
+           /* console.log(this.Where)
+            console.log(this.checkedStatus)
+            console.log(this.checkedStatus.length)*/
+           }
+            else if (!e.target.checked){
+            let value = e.target.value
+            //let pos = this.checkedStatus.indexOf(e.target.value)
+            this.checkedStatus = _.without(this.checkedStatus,value)
+            this.Where.status = this.checkedStatus
+            //console.log(this.Where.status)
+            if(Object.keys(this.Where.status).length === 0){
+              this.Where.status = undefined
+              delete this.Where.status
+            }
+            console.log(this.Where)
+            //let value = e.target.value
+                let index = this.buttonDisplay.indexOf(e.target.value)
+                if(index !== -1)
+                this.buttonDisplay = _.without(this.buttonDisplay,value)
+                //console.log(this.buttonDisplay)
+                  this.forceUpdate()
+                  }
+        }
+    onButtonRemove(index,button){
+    this.buttonDisplay.splice(index,1)
+    this.forceUpdate()
+
+}
+    onRemove(e){
+        console.log("clicked")
+        console.log("WHERE",this.Where)
+            this.buttonDisplay = [];
+            this.checkedCustomer = []
+            this.checkedStatus = []
+            this.checkedCompany = []
+            this.Query = []
+            delete this.Where.Company
+            delete this.Where.Customer
+            delete this.Where.status
+            delete this.state.viewData
+            delete this.Where.CutofFilter
+            delete this.Where.shipMentType
+
+           delete this.startdate
+           delete this.endDate
+        delete this.Where.Query
+            this.setState({
+                key : this.state.key +1,
+                index : this.state.index +1
+            })
+            document.getElementById('customer_name').selectedIndex = 0
+         this.forceUpdate();
+
+       }
+
+    onSearch(e){
+        debugger;
+        var cutofFilter = []
+        var lotFlag = false
+        var poFlag = false
+        if(this.startdate && this.endDate) {
+            var startDate = moment(this.startdate.format('MM-DD-YYYY')),
+                endDate = moment(this.endDate.format('MM-DD-YYYY'));
+            var cutoffDate = this.getDates(startDate, endDate)
+
+            var objdate = {}
+            for(var j in cutoffDate){
+                objdate = {"cargoCutoffDate" : cutoffDate[j]}
+                cutofFilter.push(objdate)
+            }
+            Object.defineProperty(this.Where,"CutofFilter",{enumerable:true ,
+                writable: true,
+                configurable: true,
+                value:cutofFilter})
+
+        }
+       if(this.Query != undefined){
+                Object.defineProperty(this.Where,"Query",{enumerable:true ,
+                    writable: true,
+                    configurable: true,
+                    value:this.Query})
+            }
+          var serachObj = []
+          var serachObjLots =[]
+          var shipType = []
+           var isDomestic
+        if(this.shipMentType){
+            Object.defineProperty(this.Where,"shipMentType",{enumerable:true ,
+                writable: true,
+                configurable: true,
+                value:this.shipMentType})
+        }
+
+
+        if(this.Where.shipMentType && this.Where.shipMentType == "Domestic") {
+            isDomestic = true
+            var objShip = {"isDomestic" : 1}
+            serachObj.push(objShip)
+        }
+        else if(this.Where.shipMentType && this.Where.shipMentType== "International"){  isDomestic = false
+            var objShip = {"isDomestic" : 0}
+            serachObj.push(objShip)
+        }
+        var customer = []
+            if (this.Where != undefined && this.Where!= null)
+                {
+                    if(this.Where.Customer && this.Where.Customer.length >0){
+                                                var obj = {}
+                        for(var i in this.Where.Customer){
+                            obj = {"customerId" : this.Where.Customer[i] }
+                            customer.push(obj);
+                        }
+                        serachObj.push(customer)
+                    }
+
+                    if(this.Where.Company && this.Where.Company.length > 0){
+                        var company = [] ;
+                        var objCompany = {}
+                        for(var j in this.Where.Company)
+                        {
+                            objCompany = {"locationId" : this.Where.Company[j] }
+                            company.push(objCompany);
+                        }
+                        serachObj.push(company)
+                    }
+                      var Railstatus = [{"status":"UNCONFIRMED"},{"staus":"CONFIRMED"},{"status":"QUEUED"},{"status":"LOADED"},{"status":"COMPLETED"}];
+
+                    if(this.Where.status && this.Where.status.length){
+                        Railstatus = [];
+                        var objStatus = {};
+                        for(var z in this.Where.status){
+                            objStatus = {"status" : this.Where.status[z]}
+                            Railstatus.push(objStatus)
+                        }
+                         serachObjLots.push(Railstatus)
+                    }
+
+                    var poSearch = {}
+                    var railSearch = {}
+                    var lotSearch = {}
+
+                    if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.POSearch && this.Where.Query.POSearch!= undefined ){
+                        poSearch =  [ {'po_number': {"like": "%" + this.Where.Query.POSearch + "%"}}]
+                        serachObj.push(poSearch)
+                        poFlag = true
+                    }
+                    else{
+                      poSearch =  [ {'po_number': {"like": "%" + "%"}}]
+                      serachObj.push(poSearch)
+                    }
+
+                    if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.railcarSearch && this.Where.Query.railcarSearch!= undefined ){
+                         railSearch = [{'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}}]
+                         serachObjLots.push(railSearch)
+                    }
+
+
+                    if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.LotSearch && this.Where.Query.LotSearch!= undefined ){
+                        var lotSearch =  [{'releaseNumber': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
+                        serachObj.push(lotSearch)
+                        lotFlag = true
+                    }
+                    else{
+                      var lotSearch =  [{'releaseNumber': {"like": "%"  + "%"}}]
+                      serachObj.push(lotSearch)
+                    }
+
+                     serachObj = [].concat.apply([], serachObj);
+                      serachObjLots = [].concat.apply([], serachObjLots);
+
+                      var PIview = createDataLoader(ShipmentViewForm,{
+      queries:[{
+        endpoint: 'TPackagingInstructions',
+        filter: {
+          include: ['TPackagingInstructionLots',{
+                                                  "relation":"TPackagingInstructions",
+                                                  "scope":{"include":["TLocation"]}
+                                                }
+                   ]
+        }
+      }]
+    })
+       var base = 'TShipmentents';
+
+                     if(this.Where.CutofFilter && this.Where.CutofFilter.length > 0){
+
+                        this.url = PIview._buildUrl(base, {
+
+                            include : ["TLocation" ,"TContainerAllocation", "TCompany" ,
+
+                                                                 {"relation" : "TContainerDomestic",
+                                                                                "scope":{"include" : "TCompany"}
+                                                                 },
+
+                                                                 {"relation" : "TContainerInternational",
+                                                                               "scope":{"include" : "TCompany"}
+                                                                 },
+                                                                 {
+                                                                  "relation" :"TShipmentDomestic",
+                                                                  "scope":{"include":"TShipmentType",
+                                                                  "where":{"or":Railstatus}}
+                                                                 },
+                                                                 {
+                                                                  "relation" :"TShipmentInternational",
+                                                                  "scope":{
+                                                                            "include":["TSteamshipLine","TContainerType"],
+                                                                            "where" : {"and":[{"cargoCutoffDate":
+                                                                                                                  {
+                                                                                                                      "between" : [new Date(cutofFilter[0].cargoCutoffDate),new Date(cutofFilter[cutofFilter.length-1].cargoCutoffDate)]
+                                                                                                                  }
+                                                                                              },
+                                                                                              {
+                                                                                                  "or":Railstatus
+                                                                                              }]
+
+                                                                                      }
+                                                                         }
+                                                                  },
+                                                                  {
+                                                                      "relation": "TShipmentLots",
+                                                                      "scope":{
+                                                                                "include":["TPackagingInstructionLots",{
+                                                                                                                          "relation":"TPackagingInstructions",
+                                                                                                                          "scope":{"where":{"and":[
+                                                                                                                                                    {"or":poSearch}
+                                                                                                                                                  ]
+                                                                                                                                           }
+                                                                                                                                  }
+                                                                                                                       }
+                                                                                          ],
+                                                                                "where":{"active":"1"}
+                                                                              }
+                                                                  }
+                                      ],
+                            where: {"and":[
+                                           {"or":customer},
+                                           {"or":company},
+                                           {"active":1}
+                                          ]
+                                   }
+
+                        });
+                    }
+
+
+                  else if(serachObjLots && serachObjLots.length > 0){
+
+                       this.url = PIview._buildUrl(base, {
+
+                           include : ["TLocation" ,"TContainerAllocation", "TCompany" ,
+                                                                {
+                                                                  "relation" : "TContainerDomestic",
+                                                                   "scope":{"include" : "TCompany"}
+                                                                },
+
+                                                                {
+                                                                  "relation" : "TContainerInternational",
+                                                                  "scope":{"include" : "TCompany"}
+                                                                },
+
+                                                                {
+                                                                  "relation" :"TShipmentDomestic",
+                                                                  "scope":{"include":"TShipmentType",
+                                                                  "where":{"and":serachObjLots}}
+                                                                },
+
+                                                                {
+                                                                  "relation" :"TShipmentInternational",
+                                                                  "scope":{"where" : {
+                                                                                        "and" : serachObjLots
+                                                                                      },
+                                                                  "include":["TSteamshipLine","TContainerType"]}
+                                                                },
+
+                                                                {
+                                                                    "relation": "TShipmentLots",
+                                                                    "scope":{
+                                                                              "include":["TPackagingInstructionLots",{
+                                                                                                                        "relation":"TPackagingInstructions",
+                                                                                                                        "scope":{"where":{"and":[
+                                                                                                                                                  {"and":poSearch}
+                                                                                                                                                ]
+                                                                                                                                         }
+                                                                                                                                }
+                                                                                                                     }
+                                                                                        ],
+                                                                              "where":{"active":"1"}
+                                                                            }
+                                                                }
+                                    ],
+                           where: {"and":[
+                             {"or":customer},
+                             {"or":company},
+                             {"or":serachObjLots}
+                           ]}
+
+
+                       });
+                   }
+
+                    else {
+                      if(objShip==undefined)
+                        {
+                          this.url = PIview._buildUrl(base, {
+                            include: ["TLocation","TContainerAllocation","TCompany",
+                                                              {
+                                                                  "relation" : "TContainerDomestic",
+                                                                  "scope":{"include" : "TCompany"}
+                                                              },
+
+                                                              {
+                                                                  "relation" : "TContainerInternational",
+                                                                  "scope":{"include" : "TCompany"}
+                                                              },
+                                                              {
+                                                                  "relation": "TShipmentDomestic",
+                                                                  "scope": {"include": ["TShipmentType"]}
+                                                              },
+
+                                                              {
+                                                                  "relation": "TShipmentInternational",
+                                                                  "scope": {"include": ["TSteamshipLine","TContainerType"]}
+                                                              },
+
+                                                              {
+                                                                  "relation": "TShipmentLots",
+                                                                  "scope":{
+                                                                            "include":["TPackagingInstructionLots",{
+                                                                                                                      "relation":"TPackagingInstructions",
+                                                                                                                      "scope":{"where":{"and":[
+                                                                                                                                                {"and":poSearch}
+                                                                                                                                              ]
+                                                                                                                                       }
+                                                                                                                              }
+                                                                                                                   }
+                                                                                      ],
+                                                                            "where":{"active":"1"}
+                                                                          }
+                                                              }
+                                    ]
+                                    ,
+                            where: {
+                              //"active":1
+                              "and":[
+                              {"or":customer},
+                              {"or":company},
+                              {"or":lotSearch}
+                            ]
+                          }
+                        });
+                      }
+                      else if(objShip.isDomestic==0){
+                        this.url = PIview._buildUrl(base, {
+                          include: ["TLocation", "TContainerAllocation", "TCompany",
+                                                            {
+                                                                "relation" : "TContainerDomestic",
+                                                                "scope":{"include" : "TCompany"}
+                                                            },
+
+                                                            {
+                                                                "relation" : "TContainerInternational",
+                                                                "scope":{"include" : "TCompany"}
+                                                            },
+
+                                                            {
+                                                                "relation": "TShipmentDomestic",
+                                                                "scope": {"include": ["TShipmentType"]}
+                                                            },
+
+                                                            {
+                                                                "relation": "TShipmentInternational",
+                                                                "scope": {"include": ["TSteamshipLine","TContainerType"]}
+                                                            },
+
+                                                            {
+                                                                "relation": "TShipmentLots",
+                                                                "scope":{
+                                                                          "include":["TPackagingInstructionLots",{
+                                                                                                                    "relation":"TPackagingInstructions",
+                                                                                                                    "scope":{"where":{"and":[
+                                                                                                                                              {"and":poSearch}
+                                                                                                                                            ]
+                                                                                                                                     }
+                                                                                                                            }
+                                                                                                                 }
+                                                                                    ],
+                                                                          "where":{"active":"1"}
+                                                                        }
+                                                            }
+                                   ],
+                          where: {"and":[
+                            {"or":customer},
+                            {"or":company},
+                            {"or":lotSearch},
+                            {"isDomestic":0}
+                          ]}
+
+
+                      });
+                      }
+                      else{
+                        this.url = PIview._buildUrl(base, {
+                          //include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational",{"relation" : "TPackagingInstructionLots" ,"scope":{"where":{"or":serachObjLots}}}}]
+
+                          include: ["TLocation", "TContainerAllocation", "TCompany",
+                                                                          {
+                                                                              "relation" : "TContainerDomestic",
+                                                                              "scope":{"include" : "TCompany"}
+                                                                          },
+
+                                                                          {
+                                                                              "relation" : "TContainerInternational",
+                                                                              "scope":{"include" : "TCompany"}
+                                                                          },
+
+                                                                          {
+                                                                              "relation": "TShipmentDomestic",
+                                                                              "scope": {"include": ["TShipmentType"]}
+                                                                          },
+
+                                                                          {
+                                                                              "relation": "TShipmentInternational",
+                                                                              "scope": {"include": ["TSteamshipLine","TContainerType"]}
+                                                                          },
+                                                                          {
+                                                                              "relation": "TShipmentLots",
+                                                                              "scope":{
+                                                                                        "include":["TPackagingInstructionLots",{
+                                                                                                                                  "relation":"TPackagingInstructions",
+                                                                                                                                  "scope":{"where":{"and":[
+                                                                                                                                                            {"and":poSearch}
+                                                                                                                                                          ]
+                                                                                                                                                   }
+                                                                                                                                          }
+                                                                                                                               }
+                                                                                                  ],
+                                                                                        "where":{"active":"1"}
+                                                                                      }
+                                                                          }
+                        ],
+                          where: {"and":[
+                            {"or":customer},
+                            {"or":company},
+                            {"or":lotSearch},
+                            {"isDomestic":1}
+                          ]}
+
+
+                      });
+                      }
+                    }
+        console.log('sdsddsdsdssdssssssssssd' , this.url);
+      $.ajax({
+            url: this.url,
+            success:function(data){
+              debugger;
+              var i =0
+
+              if(poFlag){
+                while(poFlag){
+                  if(i<data.length && data[i].TShipmentLots.length > 0 && data[i].TShipmentLots[0].TPackagingInstructions==undefined ){
+                    data.splice(i,1)
+                  }
+                  else if(i>=data.length-1){
+                    poFlag = false;
+                  }
+                  else{
+                    i++
+                  }
+                }
+              }
+              i = 0
+              if(lotFlag){
+                while(lotFlag){
+                  if(i<data.length && data.length > 0 && !data[i].releaseNumber.toUpperCase().includes(this.Where.Query.LotSearch.toUpperCase())){
+                    data.splice(i,1)
+                  }
+                  else if(i>=data.length-1){
+                    lotFlag = false;
+                  }
+                  else{
+                    i++
+                  }
+                }
+              }
+
+                console.log('ajax ',data);
+                debugger
+               this.setState(
+                   {
+                       viewData : data,
+                       loaded:true
+                   }
+               )
+               //console.log( this.state.xyz)
+        }.bind(this)
+        })
+
+
+
+    }
+
+}
+
+  handleTextChange(e){
+        this.setState({
+            Text  : e.target.value
+        })
+
+    }
+
+   saveView(e){
+
+       debugger;
+        var saveCustomView = {
+            "id": 0,
+            "screenName": "SHIPMENT",
+            "viewName": this.state.Text,
+            "viewFilters": JSON.stringify(this.Where),
+            "createdBy": 0,
+            "createdOn": "2016-09-26",
+            "modifiedBy": 0,
+            "modifiedOn": "2016-09-26",
+            "active": 1
+        }
+        console.log("Save Customer View" , saveCustomView);
+        if(saveCustomView.viewFilters != undefined && saveCustomView.viewFilters != null && saveCustomView.viewFilters != {} ){
+        axios.post(Base_Url + "TCustomViews", saveCustomView).then(response=> {
+        swal('Success' , "Successfully Saved..." , 'success');
+        console.log("response", response)
+
+         axios.get(Base_Url+"TCustomViews").then(response=>{
+         this.setState({
+             savedViews : response.data
+             })
+         })
+       })
+
+            }
+       else {
+        swal('Error' , "Please Select Filter Options First" , 'error');
+      }
+
+    }
+
+ viewChange(e){
+    var blob = e.target.value
+    this.Where = JSON.parse(blob)
+
+   var serachObj = []
+     var serachObjLots =[]
+     var shipType = []
+     var isDomestic
+     var cutofFilter = []
+     var lotFlag = false
+     var poFlag = false
+   if(this.Where.shipMentType && this.Where.shipMentType == "Domestic") {
+         isDomestic = true
+         var objShip = {"isDomestic" : 1}
+         serachObj.push(objShip)
+     }
+     else if(this.Where.shipMentType && this.Where.shipMentType== "International"){  isDomestic = false
+         var objShip = {"isDomestic" : 0}
+         serachObj.push(objShip)
+     }
+     var customer = []
+         if (this.Where != undefined && this.Where!= null)
+             {
+                 if(this.Where.Customer && this.Where.Customer.length >0){
+                                             var obj = {}
+                     for(var i in this.Where.Customer){
+                         obj = {"customerId" : this.Where.Customer[i] }
+                         customer.push(obj);
+                     }
+                     serachObj.push(customer)
+                 }
+
+                 if(this.Where.Company && this.Where.Company.length > 0){
+                     var company = [] ;
+                     var objCompany = {}
+                     for(var j in this.Where.Company)
+                     {
+                         objCompany = {"locationId" : this.Where.Company[j] }
+                         company.push(objCompany);
+                     }
+                     serachObj.push(company)
+                 }
+                 var Railstatus = [{"status":"UNCONFIRMED"},{"staus":"CONFIRMED"},{"status":"QUEUED"},{"status":"LOADED"},{"status":"COMPLETED"}];
+
+                 if(this.Where.status && this.Where.status.length){
+                     Railstatus = [];
+                     var objStatus = {};
+                     for(var z in this.Where.status){
+                         objStatus = {"status" : this.Where.status[z]}
+                         Railstatus.push(objStatus)
+                     }
+                      serachObjLots.push(Railstatus)
+                 }
+
+                 var poSearch = {}
+                 var railSearch = {}
+                 var lotSearch = {}
+
+                 if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.POSearch && this.Where.Query.POSearch!= undefined ){
+                     poSearch =  [ {'po_number': {"like": "%" + this.Where.Query.POSearch + "%"}}]
+                     serachObj.push(poSearch)
+                     poFlag = true
+                 }
+                 else{
+                   poSearch =  [ {'po_number': {"like": "%" + "%"}}]
+                   serachObj.push(poSearch)
+                 }
+
+                 if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.railcarSearch && this.Where.Query.railcarSearch!= undefined ){
+                      railSearch = [{'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}}]
+                      serachObjLots.push(railSearch)
+                 }
+
+
+                 if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.LotSearch && this.Where.Query.LotSearch!= undefined ){
+                     var lotSearch =  [{'releaseNumber': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
+                     serachObj.push(lotSearch)
+                     lotFlag = true
+                 }
+                 else{
+                   var lotSearch =  [{'releaseNumber': {"like": "%"  + "%"}}]
+                   serachObj.push(lotSearch)
+                 }
+
+                  serachObj = [].concat.apply([], serachObj);
+                   serachObjLots = [].concat.apply([], serachObjLots);
+
+         var PIview = createDataLoader(ShipmentViewForm,{
+             queries:[{
+                 endpoint: 'TPackagingInstructions',
+                 filter: {
+                     include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
+                 }
+             }]
+         })
+         var base = 'TShipmentents';
+         if(this.Where.CutofFilter && this.Where.CutofFilter.length > 0){
+           var startDate = moment(this.Where.CutofFilter[0].cargoCutoffDate),
+               endDate = moment(this.Where.CutofFilter[this.Where.CutofFilter.length-1].cargoCutoffDate);
+           var cutoffDate = this.getDates(startDate, endDate)
+           var objdate = {}
+           for(var j in cutoffDate){
+               objdate = {"cargoCutoffDate" : cutoffDate[j]}
+               cutofFilter.push(objdate)
+           }
+
+           this.url = PIview._buildUrl(base, {
+
+               include : ["TLocation" ,"TContainerAllocation", "TCompany" ,
+
+                                                    {"relation" : "TContainerDomestic",
+                                                                   "scope":{"include" : "TCompany"}
+                                                    },
+
+                                                    {"relation" : "TContainerInternational",
+                                                                  "scope":{"include" : "TCompany"}
+                                                    },
+                                                    {
+                                                     "relation" :"TShipmentDomestic",
+                                                     "scope":{"include":"TShipmentType",
+                                                     "where":{"or":Railstatus}}
+                                                    },
+                                                    {
+                                                     "relation" :"TShipmentInternational",
+                                                     "scope":{
+                                                               "include":["TSteamshipLine","TContainerType"],
+                                                               "where" : {"and":[{"cargoCutoffDate":
+                                                                                                     {
+                                                                                                         "between" : [new Date(cutofFilter[0].cargoCutoffDate),new Date(cutofFilter[cutofFilter.length-1].cargoCutoffDate)]
+                                                                                                     }
+                                                                                 },
+                                                                                 {
+                                                                                     "or":Railstatus
+                                                                                 }]
+
+                                                                         }
+                                                            }
+                                                     },
+                                                     {
+                                                         "relation": "TShipmentLots",
+                                                         "scope":{
+                                                                   "include":["TPackagingInstructionLots",{
+                                                                                                             "relation":"TPackagingInstructions",
+                                                                                                             "scope":{"where":{"and":[
+                                                                                                                                       {"or":poSearch}
+                                                                                                                                     ]
+                                                                                                                              }
+                                                                                                                     }
+                                                                                                          }
+                                                                             ],
+                                                                   "where":{"active":"1"}
+                                                                 }
+                                                     }
+                         ],
+               where: {"and":[
+                              {"or":customer},
+                              {"or":company},
+                              {"active":1}
+                             ]
+                      }
+
+           });
+        }
+
+
+      else if(serachObjLots && serachObjLots.length > 0){
+
+           this.url = PIview._buildUrl(base, {
+
+               include : ["TLocation" ,"TContainerAllocation", "TCompany" ,
+                                                    {
+                                                      "relation" : "TContainerDomestic",
+                                                       "scope":{"include" : "TCompany"}
+                                                    },
+
+                                                    {
+                                                      "relation" : "TContainerInternational",
+                                                      "scope":{"include" : "TCompany"}
+                                                    },
+
+                                                    {
+                                                      "relation" :"TShipmentDomestic",
+                                                      "scope":{"include":"TShipmentType",
+                                                      "where":{"and":serachObjLots}}
+                                                    },
+
+                                                    {
+                                                      "relation" :"TShipmentInternational",
+                                                      "scope":{"where" : {
+                                                                            "and" : serachObjLots
+                                                                          },
+                                                      "include":["TSteamshipLine","TContainerType"]}
+                                                    },
+
+                                                    {
+                                                        "relation": "TShipmentLots",
+                                                        "scope":{
+                                                                  "include":["TPackagingInstructionLots",{
+                                                                                                            "relation":"TPackagingInstructions",
+                                                                                                            "scope":{"where":{"and":[
+                                                                                                                                      {"and":poSearch}
+                                                                                                                                    ]
+                                                                                                                             }
+                                                                                                                    }
+                                                                                                         }
+                                                                            ],
+                                                                  "where":{"active":"1"}
+                                                                }
+                                                    }
+                        ],
+               where: {"and":[
+                 {"or":customer},
+                 {"or":company},
+                 {"or":serachObjLots}
+               ]}
+
+
+           });
+       }
+
+        else {
+          if(objShip==undefined)
+            {
+              this.url = PIview._buildUrl(base, {
+                include: ["TLocation","TContainerAllocation","TCompany",
+                                                  {
+                                                      "relation" : "TContainerDomestic",
+                                                      "scope":{"include" : "TCompany"}
+                                                  },
+
+                                                  {
+                                                      "relation" : "TContainerInternational",
+                                                      "scope":{"include" : "TCompany"}
+                                                  },
+                                                  {
+                                                      "relation": "TShipmentDomestic",
+                                                      "scope": {"include": ["TShipmentType"]}
+                                                  },
+
+                                                  {
+                                                      "relation": "TShipmentInternational",
+                                                      "scope": {"include": ["TSteamshipLine","TContainerType"]}
+                                                  },
+
+                                                  {
+                                                      "relation": "TShipmentLots",
+                                                      "scope":{
+                                                                "include":["TPackagingInstructionLots",{
+                                                                                                          "relation":"TPackagingInstructions",
+                                                                                                          "scope":{"where":{"and":[
+                                                                                                                                    {"and":poSearch}
+                                                                                                                                  ]
+                                                                                                                           }
+                                                                                                                  }
+                                                                                                       }
+                                                                          ],
+                                                                "where":{"active":"1"}
+                                                              }
+                                                  }
+                        ]
+                        ,
+                where: {
+                  //"active":1
+                  "and":[
+                  {"or":customer},
+                  {"or":company},
+                  {"or":lotSearch}
+                ]
+              }
+            });
+          }
+          else if(objShip.isDomestic==0){
+            this.url = PIview._buildUrl(base, {
+              include: ["TLocation", "TContainerAllocation", "TCompany",
+                                                {
+                                                    "relation" : "TContainerDomestic",
+                                                    "scope":{"include" : "TCompany"}
+                                                },
+
+                                                {
+                                                    "relation" : "TContainerInternational",
+                                                    "scope":{"include" : "TCompany"}
+                                                },
+
+                                                {
+                                                    "relation": "TShipmentDomestic",
+                                                    "scope": {"include": ["TShipmentType"]}
+                                                },
+
+                                                {
+                                                    "relation": "TShipmentInternational",
+                                                    "scope": {"include": ["TSteamshipLine","TContainerType"]}
+                                                },
+
+                                                {
+                                                    "relation": "TShipmentLots",
+                                                    "scope":{
+                                                              "include":["TPackagingInstructionLots",{
+                                                                                                        "relation":"TPackagingInstructions",
+                                                                                                        "scope":{"where":{"and":[
+                                                                                                                                  {"and":poSearch}
+                                                                                                                                ]
+                                                                                                                         }
+                                                                                                                }
+                                                                                                     }
+                                                                        ],
+                                                              "where":{"active":"1"}
+                                                            }
+                                                }
+                       ],
+              where: {"and":[
+                {"or":customer},
+                {"or":company},
+                {"or":lotSearch},
+                {"isDomestic":0}
+              ]}
+
+
+          });
+          }
+          else{
+            this.url = PIview._buildUrl(base, {
+              //include : ["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType"]}},{"relation" :"TShipmentInternational",{"relation" : "TPackagingInstructionLots" ,"scope":{"where":{"or":serachObjLots}}}}]
+
+              include: ["TLocation", "TContainerAllocation", "TCompany",
+                                                              {
+                                                                  "relation" : "TContainerDomestic",
+                                                                  "scope":{"include" : "TCompany"}
+                                                              },
+
+                                                              {
+                                                                  "relation" : "TContainerInternational",
+                                                                  "scope":{"include" : "TCompany"}
+                                                              },
+
+                                                              {
+                                                                  "relation": "TShipmentDomestic",
+                                                                  "scope": {"include": ["TShipmentType"]}
+                                                              },
+
+                                                              {
+                                                                  "relation": "TShipmentInternational",
+                                                                  "scope": {"include": ["TSteamshipLine","TContainerType"]}
+                                                              },
+                                                              {
+                                                                  "relation": "TShipmentLots",
+                                                                  "scope":{
+                                                                            "include":["TPackagingInstructionLots",{
+                                                                                                                      "relation":"TPackagingInstructions",
+                                                                                                                      "scope":{"where":{"and":[
+                                                                                                                                                {"and":poSearch}
+                                                                                                                                              ]
+                                                                                                                                       }
+                                                                                                                              }
+                                                                                                                   }
+                                                                                      ],
+                                                                            "where":{"active":"1"}
+                                                                          }
+                                                              }
+            ],
+              where: {"and":[
+                {"or":customer},
+                {"or":company},
+                {"or":lotSearch},
+                {"isDomestic":1}
+              ]}
+
+
+          });
+          }
+        }
+console.log('sdsddsdsdssdssssssssssd' , this.url);
+$.ajax({
+url: this.url,
+success:function(data){
+  debugger;
+  var i =0
+
+  if(poFlag){
+    while(poFlag){
+      if(i<data.length && data[i].TShipmentLots.length > 0 && data[i].TShipmentLots[0].TPackagingInstructions==undefined ){
+        data.splice(i,1)
+      }
+      else if(i>=data.length-1){
+        poFlag = false;
+      }
+      else{
+        i++
+      }
+    }
+  }
+  i = 0
+  if(lotFlag){
+    while(lotFlag){
+      if(i<data.length && data.length > 0 && !data[i].releaseNumber.toUpperCase().includes(this.Where.Query.LotSearch.toUpperCase())){
+        data.splice(i,1)
+      }
+      else if(i>=data.length-1){
+        lotFlag = false;
+      }
+      else{
+        i++
+      }
+    }
+  }
+
+    console.log('ajax ',data);
+    debugger
+   this.setState(
+       {
+           viewData : data,
+           loaded:true
+       }
+   )
+   //console.log( this.state.xyz)
+}.bind(this)
+})
+
+
+
+
+     }
+
+
+ }
+
+
+    handleChange(date){
+        debugger
+        this.setState({
+            startDate: date,
+        });
+        this.startdate = date
+        console.log("THESTARTDATE",this.startdate.format('MM-DD-YYYY'))
+    }
+
+    handleChange1(date){
+        debugger;
+        this.setState({
+            endDate: date
+        });
+        this.endDate = date ;
+        console.log("THEENDDATE",this.endDate.format('MM-DD-YYYY'))
+    }
+
+    getDates(startDate, endDate,interval) {
+        var cfg = {interval: interval || 'days'};
+        var dateArray = [];
+        debugger;
+        var currentDate = moment(startDate);
+        console.log('-->', currentDate._i, '<=', endDate._i, currentDate <= endDate);
+        while (currentDate <= endDate) {
+            dateArray.push(currentDate.format('YYYY-MM-DD') )
+            currentDate = currentDate.add(1, cfg.interval);
+        }
+
+        return dateArray;
+    }
+
+    ShipmentType(e){
+        console.log("valueShipment type" , e.target.value)
+        this.shipMentType = e.target.value
+    }
+
+    print(e){
+      debugger
+        if(this.selected != undefined || this.conFirmID != undefined){
+            console.log('print view',this.conFirmID+'/'+this.selected)
+            hashHistory.push('/Shipment/shipmentPrint/'+this.conFirmID)
+            //hashHistory.push('/Packaging/inventorycard/'+this.piID+'/'+this.selected)
+        }
+        else
+        {
+            console.log('mmmmmmmmmmmmmmmmmmmmm');
+            //hashHistory.push('/Shipment/shipmentPrint/')
+            swal("Selection Missing", "Please Select A Lot To View.","error")
+        }
+    }
+
+    onEditClick(e){
+      debugger
+      if(this.conFirmID != undefined){
+        hashHistory.push('/Shipment/shipmentedit/'+this.conFirmID+"/"+this.tempLotId)
+      }
+
+    else
+    {
+      swal("Selection Missing","Please Select A Checkbox","error")
+    }
+  }
+onHideColumn(e,name){
+    console.log(e.target.name)
+    switch(e.target.name){
+    case "ARB" :
+    if(this.state.showARB == ""){
+    this.setState({
+         showARB : "none"
+    })
+}
+else{
+    this.setState({
+         showARB : ""
+    })
+}
+ break;
+ case "Customer" :
+   if(this.state.showCustomer == ""){
+    this.setState({
+        showCustomer : "none"
+    })
+}
+else{
+    this.setState({
+        showCustomer : ""
+    })
+}
+break;
+ case "PO" :
+   if(this.state.showPO == ""){
+    this.setState({
+        showPO : "none"
+    })
+}
+else{
+    this.setState({
+        showPO : ""
+    })
+}
+break;
+ case "Release" :
+ console.log(e.target.name)
+  if(this.state.showRelease == ""){
+    this.setState({
+       showRelease : "none"
+    })
+}
+else{
+    this.setState({
+        showRelease : ""
+    })
+}
+break;
+ case "Lot" :
+ console.log(e.target.name)
+  if(this.state.showLot == ""){
+    this.setState({
+        showLot : "none"
+    })
+}
+else{
+    this.setState({
+        showLot : ""
+    })
+}
+break;
+ case "Material" :
+ console.log(e.target.name)
+  if(this.state.showMaterial == ""){
+    this.setState({
+        showMaterial : "none"
+    })
+}
+else{
+    this.setState({
+        showMaterial : ""
+    })
+}
+break;
+ case "Confmd" :
+ console.log(e.target.name)
+  if(this.state.showConfmd == ""){
+    this.setState({
+        showConfmd : "none"
+    })
+}
+else{
+    this.setState({
+        showConfmd : ""
+    })
+}
+break;
+ case "Booking" :
+ console.log(e.target.name)
+  if(this.state.showBooking == ""){
+    this.setState({
+        showBooking : "none"
+    })
+}
+else{
+    this.setState({
+        showBooking : ""
+    })
+}
+break;
+ case "ShipmentType" :
+ console.log(e.target.name)
+  if(this.state.showShipmentType == ""){
+    this.setState({
+        showShipmentType : "none"
+    })
+}
+else{
+    this.setState({
+        showShipmentType : ""
+    })
+}
+break;
+ case "Cutoff" :
+ console.log(e.target.name)
+  if(this.state.showCutoff == ""){
+    this.setState({
+        showCutoff : "none"
+    })
+}
+else{
+    this.setState({
+        showCutoff : ""
+    })
+}
+break;
+ case "Forwarder" :
+ console.log(e.target.name)
+  if(this.state.showForwarder == ""){
+    this.setState({
+        showForwarder : "none"
+    })
+}
+else{
+    this.setState({
+        showForwarder : ""
+    })
+}
+break;
+ case "CntrSize" :
+ console.log(e.target.name)
+  if(this.state.showCntrSize == ""){
+    this.setState({
+        showCntrSize : "none"
+    })
+}
+else{
+    this.setState({
+        showCntrSize : ""
+    })
+}
+break;
+ case "InInvt" :
+ console.log(e.target.name)
+  if(this.state.showInInvt == ""){
+    this.setState({
+        showInInvt : "none"
+    })
+}
+else{
+    this.setState({
+        showInInvt : ""
+    })
+}
+break;
+ case "Qty" :
+ console.log(e.target.name)
+  if(this.state.showQty == ""){
+    this.setState({
+        showQty : "none"
+    })
+}
+else{
+    this.setState({
+        showQty : ""
+    })
+}
+break;
+ case "Alloc" :
+ console.log(e.target.name)
+  if(this.state.showAlloc == ""){
+    this.setState({
+        showAlloc : "none"
+    })
+}
+else{
+    this.setState({
+        showAlloc : ""
+    })
+}
+break;
+ case "Enough" :
+ console.log(e.target.name)
+  if(this.state.showEno == ""){
+    this.setState({
+        showEno : "none"
+    })
+}
+else{
+    this.setState({
+        showEno : ""
+    })
+}
+break;
+ case "Bags" :
+ console.log(e.target.name)
+  if(this.state.showBags == ""){
+    this.setState({
+        showBags : "none"
+    })
+}
+else{
+    this.setState({
+        showBags : ""
+    })
+}
+break;
+ case "ERD" :
+ console.log(e.target.name)
+  if(this.state.showERD == ""){
+    this.setState({
+        showERD : "none"
+    })
+}
+else{
+    this.setState({
+        showERD : ""
+    })
+}
+break;
+ case "Vessel" :
+ console.log(e.target.name)
+  if(this.state.showVessel == ""){
+    this.setState({
+        showVessel : "none"
+    })
+}
+else{
+    this.setState({
+        showVessel : ""
+    })
+}
+break;
+ case "SteamShip" :
+ console.log(e.target.name)
+  if(this.state.showSteamShip == ""){
+    this.setState({
+        showSteamShip : "none"
+    })
+}
+else{
+    this.setState({
+        showSteamShip : ""
+    })
+}
+break;
+case "PU" :
+ console.log(e.target.name)
+  if(this.state.showPU == ""){
+    this.setState({
+        showPU : "none"
+    })
+}
+else{
+    this.setState({
+        showPU : ""
+    })
+}
+break;
+ case "Ret" :
+ console.log(e.target.name)
+  if(this.state.showRet == ""){
+    this.setState({
+        showRet : "none"
+    })
+}
+else{
+    this.setState({
+        showRet : ""
+    })
+}
+break;
+ case "Doc" :
+ console.log(e.target.name)
+  if(this.state.showDoc == ""){
+    this.setState({
+        showDoc : "none"
+    })
+}
+else{
+    this.setState({
+        showDoc : ""
+    })
+}
+break;
+ case "Status" :
+ console.log(e.target.name)
+  if(this.state.showStatus == ""){
+    this.setState({
+        showStatus : "none"
+    })
+}
+else{
+    this.setState({
+        showStatus : ""
+    })
+}
+break;
+ case "Trucker" :
+ console.log(e.target.name)
+  if(this.state.showTrucker == ""){
+    this.setState({
+        showTrucker : "none"
+    })
+}
+else{
+    this.setState({
+        showTrucker : ""
+    })
+}
+break;
+}
+}
     render()
     {
+        var filterData = ''
+if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData.length >0 )){
+
+    filterData = this.state.viewData;
+}
         return (
 
             <section className="side-filter">
                 <div className="menu-bg hidden-md hidden-lg hidden-sm  visible-xs-block">
-                    <div className="">
+                    <div className="" id="hide1">
                         <h4 className="pull-left">REFINE YOUR RESULT </h4>
                         <button type="button" className="btn collapsed pull-right " data-toggle="collapse" data-target="#filter-menu" aria-expanded="false"><i className="fa fa-caret-down fa-2x" aria-hidden="true"></i></button>
                     </div>
                 </div>
                 <div className="container">
                     <div className="row-fluid">
-                        <div className="">
-                            <div className="well filter_bg collapse navbar-collapse" id="filter-menu">
-                                <h4> REFINE YOUR RESULT </h4>
-                                <div>
-                                    <hr/>
-                                        <div className="pddn-25-btm ">
-                                            <h6 className="pull-left">AR BULK  </h6>
-                                            <a href=""  className="pull-right text_right"> Show All</a>
-                                        </div>
-                                        <ul>
-                                            <li>
-                                                <label className="control control--checkbox">SC
-                                                    <input type="checkbox" checked="checked" id="row1"/><div className="control__indicator"></div>
-                                                </label>
-                                            </li>
-                                            <li>
-                                                <label className="control control--checkbox">NG
-                                                    <input type="checkbox"  id="row1"/><div className="control__indicator"></div>
-                                                </label>
-                                            </li>
-                                        </ul>
-                                    </div>
-
-                                    <div className="customer">
-                                        <hr/>
-                                            <div className="pddn-25-btm ">
-                                                <h6 className="pull-left text_left">CUSTOMER  </h6>
-                                                <a href=""  className="pull-right text_right"> Show All</a>
-                                            </div>
-                                            <ul className="scroll">
-                                                <li>
-                                                    <label className="control control--checkbox">AA Customers
-                                                        <input type="checkbox" checked="checked" id="row1"/><div className="control__indicator"></div>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label className="control control--checkbox">Dow
-                                                        <input type="checkbox"  id="row1"/><div className="control__indicator"></div>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label className="control control--checkbox">Exxon
-                                                        <input type="checkbox" checked="checked" id="row1"/><div className="control__indicator"></div>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label className="control control--checkbox">Ravago
-                                                        <input type="checkbox"  id="row1"/><div className="control__indicator"></div>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label className="control control--checkbox">Dow
-                                                        <input type="checkbox"  id="row1"/><div className="control__indicator"></div>
-                                                    </label>
-                                                </li>
-                                            </ul>
-                                        </div>
-
-                                        <div className="">
-                                            <hr/>
-                                                <div className="">
-                                                    <h6 className="pull-left text_left">PO#  </h6>
-                                                    <a href=""  className="pull-right text_right"> Show All</a>
-
-                                                    <div id="search" className="">
-                                                        <div className="left-inner-addon ">
-                                                            <i className="fa fa-search" aria-hidden="true"></i>
-                                                            <input type="search"className="form-control" placeholder="Search" />
-                                                        </div>
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
-                                            <div className="">
-                                                <hr/>
-                                                    <h6 className="pull-left text_left">RAIL CAR#  </h6>
-                                                    <a href=""   className="pull-right text_right"> Show All</a>
-                                                    <div id="search" className="">
-                                                        <div className="left-inner-addon ">
-                                                            <i className="fa fa-search" aria-hidden="true"></i>
-                                                            <input type="search"className="form-control" placeholder="Search" />
-                                                        </div>
-                                                    </div>
-
-                                                    <ul className="pddn-10-top">
-                                                        <li>
-                                                            <label className="control control--checkbox">Open Shipment
-                                                                <input type="checkbox" checked="checked" id="row1"/><div className="control__indicator"></div>
-                                                            </label>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div className="">
-                                                    <hr/>
-                                                        <h6 className="pull-left text_left">LOT#  </h6>
-                                                        <a href=""   className="pull-right text_right"> Show All</a>
-                                                        <div id="search" className="">
-                                                            <div className="left-inner-addon ">
-                                                                <i className="fa fa-search" aria-hidden="true"></i>
-                                                                <input type="search"className="form-control" placeholder="Search" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="">
-                                                        <hr/>
-                                                            <h6 className="pull-left text_left">CUT OFF DATE </h6>
-                                                            <a href=""   className="pull-right text_right"> Show All</a>
-                                                            <div id="search" className="">
-                                                                <div id="date" className="row">
-                                                                    <div className="col-md-6 col-sm-6 col-xs-6">
-
-                                                                        <input type="text" id="date" name="date" className="form-control pull-left "  placeholder="From"/>
-
-                                                                        </div>
-                                                                        <div className="col-md-6 col-sm-6 col-xs-6">
-
-                                                                            <input type="text" className="form-control  "  id="date" name="date"  placeholder="To"/>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-
-                                                                <div className="status">
-                                                                    <hr/>
-                                                                        <div className=" pddn-25-btm ">
-                                                                            <h6 className="pull-left text_left">STATUS  </h6>
-                                                                            <a href=""  className="pull-right text_right"> Show All</a>
-                                                                        </div>
-                                                                        <ul className="scroll">
-                                                                            <li>
-                                                                                <label className="control control--checkbox">Unconfirmed
-                                                                                    <input type="checkbox" checked="checked" id="row1"/><div className="control__indicator"></div>
-                                                                                </label>
-                                                                            </li>
-                                                                            <li>
-                                                                                <label className="control control--checkbox">Confirmed
-                                                                                    <input type="checkbox"  id="row1"/><div className="control__indicator"></div>
-                                                                                </label>
-                                                                            </li>
-                                                                            <li>
-                                                                                <label className="control control--checkbox">Arrived
-                                                                                    <input type="checkbox" checked="checked" id="row1"/><div className="control__indicator"></div>
-                                                                                </label>
-                                                                            </li>
-                                                                            <li>
-                                                                                <label className="control control--checkbox">Queued
-                                                                                    <input type="checkbox"  id="row1"/><div className="control__indicator"></div>
-                                                                                </label>
-                                                                            </li>
-                                                                            <li>
-                                                                                <label className="control control--checkbox">Partially Packaged
-                                                                                    <input type="checkbox"  id="row1"/><div className="control__indicator"></div>
-                                                                                </label>
-                                                                            </li>
-                                                                            <li>
-                                                                                <label className="control control--checkbox">In Invetory
-                                                                                    <input type="checkbox"  id="row1"/><div className="control__indicator"></div>
-                                                                                </label>
-                                                                            </li>
-                                                                            <li>
-                                                                                <label className="control control--checkbox">Shipped
-                                                                                    <input type="checkbox"  id="row1"/><div className="control__indicator"></div>
-                                                                                </label>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-
-
-
-
-                                                                </div>
-                                                            </div>
-
+                    <FilterComponent key= {this.state.key} ShipmentType={this.ShipmentType}  startDate = {this.state.startDate} endDate = {this.state.endDate} handleChange = {(date) => {this.handleChange(date)}} handleChange1 = {(date) => {this.handleChange1(date)}} lotSearch={this.lotSearch}  onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter} handleChange1={this.handleChange1} handleChange={this.handleChange}/>
                                                             <div id="filter-grid">
-
-
-
-
-
-
-
                                                                 <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
                                                                     <div className="row">
-                                                                        <div className="col-lg-8 col-md-8 col-sm-12 col-xs-12 filter-btn">
-                                                                            <button type="button"  className="btn  btn-default">sc <span aria-hidden="true">&times;</span></button>
-                                                                            <button type="button"  className="btn  btn-default">AA Customers<span aria-hidden="true">&times;</span></button>
-                                                                            <button type="button"  className="btn  btn-default">Exxon <span aria-hidden="true">&times;</span></button>
-                                                                            <button type="button"  className="btn  btn-default">Arrived <span aria-hidden="true">&times;</span></button>
-                                                                            <a href="javascript:void(0)"  className="underline base_color"> Clear Filter</a>
-                                                                        </div>
+                                                                       <FilterButton buttonDisplay = {this.buttonDisplay}  onButtonRemove = {this.onButtonRemove} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
                                                                         <div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs">
-                                                                            <div className="pull-right ">
-                                                                                <select className="form-control"   id="customer_name" name="customer_name">
-                                                                                    <option value="">Save View</option>
-                                                                                    <option value="View1">View 1</option>
-                                                                                    <option value="View2">View 2</option>
-                                                                                    <option value="View3">View 3</option>
-                                                                                    <option value="View4">View 4</option>
-                                                                                    <option value="View5">View 5</option>
-                                                                                </select>
+                                                                            <div className="pull-right " id="hide5">
+                                                                                <select className="form-control"   id="customer_name" name="customer_name" onChange={this.viewChange}>
+                              <option value="Please Select An Option" disabled selected>Select custom view</option>
+                             {
+                                 _.map(this.state.savedViews , (views,index)=>{
+                                     debugger;
+                                     if(views.screenName == "SHIPMENT")
+                                     {
+                                     return(
+
+                                         <option key = {index} value={views.viewFilters}>{views.viewName }</option>
+                                     )
+                                 }
+                                 })
+                             }
+                        </select>
                                                                             </div>
-                                                                            <div className="pull-right btn_right_margin">
-                                                                                <select className="form-control"  id="customer_name" name="customer_name">
-                                                                                    <option value="">Group By</option>
-                                                                                    <option value="Date">Date</option>
-                                                                                </select>
-                                                                            </div>
+
                                                                         </div>
 
-                                                                        <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 "><hr/></div>
+                                                                        <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 " id="hide4">
+                 <a href="javascript:void(0)" name = "ARB" onClick = {(e) => {this.onHideColumn(e,name)}}>ARB</a> --
+                 <a href="javascript:void(0)" name = "Customer" onClick = {(e) => {this.onHideColumn(e)}}>Customer</a> ---
+                 <a href="javascript:void(0)" name = "PO" onClick={(e) => {this.onHideColumn(e)}}>PO</a> --
+                 <a href="javascript:void(0)" name = "Release" onClick={(e) => {this.onHideColumn(e)}}>Release</a> --
+                 <a href="javascript:void(0)" name = "Lot" onClick={(e) => {this.onHideColumn(e)}}>Lot#</a> --
+                 <a href="javascript:void(0)" name = "Material" onClick={(e) => {this.onHideColumn(e)}}>Material</a> --
+                 <a href="javascript:void(0)" name = "Confmd" onClick={(e) => {this.onHideColumn(e)}}>Confmd</a> --
+                 <a href="javascript:void(0)" name = "Booking" onClick={(e) => {this.onHideColumn(e)}}>Booking</a> --
+                 <a href="javascript:void(0)" name = "ShipmentType" onClick={(e) => {this.onHideColumn(e)}}>ShipmentType</a> --
+                 <a href="javascript:void(0)" name = "Cutoff" onClick={(e) => {this.onHideColumn(e)}}>Cutoff</a> --
+                 <a href="javascript:void(0)" name = "Forwarder" onClick={(e) => {this.onHideColumn(e)}}>Forwarder</a> --
+                 <a href="javascript:void(0)" name = "CntrSize" onClick={(e) => {this.onHideColumn(e)}}>#CntrSize</a> --
+                 <a href="javascript:void(0)" name = "InInvt" onClick={(e) => {this.onHideColumn(e)}}>In.Invt.</a> --
+                 <a href="javascript:void(0)" name = "Qty"onClick={(e) => {this.onHideColumn(e)}}>Qty</a> --
+                 <a href="javascript:void(0)" name = "Alloc" onClick={(e) => {this.onHideColumn(e)}}>Allocated</a> --
+                 <a href="javascript:void(0)" name = "Enough" onClick={(e) => {this.onHideColumn(e)}}>Enough</a> --
+                 <a href="javascript:void(0)" name = "Bags" onClick={(e) => {this.onHideColumn(e)}}>Bags</a> --
+                 <a href="javascript:void(0)" name = "ERD" onClick={(e) => {this.onHideColumn(e)}}>ERD</a> --
+                 <a href="javascript:void(0)" name = "Vessel" onClick={(e) => {this.onHideColumn(e)}}>Vessel</a> --
+                 <a href="javascript:void(0)" name = "SteamShip" onClick={(e) => {this.onHideColumn(e)}}>SteamShipLine</a> --
+                 <a href="javascript:void(0)" name = "PU" onClick={(e) => {this.onHideColumn(e)}}>PU</a> --
+                 <a href="javascript:void(0)" name = "Ret" onClick={(e) => {this.onHideColumn(e)}}>Return</a> --
+                 <a href="javascript:void(0)" name = "Doc" onClick={(e) => {this.onHideColumn(e)}}>Doc</a> --
+                 <a href="javascript:void(0)" name = "Status" onClick={(e) => {this.onHideColumn(e)}}>Status</a> --
+                 <a href="javascript:void(0)" name = "Trucker" onClick={(e) => {this.onHideColumn(e)}}>Trucker</a>
+</div>
 
                                                                         <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                                            <div className=" table-responsive view_table">
+                                                                            <div className=" table-responsive view_table viewLoad">
+                                                                            <ShipmentViewDataComponent key={this.state.index} filterData = {filterData} checkboxChange = {this.checkboxChange} showARB = {this.state.showARB}
+                        showCustomer = {this.state.showCustomer}
+                        showPO = {this.state.showPO}
+                        showRelease = {this.state.showRelease}
+                        showLot = {this.state.showLot}
+                        showMaterial = {this.state.showMaterial}
+                        showConfmd = {this.state.showConfmd}
+                        showBooking = {this.state.showBooking}
+                        showShipmentType = {this.state.showShipmentType}
+                        showCutoff = {this.state.showCutoff}
+                        showForwarder = {this.state.showForwarder}
+                        showCntrSize = {this.state.showCntrSize}
+                        showInInvt = {this.state.showInInvt}
+                        showStatus = {this.state.showStatus }
+                        showQty = {this.state.showQty}
+                        showAlloc = {this.state.showAlloc}
+                        showEno = {this.state.showEno}
+                        showBags = {this.state.showBags}
+                        showERD = {this.state.showERD}
+                        showVessel = {this.state.showVessel}
+                        showSteamShip = {this.state.showSteamShip}
+                        showPU = {this.state.showPU}
+                        showRet = {this.state.showRet}
+                        showDoc = {this.state.showDoc}
+                        showStatus = {this.state.showStatus}
+                        showTrucker = {this.state.showTrucker}
+                        />
 
-                                                                                <table id="Packaging_Instruction_View" className="table table-expandable table-striped" cellspacing="0" >
-
-                                                                                    <thead className="table_head">
-                                                                                    <tr >
-                                                                                        <th>ARB </th>
-                                                                                        <th>Customer</th>
-                                                                                        <th>Release</th>
-                                                                                        <th>Booking</th>
-                                                                                        <th>PO </th>
-                                                                                        <th>Lot# </th>
-                                                                                        <th>Material </th>
-                                                                                        <th>Confm?</th>
-                                                                                        <th>Forwarder </th>
-                                                                                        <th>Ctnr SIze </th>
-                                                                                        <th>Qty</th>
-                                                                                        <th>Allocated </th>
-                                                                                        <th>Enough?</th>
-                                                                                        <th>#Bags (To Ship)</th>
-                                                                                        <th>(In Ivt.)</th>
-                                                                                        <th>ERD</th>
-                                                                                        <th>Cutoff</th>
-                                                                                        <th>Vessel</th>
-                                                                                        <th>Steamship Line</th>
-                                                                                        <th>PU Location</th>
-                                                                                        <th>Ret’n Location</th>
-                                                                                        <th>Docs Cutoff</th>
-                                                                                        <th>Status</th>
-                                                                                        <th>Trucker</th>
-                                                                                        <th>
-                                                                                            <label className="control control--checkbox">
-                                                                                                <input type="checkbox"  id="row1"/><div className="control__indicator"></div>
-                                                                                            </label>
-                                                                                        </th>
-                                                                                    </tr>
-                                                                                    </thead>
-
-                                                                                    <thead className="base_bg " data-toggle="collapse" data-target="#head1" className="clickable" >
-                                                                                    <tr >
-                                                                                        <th colspan="1">
-                                                                                            <i className="fa fa-chevron-down" aria-hidden="true"></i> SC
-                                                                                        </th>
-                                                                                        <th colspan="23"><span>Ravago</span><span></span>  </th>
-                                                                                        <th colspan="1">
-                                                                                            <label className="control control--checkbox">
-                                                                                                <input type="checkbox"  id="row1"/><div className="control__indicator"></div>
-                                                                                            </label>
-                                                                                        </th>
-                                                                                    </tr>
-                                                                                    </thead>
-                                                                                    <tbody className="collapseIn" id="head1">
-                                                                                    <tr>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td>3986755 </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td>
-                                                                                            <label className="control control--checkbox">
-                                                                                                <input type="checkbox" id="row1"/><div className="control__indicator"></div>
-                                                                                            </label>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td>SSPHORF03352</td>
-                                                                                        <td>PO334758 </td>
-                                                                                        <td>D030G2E03 </td>
-                                                                                        <td>LLDPE 1647C</td>
-                                                                                        <td>Y </td>
-                                                                                        <td>MTS </td>
-                                                                                        <td> 40’ HC</td>
-                                                                                        <td>7</td>
-                                                                                        <td>7</td>
-                                                                                        <td>Y</td>
-                                                                                        <td>990</td>
-                                                                                        <td>990</td>
-                                                                                        <td>3/16/2016</td>
-                                                                                        <td>3/21/2016</td>
-                                                                                        <td> Sealand Washington</td>
-                                                                                        <td>MSC </td>
-                                                                                        <td> APM</td>
-                                                                                        <td> APM</td>
-                                                                                        <td>3/18/2016  12:00 pm </td>
-                                                                                        <td>In Inventory</td>
-                                                                                        <td> IP</td>
-                                                                                        <td>
-                                                                                            <label className="control control--checkbox">
-                                                                                                <input type="checkbox" checked="checked" id="row1"/><div className="control__indicator"></div>
-                                                                                            </label>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td>SSPHORF03352</td>
-                                                                                        <td>PO334758 </td>
-                                                                                        <td>D030G2E03 </td>
-                                                                                        <td>LLDPE 1647C</td>
-                                                                                        <td>Y </td>
-                                                                                        <td>MTS </td>
-                                                                                        <td> 40’ HC</td>
-                                                                                        <td>7</td>
-                                                                                        <td>7</td>
-                                                                                        <td>Y</td>
-                                                                                        <td>990</td>
-                                                                                        <td>990</td>
-                                                                                        <td>3/16/2016</td>
-                                                                                        <td>3/21/2016</td>
-                                                                                        <td> Sealand Washington</td>
-                                                                                        <td>MSC </td>
-                                                                                        <td> APM</td>
-                                                                                        <td> APM</td>
-                                                                                        <td>3/18/2016  12:00 pm </td>
-                                                                                        <td>In Inventory</td>
-                                                                                        <td> IP</td>
-                                                                                        <td>
-                                                                                            <label className="control control--checkbox">
-                                                                                                <input type="checkbox" checked="checked" id="row1"/><div className="control__indicator"></div>
-                                                                                            </label>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    </tbody>
-                                                                                    <thead className="base_bg " data-toggle="collapse" data-target="#head2" className="clickable" >
-                                                                                    <tr >
-                                                                                        <th colspan="1">
-                                                                                            <i className="fa fa-chevron-down" aria-hidden="true"></i>
-                                                                                        </th>
-                                                                                        <th colspan="23"><span></span><span></span>  </th>
-                                                                                        <th colspan="1">
-                                                                                            <label className="control control--checkbox">
-                                                                                                <input type="checkbox"  id="row1"/><div className="control__indicator"></div>
-                                                                                            </label>
-                                                                                        </th>
-                                                                                    </tr>
-                                                                                    </thead>
-
-                                                                                    <tbody id="head2">
-                                                                                    <tr>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td>3986755 </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td>
-                                                                                            <label className="control control--checkbox">
-                                                                                                <input type="checkbox" id="row1"/><div className="control__indicator"></div>
-                                                                                            </label>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td>SSPHORF03352</td>
-                                                                                        <td>PO334758 </td>
-                                                                                        <td>D030G2E03 </td>
-                                                                                        <td>LLDPE 1647C</td>
-                                                                                        <td>Y </td>
-                                                                                        <td>MTS </td>
-                                                                                        <td> 40’ HC</td>
-                                                                                        <td>7</td>
-                                                                                        <td>7</td>
-                                                                                        <td>Y</td>
-                                                                                        <td>990</td>
-                                                                                        <td>990</td>
-                                                                                        <td>3/16/2016</td>
-                                                                                        <td>3/21/2016</td>
-                                                                                        <td> Sealand Washington</td>
-                                                                                        <td>MSC </td>
-                                                                                        <td> APM</td>
-                                                                                        <td> APM</td>
-                                                                                        <td>3/18/2016  12:00 pm </td>
-                                                                                        <td>In Inventory</td>
-                                                                                        <td> IP</td>
-                                                                                        <td>
-                                                                                            <label className="control control--checkbox">
-                                                                                                <input type="checkbox" checked="checked" id="row1"/><div className="control__indicator"></div>
-                                                                                            </label>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td> </td>
-                                                                                        <td>SSPHORF03352</td>
-                                                                                        <td>PO334758 </td>
-                                                                                        <td>D030G2E03 </td>
-                                                                                        <td>LLDPE 1647C</td>
-                                                                                        <td>Y </td>
-                                                                                        <td>MTS </td>
-                                                                                        <td>40’ HC</td>
-                                                                                        <td>7</td>
-                                                                                        <td>7</td>
-                                                                                        <td>Y</td>
-                                                                                        <td>990</td>
-                                                                                        <td>990</td>
-                                                                                        <td>3/16/2016</td>
-                                                                                        <td>3/21/2016</td>
-                                                                                        <td>Sealand Washington</td>
-                                                                                        <td>MSC </td>
-                                                                                        <td>APM</td>
-                                                                                        <td>APM</td>
-                                                                                        <td>3/18/2016  12:00 pm </td>
-                                                                                        <td>In Inventory</td>
-                                                                                        <td>IP</td>
-                                                                                        <td>
-                                                                                            <label className="control control--checkbox">
-                                                                                                <input type="checkbox" checked="checked"  id="row1"/><div className="control__indicator"></div>
-                                                                                            </label>
-                                                                                        </td>
-                                                                                    </tr>
-
-                                                                                    </tbody>
-                                                                                </table>
                                                                             </div>
-
+                                                                            <div id="nonPrintable">
                                                                             <div className="row-fluid pddn-50-btm padding-top-btm-xs">
 
-                                                                                <div className="pull-left margin-10-last-l"><button type="button"  className="btn  btn-gray text-uppercase">Add to queue</button></div>
-                                                                                <div className="pull-left margin-10-all"><button type="button"  className="btn  btn-gray text-uppercase">Print Load Oreder</button></div>
-                                                                                <div className="pull-left margin-10-all"><Link to="containerarrivalentry"><button type="button"  className="btn  btn-primary text-uppercase">Allocate Container</button></Link></div>
+                                                                                {
+                                                                                    /*
+                                                                                    <div className="pull-left margin-10-last-l"><button type="button"  className="btn  btn-gray text-uppercase" onClick={this.addToQueue}>Add to queue</button></div>
+                                                                                       */
+                                                                                }
+                                                                             <div className="pull-left margin-10-all"><button type="button"  className="btn  btn-gray text-uppercase" onClick = {(e) => {this.print(e)}}>Print Load Order</button></div>
+                                                                             <div className="pull-left margin-10-all"><button type="button" onClick = {(e) => {this.allocateContainer(e)} }  className="btn  btn-primary text-uppercase">Allocate Container</button></div>
+                                                                             <div className="pull-left margin-10-all"><button type="button" onClick={this.PrintScreen}  className="btn  btn-gray">Print</button></div>
 
-
-                                                                                <div className="pull-right margin-10-last-r"><Link to="shipmentdetails"><button type="button"  className="btn  btn-primary text-uppercase">VIEW</button></Link></div>
-                                                                                <div className="pull-right margin-10-all"><Link to="shipmentedit"><button type="button"  className="btn  btn-orange text-uppercase">EDIT</button></Link></div>
-                                                                                <div className="pull-right margin-10-all"><Link to="shipmentconfirm"><button type="button"  className="btn  btn-success text-uppercase">Confirm</button></Link></div>
+                                                                                <div className="pull-right margin-10-last-r"><button type="button"  className="btn  btn-primary text-uppercase" onClick = {this.onViewClick.bind(this)}>VIEW</button></div>
+                                                                                <div className="pull-right margin-10-all"><button type="button"  className="btn  btn-orange text-uppercase" onClick={(e) =>this.onEditClick(e)}>EDIT</button></div>
+                                                                                <div className="pull-right margin-10-all"><button type="button" onClick = {(e) => {this.onConfirmClick(e)}}  className="btn  btn-success text-uppercase">Confirm</button></div>
 
 
                                                                             </div>
@@ -510,13 +1781,17 @@ class  ShipmentViewForm extends React.Component
                                                                                 <div  className="col-lg-12 col-md-12 col-sm-12 col-xs-12"><hr/></div>
 
                                                                                 <div className="col-lg-4 col-sm-4 col-md-4 col-xs-12 ">
-                                                                                    <input type="text" className="form-control" id="No_of_Bages_Pallat" placeholder="Enter Customer Screen Name "/>
+                                                                                    <input type="text" className="form-control" id="No_of_Bages_Pallat" placeholder="Enter Customer Screen Name"
+                                                                                     onChange = {this.handleTextChange}
+                                                                                     value = {this.state.Text}
+                                                                                     />
                                                                                     </div>
 
                                                                                     <div className="col-lg-4 col-sm-4 col-md-4 col-xs-12 padding-top-btm-xs">
-                                                                                        <button type="button"   className="btn  btn-success margin-left-xs text-uppercase">SAVE CUSTOMER VIEW</button>
+                                                                                        <button type="button"   className="btn  btn-success margin-left-xs text-uppercase" onClick={this.saveView}>SAVE CUSTOMER VIEW</button>
                                                                                     </div>
 
+                                                                                </div>
                                                                                 </div>
                                                                             </div>
 
@@ -531,4 +1806,3 @@ class  ShipmentViewForm extends React.Component
             }
             }
             export default ShipmentViewForm;
-   

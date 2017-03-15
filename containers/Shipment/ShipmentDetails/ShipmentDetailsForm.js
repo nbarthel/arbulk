@@ -2,17 +2,457 @@ import React from 'react';
 //import '../../public/stylesheets/style.css';
 //import '../../public/stylesheets/bootstrap.min.css';
 import { Link } from 'react-router';
+import ShipmentDetailsTable from '../../../components/ShipmentViewComponents/ShipmentDetailsTable'
+import ShipmentSummaryComponent from '../../../components/ShipmentViewComponents/ShipmentSummaryComponent'
+import ContainerSummaryComponent from '../../../components/ShipmentViewComponents/ContainerSummaryComponent'
+import CurrentInventoryComponent from '../../../components/ShipmentViewComponents/CurrentInventoryComponent'
+import DomesticShipmentSummary from '../../../components/ShipmentViewComponents/DomesticShipmentSummary'
+import { createDataLoader } from 'react-loopback'
+import { hashHistory } from 'react-router'
+import axios from 'axios'
+import { Base_Url } from '../../../constants'
+import SweetAlert from 'sweetalert-react';
+import '../../../public/stylesheets/sweetalert.css';
+
 class  ShipmentDetailsForm extends React.Component {
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state={
             showEdit : 'block',
-            hideEdit : 'none'
+            hideEdit : 'none',
+            currentIntObject : undefined,
+           CI : false,
+            total : 0
 
         }
+        this.total = 0
+        this.TotalSum = 0
+        this.allocatedArray = [ ]
+        this.unAllacated = 0
+        this.unique
+        this.addSum
+        this.flag = undefined
+        this.b = []
+        this.truckerDetail = { }
+        this.someId = 1
+        this.shipmentId = null
+        this.index  = 0
+        this.piLotId
+        this.idArray = []
+        this.deleteArray = []
         this.onClick=this.onClick.bind(this);
+        this.tableCheckBoxChange = this.tableCheckBoxChange.bind(this)
+        this.getCurrentInventry = this.getCurrentInventry.bind(this)
+        this.handleTruckerSelect = this.handleTruckerSelect.bind(this)
+        this.handleNumberOfContainers = this.handleNumberOfContainers.bind(this)
+        this.sum = this.sum.bind(this)
+        this.onAdd = this.onAdd.bind(this)
+        this.onSaveChange = this.onSaveChange.bind(this)
+        this.deleteAllocate = this.deleteAllocate.bind(this)
+        this.onDeleteFunction = this.onDeleteFunction.bind(this)
+        this.onEditClick = this.onEditClick.bind(this)
+        this.onDelete = this.onDelete.bind(this)
+        this.checkConfirmation = this.checkConfirmation.bind(this)
+        this.onAllocateContainer = this.onAllocateContainer.bind(this)
     }
-    onClick(){
+    componentDidMount() {
+       console.log("aloc",this.props.allocShipment)
+       if(this.props.allocShipment == 1){
+        this.setState({
+            hideEdit : 'block',
+                showEdit : 'none'
+        })
+       }
+       var PIview = createDataLoader(ShipmentDetailsForm,{
+          queries:[{
+              endpoint: 'TPackagingInstructions',
+              filter: {
+                  include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
+              }
+          }]
+      })
+     var base = 'TCompanies'
+      this.urlTrucker = PIview._buildUrl(base, {
+          "where" : {type : "TRUCKER" }
+      })
+      axios.get(this.urlTrucker).then((response)=>{
+        this.setState({
+            trucker : response.data
+        })
+        this.truckers = _.map(this.state.trucker,(truck,index)=>{
+           return <option key = {index} value = {truck.name+truck.id}>{truck.name}</option>
+        })
+
+        this.forceUpdate()
+      })
+    }
+    checkConfirmation()
+  	{
+      var status;
+      var id;
+      if(this.props.data.isDomestic==0){
+        status = this.props.data.TShipmentInternational[0].status
+        id = this.props.data.TShipmentInternational[0].id
+      }
+      else{
+        status = this.props.data.TShipmentDomestic[0].status
+        id = this.props.data.TShipmentDomestic[0].id
+      }
+      var data = this.props.data.isDomestic
+      var tempthis = this
+        if(status == 'UNCONFIRMED' || status == "CONFIRMED"){
+
+          swal({
+            title:"Are you sure?",
+			      text:"Want to Delete Shipment",
+			      type:"warning",
+			      showCancelButton: true,
+			      confirmButtonColor: "#DD6B55",
+  		      confirmButtonText: "Yes, delete it!",
+  		      closeOnConfirm: false
+          },
+        function(isConfirm){
+          debugger
+          if(isConfirm){
+
+            var tableName = "TShipmentInternationals";
+            if(data!=0){
+                  tableName = "TShipmentDomestics"
+            }
+            var PIview = createDataLoader(ShipmentDetailsForm, {
+                queries: [{
+                    endpoint: 'TPackagingInstructionLots'
+                }]
+            });
+              var base = Base_Url+tableName+"/DeleteTemp"
+              var obj = {id:id}
+              debugger
+                      $.ajax({
+                        type:"POST",
+                          url: base,
+                          data:obj,
+                          success:function(data){
+                            debugger
+                          swal({
+                            title:"Info",
+                            text:"Deleted Successfully",
+                            type:"info"
+                          },function(){
+                            debugger
+                              hashHistory.push('/Shipment/shipmentview')
+                          })
+
+                          }
+
+                      })
+          }
+          else{
+            return {"shpid":id,"res":false}
+          }
+        })
+
+        }
+        else{
+          swal({
+            title:"Info",
+            text:"order with status " + status + " can not be deleted",
+            type:"info"
+          },
+        function(){
+            return {"shpid":id,"res":false}
+        })
+        }
+  	}
+
+    onAllocateContainer(){
+      this.setState({
+                   hideEdit: 'block',
+                   showEdit: 'none'
+               });
+    }
+
+    onDelete(){
+      this.checkConfirmation(function(res){
+      });
+    }
+    tableCheckBoxChange(e,value){
+      debugger;
+
+        if(e.target.checked) {
+        document.getElementById("ContainerSummary").style.display = "table"
+        console.log("value", value)
+        this.sID = value.shipmentId
+        this.shipmentId = value.shipmentId
+        this.piLotId = value.TPackagingInstructionLots.id
+        this.confid = value.id
+        this.getCurrentInventry(this.piLotId)
+        this.state.CI = true
+        /*this.forceUpdate()*/
+        console.log(this.shipmentId, this.piLotId)
+            var CSView = createDataLoader(ShipmentDetailsForm,{
+                queries:[{
+                    endpoint: 'TPackagingInstructions',
+                    filter: {
+                        include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
+                    }
+                }]
+            })
+            var base = "TShipmentents" + '/' + this.shipmentId
+            this.url = CSView._buildUrl(base,{
+                "include" : [{"relation": "TContainerAllocation","scope":{"relation":"TCompany" , "scope":{"where" : {"type":"TRUCKER"}}}},{"relation": "TContainerDomestic","scope":{"include":["TCompany","TContainerLoad"]}},{"relation": "TContainerInternational","scope":{"include":["TCompany","TContainerLoad"]}}]
+            })
+            console.log(this.url)
+            axios.get(this.url).then((response)=>{
+                this.data = response.data
+               this.TotalSum = this.sum(this.data.TContainerAllocation, 'noOfContainer');
+
+                this.setState({
+                    CSummaryData : response.data,
+                    total : this.TotalSum
+                })
+            })
+
+
+
+    }
+    else if(!(e.target.checked)){
+        this.setState({
+            CI : false
+        })
+        document.getElementById("ContainerSummary").style.display = "none"
+    }
+
+    }
+    getCurrentInventry(id){
+        var PIview = createDataLoader(ShipmentDetailsForm, {
+            queries: [{
+                endpoint: 'TPackagingInstructionLots',
+                filter:
+                {"include" : ["TInventoryLocation","TPackagingInstructionLots"]
+                }
+
+            }]
+        });
+
+        var base1 = 'TPackagingInstructionLots/'+ id;
+        this.urlnew = PIview._buildUrl(base1, {
+            include: {"relation": "TPiInventory", "scope": {"include": ["TInventoryLocation"]}}
+
+        });
+
+        $.ajax({
+            url: this.urlnew,
+            success:function(data){
+                debugger;
+                console.log(">>>>>>>>>>>> ajax" , data)
+                this.CIData = data
+                this.setState({
+                    currentIntObject : this.CIData,
+                    index  :  this.index+1
+                })
+
+
+
+
+
+            }.bind(this)
+
+        })
+
+
+}
+
+    sum(items, prop){
+    return items.reduce( function(a, b){
+        return (parseInt(a) + parseInt(b[prop]));
+    }, 0);
+};
+
+
+
+
+
+
+    handleNumberOfContainers(e){
+        this.truckerDetail.noOfContainer = e.target.value
+    }
+
+
+    handleTruckerSelect(e){
+        console.log("value",e.target.selectedIndex)
+        let value = this.state.trucker[e.target.selectedIndex-1]
+        this.truckerDetail = {
+                                "id" : 0,
+                                "truckerName" : value.name,
+                              "truckerId" : value.id,
+                                "shipment_id" : this.props.id}
+                              console.log(this.truckerDetail)
+    }
+
+
+     removeDuplicates(originalArray, objKey) {
+        var trimmedArray = [];
+        var values = [];
+        var value;
+
+        for(var i = 0; i < originalArray.length; i++) {
+            value = originalArray[i][objKey];
+
+            if(values.indexOf(value) === -1) {
+                trimmedArray.push(originalArray[i]);
+                values.push(value);
+            }
+        }
+
+        return trimmedArray;
+
+    }
+
+    onSaveChange(e){
+        debugger;
+        var arr = []
+        var index = []
+       var len = this.b.length
+       var len = this.b.length
+
+   var unique = this.removeDuplicates(this.b , "truckerId")
+   var TotalSum = this.sum(unique, 'noOfContainer');
+  var delArray = []
+  this.deleteArray = [].concat.apply([], this.deleteArray)
+  for(var i in this.deleteArray){
+    if(this.deleteArray[i].id > 0){
+      delArray.push(this.deleteArray[i])
+    }
+  }
+
+
+
+        if(this.state.CSummaryData.numberOfContainers < TotalSum){
+          window.location.reload()
+            swal("" ,"Container can not be added" , 'info')
+
+            return
+        }
+
+if(this.deleteArray.length > 0  && unique.length ==0){
+  var arr = []
+  var delLength = this.deleteArray.length
+  arr = this.deleteArray
+  arr = [].concat.apply([], arr)
+  arr.forEach(function(element){
+  $.ajax({
+  	type:"delete",
+  	url: Base_Url +"/TContainerAllocations/"+element.id,
+
+  	success:function(){
+  		// swal("Posted" , "Data Has Been Successfully Edited !" , "success");
+  		// hashHistory.push('/Packaging/packaginginstview/')
+  	},
+  	Error:function(err){
+  		swal("Failed" , "Error occured please try later!" , "error");
+  	}
+  	})
+
+})
+}
+
+
+if(unique.length >0 && delArray.length == 0){
+        unique.forEach(function(element,index) {
+
+            var length = unique.length
+
+              axios.patch(Base_Url +"/TContainerAllocations",element).then((response)=>{
+                if(length == index+1){
+                  swal({
+                      title: "Success",
+                      text: "Done",
+                      type: "success",
+                      showCancelButton: true,
+                },
+               function(isConfirm){
+              	window.location.reload();
+});
+}
+        })
+        })
+      }
+
+      if(unique.length >0 && delArray.length > 0){
+        var arr = []
+        var length2 = delArray.length
+        // arr = this.deleteArray
+        // arr = [].concat.apply([], arr)
+        var length2 = delArray.length
+        delArray.forEach(function(element , idx){
+          if(element.id > 0){
+        $.ajax({
+        	type:"delete",
+        	url: Base_Url +"/TContainerAllocations/"+element.id,
+
+        	success:function(){
+            if(length2 == idx + 1){
+              unique.forEach(function(element,index) {
+
+                  var length = unique.length
+
+                    axios.patch(Base_Url +"/TContainerAllocations",element).then((response)=>{
+                      if(length == index+1){
+                        swal({
+                            title: "Success",
+                            text: "Done",
+                            type: "success",
+                            showCancelButton: true,
+                      },
+                     function(isConfirm){
+                      window.location.reload();
+            });
+            }
+              })
+              })
+
+            }
+        		// swal("Posted" , "Data Has Been Successfully Edited !" , "success");
+        		// hashHistory.push('/Packaging/packaginginstview/')
+        	},
+        	Error:function(err){
+        		swal("Failed" , "Error occured please try later!" , "error");
+        	}
+        	})
+        }
+
+
+      })
+
+            }
+    }
+
+
+onDeleteFunction(deleteArray){
+  var unique = deleteArray
+  unique.forEach(function(element,index) {
+
+      var length = unique.length
+
+        axios.patch(Base_Url +"/TContainerAllocations",element).then((response)=>{
+          if(length == index+1){
+            swal({
+                title: "Success",
+                text: "Done",
+                type: "success",
+                showCancelButton: true,
+          },
+         function(isConfirm){
+          window.location.reload();
+});
+}
+  })
+  })
+
+}
+
+
+  onClick(){
         if (this.state.hideEdit === 'block'){
             this.setState({
                 hideEdit : 'none',
@@ -30,7 +470,199 @@ class  ShipmentDetailsForm extends React.Component {
         }
 
  }
-    
+
+ onAdd(e){
+debugger
+     var bArray = []
+     this.flag = "false"
+if(this.length > 0){
+bArray = this.b
+}
+       if(this.allocatedArray.length == 0) {
+         var tkId = this.truckerDetail.truckerId
+
+
+         var index2 = _.findIndex(this.state.CSummaryData.TContainerAllocation, function(voteItem) { return voteItem.truckerId == tkId })
+        console.log("index" , index2)
+         if(index2 >=0){
+             this.truckerDetail.id = this.state.CSummaryData.TContainerAllocation[index2].id
+             this.allocatedArray.push(_.cloneDeep(this.truckerDetail))
+         }
+         else{
+             this.allocatedArray.push(_.cloneDeep(this.truckerDetail))
+         }
+
+         if(this.state.CSummaryData.TContainerAllocation.length > 0) {
+             this.allocatedArray = this.allocatedArray.concat(this.state.CSummaryData.TContainerAllocation)
+         }
+         else {
+
+             //for(var an in this.allocatedArray){
+             //    this.idArray.push(this.allocatedArray.truckerId)
+             //}
+
+             this.b = this.allocatedArray
+
+         }
+
+
+           if(this.b.length > 1){
+              var lastId;
+
+              for (var i = 0; i < this.b.length; i++) {
+                  if (lastId == this.b[i]['truckerId']) {
+                      this.b[this.b.length-1]['noOfContainer'] = parseInt(this.b[this.b.length-1]['noOfContainer']) +parseInt(this.b[i]['noOfContainer']);
+                      this.b[this.b.length-1]['id'] = this.b[this.b.length-1]['id']
+                      //b[b.length-1]['noOfContainer'] += this.allocatedArray[i]['noOfContainer'];
+                      //b[b.length-1]['noOfContainer'] += this.allocatedArray[i]['noOfContainer'];
+
+                  } else {
+
+                      this.b[this.b.length] = (this.b[i]);
+                       var id =  (this.b[i+1]) ? (this.b[i+1].id) : (this.b[i].id)
+                      this.b[i].id = id
+                      lastId = this.b[i]['truckerId'];
+                  }
+              }
+
+          }
+          else{
+
+              this.b = this.allocatedArray
+          }
+
+
+
+      }
+      else{
+         debugger;
+          var len = this.b.length
+          if(len > 0){
+          for(var k = 0 ; k < len ; k++){
+              if(this.b[k].truckerId == this.truckerDetail.truckerId){
+                  this.b[k].noOfContainer = (this.truckerDetail.noOfContainer)
+                  this.refs.TD.value = ""
+                   var id  = this.b[k].id
+                  this.b[k].id = id
+                  this.refs.NC.value = ""
+                  this.b.push(_.cloneDeep(this.truckerDetail))
+                 this.b =  this.b.concat(this.state.CSummaryData.TContainerAllocation)
+
+              }else {
+
+                  this.b.push(_.cloneDeep(this.truckerDetail))
+
+      }
+   }
+ }
+else{
+this.b.push(_.cloneDeep(this.truckerDetail))
+
+}
+
+
+  }
+      console.log(this.allocatedArray)
+      this.truckerDetail = { }
+      this.refs.TD.value = ""
+      this.refs.NC.value = ""
+
+
+      this.unique = this.removeDuplicates(this.b , "truckerId")
+      this.addSum = this.sum(this.unique, 'noOfContainer');
+      this.b = this.unique
+      this.unAllacated = this.addSum
+
+
+       if(this.addSum > this.state.CSummaryData.numberOfContainers){
+         if(this.unique.length ==2 && (this.unique[0].noOfContainer > this.state.CSummaryData.numberOfContainers) ){
+
+           this.addSum = parseInt(this.addSum) - parseInt(this.unique[0].noOfContainer)
+           this.unAllacated = this.addSum
+           this.b.splice(0,1)
+             this.forceUpdate()
+         }
+         else{
+                  if(this.state.CSummaryData.TContainerAllocation.length > 0){
+                         this.unique.splice(0,1)
+                        this.b = this.unique
+                      //  this.b = bArray
+                        swal("" , "Allocated container can't be more than Unallocated container" , "info")
+                   }
+             else{
+               if(this.unique.length > 1){
+                 this.unique.splice(this.unique.length -1,1)
+                 this.b = this.unique
+               }
+            swal("" , "Allocated container can't be more than Unallocated container" , "info")
+
+        return
+      }
+      }
+      }
+      else{
+        this.forceUpdate()
+      }
+
+}
+
+deleteAllocate(e){
+  debugger;
+  if(this.props.data.isDomestic == 0){
+    if((this.state.CSummaryData && this.state.CSummaryData.TContainerInternational && this.state.CSummaryData.TContainerInternational.length > 0 ) && (this.state.CSummaryData.TContainerInternational.length == this.state.CSummaryData.numberOfContainers) )
+    {
+      swal("" , "This allocation can not be deleted" , "info")
+      return
+    }
+  }else if(this.props.data.isDomestic == 1){
+    if((this.state.CSummaryData && this.state.CSummaryData.TContainerDomestic && this.state.CSummaryData.TContainerDomestic.length > 0 ) && (this.state.CSummaryData.TContainerDomestic.length == this.state.CSummaryData.numberOfContainers) )
+    {
+      swal("" , "This allocation can not be deleted" , "info")
+      return
+    }
+  }
+  var index = e.target.getAttribute('value')
+//  alert(e.target.getAttribute('value'))
+  console.log(this.b)
+  if(this.b.length == 0){
+    this.b = this.state.CSummaryData.TContainerAllocation
+    var obj =   this.b.splice(index , 1)
+    this.deleteArray.push(obj)
+    console.log(this.b)
+    this.unique = this.removeDuplicates(this.b , "truckerId")
+    this.addSum = this.sum(this.unique, 'noOfContainer');
+    this.unAllacated  =   this.addSum
+    this.forceUpdate()
+  }else{
+   var obj1 = this.b.splice(index , 1)
+   this.deleteArray.push(obj1)
+  console.log(this.state.CSummaryData.TContainerAllocation.length , "lengthhhh")
+  this.unique = this.removeDuplicates(this.b , "truckerId")
+  this.addSum = this.sum(this.unique, 'noOfContainer');
+    this.unAllacated  =   this.addSum
+  this.forceUpdate()
+  }
+}
+
+onConfirmClick(e){
+  if(this.props.id != null){
+          hashHistory.push('/Shipment/shipmentConfirmation/'+this.confid)}
+          else{
+            swal("Selection Missing","Please Select A Shipment Lot","info")
+          }
+}
+
+onEditClick(e){
+  if(this.props.id != undefined){
+    hashHistory.push('/Shipment/shipmentedit/'+this.props.id)
+  }
+
+else
+{
+  swal("Selection Missing","Please Select A Checkbox","error")
+}
+}
+
     render() {
         return (
             <section className="shipment">
@@ -40,51 +672,7 @@ class  ShipmentDetailsForm extends React.Component {
                         <div className="col-lg-12">
 
                             <div className="table-responsive border-bottom">
-                                <table className="table table-striped">
-                                    <thead className="base_bg">
-                                    <tr >
-                                        <th>ARB</th>
-                                        <th>Customer</th>
-                                        <th>Railcar#</th>
-                                        <th>Booking#</th>
-                                        <th>PO</th>
-                                        <th>Material</th>
-                                        <th>Confmd</th>
-                                        <th>In Inventory?</th>
-                                        <th>Cutoff Date</th>
-                                        <th>Quantity Requested</th>
-                                        <th>Quantity Shipped</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>sc</td>
-                                        <td>Ravago</td>
-                                        <td>123456</td>
-                                        <td>CCBX-73261</td>
-                                        <td>3986755</td>
-                                        <td>LLDPE 1647C</td>
-                                        <td>Y</td>
-                                        <td>Y</td>
-                                        <td>5/6/16</td>
-                                        <td>2970 Bags</td>
-                                        <td>990 Bags</td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>3986755</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                <ShipmentDetailsTable tableCheckBoxChange = {this.tableCheckBoxChange} tabledata = {this.props.data}/>
 
                             </div>
 
@@ -93,90 +681,27 @@ class  ShipmentDetailsForm extends React.Component {
 
                     <div className="">
                         <div className="row pddn-20-top">
-
                             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <fieldset className="scheduler-border">
-                                    <legend className="scheduler-border">Shipment Summary</legend>
-                                    <div className=" col-lg-5 col-md-5 col-sm-6 col-xs-12 ">
-                                        <div className="row">
-                                            <div className="col-lg-6  col-sm-6 col-xs-12">
-                                                <ul className="no-space">
-                                                    <li>Container Type: <b>40’ HC </b></li>
-                                                    <li>Number of Containers:<b> 14</b></li>
-                                                    <li># of Bags / Container: <b>990</b></li>
-                                                </ul>
-                                                <span className="margin-top-10">&nbsp;</span>
-                                                <fieldset className="scheduler-border  ">
-                                                    <legend className="scheduler-border font-size-12">Lot Number Allowed
-                                                    </legend>
-                                                    <ul className="no-space list-style-disc">
-                                                        <li>333334</li>
-                                                        <li>223452</li>
-                                                        <li>2354664</li>
-                                                        <li>2312355</li>
-                                                    </ul>
-                                                </fieldset>
-                                            </div>
-                                            <div className="col-lg-6  col-sm-6  col-xs-12">
-                                                <ul className="no-space">
-                                                    <li>Shipment Line:<b> XYZ </b></li>
-                                                    <li>Steamline Vessel: <b>XYZ</b></li>
-                                                    <li>Freight Forwarder:<b> XYZ</b></li>
-                                                    <li>Earliest Return Date:<b> XYZ</b></li>
-                                                    <li>Doc Cutoff Date: <b>XYZ</b></li>
-                                                    <li>Pick Up Location:<b> XYZ</b></li>
-                                                    <li>Return Location: <b>XYZ</b></li>
-                                                    <li>Recipient:<b> XYZ</b></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className=" col-lg-5  col-sm-5 col-xs-12 ">
-                                        <div className="form-group">
-                                            <textarea className="form-control textarea-note" rows="3" id="Notes"
-                                                      placeholder="Notes"></textarea>
-
-                                            <div className="error"><span></span></div>
-                                        </div>
-                                    </div>
-
-                                    <div className=" col-lg-2 col-md-2 col-sm-6 col-xs-12 ">
-                                        <ul className="no-space">
-                                            <li>Body Type: <b>Ravago Bag</b></li>
-                                            <li>Pallet Type:<b> H/T</b></li>
-                                            <li>Bags per Pallet:<b> 60</b></li>
-                                            <li>Stretch Wrap: <b>Full Wrap</b></li>
-                                            <li>Origin: <b>Made in USA</b></li>
-                                            <li className=" pddn-20-top">
-                                                <label className="control control--checkbox "><b>Shipment Complete </b>
-                                                <input type="checkbox" checked="checked" id="row1"/>
-
-                                                <div className="control__indicator"></div>
-                                            </label>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </fieldset>
+                            { this.props.data ? (this.props.data.isDomestic == 0 ? <ShipmentSummaryComponent summaryData = {this.props.data} pSumData = {this.props.pckData} /> : <DomesticShipmentSummary summaryData = {this.props.data} pSumData = {this.props.pckData}/>) : ''}
                         </div>
                     </div>
                 </div>
-                 <div className="row">   
-        
-                    <div className=" col-lg-12 ">   
+                 <div className="row">
+
+                    <div className=" col-lg-12 ">
                         <div className="text_left">
-                         <div className="pull-right margin-10-last-r"><button type="button" id="back" className="btn  btn-gray text-uppercase"> BACK</button> </div>
-                         
-                         <div className="pull-left margin-10-last-l"><button type="button"  className="btn  btn-gray text-uppercase">Allocate Containers</button> </div>                 
-                        
-                         
-                         <div className="pull-left margin-10-all"><Link to="shipmentconfirm"><button type="button" id="confirm" className="btn  btn-success text-uppercase">Confirm</button></Link> </div>                 
-                        
-                        
-                          <div className="pull-left margin-10-all"><Link to="shipmentconfirm"><button type="button" id="edit_shipment"  className="btn  btn-orange text-uppercase">Edit</button></Link> </div>                 
-                        </div>  
-                    </div>  
-                    <div className=" col-lg-12 "><hr/></div>    
+                         <div className="pull-right margin-10-last-r"><button type="button" id="back" className="btn  btn-gray text-uppercase" onClick = {hashHistory.goBack}> BACK</button> </div>
+
+
+
+                         <div className="pull-left margin-10-all"><button type="button" id="confirm" className="btn  btn-success text-uppercase" onClick = {(e) => {this.onConfirmClick(e)}}>Confirm</button> </div>
+                         <div className="pull-left margin-10-all"><button type="button" id="allocateContainer" className="btn  btn-success text-uppercase" onClick = {(e) => {this.onAllocateContainer(e)}}>Allocate Container</button> </div>
+
+                          <div className="pull-left margin-10-all"><button type="button" id="edit_shipment"  className="btn  btn-orange text-uppercase" onClick={this.onEditClick}>Edit</button> </div>
+                          <div className="pull-left margin-10-all"><button type="button" id="delete_shipment"  className="btn  btn-orange text-uppercase" onClick={this.onDelete}>Delete</button> </div>
+                        </div>
+                    </div>
+                    <div className=" col-lg-12 "><hr/></div>
             </div>
 
                 <br className="clearfix"/>
@@ -200,340 +725,38 @@ class  ShipmentDetailsForm extends React.Component {
                                             <form action="" method="post">
                                                 <div className="form-group">
                                                     <div className="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-                                                        <input type="text" className="form-control " id="Purchase_Order" placeholder="# of bags"/>
+                                                         <select ref = "TD" onChange = {this.handleTruckerSelect} className="form-control " id="Trucker">
+                                                        <option value = "" selected disabled>Select Trucker</option>
+                                                        {this.truckers}
+                                                        </select>
                                                             <div className="error"><span></span></div>
                                                         </div>
                                                     </div>
                                                     <div className="form-group">
                                                         <div className=" col-lg-3 col-md-3 col-sm-3 col-xs-6">
-                                                            <input type="text" className="form-control" id="" placeholder="# of Containers"/>
+                                                            <input type="text" ref = "NC" className="form-control" id="" onChange = {this.handleNumberOfContainers} placeholder="# of Containers"/>
                                                                 <div className="error"><span></span></div>
                                                             </div>
                                                         </div>
 
                                                         <div className="form-group ">
                                                             <div className="col-lg-3 col-md-3 col-sm-3 col-xs-6  padding-top-btm-xs ">
-                                                                <button type="button"  className="btn btn-success btn_right_no_margin">ADD</button>
+                                                                <button type="button" onClick = {this.onAdd}  className="btn btn-success btn_right_no_margin">ALLOCATE</button>
                                                             </div>
                                                         </div>
                                                     </form>
                                                 </div>
                                    <div className="table-responsive">
-                                        <table className="table table-striped">
-                                            <thead className="base_bg">
-                                            <tr >
-                                                <th>Status</th>
-                                                <th>Trucker</th>
-                                                <th># of Containers</th>
-                                                <th>Container #</th>
-                                                <th>Chassis #</th>
-                                                <th>Seat #</th>
-                                                <th># of Bags</th>
-                                                <th>Weight</th>
-                                                <th>
-                                                    <label className="control control--checkbox">
-                                                        <input type="checkbox" id="row1"/>
-
-                                                        <div className="control__indicator"></div>
-                                                    </label>
-                                                </th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td>Unallocated</td>
-                                                <td></td>
-                                                <td>1</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td>
-                                                    <label className="control control--checkbox">
-                                                        <input type="checkbox" id="row1"/>
-
-                                                        <div className="control__indicator"></div>
-                                                    </label>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Allocated</td>
-                                                <td>A Trucker Corp.</td>
-                                                <td>11</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td>
-                                                    <label className="control control--checkbox">
-                                                        <input type="checkbox" id="row1"/>
-
-                                                        <div className="control__indicator"></div>
-                                                    </label>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Allocated</td>
-                                                <td>MF Incorp.</td>
-                                                <td>2</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td>
-                                                    <label className="control control--checkbox">
-                                                        <input type="checkbox" id="row1"/>
-
-                                                        <div className="control__indicator"></div>
-                                                    </label>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Total</th>
-                                                <th></th>
-                                                <th>14</th>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                            </tr>
-
-                                            <tr>
-                                                <td>&nbsp;</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>Not Arrived</td>
-                                                <td>A Trucker Corp.</td>
-                                                <td>7</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td>
-                                                    <label className="control control--checkbox">
-                                                        <input type="checkbox" id="row1"/>
-
-                                                        <div className="control__indicator"></div>
-                                                    </label>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <th>Total</th>
-                                                <th></th>
-                                                <th>7</th>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                            </tr>
-
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td>
-                                                    <label className="control control--checkbox">
-                                                        <input type="checkbox" id="row1"/>
-
-                                                        <div className="control__indicator"></div>
-                                                    </label>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>Arrived</td>
-                                                <td>A Trucker Corp.</td>
-                                                <td>1</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td>
-                                                    <label className="control control--checkbox">
-                                                        <input type="checkbox" checked="checked" id="row1"/>
-
-                                                        <div className="control__indicator"></div>
-                                                    </label>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <th>Total</th>
-                                                <th></th>
-                                                <th>1</th>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                            </tr>
-
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td>
-                                                    <label className="control control--checkbox">
-                                                        <input type="checkbox" id="row1"/>
-
-                                                        <div className="control__indicator"></div>
-                                                    </label>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Loaded</td>
-                                                <td>A Trucker Corp.</td>
-                                                <td>1</td>
-                                                <td>12345-A4568</td>
-                                                <td>HJ331-2</td>
-                                                <td>F44334</td>
-                                                <td>990 Bags</td>
-                                                <td>54550 lbs.</td>
-                                                <td>
-                                                    <label className="control control--checkbox">
-                                                        <input type="checkbox" id="row1"/>
-
-                                                        <div className="control__indicator"></div>
-                                                    </label>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Loaded</td>
-                                                <td>A Trucker Corp.</td>
-                                                <td>1</td>
-                                                <td>12345-A4568</td>
-                                                <td>HJ331-2</td>
-                                                <td>F44334</td>
-                                                <td>990 Bags</td>
-                                                <td>54550 lbs.</td>
-                                                <td>
-                                                    <label className="control control--checkbox">
-                                                        <input type="checkbox" id="row1"/>
-
-                                                        <div className="control__indicator"></div>
-                                                    </label>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Total</th>
-                                                <th></th>
-                                                <th>2</th>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                                <th>1980 Bags</th>
-                                                <th>109100 lbs.</th>
-                                                <th></th>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td>
-                                                    <label className="control control--checkbox">
-                                                        <input type="checkbox" id="row1"/>
-
-                                                        <div className="control__indicator"></div>
-                                                    </label>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Loaded</td>
-                                                <td>A Trucker Corp.</td>
-                                                <td>1</td>
-                                                <td>12345-A4568</td>
-                                                <td>HJ331-2</td>
-                                                <td>F44334</td>
-                                                <td>990 Bags</td>
-                                                <td>54550 lbs.</td>
-                                                <td>
-                                                    <label className="control control--checkbox">
-                                                        <input type="checkbox" id="row1"/>
-
-                                                        <div className="control__indicator"></div>
-                                                    </label>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Loaded</td>
-                                                <td>A Trucker Corp.</td>
-                                                <td>1</td>
-                                                <td>12345-A4568</td>
-                                                <td>HJ331-2</td>
-                                                <td>F44334</td>
-                                                <td>990 Bags</td>
-                                                <td>54550 lbs.</td>
-                                                <td>
-                                                    <label className="control control--checkbox">
-                                                        <input type="checkbox" id="row1"/>
-
-                                                        <div className="control__indicator"></div>
-                                                    </label>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Total</th>
-                                                <th></th>
-                                                <th>2</th>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                                <th>1980 Bags</th>
-                                                <th>109100 lbs.</th>
-                                                <th></th>
-                                            </tr>
-
-                                            </tbody>
-                                        </table>
-                                        <div className="more_load">More containers are required to be allocated to this
+                                        <ContainerSummaryComponent deleteClick={this.deleteAllocate} flag={this.flag}  hide={this.props.allocShipment} SId = {this.shipmentId} isDomestic = {this.props.isDomestic} allocatedTruckers = {this.b.length == 0 ?((this.state.CSummaryData && this.state.CSummaryData.TContainerAllocation) ?this.state.CSummaryData.TContainerAllocation:''):this.b} allocated={this.unAllacated} total = {this.state.total } />
+                                        <div className="more_load" style={{display:((this.state.CSummaryData && this.state.CSummaryData.numberOfContainers) ?this.state.CSummaryData && (this.state.CSummaryData.numberOfContainers == this.state.total || this.state.CSummaryData.numberOfContainers == this.unAllacated ) : '') ? 'none' : 'block'}}>More containers are required to be allocated to this
                                             shipment!
                                         </div>
                                     </div>
 
                                    <div className="text_left pddn-10-top" style={{display : this.state.showEdit}}>
                          <div className="pull-left margin-10-last-l"><button type="button"  className="btn btn-sm  btn-gray">Print Load Order</button> </div>
-                         
-                         <div className="pull-left margin-10-all"><button type="button"  className="btn btn-sm  btn-gray">Add To Queue</button> </div>
-                         
-                         <div className="pull-left margin-10-all"><button type="button" onClick={this.onClick} id="edit_shipment_details"  className="btn btn-sm  btn-orange">Edit</button> </div> 
-                         
-                         <div className="pull-left margin-10-all"><button type="button"  className="btn btn-sm  btn-primary">View</button> </div>
-                        </div>  
+
+                      </div>
 
                                 </div>
                             </div>
@@ -556,37 +779,8 @@ class  ShipmentDetailsForm extends React.Component {
 
 
                                         <div className="table-responsive">
-                                            <table className="table table-striped">
-                                                <thead className="base_bg">
-                                                <tr >
-                                                    <th> nv. Loc.</th>
-                                                    <th> Bags</th>
-                                                    <th> Weight</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td>Aisle 11</td>
-                                                    <td>110 Bags</td>
-                                                    <td>60626 lbs.</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Aisle 44</td>
-                                                    <td>550 Bags</td>
-                                                    <td>30313 lbs.</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Aisle 44</td>
-                                                    <td>10 Bags</td>
-                                                    <td>550 lbs.</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Total</th>
-                                                    <th>660 Bags</th>
-                                                    <th>91039 lbs.</th>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                                  {this.state.CI == true ? <CurrentInventoryComponent key={this.state.index}  currentInventory = {this.state.currentIntObject } /> : ''}
+
                                         </div>
                                     </div>
                                 </div>
@@ -596,18 +790,17 @@ class  ShipmentDetailsForm extends React.Component {
 
                 </div>
 
-               <div className="row" style={{display:this.state.hideEdit}} >    
+               <div className="row" style={{display:this.state.hideEdit}} >
     <div className=" col-lg-12 "><hr/></div>
     <div className=" col-lg-12 " >
-    <div className="pull-left margin-10-last-l"><button type="button"  id="cancel_btn" onClick={this.onClick}  className="btn  btn-gray text-uppercase">CANCEL</button> </div>              
-    <div className="pull-left margin-10-all "><button type="button" id="save_changes" onClick={this.onClick} className="btn  btn-orange text-uppercase">Save Changes</button> </div>               
-    </div>  
-    </div>  
-            
+    <div className="pull-left margin-10-last-l"><button type="button"  id="cancel_btn" onClick={this.onClick}  className="btn  btn-gray text-uppercase">CANCEL</button> </div>
+    <div className="pull-left margin-10-all "><button type="button" id="save_changes" onClick={this.onSaveChange} className="btn  btn-orange text-uppercase">Save Changes</button> </div>
+    </div>
+    </div>
+
     </div>
             </section>
         );
     }
 }
 export default ShipmentDetailsForm;
-   

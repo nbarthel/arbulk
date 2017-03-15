@@ -29,14 +29,14 @@ class LoginForm extends React.Component{
 		this.setState({[e.target.name]: e.target.value});
 	}
 	isValid(){
-		
+
 		const { errors , isValid } = validateInput(this.state);
 		if(!isValid){
 			this.setState({ errors });
 		}
-		
+
 		return isValid;
-		
+
 		}
 	onSubmit(e){
 		e.preventDefault();
@@ -55,22 +55,23 @@ class LoginForm extends React.Component{
 			//this.userData = response.data
 			//this.userData = response.data.user
 			hashHistory.push('/Packaging/enterpackginginst/')
-			//console.log(this.state.userData)		
+			//console.log(this.state.userData)
 			}).catch(function(error){
 				swal("Fail :(" , "You Have Entered Wrong Username or Password " , "error")
 			})
 		}
-	}		
+	}
 	render()
 	{
 	return(
-	 
+	<div id="container">
+	<div id="wrapper">
 	<div id="login" className="animate form">
 	<section className="login_content" >
 	<div>
 	<span className="pull-right img-responsive imgbg" ></span>
 	</div>
-	
+
 	<div className="clearfix"></div>
 	<form id="userLogin" onSubmit={this.onSubmit}>
 	<div className="form-group">
@@ -79,7 +80,7 @@ class LoginForm extends React.Component{
 	 className="input-control"
 	 id="inputEmail"
 	 placeholder="example@gmail.com"
-	 value={this.state.email} 
+	 value={this.state.email}
 	 onChange={this.onChange}
 	 name="email"
 	 />
@@ -88,8 +89,8 @@ class LoginForm extends React.Component{
 
 	<div className="form-group">
 	<label htmlFor="inputPassword">Password</label>
-	<input 
-	type="password" 
+	<input
+	type="password"
 	className="input-control"
 	id="inputPassword"
 	placeholder="*********"
@@ -104,15 +105,16 @@ class LoginForm extends React.Component{
 	<label className="pull-left">
 	<Link to="/forgotpass">Forgot Password?</Link>
 	</label>
-	<button 
+	<button
 	onClick={this.onSubmit}
-	className="login-btn pull-right">Sign in</button>	
+	className="login-btn pull-right">Sign in</button>
 	</div>
 	{this.state.isLoading ? <Spinner spinnerName='circle' /> : null}
-	</form> 
+	</form>
 	</section>
 	</div>
-	 
+	</div>
+	</div>
 	)
 	}
 }

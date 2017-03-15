@@ -9,23 +9,36 @@ import  { PropTypes } from 'react';
 import { createDataLoader } from 'react-loopback';
 import FilterComponent from '../../../components/FilterComponent';
 import FilterButton from '../../../components/FilterComponent/FilterButton';
+import SweetAlert from 'sweetalert-react';
+import '../../../public/stylesheets/sweetalert.css'
+import './js/tableHeadFixer.js'
+import './js/jquery.dataTables.min.js'
+import '../../../public/stylesheets/style.css'
+import { hashHistory } from 'react-router'
+const MUL_FACTOR = 2.204625
 export default class RailcarArrivalEntryForm extends React.Component {
 	 constructor(props){
             super(props);
-            this.buttonDisplay = [ ]
+         this.buttonDisplay = [ ]
             this.checkedCustomer = [ ]
-            this.checkedStatus = [ ] 
+            this.checkedStatus = [ ]
             this.checkedCompany = [ ]
             this.Query = [ ]
             this.Where = { }
 		    this.cartArray = [ ]
+		    this.dateArray = [ ]
 		this.state = {
-			startDate : ''
+			startDate : '',
+			key:0,
+			selectedOption: 'lbs',
+			selectedOption1: 'lbs',
 		}
 		this.updateCartArrival = this.updateCartArrival.bind(this);
 		this.handleChange1 = this.handleChange1.bind(this)
-		this.click = this.click.bind(this)
-	
+
+			 this.onClickli = this.onClickli.bind(this)
+            this.onClickPo = this.onClickPo.bind(this)
+            this.lotSearch = this.lotSearch.bind(this)
             this.click = this.click.bind(this);
             this.onCompanyFilter = this.onCompanyFilter.bind(this)
             this.onCustomerFilter =  this.onCustomerFilter.bind(this)
@@ -33,17 +46,55 @@ export default class RailcarArrivalEntryForm extends React.Component {
             this.onRemove = this.onRemove.bind(this)
             this.onSearch = this.onSearch.bind(this)
             this.onTextChange = this.onTextChange.bind(this)
+            this.onTap = this.onTap.bind(this)
+						this.onChnage = this.onChnage.bind(this)
+						this.handleOptionChange = this.handleOptionChange.bind(this)
+						this.handleOptionChange1 = this.handleOptionChange1.bind(this)
         }
+         onformat(inputDate) {
+        var datear = inputDate.split('-')
+       return (datear[1] +'-'+ datear[2] +'-'+ datear[0])
+   }
          onTextChange(e){
           this.Query[e.target.id] = e.target.value
           console.log(this.Query)
         }
         handleChange1(x,event) {
-		debugger;
-		this.setState({
-			startDate:x
-		});
+
+        	var dateValue = this.onformat(x.target.value)
+					console.log("date value is" , dateValue)
+
+		document.getElementById('row1'+ x.target.id).disabled = false
+
+		this.dateArray.push(dateValue)
+
 	}
+
+	 onClickPo(e){
+        //debugger;
+           this.Query[e.target.id] = e.target.getAttribute('value')
+
+          document.getElementById('POSearch').value = e.target.getAttribute('value')
+           console.log(this.Query)
+           console.log('>>>>>> target Value' , e.target.value)
+      }
+
+      lotSearch(e){
+          //debugger;
+           this.Query[e.target.id] = e.target.getAttribute('value')
+           console.log(this.Query)
+           document.getElementById('LotSearch').value = e.target.getAttribute('value')
+           console.log('>>>>>> target Value' , e.target.value)
+      }
+
+onClickli(e){
+  this.Query[e.target.id] = e.target.getAttribute('value')
+
+    document.getElementById('railcarSearch').value = e.target.getAttribute('value')
+  console.log(this.Query)
+  console.log('>>>>>> target Value' , e.target.value)
+}
+
 	onSearch(e){
 		debugger;
 		if(this.Query != undefined){
@@ -54,6 +105,8 @@ export default class RailcarArrivalEntryForm extends React.Component {
 		}
 		console.log(this.Where)
 		var serachObj = []
+		 var serachObjLots =[]
+
 		if (this.Where != undefined && this.Where!= null)
 		{
 			if(this.Where.Customer && this.Where.Customer.length >0){
@@ -71,7 +124,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 				var objCompany = {}
 				for(var j in this.Where.Company)
 				{
-					objCompany = {"origin_id" : this.Where.Company[j] }
+					objCompany = {"location_id" : this.Where.Company[j] }
 					company.push(objCompany);
 				}
 				serachObj.push(company)
@@ -81,57 +134,83 @@ export default class RailcarArrivalEntryForm extends React.Component {
 				var status = [];
 				var objStatus = {};
 				for(var z in this.Where.status){
-					objStatus = {"packaging_status" : this.Where.status[z]}
+					objStatus = {"status" : this.Where.status[z]}
 					status.push(objStatus)
 				}
-				serachObj.push(status)
+				serachObjLots.push(status)
 			}
 
-			if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.POSearch && his.Where.Query.POSearch!= undefined ){
-				serachObj =  [ {'po_number': {"like": "%" + this.Where.Query.POSearch + "%"}}]
-				serachObj.push(serachObj)
+			if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.POSearch && this.Where.Query.POSearch!= undefined ){
+				var poSearch =  [ {'po_number': {"like": "%" + this.Where.Query.POSearch + "%"}}]
+				serachObj.push(poSearch)
 			}
 
 
 			if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.railcarSearch && this.Where.Query.railcarSearch!= undefined ){
-				var serachObjLots = [{'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}}]
+				var railSearch = [{'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}}]
+			    serachObjLots.push(railSearch)
 			}
 
 			if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.LotSearch && this.Where.Query.LotSearch!= undefined ){
-				var serachObjLots =  [{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
+				var lotSearch =  [{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
+			      serachObjLots.push(lotSearch)
 			}
 
 			var serachObj = [].concat.apply([], serachObj);
+			var serachObjLots = [].concat.apply([], serachObjLots);
 
 			var PIview = createDataLoader(FilterComponent, {
 				queries: [{
 					endpoint: 'TPackagingInstructions',
 					filter: {
-						include : ['TPackagingInstructionLots',{"relation": "TPackagingInstructions", "scope": {"include": ["TLocation"]}}]
+						include : ['TPackagingInstructionLots',
+						{"relation": "TPackagingInstructions",
+						"scope": {"include": ["TLocation"]}
+						}]
 					}
 				}]
 			});
 			var base = 'TPackagingInstructionLots';
 			//TPackagingInstructionLots
 
-			if(serachObj && serachObj != undefined ){
-				debugger;
+			if(serachObj && serachObj != undefined && serachObjLots.length == 0){
+				//debugger;
 				this.urlSearch = PIview._buildUrl(base, {
 
-					include : {"relation": "TPackagingInstructions", "scope":{  where:{  "or":serachObj} ,"include": ["TOrigin" , "TCompany"]}},
-		         where:
-					{  "or":
-						[ {'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}},{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
-					}
+					"include" : {"relation": "TPackagingInstructions",
+											 "scope":{
+												 				where:     {"and":[
+																									{  "or":serachObj}
+																								  ]
+																					 } ,
+																"include": ["TOrigin" , "TCompany"]
+															}
+											},
+					"where":{"active":1,"railcar_status": {"neq":"ARRIVED"}}
 				})
 			}
-			else {
+			else if(serachObjLots.length > 0 && serachObj.length > 0) {
+				//debugger;
 				this.urlSearch = PIview._buildUrl(base, {
-					include : ['TPackagingInstructions',{"relation": "TPackagingInstructions", "scope": {"include": ["TLocation","TCompany"]}}],
-
+					include : {"relation": "TPackagingInstructions", "scope":{where:{  "or":serachObj} ,"include": ["TOrigin" , "TCompany"]}},
 					"where":
 					{  "or":
-						[ {'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}},{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
+						[ {'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}},
+						  {'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}
+						],
+						"and":{"railcar_status": {"neq":"ARRIVED"},"active":1}
+					}
+				});
+			}
+			else{
+				//debugger;
+				this.urlSearch = PIview._buildUrl(base, {
+					include : {"relation": "TPackagingInstructions", "scope":{"include": ["TOrigin" , "TCompany"]}},
+					"where":
+					{
+						"or":serachObjLots,
+						"and":{"railcar_status": {"neq":"ARRIVED"},"active":1}
+							//[ {'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}},{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
 					}
 				});
 			}
@@ -140,7 +219,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 			$.ajax({
 				url: this.urlSearch,
 				success:function(data){
-					debugger;
+					//debugger;
 					console.log('ajax ',data);
 
 					this.setState(
@@ -148,12 +227,27 @@ export default class RailcarArrivalEntryForm extends React.Component {
 							viewData : data
 						}
 					)
+				this.forceUpdate()
 					console.log( "ajax>>>>>>>")
 				}.bind(this)
 
 			})
 		}
 	}
+
+	handleOptionChange(changeEvent) {
+		var selectedOption = changeEvent.target.value
+		this.setState({
+					selectedOption: changeEvent.target.value
+	});
+			 console.log( selectedOption);
+	}
+	handleOptionChange1(e) {
+				 this.setState({
+					selectedOption: e.target.value
+			});
+	}
+
 
 
     onCompanyFilter(e,location){
@@ -176,11 +270,11 @@ export default class RailcarArrivalEntryForm extends React.Component {
               //console.log(this.Where)
               delete this.Where.Company
              }
-                let value = e.target.value               
+                let value = e.target.value
                 let index = this.buttonDisplay.indexOf(e.target.value)
                 if(index !== -1)
-                this.buttonDisplay = _.without(this.buttonDisplay,value)       
-                 this.forceUpdate() 
+                this.buttonDisplay = _.without(this.buttonDisplay,value)
+                 this.forceUpdate()
                    }
         }
         onCustomerFilter(e,customer){
@@ -221,7 +315,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
                                                       value:this.checkedStatus})
             this.buttonDisplay.push(e.target.value)
             this.forceUpdate()
-            
+
             //console.log(this.props.buttonDisplay)
            /* console.log(this.Where)
             console.log(this.checkedStatus)
@@ -241,22 +335,31 @@ export default class RailcarArrivalEntryForm extends React.Component {
             //let value = e.target.value
                 let index = this.buttonDisplay.indexOf(e.target.value)
                 if(index !== -1)
-                this.buttonDisplay = _.without(this.buttonDisplay,value) 
-                //console.log(this.buttonDisplay)      
+                this.buttonDisplay = _.without(this.buttonDisplay,value)
+                //console.log(this.buttonDisplay)
                   this.forceUpdate()
                   }
         }
-         onRemove(e){
+      onRemove(e){
         console.log("clicked")
          this.buttonDisplay = [];
          //this.buttonDisplay = []
-            this.checkedCustomer = { }
-            this.checkedStatus = { }
-            this.checkedCompany = { }
+             this.checkedCustomer = []
+             this.checkedStatus = []
+             this.checkedCompany = []
+			       delete this.Where.Company
+			       delete this.Where.Customer
+			      delete this.Where.status
+             this.setState({
+				 key : this.state.key +1
+			 })
          this.forceUpdate();
+			 if(this.state.viewData){
+				 delete this.state.viewData
+			 }
 
     }
-  
+
  	onTap() {
   	$(document).ready(function(){
 		var date_input=$('input[name="date"]'); //our date input has the name "date"
@@ -269,136 +372,312 @@ export default class RailcarArrivalEntryForm extends React.Component {
 		})
 	})
   }
-  	click(data , value)
+  click(data,value,index)
 	{
+		debugger
+
+		if(data.target.checked){
+			//this.checked = true
+
+			document.getElementById('th'+ index).value = "YES"
+			document.getElementById('th'+ index).innerText = "YES"
+			for(var i=0;i<this.props.data.length;i++){
+				if(this.props.data[i].TPackagingInstructions.po_number == value.TPackagingInstructions.po_number){
+					this.props.data[i].arrived = 1
+					break;
+				}
+			}
+
+			//this.forceUpdate()
+		}
+		else if(!data.target.checked){
+			// this.checked = false
+			document.getElementById('th'+index).value = "NO"
+			document.getElementById('th'+ index).innerText = "NO"
+			for(var i=0;i<this.props.data.length;i++){
+				if(this.props.data[i].TPackagingInstructions.po_number == value.TPackagingInstructions.po_number){
+					this.props.data[i].arrived = 0
+					break;
+				}
+			}
+			//this.forceUpdate()
+		}
 
 		var cartDataArray = []
+	//	var dateArray = []
 		this.cartArray.push(value.id)
 
+    this.lotOrderValue = value
 
 		console.log("clicked" , data , value)
 	};
-		updateCartArrival(){
-		var option = {
-			railcar_arrived_on : this.state.startDate._d.getMonth()+'/'+this.state.startDate._d.getDate()+'/' +this.state.startDate._d.getFullYear()
-		}
-     	this.cartArray.forEach((id)=>{
-		 axios.put(Base_Url+"TPackagingInstructionLots/" + id , option).then(function(response){
-          console.log('CartArrivaladte Submitted' , response)
-		 }).catch(function(err){
-			 console.log("Error Is" + err)
-		 })
-	 })
 
-	}
+
+	updateCartArrival(){
+	//zdebugger;
+      if(this.cartArray.length < 1 && (this.state.startDate=null || this.state.startDate=== undefined || this.state.startDate=== '' || this.state.startDate=== false)){
+         swal('Info' , 'Please select arrival Date and or row' , 'info')
+         return
+      }
+
+   // var option = {
+   //    railcar_arrived_on : parseInt(this.state.startDate._d.getMonth())+parseInt('1')+'/'+this.state.startDate._d.getDate()+'/' +this.state.startDate._d.getFullYear(),
+   //    status : 'ARRIVED'
+   // }
+
+  if(this.lotOrderValue.status == "CONFIRMED")
+{
+   this.cartArray.forEach((id ,index)=>{
+	  axios.put(Base_Url+"TPackagingInstructionLots/" + id , {railcar_arrived_on : this.dateArray[index] , status:"READY" , arrived : 1,railcar_status:"ARRIVED"}).then(function(response){
+         swal({
+                      title: "Success",
+                      text: "Arrival Submitted",
+                      type: "success",
+                      showCancelButton: true,
+                        },
+                     function(isConfirm){
+                      hashHistory.push('/Packaging/packaginginstview/')
+                 });
+    }).catch(function(err){
+       console.log("Error Is" + err)
+    })
+ })
+}
+
+else if(this.lotOrderValue.status == "QUEUED")
+{
+ this.cartArray.forEach((id ,index)=>{
+	axios.put(Base_Url+"TPackagingInstructionLots/" + id , {railcar_arrived_on : this.dateArray[index], arrived : 1,railcar_status:"ARRIVED"}).then(function(response){
+			 swal({
+										title: "Success",
+										text: "Arrival Submitted",
+										type: "success",
+										showCancelButton: true,
+											},
+									 function(isConfirm){
+										hashHistory.push('/Packaging/packaginginstview/')
+							 });
+	}).catch(function(err){
+		 console.log("Error Is" + err)
+	})
+})
+}
+
+
+
+
+else if(this.lotOrderValue.status == "UNCONFIRMED")
+{
+this.cartArray.forEach((id ,index)=>{
+    axios.put(Base_Url+"TPackagingInstructionLots/" + id , {railcar_arrived_on : this.dateArray[index] , arrived : 1,railcar_status:"ARRIVED"}).then(function(response){
+
+                    swal({
+                      title: "Success",
+                      text: "Arrival Submitted",
+                      type: "success",
+                      showCancelButton: true,
+                        },
+                     function(isConfirm){
+                      hashHistory.push('/Packaging/packaginginstview/')
+                 });
+
+ }).catch(function(err){
+       console.log("Error Is" + err)
+    })
+ })
+}
+
+
+else{
+	swal("Info" , "Railcar must be confirmed first" , 'info')
+}
+
+}
+
+componentDidMount() {
+  $(function () {
+    setTimeout(function(){
+      $("#tableRailCarArrival").tableHeadFixer({'head' : true})
+
+  }, 2000);
+  });
+
+}
+
+onChnage(e){
+
+}
     render() {
-    	const railCart = this.props.data
-		console.log("raillllllllllll>>>>>>" , railCart)
-		var railcartData = _.map(railCart , (view)=>{
+	//debugger;
+		var fiterData = undefined ;
+		fiterData = this.state.viewData ? this.state.viewData : undefined ;
+
+        if(fiterData != undefined){
+			var railCarFilterData = _.map(fiterData , (view ,index)=>{
+				debugger
+				if(view.TPackagingInstructions && (view.status == "CONFIRMED" || view.status == "UNCONFIRMED"|| view.status == "READY") && (view.arrived != 1) ){
+					return (
+						<tr>
+							<td>{view.TPackagingInstructions.TCompany? view.TPackagingInstructions.TCompany.name : ''}</td>
+							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.po_number : ''}</td>
+							<td>{view.railcar_number ? view.railcar_number : ''}</td>
+							<td>{view.weight?(this.state.selectedOption=='lbs'?view.weight:(view.weight/MUL_FACTOR).toFixed(2)):''}</td>
+							<td>{view.lot_number ? view.lot_number: ''}</td>
+							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.material : ''}</td>
+							<td> {view.status == "UNCONFIRMED"? "NO" : "YES"}</td>
+								<td ref="arrived" id={"th"+index}> {view.arrived == 1 || this.checked==true ? "YES" : "NO"}</td>
+							<td>
+								<label className="control control--checkbox">
+								<input type="checkbox" id={"row1"+ index} value={view} onChange={(e) => this.click(e,view,index)} disabled/>
+
+									<div className="control__indicator"></div>
+								</label>
+							</td>
+							<td>
+							<input type="date" onChange={(e, x,) => this.handleChange1(e,x)}  id={index}/>
+					</td>
+						</tr>
+					)
+				}
+				//else{
+				//	return (
+				//		<tr>
+				//			<td>{view.TPackagingInstructions.TCompany.name}</td>
+				//			<td>{view.TPackagingInstructions.po_number}</td>
+				//			<td>{view.railcar_number}</td>
+				//			<td>{view.lot_number}</td>
+				//			<td>{view.TPackagingInstructions.material}</td>
+				//			<td> {view.TPackagingInstructions.stamp_confirmed == 1 ? 'Y' : 'N'}</td>
+				//			<td>
+				//				<label className="control control--checkbox">
+				//					<input type="checkbox" id="row1" value={view} onChange={(e) => this.click(e,view)}/>
+                //
+				//					<div className="control__indicator"></div>
+				//				</label>
+				//			</td>
+				//		</tr>
+				//	)
+				//}
+			})
+		}
+
+  	const railCart = this.props.data
+		var railcartData = _.map(railCart , (view ,index)=>{
+		debugger;
+
+			if(view.TPackagingInstructions && (view.status == "CONFIRMED" || view.status == "UNCONFIRMED" || view.status == "QUEUED")) {
+debugger
 		return(
-		<tr>
-			<td>{view.TPackagingInstructions.TCompany.name}</td>
-			<td>{view.TPackagingInstructions.po_number}</td>
-			<td>{view.railcar_number}</td>
-			<td>{view.lot_number}</td>
-			<td>{view.TPackagingInstructions.material}</td>
-			<td> {view.TPackagingInstructions.stamp_confirmed == 1? 'Y':'N'}</td>
-			<td>
-				<label className="control control--checkbox">
-					<input type="checkbox" id="row1" value = {view} onChange = {(e) => this.click(e,view)}/><div className="control__indicator"></div>
-				</label>
-			</td>
-		</tr>
+	              	<tr>
+							<td>{view.TPackagingInstructions.TCompany? view.TPackagingInstructions.TCompany.name : ''}</td>
+							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.po_number : ''}</td>
+							<td>{view.railcar_number ? view.railcar_number : ''}</td>
+							<td>{view.weight?(this.state.selectedOption=='lbs'?view.weight:(view.weight/MUL_FACTOR).toFixed(2)):''}</td>
+							<td>{view.lot_number ? view.lot_number: ''}</td>
+							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.material : ''}</td>
+							<td> {view.status == "UNCONFIRMED" ? "NO" : "YES"}</td>
+							<td ref="arrived" id={"th"+index}> {view.arrived == 1 || this.checked==true ? "YES" : "NO"}</td>
+							<td>
+								<label className="control control--checkbox">
+									<input type="checkbox" id={"row1"+ index} value={view} onChange={(e) => this.click(e,view,index)} disabled/>
+
+									<div className="control__indicator"></div>
+								</label>
+							</td>
+							<td>
+							<input type="date" className="calender"  onChange={(e, x) => this.handleChange1(e,x)}  id={index}   />
+					</td>
+						</tr>
 		)
+	}
+
 		})
     return (
-      
+
     <section className="side-filter">
-      <div className="menu-bg hidden-md hidden-lg hidden-sm  visible-xs-block">  
+      <div className="menu-bg hidden-md hidden-lg hidden-sm  visible-xs-block">
 		 <div className="">
 		  <h4 className="pull-left">REFINE YOUR RESULT </h4>
-		  <button type="button" className="btn btn-default collapsed pull-right " data-toggle="collapse" data-target="#filter-menu" aria-expanded="false"><i className="fa fa-caret-down fa-2x" aria-hidden="true"></i></button>			 
+		  <button type="button" className="btn btn-default collapsed pull-right " data-toggle="collapse" data-target="#filter-menu" aria-expanded="false"><i className="fa fa-caret-down fa-2x" aria-hidden="true"></i></button>
 		</div>
-	</div> 
+	</div>
 <div className="container">
 	<div className="row-fluid">
-	<FilterComponent onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter}/>        
-	 	<div id="filter-grid">
-		<div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">			
-			<div className="row">			
-			<FilterButton buttonDisplay = {this.buttonDisplay} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/> 
+<FilterComponent key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter} parent={"RailcarArrivalEntry"}/>	 	<div id="filter-grid">
+		<div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
+		<div className="pull-right margin-30-right">
+				<label className="control control--radio ">LBS
+						<input id="Modify_User" name="Modify_User" type="radio"
+									 type="radio"
+									 id="ADDCustomers"
+									 name="ADDCustomers"
+									 value="lbs"
+									 onChange={this.handleOptionChange}
+									 checked={this.state.selectedOption==='lbs'}
+								/><div className="control__indicator"></div>
+						</label>
+				</div>
+				<div className="pull-right margin-30-right">
+						<label className="control control--radio ">Kg
+								<input id="Modify_User" name="Modify_User" type="radio"
+											 id="ADDCustomers"
+											 name="ADDCustomers"
+											 value="kg"
+											 onChange={this.handleOptionChange1}
+											 checked={this.state.selectedOption==='kg'}
+										/><div className="control__indicator"></div>
+								</label>
+						</div>
+			<div className="row">
+			<FilterButton buttonDisplay = {this.buttonDisplay} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
 				<div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs">
-					<div className="pull-right ">
-						 <select className="form-control"   id="customer_name" name="customer_name">
-							 <option value="">Save View</option>
-							 <option value="View1">View 1</option>
-							 <option value="View2">View 2</option>
-							 <option value="View3">View 3</option>
-							 <option value="View4">View 4</option>
-							 <option value="View5">View 5</option>
-						</select>
-					</div>					
-					<div className="pull-right btn_right_margin">
-						<select className="form-control"  id="customer_name" name="customer_name">
-							 <option value="">Group By</option>
-							 <option value="Date">Date</option>
-						</select>
-					</div>	
-				</div>	
-				
-			<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 "><hr/></div>	
-			
+
+				</div>
+
+			<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 "><hr/></div>
+
 			<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-				<div className="table-responsive ">	
-					<table className="table table-striped">
-						<thead className="base_bg">
-						  <tr >
-							
+				<div className="table-responsive view_table  mega" style={{"max-height":"550","overflow-y":"scroll"}}>
+					<table id="tableRailCarArrival" className="table table-expandable" cellSpacing="0">
+						<thead id="headerRailCarArrival" className="table_head header-fixed header red">
+						  <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
 							<th>Customer</th>
 							<th>PO# </th>
 							<th>Railcar# </th>
+							<th>weight</th>
 							<th>Lot# </th>
 							<th>Material </th>
-							<th>In Inventiry?</th>
+							<th>Confirmed</th>
+							<th>Arrived</th>
+							<th></th>
+							<th>Arrival Date</th>
 							<th>
 								<label className="control control--checkbox">
-								  <input type="checkbox" id="row1"/><div className="control__indicator"></div>
-								</label>									
+								</label>
 							</th>
 						</tr>
 						</thead>
-						<tbody>
-							{railcartData}
+						<tbody >
+							{fiterData != undefined ? railCarFilterData :  railcartData}
 						</tbody>
 					</table>
 				</div>
-										
-				
-				<div className=" ">				
-					<div className="pull-left pddn-10-top ">					
-						 <div className="padding-10-last-l" >
-						 <div className="right-inner-addon "><i className="fa fa-calendar" aria-hidden="true"></i>				
-							<DatePicker
-								 dateFormat="MM-DD-YYYY"
-								 selected={this.state.startDate}
-								 value={this.state.startDate}
-								 onChange={(x, event) => this.handleChange1(x,event)} placeholderText="RailCar Arrival Date"/>	</div>
-						</div>
-						</div>						
-					</div>					
-				    <div className="pull-right padding-top-btm-xs"> 					
-						<div className="pull-right padding-10-last-r"><button type="button"  className="btn  btn-primary" onClick={this.updateCartArrival} >ARRIVAL </button></div>
-						<div className="pull-right padding-10-all"><button type="button"  className="btn  btn-gray">BACK </button></div>						
-					</div>					
+
+
+
+				    <div className="pull-right padding-top-btm-xs">
+						<div className="pull-right padding-10-last-r"><button type="button"  className="btn  btn-primary" onClick={this.updateCartArrival} >Save </button></div>
+						<div className="pull-right padding-10-all"><button type="button"  className="btn  btn-gray" onClick={hashHistory.goBack}>Cancel </button></div>
+					</div>
 				</div>
-				
-		</div>		
+
+		</div>
 		</div>
 	</div>
 	</div>
 </div>
- 
-</section>	
+
+</section>
     );
   }
 }

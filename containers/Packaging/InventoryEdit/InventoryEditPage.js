@@ -5,11 +5,9 @@ import Footer from '../../../components/Footer';
 class InventoryEditPage extends React.Component{
     render(){
         return(
-            <div className="wrapper-inner">
-            <div className="content-inside">
+            <div className="wrapper">
             <Header />
                 <InventoryEditForm/>
-             </div>
                 <Footer />
                 </div>
         );

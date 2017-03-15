@@ -6,7 +6,7 @@ class ShipmentArrivalEntryPage  extends React.Component{
     render(){
         return(
             <div className="wrapper">
-            	<Header />
+            	<Header routes = {this.props.routes} />
                 <ShipmentArrivalEntryForm/>
                 <Footer />
             </div>

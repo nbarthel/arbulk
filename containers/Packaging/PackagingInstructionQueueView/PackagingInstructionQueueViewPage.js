@@ -6,19 +6,25 @@ import Footer from '../../../components/Footer';
 import _ from 'lodash';
 import  { PropTypes } from 'react';
 import { createDataLoader } from 'react-loopback';
+import { hashHistory } from 'react-router'
 class PackagingInstructionQueueViewPage extends React.Component{
 
     constructor(){
         super()
-        this.state = {}
+        this.state = { }
+        this.onDoubleClick = this.onDoubleClick.bind(this)
 
     }
 
+ onDoubleClick(e,queueView){
+        var id = queueView.TPackagingInstructions.id
 
+       //this.props.location.search = id
+        hashHistory.push('/Packaging/packaginginstview/'+id)
+    }
 
 
     componentDidMount() {
-
         var PIview = createDataLoader(PackagingInstructionQueueViewForm, {
             queries: [{
                 endpoint: 'TPackagingInstructionLots',
@@ -30,10 +36,9 @@ class PackagingInstructionQueueViewPage extends React.Component{
         var base = 'TPackagingInstructionLots';
         //TPackagingInstructionLots
         this.url = PIview._buildUrl(base, {
-            include : ['TPackagingInstructions',{"relation": "TPackagingInstructions", "scope": {"include": ["TLocation","TCompany"]}}]
-
-
-        });
+            include : [{"relation": "TPackagingInstructions", "scope": {"include": ["TLocation","TCompany"]}}],
+            "scope" : {"where":{"active":1}}
+    });
 
         console.log('sdsddsdsdsdsd' , this.url);
 
@@ -66,8 +71,8 @@ class PackagingInstructionQueueViewPage extends React.Component{
         return(
             <div className="wrapper-inner">
             <div className="content-inside">
-            <Header />
-                <PackagingInstructionQueueViewForm key="0" data={viewRailQueue}/>
+            <Header routes = {this.props.routes}/>
+                <PackagingInstructionQueueViewForm key="0" onDoubleClick = {this.onDoubleClick} data={viewRailQueue}/>
                 </div>
                 <Footer/>
                 </div>

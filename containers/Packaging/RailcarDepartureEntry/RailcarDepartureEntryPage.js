@@ -21,7 +21,7 @@ export default class RailcarDepartureEntryPage extends React.Component {
       }]
     });
     var base = 'TPackagingInstructionLots';
-    //T
+  
     $.ajax({
       url: this.url,
       success:function(data){
@@ -45,10 +45,8 @@ export default class RailcarDepartureEntryPage extends React.Component {
 
     });
 
-    console.log('sdsddsdsdsdsd' , this.url);
-
-
-    $.ajax({
+  
+   $.ajax({
       url: this.url,
       success:function(data){
         console.log('ajax ',data);
@@ -70,7 +68,7 @@ export default class RailcarDepartureEntryPage extends React.Component {
     return (
       <div className="wrapper-inner">
       <div className="content-inside">
-      <Header />
+      <Header routes = {this.props.routes}/>
       <RailcarDepartureEntryForm key="0" data={viewRailData} />
       </div>
       <Footer />

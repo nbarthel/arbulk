@@ -2,13 +2,57 @@ import React from 'react';
 import ShipmentConfirmationForm from './ShipmentConfirmationForm';
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
+import { createDataLoader } from 'react-loopback'
+var Loader = require('react-loader');
+//var shpData = require('./ShpmentViewData.json')
+import ShipmentConfirmDomestic from './ShipmentConfirmDomestic'
 class ShipmentConfirmationPage  extends React.Component{
+    constructor(props){
+        super(props);
+      
+        this.id = this.props.params.id
+        this.state = {loaded : true,
+        }
+    }
+    componentDidMount(){
+        var PIview = createDataLoader(ShipmentConfirmationForm,{
+      queries:[{
+        endpoint: 'TPackagingInstructions',
+        filter: {
+          include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
+        }
+      }]
+    })
+       var base = 'TShipmentLots'+'/'+this.id;
+        //TPackagingInstructionLots
+        this.url = PIview._buildUrl(base, {
+                    "include" : ["TPackagingInstructionLots","TPackagingInstructions",{"relation" :"TShipmentent","scope":{"include":["TLocation" , "TCompany" ,{"relation" :"TShipmentDomestic" , "scope":{"include" : ["TShipmentType","TPaymentType"]}}, "TShipmentAddress" ,{"relation":"TShipmentInternational","scope":{"include":["TSteamshipLine","TContainerType"]}}]}}]
+        });
+        console.log('sdsddsdsdssdssssssssssd' , this.url);
+      $.ajax({
+            url: this.url,
+            success:function(data){
+                console.log('ajax ',data);
+                debugger
+               this.setState(
+                   {
+                       confirmData : data,
+                       loaded : true
+                   }
+               )
+               //console.log( this.state.xyz)
+        }.bind(this)
+        })
+    }
     render(){
+        console.log("confirmData",this.state.confirmData)
         return(
             <div className="wrapper-inner">
             <div className="content-inside">
-                <Header />
-                <ShipmentConfirmationForm/>
+                <Header routes = {this.props.routes}/>
+                <Loader loaded = {this.state.loaded}>
+               {(this.state.confirmData === undefined) ? null : this.state.confirmData.TShipmentent.isDomestic == 0 ? <ShipmentConfirmationForm data = {this.state.confirmData}/> : <ShipmentConfirmDomestic data = {this.state.confirmData}/>}
+                </Loader>
                 </div>
                 <Footer />
             </div>
