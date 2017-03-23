@@ -357,7 +357,7 @@ onSearch(e){
                                   }
                                 }
                             }
-  debugger
+  
                             // if(this.startDate!=undefined&&this.endDate!=undefined){
                             //
                             //   for(var i=0;i<data.length;i++){
