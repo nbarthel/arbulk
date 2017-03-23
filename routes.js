@@ -352,7 +352,7 @@ export default function createRoutes(store) {
         	}
         },
 		{
-			path: '/Shipment/shipmentDetails/(:id)/(:isDomestic)',
+			path: '/Shipment/shipmentDetails/(:id)/(:lotID)',
 			name: <span>Shipment<i className="fa fa-angle-double-right"/>Shipment View Details</span>,
 			getComponent(nextState,cb){
 				System.import('./containers/Shipment/ShipmentDetails/ShipmentDetailsPage')
