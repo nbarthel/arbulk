@@ -5,10 +5,11 @@ import Footer from '../../../components/Footer';
 import _ from 'lodash';
 import  { PropTypes } from 'react';
 import { createDataLoader } from 'react-loopback';
+var Loader = require('react-loader');
 export default class RailcarDepartureEntryPage extends React.Component {
  constructor(props){
   super(props);
-  this.state = { }
+  this.state = {loaded:false }
  }
   componentDidMount() {
 
@@ -21,7 +22,7 @@ export default class RailcarDepartureEntryPage extends React.Component {
       }]
     });
     var base = 'TPackagingInstructionLots';
-  
+
     $.ajax({
       url: this.url,
       success:function(data){
@@ -37,7 +38,7 @@ export default class RailcarDepartureEntryPage extends React.Component {
 
     })
 
-  
+
 //PackagingInstructionLots
     this.url = PIview._buildUrl(base, {
       include : ['TPackagingInstructions',{"relation": "TPackagingInstructions", "scope": {"include": ["TLocation","TCompany"]}}]
@@ -45,7 +46,7 @@ export default class RailcarDepartureEntryPage extends React.Component {
 
     });
 
-  
+
    $.ajax({
       url: this.url,
       success:function(data){
@@ -53,7 +54,8 @@ export default class RailcarDepartureEntryPage extends React.Component {
 
         this.setState(
             {
-              viewRailcartData : data
+              viewRailcartData : data,
+              loaded : true
             }
         )
         console.log( '>>>>>>>>>>>>raillcart' , this.state.viewRailcartData)
@@ -62,14 +64,16 @@ export default class RailcarDepartureEntryPage extends React.Component {
     })
 
   }
- 
+
   render() {
     const viewRailData = this.state.viewRailcartData
     return (
       <div className="wrapper-inner">
       <div className="content-inside">
       <Header routes = {this.props.routes}/>
+      <Loader loaded={this.state.loaded} id="loaded">
       <RailcarDepartureEntryForm key="0" data={viewRailData} />
+      </Loader>
       </div>
       <Footer />
       </div>

@@ -13,8 +13,8 @@
     import HeadBody from '../../../components/ViewDataComponent/HeadBody';
     import axios from 'axios'
     var Loader = require('react-loader')
-   import {Base_Url} from '../../../constants';
-  import '../../../public/stylesheets/style.css'
+    import {Base_Url} from '../../../constants';
+    import '../../../public/stylesheets/style.css'
 export default class PackagingInstructionViewForm extends React.Component {
         constructor(props){
             super(props);
@@ -96,7 +96,7 @@ export default class PackagingInstructionViewForm extends React.Component {
  axios.get(Base_Url+"TContainerLoads").then(response=>{
    this.setState({
      contanerLoad : response.data
-   }).bind(this)
+   })
  })
       axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
     this.setState({
@@ -159,7 +159,6 @@ PrintScreen(){
 
 }
 onSearch(e){
-       ;
   var cutofFilter = []
   if(this.startDate && this.endDate) {
       // var startDate = moment(this.startDate.format('MM-DD-YYYY')),
@@ -363,7 +362,8 @@ onSearch(e){
                             //
                             //   }
                             // }
-
+                            debugger
+                            localStorage.setItem('piViewData', JSON.stringify(data));
                             this.setState(
                                 {
                                     viewData : data
@@ -793,6 +793,7 @@ debugger
   }
 onButtonRemove(index,button){
     this.buttonDisplay.splice(index,1)
+
     this.forceUpdate()
 
 }
@@ -814,6 +815,7 @@ onButtonRemove(index,button){
                 index : this.state.index +1
             })
             document.getElementById('customer_name').selectedIndex = 0
+            localStorage.removeItem('piViewData')
          this.forceUpdate();
 
     }
@@ -1183,9 +1185,7 @@ print(e){
         }
     }
   render() {
-
       var index = 0
-
       var filterData = ''
 if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData.length >0 )){
 

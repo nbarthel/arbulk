@@ -86,10 +86,30 @@ class  ShipmentViewForm extends React.Component
             this.addToQueue = this.addToQueue.bind(this)
             this.tempLotId = ""
             this.PrintScreen = this.PrintScreen.bind(this)
-            //this.headerCheckboxChange = this.headerCheckboxChange.bind(this)
+            this.headerCheckboxChange = this.headerCheckboxChange.bind(this)
     }
     allocateContainer(e){
         hashHistory.push('/Container/containerarrivalentry')
+    }
+    headerCheckboxChange(e,data){
+      debugger
+      if(e.target.checked){
+          this.conFirmID = e.target.value
+          this.selected = e.target.id
+          this.confId = data.id
+          // this.status = value.status
+          // this.shipId = value.id
+          // this.tempLotId = data.piLotsId
+      }
+      else if(!e.target.checked){
+          this.selected = null
+          this.confId = null
+          this.selected = null
+          this.conFirmID = null
+          this.tempLotId = null
+          //this.piID = null
+
+      }
     }
     onConfirmClick(e){
       if(this.confId != null || undefined){
@@ -100,8 +120,9 @@ class  ShipmentViewForm extends React.Component
     }
 
 onViewClick(e){
+
       if(this.conFirmID != null || undefined){
-          hashHistory.push('/Shipment/shipmentDetails/'+this.conFirmID);
+          hashHistory.push('/Shipment/shipmentDetails/'+this.conFirmID+'/'+this.tempLotId);
     }else{
       swal("Selection Missing","Please Select A Shipment Lot","info")
     }
@@ -344,6 +365,7 @@ onClickli(e){
                 index : this.state.index +1
             })
             document.getElementById('customer_name').selectedIndex = 0
+            localStorage.removeItem('siViewData')
          this.forceUpdate();
 
        }
@@ -493,7 +515,7 @@ onClickli(e){
                                                                  {
                                                                   "relation" :"TShipmentDomestic",
                                                                   "scope":{"include":"TShipmentType",
-                                                                  "where":{"or":Railstatus}}
+                                                                  "where":{"or":Railstatus,"active":1}}
                                                                  },
                                                                  {
                                                                   "relation" :"TShipmentInternational",
@@ -506,7 +528,7 @@ onClickli(e){
                                                                                               },
                                                                                               {
                                                                                                   "or":Railstatus
-                                                                                              }]
+                                                                                              },{"active":1}]
 
                                                                                       }
                                                                          }
@@ -556,13 +578,13 @@ onClickli(e){
                                                                 {
                                                                   "relation" :"TShipmentDomestic",
                                                                   "scope":{"include":"TShipmentType",
-                                                                  "where":{"and":serachObjLots}}
+                                                                  "where":{"and":serachObjLots,"active":1}}
                                                                 },
 
                                                                 {
                                                                   "relation" :"TShipmentInternational",
                                                                   "scope":{"where" : {
-                                                                                        "and" : serachObjLots
+                                                                                        "and" : serachObjLots,"active":1
                                                                                       },
                                                                   "include":["TSteamshipLine","TContainerType"]}
                                                                 },
@@ -609,12 +631,12 @@ onClickli(e){
                                                               },
                                                               {
                                                                   "relation": "TShipmentDomestic",
-                                                                  "scope": {"include": ["TShipmentType"]}
+                                                                  "scope": {"include": ["TShipmentType"],"where":{"active":1}}
                                                               },
 
                                                               {
                                                                   "relation": "TShipmentInternational",
-                                                                  "scope": {"include": ["TSteamshipLine","TContainerType"]}
+                                                                  "scope": {"include": ["TSteamshipLine","TContainerType"],"where":{"active":1}}
                                                               },
 
                                                               {
@@ -659,12 +681,12 @@ onClickli(e){
 
                                                             {
                                                                 "relation": "TShipmentDomestic",
-                                                                "scope": {"include": ["TShipmentType"]}
+                                                                "scope": {"include": ["TShipmentType"],"where":{"active":1}}
                                                             },
 
                                                             {
                                                                 "relation": "TShipmentInternational",
-                                                                "scope": {"include": ["TSteamshipLine","TContainerType"]}
+                                                                "scope": {"include": ["TSteamshipLine","TContainerType"],"where":{"active":1}}
                                                             },
 
                                                             {
@@ -710,12 +732,12 @@ onClickli(e){
 
                                                                           {
                                                                               "relation": "TShipmentDomestic",
-                                                                              "scope": {"include": ["TShipmentType"]}
+                                                                              "scope": {"include": ["TShipmentType"],"where":{"active":1}}
                                                                           },
 
                                                                           {
                                                                               "relation": "TShipmentInternational",
-                                                                              "scope": {"include": ["TSteamshipLine","TContainerType"]}
+                                                                              "scope": {"include": ["TSteamshipLine","TContainerType"],"where":{"active":1}}
                                                                           },
                                                                           {
                                                                               "relation": "TShipmentLots",
@@ -781,6 +803,7 @@ onClickli(e){
 
                 console.log('ajax ',data);
                 debugger
+              localStorage.setItem('siViewData', JSON.stringify(data));
                this.setState(
                    {
                        viewData : data,
@@ -1729,7 +1752,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
 
                                                                         <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                                             <div className=" table-responsive view_table viewLoad">
-                                                                            <ShipmentViewDataComponent key={this.state.index} filterData = {filterData} checkboxChange = {this.checkboxChange} showARB = {this.state.showARB}
+                                                                            <ShipmentViewDataComponent key={this.state.index} headerCheckboxChange={this.headerCheckboxChange} filterData = {filterData} checkboxChange = {this.checkboxChange} showARB = {this.state.showARB}
                         showCustomer = {this.state.showCustomer}
                         showPO = {this.state.showPO}
                         showRelease = {this.state.showRelease}

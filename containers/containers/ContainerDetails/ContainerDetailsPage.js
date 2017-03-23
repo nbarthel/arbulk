@@ -7,16 +7,17 @@ import ContainerDetailsForm from './ContainerDetailsForm';
 import {Base_Url} from '../../../constants';
 import { createDataLoader } from 'react-loopback';
 import axios from 'axios'
+var Loader = require('react-loader')
 class ContainerDetailsPage  extends React.Component{
 
  constructor(props){
      super(props)
      this.conatinerObj = {}
-     this.state = {}
+     this.state = {loaded:false}
  }
 
 
-    componentWillMount(){
+    componentDidMount(){
 
 
       this.containerId= this.props.params.id
@@ -47,7 +48,8 @@ class ContainerDetailsPage  extends React.Component{
         axios.get(this.url).then((response)=>{
 
             this.setState({
-                result : response.data
+                result : response.data,
+                loaded:true
             })
 
         })
@@ -58,8 +60,10 @@ class ContainerDetailsPage  extends React.Component{
             <div className="wrapper-inner">
             <div className="content-inside">
             <Header routes = {this.props.routes}/>
+            <Loader loaded={this.state.loaded}>
                 <ContainerDetailsForm isDomestic={this.type}  shipID = {(this.state.result && this.state.result.TShipmentent )?this.state.result.TShipmentent.id : undefined}   containerTable ={this.state.result} containerId ={this.containerId} isDomestic = {this.props.params.isDomestic}/>
-  				</div>
+            </Loader>
+          </div>
 
                 <Footer />
             </div>

@@ -54,6 +54,7 @@ class  ShipmentDetailsForm extends React.Component {
         this.onDelete = this.onDelete.bind(this)
         this.checkConfirmation = this.checkConfirmation.bind(this)
         this.onAllocateContainer = this.onAllocateContainer.bind(this)
+        this.piLotIdArray = []
     }
     componentDidMount() {
        console.log("aloc",this.props.allocShipment)
@@ -85,6 +86,20 @@ class  ShipmentDetailsForm extends React.Component {
 
         this.forceUpdate()
       })
+      var e = {target:{checked:true}}
+      var i =0
+      while(true){
+        if(document.getElementById(i)){
+          document.getElementById(i).checked = true
+          this.tableCheckBoxChange(e,this.props.data.TShipmentLots[i])
+          i++
+        }
+        else{
+          break
+        }
+      }
+
+      this.forceUpdate()
     }
     checkConfirmation()
   	{
@@ -179,6 +194,7 @@ class  ShipmentDetailsForm extends React.Component {
       debugger;
 
         if(e.target.checked) {
+        this.piLotIdArray.push(value.TPackagingInstructionLots.id)
         document.getElementById("ContainerSummary").style.display = "table"
         console.log("value", value)
         this.sID = value.shipmentId
@@ -216,10 +232,19 @@ class  ShipmentDetailsForm extends React.Component {
 
     }
     else if(!(e.target.checked)){
-        this.setState({
+      for(var i in this.piLotIdArray){
+        if(parseInt(this.piLotIdArray[i]) == parseInt(value.TPackagingInstructionLots.id)){
+          this.piLotIdArray.splice(i,1)
+          i=0
+        }
+      }
+      if(this.piLotIdArray.length==0){
+          this.setState({
             CI : false
         })
         document.getElementById("ContainerSummary").style.display = "none"
+      }
+      this.getCurrentInventry(this.piLotIdArray[0])
     }
 
     }
@@ -234,9 +259,10 @@ class  ShipmentDetailsForm extends React.Component {
             }]
         });
 
-        var base1 = 'TPackagingInstructionLots/'+ id;
+        var base1 = 'TPackagingInstructionLots';
         this.urlnew = PIview._buildUrl(base1, {
-            include: {"relation": "TPiInventory", "scope": {"include": ["TInventoryLocation"]}}
+            include: {"relation": "TPiInventory", "scope": {"include": ["TInventoryLocation"]}},
+            "where":{"id":{"inq":this.piLotIdArray}}
 
         });
 

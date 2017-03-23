@@ -10,7 +10,10 @@ import { hashHistory } from 'react-router'
 var moment = require('moment');
 import validateInput from './DomesticContainerValidator'
 import validateIntInput from './InternationalContainerValidator'
+import DisableDoubleClick from '../../GlobalFunctions/DisableDoubleClick'
+import EnableClick from '../../GlobalFunctions/EnableClick'
 var isDomesticTab = false;
+var Loader = require('react-loader')
 class  ContainerArrivalEntryForm extends React.Component {
   constructor(props){
     super(props);
@@ -24,7 +27,8 @@ class  ContainerArrivalEntryForm extends React.Component {
         poArray : [],
         index:0,
         domesticErrors : { },
-        intErrors : { }
+        intErrors : { },
+        loaded : false
         }
         this.IntPostObj = {containerNumber: '',
                         pickupTruckerId: '',
@@ -131,14 +135,14 @@ class  ContainerArrivalEntryForm extends React.Component {
 
                     this.setState({
                         domesticData : this.domesticData,
-
                     })
                 })
 
 
                 this.setState({
                     IsInternational : this.IsInternational,
-                    IsDomestic : this.IsDomestic
+                    IsDomestic : this.IsDomestic,
+                    loaded : true
                 })
 
          }
@@ -163,7 +167,8 @@ class  ContainerArrivalEntryForm extends React.Component {
                 })
                 this.setState({
                     IsInternational : this.IsInternational,
-                    IsDomestic : this.IsDomestic
+                    IsDomestic : this.IsDomestic,
+                    loaded : true
                 })
             }
         }
@@ -211,7 +216,8 @@ class  ContainerArrivalEntryForm extends React.Component {
       })
       axios.get(this.urlCustomer).then((response) => {
           this.setState({
-              customer: response.data
+              customer: response.data,
+              loaded : true
           })
 
       })
@@ -380,12 +386,14 @@ isIValid(){
 }
 onSave(e){
   debugger
+  DisableDoubleClick('Save')
   if(this.shipmentType == 1){
     var arrivedDom = (this.state.domesticData && this.state.domesticData.TContainerDomestic) ? this.state.domesticData.TContainerDomestic.length : 0 ;
     var arrivedInt = (this.state.IntlData && this.state.IntlData.TContainerInternational) ? this.state.IntlData.TContainerInternational.length : 0 ;
     var totalContainer = this.state.domesticData  ?  this.state.domesticData.numberOfContainers : 0
   if(parseInt(arrivedDom) + parseInt(arrivedInt) == parseInt(totalContainer))
   {
+  EnableClick('Save')
   swal("" , "Arrived containers can not be more than assigned containers" , "info")
   return
 }
@@ -397,6 +405,7 @@ else if(this.shipmentType == 0){
   var totalContainer = this.state.IntlData  ?  this.state.IntlData.numberOfContainers : 0
   if((parseInt(arrivedDom) + parseInt(arrivedInt)) == parseInt(totalContainer))
   {
+  EnableClick('Save')
   swal("" , "Arrived containers can not be more than assigned containers" , "info")
   return
 }
@@ -415,6 +424,7 @@ else if(this.shipmentType == 0){
   }
   today = mm+'/'+dd+'/'+yyyy
   if(this.shipmentId == ""){
+    EnableClick('Save')
     swal("Missing","Please Select A Booking Number","info")
     return
       }
@@ -437,8 +447,11 @@ else if(this.shipmentType == 0){
       swal('Success',"Entry Done","success")
         hashHistory.push('/Container/containerview')
 
+    }).catch(function(error){
+      EnableClick('Save')
     })
   }else{
+      EnableClick('Save')
       if(this.haveSpecial==0){
         swal("Missing","Please fill in all the fields","info")
       }
@@ -447,13 +460,14 @@ else if(this.shipmentType == 0){
   console.log("POSTOBJ",this.postObj)
 }
 onIntSave(e){
-
+  DisableDoubleClick('IntSave')
   if(this.shipmentType == 1){
     var arrivedDom = (this.state.domesticData && this.state.domesticData.TContainerDomestic) ? this.state.domesticData.TContainerDomestic.length : 0 ;
     var arrivedInt = (this.state.IntlData && this.state.IntlData.TContainerInternational) ? this.state.IntlData.TContainerInternational.length : 0 ;
     var totalContainer = this.state.domesticData  ?  this.state.domesticData.numberOfContainers : 0
   if(parseInt(arrivedDom) + parseInt(arrivedInt) == parseInt(totalContainer))
   {
+  EnableClick('IntSave')
   swal("" , "Arrived containers can not be more than assigned containers" , "info")
   return
 }
@@ -465,6 +479,7 @@ else if(this.shipmentType == 0){
   var totalContainer = this.state.IntlData  ?  this.state.IntlData.numberOfContainers : 0
   if((parseInt(arrivedDom) + parseInt(arrivedInt)) == parseInt(totalContainer))
   {
+  EnableClick('IntSave')
   swal("" , "Arrived containers can not be more than assigned containers" , "info")
   return
 }
@@ -482,6 +497,7 @@ else if(this.shipmentType == 0){
   today = mm+'/'+dd+'/'+yyyy
 
 if(this.shipmentId == ""){
+  EnableClick('IntSave')
   swal("Missing","Please Select A Booking Number","info")
   return
 }
@@ -507,7 +523,11 @@ if(this.shipmentId == ""){
     axios.post(Base_Url + 'TContainerInternationals',this.IntPostObj).then((response) =>{
       swal('Success',"Entry Done","success")
         hashHistory.push('/Container/containerview')
-    })}else{
+    }).catch(function(){
+      EnableClick('IntSave')
+    })
+  }else{
+      EnableClick('IntSave')
       if(this.haveSpecial==0){
         swal("Missing","Please fill the missing fields","info")
       }
@@ -691,7 +711,9 @@ if(e.target.checked){
                                     return <option key = {index} onChange = {(e)=> this.onHandleIntlChange(e,book)}  value = {book.id +','+book.TShipmentInternational[0].id +','+book.isDomestic}>{book.TShipmentInternational[0].bookingNumber}</option>
                                   }
                     })}
+
           return (
+           <Loader loaded={this.state.loaded} id="loaded">
            <section className="container_detils">
             <div className="container-fluid">
             <div className="row">
@@ -867,7 +889,7 @@ if(e.target.checked){
                              <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
               <div className="form-group col-lg-12">
                <div className="pull-left margin-10-last-l"> <button type="submit" className="btn  btn-gray text-uppercase " >CANCEL</button> </div>
-                <div className="pull-left margin-10-all"><button type="button" id="cancel" className="btn  btn-primary text-uppercase " onClick = {this.onIntSave}>Save</button> </div>
+                <div className="pull-left margin-10-all"><button type="button" id="cancel" className="btn  btn-primary text-uppercase " id="IntSave" onClick = {this.onIntSave}>Save</button> </div>
                </div>
               </div>
                     </div>
@@ -989,7 +1011,7 @@ if(e.target.checked){
                          <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
               <div className="form-group col-lg-12">
                <div className="pull-left margin-10-last-l"> <button type="submit" className="btn  btn-gray text-uppercase " >CANCEL</button> </div>
-                <div className="pull-left margin-10-all"><button type="button" id="cancel" className="btn  btn-primary text-uppercase " onClick = {this.onSave}>Save</button> </div>
+                <div className="pull-left margin-10-all"><button type="button" id="cancel" className="btn  btn-primary text-uppercase " id="Save" onClick = {this.onSave}>Save</button> </div>
                </div>
               </div>
                     </div>
@@ -1001,6 +1023,7 @@ if(e.target.checked){
             </div>
             </div>
     </section>
+    </Loader>
 )
 }
 }

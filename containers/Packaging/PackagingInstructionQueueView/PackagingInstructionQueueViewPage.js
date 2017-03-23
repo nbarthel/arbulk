@@ -7,11 +7,12 @@ import _ from 'lodash';
 import  { PropTypes } from 'react';
 import { createDataLoader } from 'react-loopback';
 import { hashHistory } from 'react-router'
+var Loader = require('react-loader')
 class PackagingInstructionQueueViewPage extends React.Component{
 
     constructor(){
         super()
-        this.state = { }
+        this.state = { loaded : false}
         this.onDoubleClick = this.onDoubleClick.bind(this)
 
     }
@@ -50,7 +51,8 @@ class PackagingInstructionQueueViewPage extends React.Component{
 
                 this.setState(
                     {
-                        viewRailcartData : data
+                        viewRailcartData : data,
+                        loaded:true
                     }
                 )
                 console.log( '>>>>>>>>>>>>raillcart' , this.state.viewRailcartData)
@@ -72,7 +74,9 @@ class PackagingInstructionQueueViewPage extends React.Component{
             <div className="wrapper-inner">
             <div className="content-inside">
             <Header routes = {this.props.routes}/>
+            <Loader loaded={this.state.loaded} id="loaded">
                 <PackagingInstructionQueueViewForm key="0" onDoubleClick = {this.onDoubleClick} data={viewRailQueue}/>
+            </Loader>
                 </div>
                 <Footer/>
                 </div>

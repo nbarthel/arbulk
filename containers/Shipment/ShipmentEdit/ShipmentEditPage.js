@@ -10,7 +10,7 @@ class ShipmentEditPage  extends React.Component{
 		super(props);
 		 this.id = this.props.params.id
 		 this.lotId = this.props.routeParams.lotId
-        this.state = {loaded : true,
+        this.state = {loaded : false
         }
 	}
      componentDidMount(){

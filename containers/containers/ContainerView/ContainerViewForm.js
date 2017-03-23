@@ -317,6 +317,7 @@ class  ContainerViewForm extends React.Component {
                 index : this.state.index +1
             })
             document.getElementById('customer_name').selectedIndex = 0
+         localStorage.removeItem('conViewData')
          this.forceUpdate();
 
     }
@@ -700,6 +701,7 @@ debugger;
                     searchContainerFlag = false
                     steamflag = false
                     console.log('ajax ',data);
+                    localStorage.setItem('conViewData',JSON.stringify(data))
                     this.setState({
                         viewData : data,
                         loaded:true

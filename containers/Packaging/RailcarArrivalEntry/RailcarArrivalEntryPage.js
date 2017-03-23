@@ -4,11 +4,12 @@ import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 import _ from 'lodash';
 import  { PropTypes } from 'react';
-import { createDataLoader } from 'react-loopback';
+import { createDataLoader } from 'react-loopback'
+var Loader = require('react-loader');
 export default class RailcarArrivalEntryPage extends React.Component {
     constructor(props){
       super(props);
-      this.state = { }
+      this.state = { loaded : false}
     }
      componentDidMount() {
 
@@ -36,7 +37,8 @@ export default class RailcarArrivalEntryPage extends React.Component {
 
                 this.setState(
                     {
-                        viewRailcartData : data
+                        viewRailcartData : data,
+                        loaded:true
                     }
                 )
                 console.log( '>>>>>>>>>>>>raillcart' , this.state.viewRailcartData)
@@ -52,7 +54,9 @@ export default class RailcarArrivalEntryPage extends React.Component {
       <div className="wrapper-inner">
       <div className="content-inside">
       <Header routes = {this.props.routes}/>
+      <Loader loaded={this.state.loaded} id="loaded">
       <RailcarArrivalEntryForm key="0" data={viewRailData}/>
+      </Loader>
       </div>
       <Footer />
       </div>
