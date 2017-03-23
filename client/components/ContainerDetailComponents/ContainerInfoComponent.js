@@ -9,23 +9,33 @@ class ContainerInfoComponent extends Component {
         var containerTareWeight  = (this.props.info && this.props.info.tareWeight) ? this.props.info.tareWeight : 'NA'
         var typeConf = (this.props.info && this.props.info.containerTypeConfirmed) ? this.props.info.containerTypeConfirmed : 'NA'
         if(typeConf ==1){
-            document.getElementById('cType').checked = true
+					if(document.getElementById('cType')){
+						document.getElementById('cType').checked = true
+					}
         }
         var steamConf = (this.props.info && this.props.info.containerSteamshipLineConfirmed) ? this.props.info.containerSteamshipLineConfirmed : 'NA'
         if(steamConf ==1){
-            document.getElementById('sType').checked = true
+					if(document.getElementById('sType')){
+						  document.getElementById('sType').checked = true
+					}
         }
         var loadConf = (this.props.info && this.props.info.containerLoaded) ? this.props.info.containerLoaded : 'NA'
         var tranConf = (this.props.info && this.props.info.containerInTransit) ? this.props.info.containerInTransit : 'NA'
         var delConf = (this.props.info && this.props.info.containerDelivered) ? this.props.info.containerDelivered : 'NA'
         if(loadConf ==1){
-            document.getElementById('lType').checked = true
+					if(document.getElementById('lType')){
+						document.getElementById('lType').checked = true
+					}
         }
         if(tranConf ==1){
-            document.getElementById('tType').checked = true
+					if(document.getElementById('tType')){
+						  document.getElementById('tType').checked = true
+					}
         }
         if(delConf ==1){
-            document.getElementById('dType').checked = true
+					if(  document.getElementById('dType')){
+						document.getElementById('dType').checked = true
+					}
         }
 
         return (

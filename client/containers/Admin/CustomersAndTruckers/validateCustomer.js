@@ -14,7 +14,7 @@ export function validateCustomer(data){
 	}
 	if(Validator.isNull(data.phoneNumber)){
 		errors.phoneNumber = "Field is Required"
-	}else if(data.phoneNumber.length != 11){
+	}else if(data.phoneNumber.length != 10){
 		errors.phoneNumber = "Enter a valid Phone Number"
 	}
 	if(Validator.isNull(data.emailAddress)){

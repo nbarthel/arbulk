@@ -18,7 +18,7 @@ constructor(props){
 
 
     }
-        
+
 
     render(){
 
@@ -26,7 +26,7 @@ constructor(props){
             return (
                 <li key={location.id}>
                             <label className="control control--checkbox">{steamShip.name}
-                                <input type="checkbox" value={steamShip.name} onChange={(e) => this.props.onCompanyFilter(e,location)} id={location.id}/><div className="control__indicator"></div>
+                                <input type="checkbox" value={steamShip.name} onChange={(e) => this.props.onSteamShipFilter(e,steamShip)} id={steamShip.id}/><div className="control__indicator"></div>
 
                             </label>
                         </li>
@@ -41,7 +41,11 @@ constructor(props){
                  <h6 className="pull-left">SteamShipLine</h6>
 
              </div>
-             <ul>
+						 <ul className="scroll">
+								{steamShip}
+
+						 </ul>
+             {/*<ul>
                  <li>
                      <label className="control control--radio">Yes
                          <input type="radio"  name="steam_yes" value="1" id="steamYes" onChange={this.props.SteamLine}/><div className="control__indicator"></div>
@@ -52,7 +56,7 @@ constructor(props){
                          <input type="radio"  name="steam_yes" id=""  value="0" id="steamNo" onChange={this.props.SteamLine}/><div className="control__indicator"></div>
                      </label>
                  </li>
-             </ul>
+             </ul>*/}
          </div>
 
 
@@ -61,5 +65,5 @@ constructor(props){
                 )
     }
 }
-	
+
 export default SteamshipLineFilter;

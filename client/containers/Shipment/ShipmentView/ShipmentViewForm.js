@@ -85,10 +85,31 @@ class  ShipmentViewForm extends React.Component
             this.qArray = []
             this.addToQueue = this.addToQueue.bind(this)
             this.tempLotId = ""
-            //this.headerCheckboxChange = this.headerCheckboxChange.bind(this)
+            this.PrintScreen = this.PrintScreen.bind(this)
+            this.headerCheckboxChange = this.headerCheckboxChange.bind(this)
     }
     allocateContainer(e){
         hashHistory.push('/Container/containerarrivalentry')
+    }
+    headerCheckboxChange(e,data){
+      debugger
+      if(e.target.checked){
+          this.conFirmID = e.target.value
+          this.selected = e.target.id
+          this.confId = data.id
+          // this.status = value.status
+          // this.shipId = value.id
+          // this.tempLotId = data.piLotsId
+      }
+      else if(!e.target.checked){
+          this.selected = null
+          this.confId = null
+          this.selected = null
+          this.conFirmID = null
+          this.tempLotId = null
+          //this.piID = null
+
+      }
     }
     onConfirmClick(e){
       if(this.confId != null || undefined){
@@ -99,8 +120,9 @@ class  ShipmentViewForm extends React.Component
     }
 
 onViewClick(e){
+
       if(this.conFirmID != null || undefined){
-          hashHistory.push('/Shipment/shipmentDetails/'+this.conFirmID);
+          hashHistory.push('/Shipment/shipmentDetails/'+this.conFirmID+'/'+this.tempLotId);
     }else{
       swal("Selection Missing","Please Select A Shipment Lot","info")
     }
@@ -124,7 +146,27 @@ onViewClick(e){
 
 
  }
-
+PrintScreen(){
+  var scrollLeft = document.getElementsByClassName("loadedContent")[0].scrollLeft
+  document.getElementsByClassName('pos-relative-b')[0].style.display = 'none'
+  document.getElementsByClassName('filter-btn')[0].style.display = 'none'
+  document.getElementById("nonPrintable").style.display = "none"
+  document.getElementById("row").style.display = "none"
+  document.getElementById("hide1").style.display = "none"
+  // document.getElementById("hide2").style.display = "none"
+  // document.getElementById("hide3").style.display = "none"
+  document.getElementById("hide4").style.display = "none"
+  document.getElementById("hide5").style.display = "none"
+  document.getElementById("customer_name").style.display = "none"
+  document.getElementsByClassName("loadedContent")[0].style.cssText=""
+  document.getElementsByClassName("loadedContent")[0].style.height="100%"
+  document.getElementsByClassName("loadedContent")[0].style.overflowX='auto'
+  document.getElementsByClassName("loadedContent")[0].scrollLeft = scrollLeft
+  var printContent = document.getElementById('Packaging_Instruction_View').innerHtml
+  document.body.innerHtml = printContent
+  window.print()
+  window.location.reload()
+}
 
     checkboxChange(e,value,data){
         debugger
@@ -323,6 +365,7 @@ onClickli(e){
                 index : this.state.index +1
             })
             document.getElementById('customer_name').selectedIndex = 0
+            localStorage.removeItem('siViewData')
          this.forceUpdate();
 
        }
@@ -472,7 +515,7 @@ onClickli(e){
                                                                  {
                                                                   "relation" :"TShipmentDomestic",
                                                                   "scope":{"include":"TShipmentType",
-                                                                  "where":{"or":Railstatus}}
+                                                                  "where":{"or":Railstatus,"active":1}}
                                                                  },
                                                                  {
                                                                   "relation" :"TShipmentInternational",
@@ -485,7 +528,7 @@ onClickli(e){
                                                                                               },
                                                                                               {
                                                                                                   "or":Railstatus
-                                                                                              }]
+                                                                                              },{"active":1}]
 
                                                                                       }
                                                                          }
@@ -535,13 +578,13 @@ onClickli(e){
                                                                 {
                                                                   "relation" :"TShipmentDomestic",
                                                                   "scope":{"include":"TShipmentType",
-                                                                  "where":{"and":serachObjLots}}
+                                                                  "where":{"and":serachObjLots,"active":1}}
                                                                 },
 
                                                                 {
                                                                   "relation" :"TShipmentInternational",
                                                                   "scope":{"where" : {
-                                                                                        "and" : serachObjLots
+                                                                                        "and" : serachObjLots,"active":1
                                                                                       },
                                                                   "include":["TSteamshipLine","TContainerType"]}
                                                                 },
@@ -588,12 +631,12 @@ onClickli(e){
                                                               },
                                                               {
                                                                   "relation": "TShipmentDomestic",
-                                                                  "scope": {"include": ["TShipmentType"]}
+                                                                  "scope": {"include": ["TShipmentType"],"where":{"active":1}}
                                                               },
 
                                                               {
                                                                   "relation": "TShipmentInternational",
-                                                                  "scope": {"include": ["TSteamshipLine","TContainerType"]}
+                                                                  "scope": {"include": ["TSteamshipLine","TContainerType"],"where":{"active":1}}
                                                               },
 
                                                               {
@@ -638,12 +681,12 @@ onClickli(e){
 
                                                             {
                                                                 "relation": "TShipmentDomestic",
-                                                                "scope": {"include": ["TShipmentType"]}
+                                                                "scope": {"include": ["TShipmentType"],"where":{"active":1}}
                                                             },
 
                                                             {
                                                                 "relation": "TShipmentInternational",
-                                                                "scope": {"include": ["TSteamshipLine","TContainerType"]}
+                                                                "scope": {"include": ["TSteamshipLine","TContainerType"],"where":{"active":1}}
                                                             },
 
                                                             {
@@ -689,12 +732,12 @@ onClickli(e){
 
                                                                           {
                                                                               "relation": "TShipmentDomestic",
-                                                                              "scope": {"include": ["TShipmentType"]}
+                                                                              "scope": {"include": ["TShipmentType"],"where":{"active":1}}
                                                                           },
 
                                                                           {
                                                                               "relation": "TShipmentInternational",
-                                                                              "scope": {"include": ["TSteamshipLine","TContainerType"]}
+                                                                              "scope": {"include": ["TSteamshipLine","TContainerType"],"where":{"active":1}}
                                                                           },
                                                                           {
                                                                               "relation": "TShipmentLots",
@@ -760,6 +803,7 @@ onClickli(e){
 
                 console.log('ajax ',data);
                 debugger
+              localStorage.setItem('siViewData', JSON.stringify(data));
                this.setState(
                    {
                        viewData : data,
@@ -1645,7 +1689,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
 
             <section className="side-filter">
                 <div className="menu-bg hidden-md hidden-lg hidden-sm  visible-xs-block">
-                    <div className="">
+                    <div className="" id="hide1">
                         <h4 className="pull-left">REFINE YOUR RESULT </h4>
                         <button type="button" className="btn collapsed pull-right " data-toggle="collapse" data-target="#filter-menu" aria-expanded="false"><i className="fa fa-caret-down fa-2x" aria-hidden="true"></i></button>
                     </div>
@@ -1658,7 +1702,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                                                                     <div className="row">
                                                                        <FilterButton buttonDisplay = {this.buttonDisplay}  onButtonRemove = {this.onButtonRemove} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
                                                                         <div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs">
-                                                                            <div className="pull-right ">
+                                                                            <div className="pull-right " id="hide5">
                                                                                 <select className="form-control"   id="customer_name" name="customer_name" onChange={this.viewChange}>
                               <option value="Please Select An Option" disabled selected>Select custom view</option>
                              {
@@ -1678,7 +1722,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
 
                                                                         </div>
 
-                                                                        <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+                                                                        <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 " id="hide4">
                  <a href="javascript:void(0)" name = "ARB" onClick = {(e) => {this.onHideColumn(e,name)}}>ARB</a> --
                  <a href="javascript:void(0)" name = "Customer" onClick = {(e) => {this.onHideColumn(e)}}>Customer</a> ---
                  <a href="javascript:void(0)" name = "PO" onClick={(e) => {this.onHideColumn(e)}}>PO</a> --
@@ -1708,7 +1752,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
 
                                                                         <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                                             <div className=" table-responsive view_table viewLoad">
-                                                                            <ShipmentViewDataComponent key={this.state.index} filterData = {filterData} checkboxChange = {this.checkboxChange} showARB = {this.state.showARB}
+                                                                            <ShipmentViewDataComponent key={this.state.index} headerCheckboxChange={this.headerCheckboxChange} filterData = {filterData} checkboxChange = {this.checkboxChange} showARB = {this.state.showARB}
                         showCustomer = {this.state.showCustomer}
                         showPO = {this.state.showPO}
                         showRelease = {this.state.showRelease}
@@ -1737,7 +1781,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                         />
 
                                                                             </div>
-
+                                                                            <div id="nonPrintable">
                                                                             <div className="row-fluid pddn-50-btm padding-top-btm-xs">
 
                                                                                 {
@@ -1746,8 +1790,8 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                                                                                        */
                                                                                 }
                                                                              <div className="pull-left margin-10-all"><button type="button"  className="btn  btn-gray text-uppercase" onClick = {(e) => {this.print(e)}}>Print Load Order</button></div>
-                                                                                <div className="pull-left margin-10-all"><button type="button" onClick = {(e) => {this.allocateContainer(e)} }  className="btn  btn-primary text-uppercase">Allocate Container</button></div>
-
+                                                                             <div className="pull-left margin-10-all"><button type="button" onClick = {(e) => {this.allocateContainer(e)} }  className="btn  btn-primary text-uppercase">Allocate Container</button></div>
+                                                                             <div className="pull-left margin-10-all"><button type="button" onClick={this.PrintScreen}  className="btn  btn-gray">Print</button></div>
 
                                                                                 <div className="pull-right margin-10-last-r"><button type="button"  className="btn  btn-primary text-uppercase" onClick = {this.onViewClick.bind(this)}>VIEW</button></div>
                                                                                 <div className="pull-right margin-10-all"><button type="button"  className="btn  btn-orange text-uppercase" onClick={(e) =>this.onEditClick(e)}>EDIT</button></div>
@@ -1770,6 +1814,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                                                                                         <button type="button"   className="btn  btn-success margin-left-xs text-uppercase" onClick={this.saveView}>SAVE CUSTOMER VIEW</button>
                                                                                     </div>
 
+                                                                                </div>
                                                                                 </div>
                                                                             </div>
 

@@ -13,7 +13,6 @@ import React, { Component } from 'react';
         if(this.props.tabledata){
           var statusConfirmed = 'UNCONFIRMED'
 
-
           if(this.props.tabledata.isDomestic ==0 && this.props.tabledata.TShipmentInternational.length > 0){
             statusConfirmed = this.props.tabledata.TShipmentInternational[0].status
           }
@@ -43,14 +42,15 @@ import React, { Component } from 'react';
                                                 <td>{releaseNumber}</td>
                                                 <td>{bookingNumber}</td>
                                                 <td>{tble.TPackagingInstructions ? tble.TPackagingInstructions.po_number : ''}</td>
+                                                <td>{tble.TPackagingInstructionLots?tble.TPackagingInstructionLots.lot_number : ''}</td>
                                                 <td>{tble.TPackagingInstructions ? tble.TPackagingInstructions.material : ''}</td>
                                                 <td>{statusConfirmed == "UNCONFIRMED" ? 'N' : 'Y'}</td>
                                                 <td>{(inInventory.toUpperCase() == "IN INVENTORY" || inInventory.toUpperCase() =="SHIPPED")? 'Y' : 'N'}</td>
                                                 <td>{cutOff}</td>
-                                                <td>{tble.TPackagingInstructionLots ? (tble.TPackagingInstructionLots.inInventory ? tble.TPackagingInstructionLots.inInventory : '') : ''} Bags</td>
-                                                  <td>{tble.noOfBags ? tble.noOfBags : ''} Bags</td>
+                                                <td>{tble.TPackagingInstructionLots ? (tble.TPackagingInstructionLots.inInventory ? tble.TPackagingInstructionLots.inInventory : 0) : 0} Bags</td>
+                                                  <td>{tble.noOfBags ? tble.noOfBags : 0} Bags</td>
                                                 <td><label className="control control--checkbox" >
-                                                          <input type="checkbox" onClick = {(e) => this.props.tableCheckBoxChange(e,tble)}/><div className = "control__indicator"></div>
+                                                          <input type="checkbox" id={index} onClick = {(e) => this.props.tableCheckBoxChange(e,tble)}/><div className = "control__indicator"></div>
                                                      </label>
                                                 </td>
                             </tr>
@@ -65,6 +65,7 @@ import React, { Component } from 'react';
                                         <th>Release#</th>
                                         <th>Booking#</th>
                                         <th>PO</th>
+                                        <th>lot #</th>
                                         <th>Material</th>
                                         <th>Confmd</th>
                                         <th>In Inventory?</th>

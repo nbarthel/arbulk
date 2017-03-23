@@ -5,13 +5,13 @@ import Footer from '../../../components/Footer';
 import {createDataLoader} from 'react-loopback'
 import { Base_Url} from '../../../constants/index.js'
 import axios from 'axios'
-
+var Loader = require('react-loader')
 class ContainerQueueViewPage  extends React.Component{
 
     constructor(props){
         super(props)
         this.state = {
-
+                      loaded : false
         }
 
     }
@@ -39,7 +39,8 @@ class ContainerQueueViewPage  extends React.Component{
             this.queuwViewData = response.data
 
             this.setState({
-                queueData : this.queuwViewData
+                queueData : this.queuwViewData,
+                loaded : true
             })
         })
 
@@ -51,7 +52,9 @@ class ContainerQueueViewPage  extends React.Component{
             <div className="wrapper-inner">
             <div className="content-inside">
             <Header routes = {this.props.routes}/>
+            <Loader loaded = {this.state.loaded}>
                 <ContainerQueueViewForm queueData = {this.state.queueData}/>
+            </Loader>
                 </div>
                 <Footer />
             </div>

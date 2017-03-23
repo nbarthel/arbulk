@@ -8,17 +8,17 @@ h3{margin:0px; padding:0px; font-weight:600;}
 .logoShipment .text{width:70%; text-align:right; font-size:24px; text-transform:uppercase; font-weight:600;  vertical-align:middle;}
 .door{ float:right; text-align:right;}
 
-.loadOrder{ width:100%; clear:both; padding-top: 30px;}
-.loadOrder .loadOrder_data{width:55%; padding-bottom: 50px; float: left;}
+.loadOrder{ width:100%; clear:both; padding-top: 30px; padding: 5px;}
+.loadOrder .loadOrder_data{width:33.33%; padding-bottom: 50px; float: left;padding-top: 5px;}
 .loadOrder .loadOrder_data table{border:1px solid #000;  border-collapse: collapse;}
-.loadOrder .loadOrder_data table td{padding: 6px 10px;font-size: 14px;white-space: nowrap;overflow:  hidden;text-overflow: ellipsis;  vertical-align: middle; border:1px solid #000;}
-.loadOrder .loadOrder_data table tr.spacel{height: 100px;}
+.loadOrder .loadOrder_data table td{padding: 6px 10px;font-size: 14px;white-space:normal;overflow:  hidden;text-overflow: ellipsis;  vertical-align: middle; border:1px solid #000;}
+.loadOrder .loadOrder_data table tr.spacel{height: 60px;}
 .bg_striped tr:nth-child(odd) {background-color: #ccc ; border:1px solid #000; }
 .loadOrder .loadOrder_data table.bg_striped td:nth-child(odd){ text-align:right; border-right:1px solid #000;}
 .loadOrder .loadOrder_data table.bg_striped td:nth-child(even){ font-weight: 600;}
 
-.loadOrder .quantity{width:40%; float:right;}
-.loadOrder .quantity table{border:1px solid #000;  border-collapse: collapse; width:100%;  margin-bottom:50px;}
+.loadOrder .quantity{width:33.33%; float:right;padding: 5px;}
+.loadOrder .quantity table{border:1px solid #000;  border-collapse: collapse; width:100%;  margin-bottom:20px;}
 .loadOrder .quantity table td{padding: 6px 10px;font-size: 14px;white-space: nowrap;overflow:  hidden;text-overflow: ellipsis;  vertical-align: middle; border:1px solid #000; line-height:8px}
 .bg_striped tr:nth-child(odd) {border:1px solid #000; }
 .bg_striped td:nth-child(odd){ border-right:1px solid #000;}

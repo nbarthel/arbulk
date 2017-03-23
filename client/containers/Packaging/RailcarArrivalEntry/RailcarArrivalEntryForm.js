@@ -15,6 +15,7 @@ import './js/tableHeadFixer.js'
 import './js/jquery.dataTables.min.js'
 import '../../../public/stylesheets/style.css'
 import { hashHistory } from 'react-router'
+const MUL_FACTOR = 2.204625
 export default class RailcarArrivalEntryForm extends React.Component {
 	 constructor(props){
             super(props);
@@ -179,13 +180,13 @@ onClickli(e){
 					"include" : {"relation": "TPackagingInstructions",
 											 "scope":{
 												 				where:     {"and":[
-																									{  "or":serachObj},
-																									{"railcar_status": {"neq":"ARRIVED"}}
+																									{  "or":serachObj}
 																								  ]
 																					 } ,
 																"include": ["TOrigin" , "TCompany"]
 															}
-											}
+											},
+					"where":{"active":1,"railcar_status": {"neq":"ARRIVED"}}
 				})
 			}
 			else if(serachObjLots.length > 0 && serachObj.length > 0) {
@@ -197,7 +198,7 @@ onClickli(e){
 						[ {'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}},
 						  {'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}
 						],
-						"and":{"railcar_status": {"neq":"ARRIVED"}}
+						"and":{"railcar_status": {"neq":"ARRIVED"},"active":1}
 					}
 				});
 			}
@@ -208,7 +209,7 @@ onClickli(e){
 					"where":
 					{
 						"or":serachObjLots,
-						"and":{"railcar_status": {"neq":"ARRIVED"}}
+						"and":{"railcar_status": {"neq":"ARRIVED"},"active":1}
 							//[ {'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}},{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
 					}
 				});
@@ -520,7 +521,7 @@ onChnage(e){
 							<td>{view.TPackagingInstructions.TCompany? view.TPackagingInstructions.TCompany.name : ''}</td>
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.po_number : ''}</td>
 							<td>{view.railcar_number ? view.railcar_number : ''}</td>
-							<td>{view.weight?(this.state.selectedOption=='lbs'?view.weight:(view.weight/2.20).toFixed(2)):''}</td>
+							<td>{view.weight?(this.state.selectedOption=='lbs'?view.weight:(view.weight/MUL_FACTOR).toFixed(2)):''}</td>
 							<td>{view.lot_number ? view.lot_number: ''}</td>
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.material : ''}</td>
 							<td> {view.status == "UNCONFIRMED"? "NO" : "YES"}</td>
@@ -571,7 +572,7 @@ debugger
 							<td>{view.TPackagingInstructions.TCompany? view.TPackagingInstructions.TCompany.name : ''}</td>
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.po_number : ''}</td>
 							<td>{view.railcar_number ? view.railcar_number : ''}</td>
-							<td>{view.weight?(this.state.selectedOption=='lbs'?view.weight:(view.weight/2.20).toFixed(2)):''}</td>
+							<td>{view.weight?(this.state.selectedOption=='lbs'?view.weight:(view.weight/MUL_FACTOR).toFixed(2)):''}</td>
 							<td>{view.lot_number ? view.lot_number: ''}</td>
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.material : ''}</td>
 							<td> {view.status == "UNCONFIRMED" ? "NO" : "YES"}</td>

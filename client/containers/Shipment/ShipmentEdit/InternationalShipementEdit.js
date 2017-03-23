@@ -294,10 +294,10 @@ class InternationalShipementEdit extends React.Component {
      onSave(e){
 			 debugger;
 			 if(this.props.editData.TShipmentLots[0].TPackagingInstructionLots.inInventory<this.props.editData.TShipmentLots[0].noOfBags){
-		     swal("Shipped bags must not be greater than Inventory bags")
-		     return;
+		     //swal("Shipped bags must not be greater than Inventory bags")
+		     //return;
 		   }
-     	this.SIObj.customerId = this.props.editData.customerId
+     	  this.SIObj.customerId = this.props.editData.customerId
         this.SIObj.releaseNumber = this.props.editData.releaseNumber
         this.SIObj.numberOfContainers = this.props.editData.numberOfContainers
         this.SIObj.numberOfBags = this.props.editData.numberOfBags

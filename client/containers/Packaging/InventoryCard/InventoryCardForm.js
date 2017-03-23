@@ -183,8 +183,15 @@ componentWillMount() {
     }
 
     addToQueue(e){
-
-     let id = this.props.cId
+		 if(this.lotIdArray.length>1){
+			 swal("warning","Please Select a single Lot","warning")
+			 return
+		 }
+		 else if(this.lotIdArray.length<=0){
+			 swal("warning","Please Select a Lot","warning")
+			 return
+		 }
+     let id = this.lotIdArray[0]
      var sequence =  this.state.queue_Sequence[0].max_mark
 
       var option = {
@@ -238,6 +245,7 @@ componentWillMount() {
 		}
 
     onCheck(e,status,when,stampConfirmed,NumberOfRows){
+			debugger
 			if(this.lotIdArray.length>0){
 				for(var i=0;i<this.lotIdArray.length; i++){
 					this.lotIdArray[i]=parseInt(this.lotIdArray[i])
@@ -247,6 +255,9 @@ componentWillMount() {
 					if(stampConfirmed==1){
 						localStorage.setItem('stamp' , true)
 						document.getElementById("rowstamp").checked = true;
+					}
+					else if(stampConfirmed==0){
+						document.getElementById("rowstamp").checked = false;
 					}
 			}
 			if(e!=null){
@@ -296,7 +307,7 @@ if(when==0 ){
 
 }
 	onStampConfirmed(e){
-
+debugger
 		let id = this.props.cId
 		var stamp ;
 		var tempThis = this
@@ -310,10 +321,17 @@ if(when==0 ){
 			axios.put( Base_Url+"TPackagingInstructionLots/"+id , {"stamp_confirmed" : 1}).then(function(response){
 					tempThis.flagStampconfirm = true
 					tempThis.forceUpdate()
+					document.getElementById('rowstamp').checked = true
 			})
 }
 		}
 		else{
+			axios.put( Base_Url+"TPackagingInstructionLots/"+id , {"stamp_confirmed" : 0}).then(function(response){
+					tempThis.flagStampconfirm = false
+					localStorage.removeItem('stamp')
+					tempThis.forceUpdate()
+					document.getElementById('rowstamp').checked = 0
+			})
 			document.getElementById('rowstamp').checked = 0
 		}
 	}

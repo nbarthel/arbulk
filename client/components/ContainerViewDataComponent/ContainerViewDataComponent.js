@@ -49,7 +49,7 @@ componentWillMount(){
         }]
       })
     console.log("I have recieved props")
-    //debugger
+    //
 
     var base = 'TPackagingInstructions'+'/'+id;
     this.url = PIview._buildUrl(base, {
@@ -65,13 +65,19 @@ componentWillMount(){
                   viewData : [data],
                   loaded:true
                 })
+                var tableData = JSON.parse(localStorage.getItem('conViewData'))
+                if(tableData && tableData.length>0){
+                  this.setState({
+                      viewData : tableData
+                    })
+                  }
           }.bind(this)
 
         })
 
     }
    else {
-    debugger
+
   var PIview = createDataLoader(ContainerViewDataComponent,{
       queries:[{
         endpoint: 'TPackagingInstructions',
@@ -101,19 +107,24 @@ componentWillMount(){
             url: this.url,
             success:function(data){
                 console.log('ajax ',data);
-                debugger
+
                this.setState(
                    {
                        viewData : data,
                        loaded:true
                    }
                )
-               //console.log( this.state.xyz)
+               var tableData = JSON.parse(localStorage.getItem('conViewData'))
+               if(tableData && tableData.length>0){
+                 this.setState({
+                     viewData : tableData
+                   })
+                 }
         }.bind(this)
         })
 
      axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
-    debugger;
+      ;
     this.setState({
         queue_Sequence : response.data
     })
@@ -124,13 +135,13 @@ componentWillMount(){
   }
 componentDidMount() {
   $(function () {
-    setTimeout(function(){debugger;$("#Packaging_Instruction_View").tableHeadFixer({'head' : true})}, 1000);
+    setTimeout(function(){  ;$("#Packaging_Instruction_View").tableHeadFixer({'head' : true})}, 1000);
       //$(".Packaging_Instruction_View").tableHeadFixer({'head' : true});
   });
 }
 checkclick(data , value)
 {
-    debugger;
+      ;
     var queueArray = []
     this.qArray.push(value.id)
     localStorage.setItem('qArray',this.qArray)
@@ -139,7 +150,7 @@ checkclick(data , value)
 }
 
 onAscending(e,head){
-  debugger
+
   flagSorting = true;
 
 
@@ -223,7 +234,7 @@ var switchvalue = head;
                       break;//view.TShipmentInternational[0].TSteamshipLine
                       case 'SteamshipLine':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
-                                  debugger
+
                                 if(item.TShipmentInternational.length>0){
                                   return item.TShipmentInternational[0].TSteamshipLine.name.toLowerCase()
                                 }
@@ -236,12 +247,12 @@ var switchvalue = head;
                       break;
                       case 'Type':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
-                                  debugger
+
                                 if(item.TContainerInternational.length>0){
-                                  return item.TContainerInternational[0].staus
+                                  return item.TShipmentInternational[0].TContainerType.name.toLowerCase()
                                 }
                                 else{
-                                  return item
+                                  return 'z'
                                 }
 
                                 });
@@ -249,12 +260,12 @@ var switchvalue = head;
                       break;
                       case 'status':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
-                                  debugger
-                                if(item.TShipmentInternational.length>0){
-                                  return item.TShipmentInternational[0].TSteamshipLine.name.toLowerCase()
+
+                                if(item.TContainerInternational.length>0){
+                                  return item.TContainerInternational[0].status.toLowerCase()
                                 }
-                                else if(item.TShipmentDomestic.length>0){
-                                  return item
+                                else if(item.TContainerDomestic.length>0){
+                                  return item.TContainerDomestic[0].status.toLowerCase()
                                 }
                                 return item
                                 });
@@ -262,7 +273,7 @@ var switchvalue = head;
                       break;
                       case 'shipmentType':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
-                                  debugger
+
                                 if(item.isDomestic==1){
                                   return item
                                 }
@@ -284,13 +295,14 @@ else{
 this.setState({
      viewData  : sortedData
              })
+localStorage.setItem('conViewData', JSON.stringify(sortedData));
 }
 
 
 onToggel(e ,elm){
 console.log('>>>>>>' , $(elm))
 
-  debugger;
+    ;
   $( "button" ).click(function() {
   $( "p" ).slideToggle( "slow" );
 });
@@ -329,7 +341,7 @@ onClickRow(e){
 
 
     render(){
-        debugger;
+          ;
         var filterData
         if(!flagSorting){
         filterData = this.props.filterData
@@ -347,7 +359,7 @@ onClickRow(e){
 
         var selectedWeight = this.props.weight;
 
-        debugger
+
         console.log("<<<<<^^>>>>>",this.state.viewData)
 
         var listData =  _.map(this.state.viewData,(view,index) => {
@@ -461,7 +473,7 @@ onClickRow(e){
                            </tr>
                            {
                           _.map(view.TContainerInternational , (data ,index)=>{
-                            debugger
+
                              if(data.containerArrived == 1){
                                       var Arr = 'YES'
                                           } else{
@@ -512,6 +524,7 @@ onClickRow(e){
 
         return(
             <Loader loaded={this.state.loaded}>
+            <div className="loadedContentNew">
                 <table id="Packaging_Instruction_View" className="table table-expandable table-striped" cellSpacing="0" >
                     <thead className="table_head">
                     <tr className="sorting_head"  style={{"backgroundColor" : "#2e6da4"}}>
@@ -597,6 +610,7 @@ onClickRow(e){
                     </thead>
                     {listData}
                 </table>
+                </div>
             </Loader>)
     }
 }

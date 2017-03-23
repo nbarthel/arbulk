@@ -15,6 +15,7 @@ var clickOnEdit = false
 var initialY = 0;
 var goTop = true;
 var goDown = false;
+const MUL_FACTOR = 2.204625
 class  PackagingInstructionQueueViewForm extends React.Component
 {
     constructor(){
@@ -33,7 +34,7 @@ class  PackagingInstructionQueueViewForm extends React.Component
         this.locationFilter = []
         this.locId = {}
         this.ScrollUp = this.ScrollUp.bind(this)
-
+        this.Print = this.Print.bind(this)
  }
 
 componentWillMount(){
@@ -116,7 +117,12 @@ ScrollUp(a)
 
          console.log( selectedOption);
     }
-
+Print(){
+  document.getElementById('radioButtons').style.display = 'none'
+  document.getElementById('buttons').style.display = 'none'
+  window.print()
+  window.location.reload()
+}
     callonEdit(){
       clickOnEdit = true;
          $(ReactDOM.findDOMNode(this)).sortable({
@@ -279,7 +285,7 @@ ScrollUp(a)
          <td>{queueView.TPackagingInstructions.material}</td>
          <td>{}</td>
          <td>{}</td>
-         <td>{queueView.weight ? (this.state.selectedOption=='kg' ?(queueView.weight/2.20).toFixed(2) :queueView.weight.toFixed(2)) : ''}</td>
+         <td>{queueView.weight ? (this.state.selectedOption=='kg' ?(queueView.weight/MUL_FACTOR).toFixed(2) :queueView.weight.toFixed(2)) : ''}</td>
          <td>{queueView.bags_to_ship}</td>
          <td>{}</td>
          <td>
@@ -308,7 +314,7 @@ ScrollUp(a)
     return(
 
 <section className="view_table-queue" onMouseMove={this._onMouseMove}>
-
+<div id="radioButtons">
  <div className=" margin-30-right" style={{"float" : "left"}}>
                  <label className="control control--radio ">LBS
                      <input id="Modify_User" name="Modify_User" type="radio"
@@ -337,11 +343,7 @@ ScrollUp(a)
                             {locations}
                          </ul>
                      </div>
-
-
-
-
-
+    </div>
 
     <div className="container-fluid" onMouseMove={this._throttledMouseMove}>
 
@@ -379,10 +381,11 @@ ScrollUp(a)
 
    <div className="row-fluid pddn-50-btm">
     <hr/>
-        <div className="padding-top-btm-xs">
+        <div className="padding-top-btm-xs" id="buttons">
         <div className="padding-20-all pull-right"><button type="button" id="edit_btn" onClick={hashHistory.goBack}   className="btn  btn-gray">BACK</button></div>
 
    <div className="padding-20-all pull-right"><button type="button" id="edit_btn" onClick={this.callonEdit}   className="btn  btn-gray">EDIT QUEUE</button></div>
+   <div className="padding-20-all pull-right"><button type="button" id="edit_btn" onClick = {this.Print} className="btn  btn-gray">PRINT</button></div>
 
         </div>
 

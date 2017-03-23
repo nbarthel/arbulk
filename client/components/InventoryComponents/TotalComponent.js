@@ -11,7 +11,7 @@ export class TotalComponent extends Component {
 		let totalGainOrLoss =0
 
 		if(this.props.isBag && totalRailCarWeight!=undefined){
-			totalGainOrLoss = Math.round((totalPackagedWeight*2.20462).toFixed(2)) - Math.round((totalRailCarWeight).toFixed(2))
+			totalGainOrLoss = Math.round((totalPackagedWeight*2.204625).toFixed(2)) - Math.round((totalRailCarWeight).toFixed(2))
 		}
 		else if(!this.props.isBag && totalRailCarWeight!=undefined){
 
@@ -36,11 +36,11 @@ export class TotalComponent extends Component {
 							</tr>
 							<tr>
 								<td>Packaged Weight </td>
-								<td>{this.props.lotIdArray.length<2?(this.props.isBag?Math.round((totalPackagedWeight*2.20462).toFixed(0)):Math.round((totalPackagedWeight).toFixed(0))):0} </td>
+								<td>{this.props.lotIdArray.length<2?(this.props.isBag?Math.round((totalPackagedWeight*2.204625).toFixed(0)):Math.round((totalPackagedWeight).toFixed(0))):0} </td>
 							</tr>
 							<tr>
 								<td>Gain / Loss</td>
-								<td>{ totalGainOrLoss } </td>
+								<td>{ this.props.lotIdArray.length<2?totalGainOrLoss:0 } </td>
 							</tr>
 
 						</tbody>

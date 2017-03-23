@@ -21,6 +21,7 @@ var Loader = require('react-loader');
 var sortedDataflag = false
 var sortedData = []
 var flagSorting = false
+const MUL_FACTOR = 2.204625
 class ViewDataComponent extends React.Component{
 
     constructor(props){
@@ -36,9 +37,12 @@ class ViewDataComponent extends React.Component{
         //this.onAscending = this.onAscending.bind(this)
         this.onToggel = this.onToggel.bind(this)
         this.onClickRow = this.onClickRow.bind(this)
+        this.press = this.press.bind(this)
 
       }
-
+press(e){
+  debugger
+}
 componentWillMount(){
 
    let id = this.props.id
@@ -69,6 +73,12 @@ componentWillMount(){
                   viewData : [data],
                   loaded:true
                 })
+                var tableData = JSON.parse(localStorage.getItem('piViewData'))
+                if(tableData && tableData.length>0){
+                  this.setState({
+                      viewData : tableData
+                    })
+                  }
           }.bind(this)
 
         })
@@ -129,7 +139,12 @@ componentWillMount(){
                        loaded:true
                    }
                )
-               //console.log( this.state.xyz)
+               var tableData = JSON.parse(localStorage.getItem('piViewData'))
+               if(tableData && tableData.length>0){
+                 this.setState({
+                     viewData : tableData
+                   })
+                 }
         }.bind(this)
         })
 
@@ -147,8 +162,8 @@ componentDidMount() {
   $(function () {
     setTimeout(function(){
       $("#Packaging_Instruction_View").tableHeadFixer({'head' : true})
-
   }, 2000);
+
   });
 
 }
@@ -163,11 +178,11 @@ checkclick(data , value)
 }
 
 onAscending(e,head){
-
+debugger
   sortedDataflag = true;
   flagSorting = true;
   var switchvalue = head;
-
+  var tempThis = this
   switch(switchvalue) {
                        case 'location':
                               sortedData = _.sortBy(this.state.viewData, function(item) {
@@ -205,7 +220,7 @@ onAscending(e,head){
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
                                   if(item.TPackagingInstructionLots.length > 0){
                                     if(item.TPackagingInstructionLots[0].status != "UNCONFIRMED"){
-                                      return item.TPackagingInstructionLots[0].toLowerCase();
+                                      return item.TPackagingInstructionLots[0].status.toLowerCase();
                                     }
                                   }
                                 });
@@ -215,7 +230,7 @@ onAscending(e,head){
 
                                   if(item.TPackagingInstructionLots.length > 0){
                                     if(item.TPackagingInstructionLots[0].railcar_arrived_on !=null)
-                                      return item.TPackagingInstructionLots[0].toLowerCase();
+                                      return item.TPackagingInstructionLots[0]
                                 }
                                 });
                       break;
@@ -247,11 +262,12 @@ onAscending(e,head){
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
 
                                   var len,sum=0;
+
                                   if(item.TPackagingInstructionLots.length > 0 && item.TPackagingInstructionLots[0].TShipmentLots.length > 0){
-                                    len = item.TPackagingInstructionLots[0].TShipmentLots.length
-                                    for(var i =0;i<len;i++)
-                                    {
-                                      sum = sum + item.TPackagingInstructionLots[0].TShipmentLots[i].noOfBags
+                                    for(var i=0;i<tempThis.props.contanerLoad.length;i++){
+                                      if(tempThis.props.contanerLoad[i].lotId == item.TPackagingInstructionLots[0].id){
+                                        sum = sum+tempThis.props.contanerLoad[i].noOfBags
+                                      }
                                     }
                                   }
                                   else{
@@ -264,17 +280,17 @@ onAscending(e,head){
                                 sortedData = _.sortBy(this.state.viewData, 'Number',function(item) {
                                   var len,sum=0;
                                   if(item.TPackagingInstructionLots.length > 0 && item.TPackagingInstructionLots[0].TShipmentLots.length > 0){
-                                    len = item.TPackagingInstructionLots[0].TShipmentLots.length
-                                    for(var i =0;i<len;i++)
-                                    {
-                                      sum = sum + item.TPackagingInstructionLots[0].TShipmentLots[i].noOfBags
+                                    for(var i=0;i<tempThis.props.contanerLoad.length;i++){
+                                      if(tempThis.props.contanerLoad[i].lotId == item.TPackagingInstructionLots[0].id){
+                                        sum = parseInt(sum)+parseInt(tempThis.props.contanerLoad[i].noOfBags)
+                                      }
                                     }
                                   }
                                   else{
 
                                     return 0
                                   }
-                                  return item.TPackagingInstructionLots[0].inInventory - sum
+                                  return parseInt(item.TPackagingInstructionLots[0].inInventory) - parseInt(sum)
                                 });
                       break;
                       case 'Status':
@@ -358,6 +374,7 @@ else{
 this.setState({
      viewData  : sortedData
              })
+localStorage.setItem('piViewData', JSON.stringify(sortedData));
 }
 
 onToggel(e ,elm){
@@ -516,9 +533,9 @@ render(){
                    <td style ={{display : this.props.showArrvd}}>{data.railcar_arrived_on != null ? 'YES' : 'NO'}</td>
                    <td style ={{display : this.props.showRecd}}>{(data.TShipmentLots && data.TShipmentLots.length>0 && data.status!= "SHIPPED") ? "YES" : "NO"}</td>
                    <td style ={{display : this.props.showCutoff}}>{(data.TShipmentLots && data.TShipmentLots.length>0 && data.TShipmentLots[0].TShipmentent && data.TShipmentLots[0].TShipmentent.TShipmentInternational && data.TShipmentLots[0].TShipmentent.TShipmentInternational.length>0 )?moment(data.TShipmentLots[0].TShipmentent.TShipmentInternational[0].cargoCutoffDate).format("MM-DD-YYYY"):'NA'}</td>
-                   <td style ={{display : this.props.showWeight}}>{selectedWeight == 'lbs' ? data.weight:(data.weight / 2.20462).toFixed(2)}</td>
-                   <td style ={{display : this.props.showBag}}>{bagsallocated>0?bagsallocated : 'NA'}</td>
-                   <td style ={{display : this.props.showInInvt}}>{(data.inInventory && bagsallocated > 0) ?(data.inInventory - bagsallocated ):data.inInventory }</td>
+                   <td style ={{display : this.props.showWeight}}>{selectedWeight == 'lbs' ? data.weight:(data.weight / MUL_FACTOR).toFixed(2)}</td>
+                   <td style ={{display : this.props.showBag}}>{bagsallocated>0?bagsallocated : 0}</td>
+                   <td style ={{display : this.props.showInInvt}}>{(data.inInventory && bagsallocated > 0) ?(data.inInventory - bagsallocated ):parseInt(data.inInventory)>0?parseInt(data.inInventory):0 }</td>
 
                    <td style ={{display : this.props.showStatus}}>{data.status ? data.status : '' }</td>
                    <td style ={{display : this.props.showRailcarArr}}>{data.arrived != null && data.arrived == 1 ? "Yes" : "No"}</td>
@@ -542,15 +559,15 @@ render(){
        }}
   )
  return(
- <Loader loaded={this.state.loaded}>
-
-        <table id="Packaging_Instruction_View" className="table table-expandable" cellSpacing="0">
+ <Loader loaded={this.state.loaded} id="loaded">
+<div className="loadedContentNew">
+        <table id="Packaging_Instruction_View" className="table table-expandable sort" cellSpacing="0">
                     <thead id="table_head1" className="table_head header-fixed header red">
                   <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}} >
                      <th>
 
                       </th>
-                      <th   style = {{display : this.props.showARB }} onClick={(e)=> this.onAscending(e,'location')}>ARB
+                      <th   style = {{display : this.props.showARB }} onKeyDown={(e)=>this.press(e)} onClick={(e)=> this.onAscending(e,'location')}>ARB
                            <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x" ></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -690,7 +707,7 @@ render(){
 
                {}
 
-
+        </div>
         </Loader>)
   }
 }

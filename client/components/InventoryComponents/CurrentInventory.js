@@ -9,6 +9,7 @@ import axios from 'axios'
 import { TotalComponent } from './TotalComponent'
 import Validator from 'validator';
 import isEmpty from 'lodash/isEmpty';
+var Loader = require('react-loader');
 class CurrentInventory extends Component {
 	constructor(){
 	super();
@@ -20,7 +21,8 @@ class CurrentInventory extends Component {
 		showEdit : 'none',
 		addFlag : false,
 		errors: { },
-		weightLBS : 0
+		weightLBS : 0,
+		loaded : false
 		}
 	this.currentInventArray
 
@@ -57,7 +59,9 @@ class CurrentInventory extends Component {
 	this.tempTotalBags = 0
 	this.isBag = true;
 }
+componentDidMount(){
 
+}
 
 componentWillReceiveProps(nextProps) {
 
@@ -114,7 +118,8 @@ componentWillReceiveProps(nextProps) {
 
                 this.setState({
                 	currentInventory : data[0],
-                	rows : tempData
+                	rows : tempData,
+									loaded : true
                 })
                 if(this.orignalTble === undefined){
 
@@ -138,12 +143,11 @@ componentWillReceiveProps(nextProps) {
 		this.row = _.cloneDeep(this.state.rows[this.index])
 		this.selectedRow = _.cloneDeep(this.state.rows[this.index])
 		console.log(this.selectedRow)
-		//if(this.selectedRow.noOfBags != undefined && this.selectedRow.)
-
 		if (this.selectedRow.noOfBags != undefined && this.selectedRow.TInventoryLocation != undefined && this.selectedRow.weight != undefined) {
 		this.refs.noOfBags.value = this.selectedRow.noOfBags
 		this.refs.locationName.value = this.selectedRow.TInventoryLocation.locationName
 		this.refs.weight.value = this.selectedRow.weight
+		this.state.weightBox = this.refs.weight.value
 		this.setState({
 				hideEdit: 'none',
 				showEdit : 'block'
@@ -173,6 +177,7 @@ componentWillReceiveProps(nextProps) {
 		this.refs.noOfBags.value = this.selectedRow.noOfBags
 		this.refs.locationName.value = this.selectedRow.TInventoryLocation.locationName
 		this.refs.weight.value = this.selectedRow.weight
+		this.state.weightBox = this.refs.weight.value
 			this.setState({
 					hideEdit : 'none',
 					showEdit : 'block'
@@ -228,7 +233,7 @@ else{
 
 		}
 		else{
-			this.addRow = {active : 1 ,createdBy: 1,createdOn: "2016-10-02T00:00:00.000Z",id: 1,inventoryLocationId:this.props.lid,inventory_location_id:this.props.lID,lot_number:this.state.currentInventory.lot_number,modifiedBy:1,modifiedOn:"2016-10-02T00:00:00.000Z",noOfBags:400,piLotId:this.props.lID,weight:22}
+			this.addRow = {active : 1 ,createdBy: 1,createdOn: "2016-10-02T00:00:00.000Z",id: 1,inventoryLocationId:this.props.lid,inventory_location_id:this.props.lotId,lot_number:this.state.currentInventory.lot_number,modifiedBy:1,modifiedOn:"2016-10-02T00:00:00.000Z",noOfBags:400,piLotId:this.lotIdArray[0],weight:22}
 			let dummy = {active : 1 ,locationName : "Vegas" , location_id : this.props.lid}
 			this.addRow.TInventoryLocation = dummy
 			console.log(this.addRow)
@@ -239,8 +244,6 @@ else{
 			})
 
 		}
-
-
 
 		else{
 			swal("Error","Please select a lot first","error")
@@ -299,15 +302,16 @@ else{
 				this.setState({
        weightLBS: 0
  })
+ window.location.reload()
+ this.forceUpdate()
 			}
 
 	handleInputChange(e){
+		debugger
 		let avgweight = 0
-		for(var i=0;i<this.props.viewData.length;i++){
-			if(parseInt(this.lotIdArray[0])==parseInt(this.props.viewData[i].TPackagingInstructionLots[0].id)){
-				avgweight = this.props.viewData[i].TPackagingMaterial.avarageMaterialWeight
-			}
-		}
+		if(this.props.viewData.length>0){
+		avgweight = this.props.viewData[0].TPackagingMaterial.avarageMaterialWeight
+	}
 				if(this.index != undefined){
 				this.selectedRow[e.target.id] =  e.target.value
 				if(e.target.id == "noOfBags"){
@@ -567,7 +571,7 @@ var calcWeight = this.state.weightBox
 		this.index = undefined
 	}
 		calculateWeight(){
-			debugger
+
 			this.totalBags = 0
 			this.totalWeight = 0
 			this.totalRailcarWeight = 0
@@ -594,13 +598,19 @@ var calcWeight = this.state.weightBox
 
 		onSaveChange(e){
 			debugger
-
+			if(this.state.notes && this.state.notes.length > 100){
+				swal("Warning","Length of Notes can't be greater than 100","warning")
+				return
+			}
+			if(!this.state.notes){
+				this.state.notes = ''
+			}
 			var stamp = localStorage.getItem('stamp')
 	    this.CID = this.props.lID == "null" ? this.props.lotId : this.props.lID
 			var packStatus = localStorage.getItem('packagingFlag') ? localStorage.getItem('packagingFlag')  :'false' ;
 			if(this.addPostArray.length == 0 && this.editPostArray.length == 0 && this.splitAddPostArray.length == 0 && this.splitPostArray.length == 0 && this.addPostArray.length == 0 && this.deletePostArray.length == 0){
 				var tempThis = this
-				if(packStatus == 'true'){
+				if(packStatus == 'true' && this.refs.noOfBags.value=="" && this.refs.locationName.value==""){
 						axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"In Inventory"})
 						swal({
 							title:"Edited",
@@ -618,9 +628,11 @@ var calcWeight = this.state.weightBox
 							}
 					)
 					}
-
+					else{
 						swal("","Please press add before save","info")
 						return
+					}
+
 					}
 
 			if(this.edit){
@@ -809,7 +821,7 @@ var calcWeight = this.state.weightBox
 				let deleteArr = this.deletePostArray
 				let deleteurl = Base_Url+"TInventoryLocations/deleteLocation"
 				deleteArr.forEach(function(data){
-					debugger
+
 				var tempObj = JSON.parse(JSON.stringify(obj))
 				tempObj.weight = data.weight
 				tempObj.piLotId = data.piLotId
@@ -817,25 +829,25 @@ var calcWeight = this.state.weightBox
 				tempObj.inventoryLocationId = data.Tpinventory
 				//tempObj.inventoryLocationId	= data.inventoryLocationId
 				// axios.post(Base_Url+"TPiInventoryHistories",{data:tempObj}).then((response)=>{
-				// 	debugger
+				//
 				// })
 				$.ajax({
 					type:'POST',
 					url:Base_Url+"TPiInventoryHistories",
 					data:tempObj,
 					success:function(){
-						debugger
+
 					},
 					Error:function(err){
 						swal("Error","Error Occured. Please Try Again","error")
 					}
 				})
 				axios.delete(Base_Url+"TPiInventories/"+data.Tinventory).then((response)=>{
-					debugger
+
 
 				})
 				// axios.delete(Base_Url+"TInventoryLocations/"+data.Tpinventory).then((response)=>{
-				// 	debugger
+				//
 				//
 				// })
 							})
@@ -889,6 +901,7 @@ var tempThis = this
 			this.splitPostArray = [ ]
 			this.orignalTble = _.cloneDeep(this.state.rows)
 			this.index = undefined
+			this.state.notes = ""
 
 		}
 		noteChange(e)
@@ -984,7 +997,7 @@ var tempThis = this
 			if(this.state.showEdit != 'none'){
 		var tempWeight=0,tempTotalBags=0
 		var inventory = _.map(this.state.rows,(invent,index) => {
-			debugger
+
 			if(invent.TInventoryLocation && (invent.active==1 || invent.added))
 			{
 				tempWeight = tempWeight + parseInt(invent.weight)
@@ -1032,6 +1045,7 @@ var tempThis = this
 }
 
 	return (
+		<Loader loaded={this.state.loaded} >
 			 <div className=" col-lg-6 col-md-6 col-sm-6 col-xs-12">
 	 <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 active">
 	 	 <div className=" col-lg-7 col-md-7 col-sm-7 col-xs-12">
@@ -1107,6 +1121,7 @@ var tempThis = this
 			</div>
 		</div>
 	</div>
+	</Loader>
 		);
 	}
 }

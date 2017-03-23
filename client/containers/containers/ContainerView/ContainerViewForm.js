@@ -45,18 +45,21 @@ class  ContainerViewForm extends React.Component {
             this.SteamLine = this.SteamLine.bind(this)
             this.Arrival = this.Arrival.bind(this)
             this.lotSearch = this.lotSearch.bind(this)
-        this.onTextChange = this.onTextChange.bind(this)
+            this.onTextChange = this.onTextChange.bind(this)
             this.onSearch = this.onSearch.bind(this)
             this.onCompanyFilter = this.onCompanyFilter.bind(this)
             this.onCustomerFilter =  this.onCustomerFilter.bind(this)
             this.onStatusFilter = this.onStatusFilter.bind(this)
             this.onRemove = this.onRemove.bind(this)
-        this.saveView = this.saveView.bind(this)
-    this.onEdit = this.onEdit.bind(this)
+            this.saveView = this.saveView.bind(this)
+            this.onEdit = this.onEdit.bind(this)
             this.onCheckboxChange = this.onCheckboxChange.bind(this)
         this.handleTextChange = this.handleTextChange.bind(this)
         this.viewChange = this.viewChange.bind(this)
         this.addToqueue = this.addToqueue.bind(this)
+        this.PrintScreen = this.PrintScreen.bind(this)
+        this.onSteamShipFilter = this.onSteamShipFilter.bind(this)
+        this.SteamLineArray = []
         }
 
 
@@ -81,10 +84,13 @@ class  ContainerViewForm extends React.Component {
             hashHistory.push('/Container/containerPrint/'+this.contId)
             //hashHistory.push('/Packaging/inventorycard/'+this.piID+'/'+this.selected)
         }
+        else if(this.containerId!='' && this.isDomestic==true)
+        {
+            hashHistory.push('/Container/BOLDomestic/'+this.contId)
+        }
         else if(this.containerId=='' && this.isDomestic==false)
         {
-            /*console.log('mmmmmmmmmmmmmmmmmmmmm');
-            hashHistory.push('/Container/containerPrint/')*/
+
             swal("Selection Missing", "Please Select A Container To Print.","error")
         }
         else{
@@ -118,7 +124,45 @@ class  ContainerViewForm extends React.Component {
             value:this.arrivalType})
     }
 
-
+    PrintScreen(){
+      var scrollLeft = document.getElementsByClassName("loadedContent")[0].scrollLeft
+      document.getElementsByClassName('pos-relative-b')[0].style.display = 'none'
+      document.getElementsByClassName('filter-btn')[0].style.display = 'none'
+      document.getElementById("nonPrintable").style.display = "none"
+      document.getElementById("row").style.display = "none"
+      document.getElementById("hide1").style.display = "none"
+      // document.getElementById("hide2").style.display = "none"
+      // document.getElementById("hide3").style.display = "none"
+      document.getElementById("hide4").style.display = "none"
+      document.getElementById("hide5").style.display = "none"
+      document.getElementById("customer_name").style.display = "none"
+      document.getElementsByClassName("loadedContent")[0].style.cssText=""
+      document.getElementsByClassName("loadedContent")[0].style.height="100%"
+      document.getElementsByClassName("loadedContent")[0].style.overflowX='auto'
+      document.getElementsByClassName("loadedContent")[0].scrollLeft = scrollLeft
+      var printContent = document.getElementById('Packaging_Instruction_View').innerHtml
+      document.body.innerHtml = printContent
+      window.print()
+      window.location.reload()
+    }
+    onSteamShipFilter(e,steamShip){
+      debugger
+      if(e.target.checked){
+      this.SteamLineArray.push(parseInt(e.target.id));
+      Object.defineProperty(this.Where,"SteamLine",{enumerable: true ,
+                                                writable: true,
+                                                configurable:true,
+                                                value:this.SteamLineArray})
+      this.buttonDisplay.push(e.target.value)
+    }
+    else{
+          if(this.SteamLineArray.indexOf(parseInt(e.target.id))!=-1){
+            this.SteamLineArray.splice(this.SteamLineArray.indexOf(parseInt(e.target.id)),1)
+          }
+            this.buttonDisplay = _.without(this.buttonDisplay,e.target.value)
+    }
+      this.forceUpdate()
+    }
     onContainerFilter(e,location){
         if(e.target.checked){
              this.checkedContainer.push(e.target.id)
@@ -259,7 +303,7 @@ class  ContainerViewForm extends React.Component {
             this.checkedStatus = []
             this.checkedCompany = []
             this.Query = []
-
+            this.SteamLineArray = []
             delete this.Where.Company
             delete this.Where.Customer
             delete this.Where.status
@@ -273,6 +317,7 @@ class  ContainerViewForm extends React.Component {
                 index : this.state.index +1
             })
             document.getElementById('customer_name').selectedIndex = 0
+         localStorage.removeItem('conViewData')
          this.forceUpdate();
 
     }
@@ -289,7 +334,7 @@ debugger;
         this.shipmentid = (data.TShipmentInternational && data.TShipmentInternational.length > 0) ?data.TShipmentInternational[0].id : ''
          if(data.isDomestic==1){
             this.isDomestic=true;
-            //swal('' , 'Domestic container is not allowed for ')
+            this.containerId = data.TContainerDomestic[0].id;
         }
         else{
             this.isDomestic=false;
@@ -378,15 +423,17 @@ debugger;
             serachObj.push(objShip)
         }
 
-   //containerTypeId
+   var searchContainerFlag = false
    if(this.Where.Container && this.Where.Container.length > 0){
      var container = []
      var obj2 = {}
      for (var i in this.Where.Container) {
+
          obj2 = {"containerTypeId": this.Where.Container[i]}
          container.push(obj2);
      }
      containerSearch.push(container)
+     searchContainerFlag = true
    }
 
       console.log("Search object" , serachObj)
@@ -438,12 +485,17 @@ debugger;
                 arrival.push(arrivalData)
                 intl.push(arrivalData)
             }
-            var tempsteamp = -1
-            if(this.Where.SteamLine =="1" || this.Where.SteamLine =="0"){
-                var steam = []
+            var tempsteamp = this.SteamLineArray.length>0?1:-1
+            var steam = []
+            var steamflag = false
+            if(this.SteamLineArray.length>0){
+                steam = []
+                steamflag = true
+                for(var steamTemp in this.SteamLineArray){
+                  steam.push(this.SteamLineArray[steamTemp])
+                }
                 var steamdata = {"containerSteamshipLineConfirmed" : this.Where.SteamLine }
                 intl.push(steamdata)
-                tempsteamp = parseInt(this.Where.SteamLine)
             }
 
             serachObj = [].concat.apply([], serachObj);
@@ -514,25 +566,29 @@ debugger;
                 });
             }
 
-           else if(tempsteamp!=-1 && serachObj.length == 0  &&  arrival.length==0 && serachObjLots.length ==0) {
+           else if(tempsteamp!=-1 && serachObj.length >= 0  &&  arrival.length>=0 && serachObjLots.length ==0) {
                 debugger;
                 this.url = PIview._buildUrl(base, {
                     "include": [ {
                         "relation": "TContainerInternational",
                         "scope": {"include":"TCompany","where":{"containerSteamshipLineConfirmed":tempsteamp}}
                     }, "TCompany", "TLocation", "TShipmentDomestic",   {"relation":"TShipmentInternational" ,
-                                  "scope":{"include":["TContainerType" , "TSteamshipLine"]}}]
+                                  "scope":{"include":["TContainerType" , "TSteamshipLine"]}}],
+                    where: {"and":[
+                      {"or":customer},
+                      {"or":company},
+                      {"or":lotSearch}
+
+                    ]
+                    }
 
                 });
             }
 
-            else if(tempsteamp!=-1 &&  arrival.length > 0 && serachObj.length == 0  && serachObjLots.length ==0) {
+            else if(tempsteamp!=-1 &&  arrival.length >= 0 && serachObj.length == 0  && serachObjLots.length ==0) {
                 debugger;
                 this.url = PIview._buildUrl(base, {
-                    "include": [{
-                        "relation": "TContainerDomestic",
-                        "scope": {"include":"TCompany","where": {"containerArrived": arrivalData.containerArrived}}
-                    }, {
+                    "include": [ {
                         "relation": "TContainerInternational",
                         "scope": {"include":"TCompany","where": {"and":[{"containerArrived": arrivalData.containerArrived},
                                                                         {"containerSteamshipLineConfirmed":tempsteamp}
@@ -596,7 +652,56 @@ debugger;
                 url: this.url,
                 success:function(data){
                     debugger;
+                    if(searchContainerFlag){
+                      var temp = []
+                      for(var i in containerSearch){
+                        temp.push(parseInt(containerSearch[i].containerTypeId))
+                      }
+                      var i =0
+                      while(i<data.length){
+                        if(i<data.length && data[i].TShipmentInternational.length>0){
+                          if(temp.indexOf(parseInt(data[i].TShipmentInternational[0].TContainerType.id))==-1){
+                            data.splice(i,1)
+                            i=0
+                          }
+                          else{
+                            i++
+                          }
+                        }
+                        else if(i<data.length){
+                          data.splice(i,1)
+                          i=0
+                        }
+                        else{
+                          i++
+                        }
+                      }
+                    }
+                    i=0
+                    if(steamflag){
+                      while(i<data.length){
+                        if(i<data.length && data[i].TShipmentInternational.length>0){
+                          if(steam.indexOf(parseInt(data[i].TShipmentInternational[0].steamshipLineId))==-1){
+                            data.splice(i,1)
+                            i=0
+                          }
+                          else{
+                            i++
+                          }
+                        }
+                        else if(i<data.length){
+                          data.splice(i,1)
+                          i=0
+                        }
+                        else{
+                          i++
+                        }
+                      }
+                    }
+                    searchContainerFlag = false
+                    steamflag = false
                     console.log('ajax ',data);
+                    localStorage.setItem('conViewData',JSON.stringify(data))
                     this.setState({
                         viewData : data,
                         loaded:true
@@ -621,220 +726,329 @@ debugger;
        // var changedView = this.state.savedViews[index -1]
         this.Where = JSON.parse(blob)
 
-        //Object.defineProperty(this.Where,"Query",{enumerable:true ,
-        //    writable: true,
-        //    configurable: true,
-        //    value:this.Query})
+        debugger
+        Object.defineProperty(this.Where,"Query",{enumerable:true ,
+              writable: true,
+              configurable: true,
+              value:this.Query})
 
 
-        var serachObj = []
-        var serachObjLots =[]
-        var shipType = []
-        var isDomestic
-        var intl = []
-        var arrival = []
-        if(this.shipMentType){
-            Object.defineProperty(this.Where,"shipMentType",{enumerable:true ,
-                writable: true,
-                configurable: true,
-                value:this.shipMentType})
-
-
-
-        }
-
-
-        if(this.Where.shipMentType && this.Where.shipMentType == "Domestic") {
-
-
-            isDomestic = true
-            var objShip = {"isDomestic" : 1}
-            serachObj.push(objShip)
-        }
-        else if(this.Where.shipMentType && this.Where.shipMentType== "International"){  isDomestic = false
-            var objShip = {"isDomestic" : 0}
-            serachObj.push(objShip)
-        }
-        if (this.Where != undefined && this.Where!= null) {
-            if (this.Where.Customer && this.Where.Customer.length > 0) {
-                var customer = []
-                var obj = {}
-                for (var i in this.Where.Customer) {
-                    obj = {"customerId": this.Where.Customer[i]}
-                    customer.push(obj);
-                }
-                serachObj.push(customer)
-            }
-
-            if (this.Where.Company && this.Where.Company.length > 0) {
-                var company = [];
-                var objCompany = {}
-                for (var j in this.Where.Company) {
-                    objCompany = {"locationId": this.Where.Company[j]}
-                    company.push(objCompany);
-                }
-                serachObj.push(company)
-            }
-
-            if (this.Where.status && this.Where.status.length) {
-                var Railstatus = [];
-                var objStatus = {};
-                for (var z in this.Where.status) {
-                    objStatus = {"status": this.Where.status[z]}
-                    Railstatus.push(objStatus)
-                }
-                serachObjLots.push(Railstatus)
-            }
-
-            if (this.Where.Query && this.Where.Query != null && this.Where.Query != undefined && this.Where.Query.POSearch && this.Where.Query.POSearch != undefined) {
-                var poSearch = [{'po_number': {"like": "%" + this.Where.Query.POSearch + "%"}}]
-                serachObj.push(poSearch)
-            }
-
-            if (this.Where.Query && this.Where.Query != null && this.Where.Query != undefined && this.Where.Query.LotSearch && this.Where.Query.LotSearch != undefined) {
-                var lotSearch = [{'releaseNumber': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
-                serachObj.push(lotSearch)
-            }
-            if(this.Where.Arrival =="1" || this.Where.Arrival =="0"){
-
-                var arrivalData = {"containerArrived" : parseInt(this.Where.Arrival)}
-                arrival.push(arrivalData)
-                intl.push(arrivalData)
-            }
-            if(this.Where.SteamLine =="1" || this.Where.SteamLine =="0"){
-                var steam = []
-                var steamdata = {"containerSteamshipLineConfirmed" : this.Where.SteamLine }
-                intl.push(steamdata)
-            }
-
-            serachObj = [].concat.apply([], serachObj);
-            serachObjLots = [].concat.apply([], serachObjLots);
-
-            var PIview = createDataLoader(ContainerViewForm,{
-                queries:[{
-                    endpoint: 'TPackagingInstructions',
-                    filter: {
-                        include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
-                    }
-                }]
-            })
-            console.log("I have recieved props")
-            //debugger
-            var base = 'TShipmentents';
-            //TPackagingInstructionLots TContainerInternational
-            if(serachObjLots && serachObjLots.length>0){
-                this.url = PIview._buildUrl(base, {
-                    "include": [{
-                        "relation": "TContainerDomestic",
-                        "scope": {"where": {"or": serachObjLots}}
-                    }, {
-                        "relation": "TContainerInternational",
-                        "scope": {"where": {"or": serachObjLots}}
-                    }, "TCompany", "TLocation", "TShipmentDomestic", "TShipmentInternational"],
-                    where: {"and":[
-                      {"or":customer},
-                      {"or":company}
-                    ]
-                    }
-
-                });
-            }
-            if(intl.length >0 && serachObj.length > 0  && arrival.length>0 && serachObjLots.length == 0 ) {
-                this.url = PIview._buildUrl(base, {
-                    "include": [{
-                        "relation": "TShipmentDomestic",
-                        "scope": {"where": {"or": arrival}}
-                    }, {
-                        "relation": "TContainerInternational",
-                        "scope": {"where": {"or": intl}}
-                    }, "TCompany", "TLocation", "TShipmentDomestic", "TShipmentInternational"],
-                    where: {"and":[
-                      {"or":customer},
-                      {"or":company}
-                    ]
-                    }
-
-                });
-            }
-
-            else if(intl.length >0 && serachObj.length == 0  &&  arrival.length==0 && serachObjLots.length == 0 ) {
-                debugger;
-                this.url = PIview._buildUrl(base, {
-                    "include": ["TShipmentDomestic",
-                        {
-                            "relation": "TContainerInternational",
-                            "scope": {"where": {"or": intl}}
-                        }, "TCompany", "TLocation", "TShipmentDomestic", "TShipmentInternational"],
-                    // where: {"and": serachObj}
-
-                });
-            }
-
-            else if(intl.length >0 &&  arrival.length > 0 && serachObj.length == 0 && serachObjLots.length == 0 ) {
-                debugger;
-                this.url = PIview._buildUrl(base, {
-                    "include": [{
-                        "relation": "TContainerDomestic",
-                        "scope": {"where": {"or": arrival}}
-                    }, {
-                        "relation": "TContainerInternational",
-                        "scope": {"where": {"or": intl}}
-                    }, "TCompany", "TLocation", "TShipmentDomestic", "TShipmentInternational"]
-                    //where: {"and": serachObj}
-
-                });
-            }
-
-            else if( arrival.length>0 && intl.length ==0 && serachObj.length == 0 && serachObjLots.length == 0 ) {
-                this.url = PIview._buildUrl(base, {
-                    "include": [{
-                        "relation": "TContainerDomestic",
-                        "scope": {"where": {"containerArrived":1}}
-                    },  "TContainerInternational",
-                        "TCompany", "TLocation", "TShipmentDomestic", "TShipmentInternational"]
-                    //where: {"and": serachObj}
-
-                });
-            }
-            else if(intl.length ==0 && serachObj.length > 0  && arrival.length==0 && serachObjLots.length ==0)
-            {
-                this.url = PIview._buildUrl(base, {
-                    "include" : ["TContainerDomestic","TContainerInternational","TCompany" ,"TLocation","TShipmentDomestic","TShipmentInternational"],
-                    where: {"and":[
-                      {"or":customer},
-                      {"or":company}
-                    ]
-                    }
-
-
-                });
-            }
-            console.log(this.url,"<<<<<<<<<<<<<<<<<<<<URL")
-
-            $.ajax({
-                url: this.url,
-                success:function(data){
-                    debugger;
-                    console.log('ajax ',data);
-                    this.setState({
-                        viewData : data,
-                        loaded:true
-                    })
-                }.bind(this)
-
-            })
-
-
-
-
-
-        }
-
+          var serachObj = []
+          var serachObjLots =[]
+          var shipType = []
+          var containerSearch = []
+          var isDomestic
+          var intl = []
+          var arrival = []
+          var arrivedtemp,steamtemp
+          if(this.shipMentType){
+              Object.defineProperty(this.Where,"shipMentType",{enumerable:true ,
+                  writable: true,
+                  configurable: true,
+                  value:this.shipMentType})
     }
 
+       if(this.Where.shipMentType && this.Where.shipMentType == "Domestic") {
+              isDomestic = true
+              var objShip = {"isDomestic" : 1}
+              serachObj.push(objShip)
+          }
+          else if(this.Where.shipMentType && this.Where.shipMentType== "International"){  isDomestic = false
+              var objShip = {"isDomestic" : 0}
+              serachObj.push(objShip)
+          }
+
+     var searchContainerFlag = false
+     if(this.Where.Container && this.Where.Container.length > 0){
+       var container = []
+       var obj2 = {}
+       for (var i in this.Where.Container) {
+
+           obj2 = {"containerTypeId": this.Where.Container[i]}
+           container.push(obj2);
+       }
+       containerSearch.push(container)
+       searchContainerFlag = true
+     }
+
+        console.log("Search object" , serachObj)
+
+          if (this.Where != undefined && this.Where!= null) {
+              if (this.Where.Customer && this.Where.Customer.length > 0) {
+                  var customer = []
+                  var obj = {}
+                  for (var i in this.Where.Customer) {
+                      obj = {"customerId": this.Where.Customer[i]}
+                      customer.push(obj);
+                  }
+                  serachObj.push(customer)
+              }
+
+              if (this.Where.Company && this.Where.Company.length > 0) {
+                  var company = [];
+                  var objCompany = {}
+                  for (var j in this.Where.Company) {
+                      objCompany = {"locationId": this.Where.Company[j]}
+                      company.push(objCompany);
+                  }
+                  serachObj.push(company)
+              }
+
+              if (this.Where.status && this.Where.status.length) {
+                  var Railstatus = [];
+                  var objStatus = {};
+                  for (var z in this.Where.status) {
+                      objStatus = {"status": this.Where.status[z]}
+                      Railstatus.push(objStatus)
+                  }
+                  serachObjLots.push(Railstatus)
+              }
+
+              if (this.Where.Query && this.Where.Query != null && this.Where.Query != undefined && this.Where.Query.POSearch && this.Where.Query.POSearch != undefined) {
+                  var poSearch = [{'po_number': {"like": "%" + this.Where.Query.POSearch + "%"}}]
+                  serachObj.push(poSearch)
+              }
+
+               if (this.Where.Query && this.Where.Query != null && this.Where.Query != undefined && this.Where.Query.LotSearch && this.Where.Query.LotSearch != undefined) {
+                  var lotSearch = [{'releaseNumber': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
+                  serachObj.push(lotSearch)
+              }
+              var arrivalData = {"containerArrived":-1}
+              if(this.Where.Arrival =="1" || this.Where.Arrival =="0"){
+
+                  arrivalData = {"containerArrived" : parseInt(this.Where.Arrival)}
+                  arrival.push(arrivalData)
+                  intl.push(arrivalData)
+              }
+              var tempsteamp = this.SteamLineArray.length>0?1:-1
+              var steam = []
+              var steamflag = false
+              if(this.Where.SteamLine && this.Where.SteamLine.length>0){
+                  steam = []
+                  steamflag = true
+                  for(var steamTemp in this.Where.SteamLine){
+                    steam.push(this.Where.SteamLine[steamTemp])
+                  }
+                  var steamdata = {"containerSteamshipLineConfirmed" : this.Where.SteamLine }
+                  intl.push(steamdata)
+              }
+
+              serachObj = [].concat.apply([], serachObj);
+              serachObjLots = [].concat.apply([], serachObjLots);
+              containerSearch = [].concat.apply([], containerSearch);
+                   console.log("search obj second" , serachObj , serachObjLots)
+              var PIview = createDataLoader(ContainerViewForm,{
+                  queries:[{
+                      endpoint: 'TPackagingInstructions',
+                      filter: {
+                          include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
+                      }
+                  }]
+              })
+
+              var base = 'TShipmentents';
+              //TPackagingInstructionLots TContainerInternational
+   if((containerSearch && containerSearch.length > 0)){
+
+     this.url = PIview._buildUrl(base, {
+         "include": ["TContainerInternational", "TCompany", "TLocation", "TShipmentDomestic",
+          {"relation":"TShipmentInternational" ,"include":["TContainerType" , "TSteamshipLine"], "scope":{"include" : "TContainerType" , "where":{"or":containerSearch}}}]
+         //where: {"and": serachObj}
+
+     });
+   }
+
+    if(serachObjLots && serachObjLots.length>0){
+                  this.url = PIview._buildUrl(base, {
+                      "include": [{
+                          "relation": "TContainerDomestic",
+                          "scope": {"where": {"or": serachObjLots}}
+                      }, {
+                          "relation": "TContainerInternational",
+                          "scope": {"include" : "TCompany","where": {"or": serachObjLots}}
+                      }, "TCompany", "TLocation", "TShipmentDomestic",
+                      {"relation":"TShipmentInternational" ,
+                                  "scope":{"include":["TContainerType" , "TSteamshipLine"]}}],
+                      where: {"and":[
+                        {"or":customer},
+                        {"or":company},
+                        {"or":lotSearch}
+                      ]
+                      }
+
+                  });
+              }
+              if(tempsteamp!=-1 && serachObj.length > 0  && arrival.length>0 && serachObjLots.length ==0) {
+                  this.url = PIview._buildUrl(base, {
+                      "include": [{
+                          "relation": "TShipmentDomestic",
+                          "scope": {"where": {"containerArrived": arrivalData.containerArrived}}
+                      }, {
+                          "relation": "TContainerInternational",
+                          "scope": {"include":"TCompany","where": {"and":[{"containerArrived": arrivalData.containerArrived},
+                                                                          {"containerSteamshipLineConfirmed":tempsteamp}
+                                                                              ]}}
+                      }, "TCompany", "TLocation", "TShipmentDomestic",   {"relation":"TShipmentInternational" ,
+                                    "scope":{"include":["TContainerType" , "TSteamshipLine"]}}],
+                      where: {"and":[
+                        {"or":customer},
+                        {"or":company},
+                        {"or":lotSearch}
+
+                      ]
+                      }
+
+                  });
+              }
+
+             else if(tempsteamp!=-1 && serachObj.length >= 0  &&  arrival.length>=0 && serachObjLots.length ==0) {
+                  debugger;
+                  this.url = PIview._buildUrl(base, {
+                      "include": [ {
+                          "relation": "TContainerInternational",
+                          "scope": {"include":"TCompany","where":{"containerSteamshipLineConfirmed":tempsteamp}}
+                      }, "TCompany", "TLocation", "TShipmentDomestic",   {"relation":"TShipmentInternational" ,
+                                    "scope":{"include":["TContainerType" , "TSteamshipLine"]}}],
+                      where: {"and":[
+                        {"or":customer},
+                        {"or":company},
+                        {"or":lotSearch}
+
+                      ]
+                      }
+
+                  });
+              }
+
+              else if(tempsteamp!=-1 &&  arrival.length >= 0 && serachObj.length == 0  && serachObjLots.length ==0) {
+                  debugger;
+                  this.url = PIview._buildUrl(base, {
+                      "include": [ {
+                          "relation": "TContainerInternational",
+                          "scope": {"include":"TCompany","where": {"and":[{"containerArrived": arrivalData.containerArrived},
+                                                                          {"containerSteamshipLineConfirmed":tempsteamp}
+                                                                              ]}}
+                      }, "TCompany", "TLocation", "TShipmentDomestic",   {"relation":"TShipmentInternational" ,
+                                    "scope":{"include":["TContainerType" , "TSteamshipLine"]}}]
+                      //where: {"and": serachObj}
+
+                  });
+              }
+
+              else if( arrival.length>0 && tempsteamp==-1 && serachObj.length == 0 && serachObjLots.length ==0) {
+                  this.url = PIview._buildUrl(base, {
+                      "include": [{
+                          "relation": "TContainerDomestic",
+                          "scope": {"where": {"containerArrived":arrivalData.containerArrived}}
+                      },  {"relation":"TContainerInternational","scope": {"include" : "TCompany","where": {"containerArrived":arrivalData.containerArrived}}},
+                       "TCompany", "TLocation", "TShipmentDomestic",   {"relation":"TShipmentInternational" ,
+                                     "scope":{"include":["TContainerType" , "TSteamshipLine"]}}]
+                      //where: {"and": serachObj}
+
+                  });
+              }
+              else if(tempsteamp==-1 && serachObj.length > 0  && arrival.length==0 && serachObjLots.length ==0)
+              {
+                  this.url = PIview._buildUrl(base, {
+                      "include" : [{"relation":"TContainerDomestic","scope":{"include" : "TCompany"}},{"relation":"TContainerInternational","scope":{"include" : "TCompany"}},"TCompany" ,"TLocation","TShipmentDomestic",
+                      {"relation":"TShipmentInternational" ,
+                                  "scope":{"include":["TContainerType" , "TSteamshipLine"]}}],
+                      where: {"and":[
+                        {"or":customer},
+                        {"or":company},
+                        {"or":lotSearch}
+                      ]
+                      }
+
+
+                  });
+              }
+              else if(tempsteamp==-1 && serachObj.length > 0  && arrival.length>=0 && serachObjLots.length ==0)
+              {
+                this.url = PIview._buildUrl(base, {
+                    "include": [{
+                        "relation": "TContainerDomestic",
+                        "scope": {"where": {"containerArrived":arrivalData.containerArrived}}
+                    },  {"relation":"TContainerInternational","scope": {"include":"TCompany","where": {"containerArrived":arrivalData.containerArrived}}},
+                     "TCompany", "TLocation", "TShipmentDomestic",
+                     {"relation":"TShipmentInternational" ,
+                                 "scope":{"include":["TContainerType" , "TSteamshipLine"]}}],
+                     where: {"and":[
+                       {"or":customer},
+                       {"or":company},
+                       {"or":lotSearch}
+                     ]
+                     }
+                    //where: {"and": serachObj}
+
+                });
+              }
+              $.ajax({
+                  url: this.url,
+                  success:function(data){
+                      debugger;
+                      if(searchContainerFlag){
+                        var temp = []
+                        for(var i in containerSearch){
+                          temp.push(parseInt(containerSearch[i].containerTypeId))
+                        }
+                        var i =0
+                        while(i<data.length){
+                          if(data[i].TShipmentInternational.length>0){
+                            if(temp.indexOf(parseInt(data[i].TShipmentInternational[0].TContainerType.id))==-1){
+                              data.splice(i,1)
+                              i=0
+                            }
+                            else{
+                              i++
+                            }
+                          }
+                          else{
+                            i++
+                          }
+                        }
+                      }
+                      i=0
+                      if(steamflag){
+                        while(i<data.length){
+                          if(data[i].TShipmentInternational.length>0){
+                            if(i<data.length && steam.indexOf(parseInt(data[i].TShipmentInternational[0].steamshipLineId))==-1){
+                              data.splice(i,1)
+                              i=0
+                            }
+                            else{
+                              i++
+                            }
+                          }
+                          else if(i<data.length){
+                            data.splice(i,1)
+                            i=0
+                          }
+                          else{
+                            i++
+                          }
+                        }
+                      }
+                      searchContainerFlag = false
+                      steamflag = false
+                      console.log('ajax ',data);
+                      this.setState({
+                          viewData : data,
+                          loaded:true
+                      })
+                      this.forceUpdate()
+
+                  }.bind(this)
+
+              })
 
 
 
+
+
+          }
+
+    }
 
     saveView(e){
 
@@ -1040,20 +1254,20 @@ onViewClick(e){
         return(
             <section className="side-filter">
                 <div className="menu-bg hidden-md hidden-lg hidden-sm  visible-xs-block">
-                    <div className="">
+                    <div className="" id="hide1">
                         <h4 className="pull-left">REFINE YOUR RESULT </h4>
                         <button type="button" className="btn collapsed pull-right " data-toggle="collapse" data-target="#filter-menu" aria-expanded="false"><i className="fa fa-caret-down fa-2x" aria-hidden="true"></i></button>
                     </div>
                 </div>
                 <div className="container">
                     <div className="row-fluid">
-    <FilterComponent key={this.state.key}  onContainerFilter={this.onContainerFilter}   Arrival={this.Arrival} SteamLine={this.SteamLine} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter}  lotSearch={this.lotSearch} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter}/>
+    <FilterComponent key={this.state.key} onSteamShipFilter={this.onSteamShipFilter}  onContainerFilter={this.onContainerFilter}   Arrival={this.Arrival} SteamLine={this.SteamLine} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter}  lotSearch={this.lotSearch} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter}/>
 <div id="filter-grid">
 <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
 <div className="row">
    <FilterButton buttonDisplay = {this.buttonDisplay}  onButtonRemove = {this.onButtonRemove} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
     <div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs">
-        <div className="pull-right ">
+        <div className="pull-right " id="hide5">
             <select className="form-control"   id="customer_name" name="customer_name" onChange={this.viewChange}>
                 <option value="Please Select An Option" disabled selected>Select custom view</option>
                 {
@@ -1072,7 +1286,7 @@ onViewClick(e){
         </div>
 
     </div>
-    <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+    <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 " id="hide4">
                  <a href="javascript:void(0)" name = "ARB" onClick = {(e) => {this.onHideColumn(e,name)}}>ARB</a> --
                  <a href="javascript:void(0)" name = "Customer" onClick = {(e) => {this.onHideColumn(e)}}>Customer</a> ---
                  <a href="javascript:void(0)" name = "Release" onClick={(e) => {this.onHideColumn(e)}}>Release</a> --
@@ -1096,10 +1310,12 @@ onViewClick(e){
                         showType = {this.state.showType}
                         onCheckboxChange = {this.onCheckboxChange} key={this.state.index} onCheckboxChange = {this.onCheckboxChange} filterData = {filterData}/>
         </div>
+        <div id="nonPrintable">
         <div className="row-fluid pddn-50-btm padding-top-btm-xs">
             <div className="pull-left margin-10-last-l"><button type="button" onClick={(e) => this.print(e)} className="btn  btn-primary">Print BOL</button></div>
             <div className="pull-left margin-10-all"><button type="button"  onClick={(e) => this.printLoadOrder(e)} className="btn  btn-primary">Print Load Order</button></div>
             <div className="pull-left margin-10-all"><button type="button"  className="btn  btn-gray" onClick={this.addToqueue}>Add to Queue</button></div>
+            <div className="pull-left margin-10-all"><button type="button" onClick={this.PrintScreen}  className="btn  btn-gray">Print</button></div>
             <div className="pull-right margin-10-last-r"><button type="button"  className="btn  btn-success" onClick = {this.onViewClick.bind(this)}>View</button></div>
             <div className="pull-right margin-10-all"><button type="button" id="edit_btn"  className="btn  btn-orange" onClick = {this.onEdit}>EDIT</button></div>
         </div>
@@ -1113,6 +1329,7 @@ onViewClick(e){
             <div className="col-lg-4 col-sm-4 col-md-4 col-xs-12 padding-top-btm-xs">
                 <button type="button"   className="btn  btn-success margin-left-xs" onClick={this.saveView}>SAVE CUSTOMER VIEW</button>
             </div>
+        </div>
         </div>
     </div>
 </div>

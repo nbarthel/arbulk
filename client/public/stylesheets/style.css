@@ -24,6 +24,9 @@ a:hover{text-decoration: none;color: #0b6acf;}
 p {margin: 0 0 15px 0;   display: block;}
 hr {height: 1px; background: #ccc;border: none;margin: 15px 0 15px 0;}
 .loadedContent {
+
+}
+.loadedContentNew{
 	height : 450px
 }
 .dataTables_info{

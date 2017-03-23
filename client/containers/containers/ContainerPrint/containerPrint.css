@@ -9,7 +9,7 @@ p{text-align:left;}
 .font-8{font-size:8px;}
 .font-10{font-size:10px;}
 .font-12{font-size:12px;}
-
+.font-11{font-size:11px;}
 body {margin:0 auto; width:100%; height:100%; background:#fff; color:#000;  padding:30px 0px; font-size: 100%;  }
 .bill-of-completed{ max-width:8.27in;  max-height:11.69in;  background:#fff; color:#000;  margin-bottom:50px; font-size: 12px;  font-weight:300;  margin: 0 auto; padding: 0; font-family:Arial, Helvetica, sans-serif; overflow:hidden; }
 .bill-of-completed .content-inside{padding-bottom: 50px;   position:relative;  z-index:1; }

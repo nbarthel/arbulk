@@ -8,7 +8,11 @@ import RailcarInformation from '../../../components/RailcarInformation/RailcarIn
 import {Base_Url} from '../../../constants';
 var Spinner = require('react-spinkit');
 import  validateInput  from './PIValidator';
+import ValidateAlphaNumeric from './PIValidator'
 import { createDataLoader } from 'react-loopback';
+import DisableDoubleClick from '../../GlobalFunctions/DisableDoubleClick'
+import EnableClick from '../../GlobalFunctions/EnableClick'
+var Loader = require('react-loader')
 var ReactDOM = require('react-dom');
 var flagsc = true;
 var flagnj = true;
@@ -16,6 +20,10 @@ var weightinLBS = true;
 var isWeightconverted = false;
 var flagBoxesSet = false
 var objectPushed = false
+const MUL_FACTOR = 2.204625
+var clicked = false
+var flag = true
+
 export default class EnterPackagingInstructionForm extends React.Component {
     constructor(props)
     	{
@@ -43,7 +51,9 @@ export default class EnterPackagingInstructionForm extends React.Component {
 	    	errors : { },
 			rObjects:[],
       labelLength : [],
-      selectedOption: 'lbs'
+      selectedOption: 'lbs',
+      haveSpecialChar :0,
+      loaded : false
 	    }
 	    this.userId = localStorage.getItem('userId')
 	    //this.index = 0
@@ -78,9 +88,9 @@ export default class EnterPackagingInstructionForm extends React.Component {
       this.ValidateRailCar = this.ValidateRailCar.bind(this)
       this.SetUnitType = this.SetUnitType.bind(this)
 }
+// componentDidMount() {
+// }
 componentDidMount() {
-}
-componentWillMount() {
 	var PIview = createDataLoader(EnterPackagingInstructionForm,{
 		queries:[{
 			endpoint: 'TPackagingInstructions',
@@ -158,7 +168,8 @@ componentWillMount() {
 
 	axios.get(Base_Url+"TPackagingMaterials").then((response) => {
 		this.setState({
-			tempUnitType : response.data
+			tempUnitType : response.data,
+      loaded : true
 		})
     debugger
     if(this.props.data){
@@ -171,7 +182,8 @@ componentWillMount() {
         }
       }
       this.setState({
-  			unittype : tempObj
+  			unittype : tempObj,
+        loaded : true
   		})
     }
 	})
@@ -245,7 +257,7 @@ SetUnitType(name){
       }
     }
     var dummyObject={}
-    if(Object.keys(tempObj[0]).length>0){
+    if(tempObj && tempObj.length>0 && Object.keys(tempObj[0]).length>0){
       for(var props in tempObj[0]){
         dummyObject[props] = ""
       }
@@ -257,6 +269,7 @@ SetUnitType(name){
   }
 }
 handlePIChange(e){
+  debugger
 	this.obj[e.target.name] = e.target.value
 	if(this.obj.bag_id == 1){
     flagBoxesSet = false
@@ -425,6 +438,7 @@ handleRailcarChange(e){
    }
 onUpdate(e){
 
+  DisableDoubleClick('update')
   this.obj = {
     customer_id : this.props.data.customer_id.toString(),
     location_id : this.props.data.location_id.toString(),
@@ -439,6 +453,11 @@ onUpdate(e){
     custom_label : this.props.data.custom_label.toString(),
    }
    if(this.isValid() != true){
+     EnableClick('update')
+     return
+   }
+   if(this.ValidateRailCar(1)){
+     EnableClick('update')
      return
    }
 var isError = false;
@@ -449,25 +468,30 @@ for(var i=0;i<this.props.data.TPackagingInstructionLots.length;i++){
   if(lot_number==" " || lot_number==null || lot_number == undefined || lot_number==""){
     swal("Lot Number can't be empty")
     isError = true;
+    EnableClick('update')
     return
   }
   if(railcar_number==" " || railcar_number==null || railcar_number == undefined || railcar_number==""){
     swal("Railcar Number can't be empty")
     isError = true;
+    EnableClick('update')
     return
   }
   if(weight==" " || weight==null || weight == undefined || weight==0 || weight==""){
     swal("Weight can't be empty or 0")
     isError = true;
+    EnableClick('update')
     return
   }
 }
 if(!document.getElementById('row1').checked){
   swal("Error","Please check the Create Label Check Box","info")
   isError = true
+  EnableClick('update')
   return
 }
 if(isError){
+  EnableClick('update')
   return
 }
 	var postUrl = Base_Url+"TPackagingInstructions/updatePIEntry"
@@ -480,31 +504,39 @@ if(isError){
 		hashHistory.push('/Packaging/packaginginstview/')
 	},
 	Error:function(err){
+    EnableClick('update')
 		swal("Failed" , "Error occured please try later!" , "error");
 	}
 	})
 
 }
 isValid(){
-	debugger
-	const { errors , isValid } = validateInput(this.obj);
+
+	const { errors , isValid, haveSpecialChar } = validateInput(this.obj);
 	if(!isValid){
 		this.setState({
-			errors : errors
+			errors : errors,
+      haveSpecialChar : haveSpecialChar
 		})
 	}
+  this.forceUpdate()
 	return isValid;
 }
 
 
 onSubmit(e){
+  debugger
 	var checkPo = []
+
+  DisableDoubleClick('submit')
+
 	for(var i in this.state.polList){
 		checkPo.push(this.state.polList[i].poNumber)
 	}
 	if(this.obj.po_number != ""){
 		if(checkPo.indexOf(this.obj.po_number) > 0){
 		swal('Warning' , "This Purchase order already exists" , 'info')
+    EnableClick('submit')
 		return ;
 	}
 	}
@@ -512,9 +544,11 @@ onSubmit(e){
 
     if(!document.getElementById('row1').checked){
       swal("Error","Please check the Create Label Check Box")
+      EnableClick('submit')
       return
     }
     if(this.ValidateRailCar()){
+      EnableClick('submit')
       return
     }
 	console.log("PI Object",this.obj)
@@ -559,7 +593,7 @@ if(this.railCarObjects && this.railCarObjects.length > 1){
 if(this.state.selectedOption == 'kg'){
   var flag = true;
   for(var i=0;i<this.railCarObjects.length;i++){
-    this.railCarObjects[i].weight = this.railCarObjects[i].weight*2.20462
+    this.railCarObjects[i].weight = this.railCarObjects[i].weight*MUL_FACTOR
   }
 }
 if(this.state.labelLength && this.state.labelLength.length == 0){
@@ -574,11 +608,12 @@ var postUrl = Base_Url+"TPackagingInstructions/createPiEntry"
 if(this.railCarObjects== 0){
   if(flag){
     for(var i=0;i<this.railCarObjects.length;i++){
-      this.railCarObjects[i].weight = this.railCarObjects[i].weight/2.20462
+      this.railCarObjects[i].weight = this.railCarObjects[i].weight/MUL_FACTOR
     }
   }
   this.state.labelLength.shift()
 	swal("Error","Please enter railcar Information","error")
+  EnableClick('submit')
 	return;
 }
 console.log(this.Allobjs)
@@ -600,22 +635,23 @@ $.ajax({
 		hashHistory.push('/Packaging/packaginginstview/')
 	},
 	error:function(err){
+    EnableClick('submit')
     if(flag){
       for(var i=0;i<this.railCarObjects.length;i++){
-        this.railCarObjects[i].weight = this.railCarObjects[i].weight/2.20462
+        this.railCarObjects[i].weight = this.railCarObjects[i].weight/MUL_FACTOR
       }
     }
     this.state.labelLength.shift()
 		swal("Error","Please enter all the fields","error")
-
 	}
-
 	})
   this.railCarObjects.splice(this.railCarObjects.length-1,1)
-
 }
 	else{
-		swal('',"Please complete fields marked as red" , 'info')
+    if(this.state.haveSpecialChar==0){
+      swal('',"Please complete fields marked as red" , 'info')
+      EnableClick('submit')
+    }
 	}
 
 }
@@ -671,6 +707,11 @@ $.ajax({
               isError = true;
               break
             }
+            if(!/^[\w-//]+$/.test(obj[i][prop])){
+            swal("Error","Cant't have special charcters","warning")
+            isError = true;
+            break
+            }
         }}
         if(isError){
           break
@@ -682,7 +723,7 @@ $.ajax({
 onAdd(e){
   debugger
   var position = 0;
-
+  this.Add = true
   if(this.ValidateRailCar()){
     return
   }
@@ -702,11 +743,11 @@ convertWeightToLBS(object){
     if(Array.isArray(object)){
 
       for(var i =0;i<object.length;i++){
-        object[i].weight = object[i].weight / 2.20462
+        object[i].weight = object[i].weight / MUL_FACTOR
       }
     }
     else{
-      object.weight = object.weight / 2.20462
+      object.weight = object.weight / MUL_FACTOR
     }
 
 }
@@ -715,11 +756,11 @@ convertWeightToKG(object){
     if(Array.isArray(object)){
 
       for(var i =0;i<object.length;i++){
-        object[i].weight = object[i].weight * 2.20462
+        object[i].weight = object[i].weight * MUL_FACTOR
       }
     }
     else{
-      object.weight = object.weight * 2.20462
+      object.weight = object.weight * MUL_FACTOR
     }
 
 }
@@ -855,7 +896,7 @@ var uniquelot = arrlot.filter(function(elem, index, self) {
 	})
   if(this.state.selectedOption == 'kg'){
     for(var i =0 ;i<uniqueWeight.length;i++){
-      uniqueWeight[i] = uniqueWeight[i] * 2.20462
+      uniqueWeight[i] = uniqueWeight[i] * MUL_FACTOR
     }
   }
 var stampConfirm = localStorage.getItem('userName')
@@ -960,6 +1001,7 @@ render() {
     	})
     }
     return (
+      <Loader loaded={this.state.loaded} id="loaded">
 <section className="edit_Packaging">
 {this.props.data == undefined?
 <div className="pull-right "  style={{"margin-right":"170","margin-top":"-33"}}>
@@ -1489,8 +1531,8 @@ render() {
       <div className=" col-lg-12 col-md-12 col-sm-12 col-xs-12   padding-20-last-l ">
          <div className="pull-left padding-20-last-l">
          {
-         this.props.data != undefined ? <button type="button"  className="btn  btn-primary" onClick = {this.onUpdate}>Update</button> :
-         <button type="button"  className="btn  btn-primary" onClick = {this.onSubmit}>SUBMIT</button> }
+         this.props.data != undefined ? <button type="button" id="update"  className="btn  btn-primary" onClick = {this.onUpdate}>Update</button> :
+         <button type="button"  className="btn  btn-primary" id="submit" onClick = {this.onSubmit}>SUBMIT</button> }
          </div>
          <div className="pull-left padding-20-all"><button type="button" onClick={(e) => this.cancel(e)}  className="btn  btn-gray">CANCEL</button> </div>
 		  <div className="pull-left padding-20-all"><button type="button" onClick={hashHistory.goBack}  className="btn  btn-gray">BACK</button> </div>
@@ -1506,7 +1548,7 @@ render() {
  	</div>
  	</div>
 </section>
-
+</Loader>
 
 )}
 }

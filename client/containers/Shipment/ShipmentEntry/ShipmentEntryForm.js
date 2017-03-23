@@ -22,6 +22,9 @@ import ShipmentDomesticCarear from '../../../components/ShipmentDomesticCarear/S
 import 'react-date-picker/index.css'
 import { DateField, Calendar } from 'react-date-picker'
 import { hashHistory } from 'react-router'
+import DisableDoubleClick from '../../GlobalFunctions/DisableDoubleClick'
+import EnableClick from '../../GlobalFunctions/EnableClick'
+var Loader = require('react-loader')
 var Promise = require('bluebird');
 var totalBagsInPO =0;
 var totalBagsOrderForPO = 0
@@ -74,7 +77,9 @@ class ShipmentEntryForm extends React.Component {
             errors : { },
             errorsd : { },
             errorsI : { },
+            loaded : false
         }
+        this.haveSpecial = 0
         this.Address = {
             zipCode: ''
         }
@@ -164,7 +169,7 @@ class ShipmentEntryForm extends React.Component {
 
 
     }
-    componentWillMount() {
+    componentDidMount() {
         var PIview = createDataLoader(ShipmentEntryForm,{
             queries:[{
                 endpoint: 'TPackagingInstructions',
@@ -174,7 +179,7 @@ class ShipmentEntryForm extends React.Component {
             }]
         })
         console.log("I have recieved props")
-        debugger
+
 
         var base = 'TCompanies'
         this.urlCustomer = PIview._buildUrl(base, {
@@ -214,7 +219,8 @@ class ShipmentEntryForm extends React.Component {
             })
             axios.get(Base_Url + "TLocations").then((response) => {
                 this.setState({
-                    location : response.data
+                    location : response.data,
+                    loaded : true
                 })
             })
     }
@@ -255,7 +261,7 @@ class ShipmentEntryForm extends React.Component {
 
     }
     InternationalReturnDate(date){
-      debugger
+
         var startdate=this.convertDate(date)
         this.setState({
             EarliestReturnDate:date
@@ -265,7 +271,7 @@ class ShipmentEntryForm extends React.Component {
 
     }
     convertDate(date){
-      debugger
+
       var temp =[]
       temp = date.split('-');
       var tempYear = temp[2].split(' ')
@@ -287,7 +293,7 @@ class ShipmentEntryForm extends React.Component {
         this.DocCutoffDate=startdate
     }
     InternationalCargoDate(date){
-      debugger
+
      var startdate=this.convertDate(date)
         this.setState({
             CargoCutoffDate:date
@@ -355,7 +361,7 @@ class ShipmentEntryForm extends React.Component {
     }
 
     handleLIChange(e){
-      debugger
+
         var lot_name=e.target.name;
         var lot_value=e.target.value;
         var selectedIndex=e.target.selectedIndex;
@@ -375,7 +381,7 @@ class ShipmentEntryForm extends React.Component {
 
     }
     handleMIChange(e){
-            debugger
+
             totalBagsInPO =0
             totalBagsOrderForPO = 0
           if(e.target.name == "po_number"){
@@ -396,7 +402,7 @@ class ShipmentEntryForm extends React.Component {
                      } );
 
                  axios.get(pLotUrl).then((response)=>{
-                   debugger
+
                    this.setState({
                     lotNumber: response.data,
                     len:response.data.length-1
@@ -413,7 +419,7 @@ class ShipmentEntryForm extends React.Component {
                      this.Total = inventoryBags.reduce(function(a,b){return parseInt(a)+parseInt(b) ;},0)
 
                 this.lotNumber = _.map(this.state.lotNumber,(lotNum,index) => {
-                   debugger
+
                   if(isNaN(lotNum.inInventory) || lotNum.inInventory == null){
                     lotNum.inInventory = 0;
                   }
@@ -447,7 +453,7 @@ class ShipmentEntryForm extends React.Component {
     handleCompPOChange(e,value){
         console.log("I WAS CALLED")
         console.log(value)
-        debugger
+
         var lot_name=e.target.name;
         var lot_value=e.target.value;
         var selectedIndex=e.target.selectedIndex;
@@ -513,7 +519,7 @@ class ShipmentEntryForm extends React.Component {
         console.log(this.DomesticInfoObjects);
     }*/
     onAdd(){
-      debugger
+
         if(this.state.materialInfoList.length == 0 && Object.keys(this.MIobj).length != 0) {
             if(this.LIobj.lot_id == undefined){
                 swal("Empty Lot","Please select a lot number before adding new lots","error")
@@ -632,7 +638,7 @@ class ShipmentEntryForm extends React.Component {
     }
    //React.unmountComponentAtNode(document.getElementById(''));}
     onAdd1(){
-      debugger
+
         if(Object.keys(this.Address).length != 0) {
             this.addDomesticshipObject();
             const DomesticInfoList = this.state.DomesticInfoList;
@@ -652,7 +658,7 @@ class ShipmentEntryForm extends React.Component {
 
 
     handleOptionChange(e){
-        //debugger
+        //
         //console.log(e.target.name);
         if(e.target.name == "Domestic"){
             this.isDomestic = 1
@@ -669,18 +675,21 @@ class ShipmentEntryForm extends React.Component {
         console.log(option);
     }
     isValid(){
-        debugger
-        const { errors , isValid } = validateInput(this.SIObj);
+
+        const { errors , isValid, haveSpecialChar } = validateInput(this.SIObj);
+        this.haveSpecial = haveSpecialChar
         if(!isValid){
             this.setState({
                 errors : errors
             })
         }
+        this.forceUpdate()
         return isValid;
     }
  isValidDomestic(){
-        debugger
-        const { errorsd , isValid } = validateDomesticInput(this.Domesticobj);
+
+        const { errorsd , isValid, haveSpecialChar } = validateDomesticInput(this.Domesticobj);
+        this.haveSpecial = haveSpecialChar
         if(!isValid){
            this.state.errorsd = errorsd
             this.setState({
@@ -690,8 +699,9 @@ class ShipmentEntryForm extends React.Component {
         return isValid;
     }
     isValidInt(){
-        debugger
-        const { errorsI , isValid } = validateInternationalInput(this.Internationalobj);
+
+        const { errorsI , isValid, haveSpecialChar } = validateInternationalInput(this.Internationalobj);
+        this.haveSpecial = haveSpecialChar
         if(!isValid){
             this.state.errorsI = errorsI
             this.setState({
@@ -702,25 +712,34 @@ class ShipmentEntryForm extends React.Component {
     }
 
     onSubmit(e){
+      debugger
+      DisableDoubleClick('submit')
+      var bagsLeftTemp = 0
         if(!(this.isValid())){
-            // swal("" , "Please fill red marked fields" , "error")
-            // return
+          EnableClick('submit')
+            if(this.haveSpecial==0){
+              swal("", "Please fill red marked fields", "error")
+            }
+            return
         }
 
         if(this.isDomestic) {
             if (!(this.isValidDomestic())) {
+              EnableClick('submit')
+                if(this.haveSpecial==0){
                 swal("", "Please fill red marked Domestic fields", "error")
+              }
                 return
-            }
-            else {
-
             }
         }
         if(!this.isDomestic){
 
             if(!(this.isValidInt())) {
+              EnableClick('submit')
+              if(this.haveSpecial==0){
                 swal("", "Please fill red marked International Shipment fields", "error")
-                return
+              }
+              return
             }
         }
 
@@ -741,7 +760,7 @@ class ShipmentEntryForm extends React.Component {
           flagToDecideLotNumber = true
         }
         if(!flagToDecideLotNumber){
-          debugger
+
           let bagsAdded = 0;
           let bagsrequested = parseInt(this.comPo.bagsToShip)
           let bagsLeft = bagsrequested - bagsAdded
@@ -776,10 +795,14 @@ class ShipmentEntryForm extends React.Component {
             obj.lot_id = this.state.lotNumber[0].id
             obj.inInventorybags = this.state.lotNumber[0].inInventory
             obj.bagsToShip = bagsrequested
+            bagsLeft = 0
             this.LIObjects.push(_.cloneDeep(obj));
           }
           }
-
+            bagsLeftTemp = bagsLeft
+        }
+        if(bagsLeftTemp>0){
+          this.LIObjects[this.LIObjects.length-1].bagsToShip = parseInt(this.LIObjects[this.LIObjects.length-1].bagsToShip) + parseInt(bagsLeftTemp)
         }
         this.SIObj.isDomestic = this.isDomestic
 
@@ -836,7 +859,7 @@ class ShipmentEntryForm extends React.Component {
             // if(this.LIObjects.length > 1) {
             //      this.LIObjects.forEach(function (element, index) {
             //          if (parseInt(element.bagsToShip) == parseInt(element.inInventorybags)) {
-            //           debugger
+            //
             //               axios.put(Base_Url + "TPackagingInstructionLots/" + element.lot_id).then((response)=> {
             //
             //             }).then((response)=> {
@@ -882,25 +905,29 @@ class ShipmentEntryForm extends React.Component {
            // }
 
               if(response.data.errors){
+                EnableClick('submit')
               if(response.data.errors.code == "Release Number Already Exist" || response.data.errors.code == "Booking Number Already Exist"){
                  swal(response.data.errors.code)
                  return
               }}
                else{
                  swal("Posted","Success","success")
-               hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/'+1 )
+               hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/-'+ 1 )
              }
 
 
 
-        })
+        }).catch(function (error) {
+          EnableClick('submit')
+          console.log(error);
+  });
 
 
 
 
         //axios.post(Base_Url+"TShipmentents/createShipMentEntry",this.Allobjs)
         //    .then((response) => {
-        //        debugger;
+        //            ;
         //
         //    }).then((response) => {
         //
@@ -918,29 +945,37 @@ class ShipmentEntryForm extends React.Component {
    }
   //  hashHistory.push('/Container/containerarrivalentry/'+response.data.id+'/'+this.SIObj.isDomestic )
 onSubmitContainer(e){
-  debugger
+  var bagsLeftTemp =0
+DisableDoubleClick('submitContainer')
   if(!(this.isValid())){
+    EnableClick('submitContainer')
+      if(this.haveSpecial==0){
          swal("" , "Please fill red marked fields" , "error")
+       }
          return
      }
 
      if(this.isDomestic) {
          if (!(this.isValidDomestic())) {
+           EnableClick('submitContainer')
+           if(this.haveSpecial==0){
              swal("", "Please fill red marked Domestic fields", "error")
+           }
              return
          }
-         else {
 
-         }
      }
      if(!this.isDomestic){
 
          if(!(this.isValidInt())) {
+           EnableClick('submitContainer')
+           if(this.haveSpecial==0){
              swal("", "Please fill red marked International Shipment fields", "error")
-             return
+           }
+           return
          }
      }
-     debugger
+
      if(parseInt(this.comPo.bagsToShip) > parseInt(this.comPo.inInventorybags)){
          //swal("" , "Shipped bags must not be greater than Inventory bags" , "info")
          //return
@@ -960,7 +995,7 @@ onSubmitContainer(e){
        flagToDecideLotNumber = true
      }
      if(!flagToDecideLotNumber){
-       debugger
+
        let bagsAdded = 0;
        let bagsrequested = parseInt(this.comPo.bagsToShip)
        let bagsLeft = bagsrequested - bagsAdded
@@ -995,14 +1030,16 @@ onSubmitContainer(e){
          obj.lot_id = this.state.lotNumber[0].id
          obj.inInventorybags = this.state.lotNumber[0].inInventory
          obj.bagsToShip = bagsrequested
+         bagsLeft = 0
          this.LIObjects.push(_.cloneDeep(obj));
        }
        }
-
+         bagsLeftTemp = bagsLeft
      }
-
+     if(bagsLeftTemp>0){
+       this.LIObjects[this.LIObjects.length-1].bagsToShip = parseInt(this.LIObjects[this.LIObjects.length-1].bagsToShip) + parseInt(bagsLeftTemp)
+     }
      this.SIObj.isDomestic = this.isDomestic
-
      if(this.minus==0){
          this.addMIObject();
 
@@ -1108,18 +1145,21 @@ onSubmitContainer(e){
                 //     })
                 // }
                 if(response.data.errors){
+                EnableClick('submitContainer')
                 if(response.data.errors.code == "Release Number Already Exist" || response.data.errors.code == "Booking Number Already Exist"){
                    swal(response.data.errors.code)
                    return
                 }}
                 else{
                     swal("Posted", "Success", "success")
-                    hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/'+ 1 )
+                    hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/-'+ 1 )
                 }
 
 
-            });
-        // }
+            }).catch(function(error){
+              EnableClick('submitContainer')
+            })
+        // }ss
         // }
         // else{
         //     swal("Posted","Success","success")
@@ -1134,7 +1174,7 @@ onSubmitContainer(e){
 
      //axios.post(Base_Url+"TShipmentents/createShipMentEntry",this.Allobjs)
      //    .then((response) => {
-     //        debugger;
+     //            ;
      //
      //    }).then((response) => {
      //
@@ -1197,7 +1237,7 @@ onSubmitContainer(e){
     }
                return (
 
-
+<Loader loaded={this.state.loaded}>
             <section className="shipment_edit">
                 <div className="container">
                     <div className="row">
@@ -2002,12 +2042,12 @@ onSubmitContainer(e){
 
                             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 pddn-30-btm padding-top-btm-xs">
                                 <div className="pull-left margin-10-last-l">
-                                    <button type="button" className="btn  btn-orange text-uppercase" onClick={this.onSubmitContainer}>Save  Allocate
+                                    <button type="button" className="btn  btn-orange text-uppercase" id="submitContainer" onClick={this.onSubmitContainer}>Save  Allocate
                                         Container
                                     </button>
                                 </div>
                                 <div className="pull-left margin-10-all">
-                                    <button type="button" className="btn  btn-primary text-uppercase" onClick = {this.onSubmit}>Save</button>
+                                    <button type="button" className="btn  btn-primary text-uppercase" id="submit" onClick = {this.onSubmit}>Save</button>
                                 </div>
                                 <div className="pull-left margin-10-all">
                                     <button type="button" className="btn  btn-gray text-uppercase" onClick={this.onCancel}>Cancel</button>
@@ -2023,7 +2063,7 @@ onSubmitContainer(e){
 
 
             </section>
-
+</Loader>
         )
     }
 }

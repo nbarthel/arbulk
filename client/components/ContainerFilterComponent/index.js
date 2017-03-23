@@ -15,7 +15,7 @@ class FilterComponent extends React.Component {
 	}
     render() {
         return (
-            	
+
         <div className="">
  			<div className="well filter_bg collapse navbar-collapse" id="filter-menu">
                 <h4 className=" hidden-xs"> REFINE YOUR RESULT </h4>
@@ -24,12 +24,12 @@ class FilterComponent extends React.Component {
                 <ContainerFilter lotSearch = {this.props.lotSearch} onTextChange = {this.props.onTextChange}/>
 
                 <ArrivalFilter Arrival={this.props.Arrival}/>
-                <SteamshipLineFilter SteamLine ={this.props.SteamLine} />
+                <SteamshipLineFilter onSteamShipFilter={this.props.onSteamShipFilter} SteamLine ={this.props.SteamLine} />
                 <ContainerTypeFilter onContainerFilter = {this.props.onContainerFilter}/>
                 <StatusFilterPage onStatusFilter = {this.props.onStatusFilter}/>
             </div>
         </div>
-              
+
         )
     }
 }

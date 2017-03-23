@@ -16,6 +16,7 @@ var Loader = require('react-loader');
       this.setState({
         loaded:false
       })
+      this.forceUpdate()
        var PIview = createDataLoader(EnterPackagingInstructionForm,{
            queries:[{
            endpoint: 'TPackagingInstructions',

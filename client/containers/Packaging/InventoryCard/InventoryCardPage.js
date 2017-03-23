@@ -5,12 +5,13 @@ import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 import { createDataLoader } from 'react-loopback';
 import axios from 'axios'
+var Loader = require('react-loader');
 class InventoryCardPage extends InventoryCardForm{
   constructor(props){
     super(props);
-
+    this.state = {loaded:false}
   }
-componentDidMount(){
+componentWillMount(){
 var InventView = createDataLoader(InventoryCardPage,{
            queries:[{
            endpoint: 'TPackagingInstructions',
@@ -28,7 +29,7 @@ var containersView = createDataLoader(InventoryCardPage,{
     this.url = InventView._buildUrl(base, {
       include: [{"relation":"TPackagingInstructionLots" ,"scope":{"include" :["TShipmentLots" ,"TShipmentInternational"],"where":{"active":1}}},"TLocation","TCompany","TPackagingMaterial","TPalletType","TWrapType","TOrigin","TPackagingType"]
     })
-
+var tempThis = this
       $.ajax({
             url: this.url,
             success:function(data){
@@ -41,20 +42,21 @@ var containersView = createDataLoader(InventoryCardPage,{
               var containerGeturl = containersView._buildUrl(baseContainer, {
                 "where":{"lotId":{"inq":lots}}
               })
-              var tempThis = this
+
               axios.get(containerGeturl).then(function (response) {
                 tempThis.setState({
-                  containerLoadData:response.data
-                }).bind(this)
+                  containerLoadData:response.data,
+                  loaded:true
+                })
 
             })
-              this.setState({
+              tempThis.setState({
                   viewData : [data],
                   lots : data.TPackagingInstructionLots,
                   LocationId : data.TLocation.id
-                  })
-               this.length = this.state.viewData.length
-          }.bind(this)
+                })
+               tempThis.length = tempThis.state.viewData.length
+          }
 
         })
 
@@ -71,6 +73,7 @@ var containersView = createDataLoader(InventoryCardPage,{
 
     console.log("$$$$$$$$$$$$$",this.state.viewData,this.state.lots)
 		return(
+      <Loader loaded={this.state.loaded}>
 			<div className="wrapper">
 			<div className="content-inside">
 			<Header routes = {this.props.routes} />
@@ -78,6 +81,7 @@ var containersView = createDataLoader(InventoryCardPage,{
 			</div>
 			<Footer />
 			</div>
+      </Loader>
 			)
 	}
 

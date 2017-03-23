@@ -31,18 +31,24 @@ componentDidMount(){
 
 
 	render() {
-
         if(this.props.currentInventory!= undefined)
         {
-            var CiList = _.map(this.props.currentInventory.TPiInventory, (data, index)=> {
+          var CiList = _.map(this.props.currentInventory, (view, index)=>{
+console.log(view)
+
+            return _.map(view.TPiInventory, (data, index)=> {
+                        if(data.noOfBags>0){
                         return (
                             <tr key={index}>
+                                <td>{view.lot_number}</td>
                                 <td>{data.TInventoryLocation ? data.TInventoryLocation.locationName : ''}</td>
                                 <td>{data.noOfBags}</td>
                                 <td>{data.weight}</td>
                             </tr>
                         )
+                      }
                     })
+                      })
         }
 
 
@@ -50,7 +56,8 @@ componentDidMount(){
 			  <table className="table table-striped">
                                                 <thead className="base_bg">
                                                 <tr >
-                                                    <th> nv. Loc.</th>
+                                                    <th> Lot # </th>
+                                                    <th> Inv. Loc.</th>
                                                     <th> Bags</th>
                                                     <th> Weight</th>
                                                 </tr>

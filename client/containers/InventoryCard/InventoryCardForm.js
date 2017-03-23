@@ -9,10 +9,12 @@ import { createDataLoader } from 'react-loopback'
 import { hashHistory } from 'react-router'
 import axios from 'axios'
 import { Base_Url } from '../../../constants'
+var Loader = require('react-loaders')
 class InventoryCardForm extends React.Component{
 constructor(){
 	super();
 	this.state = {
+		loaded : false
 }
 	//this.id = this.props.id
 	//console.log(this.id)
@@ -136,8 +138,7 @@ componentWillMount() {
 		console.log("sssfsdsdsadasdas",this.state.viewInventoryCardData)
 		console.log(">>>>>>>>>>>>>>>>>>>>>...",this.state.currentInventory)
 		return(
-
-
+<Loader loaded={this.props.viewData && this.props.viewData[0].custom_label!=""?true:false}>
 <section className="inventory_card">
 		<div className="container-fluid">
 
@@ -211,7 +212,7 @@ componentWillMount() {
 	<InventoryHistory  />
 
 
-	
+
 	</div>
 	<div className="row pddn-20-top">
 
@@ -226,7 +227,7 @@ componentWillMount() {
 
  </div>
 </section>
-
+</Loader>
 
 			)
 	}

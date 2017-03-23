@@ -78,7 +78,7 @@ export default class ContainerPrint extends React.Component {
             }]
         })
         this.url1 = ShipmentView._buildUrl('TPackagingInstructionLots/'+PiLotId, {
-            "include" : {"relation" :"TPackagingInstructions" ,"scope":{"include":["TPackagingMaterial" ,"TPalletType"]}}
+            "include" : {"relation" :"TPackagingInstructions" ,"scope":{"include":[{"relation":"TPackagingMaterial","scope":{"include":"TPackagingType"}},"TPalletType"]}}
         })
         $.ajax({
             url: this.url1,
@@ -140,14 +140,24 @@ export default class ContainerPrint extends React.Component {
     }
     render(){
       if(this.state.viewData && this.state.viewData.TContainerLoad && this.state.viewData.TContainerLoad.length > 0){
+        var multiplyingFactor = 1
+
+        var displaygW = gW + ""
+        var weight =0
+        var unit=""
+        var unitType=""
+
+        if(this.state.PIData.TPackagingInstructions.TPackagingMaterial.TPackagingType!=undefined){
+          weight =   this.state.PIData.TPackagingInstructions.TPackagingMaterial.avarageMaterialWeight
+          unit =     this.state.PIData.TPackagingInstructions.TPackagingMaterial.TPackagingType.id==1?"Kg":"lbs"
+          unitType = this.state.PIData.TPackagingInstructions.TPackagingMaterial.TPackagingType.packagingType
+          multiplyingFactor = this.state.PIData.TPackagingInstructions.TPackagingMaterial.TPackagingType.id!=1?2.204625:1
+        }
         var totalBags = this.getSum(this.state.viewData.TContainerLoad)
         var totalPallets = Math.ceil(totalBags / this.state.PIData.TPackagingInstructions.bags_per_pallet)
-        var gW = totalBags*(this.state.PIData.TPackagingInstructions.TPackagingMaterial.avarageMaterialWeight) + totalBags *(this.state.PIData.TPackagingInstructions.TPackagingMaterial.emptyWeight) + totalPallets *(this.state.PIData && this.state.PIData.TPackagingInstructions && this.state.PIData.TPackagingInstructions.TPalletType ? this.state.PIData.TPackagingInstructions.TPalletType.weight : 1)
-        var tw = totalBags *(this.state.PIData.TPackagingInstructions.TPackagingMaterial.emptyWeight) + totalPallets *(this.state.PIData && this.state.PIData.TPackagingInstructions && this.state.PIData.TPackagingInstructions.TPalletType ? this.state.PIData.TPackagingInstructions.TPalletType.weight : 1)
-      
-        var displaygW = gW + ""
+        var gW = totalBags*(this.state.PIData.TPackagingInstructions.TPackagingMaterial.avarageMaterialWeight) + totalBags *(this.state.PIData.TPackagingInstructions.TPackagingMaterial.emptyWeight) + totalPallets *(this.state.PIData && this.state.PIData.TPackagingInstructions && this.state.PIData.TPackagingInstructions.TPalletType ? this.state.PIData.TPackagingInstructions.TPalletType.weight * multiplyingFactor : 1)
+        var tw = totalBags *(this.state.PIData.TPackagingInstructions.TPackagingMaterial.emptyWeight) + totalPallets *(this.state.PIData && this.state.PIData.TPackagingInstructions && this.state.PIData.TPackagingInstructions.TPalletType ? this.state.PIData.TPackagingInstructions.TPalletType.weight * multiplyingFactor : 1)
 
-        console.log("Total Bagssssssssssssssssssssss" , totalBags , gW )
       }
         return (
             <div style={{margin:'0 auto',textAlign :'center'}}>
@@ -196,8 +206,8 @@ export default class ContainerPrint extends React.Component {
                                                     C/O {(this.state.viewData && this.state.viewData.TShipmentent && this.state.viewData.TShipmentent.TShipmentInternational && this.state.viewData.TShipmentent.TShipmentInternational.length > 0 && this.state.viewData.TShipmentent.TShipmentInternational[0].TSteamshipLine) ? this.state.viewData.TShipmentent.TShipmentInternational[0].TSteamshipLine.name : ""}
 
                                                     {" "}RETURN LOADS TO APM
-                                                    CONTAINER TARE WT: {this.state.viewData.tareWeight} KG,
-                                                    VGM = {this.state.viewData.tareWeight + gW} KG
+                                                    CONTAINER TARE WT: {this.state.viewData.tareWeight} {unit},
+                                                    VGM = {this.state.viewData.tareWeight + gW} {unit}
                                                 </strong>
                                             </td>
                                         </tr>
@@ -260,15 +270,15 @@ export default class ContainerPrint extends React.Component {
                                         <tr className="bill_details_body " style={{borderBottom: '0px'}}>
                                             <td className="border_right font-12"><p>{totalBags}</p></td>
                                             <td className="border_right font-12">
-                                                <p>BAGS OF {this.state.PIData.TPackagingInstructions.material}<span>NW:</span> </p>
+                                                <p>{unitType} OF {this.state.PIData.TPackagingInstructions.material}<span>NW:</span> </p>
                                                 <p>LOT#&nbsp;{this.state.PIData.lot_number} <span>TW:{}</span></p>
                                                 <p><span>GW:</span></p>
-                                                <p>***BAGS ARE 25 KG NET WT***</p>
+                                                <p>***{unitType} ARE {weight} {unit} NET WT***</p>
                                             </td>
                                             <td className="font-12 value" >
-                                                <span>{totalBags * this.state.PIData.TPackagingInstructions.TPackagingMaterial.avarageMaterialWeight}KG</span>
-                                                <span>{tw}KG</span>
-                                                <span>{gW}KG</span>
+                                                <span>{totalBags * this.state.PIData.TPackagingInstructions.TPackagingMaterial.avarageMaterialWeight}{unit}</span>
+                                                <span>{tw}{unit}</span>
+                                                <span>{gW}{unit}</span>
                                             </td>
                                         </tr>
                                     </tbody>

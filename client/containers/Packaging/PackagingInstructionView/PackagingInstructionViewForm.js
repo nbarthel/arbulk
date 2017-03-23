@@ -13,8 +13,8 @@
     import HeadBody from '../../../components/ViewDataComponent/HeadBody';
     import axios from 'axios'
     var Loader = require('react-loader')
-   import {Base_Url} from '../../../constants';
-  import '../../../public/stylesheets/style.css'
+    import {Base_Url} from '../../../constants';
+    import '../../../public/stylesheets/style.css'
 export default class PackagingInstructionViewForm extends React.Component {
         constructor(props){
             super(props);
@@ -83,6 +83,7 @@ export default class PackagingInstructionViewForm extends React.Component {
             this.EndDate = ''
             this.StartDate = ''
             this.getdt = this.getdt.bind(this)
+            this.PrintScreen = this.PrintScreen.bind(this)
         }
     componentWillMount() {
 
@@ -95,7 +96,7 @@ export default class PackagingInstructionViewForm extends React.Component {
  axios.get(Base_Url+"TContainerLoads").then(response=>{
    this.setState({
      contanerLoad : response.data
-   }).bind(this)
+   })
  })
       axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
     this.setState({
@@ -135,9 +136,29 @@ onClickli(e){
   this.Query[e.target.id] = e.target.getAttribute('value')
   document.getElementById('railcarSearch').value = e.target.getAttribute('value')
 }
+PrintScreen(){
+  var scrollLeft = document.getElementsByClassName("loadedContent")[0].scrollLeft
+  document.getElementsByClassName('pos-relative-b')[0].style.display = 'none'
+  document.getElementsByClassName('filter-btn')[0].style.display = 'none'
+  document.getElementById("nonPrintable").style.display = "none"
+  document.getElementById("row").style.display = "none"
+  document.getElementById("hide1").style.display = "none"
+  document.getElementById("hide2").style.display = "none"
+  document.getElementById("hide3").style.display = "none"
+  document.getElementById("hide4").style.display = "none"
+  document.getElementById("hide5").style.display = "none"
+  document.getElementById("customer_name").style.display = "none"
+  document.getElementsByClassName("loadedContent")[0].style.cssText=""
+  document.getElementsByClassName("loadedContent")[0].style.height="100%"
+  document.getElementsByClassName("loadedContent")[0].style.overflowX='auto'
+  document.getElementsByClassName("loadedContent")[0].scrollLeft = scrollLeft
+  var printContent = document.getElementById('Packaging_Instruction_View').innerHtml
+  document.body.innerHtml = printContent
+  window.print()
+  window.location.reload()
 
+}
 onSearch(e){
-  debugger;
   var cutofFilter = []
   if(this.startDate && this.endDate) {
       // var startDate = moment(this.startDate.format('MM-DD-YYYY')),
@@ -175,7 +196,7 @@ onSearch(e){
                             obj = {"customer_id" : this.Where.Customer[i] }
                             customer.push(obj);
                         }
-                        serachObj.push(customer)
+                        //serachObj.push(customer)
                     }
 
                     if(this.Where.Company && this.Where.Company.length > 0){
@@ -186,7 +207,7 @@ onSearch(e){
                             objCompany = {"location_id" : this.Where.Company[j] }
                             company.push(objCompany);
                         }
-                        serachObj.push(company)
+                        //serachObj.push(company)
                     }
 
                     if(this.Where.status && this.Where.status.length){
@@ -241,14 +262,15 @@ onSearch(e){
                               "scope":{"include" : "TShipmentInternational",
                               "scope":{"where" : {"or" : cutofFilter }}
                             }}}},
-                                "where":{ "and": [{"or":serachObjLots},{active:1}]}
+                                "where":{ "and": [{"and":serachObjLots},{active:1}]}
                             }
                                }
                             ],
                             where: {"and":[
                               {"or":customer},
                               {"or":company},
-                              {"or":serachObjLots}
+                              {"and":serachObjLots},
+                              { "or": serachObj }
                             ]
                             }
                         });
@@ -267,14 +289,15 @@ onSearch(e){
                         "scope":{"include" : "TShipmentInternational",
                         "scope":{"where" : {"or" : cutofFilter }}
                       }}}},
-                        "where":{active:1}
+                        "where":{ "and": [{"and":serachObjLots},{active:1}]}
                         }},
                         "TLocation" ,
                         "TCompany"],
                             where: {"and":[
                               {"or":customer},
                               {"or":company},
-                              {"or":serachObj}
+                              {"and":serachObj},
+                              {"or":serachObjLots},
                             ]
                             }
                  });
@@ -288,7 +311,7 @@ onSearch(e){
                             console.log('ajax ',data);
                             var st = this.startDate,
                                 ed = this.endDate
-                            debugger
+
                             if(this.startDate!=undefined&&this.endDate!=undefined){
                               this.setState(
                                   {
@@ -298,7 +321,7 @@ onSearch(e){
                               )
                             }
                             // if(this.startDate!=undefined&&this.endDate!=undefined){
-                            //   debugger
+                            //
                             //   for(var i=0;i<data.length;i++){
                             //     if(data[i].TPackagingInstructionLots.length<=0){
                             //       data.splice(i,1)
@@ -339,7 +362,8 @@ onSearch(e){
                             //
                             //   }
                             // }
-
+                            debugger
+                            localStorage.setItem('piViewData', JSON.stringify(data));
                             this.setState(
                                 {
                                     viewData : data
@@ -360,7 +384,8 @@ onSearch(e){
                                                       writable: true,
                                                       configurable:true,
                                                       value:this.checkedCompany})
-            this.buttonDisplay.push(e.target.value)
+
+            // this.buttonDisplay.push(e.target.value)
             //console.log(this.props.checkedCompany)
             //console.log(this.props.buttonDisplay)
 
@@ -381,6 +406,8 @@ onSearch(e){
                 this.buttonDisplay = _.without(this.buttonDisplay,value)
                  this.forceUpdate()
                    }
+                   this.onSearch(e)
+
         }
         onCustomerFilter(e,customer){
             if(e.target.checked){
@@ -454,7 +481,7 @@ onSearch(e){
 
     }
     viewChange(e){
-
+        debugger
          var index = e.target.selectedIndex ;
          var blob = e.target.value
          var changedView = this.state.savedViews[index -1]
@@ -470,117 +497,221 @@ onSearch(e){
         //console.log(this.Where)
         var serachObj = []
         var serachObjLots =[]
-        if (this.Where != undefined && this.Where!= null)
-        {
-            if(this.Where.Customer && this.Where.Customer.length >0){
-                var customer = []
-                var obj = {}
-                for(var i in this.Where.Customer){
-                    obj = {"customer_id" : this.Where.Customer[i] }
-                    customer.push(obj);
-                }
-                serachObj.push(customer)
+        var cutofFilter = []
+        if(this.startDate && this.endDate) {
+            // var startDate = moment(this.startDate.format('MM-DD-YYYY')),
+            //     endDate = moment(this.endDate.format('MM-DD-YYYY'));
+            var cutoffDate = []
+            cutoffDate.push(this.startDate)
+            cutoffDate.push(this.endDate)
+
+            var objdate = {}
+            for(var j in cutoffDate){
+                objdate = {"cargoCutoffDate" : cutoffDate[j]}
+                cutofFilter.push(objdate)
             }
+            Object.defineProperty(this.Where,"CutofFilter",{enumerable:true ,
+                writable: true,
+                configurable: true,
+                value:cutofFilter})
 
-            if(this.Where.Company && this.Where.Company.length > 0){
-                var company = [] ;
-                var objCompany = {}
-                for(var j in this.Where.Company)
-                {
-                    objCompany = {"location_id" : this.Where.Company[j] }
-                    company.push(objCompany);
-                }
-                serachObj.push(company)
-            }
-
-            if(this.Where.status && this.Where.status.length){
-
-                var Railstatus = [];
-                var objStatus = {};
-                for(var z in this.Where.status){
-                    objStatus = {"status" : this.Where.status[z]}
-                    Railstatus.push(objStatus)
-                }
-                serachObjLots.push(Railstatus)
-            }
-
-            if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.POSearch && this.Where.Query.POSearch!= undefined ){
-                var poSearch =  [ {'po_number': {"like": "%" + this.Where.Query.POSearch + "%"}}]
-                serachObj.push(poSearch)
-            }
-
-
-            if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.railcarSearch && this.Where.Query.railcarSearch!= undefined ){
-                var railSearch = [{'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}}]
-                serachObjLots.push(railSearch)
-            }
-
-            if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.LotSearch && this.Where.Query.LotSearch!= undefined ){
-                var lotSearch =  [{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
-                serachObjLots.push(lotSearch)
-            }
-
-            serachObj = [].concat.apply([], serachObj);
-            serachObjLots = [].concat.apply([], serachObjLots);
-            var PIview = createDataLoader(PackagingInstructionViewForm, {
-                queries: [{
-                    endpoint: 'TPackagingInstructions',
-                    filter: {
-                        include : ['TPackagingInstructionLots',{"relation": "TPackagingInstructions", "scope": {"include": ["TLocation"]}}]
-                    }
-                }]
-            });
-            var base = 'TPackagingInstructions';
-
-            if(serachObjLots && serachObjLots.length > 0 ){
-
-                this.urlSearch = PIview._buildUrl(base, {
-                    include : ["TLocation" , "TCompany" ,{"relation": "TPackagingInstructionLots", "scope":
-                    {
-                        "where":
-                        {  "or":
-                            serachObjLots
-                            // [ {'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}},{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
-                        }
-                    }
-                    }
-                    ],
-                    where: {"and":[
-                      {"or":customer},
-                      {"or":company}
-                    ]
-                    }
-                });
-            }
-
-            else {
-                this.urlSearch = PIview._buildUrl(base, {
-                    include: ["TLocation", "TCompany", "TPackagingInstructionLots"],
-                    where: {"and":[
-                      {"or":customer},
-                      {"or":company}
-                    ]
-                    }
-                });
-            }
-
-            $.ajax({
-                url: this.urlSearch,
-                success:function(data){
-
-                    this.setState(
-                        {
-                            viewData : data
-                        }
-                    )
-
-                }.bind(this)
-
-            })
         }
-    }
-saveView(e){
 
+       var serachObj = []
+       var serachObjLots =[]
+         if (this.Where != undefined && this.Where!= null)
+             {
+                 if(this.Where.Customer && this.Where.Customer.length >0){
+                     var customer = []
+                     var obj = {}
+                     for(var i in this.Where.Customer){
+                         obj = {"customer_id" : this.Where.Customer[i] }
+                         customer.push(obj);
+                     }
+                     //serachObj.push(customer)
+                 }
+
+                 if(this.Where.Company && this.Where.Company.length > 0){
+                     var company = [] ;
+                     var objCompany = {}
+                     for(var j in this.Where.Company)
+                     {
+                         objCompany = {"location_id" : this.Where.Company[j] }
+                         company.push(objCompany);
+                     }
+                     //serachObj.push(company)
+                 }
+
+                 if(this.Where.status && this.Where.status.length){
+
+                     var Railstatus = [];
+                     var objStatus = {};
+                     for(var z in this.Where.status){
+                         objStatus = {"status" : this.Where.status[z]}
+                         Railstatus.push(objStatus)
+                     }
+                      serachObjLots.push(Railstatus)
+                 }
+
+                 if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.POSearch && this.Where.Query.POSearch!= undefined ){
+                     var poSearch =  [ {'po_number': {"like": "%" + this.Where.Query.POSearch + "%"}}]
+                     serachObj.push(poSearch)
+                 }
+
+
+                 if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.railcarSearch && this.Where.Query.railcarSearch!= undefined ){
+                     var railSearch = [{'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}}]
+                      serachObjLots.push(railSearch)
+                 }
+
+                 if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.LotSearch && this.Where.Query.LotSearch!= undefined ){
+                     var lotSearch =  [{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
+                     serachObjLots.push(lotSearch)
+                 }
+
+                  serachObj = [].concat.apply([], serachObj);
+                   serachObjLots = [].concat.apply([], serachObjLots);
+                 var PIview = createDataLoader(PackagingInstructionViewForm, {
+                     queries: [{
+                         endpoint: 'TPackagingInstructions',
+                         filter: {
+                             include : ['TPackagingInstructionLots',{"relation": "TPackagingInstructions", "scope": {"include": ["TLocation"]}}]
+                         }
+                     }]
+                 });
+                 var base = 'TPackagingInstructions';
+
+                 if(serachObjLots && serachObjLots.length > 0 ){
+
+                     this.urlSearch = PIview._buildUrl(base, {
+                         include : ["TLocation" , "TCompany" ,{"relation": "TPackagingInstructionLots", "scope":
+                         {
+                           "include" :{
+                           "relation" : "TShipmentLots" ,
+                           "scope":{
+                           "include":{
+                           "relation":"TShipmentent" ,
+                           "scope":{"include" : "TShipmentInternational",
+                           "scope":{"where" : {"or" : cutofFilter }}
+                         }}}},
+                             "where":{ "and": [{"and":serachObjLots},{active:1}]}
+                         }
+                            }
+                         ],
+                         where: {"and":[
+                           {"or":customer},
+                           {"or":company},
+                           {"and":serachObjLots},
+                           { "or": serachObj }
+                         ]
+                         }
+                     });
+                 }
+
+                 else {
+                     this.urlSearch = PIview._buildUrl(base, {
+                       include : [
+                     {"relation":"TPackagingInstructionLots" ,
+                     "scope":{
+                     "include" :{
+                     "relation" : "TShipmentLots" ,
+                     "scope":{
+                     "include":{
+                     "relation":"TShipmentent" ,
+                     "scope":{"include" : "TShipmentInternational",
+                     "scope":{"where" : {"or" : cutofFilter }}
+                   }}}},
+                     "where":{ "and": [{"and":serachObjLots},{active:1}]}
+                     }},
+                     "TLocation" ,
+                     "TCompany"],
+                         where: {"and":[
+                           {"or":customer},
+                           {"or":company},
+                           {"and":serachObj},
+                           {"or":serachObjLots},
+                         ]
+                         }
+              });
+                 }
+
+
+                 $.ajax({
+                     url: this.urlSearch,
+                     success:function(data){
+                       var flag = false;
+                         console.log('ajax ',data);
+                         var st = this.startDate,
+                             ed = this.endDate
+
+                         if(this.startDate!=undefined&&this.endDate!=undefined){
+                           this.setState(
+                               {
+                                   startDate : st,
+                                   endDate :ed
+                               }
+                           )
+                         }
+                         // if(this.startDate!=undefined&&this.endDate!=undefined){
+                         //
+                         //   for(var i=0;i<data.length;i++){
+                         //     if(data[i].TPackagingInstructionLots.length<=0){
+                         //       data.splice(i,1)
+                         //       i=0
+                         //       continue
+                         //     }
+                         //       for(var k in data[i].TPackagingInstructionLots){
+                         //         if(data[i].TPackagingInstructionLots[k].TShipmentLots.length<=0){
+                         //           data.splice(i,1)
+                         //           i=0
+                         //           break
+                         //           flag = true;
+                         //         }
+                         //         for(var j in data[i].TPackagingInstructionLots[k].TShipmentLots){
+                         //           if(!(data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0] &&
+                         //               new Date(data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0].cargoCutoffDate)>=new Date(this.startDate) &&
+                         //               new Date(data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0].cargoCutoffDate) <= new Date(this.endDate))){
+                         //           data.splice(i,1);
+                         //           i=0
+                         //           flag = true;
+                         //           break;
+                         //         }
+                         //         else if(!data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0] && data[i].TPackagingInstructionLots[k].TShipmentLots[j]){
+                         //           data.splice(i,1);
+                         //           i=0
+                         //           flag = true;
+                         //           break;
+                         //         }
+                         //         if(flag){
+                         //           break;
+                         //         }
+                         //         }
+                         //         if(flag){
+                         //           break;
+                         //         }
+                         //       }
+                         //       flag = false;
+                         //
+                         //   }
+                         // }
+
+                         this.setState(
+                             {
+                                 viewData : data
+                             }
+                         )
+
+                     }.bind(this)
+
+                 })
+             }
+}
+saveView(e){
+debugger
+  for(var props in this.Where.Query){
+            var obj = {[props]:this.Where.Query[props]}
+            this.Where.Query[props] = this.Where.Query[props]
+          }
         var saveCustomView = {
             "id": 0,
             "screenName": "PACKAGING",
@@ -665,6 +796,7 @@ saveView(e){
   }
 onButtonRemove(index,button){
     this.buttonDisplay.splice(index,1)
+
     this.forceUpdate()
 
 }
@@ -686,6 +818,7 @@ onButtonRemove(index,button){
                 index : this.state.index +1
             })
             document.getElementById('customer_name').selectedIndex = 0
+            localStorage.removeItem('piViewData')
          this.forceUpdate();
 
     }
@@ -1055,9 +1188,7 @@ print(e){
         }
     }
   render() {
-
       var index = 0
-
       var filterData = ''
 if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData.length >0 )){
 
@@ -1067,7 +1198,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
   return (
     <section className="side-filter">
     <div className="menu-bg hidden-md hidden-lg hidden-sm  visible-xs-block">
-        <div className="">
+        <div className="" id="hide1">
           <h4 className="pull-left">REFINE YOUR RESULT </h4>
           <button type="button" className="btn collapsed pull-right " data-toggle="collapse" data-target="#filter-menu" aria-expanded="false"><i className="fa fa-caret-down fa-2x" aria-hidden="true"></i></button>
         </div>
@@ -1079,7 +1210,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
     <FilterComponent getdt = {this.getdt} startDate = {this.StartDate} endDate = {this.EndDate} key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter}/>
         <div id="filter-grid">
          <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
-             <div className="pull-right margin-30-right">
+             <div className="pull-right margin-30-right" id="hide2">
                  <label className="control control--radio ">LBS
                      <input id="Modify_User" name="Modify_User" type="radio"
                             type="radio"
@@ -1091,7 +1222,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                          /><div className="control__indicator"></div>
                      </label>
                  </div>
-                 <div className="pull-right margin-30-right">
+                 <div className="pull-right margin-30-right" id="hide3">
                      <label className="control control--radio ">Kg
                          <input id="Modify_User" name="Modify_User" type="radio"
                                 id="ADDCustomers"
@@ -1107,7 +1238,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
             <div className="row">
             <FilterButton buttonDisplay = {this.buttonDisplay}  onButtonRemove = {this.onButtonRemove} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
                     <div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs pull-right">
-                    <div className="pull-right ">
+                    <div className="pull-right " id="hide5">
 
                          <select className="form-control"   id="customer_name" name="customer_name" onChange={this.viewChange}>
                               <option value="Please Select An Option" disabled selected>Select custom view</option>
@@ -1129,7 +1260,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
             </div>
         </div>
 
-            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 " id="hide4">
                  <a href="javascript:void(0)" name = "ARB" onClick = {(e) => {this.onHideColumn(e,name)}}>ARB</a> --
                  <a href="javascript:void(0)" name = "Customer" onClick = {(e) => {this.onHideColumn(e)}}>Customer</a> ---
                  <a href="javascript:void(0)" name = "PO" onClick={(e) => {this.onHideColumn(e)}}>PO</a> --
@@ -1214,13 +1345,13 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                         contanerLoad = {this.state.contanerLoad}/>}
 
                   </div>
-
+                <div id="nonPrintable">
                 <div className="row-fluid pddn-50-btm padding-top-btm-xs">
 
                         <div className="pull-left margin-10-last-l"><button type="button" onClick = {(e)=>{this.print(e)}} className="btn  btn-gray">Print Packaging Instruction</button></div>
                         <div className="pull-left margin-10-all"><button type="button" onClick={this.addToQueue} className="btn  btn-gray">Add To Queue</button></div>
-                        <div className="pull-left margin-10-all"><button type="button"  className="btn  btn-gray">Print</button></div>
-                      <div className="pull-right margin-10-last-r"><button type="button" onClick={(e) => this.onViewClick(e)} className="btn  btn-primary">View</button></div>
+                        <div className="pull-left margin-10-all"><button type="button" onClick={this.PrintScreen}  className="btn  btn-gray">Print</button></div>
+                        <div className="pull-right margin-10-last-r"><button type="button" onClick={(e) => this.onViewClick(e)} className="btn  btn-primary">View</button></div>
                         <div className="pull-right margin-10-all"><button type="button" id="edit_btn" onClick={this.onEdit}  className="btn  btn-orange">EDIT</button></div>
                         <div className="pull-right margin-10-all"><button type="button" onClick = {(e) => this.onConfirmClick(e)}  className="btn  btn-default">Confirm</button></div>
 
@@ -1244,6 +1375,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                     <div className="col-lg-4 col-sm-4 col-md-4 col-xs-12 padding-top-btm-xs">
                         <button type="button" onClick={(e) => this.saveView(e)} className="btn  btn-success margin-left-xs">SAVE CUSTOMER VIEW</button>
                     </div>
+               </div>
                </div>
             </div>
         </div>

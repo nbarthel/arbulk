@@ -4,6 +4,7 @@ import { createDataLoader } from 'react-loopback';
 import axios from 'axios';
 import { Base_Url } from '../../constants'
 var moment = require('moment');
+var Loader = require('react-loader');
  class InventoryTable extends Component {
  constructor(props){
  	super(props);
@@ -125,11 +126,11 @@ debugger
 								<td>{data.lot_number}</td>
 								<td>{data.status == 'UNCONFIRMED' ? 'NO': 'YES'}</td>
 								<td>{data.railcar_arrived_on != null ? 'YES' : 'NO'}</td>
-								<td>{data.status == "SHIPPED" ? 'YES' : 'NO'}</td>
+								<td>{(data.TShipmentLots && data.TShipmentLots.length>0 && data.status!= "SHIPPED") ? "YES" : "NO"}</td>
 								<td>{(data.TShipmentInternational && data.TShipmentInternational.length>0) ?moment(data.TShipmentInternational[0].cargoCutoffDate).format('MM-DD-YYYY') : 'NA'}</td>
 								<td>{data.weight}</td>
-								<td>{bagsLoadedInContainer>0? bagsLoadedInContainer : "NA"}</td>
-								<td>{data.inInventory ?(data.inInventory - bagsLoadedInContainer ):data.inInventory }</td>
+								<td>{bagsLoadedInContainer>0? bagsLoadedInContainer : 0}</td>
+								<td>{data.inInventory ?(data.inInventory - bagsLoadedInContainer ):parseInt(data.inInventory)>0?parseInt(data.inInventory):0 }</td>
 								<td>{data.status?data.status : ''}</td>
 								<td>
 									<label className="control control--checkbox" id={data.status}>
@@ -147,15 +148,15 @@ debugger
 								<td> </td>
 								<td> </td>
                 <td> </td>
-								<td>{data.railcar_number}</td>
+                <td>{data.railcar_number}</td>
 								<td>{data.lot_number}</td>
 								<td>{data.status == 'UNCONFIRMED' ? 'NO': 'YES'}</td>
-								<td>Y</td>
 								<td>{data.railcar_arrived_on != null ? 'YES' : 'NO'}</td>
+								<td>{(data.TShipmentLots && data.TShipmentLots.length>0 && data.status!= "SHIPPED") ? "YES" : "NO"}</td>
 								<td>{(data.TShipmentInternational && data.TShipmentInternational.length>0) ?moment(data.TShipmentInternational[0].cargoCutoffDate).format('MM-DD-YYYY') : 'NA'}</td>
 								<td>{data.weight}</td>
-								<td>{bagsLoadedInContainer>0? bagsLoadedInContainer : "NA"}</td>
-								<td>{data.inInventory ?(data.inInventory - bagsLoadedInContainer ):data.inInventory }</td>
+								<td>{bagsLoadedInContainer>0? bagsLoadedInContainer : 0}</td>
+								<td>{data.inInventory ?(data.inInventory - bagsLoadedInContainer ):parseInt(data.inInventory)>0?parseInt(data.inInventory):0 }</td>
 								<td>{data.status?data.status : ''}</td>
 								<td>
 									<label className="control control--checkbox">
@@ -174,6 +175,7 @@ debugger
 				{tableData}
 		</div>
 		)
+
 	}
 
 }

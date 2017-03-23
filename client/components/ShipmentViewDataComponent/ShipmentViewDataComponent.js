@@ -65,12 +65,17 @@ componentWillMount(){
                   viewData : [data],
                   loaded:true
                 })
+              var tableData = JSON.parse(localStorage.getItem('siViewData'))
+              if(tableData && tableData.length>0){
+                this.setState({
+                    viewData : tableData
+                  })
+                }
           }.bind(this)
 
         })
 
    axios.get(Base_Url+"TShipmentLots/getMaxQueue").then(response=>{
-     ;
     this.setState({
         queue_Sequence : response.data
     })
@@ -138,7 +143,7 @@ componentWillMount(){
                 console.log('ajax ',data);
                 debugger
                 for(var i in data){
-                  if(data[i].TShipmentInternational.length==0 && data[i].TShipmentDomestic.length==0){
+                  if(data[i].TShipmentInternational && data[i].TShipmentInternational.length==0 && data[i].TShipmentDomestic.length==0){
                     data.splice(i,1)
                   }
                 }
@@ -148,6 +153,12 @@ componentWillMount(){
                        loaded:true
                    }
                )
+               var tableData = JSON.parse(localStorage.getItem('siViewData'))
+               if(tableData && tableData.length>0){
+                 this.setState({
+                     viewData : tableData
+                   })
+                 }
         }.bind(this)
         })
 
@@ -178,10 +189,11 @@ onAscending(e,head){
 
                             switch(switchvalue) {
                             case 'po_number':
-                           sortedData = _.sortBy(this.state.viewData, function(item) {
-                             if(item.po_number){
-                               return item.po_number.toLowerCase();
+                             sortedData = _.sortBy(this.state.viewData, function(item) {
+                             if(item.TShipmentLots && item.TShipmentLots.length >0 && item.TShipmentLots[0].TPackagingInstructions){
+                               return item.TShipmentLots[0].TPackagingInstructions.po_number.toLowerCase();
                              }
+                             return 'z'
 
                            });
                              break;
@@ -194,18 +206,19 @@ onAscending(e,head){
                     });
                       break;
                    case 'lot_number':
+                   debugger
                      sortedData = _.sortBy(this.state.viewData, function(item) {
-                     return (item.TPackagingInstructionLots!=undefined?(item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].lot_number : ''):'');
+                     return ( item.TShipmentLots.length>0 ? (item.TShipmentLots[0].TPackagingInstructionLots? item.TShipmentLots[0].TPackagingInstructionLots.lot_number.toLowerCase() : 'z'):'z');
                      });
                        break;
-                               case 'railcar_number.toLowerCase()':
+                               case 'railcar_number':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
-                                return (item.TPackagingInstructionLots!=undefined?(item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].railcar_number : ''):'');
+                                return (item.TShipmentLots.length>0?(item.TShipmentLots[0].TPackagingInstructionLots? item.TShipmentLots[0].TPackagingInstructionLots.railcar_number.toLowerCase() : 'z'):'z');
                                 });
                       break;
                        case 'weight':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
-                                return (item.TPackagingInstructionLots!=undefined?(item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].weight : ''):'');
+                                return (item.TShipmentLots.length>0?(item.TShipmentLots[0].TPackagingInstructionLots? item.TShipmentLots[0].TPackagingInstructionLots.weight : '0'):'0');
                                 });
                       break;
                       case 'location':
@@ -217,6 +230,16 @@ onAscending(e,head){
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
                                 return item.TCompany.name.toLowerCase();
                                 });
+                      break;
+                      case 'Booking':
+                               sortedData = _.sortBy(this.state.viewData, function(item){
+                                 if(item.isDomestic==0 && item.TShipmentInternational && item.TShipmentInternational.length>0){
+                                   return item.TShipmentInternational[0].bookingNumber.toLowerCase()
+                                 }
+                                 else if(item.TShipmentDomestic && item.TShipmentDomestic.length>0){
+                                   return item.TShipmentDomestic[0].bookingNumber.toLowerCase()
+                                 }
+                               })
                       break;
                       case 'ShipmentType':
                                 sortedData = _.sortBy(this.state.viewData, function(item) {
@@ -379,6 +402,7 @@ else{
 this.setState({
      viewData  : sortedData
              })
+localStorage.setItem('siViewData', JSON.stringify(sortedData));
 }
 
 onToggel(e ,elm){
@@ -547,7 +571,7 @@ render(){
        {
 
           _.map(view.TShipmentLots,(data,index)=>{
-
+            debugger
             if( sortedDataflag || (view.TShipmentInternational!=undefined&&view.TShipmentInternational.length>0) || (view.TShipmentInternational!=undefined&&view.TShipmentDomestic.length>0)){
             this.statusArray = []
             if(view.TContainerDomestic && view.TContainerDomestic.length > 0){
@@ -631,6 +655,7 @@ render(){
   )
  return(
  <Loader loaded={this.state.loaded}>
+ <div className="loadedContentNew">
  <table id="Packaging_Instruction_View" className="table table-expandable table-striped" cellSpacing="0" >
              <thead className="table_head header-fixed header">
            <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
@@ -818,6 +843,7 @@ render(){
            </thead>
                 {listData}
         </table>
+        </div>
         </Loader>)
   }
 }
