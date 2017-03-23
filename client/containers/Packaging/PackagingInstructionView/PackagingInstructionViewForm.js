@@ -485,19 +485,17 @@ onSearch(e){
         this.Where = JSON.parse(blob)
 
         console.log(this.Where)
-        //if(this.Query != undefined){
-        //    Object.defineProperty(this.Where,"Query",{enumerable:true ,
-        //        writable: true,
-        //        configurable: true,
-        //        value:this.Query})
-        //}
-        //console.log(this.Where)
         var serachObj = []
         var serachObjLots =[]
         var cutofFilter = []
+        var flagForcutOffFilter = false
+        if(this.Where.CutofFilter){
+          this.startDate = new Date(this.Where.CutofFilter[0].cargoCutoffDate)
+          this.endDate = new Date(this.Where.CutofFilter[this.Where.CutofFilter.length-1].cargoCutoffDate)
+        }
         if(this.startDate && this.endDate) {
-            // var startDate = moment(this.startDate.format('MM-DD-YYYY')),
-            //     endDate = moment(this.endDate.format('MM-DD-YYYY'));
+            // this.startDate = moment(this.startDate.format('MM-DD-YYYY')),
+            // this.endDate = moment(this.endDate.format('MM-DD-YYYY'));
             var cutoffDate = []
             cutoffDate.push(this.startDate)
             cutoffDate.push(this.endDate)
@@ -511,6 +509,8 @@ onSearch(e){
                 writable: true,
                 configurable: true,
                 value:cutofFilter})
+
+            flagForcutOffFilter = true
 
         }
 
@@ -639,59 +639,52 @@ onSearch(e){
                        var flag = false;
                          console.log('ajax ',data);
                          var st = this.startDate,
-                             ed = this.endDate
+                             ed = this.endDate,
+                             i=0,
+                             flagToDecideIncrement = true
+                             debugger
+                         if(flagForcutOffFilter && data.length>0){
 
-                         if(this.startDate!=undefined&&this.endDate!=undefined){
-                           this.setState(
-                               {
-                                   startDate : st,
-                                   endDate :ed
+                             while(i<data.length){
+                               flagToDecideIncrement = true
+                               if(data[i].TPackagingInstructionLots.length<1){
+                                 data.splice(i,1)
+                                 i = i==0?0:i-1
+                                 flagToDecideIncrement = false
                                }
-                           )
-                         }
-                         // if(this.startDate!=undefined&&this.endDate!=undefined){
-                         //
-                         //   for(var i=0;i<data.length;i++){
-                         //     if(data[i].TPackagingInstructionLots.length<=0){
-                         //       data.splice(i,1)
-                         //       i=0
-                         //       continue
-                         //     }
-                         //       for(var k in data[i].TPackagingInstructionLots){
-                         //         if(data[i].TPackagingInstructionLots[k].TShipmentLots.length<=0){
-                         //           data.splice(i,1)
-                         //           i=0
-                         //           break
-                         //           flag = true;
-                         //         }
-                         //         for(var j in data[i].TPackagingInstructionLots[k].TShipmentLots){
-                         //           if(!(data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0] &&
-                         //               new Date(data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0].cargoCutoffDate)>=new Date(this.startDate) &&
-                         //               new Date(data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0].cargoCutoffDate) <= new Date(this.endDate))){
-                         //           data.splice(i,1);
-                         //           i=0
-                         //           flag = true;
-                         //           break;
-                         //         }
-                         //         else if(!data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0] && data[i].TPackagingInstructionLots[k].TShipmentLots[j]){
-                         //           data.splice(i,1);
-                         //           i=0
-                         //           flag = true;
-                         //           break;
-                         //         }
-                         //         if(flag){
-                         //           break;
-                         //         }
-                         //         }
-                         //         if(flag){
-                         //           break;
-                         //         }
-                         //       }
-                         //       flag = false;
-                         //
-                         //   }
-                         // }
+                               else{
+                                 for(var j in data[i].TPackagingInstructionLots){
 
+                                   if(!data[i].TPackagingInstructionLots[j].TShipmentLots || data[i].TPackagingInstructionLots[j].TShipmentLots.length<1){
+                                     data[i].TPackagingInstructionLots.splice(j,1)
+                                     i = i==0?0:i-1
+                                     flagToDecideIncrement = false
+                                     break
+                                   }
+                                   else{
+                                     for(var k in data[i].TPackagingInstructionLots[j].TShipmentLots){
+
+                                       var date = new Date(data[i].TPackagingInstructionLots[j].TShipmentLots[k].TShipmentent.TShipmentInternational.length>0?data[i].TPackagingInstructionLots[j].TShipmentLots[k].TShipmentent.TShipmentInternational[0].cargoCutoffDate:new Date('01-01-0001'))
+                                       if(date > new Date(this.endDate) || date<new Date(this.startDate)){
+                                         data[i].TPackagingInstructionLots.splice(j,1)
+                                         i = i==0?0:i-1
+                                         flagToDecideIncrement = false
+                                         break
+                                       }
+                                     }
+                                   }
+                                   if(!flagToDecideIncrement){
+                                     break
+                                   }
+                                 }
+                               }
+                               if(flagToDecideIncrement){
+                                 i++
+                               }
+                             }
+                         }
+
+                         localStorage.setItem('piViewData', JSON.stringify(data));
                          this.setState(
                              {
                                  viewData : data
