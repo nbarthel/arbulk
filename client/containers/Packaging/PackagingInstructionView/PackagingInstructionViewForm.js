@@ -1279,7 +1279,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                         showARB = {this.state.showARB}
                         showCustomer = {this.state.showCustomer}
                         showPO = {this.state.showPO}
-                        Railcar = {this.state.Railcar}
+                        Railcar = {this.state.showRailcar}
                         showLot = {this.state.showLot}
                         showMaterial = {this.state.showMaterial}
                         showConfmd = {this.state.showConfmd}
@@ -1311,7 +1311,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                         showARB = {this.state.showARB}
                         showCustomer = {this.state.showCustomer}
                         showPO = {this.state.showPO}
-                        Railcar = {this.state.Railcar}
+                        Railcar = {this.state.showRailcar}
                         showLot = {this.state.showLot}
                         showMaterial = {this.state.showMaterial}
                         showConfmd = {this.state.showConfmd}
