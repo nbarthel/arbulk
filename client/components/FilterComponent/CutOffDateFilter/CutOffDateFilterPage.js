@@ -22,7 +22,7 @@ constructor(props){
       var tempDate;
       if(date != null)
       {
-        tempDate = date.year()+"-"+date.month()+1+"-"+date.date()
+        tempDate = date.year()+"-"+(parseInt(date.month())+parseInt(1))+"-"+date.date()
     }
     else{
       date=""
@@ -39,7 +39,7 @@ constructor(props){
       var tempDate;
       if(date != null)
       {
-        tempDate = date.year()+"-"+date.month()+1+"-"+date.date()
+        tempDate = date.year()+"-"+(parseInt(date.month())+parseInt(1))+"-"+date.date()
     }
     else{
       date=""
