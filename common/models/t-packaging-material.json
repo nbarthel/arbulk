@@ -301,7 +301,25 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "TCompany": {
+      "type": "belongsTo",
+      "model": "TCompany",
+      "foreignKey": "customer_id"
+    }
+    ,
+    "TLocation": {
+      "type": "belongsTo",
+      "model": "TLocation",
+      "foreignKey": "location_id"
+    }
+    ,
+      "TPackagingType": {
+        "type": "belongsTo",
+        "model": "TPackagingType",
+        "foreignKey": "packaging_type_id"
+      }
+  },
   "acls": [],
   "methods": {}
 }

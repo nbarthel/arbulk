@@ -52,21 +52,22 @@ module.exports = function(Tpackaginginstructionlots) {
         });
 
     };
-	
-  	 Tpackaginginstructionlots.setInActive = function(id,cb) {
 
-       var ds = Tpackaginginstructionlots.dataSource;
-       var sql ="update t_packaging_instruction_lots set active = 0 where id="+id.id
+    Tpackaginginstructionlots.setInActive = function(id,cb) {
 
-       ds.connector.query(sql, function (err, result) {
-         if (err) {
-           logger.error(err)
-           return cb(err);
-         }
-         cb(null, result);
-       });
+        var ds = Tpackaginginstructionlots.dataSource;
+        var sql ="update t_packaging_instruction_lots set active = 0 where id="+id.id
+
+        ds.connector.query(sql, function (err, result) {
+            if (err) {
+                logger.error(err)
+                return cb(err);
+            }
+            cb(null, result);
+        });
 
     };
+
 
     Tpackaginginstructionlots.remoteMethod('getMaxQueue', {
         description: 'get max queue Value',
@@ -86,11 +87,10 @@ module.exports = function(Tpackaginginstructionlots) {
         returns: { type: 'object',root: true},
         http: {path:"/getLotList", verb: 'get'}
     });
-  
-  	Tpackaginginstructionlots.remoteMethod('setInActive', {
-    description: 'soft delete PO',
-    accepts: { arg: 'data', type: 'object', http: { source: 'body' }} ,
-    returns: { type: 'object',root: true},
-    http: {path:"/setInActive", verb: 'post'}
+    Tpackaginginstructionlots.remoteMethod('setInActive', {
+        description: 'soft delete PO',
+        accepts: { arg: 'data', type: 'object', http: { source: 'body' }} ,
+        returns: { type: 'object',root: true},
+        http: {path:"/setInActive", verb: 'post'}
     });
 };

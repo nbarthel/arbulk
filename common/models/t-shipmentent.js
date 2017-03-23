@@ -193,7 +193,7 @@ module.exports = function(Tshipmentent) {
                           if(err){
                           if(err.code == "ER_DUP_ENTRY"){
                             customErr.code == "Booking Number Already Exist"
-                            
+
                           }
                           return cb(null, {errors: customErr});
                           }

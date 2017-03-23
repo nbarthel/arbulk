@@ -6,11 +6,12 @@ var modelBuilder = new ModelBuilder();
 var dsConfig = require('../../server/datasources.json');
 
 module.exports = function(Tinventorylocation) {
-	
-  
+
+
     Tinventorylocation.addbagweight = function(tinventory, cb) {
+
       var d = new Date();
-	  var date_with_time =     d.getFullYear()+"-"+d.getMonth()+1+"-"+d.getDate()+" "
+	  var date_with_time =       d.getFullYear()+"-"+(parseInt(d.getMonth())+parseInt(1))+"-"+d.getDate()+" "
                               +d.getHours()+":"
                               +d.getMinutes()+":"+d.getSeconds()
       	console.log("Here is the date",date_with_time)
@@ -39,7 +40,7 @@ module.exports = function(Tinventorylocation) {
                         return cb(null, {errors: err});
                     }
                     if(obj!= null && obj!= undefined){
-                        console.log(">>>>>>>>>>>>>>>>>>>>>>.Object" , JSON.stringify((obj)))
+                        console.log(">>>>>>>>>>>>>>>>>>>>>>.Object" , JSON.stringify(obj))
                         console.log(">>>>>>>>>>>.Invnetory lacation table entry done" ,JSON.stringify(obj) )
                         if(!(tinventory.Tinventory)){
                             return cb(null, {errors: err});
@@ -67,30 +68,31 @@ module.exports = function(Tinventorylocation) {
                                 }
                                 else{
                                     console.log("lots Object" , lotsObj)
+                                    InventoryHistoryLog.create({
+                                    "id": 0,
+                                    "piLotId": tinventory.Tinventory.piLotId,
+                                    "inventoryLocationId": obj.id,
+                                    "noOfBags": tinventory.Tinventory.noOfBags,
+                                    "notes" : tinventory.Tinventory.notes,
+                                    "weight": tinventory.Tinventory.weight,
+                                    "createdOn": date_with_time,
+                                    "modifiedOn": date_with_time,
+                                    "createdBy": 1,
+                                    "modifiedBy": 1,
+                                    "active": 1
+
+                                },function(err , lotsObj){
+                                    if (err) {
+                                        // logger.error(err);
+                                        return cb(null, {errors: err});
+                                    }
+                                    else{
+                                        console.log("history Object" , lotsObj)
+                                    }
+                                });
                                 }
                             });
-                          InventoryHistoryLog.create({
-                        "id": 0,
-                        "piLotId": tinventory.Tinventory.piLotId,
-                        "inventoryLocationId": obj.id,
-                        "noOfBags": tinventory.Tinventory.noOfBags,
-                        "notes" : tinventory.Tinventory.notes,
-                        "weight": tinventory.Tinventory.weight,
-                        "createdOn": date_with_time,
-                        "modifiedOn": date_with_time,
-                        "createdBy": 1,
-                        "modifiedBy": 1,
-                        "active": 1
 
-                    },function(err , lotsObj){
-                        if (err) {
-                            // logger.error(err);
-                            return cb(null, {errors: err});
-                        }
-                        else{
-                            console.log("history Object" , lotsObj)
-                        }
-                    });
                         }
 
                         cb(null,obj);
@@ -104,7 +106,7 @@ module.exports = function(Tinventorylocation) {
 
     Tinventorylocation.deleteLocation = function(tinventory, cb) {
         var d = new Date();
-	  	var date_with_time =     d.getFullYear()+"-"+d.getMonth()+1+"-"+d.getDate()+" "
+	  	var date_with_time =     d.getFullYear()+"-"+(parseInt(d.getMonth())+parseInt(1))+"-"+d.getDate()+" "
                               +d.getHours()+":"
                               +d.getMinutes()+":"+d.getSeconds()
       	console.log("Here is the date",date_with_time)
@@ -187,7 +189,7 @@ module.exports = function(Tinventorylocation) {
 
     Tinventorylocation.updatebagweight = function(tinventory, cb) {
         var d = new Date();
-        var date_with_time =     d.getFullYear()+"-"+d.getMonth()+1+"-"+d.getDate()+" "
+        var date_with_time =     d.getFullYear()+"-"+(parseInt(d.getMonth())+parseInt(1))+"-"+d.getDate()+" "
                               +d.getHours()+":"
                               +d.getMinutes()+":"+d.getSeconds()
       	console.log("Here is the date",date_with_time)

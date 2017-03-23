@@ -280,9 +280,10 @@ module.exports = function(Tpackaginginstructions) {
                         });
                     }
                     else if(tpackaging.TPackagingInstructionLots.length >1){
-
                         console.log("started updating packahing instruction lots table")
                         for(var i in tpackaging.TPackagingInstructionLots) {
+
+                          if(tpackaging.TPackagingInstructionLots.id>0){
                             PackagingLots.upsert({
                                 id : tpackaging.TPackagingInstructionLots[i].id,
                                 pi_id: obj.id,
@@ -310,6 +311,37 @@ module.exports = function(Tpackaginginstructions) {
                                     return cb(null, {errors: err});
                                 }
                             })
+                          }
+                          else{
+                            PackagingLots.create({
+                                id : 0,
+                                pi_id: obj.id,
+                                railcar_number: tpackaging.TPackagingInstructionLots[i].railcar_number,
+                                lot_number: tpackaging.TPackagingInstructionLots[i].lot_number,
+                                weight: tpackaging.TPackagingInstructionLots[i].weight,
+                                bags_to_ship: "0",
+                                status: "UNCONFIRMED",
+                                stamp_confirmed: 0,
+                                railcar_arrived_on: null,
+                                railcar_departed_on: null,
+                                queue_sequence: 1,
+                                createdBy: 1,
+                                createdOn:  today ,
+                                modifiedBy: 1,
+                                modifedOn:  today ,
+                                active: 1,
+                                arrived: 0,
+                                railcar_status : 'INTRANSIT',
+                                custom_label: tpackaging.TPackagingInstructionLots[i].custom_label
+
+                            }, function (err, lotsObj) {
+                                if (err) {
+                                    //logger.error(err);
+                                    console.log(err)
+                                    return cb(null, {errors: err});
+                                }
+                            })
+                          }
                         }
                     }
 

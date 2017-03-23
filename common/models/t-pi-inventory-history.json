@@ -91,7 +91,7 @@
       },
       "_selectable": true
     },
-    
+
     "weight": {
       "type": "Number",
       "required": false,
