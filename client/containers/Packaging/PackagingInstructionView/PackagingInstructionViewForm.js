@@ -478,12 +478,10 @@ onSearch(e){
 
     }
     viewChange(e){
-        debugger
          var index = e.target.selectedIndex ;
          var blob = e.target.value
          var changedView = this.state.savedViews[index -1]
         this.Where = JSON.parse(blob)
-
         console.log(this.Where)
         var serachObj = []
         var serachObjLots =[]
