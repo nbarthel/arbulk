@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+	import React, { Component } from 'react';
 
 import axios from 'axios';
 import _ from 'lodash';
@@ -9,7 +9,7 @@ import { createDataLoader } from 'react-loopback';
 
 
 import { Base_Url } from '../../constants'
-
+var enoughBags = true;
 
 class PendingShipment extends Component {
 
@@ -31,7 +31,7 @@ class PendingShipment extends Component {
 
 	        this.url = PIview._buildUrl(base, {
 	           // include : [{"relation":"TPackagingInstructionLots" ,"scope":{"include" :["TShipmentLots" ,"TShipmentInternational"]}},"TLocation" , "TCompany"]
-	            include : [{"relation":"TPackagingInstructionLots" ,"scope":{"include" :{"relation" : "TShipmentLots" , "scope":{"include":{"relation":"TShipmentent" , "scope":{"include" : "TShipmentInternational"}}}}}},"TLocation" , "TCompany"],
+	            include : [{"relation":"TPackagingInstructionLots" ,"scope":{"include" :{"relation" : "TShipmentLots" , "scope":{"include":{"relation":"TShipmentent" , "scope":{"include" : ["TShipmentInternational","TShipmentDomestic"]}}}}}},"TLocation" , "TCompany"],
 							"where":{"id": next.pID}
 
 	        });
@@ -40,7 +40,20 @@ class PendingShipment extends Component {
 	            url: this.url,
 	            success:function(data){
 	                console.log('ajax ',data);
-	                debugger
+	               for(var i in data){
+									 for(var j in data[i].TPackagingInstructionLots){
+										 for(var k in data[i].TPackagingInstructionLots[j].TShipmentLots){
+											 if(data[i].TPackagingInstructionLots[j].TShipmentLots[k].TShipmentent){
+												 if(data[i].TPackagingInstructionLots[j].TShipmentLots[k].TShipmentent.TShipmentInternational.length>0 && data[i].TPackagingInstructionLots[j].TShipmentLots[k].TShipmentent.TShipmentInternational[0].active==0){
+													 data[i].TPackagingInstructionLots[j].TShipmentLots.splice(k,1)
+												 }
+												 else if(data[i].TPackagingInstructionLots[j].TShipmentLots[k].TShipmentent.TShipmentDomestic.length>0 && data[i].TPackagingInstructionLots[j].TShipmentLots[k].TShipmentent.TShipmentDomestic[0].active==0){
+													 data[i].TPackagingInstructionLots[j].TShipmentLots.splice(k,1)
+												 }
+											 }
+										 }
+									 }
+								 }
 	               this.setState(
 	                   {
 	                       historyData : data,
@@ -77,6 +90,7 @@ class PendingShipment extends Component {
 			}
 			return _.map(view.TShipmentLots,function(viewTShipLot,index){
 				inventoryBags = inventoryBags - viewTShipLot.noOfBags
+				enoughBags = inventoryBags<0?false:true
 				return(
 					<tr key={index}>
 					<td>{moment(viewTShipLot.createdOn).format("MM-DD-YYYY")}	</td>
@@ -86,9 +100,9 @@ class PendingShipment extends Component {
 					<td>{"- "+viewTShipLot.noOfBags}</td>
 					<td>{inventoryBags}</td>
 				</tr>
-
 			)
 			})
+
 		}
 		})
 	}
@@ -112,8 +126,10 @@ class PendingShipment extends Component {
 			</thead>
 			<tbody>
 			{history}
+
             </tbody>
 	    </table>
+			<span style={{"color":"red"}}>{!enoughBags?"There are not enough bags in inventory for pending shipments!":""}</span>
 	</div>
 	<p className="error"></p>
 	</div>

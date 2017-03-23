@@ -15,6 +15,7 @@ constructor(props){
   onLogout(){
     localStorage.removeItem('userName');
     localStorage.removeItem('userId');
+    localStorage.clear();
     hashHistory.push('/')
   }
      render() {

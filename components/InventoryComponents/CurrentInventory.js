@@ -9,6 +9,7 @@ import axios from 'axios'
 import { TotalComponent } from './TotalComponent'
 import Validator from 'validator';
 import isEmpty from 'lodash/isEmpty';
+var Loader = require('react-loader');
 class CurrentInventory extends Component {
 	constructor(){
 	super();
@@ -20,7 +21,8 @@ class CurrentInventory extends Component {
 		showEdit : 'none',
 		addFlag : false,
 		errors: { },
-		weightLBS : 0
+		weightLBS : 0,
+		loaded : false
 		}
 	this.currentInventArray
 
@@ -57,7 +59,9 @@ class CurrentInventory extends Component {
 	this.tempTotalBags = 0
 	this.isBag = true;
 }
+componentDidMount(){
 
+}
 
 componentWillReceiveProps(nextProps) {
 
@@ -114,7 +118,8 @@ componentWillReceiveProps(nextProps) {
 
                 this.setState({
                 	currentInventory : data[0],
-                	rows : tempData
+                	rows : tempData,
+									loaded : true
                 })
                 if(this.orignalTble === undefined){
 
@@ -228,7 +233,7 @@ else{
 
 		}
 		else{
-			this.addRow = {active : 1 ,createdBy: 1,createdOn: "2016-10-02T00:00:00.000Z",id: 1,inventoryLocationId:this.props.lid,inventory_location_id:this.props.lID,lot_number:this.state.currentInventory.lot_number,modifiedBy:1,modifiedOn:"2016-10-02T00:00:00.000Z",noOfBags:400,piLotId:this.props.lID,weight:22}
+			this.addRow = {active : 1 ,createdBy: 1,createdOn: "2016-10-02T00:00:00.000Z",id: 1,inventoryLocationId:this.props.lid,inventory_location_id:this.props.lotId,lot_number:this.state.currentInventory.lot_number,modifiedBy:1,modifiedOn:"2016-10-02T00:00:00.000Z",noOfBags:400,piLotId:this.lotIdArray[0],weight:22}
 			let dummy = {active : 1 ,locationName : "Vegas" , location_id : this.props.lid}
 			this.addRow.TInventoryLocation = dummy
 			console.log(this.addRow)
@@ -239,8 +244,6 @@ else{
 			})
 
 		}
-
-
 
 		else{
 			swal("Error","Please select a lot first","error")
@@ -594,10 +597,13 @@ var calcWeight = this.state.weightBox
 	}
 
 		onSaveChange(e){
-
+			debugger
 			if(this.state.notes && this.state.notes.length > 100){
 				swal("Warning","Length of Notes can't be greater than 100","warning")
 				return
+			}
+			if(!this.state.notes){
+				this.state.notes = ''
 			}
 			var stamp = localStorage.getItem('stamp')
 	    this.CID = this.props.lID == "null" ? this.props.lotId : this.props.lID
@@ -1039,6 +1045,7 @@ var tempThis = this
 }
 
 	return (
+		<Loader loaded={this.state.loaded} >
 			 <div className=" col-lg-6 col-md-6 col-sm-6 col-xs-12">
 	 <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 active">
 	 	 <div className=" col-lg-7 col-md-7 col-sm-7 col-xs-12">
@@ -1114,6 +1121,7 @@ var tempThis = this
 			</div>
 		</div>
 	</div>
+	</Loader>
 		);
 	}
 }
