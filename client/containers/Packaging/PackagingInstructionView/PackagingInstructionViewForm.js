@@ -357,49 +357,6 @@ onSearch(e){
                                   }
                                 }
                             }
-  
-                            // if(this.startDate!=undefined&&this.endDate!=undefined){
-                            //
-                            //   for(var i=0;i<data.length;i++){
-                            //     if(data[i].TPackagingInstructionLots.length<=0){
-                            //       data.splice(i,1)
-                            //       i=0
-                            //       continue
-                            //     }
-                            //       for(var k in data[i].TPackagingInstructionLots){
-                            //         if(data[i].TPackagingInstructionLots[k].TShipmentLots.length<=0){
-                            //           data.splice(i,1)
-                            //           i=0
-                            //           break
-                            //           flag = true;
-                            //         }
-                            //         for(var j in data[i].TPackagingInstructionLots[k].TShipmentLots){
-                            //           if(!(data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0] &&
-                            //               new Date(data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0].cargoCutoffDate)>=new Date(this.startDate) &&
-                            //               new Date(data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0].cargoCutoffDate) <= new Date(this.endDate))){
-                            //           data.splice(i,1);
-                            //           i=0
-                            //           flag = true;
-                            //           break;
-                            //         }
-                            //         else if(!data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0] && data[i].TPackagingInstructionLots[k].TShipmentLots[j]){
-                            //           data.splice(i,1);
-                            //           i=0
-                            //           flag = true;
-                            //           break;
-                            //         }
-                            //         if(flag){
-                            //           break;
-                            //         }
-                            //         }
-                            //         if(flag){
-                            //           break;
-                            //         }
-                            //       }
-                            //       flag = false;
-                            //
-                            //   }
-                            // }
 
                             localStorage.setItem('piViewData', JSON.stringify(data));
                             this.setState(
