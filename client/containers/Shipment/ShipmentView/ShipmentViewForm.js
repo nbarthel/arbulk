@@ -766,7 +766,6 @@ onClickli(e){
                       });
                       }
                     }
-        console.log('sdsddsdsdssdssssssssssd' , this.url);
       $.ajax({
             url: this.url,
             success:function(data){

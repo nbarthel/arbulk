@@ -66,7 +66,6 @@ export default class PackagingInstructionViewForm extends React.Component {
             this.onCustomerFilter =  this.onCustomerFilter.bind(this)
             this.onStatusFilter = this.onStatusFilter.bind(this)
             this.onRemove = this.onRemove.bind(this)
-           // this.onClick = this.onClick.bind(this)
             this.onButtonRemove = this.onButtonRemove.bind(this)
             this.onSearch = this.onSearch.bind(this)
             this.onTextChange = this.onTextChange.bind(this)
@@ -107,12 +106,11 @@ export default class PackagingInstructionViewForm extends React.Component {
 
 
  }
-        //this.state.queue_Sequence[0].max_mark
 getdt(a){
 a.id=="1"?this.startDate = a.tempDate:this.endDate=a.tempDate;
 }
      onTextChange(e){
-
+        //debugger
          var idValue = e.target.id
 
           this.Query[idValue] = e.target.value
@@ -1261,10 +1259,10 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
         </div>
 
             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 " id="hide4">
-                 <a href="javascript:void(0)" name = "ARB" onClick = {(e) => {this.onHideColumn(e,name)}}>ARB</a> --
-                 <a href="javascript:void(0)" name = "Customer" onClick = {(e) => {this.onHideColumn(e)}}>Customer</a> ---
-                 <a href="javascript:void(0)" name = "PO" onClick={(e) => {this.onHideColumn(e)}}>PO</a> --
-                 <a href="javascript:void(0)" name = "Railcar" onClick={(e) => {this.onHideColumn(e)}}>Railcar#</a> --
+                 <a href="javascript:void(0)" name = "ARB" onClick = {(e) => {this.onHideColumn(e,name)}}>ARB</a>
+                 <a href="javascript:void(0)" name = "Customer" onClick = {(e) => {this.onHideColumn(e)}}>Customer</a>
+                 <a href="javascript:void(0)" name = "PO" onClick={(e) => {this.onHideColumn(e)}}>PO</a>
+                 <a href="javascript:void(0)" name = "Railcar" onClick={(e) => {this.onHideColumn(e)}}>Railcar#</a>
                  <a href="javascript:void(0)" name = "Lot" onClick={(e) => {this.onHideColumn(e)}}>Lot#</a> --
                  <a href="javascript:void(0)" name = "Material" onClick={(e) => {this.onHideColumn(e)}}>Material</a> --
                  <a href="javascript:void(0)" name = "Confmd" onClick={(e) => {this.onHideColumn(e)}}>Confmd</a> --
