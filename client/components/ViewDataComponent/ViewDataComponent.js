@@ -475,7 +475,7 @@ debugger
 
        </tr>}
        {noData ?
-       <tr >No results match your entered criteria.</tr>:
+       <tr><td colSpan="20">No results match your entered criteria.</td></tr>:
 
 
           _.map(view.TPackagingInstructionLots,(data,index)=>{
