@@ -212,10 +212,10 @@ header .contain{ padding:5px 0px;}
 .top_nav_admin li{border-left: 1px solid #edecec;font-size: 14px; background: #fff; z-index: 22;}
 .top_nav_admin .active{.color: #fff; background-color: #286090 !important;}
 .dropdown-menu li:hover {color: #262626;text-decoration: none;background-color: #ccc;}
-.dropdown-menu li{font-size: 12px;}
+.dropdown-menu li{ }
 
 header .pageTitle{float: left;padding: 8px 15px;height: 40px;margin-top: 10px;}
-
+header .pageTitle i{padding: 0 10px;}
 
 
 /*////////////////////////------footer------ /////////////////////////////*/
@@ -281,9 +281,11 @@ legend.scheduler-border { text-transform:uppercase !important;font-weight: bold 
 .edit_Packaging .textarea{ height:142px;  resize: none;}
 .edit_Packaging .textarea_label{ height:208px;  resize: none;}
 .add_btn{cursor:pointer; padding-right:5px;}
-.Packaging_footer{ background:#f7f7f7; min-height:150px; padding:20px 0px;}
+.Packaging_footer{ background:#f7f7f7; min-height:150px; padding:20px 0px; clear:both;}
 .edit_Packaging .add_btn{margin-left: 0px !important;padding-left: 0px !important;padding-top: 6px;}
-.edit_Packaging{ margin-top: 2%; min-width:300px;}
+.edit_Packaging{ margin-top: 8px; min-width:300px;}
+.edit_Packaging .control__indicator {top:3px;}
+
 /*.edit_Packaging .form-horizontal .form-group {margin-right: 0px!important; margin-left: 0px!important;}
 .edit_Packaging label{ font-weight: 500 !important; text-align:left  !important;  }*/
 .edit_Packaging h4{color:#004a98; text-align:center;font-size:18px;}
@@ -497,3 +499,15 @@ input[type=number]::-webkit-outer-spin-button {
     appearance: none;
     margin: 0;
 }
+/*============================================================*/
+
+#hide2{margin-top: -43px;}
+#hide3{margin-top: -43px;  margin-right: 100px;}
+#hide2 .control__indicator,#hide3 .control__indicator{top: 2px;}
+
+#hide5{}
+#hide5 #customer_name{height: 25px; padding: 3px;}
+
+.padding-50{padding-top:50px !important;}
+.padding-30{padding-top:30px !important;}
+.cLabel{padding: 0px;height: 20px;margin-bottom: 0px;}
