@@ -2,8 +2,6 @@ import React from 'react';
 import _ from 'lodash';
 import  { PropTypes } from 'react';
 import { createDataLoader } from 'react-loopback';
-/*  import './stylesheet/jquery.dataTables.min.css';
- import './js/jquery.dataTables.min.js';*/
 import { hashHistory } from 'react-router'
 import FilterComponent from '../../../components/FilterComponent';
 import FilterButton from '../../../components/FilterComponent/FilterButton';
@@ -111,7 +109,7 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.onSearch(a)
     }
     onTextChange(e){
-        //debugger
+
         var idValue = e.target.id
 
         this.Query[idValue] = e.target.value
@@ -119,9 +117,7 @@ export default class PackagingInstructionViewForm extends React.Component {
     }
 
     onClickPo(e){
-
         this.Query[e.target.id] = e.target.getAttribute('value')
-
         document.getElementById('POSearch').value = e.target.getAttribute('value')
         this.onSearch(e)
     }
@@ -162,8 +158,6 @@ export default class PackagingInstructionViewForm extends React.Component {
         var cutofFilter = []
         var flagForcutOffFilter = false
         if(this.startDate && this.endDate) {
-            // var startDate = moment(this.startDate.format('MM-DD-YYYY')),
-            //     endDate = moment(this.endDate.format('MM-DD-YYYY'));
             var cutoffDate = []
             cutoffDate.push(this.startDate)
             cutoffDate.push(this.endDate)
@@ -198,7 +192,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                     obj = {"customer_id" : this.Where.Customer[i] }
                     customer.push(obj);
                 }
-                //serachObj.push(customer)
+
             }
 
             if(this.Where.Company && this.Where.Company.length > 0){
@@ -209,7 +203,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                     objCompany = {"location_id" : this.Where.Company[j] }
                     company.push(objCompany);
                 }
-                //serachObj.push(company)
+
             }
 
             if(this.Where.status && this.Where.status.length){
@@ -377,9 +371,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 configurable:true,
                 value:this.checkedCompany})
 
-            // this.buttonDisplay.push(e.target.value)
-            //console.log(this.props.checkedCompany)
-            //console.log(this.props.buttonDisplay)
+
 
         }
         else if (!e.target.checked){
@@ -389,7 +381,6 @@ export default class PackagingInstructionViewForm extends React.Component {
             this.Where.Company = this.checkedCompany
             if(Object.keys(this.Where.Company).length === 0){
                 this.Where.Company = undefined
-                //console.log(this.Where)
                 delete this.Where.Company
             }
             let value = e.target.value
@@ -409,10 +400,6 @@ export default class PackagingInstructionViewForm extends React.Component {
                 writable: true,
                 configurable:true,
                 value:this.checkedCustomer})
-            //this.buttonDisplay.push(e.target.value)
-            //console.log(this.props.checkedCompany)
-            //console.log(this.props.buttonDisplay)
-            console.log(this.checkedCustomer)
         }
         else if (!e.target.checked){
             let id = e.target.id
@@ -438,30 +425,27 @@ export default class PackagingInstructionViewForm extends React.Component {
                 writable: true,
                 configurable:true,
                 value:this.checkedStatus})
-            //this.buttonDisplay.push(e.target.value)
+
             this.forceUpdate()
 
-            //console.log(this.props.buttonDisplay)
-            /* console.log(this.Where)
-             console.log(this.checkedStatus)
-             console.log(this.checkedStatus.length)*/
+
         }
         else if (!e.target.checked){
             let value = e.target.value
-            //let pos = this.checkedStatus.indexOf(e.target.value)
+
             this.checkedStatus = _.without(this.checkedStatus,value)
             this.Where.status = this.checkedStatus
-            //console.log(this.Where.status)
+
             if(Object.keys(this.Where.status).length === 0){
                 this.Where.status = undefined
                 delete this.Where.status
             }
             console.log(this.Where)
-            //let value = e.target.value
+
             let index = this.buttonDisplay.indexOf(e.target.value)
             if(index !== -1)
                 this.buttonDisplay = _.without(this.buttonDisplay,value)
-            //console.log(this.buttonDisplay)
+
             this.forceUpdate()
         }
         this.onSearch(e)
@@ -489,8 +473,7 @@ export default class PackagingInstructionViewForm extends React.Component {
             this.endDate = new Date(this.Where.CutofFilter[this.Where.CutofFilter.length-1].cargoCutoffDate)
         }
         if(this.startDate && this.endDate) {
-            // this.startDate = moment(this.startDate.format('MM-DD-YYYY')),
-            // this.endDate = moment(this.endDate.format('MM-DD-YYYY'));
+
             var cutoffDate = []
             cutoffDate.push(this.startDate)
             cutoffDate.push(this.endDate)
@@ -520,7 +503,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                     obj = {"customer_id" : this.Where.Customer[i] }
                     customer.push(obj);
                 }
-                //serachObj.push(customer)
+
             }
 
             if(this.Where.Company && this.Where.Company.length > 0){
@@ -531,7 +514,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                     objCompany = {"location_id" : this.Where.Company[j] }
                     company.push(objCompany);
                 }
-                //serachObj.push(company)
+
             }
 
             if(this.Where.status && this.Where.status.length){
@@ -708,7 +691,6 @@ export default class PackagingInstructionViewForm extends React.Component {
             "modifiedOn": "2016-09-26",
             "active": 1
         }
-        console.log("Save Customer View" , saveCustomView);
         if(saveCustomView.viewFilters != undefined && saveCustomView.viewFilters != null){
             axios.post(Base_Url + "TCustomViews", saveCustomView).then(response=> {
                 swal('Success' , "Successfully Saved..." , 'success');
@@ -755,12 +737,10 @@ export default class PackagingInstructionViewForm extends React.Component {
 
         if(e.target.checked){
             this.piID = e.target.value
-            console.log("PIID",this.piID)
-            //this.status = value.status
-        }
+                    }
         else if(!e.target.checked){
             this.piID = undefined
-            console.log("PIID",this.piID)
+
         }
 
     }
@@ -787,9 +767,9 @@ export default class PackagingInstructionViewForm extends React.Component {
     }
     onRemove(e){
 
-        console.log("clicked")
+
         this.buttonDisplay = [];
-        //this.buttonDisplay = []
+
         this.checkedCustomer = []
         this.checkedStatus = []
         this.checkedCompany = []
@@ -844,11 +824,7 @@ export default class PackagingInstructionViewForm extends React.Component {
         var qArray =  localStorage.getItem('qArray')
         var sequence =  localStorage.getItem('queue_Sequence')
         var queueArray = qArray.split(",")
-        //queueArray.push(qArray);
-        //if(queueArray.length[0] == null){
-        //    swal('',"Please select an order" , "info")
-        //    return
-        //}
+
         localStorage.removeItem('qArray');
         localStorage.removeItem('queue_Sequence');
         var option = {
@@ -1164,7 +1140,6 @@ export default class PackagingInstructionViewForm extends React.Component {
         if(this.selected != undefined || this.piID != undefined){
             console.log('print view',this.piID+'/'+this.selected)
             hashHistory.push('/Packaging/packagingInstFormPrint/'+this.piID+'/'+this.selected)
-            //hashHistory.push('/Packaging/inventorycard/'+this.piID+'/'+this.selected)
         }
         else
         {

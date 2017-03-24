@@ -341,7 +341,7 @@ onClickRow(e){
 
 
     render(){
-          ;
+
         var filterData
         if(!flagSorting){
         filterData = this.props.filterData
@@ -359,9 +359,16 @@ onClickRow(e){
 
         var selectedWeight = this.props.weight;
 
+        var hasData = true;
+        var listData = {}
+        if(this.state.viewData && this.state.viewData.length==0){
 
-        console.log("<<<<<^^>>>>>",this.state.viewData)
-
+            listData = <tbody key="0">
+            <tr><td colSpan={24}>No results match your entered criteria.</td></tr>
+            </tbody>
+            hasData = false
+        }
+        if(hasData){
         var listData =  _.map(this.state.viewData,(view,index) => {
                 if(view.isDomestic == 1){
                                if(view.TContainerDomestic && view.TContainerDomestic.length > 0){
@@ -519,7 +526,7 @@ onClickRow(e){
 
                }
 
-            })
+            })}
 
 
         return(

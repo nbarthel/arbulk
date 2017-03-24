@@ -1,6 +1,4 @@
-/**
- * Created by Anurag on 15-09-2016.
- */
+
 'use strict';
 
 import React from 'react';
@@ -8,15 +6,12 @@ import axios from 'axios';
 import _ from 'lodash';
 import  { PropTypes } from 'react';
 import { createDataLoader } from 'react-loopback';
-//import PackagingInstructionViewForm from '../../containers/Packaging/PackagingInstructionView/PackagingInstructionViewForm';
-// import HeadBody from './HeadBody';
-// import NestedRows from './NestedRows'
+
 import request from '../../utils/request';
 import { Base_Url } from '../../constants'
 var moment = require('moment');
 import './js/tableHeadFixer.js'
 import './js/jquery.dataTables.min.js'
-//import './js/fixed.js'
 var Loader = require('react-loader');
 var sortedDataflag = false
 var sortedData = []
@@ -41,7 +36,7 @@ class ViewDataComponent extends React.Component{
 
       }
 press(e){
-  debugger
+
 }
 componentWillMount(){
 
@@ -56,14 +51,11 @@ componentWillMount(){
              }
         }]
       })
-    console.log("I have recieved props")
-    //////debugger
 
     var base = 'TPackagingInstructions'+'/'+id;
     this.url = PIview._buildUrl(base, {
       include: ['TPackagingInstructionLots',"TLocation","TCompany"]
     })
-    console.log(this.url,"<<<<<<<<<<<<<<<<<<<<URL")
 
       $.ajax({
             url: this.url,
@@ -84,7 +76,6 @@ componentWillMount(){
         })
 
    axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
-    //debugger;
     this.setState({
         queue_Sequence : response.data
     })
@@ -95,7 +86,7 @@ componentWillMount(){
 
     }
    else {
-    //debugger
+
   var PIview = createDataLoader(ViewDataComponent,{
       queries:[{
         endpoint: 'TPackagingInstructions',
@@ -108,9 +99,9 @@ componentWillMount(){
       }]
     })
        var base = 'TPackagingInstructions';
-        //TPackagingInstructionLots
+
         this.url = PIview._buildUrl(base, {
-           // include : [{"relation":"TPackagingInstructionLots" ,"scope":{"include" :["TShipmentLots" ,"TShipmentInternational"]}},"TLocation" , "TCompany"]
+
             include : [
           {"relation":"TPackagingInstructionLots" ,
           "scope":{
@@ -127,12 +118,10 @@ componentWillMount(){
 
 
         });
-        console.log('sdsddsdsdssdssssssssssd' , this.url);
+
       $.ajax({
             url: this.url,
             success:function(data){
-                console.log('ajax ',data);
-                //debugger
                this.setState(
                    {
                        viewData : data,
@@ -149,7 +138,7 @@ componentWillMount(){
         })
 
      axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
-    //debugger;
+
     this.setState({
         queue_Sequence : response.data
     })
@@ -169,7 +158,6 @@ componentDidMount() {
 }
 checkclick(data , value)
 {
-    //debugger;
     var queueArray = []
     this.qArray.push(value.id)
     localStorage.setItem('qArray',this.qArray)
@@ -178,7 +166,7 @@ checkclick(data , value)
 }
 
 onAscending(e,head){
-debugger
+
   sortedDataflag = true;
   flagSorting = true;
   var switchvalue = head;
@@ -378,20 +366,15 @@ localStorage.setItem('piViewData', JSON.stringify(sortedData));
 }
 
 onToggel(e ,elm){
-console.log('>>>>>>' , $(elm))
-
   $( "button" ).click(function() {
   $( "p" ).slideToggle( "slow" );
 });
 }
 
 onClickRow(e){
-console.log("hi")
            var rowObj = $(this.refs.clickable)
 
             var aa = e.target.getAttribute('data-target')
-
-
 
       if($('#Packaging_Instruction_View').find('.'+aa).length >= 2)
       {
@@ -423,12 +406,8 @@ render(){
 
    flagSorting =false
  }
-//console.log("sss",this.state.viewdata.length);
-      var selectedWeight = this.props.weight;
-    //if(filterData.length = null){
-    //    console.log("sss");
-    //}
-debugger
+    var selectedWeight = this.props.weight;
+
     var noData = false;
 
     if(this.state.viewData && this.state.viewData.length==0){
@@ -532,7 +511,6 @@ debugger
                   }
         }
 
-           //debugger
            return(
                <tr key={index} className ={count}>
                    <td>

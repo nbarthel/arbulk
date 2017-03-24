@@ -141,7 +141,7 @@ componentWillMount(){
             url: this.url,
             success:function(data){
                 console.log('ajax ',data);
-                debugger
+
                 for(var i in data){
                   if(data[i].TShipmentInternational && data[i].TShipmentInternational.length==0 && data[i].TShipmentDomestic.length==0){
                     data.splice(i,1)
@@ -206,7 +206,7 @@ onAscending(e,head){
                     });
                       break;
                    case 'lot_number':
-                   debugger
+
                      sortedData = _.sortBy(this.state.viewData, function(item) {
                      return ( item.TShipmentLots.length>0 ? (item.TShipmentLots[0].TPackagingInstructionLots? item.TShipmentLots[0].TPackagingInstructionLots.lot_number.toLowerCase() : 'z'):'z');
                      });
@@ -473,10 +473,18 @@ render(){
    flagSorting =false
  }
 
+    var hasData = true;
+    var listData = {}
+    if(this.state.viewData && this.state.viewData.length==0){
+
+        listData = <tbody key="0">
+        <tr><td colSpan={24}>No results match your entered criteria.</td></tr>
+        </tbody>
+        hasData = false
+    }
       var selectedWeight = this.props.weight;
 
-      console.log("<<<<<^^>>>>>",this.state.viewData)
-      // const data = this.state.xyz
+      if(hasData){
       var listData =  _.map(this.state.viewData,(view,index)=>{
         if( sortedDataflag || (view.TShipmentInternational!=undefined&&view.TShipmentInternational.length>0) || (view.TShipmentInternational!=undefined&&view.TShipmentDomestic.length>0)){
         var alloc = "No"
@@ -499,7 +507,7 @@ render(){
          }
        }
       var count = index
-      debugger
+
       if(view.TShipmentLots.length>0){
 
 
@@ -571,7 +579,7 @@ render(){
        {
 
           _.map(view.TShipmentLots,(data,index)=>{
-            debugger
+
             if( sortedDataflag || (view.TShipmentInternational!=undefined&&view.TShipmentInternational.length>0) || (view.TShipmentInternational!=undefined&&view.TShipmentDomestic.length>0)){
             this.statusArray = []
             if(view.TContainerDomestic && view.TContainerDomestic.length > 0){
@@ -652,7 +660,7 @@ render(){
 
     )}}
   }
-  )
+  )}
  return(
  <Loader loaded={this.state.loaded}>
  <div className="loadedContentNew">
