@@ -506,7 +506,7 @@ input[type=number]::-webkit-outer-spin-button {
 #hide2 .control__indicator,#hide3 .control__indicator{top: 2px;}
 
 #hide5{}
-#hide5 #customer_name{height: 25px; padding: 3px;}
+#hide5 #customer_name{height: 25px; padding: 0px 5px;}
 
 .padding-50{padding-top:50px !important;}
 .padding-30{padding-top:30px !important;}
