@@ -265,7 +265,7 @@ export default class PrintPackaging extends React.Component {
                                         })}
 
                                     </div>
-<div style={{"float":"left" , "margin" : 70}}>Stamp Confirmed By : __________</div>
+                                <div style={{"float":"left" , "margin" : 70}}>Stamp Confirmed By : __________</div>
 
                                 </div>
 

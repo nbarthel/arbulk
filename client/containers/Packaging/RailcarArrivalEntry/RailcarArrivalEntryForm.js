@@ -30,8 +30,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 		this.state = {
 			startDate : '',
 			key:0,
-			selectedOption: 'lbs',
-			selectedOption1: 'lbs',
+
 		}
 		this.updateCartArrival = this.updateCartArrival.bind(this);
 		this.handleChange1 = this.handleChange1.bind(this)
@@ -48,8 +47,8 @@ export default class RailcarArrivalEntryForm extends React.Component {
             this.onTextChange = this.onTextChange.bind(this)
             this.onTap = this.onTap.bind(this)
 						this.onChnage = this.onChnage.bind(this)
-						this.handleOptionChange = this.handleOptionChange.bind(this)
-						this.handleOptionChange1 = this.handleOptionChange1.bind(this)
+						//this.handleOptionChange = this.handleOptionChange.bind(this)
+						//this.handleOptionChange1 = this.handleOptionChange1.bind(this)
         }
          onformat(inputDate) {
         var datear = inputDate.split('-')
@@ -57,12 +56,12 @@ export default class RailcarArrivalEntryForm extends React.Component {
    }
          onTextChange(e){
           this.Query[e.target.id] = e.target.value
-          console.log(this.Query)
+
         }
         handleChange1(x,event) {
 
         	var dateValue = this.onformat(x.target.value)
-					console.log("date value is" , dateValue)
+
 
 		document.getElementById('row1'+ x.target.id).disabled = false
 
@@ -71,39 +70,35 @@ export default class RailcarArrivalEntryForm extends React.Component {
 	}
 
 	 onClickPo(e){
-        //debugger;
+
            this.Query[e.target.id] = e.target.getAttribute('value')
 
           document.getElementById('POSearch').value = e.target.getAttribute('value')
-           console.log(this.Query)
-           console.log('>>>>>> target Value' , e.target.value)
+
       }
 
       lotSearch(e){
-          //debugger;
            this.Query[e.target.id] = e.target.getAttribute('value')
-           console.log(this.Query)
+
            document.getElementById('LotSearch').value = e.target.getAttribute('value')
-           console.log('>>>>>> target Value' , e.target.value)
+
       }
 
 onClickli(e){
   this.Query[e.target.id] = e.target.getAttribute('value')
 
     document.getElementById('railcarSearch').value = e.target.getAttribute('value')
-  console.log(this.Query)
-  console.log('>>>>>> target Value' , e.target.value)
+
 }
 
 	onSearch(e){
-		debugger;
+
 		if(this.Query != undefined){
 			Object.defineProperty(this.Where,"Query",{enumerable:true ,
 				writable: true,
 				configurable: true,
 				value:this.Query})
 		}
-		console.log(this.Where)
 		var serachObj = []
 		 var serachObjLots =[]
 
@@ -174,7 +169,7 @@ onClickli(e){
 			//TPackagingInstructionLots
 
 			if(serachObj && serachObj != undefined && serachObjLots.length == 0){
-				//debugger;
+
 				this.urlSearch = PIview._buildUrl(base, {
 
 					"include" : {"relation": "TPackagingInstructions",
@@ -190,7 +185,7 @@ onClickli(e){
 				})
 			}
 			else if(serachObjLots.length > 0 && serachObj.length > 0) {
-				//debugger;
+
 				this.urlSearch = PIview._buildUrl(base, {
 					include : {"relation": "TPackagingInstructions", "scope":{where:{  "or":serachObj} ,"include": ["TOrigin" , "TCompany"]}},
 					"where":
@@ -203,7 +198,7 @@ onClickli(e){
 				});
 			}
 			else{
-				//debugger;
+
 				this.urlSearch = PIview._buildUrl(base, {
 					include : {"relation": "TPackagingInstructions", "scope":{"include": ["TOrigin" , "TCompany"]}},
 					"where":
@@ -215,12 +210,12 @@ onClickli(e){
 				});
 			}
 
-			console.log(this.urlSearch , ">>>>>>>>>>>d,lpwkdlwjldjwlkdjwo");
+
 			$.ajax({
 				url: this.urlSearch,
 				success:function(data){
-					//debugger;
-					console.log('ajax ',data);
+
+
 
 					this.setState(
 						{
@@ -228,24 +223,11 @@ onClickli(e){
 						}
 					)
 				this.forceUpdate()
-					console.log( "ajax>>>>>>>")
+
 				}.bind(this)
 
 			})
 		}
-	}
-
-	handleOptionChange(changeEvent) {
-		var selectedOption = changeEvent.target.value
-		this.setState({
-					selectedOption: changeEvent.target.value
-	});
-			 console.log( selectedOption);
-	}
-	handleOptionChange1(e) {
-				 this.setState({
-					selectedOption: e.target.value
-			});
 	}
 
 
@@ -267,7 +249,7 @@ onClickli(e){
             this.Where.Company = this.checkedCompany
             if(Object.keys(this.Where.Company).length === 0){
               this.Where.Company = undefined
-              //console.log(this.Where)
+
               delete this.Where.Company
              }
                 let value = e.target.value
@@ -286,9 +268,7 @@ onClickli(e){
                                                       configurable:true,
                                                       value:this.checkedCustomer})
             this.buttonDisplay.push(e.target.value)
-            //console.log(this.props.checkedCompany)
-            //console.log(this.props.buttonDisplay)
-            console.log(this.checkedCustomer)
+
            }
             else if (!e.target.checked){
             let id = e.target.id
@@ -316,32 +296,28 @@ onClickli(e){
             this.buttonDisplay.push(e.target.value)
             this.forceUpdate()
 
-            //console.log(this.props.buttonDisplay)
-           /* console.log(this.Where)
-            console.log(this.checkedStatus)
-            console.log(this.checkedStatus.length)*/
            }
             else if (!e.target.checked){
             let value = e.target.value
             //let pos = this.checkedStatus.indexOf(e.target.value)
             this.checkedStatus = _.without(this.checkedStatus,value)
             this.Where.status = this.checkedStatus
-            //console.log(this.Where.status)
+
             if(Object.keys(this.Where.status).length === 0){
               this.Where.status = undefined
               delete this.Where.status
             }
-            console.log(this.Where)
+
             //let value = e.target.value
                 let index = this.buttonDisplay.indexOf(e.target.value)
                 if(index !== -1)
                 this.buttonDisplay = _.without(this.buttonDisplay,value)
-                //console.log(this.buttonDisplay)
+
                   this.forceUpdate()
                   }
         }
       onRemove(e){
-        console.log("clicked")
+
          this.buttonDisplay = [];
          //this.buttonDisplay = []
              this.checkedCustomer = []
@@ -374,7 +350,7 @@ onClickli(e){
   }
   click(data,value,index)
 	{
-		debugger
+
 
 		if(data.target.checked){
 			//this.checked = true
@@ -409,12 +385,12 @@ onClickli(e){
 
     this.lotOrderValue = value
 
-		console.log("clicked" , data , value)
+
 	};
 
 
 	updateCartArrival(){
-	//zdebugger;
+
       if(this.cartArray.length < 1 && (this.state.startDate=null || this.state.startDate=== undefined || this.state.startDate=== '' || this.state.startDate=== false)){
          swal('Info' , 'Please select arrival Date and or row' , 'info')
          return
@@ -439,7 +415,7 @@ onClickli(e){
                       hashHistory.push('/Packaging/packaginginstview/')
                  });
     }).catch(function(err){
-       console.log("Error Is" + err)
+
     })
  })
 }
@@ -458,7 +434,7 @@ else if(this.lotOrderValue.status == "QUEUED")
 										hashHistory.push('/Packaging/packaginginstview/')
 							 });
 	}).catch(function(err){
-		 console.log("Error Is" + err)
+
 	})
 })
 }
@@ -482,7 +458,7 @@ this.cartArray.forEach((id ,index)=>{
                  });
 
  }).catch(function(err){
-       console.log("Error Is" + err)
+
     })
  })
 }
@@ -508,20 +484,20 @@ onChnage(e){
 
 }
     render() {
-	//debugger;
+
 		var fiterData = undefined ;
 		fiterData = this.state.viewData ? this.state.viewData : undefined ;
 
         if(fiterData != undefined){
 			var railCarFilterData = _.map(fiterData , (view ,index)=>{
-				debugger
+
 				if(view.TPackagingInstructions && (view.status == "CONFIRMED" || view.status == "UNCONFIRMED"|| view.status == "READY") && (view.arrived != 1) ){
 					return (
-						<tr>
+						<tr key={index}>
 							<td>{view.TPackagingInstructions.TCompany? view.TPackagingInstructions.TCompany.name : ''}</td>
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.po_number : ''}</td>
 							<td>{view.railcar_number ? view.railcar_number : ''}</td>
-							<td>{view.weight?(this.state.selectedOption=='lbs'?view.weight:(view.weight/MUL_FACTOR).toFixed(2)):''}</td>
+							<td>{view.weight?(this.props.weight=='lbs'?view.weight:(view.weight/MUL_FACTOR).toFixed(2)):''}</td>
 							<td>{view.lot_number ? view.lot_number: ''}</td>
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.material : ''}</td>
 							<td> {view.status == "UNCONFIRMED"? "NO" : "YES"}</td>
@@ -534,7 +510,7 @@ onChnage(e){
 								</label>
 							</td>
 							<td>
-							<input type="date" onChange={(e, x,) => this.handleChange1(e,x)}  id={index}/>
+							<input type="date" onChange={(e, x) => this.handleChange1(e,x)}  id={index}/>
 					</td>
 						</tr>
 					)
@@ -563,16 +539,16 @@ onChnage(e){
 
   	const railCart = this.props.data
 		var railcartData = _.map(railCart , (view ,index)=>{
-		debugger;
+
 
 			if(view.TPackagingInstructions && (view.status == "CONFIRMED" || view.status == "UNCONFIRMED" || view.status == "QUEUED")) {
-debugger
+
 		return(
-	              	<tr>
+	              	<tr key={index}>
 							<td>{view.TPackagingInstructions.TCompany? view.TPackagingInstructions.TCompany.name : ''}</td>
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.po_number : ''}</td>
 							<td>{view.railcar_number ? view.railcar_number : ''}</td>
-							<td>{view.weight?(this.state.selectedOption=='lbs'?view.weight:(view.weight/MUL_FACTOR).toFixed(2)):''}</td>
+							<td>{view.weight?(this.props.weight=='lbs'?view.weight:(view.weight/MUL_FACTOR).toFixed(2)):''}</td>
 							<td>{view.lot_number ? view.lot_number: ''}</td>
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.material : ''}</td>
 							<td> {view.status == "UNCONFIRMED" ? "NO" : "YES"}</td>
@@ -605,29 +581,6 @@ debugger
 	<div className="row-fluid">
 <FilterComponent key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter} parent={"RailcarArrivalEntry"}/>	 	<div id="filter-grid">
 		<div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
-		<div className="pull-right margin-30-right">
-				<label className="control control--radio ">LBS
-						<input id="Modify_User" name="Modify_User" type="radio"
-									 type="radio"
-									 id="ADDCustomers"
-									 name="ADDCustomers"
-									 value="lbs"
-									 onChange={this.handleOptionChange}
-									 checked={this.state.selectedOption==='lbs'}
-								/><div className="control__indicator"></div>
-						</label>
-				</div>
-				<div className="pull-right margin-30-right">
-						<label className="control control--radio ">Kg
-								<input id="Modify_User" name="Modify_User" type="radio"
-											 id="ADDCustomers"
-											 name="ADDCustomers"
-											 value="kg"
-											 onChange={this.handleOptionChange1}
-											 checked={this.state.selectedOption==='kg'}
-										/><div className="control__indicator"></div>
-								</label>
-						</div>
 			<div className="row">
 			<FilterButton buttonDisplay = {this.buttonDisplay} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
 				<div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs">
@@ -637,7 +590,7 @@ debugger
 			<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 "><hr/></div>
 
 			<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-				<div className="table-responsive view_table  mega" style={{"max-height":"550","overflow-y":"scroll"}}>
+				<div className="table-responsive view_table  mega" style={{"maxHeight":"550px","overflowY":"scroll"}}>
 					<table id="tableRailCarArrival" className="table table-expandable" cellSpacing="0">
 						<thead id="headerRailCarArrival" className="table_head header-fixed header red">
 						  <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>

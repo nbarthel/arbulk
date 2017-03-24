@@ -110,14 +110,13 @@ export default class PackagingInstructionViewForm extends React.Component {
         //this.state.queue_Sequence[0].max_mark
 getdt(a){
 a.id=="1"?this.startDate = a.tempDate:this.endDate=a.tempDate;
-this.onSearch(a)
 }
      onTextChange(e){
 
          var idValue = e.target.id
 
           this.Query[idValue] = e.target.value
-          this.onSearch(e)
+          console.log(this.Query)
         }
 
       onClickPo(e){
@@ -125,13 +124,12 @@ this.onSearch(a)
            this.Query[e.target.id] = e.target.getAttribute('value')
 
           document.getElementById('POSearch').value = e.target.getAttribute('value')
-          this.onSearch(e)
+
       }
 
       lotSearch(e){
            this.Query[e.target.id] = e.target.getAttribute('value')
            document.getElementById('LotSearch').value = e.target.getAttribute('value')
-           this.onSearch(e)
   }
 
 onClickli(e){
@@ -162,7 +160,6 @@ PrintScreen(){
 }
 onSearch(e){
   var cutofFilter = []
-  var flagForcutOffFilter = false
   if(this.startDate && this.endDate) {
       // var startDate = moment(this.startDate.format('MM-DD-YYYY')),
       //     endDate = moment(this.endDate.format('MM-DD-YYYY'));
@@ -179,7 +176,6 @@ onSearch(e){
           writable: true,
           configurable: true,
           value:cutofFilter})
-      flagForcutOffFilter = true
 
   }
            if(this.Query != undefined){
@@ -252,6 +248,7 @@ onSearch(e){
                         }]
                     });
                     var base = 'TPackagingInstructions';
+
                     if(serachObjLots && serachObjLots.length > 0 ){
 
                         this.urlSearch = PIview._buildUrl(base, {
@@ -263,7 +260,7 @@ onSearch(e){
                               "include":{
                               "relation":"TShipmentent" ,
                               "scope":{"include" : "TShipmentInternational",
-                              "scope":{"where" : {"and" : cutofFilter }}
+                              "scope":{"where" : {"or" : cutofFilter }}
                             }}}},
                                 "where":{ "and": [{"and":serachObjLots},{active:1}]}
                             }
@@ -290,7 +287,7 @@ onSearch(e){
                         "include":{
                         "relation":"TShipmentent" ,
                         "scope":{"include" : "TShipmentInternational",
-                        "scope":{"where" : {"and" : cutofFilter }}
+                        "scope":{"where" : {"or" : cutofFilter }}
                       }}}},
                         "where":{ "and": [{"and":serachObjLots},{active:1}]}
                         }},
@@ -313,51 +310,59 @@ onSearch(e){
                           var flag = false;
                             console.log('ajax ',data);
                             var st = this.startDate,
-                                ed = this.endDate,
-                                i=0,
-                                flagToDecideIncrement = true
+                                ed = this.endDate
 
-                            if(flagForcutOffFilter && data.length>0){
-
-                                while(i<data.length){
-                                  flagToDecideIncrement = true
-                                  if(data[i].TPackagingInstructionLots.length<1){
-                                    data.splice(i,1)
-                                    i = i==0?0:i-1
-                                    flagToDecideIncrement = false
+                            if(this.startDate!=undefined&&this.endDate!=undefined){
+                              this.setState(
+                                  {
+                                      startDate : st,
+                                      endDate :ed
                                   }
-                                  else{
-                                    for(var j in data[i].TPackagingInstructionLots){
-
-                                      if(!data[i].TPackagingInstructionLots[j].TShipmentLots || data[i].TPackagingInstructionLots[j].TShipmentLots.length<1){
-                                        data[i].TPackagingInstructionLots.splice(j,1)
-                                        i = i==0?0:i-1
-                                        flagToDecideIncrement = false
-                                        break
-                                      }
-                                      else{
-                                        for(var k in data[i].TPackagingInstructionLots[j].TShipmentLots){
-
-                                          var date = new Date(data[i].TPackagingInstructionLots[j].TShipmentLots[k].TShipmentent.TShipmentInternational.length>0?data[i].TPackagingInstructionLots[j].TShipmentLots[k].TShipmentent.TShipmentInternational[0].cargoCutoffDate:new Date('01-01-0001'))
-                                          if(date > new Date(this.endDate) || date<new Date(this.startDate)){
-                                            data[i].TPackagingInstructionLots.splice(j,1)
-                                            i = i==0?0:i-1
-                                            flagToDecideIncrement = false
-                                            break
-                                          }
-                                        }
-                                      }
-                                      if(!flagToDecideIncrement){
-                                        break
-                                      }
-                                    }
-                                  }
-                                  if(flagToDecideIncrement){
-                                    i++
-                                  }
-                                }
+                              )
                             }
-
+                            // if(this.startDate!=undefined&&this.endDate!=undefined){
+                            //
+                            //   for(var i=0;i<data.length;i++){
+                            //     if(data[i].TPackagingInstructionLots.length<=0){
+                            //       data.splice(i,1)
+                            //       i=0
+                            //       continue
+                            //     }
+                            //       for(var k in data[i].TPackagingInstructionLots){
+                            //         if(data[i].TPackagingInstructionLots[k].TShipmentLots.length<=0){
+                            //           data.splice(i,1)
+                            //           i=0
+                            //           break
+                            //           flag = true;
+                            //         }
+                            //         for(var j in data[i].TPackagingInstructionLots[k].TShipmentLots){
+                            //           if(!(data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0] &&
+                            //               new Date(data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0].cargoCutoffDate)>=new Date(this.startDate) &&
+                            //               new Date(data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0].cargoCutoffDate) <= new Date(this.endDate))){
+                            //           data.splice(i,1);
+                            //           i=0
+                            //           flag = true;
+                            //           break;
+                            //         }
+                            //         else if(!data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0] && data[i].TPackagingInstructionLots[k].TShipmentLots[j]){
+                            //           data.splice(i,1);
+                            //           i=0
+                            //           flag = true;
+                            //           break;
+                            //         }
+                            //         if(flag){
+                            //           break;
+                            //         }
+                            //         }
+                            //         if(flag){
+                            //           break;
+                            //         }
+                            //       }
+                            //       flag = false;
+                            //
+                            //   }
+                            // }
+                            debugger
                             localStorage.setItem('piViewData', JSON.stringify(data));
                             this.setState(
                                 {
@@ -412,7 +417,7 @@ onSearch(e){
                                                       writable: true,
                                                       configurable:true,
                                                       value:this.checkedCustomer})
-            //this.buttonDisplay.push(e.target.value)
+            this.buttonDisplay.push(e.target.value)
             //console.log(this.props.checkedCompany)
             //console.log(this.props.buttonDisplay)
             console.log(this.checkedCustomer)
@@ -431,7 +436,6 @@ onSearch(e){
                 this.buttonDisplay = _.without(this.buttonDisplay,value)
                   this.forceUpdate()
                    }
-            this.onSearch(e)
         }
         onStatusFilter(e,status){
             if(e.target.checked){
@@ -441,7 +445,7 @@ onSearch(e){
                                                       writable: true,
                                                       configurable:true,
                                                       value:this.checkedStatus})
-            //this.buttonDisplay.push(e.target.value)
+            this.buttonDisplay.push(e.target.value)
             this.forceUpdate()
 
             //console.log(this.props.buttonDisplay)
@@ -467,7 +471,6 @@ onSearch(e){
                 //console.log(this.buttonDisplay)
                   this.forceUpdate()
                   }
-            this.onSearch(e)
         }
 
 
@@ -478,22 +481,26 @@ onSearch(e){
 
     }
     viewChange(e){
+        debugger
          var index = e.target.selectedIndex ;
          var blob = e.target.value
          var changedView = this.state.savedViews[index -1]
         this.Where = JSON.parse(blob)
+
         console.log(this.Where)
+        //if(this.Query != undefined){
+        //    Object.defineProperty(this.Where,"Query",{enumerable:true ,
+        //        writable: true,
+        //        configurable: true,
+        //        value:this.Query})
+        //}
+        //console.log(this.Where)
         var serachObj = []
         var serachObjLots =[]
         var cutofFilter = []
-        var flagForcutOffFilter = false
-        if(this.Where.CutofFilter){
-          this.startDate = new Date(this.Where.CutofFilter[0].cargoCutoffDate)
-          this.endDate = new Date(this.Where.CutofFilter[this.Where.CutofFilter.length-1].cargoCutoffDate)
-        }
         if(this.startDate && this.endDate) {
-            // this.startDate = moment(this.startDate.format('MM-DD-YYYY')),
-            // this.endDate = moment(this.endDate.format('MM-DD-YYYY'));
+            // var startDate = moment(this.startDate.format('MM-DD-YYYY')),
+            //     endDate = moment(this.endDate.format('MM-DD-YYYY'));
             var cutoffDate = []
             cutoffDate.push(this.startDate)
             cutoffDate.push(this.endDate)
@@ -507,8 +514,6 @@ onSearch(e){
                 writable: true,
                 configurable: true,
                 value:cutofFilter})
-
-            flagForcutOffFilter = true
 
         }
 
@@ -637,52 +642,59 @@ onSearch(e){
                        var flag = false;
                          console.log('ajax ',data);
                          var st = this.startDate,
-                             ed = this.endDate,
-                             i=0,
-                             flagToDecideIncrement = true
-                             debugger
-                         if(flagForcutOffFilter && data.length>0){
+                             ed = this.endDate
 
-                             while(i<data.length){
-                               flagToDecideIncrement = true
-                               if(data[i].TPackagingInstructionLots.length<1){
-                                 data.splice(i,1)
-                                 i = i==0?0:i-1
-                                 flagToDecideIncrement = false
+                         if(this.startDate!=undefined&&this.endDate!=undefined){
+                           this.setState(
+                               {
+                                   startDate : st,
+                                   endDate :ed
                                }
-                               else{
-                                 for(var j in data[i].TPackagingInstructionLots){
-
-                                   if(!data[i].TPackagingInstructionLots[j].TShipmentLots || data[i].TPackagingInstructionLots[j].TShipmentLots.length<1){
-                                     data[i].TPackagingInstructionLots.splice(j,1)
-                                     i = i==0?0:i-1
-                                     flagToDecideIncrement = false
-                                     break
-                                   }
-                                   else{
-                                     for(var k in data[i].TPackagingInstructionLots[j].TShipmentLots){
-
-                                       var date = new Date(data[i].TPackagingInstructionLots[j].TShipmentLots[k].TShipmentent.TShipmentInternational.length>0?data[i].TPackagingInstructionLots[j].TShipmentLots[k].TShipmentent.TShipmentInternational[0].cargoCutoffDate:new Date('01-01-0001'))
-                                       if(date > new Date(this.endDate) || date<new Date(this.startDate)){
-                                         data[i].TPackagingInstructionLots.splice(j,1)
-                                         i = i==0?0:i-1
-                                         flagToDecideIncrement = false
-                                         break
-                                       }
-                                     }
-                                   }
-                                   if(!flagToDecideIncrement){
-                                     break
-                                   }
-                                 }
-                               }
-                               if(flagToDecideIncrement){
-                                 i++
-                               }
-                             }
+                           )
                          }
+                         // if(this.startDate!=undefined&&this.endDate!=undefined){
+                         //
+                         //   for(var i=0;i<data.length;i++){
+                         //     if(data[i].TPackagingInstructionLots.length<=0){
+                         //       data.splice(i,1)
+                         //       i=0
+                         //       continue
+                         //     }
+                         //       for(var k in data[i].TPackagingInstructionLots){
+                         //         if(data[i].TPackagingInstructionLots[k].TShipmentLots.length<=0){
+                         //           data.splice(i,1)
+                         //           i=0
+                         //           break
+                         //           flag = true;
+                         //         }
+                         //         for(var j in data[i].TPackagingInstructionLots[k].TShipmentLots){
+                         //           if(!(data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0] &&
+                         //               new Date(data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0].cargoCutoffDate)>=new Date(this.startDate) &&
+                         //               new Date(data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0].cargoCutoffDate) <= new Date(this.endDate))){
+                         //           data.splice(i,1);
+                         //           i=0
+                         //           flag = true;
+                         //           break;
+                         //         }
+                         //         else if(!data[i].TPackagingInstructionLots[k].TShipmentLots[j].TShipmentent.TShipmentInternational[0] && data[i].TPackagingInstructionLots[k].TShipmentLots[j]){
+                         //           data.splice(i,1);
+                         //           i=0
+                         //           flag = true;
+                         //           break;
+                         //         }
+                         //         if(flag){
+                         //           break;
+                         //         }
+                         //         }
+                         //         if(flag){
+                         //           break;
+                         //         }
+                         //       }
+                         //       flag = false;
+                         //
+                         //   }
+                         // }
 
-                         localStorage.setItem('piViewData', JSON.stringify(data));
                          this.setState(
                              {
                                  viewData : data
@@ -1279,7 +1291,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                         showARB = {this.state.showARB}
                         showCustomer = {this.state.showCustomer}
                         showPO = {this.state.showPO}
-                        Railcar = {this.state.showRailcar}
+                        Railcar = {this.state.Railcar}
                         showLot = {this.state.showLot}
                         showMaterial = {this.state.showMaterial}
                         showConfmd = {this.state.showConfmd}
@@ -1311,7 +1323,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                         showARB = {this.state.showARB}
                         showCustomer = {this.state.showCustomer}
                         showPO = {this.state.showPO}
-                        Railcar = {this.state.showRailcar}
+                        Railcar = {this.state.Railcar}
                         showLot = {this.state.showLot}
                         showMaterial = {this.state.showMaterial}
                         showConfmd = {this.state.showConfmd}

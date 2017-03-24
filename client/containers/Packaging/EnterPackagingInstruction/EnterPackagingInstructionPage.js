@@ -8,7 +8,7 @@ var Loader = require('react-loader');
   constructor(props){
     super(props);
     this.state = {
-        loaded: true}
+        loaded: true, weight: 'lbs'}
   }
    componentWillMount(){
      debugger
@@ -37,7 +37,7 @@ var Loader = require('react-loader');
       include: {"relation":'TPackagingInstructionLots',"scope":{"where":{"active":1}}}
     })
   }
-    console.log(this.url,"<<<<<<<<<<<<<<<<<<<<URL")
+
       $.ajax({
             url: this.url,
             success:function(data){
@@ -51,22 +51,27 @@ var Loader = require('react-loader');
           }.bind(this)
 
         })
-   /* console.log("The recived data is :->>>>>. ",this.state.entryInfo)*/
 
 
-    }
 
     }
+
+    }
+     setWeight(value) {
+         console.log("set Weight", value);
+         this.setState({
+             weight: value
+         });
+     }
        render(){
-      /*console.log("The recived data is :->>>>>. ",this.state.entryInfo)
-        console.log("LOTSSSSSSSS>>>>>>>.<<<<<<<<",this.state.lotInfo)*/
+
           return (
       <div>
       <div className="wrapper-inner">
       <div className="content-inside">
-      <Header routes = {this.props.routes} />
+      <Header routes = {this.props.routes} setWeight={this.setWeight.bind(this)}/>
       <Loader loaded={this.state.loaded}>
-      <EnterPackagingInstructionForm data = {this.state.entryInfo} lotInfo = {this.state.lotInfo}/>
+      <EnterPackagingInstructionForm data = {this.state.entryInfo} lotInfo = {this.state.lotInfo} weight={this.state.weight}/>
      	</Loader>
       </div>
         <Footer />

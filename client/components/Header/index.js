@@ -49,7 +49,7 @@ constructor(props){
                <li><a href="javascript:void(0)">PACKAGING</a></li>
                <li role="separator" className="divider"></li>
               <li><Link to="/Packaging/enterpackginginst/" >Enter RailCars</Link></li>
-               <li><Link to="/Packaging/packaginginstview/">View RailCars</Link></li>
+               <li><Link to="/Packaging/packaginginstview/">View Inventory</Link></li>
                <li role="separator" className="divider"></li>
                <li><Link to="/Packaging/railcararrival">Mark Railcar Arrivals </Link></li>
                <li><Link to="/Packaging/railcardeparte">Mark Railcar Departures </Link></li>
@@ -85,7 +85,7 @@ constructor(props){
      </div>
    </nav>
 </header>
- <BreadCrumb routes = {this.props.routes} />
+ <BreadCrumb routes = {this.props.routes} setWeight={this.props.setWeight}/>
  </div>
 
     );

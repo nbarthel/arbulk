@@ -536,7 +536,6 @@ render(){
                    <td style ={{display : this.props.showWeight}}>{selectedWeight == 'lbs' ? data.weight:(data.weight / MUL_FACTOR).toFixed(2)}</td>
                    <td style ={{display : this.props.showBag}}>{bagsallocated>0?bagsallocated : 0}</td>
                    <td style ={{display : this.props.showInInvt}}>{(data.inInventory && bagsallocated > 0) ?(data.inInventory - bagsallocated ):parseInt(data.inInventory)>0?parseInt(data.inInventory):0 }</td>
-
                    <td style ={{display : this.props.showStatus}}>{data.status ? data.status : '' }</td>
                    <td style ={{display : this.props.showRailcarArr}}>{data.arrived != null && data.arrived == 1 ? "Yes" : "No"}</td>
                    <td style ={{display : this.props.showRailcarArrD}}>{data.railcar_arrived_on != null ? moment(data.railcar_arrived_on).format("MM-DD-YYYY") : "N/A"}</td>
@@ -642,14 +641,14 @@ render(){
 
 
                       </th>
-                      <th style ={{display : this.props.showBag}} onClick={(e)=> this.onAscending(e,'Bags')}>#Bags
+                      <th style ={{display : this.props.showBag}} onClick={(e)=> this.onAscending(e,'Bags')}>Qty Allocated
                       <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x" ></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
 
                       </th>
-                      <th style ={{display : this.props.showInInvt}} onClick={(e)=> this.onAscending(e,'InInvt')}>(In Invt.)
+                      <th style ={{display : this.props.showInInvt}} onClick={(e)=> this.onAscending(e,'InInvt')}>Qty Packaged
                       <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x" ></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>

@@ -51,7 +51,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
 	    	errors : { },
 			rObjects:[],
       labelLength : [],
-      selectedOption: 'lbs',
+     // selectedOption: 'lbs',
       haveSpecialChar :0,
       loaded : false
 	    }
@@ -81,8 +81,8 @@ export default class EnterPackagingInstructionForm extends React.Component {
 	   	this.onChekBoxClick = this.onChekBoxClick.bind(this)
       this.handleNumberofbagsChange = this.handleNumberofbagsChange.bind(this)
 			this.Add = false
-      this.handleOptionChange = this.handleOptionChange.bind(this)
-      this.handleOptionChange1 = this.handleOptionChange1.bind(this)
+      //this.handleOptionChange = this.handleOptionChange.bind(this)
+      //this.handleOptionChange1 = this.handleOptionChange1.bind(this)
       this.convertWeightToLBS = this.convertWeightToLBS.bind(this)
       this.convertWeightToKG = this.convertWeightToKG.bind(this)
       this.ValidateRailCar = this.ValidateRailCar.bind(this)
@@ -192,39 +192,39 @@ componentDidMount() {
 	})
 }
 
-handleOptionChange(changeEvent) {
-  debugger;
-
-  var selectedOption = changeEvent.target.value
-  this.setState({
-        selectedOption: changeEvent.target.value
-});
-// weightinLBS = true;
-// if( weightinLBS && isWeightconverted){
-//    this.convertWeightToLBS(this.railcarObj)
-//    this.convertWeightToLBS(this.railCarObjects)
-//   //  if(this.props.data!==undefined){
-//   //    this.convertWeightToLBS(this.props.data.TPackagingInstructionLots)
-//   //  }
-// }
-//isWeightconverted = false;
-}
-handleOptionChange1(e) {
-  debugger;
-
-       this.setState({
-        selectedOption: e.target.value
-    });
-    // weightinLBS = false;
-    // if( !weightinLBS && !isWeightconverted){
-    //     this.convertWeightToKG(this.railcarObj)
-    //     this.convertWeightToKG(this.railCarObjects)
-    //     // if(this.props.data!==undefined){
-    //     //   this.convertWeightToKG(this.props.data.TPackagingInstructionLots)
-    //     // }
-    // }
-    // isWeightconverted = true;
-}
+//handleOptionChange(changeEvent) {
+//  debugger;
+//
+//  var selectedOption = changeEvent.target.value
+//  this.setState({
+//        selectedOption: changeEvent.target.value
+//});
+//// weightinLBS = true;
+//// if( weightinLBS && isWeightconverted){
+////    this.convertWeightToLBS(this.railcarObj)
+////    this.convertWeightToLBS(this.railCarObjects)
+////   //  if(this.props.data!==undefined){
+////   //    this.convertWeightToLBS(this.props.data.TPackagingInstructionLots)
+////   //  }
+//// }
+////isWeightconverted = false;
+//}
+//handleOptionChange1(e) {
+//  debugger;
+//
+//       this.setState({
+//        selectedOption: e.target.value
+//    });
+//    // weightinLBS = false;
+//    // if( !weightinLBS && !isWeightconverted){
+//    //     this.convertWeightToKG(this.railcarObj)
+//    //     this.convertWeightToKG(this.railCarObjects)
+//    //     // if(this.props.data!==undefined){
+//    //     //   this.convertWeightToKG(this.props.data.TPackagingInstructionLots)
+//    //     // }
+//    // }
+//    // isWeightconverted = true;
+//}
 SetUnitType(name){
 
   debugger
@@ -590,7 +590,7 @@ if(this.railCarObjects && this.railCarObjects.length > 1){
       this.railCarObjects[i].custom_label = tempcustomlabel
   }
 }
-if(this.state.selectedOption == 'kg'){
+if(this.props.weight == 'kg'){
   var flag = true;
   for(var i=0;i<this.railCarObjects.length;i++){
     this.railCarObjects[i].weight = this.railCarObjects[i].weight*MUL_FACTOR
@@ -894,7 +894,7 @@ var uniquelot = arrlot.filter(function(elem, index, self) {
 	var uniqueWeight = arrWeight.filter(function(elem, index, self) {
 		return index == self.indexOf(elem);
 	})
-  if(this.state.selectedOption == 'kg'){
+  if(this.props.weight == 'kg'){
     for(var i =0 ;i<uniqueWeight.length;i++){
       uniqueWeight[i] = uniqueWeight[i] * MUL_FACTOR
     }
@@ -1003,31 +1003,7 @@ render() {
     return (
       <Loader loaded={this.state.loaded} id="loaded">
 <section className="edit_Packaging">
-{this.props.data == undefined?
-<div className="pull-right "  style={{"margin-right":"170","margin-top":"-33"}}>
-<label className="control control--radio ">LBS
-    <input id="Modify_User" name="Modify_User" type="radio"
-           type="radio"
-           id="ADDCustomers"
-           name="ADDCustomers"
-           value="lbs"
-           onChange={this.handleOptionChange}
-           checked={this.state.selectedOption==='lbs'}
-          /><div className="control__indicator"></div>
-    </label>
-</div>:''}
-{this.props.data == undefined?
-<div className="pull-right " style={{"margin-right":"10","margin-top":"-33"}}>
-    <label className="control control--radio ">Kg
-        <input id="Modify_User" name="Modify_User" type="radio"
-               id="ADDCustomers"
-               name="ADDCustomers"
-               value="kg"
-               onChange={this.handleOptionChange1}
-               checked={this.state.selectedOption==='kg'}
-            /><div className="control__indicator"></div>
-        </label>
-    </div>:''}
+
 <div className="container">
 
 <div className="row">
@@ -1058,7 +1034,7 @@ render() {
 					 name="customer_id"
 					 ref="customerPicker"
 					 onChange={(e) => {this.handleCustomerEditChange(e)}}
-					 defaultValue={this.props.data.customer_id}
+
 					 value={this.props.data.customer_id}
 					 >
 					{customers}
@@ -1188,7 +1164,7 @@ render() {
                 </div>
 
 				<div className="form-group">
-					<label htmlFor="Weight" className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label">{ this.state.selectedOption=='lbs'?'Weight(lbs)':'Weight(kg)'}</label>
+					<label htmlFor="Weight" className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label">{ this.props.weight=='lbs'?'Weight(lbs)':'Weight(kg)'}</label>
 					<div className="col-lg-7    col-sm-11 col-xs-11 ">
 					    {this.props.lotInfo != undefined ?
 					    <input

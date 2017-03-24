@@ -19,8 +19,8 @@ export default class PackagingInstructionViewPage extends React.Component {
   }
 
   render() {
-    //debugger
-      console.log("ajx data>>>>>>>>>>",this.state.viewData)
+
+
     return (
       <div className="wrapper-inner">
       <div className="content-inside">
