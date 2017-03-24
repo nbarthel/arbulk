@@ -1261,6 +1261,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                                 <a href="javascript:void(0)" name = "InInvt" onClick={(e) => {this.onHideColumn(e)}}>Qty Packaged</a>
                                 <a href="javascript:void(0)" name = "Status"onClick={(e) => {this.onHideColumn(e)}}>Status</a>
                                 <a href="javascript:void(0)" name = "RailcarArr" onClick={(e) => {this.onHideColumn(e)}}>Railcar Arrival</a>
+                                <br/>
                                 <a href="javascript:void(0)" name = "RailcarArrD" onClick={(e) => {this.onHideColumn(e)}}>Railcar Arrival Date</a>
                                 <a href="javascript:void(0)" name = "RailcarDep" onClick={(e) => {this.onHideColumn(e)}}>Railcar Departure</a>
                                 <a href="javascript:void(0)" name = "RailcarDepDate" onClick={(e) => {this.onHideColumn(e)}}>Railcar Departure Date</a>
