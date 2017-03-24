@@ -39,7 +39,7 @@ render() {
 		return (
                 <div className="col-lg-8 col-md-8 col-sm-12 col-xs-12 filter-btn">
                 {buttons}	
-                <button type="button" name="search" onClick={this.props.onSearch} className="btn btn-default">Search</button>                              
+					{/*<button type="button" name="search" onClick={this.props.onSearch} className="btn btn-default">Search</button>*/}
                 <a href="javascript:void(0)" name="clearall" onClick={this.props.onRemove}>Clear All</a>
                </div>
 		);
