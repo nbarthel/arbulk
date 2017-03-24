@@ -122,6 +122,7 @@ class  ContainerViewForm extends React.Component {
             writable: true,
             configurable:true,
             value:this.arrivalType})
+        this.onSearch(e)
     }
 
     PrintScreen(){
@@ -146,14 +147,14 @@ class  ContainerViewForm extends React.Component {
       window.location.reload()
     }
     onSteamShipFilter(e,steamShip){
-      debugger
       if(e.target.checked){
       this.SteamLineArray.push(parseInt(e.target.id));
       Object.defineProperty(this.Where,"SteamLine",{enumerable: true ,
                                                 writable: true,
                                                 configurable:true,
                                                 value:this.SteamLineArray})
-      this.buttonDisplay.push(e.target.value)
+      // this.buttonDisplay.push(e.target.value)
+
     }
     else{
           if(this.SteamLineArray.indexOf(parseInt(e.target.id))!=-1){
@@ -161,6 +162,7 @@ class  ContainerViewForm extends React.Component {
           }
             this.buttonDisplay = _.without(this.buttonDisplay,e.target.value)
     }
+      this.onSearch(e)
       this.forceUpdate()
     }
     onContainerFilter(e,location){
@@ -170,8 +172,8 @@ class  ContainerViewForm extends React.Component {
                 writable: true,
                 configurable:true,
                 value:this.checkedContainer})
-            this.buttonDisplay.push(e.target.value)
-              this.forceUpdate()
+            // this.buttonDisplay.push(e.target.value)
+            //   this.forceUpdate()
             //console.log(this.props.checkedCompany)
             //console.log(this.props.buttonDisplay)
 
@@ -192,6 +194,7 @@ class  ContainerViewForm extends React.Component {
                 this.buttonDisplay = _.without(this.buttonDisplay,value)
             this.forceUpdate()
         }
+        this.onSearch(e)
     }
 
 
@@ -203,7 +206,7 @@ class  ContainerViewForm extends React.Component {
                                                       writable: true,
                                                       configurable:true,
                                                       value:this.checkedCompany})
-            this.buttonDisplay.push(e.target.value)
+            //this.buttonDisplay.push(e.target.value)
             //console.log(this.props.checkedCompany)
             //console.log(this.props.buttonDisplay)
 
@@ -224,6 +227,7 @@ class  ContainerViewForm extends React.Component {
                 this.buttonDisplay = _.without(this.buttonDisplay,value)
                  this.forceUpdate()
                    }
+             this.onSearch(e)
         }
         onCustomerFilter(e,customer){
             if(e.target.checked){
@@ -233,7 +237,7 @@ class  ContainerViewForm extends React.Component {
                                                       writable: true,
                                                       configurable:true,
                                                       value:this.checkedCustomer})
-            this.buttonDisplay.push(e.target.value)
+            //this.buttonDisplay.push(e.target.value)
             //console.log(this.props.checkedCompany)
             //console.log(this.props.buttonDisplay)
             console.log(this.checkedCustomer)
@@ -252,6 +256,7 @@ class  ContainerViewForm extends React.Component {
                 this.buttonDisplay = _.without(this.buttonDisplay,value)
                   this.forceUpdate()
                    }
+            this.onSearch(e)
         }
         onStatusFilter(e,status){
             if(e.target.checked){
@@ -261,7 +266,7 @@ class  ContainerViewForm extends React.Component {
                                                       writable: true,
                                                       configurable:true,
                                                       value:this.checkedStatus})
-            this.buttonDisplay.push(e.target.value)
+            //this.buttonDisplay.push(e.target.value)
             this.forceUpdate()
 
             //console.log(this.props.buttonDisplay)
@@ -287,6 +292,7 @@ class  ContainerViewForm extends React.Component {
                 //console.log(this.buttonDisplay)
                   this.forceUpdate()
                   }
+            this.onSearch(e)
         }
     onButtonRemove(index,button){
     this.buttonDisplay.splice(index,1)
@@ -294,11 +300,9 @@ class  ContainerViewForm extends React.Component {
 
 }
     onRemove(e){
-        debugger;
         console.log("clicked")
         console.log("WHERE",this.Where)
          this.buttonDisplay = [];
-         //this.buttonDisplay = []
             this.checkedCustomer = []
             this.checkedStatus = []
             this.checkedCompany = []
@@ -308,7 +312,6 @@ class  ContainerViewForm extends React.Component {
             delete this.Where.Customer
             delete this.Where.status
             delete this.state.viewData
-      //  delete this.Where
         delete this.state.Container
         delete this.state.Arrival
         delete this.state.SteamLine
@@ -323,7 +326,6 @@ class  ContainerViewForm extends React.Component {
     }
 
 onCheckboxChange(e,data ,contData){
-debugger;
     this.containerData = contData
     console.log(">>>>>>>>>>>>>Contaimner Data" ,  this.containerData)
     this.contId = contData.id
@@ -391,7 +393,6 @@ debugger;
 }
 
     onSearch(e){
-      debugger
       Object.defineProperty(this.Where,"Query",{enumerable:true ,
             writable: true,
             configurable: true,
@@ -726,7 +727,6 @@ debugger;
        // var changedView = this.state.savedViews[index -1]
         this.Where = JSON.parse(blob)
 
-        debugger
         Object.defineProperty(this.Where,"Query",{enumerable:true ,
               writable: true,
               configurable: true,
@@ -770,9 +770,6 @@ debugger;
        containerSearch.push(container)
        searchContainerFlag = true
      }
-
-        console.log("Search object" , serachObj)
-
           if (this.Where != undefined && this.Where!= null) {
               if (this.Where.Customer && this.Where.Customer.length > 0) {
                   var customer = []
@@ -1031,7 +1028,7 @@ debugger;
                       }
                       searchContainerFlag = false
                       steamflag = false
-                      console.log('ajax ',data);
+                      localStorage.setItem('conViewData',JSON.stringify(data))
                       this.setState({
                           viewData : data,
                           loaded:true
@@ -1207,36 +1204,34 @@ break;
 
 
     onTextChange(e){
-
         var idValue = e.target.id
-
         this.Query[idValue] = e.target.value
         console.log(this.Query)
+        this.onSearch(e)
     }
 
     SteamLine(e){
-
         console.log("valueShipment type" , e.target.value)
         this.SteamLine = e.target.value
-
         Object.defineProperty(this.Where,"SteamLine",{enumerable: true ,
             writable: true,
             configurable:true,
             value:this.SteamLine})
+        this.onSearch(e)
     }
 
     lotSearch(e){
-        debugger;
         this.Query[e.target.id] = e.target.getAttribute('value')
         console.log(this.Query)
         document.getElementById('LotSearch').value = e.target.getAttribute('value')
+        this.onSearch(e)
 
     }
     handleTextChange(e){
         this.setState({
             Text  : e.target.value
         })
-
+        this.onSearch(e)
     }
 onViewClick(e){
     if(this.contId==undefined){
@@ -1287,14 +1282,14 @@ onViewClick(e){
 
     </div>
     <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 " id="hide4">
-                 <a href="javascript:void(0)" name = "ARB" onClick = {(e) => {this.onHideColumn(e,name)}}>ARB</a> --
-                 <a href="javascript:void(0)" name = "Customer" onClick = {(e) => {this.onHideColumn(e)}}>Customer</a> ---
-                 <a href="javascript:void(0)" name = "Release" onClick={(e) => {this.onHideColumn(e)}}>Release</a> --
-                 <a href="javascript:void(0)" name = "Booking" onClick={(e) => {this.onHideColumn(e)}}>Booking</a> --
-                 <a href="javascript:void(0)" name = "Container" onClick={(e) => {this.onHideColumn(e)}}>Container</a> --
-                 <a href="javascript:void(0)" name = "Trucker" onClick={(e) => {this.onHideColumn(e)}}>Trucker</a> --
-                 <a href="javascript:void(0)" name = "Arrived" onClick={(e) => {this.onHideColumn(e)}}>Arrived</a> --
-                 <a href="javascript:void(0)" name = "SteamShip" onClick={(e) => {this.onHideColumn(e)}}>SteamShip Line</a> --
+                 <a href="javascript:void(0)" name = "ARB" onClick = {(e) => {this.onHideColumn(e,name)}}>ARB</a>
+                 <a href="javascript:void(0)" name = "Customer" onClick = {(e) => {this.onHideColumn(e)}}>Customer</a>
+                 <a href="javascript:void(0)" name = "Release" onClick={(e) => {this.onHideColumn(e)}}>Release</a>
+                 <a href="javascript:void(0)" name = "Booking" onClick={(e) => {this.onHideColumn(e)}}>Booking</a>
+                 <a href="javascript:void(0)" name = "Container" onClick={(e) => {this.onHideColumn(e)}}>Container</a>
+                 <a href="javascript:void(0)" name = "Trucker" onClick={(e) => {this.onHideColumn(e)}}>Trucker</a>
+                 <a href="javascript:void(0)" name = "Arrived" onClick={(e) => {this.onHideColumn(e)}}>Arrived</a>
+                 <a href="javascript:void(0)" name = "SteamShip" onClick={(e) => {this.onHideColumn(e)}}>SteamShip Line</a>
                  <a href="javascript:void(0)" name = "Type" onClick={(e) => {this.onHideColumn(e)}}>Type</a>
                  </div>
     <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
