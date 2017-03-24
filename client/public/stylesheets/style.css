@@ -232,7 +232,7 @@ footer{  width:100%; background:#eaeaea; padding:15px 0px; height: 50px;margin-t
 
 a.hiddenanchor{display: none;}
 
-#wrapper{ margin: 0px auto; margin-top:15%;  min-width:300px; max-width:556px; vertical-align: middle; display:cell; }
+#wrapper{ margin: 0px auto;  min-width:300px; max-width:556px; vertical-align: middle; display:cell; }
 
 #wrapper:before { content: '\200B';  display: inline-block;  height: 100%;vertical-align: middle; }
 
