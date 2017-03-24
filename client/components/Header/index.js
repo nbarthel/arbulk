@@ -35,6 +35,11 @@ constructor(props){
        <span className="navbar-brand imgbg" ></span>
        </div>
 
+        <div className="pageTitle">
+         {this.props.routes[1].name.props.children[2]!="Enter Packaging Instruction" && this.props.routes[1].name.props.children[2]!= "Packaging Instruction View"?this.props.routes[1].name : (this.props.routes[1].name.props.children[2]=="Enter Packaging Instruction"?"Packaging >> Enter RailCars":"Packaging >> View RailCars")}
+        </div>
+
+
 
        <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
          <ul className="nav navbar-nav navbar-right top_nav">

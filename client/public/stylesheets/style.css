@@ -214,7 +214,7 @@ header .contain{ padding:5px 0px;}
 .dropdown-menu li:hover {color: #262626;text-decoration: none;background-color: #ccc;}
 .dropdown-menu li{font-size: 12px;}
 
-
+header .pageTitle{float: left;padding: 8px 15px;height: 40px;margin-top: 10px;}
 
 
 
