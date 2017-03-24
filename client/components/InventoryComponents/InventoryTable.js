@@ -74,8 +74,8 @@ var Loader = require('react-loader');
 							<th>Recd </th>
 							<th>Cutoff </th>
 							<th>Weight</th>
-							<th>#Bags</th>
-							<th>(In Invt.) </th>
+							<th>Qty Allocated</th>
+							<th>Qty Packaged</th>
 							<th>Status</th>
 							<th>
 

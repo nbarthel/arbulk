@@ -1126,7 +1126,7 @@ render() {
                 </div>
 			</fieldset>
 		<fieldset className="scheduler-border no-right-border">
-			<legend className="scheduler-border">RAIL CAR INFORMATION</legend>
+			<legend className="scheduler-border">RAILCAR INFORMATION</legend>
 				{this.props.lotInfo == undefined ?
 				<div>
 				<div className="bages_estimated col-lg-11 col-md-11 col-sm-11 col-xs-11"><span></span></div>
