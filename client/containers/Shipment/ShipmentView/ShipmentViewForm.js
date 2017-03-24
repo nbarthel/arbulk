@@ -23,7 +23,7 @@ class  ShipmentViewForm extends React.Component
                 index : 0,
             startDate: null,
             endDate : null,
-   		   showARB:"",
+   		      showARB:"",
            showCustomer:"",
            showPO:"",
            showRelease:"",
@@ -71,7 +71,6 @@ class  ShipmentViewForm extends React.Component
             this.onCustomerFilter =  this.onCustomerFilter.bind(this)
             this.onStatusFilter = this.onStatusFilter.bind(this)
             this.onRemove = this.onRemove.bind(this)
-           // this.onClick = this.onClick.bind(this)
             this.onButtonRemove = this.onButtonRemove.bind(this)
             this.onSearch = this.onSearch.bind(this)
             this.onTextChange = this.onTextChange.bind(this)
@@ -79,9 +78,6 @@ class  ShipmentViewForm extends React.Component
             this.handleTextChange = this.handleTextChange.bind(this)
             this.viewChange = this.viewChange.bind(this)
             this.checkboxChange = this.checkboxChange.bind(this)
-           // this.handleOptionChange = this.handleOptionChange.bind(this)
-            //this.handleOptionChange1 = this.handleOptionChange.bind(this)
-            //this.onEdit =this.onEdit.bind(this)
             this.qArray = []
             this.addToQueue = this.addToQueue.bind(this)
             this.tempLotId = ""
@@ -92,14 +88,11 @@ class  ShipmentViewForm extends React.Component
         hashHistory.push('/Container/containerarrivalentry')
     }
     headerCheckboxChange(e,data){
-      debugger
+
       if(e.target.checked){
           this.conFirmID = e.target.value
           this.selected = e.target.id
           this.confId = data.id
-          // this.status = value.status
-          // this.shipId = value.id
-          // this.tempLotId = data.piLotsId
       }
       else if(!e.target.checked){
           this.selected = null
@@ -169,7 +162,7 @@ PrintScreen(){
 }
 
     checkboxChange(e,value,data){
-        debugger
+
         console.log(value,data)
         if(e.target.checked){
             this.conFirmID = e.target.value
@@ -198,7 +191,7 @@ PrintScreen(){
 
 
     addToQueue(e){
-        debugger;
+         ;
       var option = {
           "queueSequence" : parseInt(this.state.queue_Sequence[0].max_mark) +1
       }
@@ -215,23 +208,26 @@ PrintScreen(){
 
           this.Query[idValue] = e.target.value
           console.log(this.Query)
+          this.onSearch(e)
         }
 
       onClickPo(e){
-        debugger;
+         ;
            this.Query[e.target.id] = e.target.getAttribute('value')
 
           document.getElementById('POSearch').value = e.target.getAttribute('value')
            console.log(this.Query)
            console.log('>>>>>> target Value' , e.target.value)
+           this.onSearch(e)
       }
 
       lotSearch(e){
-          debugger;
+           ;
            this.Query[e.target.id] = e.target.getAttribute('value')
            console.log(this.Query)
            document.getElementById('LotSearch').value = e.target.getAttribute('value')
            console.log('>>>>>> target Value' , e.target.value)
+           this.onSearch(e)
       }
 
 onClickli(e){
@@ -250,8 +246,8 @@ onClickli(e){
                                                       writable: true,
                                                       configurable:true,
                                                       value:this.checkedCompany})
-            this.buttonDisplay.push(e.target.value)
-            console.log(this.checkedCompany)
+            // this.buttonDisplay.push(e.target.value)
+            // console.log(this.checkedCompany)
             //console.log(this.props.buttonDisplay)
 
            }
@@ -271,6 +267,7 @@ onClickli(e){
                 this.buttonDisplay = _.without(this.buttonDisplay,value)
                  this.forceUpdate()
                    }
+          this.onSearch(e)
         }
         onCustomerFilter(e,customer){
 
@@ -281,10 +278,10 @@ onClickli(e){
                                                       writable: true,
                                                       configurable:true,
                                                       value:this.checkedCustomer})
-            this.buttonDisplay.push(e.target.value)
+            //this.buttonDisplay.push(e.target.value)
             //console.log(this.props.checkedCompany)
             //console.log(this.props.buttonDisplay)
-            console.log(this.checkedCustomer)
+            //console.log(this.checkedCustomer)
            }
             else if (!e.target.checked){
             let id = e.target.id
@@ -300,6 +297,7 @@ onClickli(e){
                 this.buttonDisplay = _.without(this.buttonDisplay,value)
                   this.forceUpdate()
                    }
+          this.onSearch(e)
         }
         onStatusFilter(e,status){
 
@@ -310,8 +308,8 @@ onClickli(e){
                                                       writable: true,
                                                       configurable:true,
                                                       value:this.checkedStatus})
-            this.buttonDisplay.push(e.target.value)
-            this.forceUpdate()
+            // this.buttonDisplay.push(e.target.value)
+            // this.forceUpdate()
 
             //console.log(this.props.buttonDisplay)
            /* console.log(this.Where)
@@ -336,6 +334,7 @@ onClickli(e){
                 //console.log(this.buttonDisplay)
                   this.forceUpdate()
                   }
+                  this.onSearch(e)
         }
     onButtonRemove(index,button){
     this.buttonDisplay.splice(index,1)
@@ -371,10 +370,10 @@ onClickli(e){
        }
 
     onSearch(e){
-        debugger;
         var cutofFilter = []
         var lotFlag = false
         var poFlag = false
+        var flagForCutOfDate = false;
         if(this.startdate && this.endDate) {
             var startDate = moment(this.startdate.format('MM-DD-YYYY')),
                 endDate = moment(this.endDate.format('MM-DD-YYYY'));
@@ -389,6 +388,7 @@ onClickli(e){
                 writable: true,
                 configurable: true,
                 value:cutofFilter})
+            flagForCutOfDate = true
 
         }
        if(this.Query != undefined){
@@ -770,8 +770,10 @@ onClickli(e){
       $.ajax({
             url: this.url,
             success:function(data){
-              debugger;
-              var i =0
+              var i =0,
+                  st = this.startDate,
+                  ed = this.endDate,
+                  flagToDecideIncrement = true
 
               if(poFlag){
                 while(poFlag){
@@ -800,9 +802,29 @@ onClickli(e){
                   }
                 }
               }
+              i=0
+              while(i<data.length && flagForCutOfDate){
+                flagToDecideIncrement = true
+                if(i<data.length && data.length>0 && data[i].TShipmentInternational.length <1){
+                  data.splice(i,1)
+                  i= i==0?0:i-1
+                  flagToDecideIncrement = false
+                }
+                else{
+                  var date = new Date(data[i].TShipmentInternational[0].cargoCutoffDate)
+                  if(date > new Date(ed) || date < new Date(st)){
+                    data.splice(i,1)
+                    i= i==0?0:i-1
+                    flagToDecideIncrement = false
+                  }
+                }
+                if(flagToDecideIncrement){
+                  i++
+                }
+              }
 
                 console.log('ajax ',data);
-                debugger
+
               localStorage.setItem('siViewData', JSON.stringify(data));
                this.setState(
                    {
@@ -829,7 +851,7 @@ onClickli(e){
 
    saveView(e){
 
-       debugger;
+        ;
         var saveCustomView = {
             "id": 0,
             "screenName": "SHIPMENT",
@@ -1236,9 +1258,7 @@ console.log('sdsddsdsdssdssssssssssd' , this.url);
 $.ajax({
 url: this.url,
 success:function(data){
-  debugger;
   var i =0
-
   if(poFlag){
     while(poFlag){
       if(i<data.length && data[i].TShipmentLots.length > 0 && data[i].TShipmentLots[0].TPackagingInstructions==undefined ){
@@ -1266,9 +1286,9 @@ success:function(data){
       }
     }
   }
-
+  localStorage.setItem('siViewData', JSON.stringify(data));
     console.log('ajax ',data);
-    debugger
+
    this.setState(
        {
            viewData : data,
@@ -1289,27 +1309,28 @@ success:function(data){
 
 
     handleChange(date){
-        debugger
+
         this.setState({
             startDate: date,
         });
         this.startdate = date
         console.log("THESTARTDATE",this.startdate.format('MM-DD-YYYY'))
+        this.onSearch()
     }
 
     handleChange1(date){
-        debugger;
+
         this.setState({
             endDate: date
         });
         this.endDate = date ;
         console.log("THEENDDATE",this.endDate.format('MM-DD-YYYY'))
+        this.onSearch()
     }
 
     getDates(startDate, endDate,interval) {
         var cfg = {interval: interval || 'days'};
         var dateArray = [];
-        debugger;
         var currentDate = moment(startDate);
         console.log('-->', currentDate._i, '<=', endDate._i, currentDate <= endDate);
         while (currentDate <= endDate) {
@@ -1323,10 +1344,11 @@ success:function(data){
     ShipmentType(e){
         console.log("valueShipment type" , e.target.value)
         this.shipMentType = e.target.value
+        this.onSearch(e)
     }
 
     print(e){
-      debugger
+
         if(this.selected != undefined || this.conFirmID != undefined){
             console.log('print view',this.conFirmID+'/'+this.selected)
             hashHistory.push('/Shipment/shipmentPrint/'+this.conFirmID)
@@ -1341,7 +1363,7 @@ success:function(data){
     }
 
     onEditClick(e){
-      debugger
+
       if(this.conFirmID != undefined){
         hashHistory.push('/Shipment/shipmentedit/'+this.conFirmID+"/"+this.tempLotId)
       }
@@ -1707,7 +1729,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                               <option value="Please Select An Option" disabled selected>Select custom view</option>
                              {
                                  _.map(this.state.savedViews , (views,index)=>{
-                                     debugger;
+                                      ;
                                      if(views.screenName == "SHIPMENT")
                                      {
                                      return(
