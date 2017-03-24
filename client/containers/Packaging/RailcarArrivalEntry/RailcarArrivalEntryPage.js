@@ -8,12 +8,11 @@ import { createDataLoader } from 'react-loopback'
 var Loader = require('react-loader');
 export default class RailcarArrivalEntryPage extends React.Component {
     constructor(props){
-      super(props);
-      this.state = { loaded : false,
-      weight: 'lbs'}
+        super(props);
+        this.state = { loaded : false}
     }
-     componentDidMount() {
-console.log("hgdhdg",this.props.routes)
+    componentDidMount() {
+
         var PIview = createDataLoader(RailcarArrivalEntryForm, {
             queries: [{
                 endpoint: 'TPackagingInstructionLots',
@@ -49,25 +48,18 @@ console.log("hgdhdg",this.props.routes)
         debugger
     }
 
-    setWeight(value) {
-        console.log("set Weight", value);
-        this.setState({
-            weight: value
-        });
-    }
-
     render() {
-      const viewRailData = this.state.viewRailcartData
-    return (
-      <div className="wrapper-inner">
-      <div className="content-inside">
-      <Header routes = {this.props.routes} setWeight={this.setWeight.bind(this)}/>
-      <Loader loaded={this.state.loaded} id="loaded">
-      <RailcarArrivalEntryForm key="0" data={viewRailData} weight={this.state.weight}/>
-      </Loader>
-      </div>
-      <Footer />
-      </div>
-    );
-  }
+        const viewRailData = this.state.viewRailcartData
+        return (
+            <div className="wrapper-inner">
+                <div className="content-inside">
+                    <Header routes = {this.props.routes}/>
+                    <Loader loaded={this.state.loaded} id="loaded">
+                        <RailcarArrivalEntryForm key="0" data={viewRailData}/>
+                    </Loader>
+                </div>
+                <Footer />
+            </div>
+        );
+    }
 }

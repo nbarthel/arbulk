@@ -85,7 +85,7 @@ constructor(props){
      </div>
    </nav>
 </header>
- <BreadCrumb routes = {this.props.routes} setWeight={this.props.setWeight}/>
+ <BreadCrumb routes = {this.props.routes} />
  </div>
 
     );
