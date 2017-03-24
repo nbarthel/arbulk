@@ -42,7 +42,7 @@ export default class AdminHeader extends React.Component {
 						<li><Link to ="/Admin/AddMaterial">Add Material</Link></li>
 						<li><Link to ="/Admin/viewMaterial">View Material</Link></li>
 						<li><Link to = "/Admin/UploadData">Upload Data</Link></li>
-						<li><a href="#">Change Histroy</a></li>
+						<li><a href="#">Change History</a></li>
 						   <li><a href="#" onclick={this.logOut}>LOGOUT <i className="fa fa-unlock-alt" aria-hidden="true"></i></a></li>
 					  </ul>
 					</div>
