@@ -8,7 +8,7 @@ module.exports = {
     './client/index'
   ],
   output: {
-    path: __dirname,
+    path: __dirname+'/dist',
     filename: 'bundle.js',
     publicPath: '/dist/'
   },
@@ -18,21 +18,18 @@ module.exports = {
   ],
   module: {
     loaders: [{
-      test: /\.js$/,
-      loaders: ['babel'],
+      test: /\.jsx?$/,
       exclude: /node_modules/,
-      include: path.join(__dirname, 'client'),
-      query:{
-        presets:['es2015','react']
-      },
+      loaders: [ 'babel-loader?presets[]=es2015,presets[]=stage-0,presets[]=react'],
     },{
       test: /\.json$/, 
-      loader: 'json'
+      loader: 'json-loader'
     },{
       test: /\.css$/,
-      loader: 'style!css'
+      loader: 'style-loader!css-loader'
     },
-     { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' }, 
+     { test: /\.(png|woff|woff2|eot|ttf|svg)$/, 
+      loader: 'url-loader?limit=100000' }, 
      ]
   }
 };

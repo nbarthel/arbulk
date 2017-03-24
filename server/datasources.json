@@ -2,35 +2,5 @@
   "db": {
     "name": "db",
     "connector": "memory"
-  },
-  "AccountDb": {
-    "host": "localhost",
-    "port": 3306,
-    "database": "arbulk",
-    "password": "anurag123",
-    "name": "AccountDb",
-    "user": "root",
-    "connector": "mysql",
-    "multipleStatements": true,
-    "connectionLimit": 10
-  },
-  "emailDs": {
-    "name": "emailDs",
-    "connector": "mail",
-    "transports": [
-      {
-        "type": "smtp",
-        "host": "smtp.gmail.com",
-        "secure": true,
-        "port": 465,
-        "tls": {
-          "rejectUnauthorized": false
-        },
-        "auth": {
-          "user": "suuport.transluminatrs@gmail.com",
-          "pass": "apple12345"
-        }
-      }
-    ]
   }
 }

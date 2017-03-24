@@ -1,4 +1,4 @@
-var loopback = require('loopback');
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              var loopback = require('loopback');
 var boot = require('loopback-boot');
 var app = module.exports = loopback();
 var webpack = require('webpack');
@@ -7,14 +7,12 @@ var path = require('path');
 var mode = process.env.NODE_ENV || env.DEVELOPMENT;
 var webpackDevMiddleware = require('webpack-dev-middleware');
 var webpackHotMiddleware = require('webpack-hot-middleware');
-var config = require(`../webpack.config.${mode}`);
+var config = require('../webpack.config.development.js');
 var compiler = webpack(config);
-
-console.log(">>>>>>>>>>>...in server.js>>>>");
-console.log(">>>>>>>>>>>...in server.js>>>>" , __dirname ,config);
+console.log(">>>>>>>>>>>>>here i am",config,__dirname)
 if(mode === env.DEVELOPMENT) {
     // only need in development
-    app.use(webpackDevMiddleware(compiler, { noInfo: false, publicPath: config.output.publicPath }));
+    app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }));
 
 app.use(webpackHotMiddleware(compiler));
     app.get('*',(req , res) =>{
@@ -24,14 +22,26 @@ app.use(webpackHotMiddleware(compiler));
 }
 
  else {
- // only need in development
-   app.use(webpackDevMiddleware(compiler, { noInfo: false, publicPath: config.output.publicPath }));
+  // only need in development
+   console.log(">>>>>>>>>>>>>I am in else>>>>>>>>>>>>>>>")
+    app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }));
+
+    app.use(webpackHotMiddleware(compiler));
+    app.get('*',(req , res) =>{
+
+     res.sendFile(path.join(__dirname, '../client/index.html'));
+  })
+  // app.use(loopback.static(__dirname + '/dist'));
+  // app.get('*', function response(req, res) {
+  //   res.sendFile(path.join(__dirname, '../client/index.html'));
+  // });
+}
+
+
+
 
 app.use(webpackHotMiddleware(compiler));
-    //app.get('*',(req , res) =>{
-  //res.sendFile(path.join(__dirname, '../client/index.html'));
-  //})
-}
+ 
 
 boot(app, __dirname);
 
