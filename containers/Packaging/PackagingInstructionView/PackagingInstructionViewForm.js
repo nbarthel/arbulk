@@ -384,7 +384,7 @@ onSearch(e){
                                                       writable: true,
                                                       configurable:true,
                                                       value:this.checkedCompany})
-            this.buttonDisplay.push(e.target.value)
+            //this.buttonDisplay.push(e.target.value)
             //console.log(this.props.checkedCompany)
             //console.log(this.props.buttonDisplay)
 
@@ -401,10 +401,11 @@ onSearch(e){
              }
                 let value = e.target.value
                 let index = this.buttonDisplay.indexOf(e.target.value)
-                if(index !== -1)
-                this.buttonDisplay = _.without(this.buttonDisplay,value)
+                // if(index !== -1)
+                // this.buttonDisplay = _.without(this.buttonDisplay,value)
                  this.forceUpdate()
-                   }
+              }
+              this.onSearch(e)
         }
         onCustomerFilter(e,customer){
             if(e.target.checked){
@@ -414,7 +415,7 @@ onSearch(e){
                                                       writable: true,
                                                       configurable:true,
                                                       value:this.checkedCustomer})
-            this.buttonDisplay.push(e.target.value)
+            //this.buttonDisplay.push(e.target.value)
             //console.log(this.props.checkedCompany)
             //console.log(this.props.buttonDisplay)
             console.log(this.checkedCustomer)
@@ -429,10 +430,11 @@ onSearch(e){
             }
                 let value = e.target.value
                 let index = this.buttonDisplay.indexOf(e.target.value)
-                if(index !== -1)
-                this.buttonDisplay = _.without(this.buttonDisplay,value)
+                // if(index !== -1)
+                // this.buttonDisplay = _.without(this.buttonDisplay,value)
                   this.forceUpdate()
                    }
+                   this.onSearch(e)
         }
         onStatusFilter(e,status){
             if(e.target.checked){
