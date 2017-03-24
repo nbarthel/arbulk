@@ -423,16 +423,31 @@ render(){
 
    flagSorting =false
  }
-
+//console.log("sss",this.state.viewdata.length);
       var selectedWeight = this.props.weight;
+    //if(filterData.length = null){
+    //    console.log("sss");
+    //}
+debugger
+    var noData = false;
+
+    if(this.state.viewData && this.state.viewData.length==0){
+        this.state.viewData = [{
+            Dummy :true
+        }]
+
+         noData=true
+
+    }
+
       var listData =  _.map(this.state.viewData,(view,index)=>{
-      if(view.TPackagingInstructionLots.length>0){
+      if(noData || view.TPackagingInstructionLots.length>0){
       var count = index
       return (
-
        <tbody key={index}>
-       <tr  className="base_bg clickable" ref ="clickable">
-       <th>
+       {noData ? "":
+           <tr  className="base_bg clickable" ref ="clickable">
+          <th>
                <label className="control control--checkbox">
                    <input type="checkbox" onChange={(e)=>{this.props.headerCheckboxChange(e,view)}} value={view.id}  id={view.id}/><div className="control__indicator"></div>
                </label>
@@ -456,11 +471,13 @@ render(){
            <th style ={{display : this.props.showRailcarDepDate}}></th>
            <th style ={{display : this.props.showDaysPresent}}></th>
             <th></th>
-
            <th style ={{display : this.props.showRailcarStatus}}></th>
 
-       </tr>
-       {
+       </tr>}
+       {noData ?
+       <tr >No results match your entered criteria.</tr>:
+
+
           _.map(view.TPackagingInstructionLots,(data,index)=>{
             let diff;
             var bagsallocated =0
