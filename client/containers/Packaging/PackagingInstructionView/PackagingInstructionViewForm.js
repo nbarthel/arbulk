@@ -1250,21 +1250,21 @@ export default class PackagingInstructionViewForm extends React.Component {
                                 <a href="javascript:void(0)" name = "Customer" onClick = {(e) => {this.onHideColumn(e)}}>Customer</a>
                                 <a href="javascript:void(0)" name = "PO" onClick={(e) => {this.onHideColumn(e)}}>PO</a>
                                 <a href="javascript:void(0)" name = "Railcar" onClick={(e) => {this.onHideColumn(e)}}>Railcar#</a>
-                                <a href="javascript:void(0)" name = "Lot" onClick={(e) => {this.onHideColumn(e)}}>Lot#</a> --
-                                <a href="javascript:void(0)" name = "Material" onClick={(e) => {this.onHideColumn(e)}}>Material</a> --
-                                <a href="javascript:void(0)" name = "Confmd" onClick={(e) => {this.onHideColumn(e)}}>Confmd</a> --
-                                <a href="javascript:void(0)" name = "Arrvd" onClick={(e) => {this.onHideColumn(e)}}>Arrvd</a> --
-                                <a href="javascript:void(0)" name = "Recd" onClick={(e) => {this.onHideColumn(e)}}>Recd</a> --
-                                <a href="javascript:void(0)" name = "Cutoff" onClick={(e) => {this.onHideColumn(e)}}>Cutoff</a> --
-                                <a href="javascript:void(0)" name = "Weight" onClick={(e) => {this.onHideColumn(e)}}>Weight</a> --
-                                <a href="javascript:void(0)" name = "Bag" onClick={(e) => {this.onHideColumn(e)}}>Qty Allocated</a> --
-                                <a href="javascript:void(0)" name = "InInvt" onClick={(e) => {this.onHideColumn(e)}}>Qty Packaged</a> --
-                                <a href="javascript:void(0)" name = "Status"onClick={(e) => {this.onHideColumn(e)}}>Status</a> --
-                                <a href="javascript:void(0)" name = "RailcarArr" onClick={(e) => {this.onHideColumn(e)}}>Railcar Arrival</a> --
-                                <a href="javascript:void(0)" name = "RailcarArrD" onClick={(e) => {this.onHideColumn(e)}}>Railcar Arrival Date</a> --
-                                <a href="javascript:void(0)" name = "RailcarDep" onClick={(e) => {this.onHideColumn(e)}}>Railcar Departure</a> --
-                                <a href="javascript:void(0)" name = "RailcarDepDate" onClick={(e) => {this.onHideColumn(e)}}>Railcar Departure Date</a> --
-                                <a href="javascript:void(0)" name = "DaysPresent" onClick={(e) => {this.onHideColumn(e)}}>Railcar Days Present</a> --
+                                <a href="javascript:void(0)" name = "Lot" onClick={(e) => {this.onHideColumn(e)}}>Lot#</a>
+                                <a href="javascript:void(0)" name = "Material" onClick={(e) => {this.onHideColumn(e)}}>Material</a>
+                                <a href="javascript:void(0)" name = "Confmd" onClick={(e) => {this.onHideColumn(e)}}>Confmd</a>
+                                <a href="javascript:void(0)" name = "Arrvd" onClick={(e) => {this.onHideColumn(e)}}>Arrvd</a>
+                                <a href="javascript:void(0)" name = "Recd" onClick={(e) => {this.onHideColumn(e)}}>Recd</a>
+                                <a href="javascript:void(0)" name = "Cutoff" onClick={(e) => {this.onHideColumn(e)}}>Cutoff</a>
+                                <a href="javascript:void(0)" name = "Weight" onClick={(e) => {this.onHideColumn(e)}}>Weight</a>
+                                <a href="javascript:void(0)" name = "Bag" onClick={(e) => {this.onHideColumn(e)}}>Qty Allocated</a>
+                                <a href="javascript:void(0)" name = "InInvt" onClick={(e) => {this.onHideColumn(e)}}>Qty Packaged</a>
+                                <a href="javascript:void(0)" name = "Status"onClick={(e) => {this.onHideColumn(e)}}>Status</a>
+                                <a href="javascript:void(0)" name = "RailcarArr" onClick={(e) => {this.onHideColumn(e)}}>Railcar Arrival</a>
+                                <a href="javascript:void(0)" name = "RailcarArrD" onClick={(e) => {this.onHideColumn(e)}}>Railcar Arrival Date</a>
+                                <a href="javascript:void(0)" name = "RailcarDep" onClick={(e) => {this.onHideColumn(e)}}>Railcar Departure</a>
+                                <a href="javascript:void(0)" name = "RailcarDepDate" onClick={(e) => {this.onHideColumn(e)}}>Railcar Departure Date</a>
+                                <a href="javascript:void(0)" name = "DaysPresent" onClick={(e) => {this.onHideColumn(e)}}>Railcar Days Present</a>
                                 <a href="javascript:void(0)" name = "RailcarStatus" onClick={(e) => {this.onHideColumn(e)}}>Railcar Status</a>
                             </div>
 
