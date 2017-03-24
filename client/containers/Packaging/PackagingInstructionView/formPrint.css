@@ -25,7 +25,9 @@ h3{margin:0px; padding:0px; font-weight:600;}
 .inventry{ border-top:1px solid #000; width:100%; clear:both; height: 150px;}
 .inventry .inventry_data{ width:100%; display:inline-black;}
 .inventry .info{padding:5px; width:27%; float: right;  border:1px solid #000; }
+.inventry .infoo{ padding:5px; float: right;  border:1px solid #000; }
 .inventry .info span{  display:block; margin-bottom:15px;}
+.inventry .infoo span{  display:block; margin-bottom:15px;}
 .inventry table{ width:71%; float:left;}
 .inventry table tr{line-height: 35px;}
 .inventry table tr td.total{text-align:right; padding-right:92px;}

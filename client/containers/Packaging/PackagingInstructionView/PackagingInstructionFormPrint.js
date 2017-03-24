@@ -290,7 +290,7 @@ export default class PrintPackaging extends React.Component {
                                                 <td colSpan="4" className="total">____Total {this.state.packType} (A+B)</td>
                                             </tr>
                                         </table>
-                                        <div className="info">
+                                        <div className="infoo">
                                             <span>Total Net Weight 	= __________ </span>
                                             <span>Railcar Weight 	= {this.state.weight} </span>
                                             <span>Weight Gain/Loss 	= __________ </span>
