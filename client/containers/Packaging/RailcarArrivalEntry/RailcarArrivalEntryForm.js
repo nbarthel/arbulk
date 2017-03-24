@@ -58,6 +58,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 	onTextChange(e){
 		this.Query[e.target.id] = e.target.value
 		console.log(this.Query)
+		this.onSearch(e)
 	}
 	handleChange1(x,event) {
 
@@ -67,6 +68,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 		document.getElementById('row1'+ x.target.id).disabled = false
 
 		this.dateArray.push(dateValue)
+        this.onSearch(x)
 
 	}
 
@@ -77,6 +79,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 		document.getElementById('POSearch').value = e.target.getAttribute('value')
 		console.log(this.Query)
 		console.log('>>>>>> target Value' , e.target.value)
+		this.onSearch(e)
 	}
 
 	lotSearch(e){
@@ -85,6 +88,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 		console.log(this.Query)
 		document.getElementById('LotSearch').value = e.target.getAttribute('value')
 		console.log('>>>>>> target Value' , e.target.value)
+		this.onSearch(e)
 	}
 
 	onClickli(e){
@@ -93,6 +97,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 		document.getElementById('railcarSearch').value = e.target.getAttribute('value')
 		console.log(this.Query)
 		console.log('>>>>>> target Value' , e.target.value)
+		this.onSearch(e)
 	}
 
 	onSearch(e){
@@ -258,7 +263,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 				writable: true,
 				configurable:true,
 				value:this.checkedCompany})
-			this.buttonDisplay.push(e.target.value)
+			// this.buttonDisplay.push(e.target.value)
 		}
 		else if (!e.target.checked){
 
@@ -276,6 +281,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 				this.buttonDisplay = _.without(this.buttonDisplay,value)
 			this.forceUpdate()
 		}
+        this.onSearch(e)
 	}
 	onCustomerFilter(e,customer){
 		if(e.target.checked){
@@ -285,7 +291,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 				writable: true,
 				configurable:true,
 				value:this.checkedCustomer})
-			this.buttonDisplay.push(e.target.value)
+			// this.buttonDisplay.push(e.target.value)
 			//console.log(this.props.checkedCompany)
 			//console.log(this.props.buttonDisplay)
 			console.log(this.checkedCustomer)
@@ -304,6 +310,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 				this.buttonDisplay = _.without(this.buttonDisplay,value)
 			this.forceUpdate()
 		}
+        this.onSearch(e)
 	}
 	onStatusFilter(e,status){
 		if(e.target.checked){
@@ -313,7 +320,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 				writable: true,
 				configurable:true,
 				value:this.checkedStatus})
-			this.buttonDisplay.push(e.target.value)
+			//this.buttonDisplay.push(e.target.value)
 			this.forceUpdate()
 
 			//console.log(this.props.buttonDisplay)
@@ -339,6 +346,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 			//console.log(this.buttonDisplay)
 			this.forceUpdate()
 		}
+        this.onSearch(e)
 	}
 	onRemove(e){
 		console.log("clicked")
