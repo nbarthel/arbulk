@@ -29,7 +29,7 @@ export default class PackagingInstructionViewPage extends React.Component {
 		 </div>
 
 		<Footer/>
-	     </div>
+	  </div>
     );
   }
 }
