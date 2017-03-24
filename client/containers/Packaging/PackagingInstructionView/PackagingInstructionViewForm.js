@@ -1222,7 +1222,7 @@ export default class PackagingInstructionViewForm extends React.Component {
 
                                 <div className="row">
                                     <FilterButton buttonDisplay = {this.buttonDisplay}  onButtonRemove = {this.onButtonRemove} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
-                                    <div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs pull-right">
+                                    <div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs pull-right mb-10">
                                         <div className="pull-right " id="hide5">
 
                                             <select className="form-control"   id="customer_name" name="customer_name" onChange={this.viewChange}>

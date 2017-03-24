@@ -22,7 +22,7 @@ export default class FilterButton extends React.Component {
 		console.log(this.props.buttonDisplay.length)
 	}
 
-*/	
+*/
 /*onRemoveButton(e){
 	<span aria-hidden="true">&times;</span>
 	console.log(e.target.id)
