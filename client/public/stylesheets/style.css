@@ -18,7 +18,7 @@ Author URI: http://www.qsstechnosoft.com/
 
 html, body {width: 100%; height:100%;}
 th {position: relative; top:0px}
-body {font-size: 14px;  color: #333; margin: 0;padding: 0; width: 100%; height:100%;}
+body {font-size: 14px;  color: #333; margin: 0;padding: 0; width: 100%; height:100%;  font-family: 'Open Sans', sans-serif;}
 a {text-decoration: none;color: #004a98;}
 a:hover{text-decoration: none;color: #0b6acf;}
 p {margin: 0 0 15px 0;   display: block;}
@@ -41,7 +41,7 @@ hr {height: 1px; background: #ccc;border: none;margin: 15px 0 15px 0;}
 .pos-absolute-b{ position:absolute;bottom:0;left:0;}
 .pos-relative-b{ position:fixed;bottom:0;left:0;}
 .pos-fixed-b{ position:fixed;bottom:0;left:0;}
-.table> thead> tr> th{z-index: 99}
+.table> thead> tr> th{z-index: 99;}
 /*input::-webkit-datetime-edit{ color: transparent; }*/
 
 /* Include this to make it visible when input is clicked */
@@ -66,7 +66,7 @@ hr {height: 1px; background: #ccc;border: none;margin: 15px 0 15px 0;}
 /*.jt-shadow { box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset; -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset; -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;}*/
 .offer_bg {background-image: url("../img/bg/bg_services.png");background-size: cover; padding: 10px 0 10px 0;}
 .signin_bg {background-image: url("../img/bg/signin_new.png");background-repeat: repeat; }
-.imgbg {background: url("../img/logo_inner.png"); height:30px; width:150px; margin-top:10px;background-repeat:no-repeat;}
+.imgbg {background: url("../img/logo_inner.png");height: 30px !important; width:150px; margin-top:10px;background-repeat:no-repeat;}
 #wrapper { position:relative;}
 
 .warpper-inner{min-height: 100%;}
@@ -203,10 +203,14 @@ header{width:100%; height:50px; background:#ffffff;}
 header .contain{ padding:5px 0px;}
 #logo{background-image: url("../img/logo_inner.png"); background-repeat: no-repeat; height:40px; width:100%;}
 .top_nav {}
-.top_nav li{border-left: 1px solid #edecec; font-family:Raleway-Medium;font-size: 14px; background: #fff; z-index: 22;}
-.top_nav_admin li{border-left: 1px solid #edecec; font-family:Raleway-Medium;font-size: 14px; background: #fff; z-index: 22;}
+.top_nav li{border-left: 1px solid #edecec; font-size: 14px; background: #fff; z-index: 22;}
+.top_nav_admin li{border-left: 1px solid #edecec;font-size: 14px; background: #fff; z-index: 22;}
 .top_nav_admin .active{.color: #fff; background-color: #286090 !important;}
 .dropdown-menu li:hover {color: #262626;text-decoration: none;background-color: #ccc;}
+.dropdown-menu li{font-size: 12px;}
+
+
+
 
 
 /*////////////////////////------footer------ /////////////////////////////*/
@@ -216,9 +220,9 @@ footer{  width:100%; background:#eaeaea; padding:15px 0px; height: 50px;margin-t
 
 /*////////////////////////------breadcrumb------ /////////////////////////////*/
 
-.breadcrumb_bg{width:100%; height:50px; background-image: url("../img/breadcrumb.png"); background-repeat: repeat;   padding:15px 0px;  }
+.breadcrumb_bg{width:100%; height:30px; background-image: url("../img/breadcrumb.png"); background-repeat: repeat;   padding:5px 0px;  }
 .breadcrumb_bg i{padding:0 10px;}
-.breadcrumb_bg p{ color:#000px; cursor:pointer; overflow: hidden; text-overflow: ellipsis; min-width: 302px;}
+.breadcrumb_bg p{ color:#000; cursor:pointer; overflow: hidden; text-overflow: ellipsis; min-width: 302px;}
 /*////////////////////////------login------ /////////////////////////////*/
 
 a.hiddenanchor{display: none;}
@@ -261,7 +265,7 @@ legend.scheduler-border { text-transform:uppercase !important;font-weight: bold 
 /*////////////////////////------Packaging------ /////////////////////////////*/
 .base_bg th label{  margin-left: 6px !important;}
 .table_head tr th label{margin-left: 5px !important;}
-.table th,td{ font-weight:300px !important; font-size:12px; white-space: nowrap;  overflow: hidden;  text-overflow: ellipsis;}
+.table th,td{ font-weight:300 !important; font-size:12px; white-space: nowrap;  overflow: hidden;  text-overflow: ellipsis;}
 
 /*.set-password .form-horizontal .form-group {padding-right: 15px !important; padding-left: 15px !important;}*/
 .set-password{ margin-top: 10%;}
@@ -295,7 +299,7 @@ legend.scheduler-border { text-transform:uppercase !important;font-weight: bold 
 
 .label-gray{ background:#f7f7f7; padding:10px; color:#004a98; width:100%; margin: 20px 0px 40px 0px;}
 .inventory_card h5{font-weight:bold !important; font-size:16px; color:#000000; }
-.inventory_card .table th,td{ font-weight:300px !important; font-size:12px; color:#000000; white-space: nowrap;  overflow: hidden;  text-overflow: ellipsis;}
+.inventory_card .table th,td{ font-weight:300 !important; font-size:12px; color:#000000; white-space: nowrap;  overflow: hidden;  text-overflow: ellipsis;}
 .inventory_card .edit .col-md-3{padding-left:0px !important; padding-right:10px !important; margin-bottom: 15px;}
 .inventory_card .edit .col-lg-3{padding-left:0px !important; padding-right:0px !important;}
 .inventory_card .edit td  i{ font-size:16px; padding:0 6px; text-align:right !important;}
@@ -303,7 +307,7 @@ legend.scheduler-border { text-transform:uppercase !important;font-weight: bold 
 
 .view_table-queue{margin-top: 2%; min-width:300px; }
 .view_table-queue table td label{margin-left: 0px;}
-.view_table-queue .table th,td{ font-weight:300px !important; font-size:12px; color:#000000; white-space: nowrap;  overflow: hidden;  text-overflow: ellipsis;}
+.view_table-queue .table th,td{ font-weight:300 !important; font-size:12px; color:#000000; white-space: nowrap;  overflow: hidden;  text-overflow: ellipsis;}
 /*===========side-filter===========*/
  #filter-menu{width:230px; height:100%; height: 700px !important;float: left;overflow: scroll !important;overflow-x: hidden !important;}
 #filter-grid{margin-left:230px; }
@@ -330,7 +334,7 @@ legend.scheduler-border { text-transform:uppercase !important;font-weight: bold 
 .side-filter a{font-size:12px;}
 .side-filter h6{margin:0px;color:#000; text-align:left; font-size: 13px;font-weight: 500;}
 .filter_bg ul, ul li{ list-style:none; padding-left:0px; margin-left:0px; }
-.filter_bg ul, ul li .control{ margin-bottom:10px;  font-weight:400 !important;   font-size:14px;}
+.filter_bg ul, ul li .control{ margin-bottom:10px;  font-weight:400 !important;font-size:12px;}
 .filter_bg  #search {padding-top: 25px;}
 .filter_bg .scroll{ overflow:scroll; height:200px; overflow-x:hidden;}
 .filter_bg .more{ overflow:scroll; height:100px; overflow-x:hidden;}
@@ -390,7 +394,7 @@ legend.scheduler-border { text-transform:uppercase !important;font-weight: bold 
 .admin{ margin: 2% 0%; position:relative; header:100%; width:100%; }
 .create_user { margin: 11.5% 0%;}
 .create_user .form-group {margin-right: 0px;margin-left: 0px;}
-.admin-menu-font{font-family: Raleway !important; }
+.admin-menu-font{ }
 .admin .mody-user td span{ padding:0 5px; cursor:pointer;}
 .admin .mody-user .action{ text-align:right; padding-right:15px;}
 .admin .verticalLine {border-right: 1px solid #ccc; min-height:383px; margin:-27px 0px !important; }
@@ -428,7 +432,7 @@ legend.scheduler-border { text-transform:uppercase !important;font-weight: bold 
 }
 
 @media (min-width: 320px) and (max-width: 768px) {
-.padding-top-btm-xs{ padding:10px px !important;}
+.padding-top-btm-xs{ padding:10px !important;}
 .margin-left-xs{ margin-left:15px !important;}
 .padding-top-btm-xs{ padding-top:10px !important; }
 .inventory_card  h5{text-align:center;}

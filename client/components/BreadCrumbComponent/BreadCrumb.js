@@ -11,9 +11,9 @@ export default class BreadCrumb extends React.Component {
 
      return (
       <section className="breadcrumb_bg">
-	    <div className="container">
+	    <div className="container-fluid">
              <div id="row">
-            <strong>{this.props.routes[1].name.props.children[2]!="Enter Packaging Instruction" && this.props.routes[1].name.props.children[2]!= "Packaging Instruction View"?this.props.routes[1].name : (this.props.routes[1].name.props.children[2]=="Enter Packaging Instruction"?"Packaging >> Enter RailCars":"Packaging >> View RailCars")}</strong>
+           {this.props.routes[1].name.props.children[2]!="Enter Packaging Instruction" && this.props.routes[1].name.props.children[2]!= "Packaging Instruction View"?this.props.routes[1].name : (this.props.routes[1].name.props.children[2]=="Enter Packaging Instruction"?"Packaging >> Enter RailCars":"Packaging >> View RailCars")}
             </div>
 	    </div>
     </section>
