@@ -23,17 +23,11 @@ a {text-decoration: none;color: #004a98;}
 a:hover{text-decoration: none;color: #0b6acf;}
 p {margin: 0 0 15px 0;   display: block;}
 hr {height: 1px; background: #ccc;border: none;margin: 15px 0 15px 0;}
-.loadedContent {
-
-}
-.loadedContentNew{	max-height : 350px !important;}
+.loadedContent {}
+.loadedContentNew{height:100%; min-height: 350px;	max-height : 350px !important;}
 .loadedContentNew .table{ margin-bottom: 0px !important;}
-.dataTables_info{
-	display: none;
-}
-.dataTables_paginate {
-	display: none;
-}
+.dataTables_info{display: none;}
+.dataTables_paginate {display: none;}
 .underline{text-decoration:underline;}
 .bold{ font-weight:bold;}
 .error{color:red;}
