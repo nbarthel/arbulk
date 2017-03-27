@@ -26,9 +26,8 @@ hr {height: 1px; background: #ccc;border: none;margin: 15px 0 15px 0;}
 .loadedContent {
 
 }
-.loadedContentNew{
-	height : 450px
-}
+.loadedContentNew{	max-height : 350px !important;}
+.loadedContentNew .table{ margin-bottom: 0px !important;}
 .dataTables_info{
 	display: none;
 }
@@ -160,11 +159,14 @@ ul.list-style-disc > li {list-style-type:disc;}
 .btn{ font-weight:600;}
 .btn-gray {color: #fff;background-color: #949494;border-color: #888888;}
 .btn-gray:focus,.btn-gray.focus {color: #fff; background-color: #777777;border-color: #8c8c8c;}
-.btn-gray:hover {color: #fff;background-color: #777777;border-color: #adadad;}
+.btn-gray:hover{color: #fff !important;background-color: #777777;border-color: #adadad;}
+.btn-gray:active {color: #fff !important;background-color: #777777;border-color: #adadad;}
 
 .btn-orange {color: #fff;background-color: #ff4800;border-color: #ff4700;}
-.btn-orange:focus,.btn-orange.focus {color: #fff; background-color: #fe5716;border-color: #fd4700;}
-.btn-orange:hover {color: #fff;background-color: #fe5716;border-color: #ff4800;}
+.btn-orange:focus,.btn-orange.focus {color: #fff !important; background-color: #fe5716;border-color: #fd4700;}
+.btn-orange:hover {color: #fff !important;background-color: #fe5716;border-color: #ff4800;}
+.btn-orange:active {color: #fff!important;background-color: #fe5716;border-color: #ff4800;}
+
 
 /*////////////////////////------checkbox and redio btn custom------ /////////////////////////////*/
 
@@ -281,11 +283,11 @@ legend.scheduler-border { text-transform:uppercase !important;font-weight: bold 
 .edit_Packaging .textarea{ height:142px;  resize: none; width: 100%;}
 .edit_Packaging .labelArea .textarea#Notes{width: 97%;}
 .edit_Packaging .textarea_label{ height:208px;  resize: none;}
-.add_btn{cursor:pointer; padding-right:5px;}
+.add_btn{cursor:pointer; padding:0px !important;}
 .Packaging_footer{ background:#f7f7f7; min-height:150px; padding:20px 0px; clear:both;}
-.edit_Packaging .add_btn{margin-left: 0px !important;padding-left: 0px !important;padding-top: 0px; margin: 0 auto;
+ .add_btn{margin-left: 0px !important;padding-left: 0px !important;padding-top: 0px; margin: 0 auto;
     text-align: left !important;}
-.edit_Packaging .add_btn i{ border: 1px solid #ddd;font-size: 18px;padding: 6px 8px;border-radius: 3px;     margin-left: -5px;}
+ .add_btn i{ border: 1px solid #ddd;font-size: 18px;padding: 6px 8px;border-radius: 3px;     margin-left: -5px;}
 .edit_Packaging{ margin-top: 8px; min-width:300px;}
 .edit_Packaging .control__indicator {top:3px;}
 
@@ -365,7 +367,7 @@ border-color: #ff4800; border: 1px solid transparent; font-weight: 400;line-heig
 .shipment_edit .sameHeight_l{height:610px;}
 .shipment_edit .sameHeight_r{ height:840px;}
 .shipment_edit .textarea-edit{height:303px !important;}
-.shipment_edit .textarea-entry{height:264px !important;}
+.shipment_edit .textarea-entry{height:150px !important; resize:none;}
 .shipment_edit .tab-bg{ background:#f4f4f4; margin-bottom:10px;margin-top: 10px;border-bottom: 1px solid #333; cursor:pointer;}
 .shipment .active{display: block;padding:2px !important; margin-bottom: 20px;line-height: 1.42857143; border: 1px solid #337ab7;border-radius: 4px; }
 
@@ -518,3 +520,5 @@ input[type=number]::-webkit-outer-spin-button {
 .cLabel{padding: 0px;height: 20px;margin-bottom: 0px;}
 .mb-10{margin-bottom:10px;}
 .pr-0{}
+.noresult{ text-align:center; background: #f5f5f5 !important;height: 290px;  vertical-align: middle !important;}
+.noresult p{font-size: 14px!important;}

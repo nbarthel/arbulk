@@ -1360,10 +1360,10 @@ DisableDoubleClick('submitContainer')
 
                                     <div className="form-group ">
                                         <label htmlFor="Rail_Car_Number"
-                                               className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Purchase
+                                               className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label pr-0">Purchase
                                             Order #</label>
 
-                                        <div className="col-lg-6  col-sm-11  col-xs-11">
+                                        <div className="col-lg-6  col-sm-11  col-xs-11 pr-0">
                                             <select className="form-control"
                                                     id="po_number"
                                                     name="po_number"
