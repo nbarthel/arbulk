@@ -47,7 +47,7 @@ class ContainerTable extends Component {
                                         <th>Customer</th>
                                         <th>Railcar# </th>
                                         <th>Booking# </th>
-                                        <th>PO </th>
+                                        <th>PO# </th>
                                         <th>Material </th>
                                         <th>Confmd </th>
                                         <th>In Inventory? </th>
