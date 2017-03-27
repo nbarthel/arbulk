@@ -1742,9 +1742,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                                                                             </div>
 
                                                                         </div>
-                                                                        <div
-                                                                            className="col-lg-12 col-md-12 col-sm-12 col-xs-12 "
-                                                                            id="hide4">
+                  <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 " id="hide4">
                  <a href="javascript:void(0)" name = "ARB" onClick = {(e) => {this.onHideColumn(e,name)}}>ARB</a>
                  <a href="javascript:void(0)" name = "Customer" onClick = {(e) => {this.onHideColumn(e)}}>Customer</a>
                                                                             <a href="javascript:void(0)" name="PO"
@@ -1761,11 +1759,9 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                  <a href="javascript:void(0)" name = "CntrSize" onClick={(e) => {this.onHideColumn(e)}}>#CntrSize</a>
                  <a href="javascript:void(0)" name = "InInvt" onClick={(e) => {this.onHideColumn(e)}}>In.Invt.</a>
                  <a href="javascript:void(0)" name = "Qty"onClick={(e) => {this.onHideColumn(e)}}>Qty</a>
-                 <a href="javascript:void(0)" name = "Alloc" onClick={(e) => {this.onHideColumn(e)}}>Allocated</a><br/>
+                 <a href="javascript:void(0)" name = "Alloc" onClick={(e) => {this.onHideColumn(e)}}>Allocated</a>
                  <a href="javascript:void(0)" name = "Enough" onClick={(e) => {this.onHideColumn(e)}}>Enough</a>
-                                                                            <a href="javascript:void(0)" name="Bags"
-                                                                               onClick={(e) => {this.onHideColumn(e)}}>#
-                                                                                of Bags In Inventory</a>
+                  <a href="javascript:void(0)" name="Bags" onClick={(e) => {this.onHideColumn(e)}}># of Bags In Inventory</a>
                  <a href="javascript:void(0)" name = "ERD" onClick={(e) => {this.onHideColumn(e)}}>ERD</a>
                  <a href="javascript:void(0)" name = "Vessel" onClick={(e) => {this.onHideColumn(e)}}>Vessel</a>
                  <a href="javascript:void(0)" name = "SteamShip" onClick={(e) => {this.onHideColumn(e)}}>SteamShipLine</a>

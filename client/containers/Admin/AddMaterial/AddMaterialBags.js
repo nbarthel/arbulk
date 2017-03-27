@@ -179,7 +179,7 @@ class AddMaterialBags extends Component {
 								id="avarageMaterialWeight"
 								onChange = {this.onBagsInput}
 								name=""
-								placeholder="Enter Avg, Weight"/>
+								placeholder="Enter Average Weight"/>
 								<div className="error"><span></span></div>
 								</div>
 							</div>
@@ -192,7 +192,7 @@ class AddMaterialBags extends Component {
 									id="ActiveBags"
 									onChange = {this.onBagsInput}
 									name=""
-									placeholder="Enter Active Bags"/>
+									placeholder="Enter # of Active Bags"/>
 									 <div className="error"><span></span></div>
 								</div>
 							</div>

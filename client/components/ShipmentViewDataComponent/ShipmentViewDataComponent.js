@@ -510,8 +510,7 @@ class ShipmentViewDataComponent extends React.Component {
                             <tbody key={index}>
                             <tr className="base_bg clickable" ref="clickable"
                                 style={{"backgroundColor": "#e5e5ff"}}>
-                                <th>
-                                    <label className="control control--checkbox">
+                                <th><label className="control control--checkbox">
                                         <input type="checkbox"
                                                onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
                                                value={view.id} id={view.id}/>
@@ -547,7 +546,7 @@ class ShipmentViewDataComponent extends React.Component {
                                 <th style={{display : this.props.showRet}}></th>
                                 <th style={{display : this.props.showDoc}}></th>
                                 <th style={{display : this.props.showStatus}}></th>
-                                <th style={{display : this.props.showTrucker}}></th>
+                                {/* <th style={{display : this.props.showTrucker}}></th>*/}
 
                             </tr>
                             <tr>
@@ -576,7 +575,7 @@ class ShipmentViewDataComponent extends React.Component {
                                 <td style={{display : this.props.showRet}}></td>
                                 <td style={{display : this.props.showDoc}}></td>
                                 <td style={{display : this.props.showStatus}}></td>
-                                <td style={{display : this.props.showTrucker}}></td>
+                                {/* <td style={{display : this.props.showTrucker}}></td> */}
 
                             </tr>
 
@@ -656,7 +655,7 @@ class ShipmentViewDataComponent extends React.Component {
                                                     <td style={{display : this.props.showRet}}>{view.isDomestic == 1 ? 'N/A' : returnLocation}</td>
                                                     <td style={{display : this.props.showDoc}}>{view.isDomestic == 1 ? 'N/A' : docCutoff}</td>
                                                     <td style={{display : this.props.showStatus}}>{status == null ? "UNCONFIRMED" : status}</td>
-                                                    { /*<td style ={{display : this.props.showTrucker}}>N/A</td>*/}
+                                                    { /* <td style ={{display : this.props.showTrucker}}>N/A</td> */}
 
                                                 </tr>
                                             )
@@ -877,6 +876,7 @@ class ShipmentViewDataComponent extends React.Component {
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
                             </th>
+
                             {/*
                              <th style ={{display : this.props.showTrucker}} >Trucker
                              <span className="fa-stack ">
