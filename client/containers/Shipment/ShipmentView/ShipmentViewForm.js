@@ -1742,15 +1742,18 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                                                                             </div>
 
                                                                         </div>
-
-                                                                        <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 " id="hide4">
+                                                                        <div
+                                                                            className="col-lg-12 col-md-12 col-sm-12 col-xs-12 "
+                                                                            id="hide4">
                  <a href="javascript:void(0)" name = "ARB" onClick = {(e) => {this.onHideColumn(e,name)}}>ARB</a>
                  <a href="javascript:void(0)" name = "Customer" onClick = {(e) => {this.onHideColumn(e)}}>Customer</a>
-                 <a href="javascript:void(0)" name = "PO" onClick={(e) => {this.onHideColumn(e)}}>PO</a>
+                                                                            <a href="javascript:void(0)" name="PO"
+                                                                               onClick={(e) => {this.onHideColumn(e)}}>PO#</a>
                  <a href="javascript:void(0)" name = "Release" onClick={(e) => {this.onHideColumn(e)}}>Release</a>
                  <a href="javascript:void(0)" name = "Lot" onClick={(e) => {this.onHideColumn(e)}}>Lot#</a>
                  <a href="javascript:void(0)" name = "Material" onClick={(e) => {this.onHideColumn(e)}}>Material</a>
-                 <a href="javascript:void(0)" name = "Confmd" onClick={(e) => {this.onHideColumn(e)}}>Confmd</a>
+                                                                            <a href="javascript:void(0)" name="Confmd"
+                                                                               onClick={(e) => {this.onHideColumn(e)}}>Confirmed?</a>
                  <a href="javascript:void(0)" name = "Booking" onClick={(e) => {this.onHideColumn(e)}}>Booking</a>
                  <a href="javascript:void(0)" name = "ShipmentType" onClick={(e) => {this.onHideColumn(e)}}>ShipmentType</a>
                  <a href="javascript:void(0)" name = "Cutoff" onClick={(e) => {this.onHideColumn(e)}}>Cutoff</a>

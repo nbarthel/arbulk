@@ -64,10 +64,10 @@ import React, { Component } from 'react';
                                         <th>Customer</th>
                                         <th>Release#</th>
                                         <th>Booking#</th>
-                                        <th>PO</th>
+                                        <th>PO#</th>
                                         <th>lot #</th>
                                         <th>Material</th>
-                                        <th>Confmd</th>
+                                        <th>Confirmed?</th>
                                         <th>In Inventory?</th>
                                         <th>Cutoff Date</th>
                                         <th>Quantity Requested</th>

@@ -729,7 +729,7 @@ class ShipmentViewDataComponent extends React.Component {
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
                             </th>
-                            <th style={{display : this.props.showPO}} onClick={(e)=> this.onAscending(e,'po_number')}>PO
+                            <th style={{display : this.props.showPO}} onClick={(e)=> this.onAscending(e,'po_number')}>PO#
                  <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -753,7 +753,7 @@ class ShipmentViewDataComponent extends React.Component {
 
                             </th>
                             <th style={{display : this.props.showConfmd}} onClick={(e)=> this.onAscending(e,'Confmd')}>
-                                Confmd
+                                Confirmed?
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -799,7 +799,7 @@ class ShipmentViewDataComponent extends React.Component {
 
                             </th>
                             <th style={{display : this.props.showBags}} onClick={(e)=> this.onAscending(e,'Bags')}>
-                                #Bags(To Ship)
+                                # of Bags To Ship
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
