@@ -425,7 +425,6 @@ class ViewDataComponent extends React.Component {
                                 <label className="control control--checkbox">
                                     <input type="checkbox" onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
                                            value={view.id} id={view.id}/>
-
                                     <div className="control__indicator"></div>
                                 </label>
                             </th>
@@ -584,7 +583,7 @@ class ViewDataComponent extends React.Component {
                        </span>
 
                             </th>
-                            <th style={{display : this.props.showPO}} onClick={(e)=> this.onAscending(e,'po_number')}>PO
+                            <th style={{display : this.props.showPO}} onClick={(e)=> this.onAscending(e,'po_number')}>PO#
                         <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -614,21 +613,21 @@ class ViewDataComponent extends React.Component {
 
                             </th>
                             <th style={{display : this.props.showConfmd}} onClick={(e)=> this.onAscending(e,'Confmd')}>
-                                Confmd
+                                Confirmed?
                       <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
                             </th>
                             <th style={{display : this.props.showArrvd}} onClick={(e)=> this.onAscending(e,'Arrvd')}>
-                                Arrvd
+                                Arrived?
                        <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
 
                             </th>
-                            <th style={{display : this.props.showRecd}} onClick={(e)=> this.onAscending(e,'Recd')}>Recd
+                            <th style={{display : this.props.showRecd}} onClick={(e)=> this.onAscending(e,'Recd')}>Shipment Received?
                        <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>

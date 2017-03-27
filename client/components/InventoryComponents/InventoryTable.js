@@ -65,13 +65,12 @@ var Loader = require('react-loader');
 						 <tr >
 							<th>ARB </th>
 							<th>Customer</th>
-							<th>PO </th>
-          	  <th>Material </th>
+							<th>PO# </th><th>Material </th>
 							<th>Railcar# </th>
 							<th>Lot# </th>
-							<th>Confmd </th>
-							<th>Arrvd </th>
-							<th>Recd </th>
+							<th>Confirmed? </th>
+							<th>Arrived? </th>
+							<th>Shipment Received?</th>
 							<th>Cutoff </th>
 							<th>Weight</th>
 							<th>Qty Allocated</th>
