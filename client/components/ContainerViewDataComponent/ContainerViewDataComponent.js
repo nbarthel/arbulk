@@ -359,16 +359,7 @@ onClickRow(e){
 
         var selectedWeight = this.props.weight;
 
-        var hasData = true;
-        var listData = {}
-        if(this.state.viewData && this.state.viewData.length==0){
 
-            listData = <tbody key="0">
-            <tr><td colSpan={24}>No results match your entered criteria.</td></tr>
-            </tbody>
-            hasData = false
-        }
-        if(hasData){
         var listData =  _.map(this.state.viewData,(view,index) => {
                 if(view.isDomestic == 1){
                                if(view.TContainerDomestic && view.TContainerDomestic.length > 0){
@@ -519,14 +510,16 @@ onClickRow(e){
                            }
 
                            </tbody>
-
-
                        )
                    }
 
                }
+            })
 
-            })}
+        listData = _.filter(listData, function (param) {
+            return param !== undefined;
+        });
+
 
 
         return(
@@ -615,7 +608,14 @@ onClickRow(e){
 
                     </tr>
                     </thead>
-                    {listData}
+                    { ( listData == undefined || listData.length == 0)
+                        ?
+                        <tbody>
+                        <tr>
+                            <td colSpan="12" className="noresult">No results match your entered criteria.</td>
+                        </tr>
+                        </tbody> : listData
+                    }
                 </table>
                 </div>
             </Loader>)

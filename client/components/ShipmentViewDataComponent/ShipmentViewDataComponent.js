@@ -476,21 +476,10 @@ class ShipmentViewDataComponent extends React.Component {
             flagSorting = false
         }
 
-        var hasData = true;
-        var listData = {}
 
-        //if (this.state.viewData && this.state.viewData.length == 0) {
-        //
-        //    listData = <tbody key="0">
-        //    <tr>
-        //        <td colSpan={24}>No results match your entered criteria.</td>
-        //    </tr>
-        //    </tbody>
-        //    hasData = false
-        //}
         var selectedWeight = this.props.weight;
 
-        //if (hasData) {
+
         var listData = _.map(this.state.viewData, (view, index)=> {
                 if (sortedDataflag || (view.TShipmentInternational != undefined && view.TShipmentInternational.length > 0) || (view.TShipmentInternational != undefined && view.TShipmentDomestic.length > 0)) {
                     var alloc = "No"

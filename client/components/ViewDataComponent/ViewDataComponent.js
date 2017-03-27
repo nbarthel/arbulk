@@ -725,7 +725,7 @@ class ViewDataComponent extends React.Component {
                             ?
                             <tbody>
                             <tr>
-                                <td colSpan="20">No results match your entered criteria.</td>
+                                <td colSpan="11" className="noresult">No results match your entered criteria.</td>
                             </tr>
                             </tbody> : listData
                         }
