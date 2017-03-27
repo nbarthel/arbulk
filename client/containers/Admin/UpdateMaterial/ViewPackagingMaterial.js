@@ -82,31 +82,36 @@ class ViewPackagingMaterial extends React.Component{
     )
     })
     return (
-      <div className="wrapper-inner">
-  <div className="content-inside">
-    <AdminHeader routes = {this.props.routes}/>
-<div style={{"height":"600px","overflow":"scroll"}}>
-      <table id="PackagingData" className="table table-expandable" cellSpacing="0">
-        <thead id="PackagingDataHead" className="table_head header-fixed header red">
-          <tr>
-            <th></th>
-            <th>Packaging Type</th>
-            <th>Cutomer</th>
-            <th>Location</th>
-            <th>Packaging Name</th>
-            <th>Empty Weight</th>
-            <th>Average Material Weight</th>
-            <th>Threshold</th>
-            <th>Quanity</th>
-            <th>FullWrap</th>
-            <th>HalfWrap</th>
-            <th>ActiveBags</th>
-            <th>Notes</th>
-          </tr>
-        </thead>
-          {listData}
-      </table>
-</div>
+        <div className="wrapper-inner">
+            <div className="content-inside">
+            <div className="container-fluid">
+              <div className="row-fluid">
+              <AdminHeader routes = {this.props.routes}/>
+              <div style={{"height":"500px","overflow":"scroll"}}>
+                <table id="PackagingData" className="table table-expandable" cellSpacing="0">
+                  <thead id="PackagingDataHead" className="table_head header-fixed header red">
+                    <tr>
+                      <th></th>
+                      <th>Packaging Type</th>
+                      <th>Cutomer</th>
+                      <th>Location</th>
+                      <th>Packaging Name</th>
+                      <th>Empty Weight</th>
+                      <th>Average Material Weight</th>
+                      <th>Threshold</th>
+                      <th>Quanity</th>
+                      <th>FullWrap</th>
+                      <th>HalfWrap</th>
+                      <th>ActiveBags</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                    {listData}
+                </table>
+              </div>
+            </div>
+            </div>
+
 <div className="row-fluid pddn-50-btm padding-top-btm-xs">
 <div className="pull-right margin-10-all"><button type="button" className="btn  btn-orange" onClick={this.update} >Update</button></div>
 </div>

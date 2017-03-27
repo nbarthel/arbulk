@@ -12,9 +12,9 @@ componentWillUnmount() {
 }
 	render(){
 		return (
-			<div>
+
 			<AdminLoginForm />
-			</div>
+
 			)
 	}
 }

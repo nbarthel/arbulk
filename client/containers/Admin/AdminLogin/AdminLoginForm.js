@@ -39,7 +39,7 @@ class AdminLoginForm extends React.Component{
 	{
 	return(
 	<div id="container">
-	<div id="wrapper">
+	<div id="wrapperLogin">
 	<div id="login" className="animate form">
 	<section className="login_content" >
 	<div>

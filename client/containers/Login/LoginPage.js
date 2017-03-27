@@ -15,9 +15,9 @@ componentWillUnmount() {
 	render(){
 		const { userLoginRequest } = this.props;
 		return (
-			<div>
+
 			<LoginForm userLoginRequest={userLoginRequest} />
-			</div>
+
 			)
 	}
 }

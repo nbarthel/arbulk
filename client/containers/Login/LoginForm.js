@@ -65,13 +65,12 @@ class LoginForm extends React.Component{
 	{
 	return(
 	<div id="container">
-	<div id="wrapper">
+	<div id="wrapperLogin">
 	<div id="login" className="animate form">
 	<section className="login_content" >
 	<div>
 	<span className="pull-right img-responsive imgbg" ></span>
 	</div>
-
 	<div className="clearfix"></div>
 	<form id="userLogin" onSubmit={this.onSubmit}>
 	<div className="form-group">

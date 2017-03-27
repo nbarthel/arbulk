@@ -67,6 +67,11 @@ hr {height: 1px; background: #ccc;border: none;margin: 15px 0 15px 0;}
 .footer {height: 50px;margin-top: -50px;}
 ul.list-style-disc > li {list-style-type:disc;}
 
+#wrapperLogin{position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);margin: 0px auto;min-width: 500px;max-width: 556px;vertical-align: middle;}
+
+
+
+
 /*////////////////////////------border------ /////////////////////////////*/
 /*.position{position:relative}
 .mega {
@@ -266,6 +271,7 @@ legend.scheduler-border { text-transform:uppercase !important;font-weight: bold 
 
 /*////////////////////////------Packaging------ /////////////////////////////*/
 .base_bg th label{  margin-left: 6px !important;}
+.view_table-queue table td label.control {margin-left: 6px !important;}
 .table_head tr th label{margin-left: 5px !important;}
 .table th,td{ font-weight:300 !important; font-size:12px; white-space: nowrap;  overflow: hidden;  text-overflow: ellipsis;}
 
@@ -409,7 +415,7 @@ border-color: #ff4800; border: 1px solid transparent; font-weight: 400;line-heig
 /*////////////////////////------ADMIN------ /////////////////////////////*/
 
 .admin{ margin: 2% 0%; position:relative; header:100%; width:100%; }
-.create_user { margin: 11.5% 0%;}
+.create_user { margin: 0% 0%;}
 .create_user .form-group {margin-right: 0px;margin-left: 0px;}
 .admin-menu-font{ }
 .admin .mody-user td span{ padding:0 5px; cursor:pointer;}
