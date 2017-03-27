@@ -313,85 +313,99 @@ Print(){
 
     return(
 
-<section className="view_table-queue" onMouseMove={this._onMouseMove}>
-<div id="radioButtons">
- <div className=" margin-30-right" style={{"float" : "left"}}>
-                 <label className="control control--radio ">LBS
-                     <input id="Modify_User" name="Modify_User" type="radio"
-                            type="radio"
-                            id="ADDCustomers"
-                            name="ADDCustomers"
-                            value="lbs"
-                            onChange={this.handleOptionChange}
-                            checked={this.state.selectedOption==='lbs'}
-                         /><div className="control__indicator"></div>
-                     </label>
-                 </div>
-                 <div className=" margin-30-right" style={{"float" : "left" }}>
-                     <label className="control control--radio ">Kg
-                         <input id="Modify_User" name="Modify_User" type="radio"
-                                id="ADDCustomers"
-                                name="ADDCustomers"
-                                value="kg"
-                                onChange={this.handleOptionChange1}
-                                checked={this.state.selectedOption==='kg'}
-                             /><div className="control__indicator">
-                             </div>
-                         </label>
-                         <h5 style={{marginLeft: "-80px"}}>ARB LOCATION</h5>
-                         <ul style={{marginLeft: "-116px"}}>
-                            {locations}
-                         </ul>
-                     </div>
-    </div>
-
-    <div className="container-fluid" onMouseMove={this._throttledMouseMove}>
-
+<section className="view_table-queue  side-filter" onMouseMove={this._onMouseMove}>
+    <div className="container">
     <div className="row-fluid">
 
-    <div className="table-responsive ">
-        <table className="table table-striped sortable" id= "simpleList" >
-            <thead className="base_bg">
-              <tr >
-                <th>ARB </th>
-                <th>Customer</th>
-                <th>PO# </th>
-                <th>Railcar# </th>
-                <th>Lot# </th>
-                <th>Material </th>
-                <th>Release Recd? </th>
-                <th>Cutoff </th>
-                <th>Weight</th>
-                <th>#Bags (To Ship)</th>
-                <th>(In Invt.) </th>
-                <th>
-                    <label className="control control--checkbox">
-                      <input type="checkbox" id="row1"/><div className="control__indicator"></div>
-                    </label>
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            {queueView}
-            </tbody>
-        </table>
-    </div>
-
-
-
-   <div className="row-fluid pddn-50-btm">
-    <hr/>
-        <div className="padding-top-btm-xs" id="buttons">
-        <div className="padding-20-all pull-right"><button type="button" id="edit_btn" onClick={hashHistory.goBack}   className="btn  btn-gray">BACK</button></div>
-
-   <div className="padding-20-all pull-right"><button type="button" id="edit_btn" onClick={this.callonEdit}   className="btn  btn-gray">EDIT QUEUE</button></div>
-   <div className="padding-20-all pull-right"><button type="button" id="edit_btn" onClick = {this.Print} className="btn  btn-gray">PRINT</button></div>
-
+        <div className="well filter_bg collapse navbar-collapse" id="filter-menu">
+            <div className="head_bg">
+                <h6 className="pull-left">ARB LOCATION</h6>
+                <a href="javascript:void(0)" className="pull-right text_right"> Show All</a>
+            </div>
+             <ul>
+                {locations}
+             </ul>
         </div>
 
-</div>
-</div>
-</div>
+
+        <div id="filter-grid">
+            <div  className=" col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right" onMouseMove={this._throttledMouseMove}>
+
+            <div className="converiosnsMenuQViewForm">
+                <div className="pull-right ">
+                    <label className="control control--radio ">LBS
+                        <input id="Modify_User" name="Modify_User" type="radio"
+                               type="radio"
+                               id="ADDCustomers"
+                               name="ADDCustomers"
+                               value="lbs"
+                               onChange={this.handleOptionChange}
+                               checked={this.state.selectedOption==='lbs'}
+                        /><div className="control__indicator"></div>
+                    </label>
+                </div>
+                <div className="pull-right margin-30-right">
+                    <label className="control control--radio ">Kg
+                        <input id="Modify_User" name="Modify_User" type="radio"
+                               id="ADDCustomers"
+                               name="ADDCustomers"
+                               value="kg"
+                               onChange={this.handleOptionChange1}
+                               checked={this.state.selectedOption==='kg'}
+                        /><div className="control__indicator">
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div className="">
+                <div className="table-responsive ">
+                    <table className="table table-striped sortable" id= "simpleList" >
+                        <thead className="base_bg">
+                          <tr >
+                            <th>ARB </th>
+                            <th>Customer</th>
+                            <th>PO# </th>
+                            <th>Railcar# </th>
+                            <th>Lot# </th>
+                            <th>Material </th>
+                            <th>Release Recd? </th>
+                            <th>Cutoff </th>
+                            <th>Weight</th>
+                            <th>#Bags (To Ship)</th>
+                            <th>(In Invt.) </th>
+                            <th>
+                                <label className="control control--checkbox">
+                                  <input type="checkbox" id="row1"/><div className="control__indicator"></div>
+                                </label>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {queueView}
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            
+
+               <div className="row-fluid pddn-50-btm">
+                <hr/>
+                    <div className="padding-top-btm-xs" id="buttons">
+                    <div className="padding-20-all pull-right"><button type="button" id="edit_btn" onClick={hashHistory.goBack}   className="btn  btn-gray">BACK</button></div>
+
+               <div className="padding-20-all pull-right"><button type="button" id="edit_btn" onClick={this.callonEdit}   className="btn  btn-gray">EDIT QUEUE</button></div>
+               <div className="padding-20-all pull-right"><button type="button" id="edit_btn" onClick = {this.Print} className="btn  btn-gray">PRINT</button></div>
+
+                    </div>
+
+            </div>
+
+        </div>
+        </div>
+
+    </div>
+    </div>
 </section>
 
                 );

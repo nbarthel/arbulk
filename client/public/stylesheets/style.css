@@ -516,6 +516,7 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 0;
 }
 /*============================================================*/
+.tableViewDragQvList{ max-height: 350px; overflow: auto;}
 
 #hide2{margin-top: -43px;}
 #hide3{margin-top: -43px;  margin-right: 100px;}
@@ -534,5 +535,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 
 .converiosnsMenu{  position: absolute;right: 0;top: -21px;}
+.converiosnsMenuQViewForm{  position: absolute;right: 20px;top: -21px;}
+
 .customtabContent{margin-top:-1px;}
 .customtabContent .tab-pane.active{ border-top-left-radius: 0px !important;border-top-right-radius: 0px !important;}
