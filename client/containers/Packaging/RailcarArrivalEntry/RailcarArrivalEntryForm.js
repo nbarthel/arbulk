@@ -613,6 +613,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 					<div className="row-fluid">
 						<FilterComponent key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter} parent={"RailcarArrivalEntry"}/>	 	<div id="filter-grid">
 						<div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
+						<div className="converiosnsMenu">
 							<div className="pull-right margin-30-right">
 								<label className="control control--radio ">LBS
 									<input id="Modify_User" name="Modify_User" type="radio"
@@ -636,6 +637,8 @@ export default class RailcarArrivalEntryForm extends React.Component {
 										/><div className="control__indicator"></div>
 								</label>
 							</div>
+						</div>
+
 							<div className="row">
 								<FilterButton buttonDisplay = {this.buttonDisplay} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
 								<div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs">

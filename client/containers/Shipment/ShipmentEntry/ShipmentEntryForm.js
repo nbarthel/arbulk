@@ -1469,7 +1469,7 @@ DisableDoubleClick('submitContainer')
                                         Options</a></li>
                                 </ul>
 
-                                <div className="tab-content">
+                                <div className="tab-content customtabContent">
                                     <fieldset className="scheduler-border  tab-pane active" id="International">
                                         <div className="form-group ">
                                             <label htmlFor="Material"
