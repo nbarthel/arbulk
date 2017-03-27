@@ -168,11 +168,12 @@ ul.list-style-disc > li {list-style-type:disc;}
 .control input {  position: absolute;  z-index: -1;  opacity: 0;}
 .control__indicator { position: absolute;  top: 0;  left: 0;  height: 16px;  width: 16px;  background: #fff;border: 1px solid #d8d8d8;}
 .control--radio .control__indicator {  border-radius: 50%; }
-.control:hover input ~ .control__indicator,.control input:focus ~ .control__indicator {  background: #ccc;}
-.control input:checked ~ .control__indicator {  background: #004a98; }
+.control:hover input ~ .control__indicator,.control input:focus ~ .control__indicator {  background: #ccc; margin:0px;}
+.control input:checked ~ .control__indicator {  background: #004a98; margin:0px; }
 .control:hover input:not([disabled]):checked ~ .control__indicator,.control input:checked:focus ~ .control__indicator {  background: #0e647d;}
 .control input:disabled ~ .control__indicator {  background: #e6e6e6;  opacity: 0.6;  pointer-events: none;}
 .control__indicator:after {  content: '';  position: absolute;  display: none;}
+
 .control input:checked ~ .control__indicator:after {  display: block; }
 .control--checkbox .control__indicator:after {  left: 5px;  top: 1px;  width: 5px;  height: 10px;  border: solid #fff;  border-width: 0 2px 2px 0;  transform: rotate(45deg); }
 .control--checkbox input:disabled ~ .control__indicator:after {  border-color: #7b7b7b;}
@@ -324,10 +325,14 @@ legend.scheduler-border { text-transform:uppercase !important;font-weight: bold 
 .side-filter .container .col-md-10{padding-left: 5px !important; padding-right: 5px !important;}
 .side-filter .filter_bg{height:100%;}
 .side-filter .well{margin-bottom: 0px !important; border-radius: 0px !important;}
+
 .view_table table { border-top: 0px solid #f3f3f3;}
-.view_table table td{font-weight:300 !important; font-size:12px !important; color:#000; white-space: nowrap;  overflow: hidden;  text-overflow: ellipsis;}
+.view_table table td{ vertical-align: middle !important;font-weight:300 !important; font-size:12px !important; color:#000; white-space: nowrap;  overflow: hidden;  text-overflow: ellipsis;}
 .view_table table thead{ cursor:pointer;}
 .view_table table td label{margin-left: 6px;}
+.view_table table td label .control__indicator{}
+
+
 .filter-btn button{margin-right: 10px !important;padding: 3px 5px; font-size: 11px;border-radius: 3px;margin-bottom: 10px;  }
 .filter-btn a{ text-decoration: none; color:#fff; margin-right: 10px !important;padding: 3px 5px; font-size: 11px;border-radius: 3px;margin-bottom: 10px;     background-color: #fe5716;
 border-color: #ff4800; border: 1px solid transparent; font-weight: 400;line-height: 1.42857143;text-align: center;white-space: nowrap;vertical-align: middle;}
