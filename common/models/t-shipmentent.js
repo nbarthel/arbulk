@@ -18,6 +18,11 @@ module.exports = function(Tshipmentent) {
         var customErr = new Error();
         customErr.statusCode = 422;
         customErr.message = null;
+        var d = new Date();
+        var date_with_time =       d.getFullYear()+"-"+(parseInt(d.getMonth())+parseInt(1))+"-"+d.getDate()+" "
+            +d.getHours()+":"
+            +d.getMinutes()+":"+d.getSeconds()
+        console.log("Here is the date",date_with_time)
         console.log("check modelsssss" ,Tshipmentent.app.models.TShipmentDomestic)
         Tshipmentent.create({
                 "id": 0,
@@ -37,8 +42,8 @@ module.exports = function(Tshipmentent) {
             },
             function (err, obj) {
                 if (err) {
-                      if(err.code.includes("ER_DUP_ENTRY")){
-                      customErr.code = "Release Number Already Exist"
+                    if(err.code.includes("ER_DUP_ENTRY")){
+                        customErr.code = "Release Number Already Exist"
                     }
                     return cb(null, {errors: customErr});
                 }
@@ -74,7 +79,7 @@ module.exports = function(Tshipmentent) {
                                 // logger.error(err);
                                 console.log(err)
                                 if(err.code == "ER_DUP_ENTRY"){
-                                  customErr.code == "Booking Number Already Exist"
+                                    customErr.code == "Booking Number Already Exist"
                                 }
                                 return cb(null, {errors: customErr});
                             }
@@ -85,18 +90,17 @@ module.exports = function(Tshipmentent) {
                                     console.log(">>>>>>>>>>>>>>>resultssss is",err,result)
                                 })
                                 ShipmentLots.create({
-
                                     "id": 0,
                                     "shipmentId": obj.id,
                                     "piLotsId": tshipment.lotInformation[0].lot_id,
                                     "sId" : tshipment.lotInformation[0].pi_id,
                                     "noOfBags":tshipment.lotInformation[0].bagsToShip,
-                                    "confirmedOn": "2016-10-26T00:00:00.000Z",
+                                    "confirmedOn": date_with_time,
                                     "confirmedBy": 0,
                                     "queueSequence": 0,
-                                    "createdOn": "2016-10-26T00:00:00.000Z",
+                                    "createdOn": date_with_time,
                                     "createdBy": 1,
-                                    "modifiedOn": "2016-10-26T00:00:00.000Z",
+                                    "modifiedOn": date_with_time,
                                     "modifiedBy": 0,
                                     "active": 1
 
@@ -113,12 +117,12 @@ module.exports = function(Tshipmentent) {
                                         "piLotsId": tshipment.lotInformation[i].lot_id,
                                         "sId" : tshipment.lotInformation[i].pi_id,
                                         "noOfBags":tshipment.lotInformation[i].bagsToShip,
-                                        "confirmedOn": "2016-10-26T00:00:00.000Z",
+                                        "confirmedOn": date_with_time,
                                         "confirmedBy": 1,
                                         "queueSequence": 0,
-                                        "createdOn": "2016-10-26T00:00:00.000Z",
+                                        "createdOn": date_with_time,
                                         "createdBy": 1,
-                                        "modifiedOn": "2016-10-26T00:00:00.000Z",
+                                        "modifiedOn": date_with_time,
                                         "modifiedBy": 0,
                                         "active": 1
 
@@ -190,13 +194,13 @@ module.exports = function(Tshipmentent) {
                             "active": 1
 
                         },function(err , lotsObj){
-                          if(err){
-                          if(err.code == "ER_DUP_ENTRY"){
-                            customErr.code == "Booking Number Already Exist"
+                            if(err){
+                                if(err.code == "ER_DUP_ENTRY"){
+                                    customErr.code == "Booking Number Already Exist"
 
-                          }
-                          return cb(null, {errors: customErr});
-                          }
+                                }
+                                return cb(null, {errors: customErr});
+                            }
                             console.log("tshipment.lotInformation.length" , tshipment.lotInformation.length)
                             if(lotsObj && tshipment.lotInformation.length==1){
                                 console.log("inside lots" ,obj.id)
@@ -207,12 +211,12 @@ module.exports = function(Tshipmentent) {
                                     "piLotsId": tshipment.lotInformation[0].lot_id,
                                     "sId" : tshipment.lotInformation[0].pi_id,
                                     "noOfBags":tshipment.lotInformation[0].bagsToShip,
-                                    "confirmedOn": "2016-10-26T00:00:00.000Z",
+                                    "confirmedOn": date_with_time,
                                     "confirmedBy": 0,
                                     "queueSequence": 0,
-                                    "createdOn": "2016-10-26T00:00:00.000Z",
+                                    "createdOn":date_with_time,
                                     "createdBy": 1,
-                                    "modifiedOn": "2016-10-26T00:00:00.000Z",
+                                    "modifiedOn": date_with_time,
                                     "modifiedBy": 0,
                                     "active": 1
 
@@ -227,12 +231,12 @@ module.exports = function(Tshipmentent) {
                                         "piLotsId": tshipment.lotInformation[z].lot_id,
                                         "sId" : tshipment.lotInformation[z].pi_id,
                                         "noOfBags":tshipment.lotInformation[z].bagsToShip,
-                                        "confirmedOn": "2016-10-26T00:00:00.000Z",
+                                        "confirmedOn": date_with_time,
                                         "confirmedBy": 1,
                                         "queueSequence": 0,
-                                        "createdOn": "2016-10-26T00:00:00.000Z",
+                                        "createdOn": date_with_time,
                                         "createdBy": 1,
-                                        "modifiedOn": "2016-10-26T00:00:00.000Z",
+                                        "modifiedOn": date_with_time,
                                         "modifiedBy": 0,
                                         "active": 1
 
@@ -272,6 +276,7 @@ module.exports = function(Tshipmentent) {
 
     Tshipmentent.updateShipMentEntry = function(tshipment, cb) {
         var context = loopback.getCurrentContext();
+        console.log("i am in update")
         var currentUser = context && context.get('currentUser');
         var ShipmentLots = Tshipmentent.app.models.TShipmentLots;
         var ShipmentDomestic = Tshipmentent.app.models.TShipmentDomestic;
@@ -281,6 +286,12 @@ module.exports = function(Tshipmentent) {
         var customErr = new Error();
         customErr.statusCode = 422;
         customErr.message = null;
+        console.log("before Date Time")
+        var d = new Date()
+        var date_with_time =       d.getFullYear()+"-"+(parseInt(d.getMonth())+parseInt(1))+"-"+d.getDate()+" "
+            +d.getHours()+":"
+            +d.getMinutes()+":"+d.getSeconds()
+        console.log("after Date")
         console.log("check modelsssss" ,Tshipmentent.app.models.TShipmentDomestic)
         Tshipmentent.upsert({
                 "id": tshipment.SI.id,
@@ -300,14 +311,14 @@ module.exports = function(Tshipmentent) {
             function (err, obj) {
                 if (err) {
                     //logger.error(err);
-                    console.log(err)
+                    console.log("first Error",err)
                     if(err.code == "ER_DUP_ENTRY"){
-                      err.code == "Release Number Already Exist"
+                        err.code == "Release Number Already Exist"
                     }
                     return cb(null, {errors: err});
                 }
                 if(obj!= null){
-
+                    console.log("first update complete")
                     if(tshipment.SI.isDomestic){
 
                         ShipmentDomestic.upsert({
@@ -325,10 +336,10 @@ module.exports = function(Tshipmentent) {
                             "paidBy": tshipment.Domestic[0].paidBy,
                             "requestedShipDate": tshipment.Domestic[0].RequestedShipDate,
                             "requestedDeliveryDate": tshipment.Domestic[0].RequestedDeliveryDate,
-                            "cretedOn": "2016-10-26T00:00:00.000Z",
+                            "cretedOn": null,
                             "createdBy": 0,
                             "status" : "UNCONFIRMED",
-                            "modifiedOn": "2016-10-26T00:00:00.000Z",
+                            "modifiedOn": date_with_time,
                             "modifiedBy": 0,
                             "active": 1
 
@@ -337,7 +348,7 @@ module.exports = function(Tshipmentent) {
                                 // logger.error(err);
                                 console.log(err)
                                 if(err.code == "ER_DUP_ENTRY"){
-                                  err.code == "Booking Number Already Exist"
+                                    err.code == "Booking Number Already Exist"
                                 }
                                 return cb(null, {errors: err});
                             }
@@ -349,12 +360,12 @@ module.exports = function(Tshipmentent) {
                                     "shipmentId": obj.id,
                                     "piLotsId": tshipment.lotInformation[0].lot_id,
                                     "noOfBags":tshipment.lotInformation[0].noOfBags,
-                                    "confirmedOn": "2016-10-26T00:00:00.000Z",
+                                    "confirmedOn": '',
                                     "confirmedBy": 0,
                                     "queueSequence": 0,
-                                    "createdOn": "2016-10-26T00:00:00.000Z",
+                                    "createdOn": null,
                                     "createdBy": 1,
-                                    "modifiedOn": "2016-10-26T00:00:00.000Z",
+                                    "modifiedOn": date_with_time,
                                     "modifiedBy": 0,
                                     "active": 1
 
@@ -367,12 +378,12 @@ module.exports = function(Tshipmentent) {
                                         "shipmentId": obj.id,
                                         "piLotsId": tshipment.lotInformation[i].lot_id,
                                         "noOfBags":tshipment.lotInformation[i].noOfBags,
-                                        "confirmedOn": "2016-10-26T00:00:00.000Z",
+                                        "confirmedOn": null,
                                         "confirmedBy": 1,
                                         "queueSequence": 0,
-                                        "createdOn": "2016-10-26T00:00:00.000Z",
+                                        "createdOn": null,
                                         "createdBy": 1,
-                                        "modifiedOn": "2016-10-26T00:00:00.000Z",
+                                        "modifiedOn": date_with_time,
                                         "modifiedBy": 0,
                                         "active": 1
 
@@ -401,14 +412,14 @@ module.exports = function(Tshipmentent) {
                             }
                             else if(tshipment.Address.length >1){
                                 for(var i in tshipment.Address){
-                                  ShipmentAddress.upsert({
-                                      "id":  tshipment.Address[0].id,
-                                      "shipmentId": tshipment.Address[0].shipmentId,
-                                      "shipToAddress": tshipment.Address[0].shipToAddress,
-                                      "shipToCity": tshipment.Address[0].shipToCity,
-                                      "shipToZip": tshipment.Address[0].shipToZip,
-                                      "shipToState": tshipment.Address[0].shipToState,
-                                      "active": 1
+                                    ShipmentAddress.upsert({
+                                        "id":  tshipment.Address[0].id,
+                                        "shipmentId": tshipment.Address[0].shipmentId,
+                                        "shipToAddress": tshipment.Address[0].shipToAddress,
+                                        "shipToCity": tshipment.Address[0].shipToCity,
+                                        "shipToZip": tshipment.Address[0].shipToZip,
+                                        "shipToState": tshipment.Address[0].shipToState,
+                                        "active": 1
                                     },function(err){
                                         if(err){
                                             return cb(null , err)
@@ -440,9 +451,9 @@ module.exports = function(Tshipmentent) {
                             "piLotsId": tshipment.lotInformation[0].lot_id,
                             "craetedBy": 0,
                             "status" : "UNCONFIRMED",
-                            "createdOn": "2016-10-25",
+                            "createdOn": null,
                             "modifiedBy": 0,
-                            "modifiedOn": "2016-10-25",
+                            "modifiedOn": date_with_time,
                             "active": 1
 
                         },function(err , lotsObj){
@@ -450,7 +461,7 @@ module.exports = function(Tshipmentent) {
                                 // logger.error(err);
                                 console.log(err)
                                 if(err.code == "ER_DUP_ENTRY"){
-                                  err.code == "Booking Number Already Exist"
+                                    err.code == "Booking Number Already Exist"
                                 }
                                 return cb(null, {errors: err});
                             }
@@ -462,12 +473,12 @@ module.exports = function(Tshipmentent) {
                                     "shipmentId": obj.id,
                                     "piLotsId": tshipment.lotInformation[0].lot_id,
                                     "noOfBags":tshipment.lotInformation[0].noOfBags,
-                                    "confirmedOn": "2016-10-26T00:00:00.000Z",
+                                    "confirmedOn": '',
                                     "confirmedBy": 0,
                                     "queueSequence": 0,
-                                    "createdOn": "2016-10-26T00:00:00.000Z",
+                                    "createdOn": null,
                                     "createdBy": 1,
-                                    "modifiedOn": "2016-10-26T00:00:00.000Z",
+                                    "modifiedOn": date_with_time,
                                     "modifiedBy": 0,
                                     "active": 1
 
@@ -480,12 +491,12 @@ module.exports = function(Tshipmentent) {
                                         "shipmentId": obj.id,
                                         "piLotsId": tshipment.lotInformation[i].lot_id,
                                         "noOfBags":tshipment.lotInformation[i].noOfBags,
-                                        "confirmedOn": "2016-10-26T00:00:00.000Z",
+                                        "confirmedOn": null,
                                         "confirmedBy": 1,
                                         "queueSequence": 0,
-                                        "createdOn": "2016-10-26T00:00:00.000Z",
+                                        "createdOn": null,
                                         "createdBy": 1,
-                                        "modifiedOn": "2016-10-26T00:00:00.000Z",
+                                        "modifiedOn": date_with_time,
                                         "modifiedBy": 0,
                                         "active": 1
 

@@ -712,7 +712,6 @@ class ShipmentEntryForm extends React.Component {
     }
 
     onSubmit(e){
-      debugger
       DisableDoubleClick('submit')
       var bagsLeftTemp = 0
         if(!(this.isValid())){

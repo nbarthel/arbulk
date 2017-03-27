@@ -53,14 +53,14 @@ componentWillReceiveProps(next){
             url: this.url,
             success:function(data){
                 console.log('ajax ',data);
-                  debugger
+
                this.setState(
                    {
                        historyData : data,
                        loaded:true
                    }
                )
-               //console.log( this.state.xyz)
+
         }.bind(this)
         })
 
@@ -85,7 +85,7 @@ componentWillReceiveProps(next){
         bagBalnce = viewI.noOfBags + bagBalnce
         return(
           <tr key={index}>
-          <td>{moment(view.createdOn).format("MM-DD-YYYY")}	</td>
+          <td>{moment(viewI.createdOn).format("MM-DD-YYYY")}	</td>
           <td>{PO_number}</td>
           <td>{view.lot_number}</td>
           <td> {releaseNumber?releaseNumber:""}</td>
