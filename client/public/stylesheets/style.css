@@ -362,7 +362,8 @@ border-color: #ff4800; border: 1px solid transparent; font-weight: 400;line-heig
 .shipment_edit .sameHeight_r{ height:840px;}
 .shipment_edit .textarea-edit{height:303px !important;}
 .shipment_edit .textarea-entry{height:150px !important; resize:none;}
-.shipment_edit .tab-bg{ background:#f4f4f4; margin-bottom:0px;margin-top: 10px;border-bottom: 0px solid #333; cursor:pointer;}
+.shipment_edit .tab-bg{  border-top-left-radius: 5px; border-top-right-radius: 5px;background:#f4f4f4; margin-bottom:0px;margin-top: 10px;border-bottom: 0px solid #333; cursor:pointer;}
+.shipment .tab-bg{  border-top-left-radius: 5px; border-top-right-radius: 5px;}
 .shipment .active{display: block;padding:2px !important; margin-bottom: 20px;line-height: 1.42857143; border: 1px solid #337ab7;border-radius: 4px; }
 .shipment .tab-bg li:first-child a{border-top-left-radius: 5px !important;}
 .shipment .tab-bg li:last-child a{border-top-right-radius: 5px !important;}
@@ -384,7 +385,7 @@ border-color: #ff4800; border: 1px solid transparent; font-weight: 400;line-heig
 /*////////////////////////------container_detils------ /////////////////////////////*/
 
 .container_detils{margin-top: 2%; }
-.container_detils .tab-bg{ background:#f4f4f4; margin-bottom:10px; margin-top: 10px;border-bottom: 1px solid #333; cursor:pointer;}
+.container_detils .tab-bg{ border-top-left-radius: 5px; border-top-right-radius: 5px;background:#f4f4f4; margin-bottom:10px; margin-top: 10px;border-bottom: 1px solid #ddd; cursor:pointer;}
 .container_detils .sameHeight{height:405px; min-width:300px; }
 .container_detils .label_details .sameHeight{height:305px; }
 .container_detils .panel-group .panel{border-radius: 0px;}
@@ -397,7 +398,8 @@ border-color: #ff4800; border: 1px solid transparent; font-weight: 400;line-heig
 .container_detils .textarea-note{height:200px; resize:none;}
 .container_detils .more_load{background:#f9f9f9; color:red; padding:4px; text-align:center;}
 .container_detils .arrow-btn{ vertical-align:middle; padding-top:50%; text-align:center;}
-.nav-pills > li > a {border-radius: 0px !important;}
+.nav-pills > li:first-child > a {border-top-left-radius: 5px !important; }
+.nav-pills > li:last-child > a {border-top-right-radius: 5px !important; }
 .s_width{ width:300px !important;}
 /*////////////////////////------ADMIN------ /////////////////////////////*/
 
