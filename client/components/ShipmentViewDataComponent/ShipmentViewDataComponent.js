@@ -893,6 +893,7 @@ class ShipmentViewDataComponent extends React.Component {
                             <tbody>
                             <tr>
                                 <td colSpan="15" className="noresult"><p>No results match your entered criteria.</p></td>
+                                <td colSpan="9" className="noresult"><p></p></td>
                             </tr>
                             </tbody> : listData
                         }
