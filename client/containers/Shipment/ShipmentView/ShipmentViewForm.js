@@ -1763,7 +1763,9 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                  <a href="javascript:void(0)" name = "Qty"onClick={(e) => {this.onHideColumn(e)}}>Qty</a>
                  <a href="javascript:void(0)" name = "Alloc" onClick={(e) => {this.onHideColumn(e)}}>Allocated</a><br/>
                  <a href="javascript:void(0)" name = "Enough" onClick={(e) => {this.onHideColumn(e)}}>Enough</a>
-                 <a href="javascript:void(0)" name = "Bags" onClick={(e) => {this.onHideColumn(e)}}>Bags</a>
+                                                                            <a href="javascript:void(0)" name="Bags"
+                                                                               onClick={(e) => {this.onHideColumn(e)}}>#
+                                                                                of Bags In Inventory</a>
                  <a href="javascript:void(0)" name = "ERD" onClick={(e) => {this.onHideColumn(e)}}>ERD</a>
                  <a href="javascript:void(0)" name = "Vessel" onClick={(e) => {this.onHideColumn(e)}}>Vessel</a>
                  <a href="javascript:void(0)" name = "SteamShip" onClick={(e) => {this.onHideColumn(e)}}>SteamShipLine</a>
