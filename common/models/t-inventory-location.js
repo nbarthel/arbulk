@@ -55,9 +55,9 @@ module.exports = function(Tinventorylocation) {
                                 "noOfBags": tinventory.Tinventory.noOfBags,
                                 "notes" : tinventory.Tinventory.notes,
                                 "weight": tinventory.Tinventory.weight,
-                                "createdOn": "2016-10-03",
+                                "createdOn": date_with_time,
                                 "createdBy": 1,
-                                "modifiedOn": "2016-10-03",
+                                "modifiedOn": date_with_time,
                                 "modifiedBy": 1,
                                 "active": 1
 
@@ -228,9 +228,9 @@ module.exports = function(Tinventorylocation) {
                             "noOfBags": tinventory.Tinventory.noOfBags,
                             "notes" : tinventory.Tinventory.notes,
                             "weight": tinventory.Tinventory.weight,
-                            "createdOn": "2016-10-03",
+                            "createdOn": '',
                             "createdBy": 1,
-                            "modifiedOn": "2016-10-03",
+                            "modifiedOn": date_with_time,
                             "modifiedBy": 1,
                             "active": 1
 
@@ -248,7 +248,7 @@ module.exports = function(Tinventorylocation) {
                         "noOfBags": tinventory.Tinventory.noOfBags,
                         "notes" : tinventory.Tinventory.notes,
                         "weight": tinventory.Tinventory.weight,
-                         "createdOn": date_with_time,
+                         "createdOn": '',
                         "modifiedOn": date_with_time,
                         "createdBy": 1,
                         "modifiedBy": 1,
