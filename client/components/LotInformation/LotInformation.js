@@ -87,8 +87,8 @@ export default class LotInformation extends React.Component {
        return(
             <div>
                 <div className="form-group">
-                    <label for="Lot_Number" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Lot Number</label>
-                    <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                    <label for="Lot_Number" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Lot Number</label>
+                    <div className="col-lg-7    col-sm-11 col-xs-11 ">
                         <select
                             className="form-control"
                             id=""
@@ -105,9 +105,9 @@ export default class LotInformation extends React.Component {
 
                 <div className="form-group ">
                     <label htmlFor="Bags_To_Ship"
-                           className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Bags To Ship</label>
+                           className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Bags To Ship</label>
 
-                    <div className="col-lg-6  col-sm-11  col-xs-11">
+                    <div className="col-lg-7  col-sm-11  col-xs-11">
                         <input type = "number" className="form-control"
                                id="bags_to_ship"
                                name="bags_to_ship"
@@ -127,10 +127,10 @@ export default class LotInformation extends React.Component {
 
                 <div className="form-group">
                                          <label htmlFor="Lot_Number"
-                                                className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label" >No. of Bags
+                                                className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label" >No. of Bags
                                              for Lot</label>
 
-                                         <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                         <div className="col-lg-7    col-sm-11 col-xs-11 ">
                                           <span style = {{color: "red"}}>{this.inInventoryBags ? this.inInventoryBags : '0'}</span>
 
 

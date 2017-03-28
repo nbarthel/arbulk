@@ -60,8 +60,8 @@ export default class MaterialInformation extends React.Component {
 
 
                 <div className="form-group ">
-                    <label htmlFor="Rail_Car_Number" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Purchase Order Number</label>
-                    <div className="col-lg-6  col-sm-11  col-xs-11">
+                    <label htmlFor="Rail_Car_Number" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Purchase Order Number</label>
+                    <div className="col-lg-7  col-sm-11  col-xs-11">
                         <select className="form-control"
                                 id="po_number"
                                 name="po_number"
@@ -77,8 +77,8 @@ export default class MaterialInformation extends React.Component {
 
 
                 <div className="form-group">
-                    <label htmlFor="Lot_Number" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Lot Number</label>
-                    <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                    <label htmlFor="Lot_Number" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Lot Number</label>
+                    <div className="col-lg-7    col-sm-11 col-xs-11 ">
                         <select
                             className="form-control"
                             id="lotNumber"
@@ -94,8 +94,8 @@ export default class MaterialInformation extends React.Component {
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="Lot_Number" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">No. of Bags  for Lot</label>
-                    <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                    <label htmlFor="Lot_Number" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">No. of Bags  for Lot</label>
+                    <div className="col-lg-7    col-sm-11 col-xs-11 ">
                         <input type="text"
                                className="form-control"
                                id="Lot_Number"

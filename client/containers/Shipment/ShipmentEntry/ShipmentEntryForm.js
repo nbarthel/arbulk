@@ -19,9 +19,9 @@ import MaterialInformation from '../../../components/MaterialInformation/Materia
 import LotInformation from '../../../components/LotInformation/LotInformation';
 import DomesticShip from '../../../components/ShipmentDomesticShip/DomesticShip';
 import ShipmentDomesticCarear from '../../../components/ShipmentDomesticCarear/ShipmentDomesticCarear';
-import 'react-date-picker/index.css'
-import { DateField, Calendar } from 'react-date-picker'
-import { hashHistory } from 'react-router'
+import 'react-date-picker/index.css';
+import { DateField, Calendar } from 'react-date-picker';
+import { hashHistory } from 'react-router';
 import DisableDoubleClick from '../../GlobalFunctions/DisableDoubleClick'
 import EnableClick from '../../GlobalFunctions/EnableClick'
 var Loader = require('react-loader')
@@ -1249,10 +1249,10 @@ DisableDoubleClick('submitContainer')
 
                                     <div className="form-group">
                                         <label htmlFor="customer_name"
-                                               className={this.state.errors.customerId ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Customer Name
+                                               className={this.state.errors.customerId ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Customer Name
                                             </label>
 
-                                        <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                        <div className="col-lg-7    col-sm-11 col-xs-11 ">
                                             <select
                                                 className="form-control"
                                                 id="customer_name"
@@ -1269,10 +1269,10 @@ DisableDoubleClick('submitContainer')
                                     </div>
                                      <div className="form-group">
                                         <label htmlFor="location_name"
-                                               className={this.state.errors.locationId? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Location
+                                               className={this.state.errors.locationId? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Location
                                             </label>
 
-                                        <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                        <div className="col-lg-7    col-sm-11 col-xs-11 ">
                                             <select
                                                 className="form-control"
                                                 id="location_id"
@@ -1289,10 +1289,10 @@ DisableDoubleClick('submitContainer')
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="ar_bulk_location"
-                                               className={this.state.errors.releaseNumber ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Release
+                                               className={this.state.errors.releaseNumber ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Release
                                             #</label>
 
-                                        <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                        <div className="col-lg-7   col-sm-11 col-xs-11 ">
                                             <input type="text"
                                                    className="form-control"
                                                    id="Release #"
@@ -1307,9 +1307,9 @@ DisableDoubleClick('submitContainer')
 
                                     <div className="form-group">
                                         <label htmlFor="Purchase_Order"
-                                               className={this.state.errors.numberOfContainers ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}># Containers</label>
+                                               className={this.state.errors.numberOfContainers ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}># Containers</label>
 
-                                        <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                        <div className="col-lg-7   col-sm-11 col-xs-11 ">
                                             <input type="text"
                                                    className="form-control"
                                                    id="No. of Containers"
@@ -1359,10 +1359,10 @@ DisableDoubleClick('submitContainer')
 
                                     <div className="form-group ">
                                         <label htmlFor="Rail_Car_Number"
-                                               className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label pr-0">Purchase
+                                               className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label pr-0">Purchase
                                             Order #</label>
 
-                                        <div className="col-lg-6  col-sm-11  col-xs-11 pr-0">
+                                        <div className="col-lg-7  col-sm-11  col-xs-11 pr-0">
                                             <select className="form-control"
                                                     id="po_number"
                                                     name="po_number"
@@ -1384,10 +1384,10 @@ DisableDoubleClick('submitContainer')
 
                                     <div className="form-group">
                                         <label htmlFor="Weight"
-                                               className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Lot
+                                               className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Lot
                                             #</label>
 
-                                        <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                        <div className="col-lg-7  col-sm-11 col-xs-11 ">
                                             <select
                                                 className="form-control"
                                                 id="lot_Number"
@@ -1410,9 +1410,9 @@ DisableDoubleClick('submitContainer')
 
                                     <div className="form-group ">
                                         <label htmlFor="Bags_To_Ship"
-                                               className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Bags To Ship</label>
+                                               className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Bags To Ship</label>
 
-                                        <div className="col-lg-6  col-sm-11  col-xs-11">
+                                        <div className="col-lg-7  col-sm-11  col-xs-11">
                                             <input type = "number" className="form-control"
                                                    id="bags_to_ship"
                                                    name="bags_to_ship"
@@ -1431,10 +1431,10 @@ DisableDoubleClick('submitContainer')
 
                                     <div className="form-group">
                                          <label htmlFor="Lot_Number"
-                                                className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label" ># Bags
+                                                className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label" ># Bags
                                              for Lot</label>
 
-                                         <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                         <div className="col-lg-7    col-sm-11 col-xs-11 ">
                                           <span style = {{color: "red"}}>{this.inInventoryBags ? this.inInventoryBags : '0'}</span>
 
 
@@ -1472,10 +1472,10 @@ DisableDoubleClick('submitContainer')
                                     <fieldset className="scheduler-border  tab-pane active" id="International">
                                         <div className="form-group ">
                                             <label htmlFor="Material"
-                                                   className={this.state.errorsI.bookingNumber ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Booking
+                                                   className={this.state.errorsI.bookingNumber ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Booking
                                                 #</label>
 
-                                            <div className="col-lg-6  col-sm-11 col-xs-11 ">
+                                            <div className="col-lg-7  col-sm-11 col-xs-11 ">
                                                 <input type="text"
                                                        className="form-control"
                                                        id="Material"
@@ -1490,10 +1490,10 @@ DisableDoubleClick('submitContainer')
 
                                         <div className="form-group">
                                             <label htmlFor="Origin"
-                                                   className={this.state.errorsI.freightForwarder ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Freight
+                                                   className={this.state.errorsI.freightForwarder ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Freight
                                                 Forwarder</label>
 
-                                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                            <div className="col-lg-7    col-sm-11 col-xs-11 ">
                                                 <input type="text"
                                                        className="form-control"
                                                        id="Material"
@@ -1508,10 +1508,10 @@ DisableDoubleClick('submitContainer')
 
                                         <div className="form-group">
                                             <label htmlFor="Type_of_Packaging"
-                                                   className={this.state.errorsI.containerTypeId ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Container
+                                                   className={this.state.errorsI.containerTypeId ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Container
                                                 Type</label>
 
-                                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                            <div className="col-lg-7    col-sm-11 col-xs-11 ">
                                                 <select className="form-control"
                                                         id="Type_of_Packaging"
                                                         name="containerTypeId"
@@ -1528,10 +1528,10 @@ DisableDoubleClick('submitContainer')
 
                                         <div className="form-group">
                                             <label htmlFor="Type_of_Bag"
-                                                   className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Steamship
+                                                   className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Steamship
                                                 Line</label>
 
-                                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                            <div className="col-lg-7    col-sm-11 col-xs-11 ">
                                                 <select className="form-control"
                                                         id="Type_of_Bag"
                                                         name="steamshipLineId"
@@ -1549,10 +1549,10 @@ DisableDoubleClick('submitContainer')
 
                                         <div className="form-group">
                                             <label htmlFor="Type_of_Pallet"
-                                                   className={this.state.errorsI.steamshipVessel ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Vessel
+                                                   className={this.state.errorsI.steamshipVessel ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Vessel
                                                    </label>
 
-                                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                            <div className="col-lg-7    col-sm-11 col-xs-11 ">
                                                 <input type="text"
                                                        className="form-control"
                                                        id="SteamshipVessel"
@@ -1569,10 +1569,10 @@ DisableDoubleClick('submitContainer')
 
                                         <div className="form-group">
                                             <label htmlFor="Earliest_Return_Date"
-                                                   className={this.state.errorsI.EarliestReturnDate ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Earliest
+                                                   className={this.state.errorsI.EarliestReturnDate ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Earliest
                                                 Return Date</label>
 
-                                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                            <div className="col-lg-7    col-sm-11 col-xs-11 ">
                                                 <div className="right-inner-addon "><i className="fa fa-calendar"
                                                                                        aria-hidden="true"></i>
                                                 <DateField
@@ -1601,10 +1601,10 @@ DisableDoubleClick('submitContainer')
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="Stretch_wrap"
-                                                   className={this.state.errorsI.DocCutoffDate ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Doc Cutoff Date/Time
+                                                   className={this.state.errorsI.DocCutoffDate ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label"}>Doc Cutoff Date/Time
                                             </label>
 
-                                            <div className="col-lg-6   col-sm-11 col-xs-11 ">
+                                            <div className="col-lg-7   col-sm-11 col-xs-11 ">
                                             <div className="right-inner-addon "><i className="fa fa-calendar" aria-hidden="true"></i>
                                    <DateField
                                      className = "form-control"
@@ -1636,10 +1636,10 @@ DisableDoubleClick('submitContainer')
 
                                         <div className="form-group">
                                             <label htmlFor="Stretch_wrap"
-                                                   className={this.state.errorsI.CargoCutoffDate ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Cargo
+                                                   className={this.state.errorsI.CargoCutoffDate ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Cargo
                                                 Cutoff Date</label>
 
-                                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                            <div className="col-lg-7    col-sm-11 col-xs-11 ">
                                                 <div className="right-inner-addon "><i className="fa fa-calendar"
                                                                                        aria-hidden="true"></i>
                                              <DateField
@@ -1668,10 +1668,10 @@ DisableDoubleClick('submitContainer')
                                         </div>
 
                                         <div className="form-group">
-                                            <label htmlFor="Stretch_forwrap" className={this.state.errorsI.freeDaysPerContainer ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}># of
+                                            <label htmlFor="Stretch_forwrap" className={this.state.errorsI.freeDaysPerContainer ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}># of
                                                 Free Days per Container</label>
 
-                                            <div className="col-lg-6   col-sm-11 col-xs-11 ">
+                                            <div className="col-lg-7   col-sm-11 col-xs-11 ">
 
                                                 <input type="number" className="form-control" id="" name="freeDaysPerContainer"  onChange={this.InternationalChange} placeholder="# of Free Days per Container"/>
 
@@ -1680,10 +1680,10 @@ DisableDoubleClick('submitContainer')
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="Stretch_wrap"
-                                                   className={this.state.errorsI.containerPickupLocation ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Container
+                                                   className={this.state.errorsI.containerPickupLocation ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Container
                                                 Pick Up Location</label>
 
-                                            <div className="col-lg-6   col-sm-11 col-xs-11 ">
+                                            <div className="col-lg-7   col-sm-11 col-xs-11 ">
                                                 <input type="text" className="form-control" id="No_of_Bages_Pallat"
                                                        name="containerPickupLocation" placeholder="Container Pick Up Location" onChange={this.InternationalChange}/>
 
@@ -1692,10 +1692,10 @@ DisableDoubleClick('submitContainer')
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="Stretch_wrap"
-                                                   className={this.state.errorsI.containerReturnLocation ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Container
+                                                   className={this.state.errorsI.containerReturnLocation ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Container
                                                 Return Location</label>
 
-                                            <div className="col-lg-6   col-sm-11 col-xs-11 ">
+                                            <div className="col-lg-7   col-sm-11 col-xs-11 ">
                                                 <input type="text" className="form-control" id="No_of_Bages_Pallat"
                                                        name="containerReturnLocation"  placeholder="Container Return Location" onChange={this.InternationalChange}/>
 
@@ -1720,8 +1720,8 @@ DisableDoubleClick('submitContainer')
 
                                     <fieldset className="scheduler-border tab-pane " id="Domestic">
                                      <div className="form-group ">
-                                        <label for="" className={this.state.errorsd.bookingNumber ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Booking #</label>
-                                        <div className="col-lg-6  col-sm-11 col-xs-11 ">
+                                        <label for="" className={this.state.errorsd.bookingNumber ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Booking #</label>
+                                        <div className="col-lg-7  col-sm-11 col-xs-11 ">
                                           <input type="text"
                                            className="form-control"
                                             id=""
@@ -1734,10 +1734,10 @@ DisableDoubleClick('submitContainer')
                                                  </div>
                                         <div className="form-group ">
                                             <label htmlFor="Material"
-                                                   className={this.state.errorsd.typeOfShipment ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Type of
+                                                   className={this.state.errorsd.typeOfShipment ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Type of
                                                 Shipment</label>
 
-                                            <div className="col-lg-6  col-sm-11 col-xs-11 ">
+                                            <div className="col-lg-7  col-sm-11 col-xs-11 ">
                                                 <select className="form-control" id="Type_of_Packaging"
                                                         name="typeOfShipment"
                                                         onChange={this.DomesticChange}
@@ -1753,10 +1753,10 @@ DisableDoubleClick('submitContainer')
 
                                         <div className="form-group">
                                             <label htmlFor="Origin"
-                                                   className={this.state.errorsd.shippingReferenceNumber ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Shipping
+                                                   className={this.state.errorsd.shippingReferenceNumber ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Shipping
                                                 Ref #</label>
 
-                                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                            <div className="col-lg-7    col-sm-11 col-xs-11 ">
                                                 <input type="text"
                                                        className="form-control"
                                                        id=""
@@ -1773,9 +1773,9 @@ DisableDoubleClick('submitContainer')
 
                                         <div className="form-group">
                                             <label htmlFor="Type_of_Bag"
-                                                   className={this.state.errorsd.recipent ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Reciepient</label>
+                                                   className={this.state.errorsd.recipent ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Reciepient</label>
 
-                                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                            <div className="col-lg-7    col-sm-11 col-xs-11 ">
                                                 <input type="text"
                                                        className="form-control"
                                                        id="" placeholder="Reciepient"
@@ -1790,10 +1790,10 @@ DisableDoubleClick('submitContainer')
 
                                         <div className="form-group">
                                             <label htmlFor="No_of_Bages_Pallat"
-                                                   className={this.state.errorsd.recipentContact ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Reciepient
+                                                   className={this.state.errorsd.recipentContact ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Reciepient
                                                 Contact</label>
 
-                                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                            <div className="col-lg-7   col-sm-11 col-xs-11 ">
                                                 <input type="text"
                                                        className="form-control"
                                                        id="No_of_Bages_Pallat"
@@ -1807,10 +1807,10 @@ DisableDoubleClick('submitContainer')
                                         </div>
                                         <div className="form-group">
                                              <label htmlFor="Type_of_Packaging"
-                                                    className={this.state.errorsd.recipentTelNumber ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Reciepient Telephone
+                                                    className={this.state.errorsd.recipentTelNumber ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Reciepient Telephone
                                              </label>
 
-                                             <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                             <div className="col-lg-7 col-sm-11 col-xs-11 ">
                                                  <input type="text"
                                                         className="form-control"
                                                         id=""
@@ -1830,10 +1830,10 @@ DisableDoubleClick('submitContainer')
 
                                             <div className="form-group">
                                                 <label htmlFor="Stretch_wrap"
-                                                       className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Ship
+                                                       className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Ship
                                                     to Address</label>
 
-                                                <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                                <div className="col-lg-7    col-sm-11 col-xs-11 ">
                                                     <input type="text"
                                                            className="form-control"
                                                            id="No_of_Bages_Pallat"
@@ -1852,10 +1852,10 @@ DisableDoubleClick('submitContainer')
 
                                             <div className="form-group">
                                                  <label htmlFor="Stretch_wrap"
-                                                        className={this.zipError ?  "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error" :"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Ship
+                                                        className={this.zipError ?  "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error" :"col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label"}>Ship
                                                      to Zip Code</label>
 
-                                                 <div className="col-lg-6   col-sm-11 col-xs-11 ">
+                                                 <div className="col-lg-7   col-sm-11 col-xs-11 ">
                                                      <input
                                                      type = "number"
                                                       maxlength = "3"
@@ -1873,10 +1873,10 @@ DisableDoubleClick('submitContainer')
                                             </div>
                                             <div className="form-group">
                                                 <label htmlFor="Stretch_wrap"
-                                                       className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Ship
+                                                       className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Ship
                                                     to City</label>
 
-                                                <div className="col-lg-6   col-sm-11 col-xs-11 ">
+                                                <div className="col-lg-7   col-sm-11 col-xs-11 ">
                                                     <input type="text"
                                                            className="form-control"
                                                            id="No_of_Bages_Pallat"
@@ -1890,10 +1890,10 @@ DisableDoubleClick('submitContainer')
                                             </div>
                                             <div className="form-group">
                                                 <label htmlFor="Stretch_wrap"
-                                                       className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Ship
+                                                       className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Ship
                                                     to State</label>
 
-                                                <div className="col-lg-6   col-sm-11 col-xs-11 ">
+                                                <div className="col-lg-7   col-sm-11 col-xs-11 ">
                                                     <input type="text"
                                                            className="form-control"
                                                            id="No_of_Bages_Pallat"
@@ -1915,9 +1915,9 @@ DisableDoubleClick('submitContainer')
 
                                             <div className="form-group">
                                                 <label htmlFor="Stretch_wrap"
-                                                       className={this.state.errorsd.carrier ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Carrier</label>
+                                                       className={this.state.errorsd.carrier ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Carrier</label>
 
-                                                <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                                <div className="col-lg-7   col-sm-11 col-xs-11 ">
                                                     <input type="text"
                                                            className="form-control"
                                                            id="No_of_Bages_Pallat"
@@ -1933,10 +1933,10 @@ DisableDoubleClick('submitContainer')
 
                                             <div className="form-group">
                                                 <label htmlFor="Stretch_wrap"
-                                                       className={this.state.errorsd.carrierAcNumber ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Carrier
+                                                       className={this.state.errorsd.carrierAcNumber ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Carrier
                                                     Account #</label>
 
-                                                <div className="col-lg-6   col-sm-11 col-xs-11 ">
+                                                <div className="col-lg-7   col-sm-11 col-xs-11 ">
                                                     <input type="text"
                                                            className="form-control"
                                                            id="No_of_Bages_Pallat"
@@ -1952,10 +1952,10 @@ DisableDoubleClick('submitContainer')
                                             </div>
                                             <div className="form-group">
                                                 <label htmlFor="Stretch_wrap"
-                                                       className={this.state.errorsd.paymentTypeId ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Shipping
+                                                       className={this.state.errorsd.paymentTypeId ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Shipping
                                                     Payment Type</label>
 
-                                                <div className="col-lg-6   col-sm-11 col-xs-11 ">
+                                                <div className="col-lg-7   col-sm-11 col-xs-11 ">
                                                     <select className="form-control"
                                                            id="No_of_Bages_Pallat"
                                                            placeholder="Shipping Payment Type"
@@ -1973,10 +1973,10 @@ DisableDoubleClick('submitContainer')
 
                                             <div className="form-group">
                                                 <label htmlFor="Stretch_wrap"
-                                                       className={this.state.errorsd.paidBy ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Shipping
+                                                       className={this.state.errorsd.paidBy ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Shipping
                                                     Paid By</label>
 
-                                                <div className="col-lg-6   col-sm-11 col-xs-11 ">
+                                                <div className="col-lg-7   col-sm-11 col-xs-11 ">
                                                     <input type="text"
                                                            className="form-control"
                                                            id="No_of_Bages_Pallat"
@@ -1991,10 +1991,10 @@ DisableDoubleClick('submitContainer')
 
                                             <div className="form-group">
                                                 <label htmlFor="No_of_Bages_Pallat"
-                                                       className={this.state.errorsd.RequestedShipDate ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Requested
+                                                       className={this.state.errorsd.RequestedShipDate ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Requested
                                                     Ship Date</label>
 
-                                                <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                                <div className="col-lg-7    col-sm-11 col-xs-11 ">
                                                     <div className="right-inner-addon "><i className="fa fa-calendar"
                                                                                            aria-hidden="true"></i>
                                                         <DatePicker
@@ -2011,10 +2011,10 @@ DisableDoubleClick('submitContainer')
 
                                             <div className="form-group">
                                                 <label htmlFor="No_of_Bages_Pallat"
-                                                       className={this.state.errorsd.RequestedDeliveryDate ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Requested
+                                                       className={this.state.errorsd.RequestedDeliveryDate ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Requested
                                                     Delivery Date</label>
 
-                                                <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                                <div className="col-lg-7    col-sm-11 col-xs-11 ">
                                                     <div className="right-inner-addon "><i className="fa fa-calendar" aria-hidden="true"></i>
                                                         <DatePicker
                                                             dateFormat="MM-DD-YYYY"
