@@ -321,7 +321,7 @@ class ContainerSummaryComponent extends Component {
                                                 <th># of Containers</th>
                                                 <th>Container #</th>
                                                 <th>Chassis #</th>
-                                                <th>Seat #</th>
+                                                <th>Seal #</th>
                                                 <th># of Bags</th>
                                                 <th>Weight</th>
                                             </tr>
