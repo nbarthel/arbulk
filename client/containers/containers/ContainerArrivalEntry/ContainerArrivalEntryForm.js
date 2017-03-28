@@ -112,7 +112,7 @@ class  ContainerArrivalEntryForm extends React.Component {
                 })
 
                 axios.get(this.urlData).then((response)=>{
-                    debugger;
+                    
                     this.domesticData = response.data
                     this.state.domesticData = this.domesticData
                     this.CustomerName = this.domesticData.TCompany.name
@@ -192,7 +192,7 @@ class  ContainerArrivalEntryForm extends React.Component {
           }]
       })
       console.log("I have recieved props")
-      //debugger
+      //
 
       var base = 'TCompanies'
       this.urlTrucker = PIview._buildUrl(base, {
@@ -232,7 +232,7 @@ class  ContainerArrivalEntryForm extends React.Component {
 onDomestic(){
   if(!isDomesticTab || this.state.bookingNumbers==undefined){
   isDomesticTab = true;
-  //debugger
+  //
   var base = "TShipmentents"
   var CIView = createDataLoader(ContainerArrivalEntryForm,{
                  queries:[{
@@ -248,7 +248,7 @@ onDomestic(){
 
     })
       axios.get(this.url).then((response) => {
-        debugger
+        
        this.setState({
          bookingNumbers : response.data
        })
@@ -274,7 +274,7 @@ onInternational(){
 
     })
       axios.get(this.url).then((response) => {
-        debugger
+        
        this.setState({
          bookingNumbers : response.data
        })
@@ -385,7 +385,7 @@ isIValid(){
   return isIValid
 }
 onSave(e){
-  debugger
+  
   DisableDoubleClick('Save')
   if(this.shipmentType == 1){
     var arrivedDom = (this.state.domesticData && this.state.domesticData.TContainerDomestic) ? this.state.domesticData.TContainerDomestic.length : 0 ;
@@ -518,7 +518,7 @@ if(this.shipmentId == ""){
 
   this.IntPostObj.id = 0
   console.log("THISINTPOSTOBJ",this.IntPostObj)
-    debugger;
+    
   if(this.isIValid() == true){
     axios.post(Base_Url + 'TContainerInternationals',this.IntPostObj).then((response) =>{
       swal('Success',"Entry Done","success")
@@ -559,7 +559,7 @@ if(e.target.checked){
 }
 }
   onCustomerChange(e){
- // debugger
+ // 
  // var base = "TShipmentents"
  // var CIView = createDataLoader(ContainerArrivalEntryForm,{
  //                queries:[{
@@ -618,7 +618,7 @@ if(e.target.checked){
  //            }
  //
  // }else if(e.target.id == "customer_international"){
-//  debugger
+//  
 // this.value = e.target.value
 //   var base = "TShipmentents"
 //   this.url = CIView._buildUrl(base, {
@@ -635,7 +635,7 @@ if(e.target.checked){
   }
 
   toogleTab(e){
-    debugger
+    
     this.refs.international.value = ""
      this.refs.domestic.value = ""
      this.IntPostObj = { }
@@ -664,7 +664,7 @@ if(e.target.checked){
   }
 
     onHandleDomesticChange(e,data){
-        debugger;
+        
         console.log("data>>>>>>>>>>>>>" , data)
     }
     onHandleIntlChange(e ,data){
@@ -680,7 +680,7 @@ if(e.target.checked){
 //    setTimeout(function(){
 //    populatePo = _.map(populateArry, (data, index)=> {
 //        alert("poresult")
-//        debugger;
+//        
 //        return (
 //            <option key={index} id={index} value={data.TPackagingInstructions ? data.TPackagingInstructions.po_number : ''}>{data.TPackagingInstructions ? data.TPackagingInstructions.po_number : ''}</option>
 //        )
@@ -689,7 +689,7 @@ if(e.target.checked){
 //},500)
 
     render() {
-        debugger;
+        
          var trucker
 
          if(this.state.trucker){
@@ -702,7 +702,7 @@ if(e.target.checked){
           })
 
           if(this.state.bookingNumbers != undefined ){
-            debugger
+            
             console.log(this.state.bookingNumbers)
                     var bookingNumbers = _.map(this.state.bookingNumbers,(book,index) => {
                       if(book.isDomestic == 1 && book.TShipmentDomestic != undefined && book.TShipmentDomestic.length > 0){
@@ -732,8 +732,8 @@ if(e.target.checked){
                             <legend className="scheduler-border">Container INFO</legend>
 
                             <div className="form-group">
-                                    <div  className="col-lg-6"><label htmlFor="Booking" className=" control-label">Booking #</label></div>
-                                    <div className="col-lg-6">
+                                    <div  className="col-lg-4"><label htmlFor="Booking" className=" control-label">Booking #</label></div>
+                                    <div className="col-lg-8">
                                      <select className="form-control" id="Booking" onMouseOver={this.onInternational} onChange = {this.onBookingChange} name="Booking">
                                         <option value="Select Booking" disabled selected>{this.bookingNumberInt ? this.bookingNumberInt : "Select an Option"}</option>
                                         {bookingNumbers}
@@ -743,8 +743,8 @@ if(e.target.checked){
                                 </div>
 
                                 <div className="form-group">
-                                     <label htmlFor="Dropoff_Trucker" className={this.state.intErrors.truckerId ? "col-lg-6 control-label has error" : "col-lg-6 control-label"}>Dropoff Trucker</label>
-                                     <div className="col-lg-6">
+                                     <label htmlFor="Dropoff_Trucker" className={this.state.intErrors.truckerId ? "col-lg-4 control-label has error" : "col-lg-4 control-label"}>Dropoff Trucker</label>
+                                     <div className="col-lg-8">
                                         <select className="form-control" ref = "IDTR" onChange = {this.onTruckerChange} id="d_Trucker" name="Dropoff_Trucker">
                                          <option disabled selected value="">Dropoff Trucker</option>
                                          {trucker}
@@ -754,8 +754,8 @@ if(e.target.checked){
                                  </div>
 
                                  <div className="form-group">
-                                     <label htmlFor="P_U_Trucker" className={this.state.intErrors.pickupTrucker ? "col-lg-6 control-label has error" : "col-lg-6 control-label"}>P/U Trucker</label>
-                                     <div className="col-lg-6">
+                                     <label htmlFor="P_U_Trucker" className={this.state.intErrors.pickupTrucker ? "col-lg-4 control-label has error" : "col-lg-4 control-label"}>P/U Trucker</label>
+                                     <div className="col-lg-8">
                                        <select className="form-control" ref = "IPUTR" onChange = {this.onTruckerChange} id="pu_Trucker" name="P_U_Trucker">
                                          <option disabled selected value="">P/U Trucker</option>
                                          {trucker}
@@ -766,24 +766,24 @@ if(e.target.checked){
 
                                <div className="form-group ">
 
-                                    <label htmlFor="Container" className={this.state.intErrors.containerNumber ? "col-lg-6 control-label has error" : "col-lg-6 control-label"}>Container #</label>
-                                    <div className="col-lg-6">
+                                    <label htmlFor="Container" className={this.state.intErrors.containerNumber ? "col-lg-4 control-label has error" : "col-lg-4 control-label"}>Container #</label>
+                                    <div className="col-lg-8">
                                       <input type="text" className="form-control" onChange = {this.onContainerChange}  id="Container_int" placeholder="Container" />
                                       <div className="error"><span></span></div>
                                     </div>
                                 </div>
 
                                 <div className="form-group">
-                                    <label htmlFor="Chassis" className={this.state.intErrors.chasisNumber ? "col-lg-6 control-label has error" : "col-lg-6 control-label"}>Chassis #</label>
-                                    <div className="col-lg-6">
+                                    <label htmlFor="Chassis" className={this.state.intErrors.chasisNumber ? "col-lg-4 control-label has error" : "col-lg-4 control-label"}>Chassis #</label>
+                                    <div className="col-lg-8">
                                          <input type="text" className="form-control" onChange = {this.onChassisChange} id="Chassis" placeholder="Chassis #" />
                                          <div className="error"><span></span></div>
                                     </div>
                                 </div>
 
                                 <div className="form-group">
-                                    <label htmlFor="Container_Tare_Weight" className={this.state.intErrors.tareWeight ? "col-lg-6 control-label has error" : "col-lg-6 control-label"}>Container Tare Weight</label>
-                                    <div className="col-lg-6">
+                                    <label htmlFor="Container_Tare_Weight" className={this.state.intErrors.tareWeight ? "col-lg-4 control-label has error" : "col-lg-4 control-label"}>Container Tare Weight</label>
+                                    <div className="col-lg-8">
                                         <input type="number" className="form-control" id="Container_Tare_Weight" onChange = {this.onContainerTChange} placeholder="Container Tare Weight" />
                                       <div className="error"><span></span></div>
                                     </div>
@@ -843,18 +843,18 @@ if(e.target.checked){
                          <fieldset className="scheduler-border  sameHeight" >
                             <legend className="scheduler-border">SHIPMENT INFO</legend>
                             <div className="form-group">
-                                <label htmlFor="Material" className="col-lg-6 ">Booking #:   </label>
-                                <div className="col-lg-6"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?this.state.IntlData.TShipmentInternational[0].bookingNumber : ''}</p></div>
+                                <label htmlFor="Material" className="col-lg-4 ">Booking #:   </label>
+                                <div className="col-lg-8"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?this.state.IntlData.TShipmentInternational[0].bookingNumber : ''}</p></div>
                                  </div>
 
                                 <div className="form-group">
-                                    <label htmlFor="Origin" className="col-lg-6 ">Container Type:</label>
-                                    <div className="col-lg-6"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?this.state.IntlData.TShipmentInternational[0].TContainerType.name : ''}</p></div>
+                                    <label htmlFor="Origin" className="col-lg-4 ">Container Type:</label>
+                                    <div className="col-lg-8"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?this.state.IntlData.TShipmentInternational[0].TContainerType.name : ''}</p></div>
                                 </div>
 
                              <div className="form-group">
-                                 <label htmlFor="Type_of_Packaging" className="col-lg-6 ">Number of Containers:</label>
-                                 <div className="col-lg-6"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?this.state.IntlData.numberOfContainers : ''}</p></div>
+                                 <label htmlFor="Type_of_Packaging" className="col-lg-4">Number of Containers:</label>
+                                 <div className="col-lg-8"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?this.state.IntlData.numberOfContainers : ''}</p></div>
                              </div>
 {/*
                                 <div className="form-group">
@@ -863,26 +863,26 @@ if(e.target.checked){
                                 </div>
 */}
                                 <div className="form-group">
-                                    <label htmlFor="Type_of_Pallet" className="col-lg-6 ">Steamship Line:</label>
-                                    <div className="col-lg-6"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?this.state.IntlData.TShipmentInternational[0].TSteamshipLine.name : ''}</p></div>
+                                    <label htmlFor="Type_of_Pallet" className="col-lg-4 ">Steamship Line:</label>
+                                    <div className="col-lg-8"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?this.state.IntlData.TShipmentInternational[0].TSteamshipLine.name : ''}</p></div>
                                 </div>
 
                                 <div className="form-group">
-                                    <label htmlFor="No_of_Bages_Pallat" className="col-lg-6 ">Steamship Vessel:</label>
-                                    <div className="col-lg-6"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?this.state.IntlData.TShipmentInternational[0].steamshipVessel : ''}</p></div>
+                                    <label htmlFor="No_of_Bages_Pallat" className="col-lg-4 ">Steamship Vessel:</label>
+                                    <div className="col-lg-8"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?this.state.IntlData.TShipmentInternational[0].steamshipVessel : ''}</p></div>
                                 </div>
 
                                 <div className="form-group">
-                                    <label htmlFor="Stretch_wrap" className="col-lg-6 ">Earliest Return Date:</label>
-                                    <div className="col-lg-6"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?moment(this.state.IntlData.TShipmentInternational[0].earliestReturnDate).format('MM-DD-YYYY') : ''}</p></div>
+                                    <label htmlFor="Stretch_wrap" className="col-lg-4 ">Earliest Return Date:</label>
+                                    <div className="col-lg-8"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?moment(this.state.IntlData.TShipmentInternational[0].earliestReturnDate).format('MM-DD-YYYY') : ''}</p></div>
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="Stretch_wrap" className="col-lg-6 ">Doc Cutoff Date:</label>
-                                    <div className="col-lg-6"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?moment(this.state.IntlData.TShipmentInternational[0].docCutoffDate).format('MM-DD-YYYY') : ''}</p></div>
+                                    <label htmlFor="Stretch_wrap" className="col-lg-4">Doc Cutoff Date:</label>
+                                    <div className="col-lg-8"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?moment(this.state.IntlData.TShipmentInternational[0].docCutoffDate).format('MM-DD-YYYY') : ''}</p></div>
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="Stretch_wrap" className="col-lg-6 ">Cutoff Date:</label>
-                                    <div className="col-lg-6"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?moment(this.state.IntlData.TShipmentInternational[0].cargoCutoffDate).format('MM-DD-YYYY') : ''}</p></div>
+                                    <label htmlFor="Stretch_wrap" className="col-lg-4 ">Cutoff Date:</label>
+                                    <div className="col-lg-8"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?moment(this.state.IntlData.TShipmentInternational[0].cargoCutoffDate).format('MM-DD-YYYY') : ''}</p></div>
                                 </div>
                          </fieldset>
                         </div>
