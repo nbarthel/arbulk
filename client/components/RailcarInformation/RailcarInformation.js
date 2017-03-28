@@ -33,8 +33,9 @@ componentDidMount(){
 }
 
 	  render() {
+	debugger
 	   return (
-    	<div className="RailCarAdd">
+    	<div className={this.props.id===0?" ":"RailCarAdd"}>
        		<div className="form-group ">
 					<label htmlFor="Rail_Car_Number" className="col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label">Railcar #</label>
 					<div className="col-lg-8    col-sm-11 col-xs-11 ">
