@@ -266,7 +266,7 @@ padding: 15px 20px 15px 20px;
 }
 
 .label_info fieldset [class*="col-"]{padding-right: 0px;  padding-left: 0px; font-weight:500; }
-.scheduler-border  label{ font-weight: bold  !important; text-align:left  !important; font-size:13px; }
+.scheduler-border  label{ font-weight: bold  !important; text-align:left  !important; font-size:12px; }
 legend.scheduler-border { text-transform:uppercase !important;font-weight: bold !important;text-align: left !important;color:#004a98 !important; font-size:16px;}
 
 /*////////////////////////------Packaging------ /////////////////////////////*/
