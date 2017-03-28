@@ -74,7 +74,7 @@ export class AddMaterialForm extends Component {
 							</div>
 							
 							<div className="form-group">							
-							  	<div className=" col-lg-6 col-md-6 col-sm-6 col-xs-12"> <label htmlFor="" >Estimated Weight Empty (lbs.)</label>
+							  	<div className=" col-lg-6 col-md-6 col-sm-6 col-xs-12"> <label htmlFor="" >Estimated Weight Empty (Kg)</label>
 							    <input type="text" className="form-control" id="" name="" placeholder="Enter Estimated Weight"/>
 								 <div className="error"><span></span></div>
 							   </div>
