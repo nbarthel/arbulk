@@ -32,9 +32,6 @@ export default class ContainerPrint extends React.Component {
             }]
         })
 
-        //debugger
-
-        //var base = 'TPackagingInstructions'+'/'+this.props.params.id;
         var base = 'TContainerInternationals/'+this.id;
         this.url = InventView._buildUrl(base, {
             "include" : ["TContainerLoad",{"relation": "TShipmentent","scope":{"include":["TShipmentDomestic" ,{"relation" :"TShipmentInternational" , "scope" :{"include" : "TSteamshipLine"}},"TShipmentLots","TCompany","TLocation"]}}]
@@ -42,7 +39,6 @@ export default class ContainerPrint extends React.Component {
         $.ajax({
             url: this.url,
             success:function(data){
-                console.log('<<<<<<<<<>>>>>>>>>',data)
                 this.setState({
                     viewData : data
                 })
@@ -83,7 +79,6 @@ export default class ContainerPrint extends React.Component {
         $.ajax({
             url: this.url1,
             success:function(data){
-                console.log('lot ,po, location array>>>>>>>>>>>>>>>',data);
                 this.setState({
                     PIData:data
                 })
@@ -146,18 +141,20 @@ export default class ContainerPrint extends React.Component {
         var weight =0
         var unit=""
         var unitType=""
-
+        debugger
         if(this.state.PIData.TPackagingInstructions.TPackagingMaterial.TPackagingType!=undefined){
           weight =   this.state.PIData.TPackagingInstructions.TPackagingMaterial.avarageMaterialWeight
           unit =     this.state.PIData.TPackagingInstructions.TPackagingMaterial.TPackagingType.id==1?"Kg":"lbs"
           unitType = this.state.PIData.TPackagingInstructions.TPackagingMaterial.TPackagingType.packagingType
           multiplyingFactor = this.state.PIData.TPackagingInstructions.TPackagingMaterial.TPackagingType.id!=1?2.204625:1
         }
-        var totalBags = this.getSum(this.state.viewData.TContainerLoad)
-        var totalPallets = Math.ceil(totalBags / this.state.PIData.TPackagingInstructions.bags_per_pallet)
-        var gW = totalBags*(this.state.PIData.TPackagingInstructions.TPackagingMaterial.avarageMaterialWeight) + totalBags *(this.state.PIData.TPackagingInstructions.TPackagingMaterial.emptyWeight) + totalPallets *(this.state.PIData && this.state.PIData.TPackagingInstructions && this.state.PIData.TPackagingInstructions.TPalletType ? this.state.PIData.TPackagingInstructions.TPalletType.weight * multiplyingFactor : 1)
-        var tw = totalBags *(this.state.PIData.TPackagingInstructions.TPackagingMaterial.emptyWeight) + totalPallets *(this.state.PIData && this.state.PIData.TPackagingInstructions && this.state.PIData.TPackagingInstructions.TPalletType ? this.state.PIData.TPackagingInstructions.TPalletType.weight * multiplyingFactor : 1)
-
+          var totalBags = this.getSum(this.state.viewData.TContainerLoad)
+          var totalPallets = Math.ceil(totalBags / this.state.PIData.TPackagingInstructions.bags_per_pallet)
+          var emptyWeightBags = totalBags *(this.state.PIData.TPackagingInstructions.TPackagingMaterial.emptyWeight) * (unit==="Kg"?1:2.204625)
+          var emptyPalletsWeight = totalPallets * (this.state.PIData && this.state.PIData.TPackagingInstructions && this.state.PIData.TPackagingInstructions.TPalletType ? this.state.PIData.TPackagingInstructions.TPalletType.weight  : 1)
+          var avgMaterialBags = totalBags*(this.state.PIData.TPackagingInstructions.TPackagingMaterial.avarageMaterialWeight)
+          var tw =  emptyWeightBags + emptyPalletsWeight
+          var gW = avgMaterialBags + tw
       }
         return (
             <div style={{margin:'0 auto',textAlign :'center'}}>

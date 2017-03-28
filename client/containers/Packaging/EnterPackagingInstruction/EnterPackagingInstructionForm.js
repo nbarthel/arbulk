@@ -226,8 +226,6 @@ export default class EnterPackagingInstructionForm extends React.Component {
     // isWeightconverted = true;
   }
   SetUnitType(name){
-
-    debugger
     var check=false
     var tempObj=[]
     if(this.obj.bag_id!=""&&this.obj.customer_id!=""&&this.obj.location_id!=""){
