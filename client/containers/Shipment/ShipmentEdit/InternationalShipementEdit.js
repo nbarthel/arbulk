@@ -375,9 +375,9 @@ class InternationalShipementEdit extends React.Component {
 				<legend className="scheduler-border">Shipment Info</legend>
 				 <div className="form-group">
                             <label htmlFor="customer_name"
-                                className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Customer Name
+                                className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Customer Name
                             </label>
-                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                            <div className="col-lg-8   col-sm-11 col-xs-11 ">
                                 <select
                                     className="form-control"
                                     id="customer_name"
@@ -392,8 +392,8 @@ class InternationalShipementEdit extends React.Component {
                             </div>
                         </div>
                         <div className="form-group">
-                            <label for="ar_bulk_location" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Release #</label>
-                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                            <label for="ar_bulk_location" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Release #</label>
+                            <div className="col-lg-8    col-sm-11 col-xs-11 ">
                                 <input type="text"
                                 className="form-control"
                                 id=""
@@ -404,8 +404,8 @@ class InternationalShipementEdit extends React.Component {
                             </div>
                         </div>
                         <div className="form-group">
-                            <label for="Purchase_Order" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"># Containers</label>
-                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                            <label for="Purchase_Order" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"># Containers</label>
+                            <div className="col-lg-8    col-sm-11 col-xs-11 ">
                                 <input type="text"
                                 className="form-control"
                                 id=""
@@ -424,8 +424,8 @@ class InternationalShipementEdit extends React.Component {
 				<legend className="scheduler-border">Material Info</legend>
 				 <div className="bages_estimated col-lg-11 col-md-11 col-sm-11 col-xs-11"><span></span></div>
                         <div className="form-group ">
-                            <label for="Rail_Car_Number" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Purchase Order #</label>
-                            <div className="col-lg-6  col-sm-11  col-xs-11">
+                            <label for="Rail_Car_Number" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Purchase Order #</label>
+                            <div className="col-lg-8 col-sm-11  col-xs-11">
                                 <select disabled onChange = {this.poChange} value = {this.props.editData.TShipmentLots[0].sId}  className="form-control" id="" >
                                  <option>{this.props.editData.TShipmentLots[0].TPackagingInstructions.po_number}</option>
                                 </select>
@@ -433,8 +433,8 @@ class InternationalShipementEdit extends React.Component {
                             </div>
                         </div>
                         <div className="form-group">
-                            <label for="Weight" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Lot #</label>
-                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                            <label for="Weight" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Lot #</label>
+                            <div className="col-lg-8  col-sm-11 col-xs-11 ">
                                 <select
                                 value = {this.props.lotId}
                                 className="form-control" id="" >
@@ -446,9 +446,9 @@ class InternationalShipementEdit extends React.Component {
                         </div>
                           <div className="form-group ">
                                         <label htmlFor="Bags_To_Ship"
-                                               className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Bags To Ship</label>
+                                               className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Bags To Ship</label>
 
-                                        <div className="col-lg-6  col-sm-11  col-xs-11">
+                                        <div className="col-lg-8 col-sm-11  col-xs-11">
                                             <input type = "number" className="form-control"
                                                    id="bags_to_ship"
                                                    name="bags_to_ship"
@@ -461,8 +461,8 @@ class InternationalShipementEdit extends React.Component {
                                         </div>
                                     </div>
                         <div className="form-group">
-                            <label for="Lot_Number" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"># Bags  for Lot</label>
-                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                            <label for="Lot_Number" className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label"># Bags  for Lot</label>
+                            <div className="col-lg-8   col-sm-11 col-xs-11 ">
                                 <input type="text" onChange = {this.lotBagsChange} disabled value = {this.props.editData.TShipmentLots[0].TPackagingInstructionLots.inInventory != null ? this.props.editData.TShipmentLots[0].TPackagingInstructionLots.inInventory : 0} className="form-control" id="Lot_Number" placeholder="No. of Bags  for Lot"/>
                                 <div className="error"><span></span></div>
                             </div>
@@ -477,24 +477,24 @@ class InternationalShipementEdit extends React.Component {
 	    <fieldset className="scheduler-border  tab-pane active " id="International">
 		<legend className="scheduler-border">Shipment Info International</legend>
 			<div className="form-group ">
-					<label for="" className="col-lg-5 col-md-5 col-sm-11  col-xs-11 control-label">Booking #</label>
-					<div className="col-lg-6  col-sm-11 col-xs-11 ">
+					<label for="" className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label">Booking #</label>
+					<div className="col-lg-8  col-sm-11 col-xs-11 ">
 					  <input type="text" onChange = {this.bookingChange} value = {this.props.editData.TShipmentInternational[0].bookingNumber} className="form-control" id="" placeholder="Booking Number"/>
 					  <div className="error"><span></span></div>
 					</div>
                 </div>
 
 				<div className="form-group">
-					<label for="" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Freight Forwarder</label>
-					<div className="col-lg-6    col-sm-11 col-xs-11 ">
+					<label for="" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Freight Forwarder</label>
+					<div className="col-lg-8    col-sm-11 col-xs-11 ">
 					    <input type="text" onChange = {this.freightChange} value ={this.props.editData.TShipmentInternational[0].freightForwarder != null ? this.props.editData.TShipmentInternational[0].freightForwarder : '' } className="form-control" id="" placeholder="Freight Forwarder"/>
 					  <div className="error"><span></span></div>
 					</div>
                 </div>
 
 				<div className="form-group">
-					<label for="" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Container Type</label>
-					<div className="col-lg-6    col-sm-11 col-xs-11 ">
+					<label for="" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Container Type</label>
+					<div className="col-lg-8    col-sm-11 col-xs-11 ">
 					  <select value = {this.props.editData.TShipmentInternational[0].containerTypeId} onChange = {this.containerTypeChange} className="form-control" id="" name="">
 						<option selected disabled value="">Container Type</option>
 						{this.containerType}
@@ -504,8 +504,8 @@ class InternationalShipementEdit extends React.Component {
                 </div>
 
 				<div className="form-group">
-					<label for="" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Steamship Line</label>
-					<div className="col-lg-6    col-sm-11 col-xs-11 ">
+					<label for="" className="col-lg-4  col-md- col-sm-11  col-xs-11 control-label">Steamship Line</label>
+					<div className="col-lg-8   col-sm-11 col-xs-11 ">
 					  <select value = {this.props.editData.TShipmentInternational[0].steamshipLineId} onChange = {this.shipLineChange} className="form-control" id="" name="">
 						<option selected disabled value="">Steamship Line</option>
 						{this.steamShipLine}
@@ -515,8 +515,8 @@ class InternationalShipementEdit extends React.Component {
                 </div>
 
 				<div className="form-group">
-					<label for="" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Vessel</label>
-					<div className="col-lg-6 col-sm-11 col-xs-11 ">
+					<label for="" className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label">Vessel</label>
+					<div className="col-lg-8 col-sm-11 col-xs-11 ">
 					 <input type="text" className="form-control" onChange = {this.vesselChange} value = {this.props.editData.TShipmentInternational[0].steamshipVessel} id="SteamshipVessel" placeholder="Steamship Vessel"/>
 					  <div className="error"><span></span></div>
 
@@ -524,8 +524,8 @@ class InternationalShipementEdit extends React.Component {
                 </div>
 
 				<div className="form-group">
-					<label for="" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Earliest Return Date</label>
-					<div className="col-lg-6 col-sm-11 col-xs-11 ">
+					<label for="" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Earliest Return Date</label>
+					<div className="col-lg-8 col-sm-11 col-xs-11 ">
 					 <div className="right-inner-addon "><i className="fa fa-calendar" aria-hidden="true"></i>
 						<input className="form-control"  name="date" onChange = {this.EarliestReturnDate} id = "errdate" placeholder="Earliest Return Date" type="date"/>
 					</div>
@@ -533,8 +533,8 @@ class InternationalShipementEdit extends React.Component {
 					</div>
                 </div>
 				<div className="form-group">
-					<label for="" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Doc Cutoff Date/Time</label>
-					<div className="col-lg-6 col-sm-11 col-xs-11 ">
+					<label for="" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Doc Cutoff Date/Time</label>
+					<div className="col-lg-8 col-sm-11 col-xs-11 ">
 					 <div className="right-inner-addon "><i className="fa fa-calendar" aria-hidden="true"></i>
 						<input className="form-control" id="dcdate" onChange = {this.DocDate} name="date" placeholder="Doc Cutoff Date/Time" type="date"/>
 					</div>
@@ -543,8 +543,8 @@ class InternationalShipementEdit extends React.Component {
                 </div>
 
 				<div className="form-group">
-					<label for="" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Cargo Cutoff Date/Time </label>
-					<div className="col-lg-6    col-sm-11 col-xs-11 ">
+					<label for="" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Cargo Cutoff Date/Time </label>
+					<div className="col-lg-8    col-sm-11 col-xs-11 ">
 					 <div className="right-inner-addon "><i className="fa fa-calendar" aria-hidden="true"></i>
 						<input className="form-control" id="ccdate"  name="date" onChange = {this.CargoDate} placeholder="Cargo Cutoff Date/Time" type="date"/>
 					</div>
@@ -553,22 +553,22 @@ class InternationalShipementEdit extends React.Component {
                 </div>
 
 				<div className="form-group">
-					<label for="" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"># of Free Days per Container</label>
-					<div className="col-lg-6   col-sm-11 col-xs-11 ">
+					<label for="" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"># of Free Days per Container</label>
+					<div className="col-lg-8   col-sm-11 col-xs-11 ">
 					   <input type="text" className="form-control" onChange = {this.freeDaysChange} value = {this.props.editData.TShipmentInternational[0].freeDaysPerContainer} id="" placeholder="# of Free Days per Container"/>
 					  <div className="error"><span></span></div>
 					</div>
                 </div>
 				<div className="form-group">
-					<label for="" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Container Pick Up Location</label>
-					<div className="col-lg-6   col-sm-11 col-xs-11 ">
+					<label for="" className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label">Container Pick Up Location</label>
+					<div className="col-lg-8   col-sm-11 col-xs-11 ">
 					 <input type="text" className="form-control" id="" onChange = {this.pickupChange} value = {this.props.editData.TShipmentInternational[0].containerPickupLocation} placeholder="Container Pick Up Location"/>
 					  <div className="error"><span></span></div>
 					</div>
                 </div>
 				<div className="form-group">
-					<label for="" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Container Return Location</label>
-					<div className="col-lg-6   col-sm-11 col-xs-11 ">
+					<label for="" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Container Return Location</label>
+					<div className="col-lg-8   col-sm-11 col-xs-11 ">
 					 <input type="text" className="form-control" id="" onChange = {this.returnChange} value ={this.props.editData.TShipmentInternational[0].containerReturnLocation} placeholder="Container Return Location"/>
 					  <div className="error"><span></span></div>
 					</div>
