@@ -43,14 +43,13 @@ export default class PrintPackaging extends React.Component {
         this.url = InventView._buildUrl(base, {
             include: ['TPackagingInstructionLots',"TLocation","TCompany","TPackagingType","TPalletType","TWrapType","TOrigin","TPackagingMaterial"]
         })
-        console.log(this.url,"<<<<<<<<<<<<<<<<<<<<URL")
+
 
         var lot='';var railcar='';var weight='';var label='';
         $.ajax({
             url: this.url,
             success:function(data){
-                console.log('Invent>>>>>>>>>>>>>>>',data);
-                debugger;
+
                 /*forEach(data.TPackagingInstructionLots,function(item){
                         lot=item.lot_number;
                 }*/
@@ -173,15 +172,15 @@ export default class PrintPackaging extends React.Component {
         hashHistory.push('/Packaging/packagingInstFormPrint/')
     }
     render(){
-      debugger
+
       if(this.state.viewData.custom_label!=null){
     var lengthLabel =  this.state.viewData.custom_label.split("\n").length}
    this.dataList =   _.map(this.state.viewData.TPackagingType.packagingType , (status,index)=>{
 		lot = this.state.lot
         weight = this.state.weight
          if(status!=''){
-           debugger;
-           console.log("boxesssssssssssss" , status)
+
+
              if(status=='BOXES'){
                  return(
                      <div className="packaging_data " style={{"text-align":"center"}}>
@@ -251,7 +250,7 @@ export default class PrintPackaging extends React.Component {
 
                                     <div className="info" style={{"float":"left" , "margin-top" : 30,"width":"150px"}}>
                                         {this.state.viewData.custom_label.split("\n").map(function(item ,index) {
-                                          debugger
+
                                             return (
                                                 <span>
                                                     {item}

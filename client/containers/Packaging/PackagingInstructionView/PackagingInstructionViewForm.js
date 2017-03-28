@@ -620,7 +620,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                         ed = this.endDate,
                         i=0,
                         flagToDecideIncrement = true
-                    debugger
+
                     if(flagForcutOffFilter && data.length>0){
 
                         while(i<data.length){
@@ -675,7 +675,7 @@ export default class PackagingInstructionViewForm extends React.Component {
         }
     }
     saveView(e){
-        debugger
+
         for(var props in this.Where.Query){
             var obj = {[props]:this.Where.Query[props]}
             this.Where.Query[props] = this.Where.Query[props]
