@@ -900,8 +900,8 @@ if(e.target.checked){
                             <legend className="scheduler-border">Container INFO</legend>
 
                             <div className="form-group ">
-                                <div  className="col-lg-6"><label htmlFor="Booking" id="domesticBooking" className=" control-label">Release #</label></div>
-                                <div className="col-lg-6">
+                                <div  className="col-lg-4"><label htmlFor="Booking" id="domesticBooking" className=" control-label">Release #</label></div>
+                                <div className="col-lg-8">
                                  <select className="form-control" id="ReleaseNumberForDomestic" onMouseOver = {this.onDomestic} onChange = {this.onBookingChange} name="Release Number For Domestic">
                                     <option disabled selected value="">{this.bookingNumber? this.bookingNumber : "Release Number"} </option>
                                     {bookingNumbers}
@@ -927,8 +927,8 @@ if(e.target.checked){
                                   </div>*/
                               }
                               <div className="form-group ">
-                                   <label htmlFor="Dropoff_Trucker" className={this.state.domesticErrors.truckerId ? "col-lg-6 control-label has error" : "col-lg-6 control-label"}>Dropoff Trucker</label>
-                                   <div className="col-lg-6">
+                                   <label htmlFor="Dropoff_Trucker" className={this.state.domesticErrors.truckerId ? "col-lg-4 control-label has error" : "col-lg-4 control-label"}>Dropoff Trucker</label>
+                                   <div className="col-lg-8">
                                     <select className="form-control" ref = "DDTR" onChange = {this.onTruckerChange} id="d_Trucker" name="Dropoff_Trucker">
                                        <option selected disabled value="">Dropoff Trucker</option>
                                        {trucker}
@@ -938,8 +938,8 @@ if(e.target.checked){
                                </div>
 
                                <div className="form-group ">
-                                     <label htmlFor="P_U_Trucker" className={this.state.domesticErrors.pickupTrucker ? "col-lg-6 control-label has error" : "col-lg-6 control-label"}>P / U Trucker</label>
-                                     <div className="col-lg-6">
+                                     <label htmlFor="P_U_Trucker" className={this.state.domesticErrors.pickupTrucker ? "col-lg-4 control-label has error" : "col-lg-4 control-label"}>P / U Trucker</label>
+                                     <div className="col-lg-8">
                                       <select className="form-control" ref = "PUTR"  onChange = {this.onTruckerChange} id="pu_Trucker" name="P_U_Trucker">
                                          <option disabled selected value="">P/U Trucker</option>
                                          {trucker}
@@ -949,16 +949,16 @@ if(e.target.checked){
                                  </div>
 
                             <div className="form-group">
-                                <label htmlFor="Container_#" className={this.state.domesticErrors.containerNumber ? "col-lg-6 control-label has error" : "col-lg-6 control-label"}>Container #</label>
-                                <div className="col-lg-6">
+                                <label htmlFor="Container_#" className={this.state.domesticErrors.containerNumber ? "col-lg-4 control-label has error" : "col-lg-4 control-label"}>Container #</label>
+                                <div className="col-lg-8">
                                     <input type="text" onChange = {this.onContainerChange} className="form-control" id="Container_#" placeholder="Container #" />
                                   <div className="error"><span></span></div>
                                 </div>
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="Tracking_#" className={this.state.domesticErrors.trackingNumber ? "col-lg-6 control-label has error" : "col-lg-6 control-label"}>Tracking #</label>
-                                <div className="col-lg-6">
+                                <label htmlFor="Tracking_#" className={this.state.domesticErrors.trackingNumber ? "col-lg-4 control-label has error" : "col-lg-4 control-label"}>Tracking #</label>
+                                <div className="col-lg-8">
                                      <input type="text" onChange = {this.onTrackChange} className="form-control" id="Tracking_#" placeholder="Tracking #" />
                                      <div className="error"><span></span></div>
                                 </div>
