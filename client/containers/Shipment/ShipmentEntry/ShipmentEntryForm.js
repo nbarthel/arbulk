@@ -1706,7 +1706,7 @@ DisableDoubleClick('submitContainer')
                                             <label htmlFor="No_of_Bages_Pallat"
                                                    className={this.state.errorsI.notes ? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>Notes</label>
 
-                                            <div className="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+                                            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                 <textarea className="form-control textarea-entry" rows="3"
                                                           name="notes" id="Notes" onChange={this.InternationalChange}></textarea>
 
@@ -1720,7 +1720,7 @@ DisableDoubleClick('submitContainer')
                                     <fieldset className="scheduler-border tab-pane " id="Domestic">
                                      <div className="form-group ">
                                         <label for="" className={this.state.errorsd.bookingNumber ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Booking #</label>
-                                        <div className="col-lg-7  col-sm-11 col-xs-11 ">
+                                        <div className="col-lg-8  col-sm-11 col-xs-11 ">
                                           <input type="text"
                                            className="form-control"
                                             id=""
@@ -1954,7 +1954,7 @@ DisableDoubleClick('submitContainer')
                                                        className={this.state.errorsd.paymentTypeId ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Shipping
                                                     Payment Type</label>
 
-                                                <div className="col-lg-7   col-sm-11 col-xs-11 ">
+                                                <div className="col-lg-8   col-sm-11 col-xs-11 ">
                                                     <select className="form-control"
                                                            id="No_of_Bages_Pallat"
                                                            placeholder="Shipping Payment Type"

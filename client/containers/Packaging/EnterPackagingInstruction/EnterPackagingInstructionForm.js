@@ -1418,10 +1418,10 @@ export default class EnterPackagingInstructionForm extends React.Component {
 
                       <div className="form-group">
                         <label htmlFor="No_of_Bags_Pallat" className="col-lg-12 control-label">Notes</label>
-                        <div className="col-lg-121 col-md-12 col-sm-12 col-xs-12">
+                        <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                           {this.props.data != undefined ?
                               <textarea
-                                  className="form-control textarea"
+                                  className="form-control textarea-entry"
                                   onChange ={(e)=>{this.handleNotesChange(e)}}
                                   ref="notes"
                                   value = {this.props.data.notes}
@@ -1430,7 +1430,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
                                   id="Notes"></textarea>
                               :
                               <textarea
-                                  className="form-control textarea"
+                                  className="form-control textarea-entry"
                                   onChange ={this.handlePIChange}
                                   name="notes"
                                   rows="3"
@@ -1467,7 +1467,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
                         {
                           this.props.lotInfo != undefined ?
                               <textarea
-                                  className="form-control  textarea"
+                                  className="form-control  textareaLabel"
                                   name= "custom_label"
                                   onChange ={(e)=>{this.handleLabelChange(e)}}
                                   ref="customLabel"
@@ -1477,7 +1477,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
                                   placeholder="Enter Custom Label information"></textarea>
                               :
                               <textarea
-                                  className="form-control  textarea"
+                                  className="form-control  textareaLabel"
                                   name = "custom_label"
                                   onChange ={this.handlePIChange}
                                   rows="3"
@@ -1503,7 +1503,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
                               {
                                 (!element) ?
                                     <textarea
-                                        className="form-control  textarea"
+                                        className="form-control  textareaLabel"
                                         name= "custom_label"
                                         onChange ={(e)=>{this.handleLabelChange(e)}}
                                         ref="customLabel"
@@ -1513,7 +1513,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
                                         placeholder="Enter Custom Label information"></textarea>
                                     :
                                     <textarea
-                                        className="form-control  textarea"
+                                        className="form-control  textareaLabel"
                                         name = "custom_label"
 
                                         rows="3"

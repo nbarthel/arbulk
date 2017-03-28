@@ -266,9 +266,13 @@ padding: 15px 20px 15px 20px;
 }
 
 .label_info fieldset [class*="col-"]{padding-right: 0px;  padding-left: 0px; font-weight:500; }
-.scheduler-border  label{ font-weight: bold  !important; text-align:left  !important; font-size:12px; }
+.scheduler-border  label{ font-weight: 400 !important; text-align:left  !important; font-size:12px; padding-right:0px; }
 legend.scheduler-border { text-transform:uppercase !important;font-weight: bold !important;text-align: left !important;color:#004a98 !important; font-size:16px;}
 
+.scheduler-border .form-control{height: 30px !important; border-radius: 3px !important; padding: 3px 12px; }
+.scheduler-border .form-group{margin-bottom: 8px!important;}
+.scheduler-border .form-group .react-date-field__input{padding: 4px 5px !important;}
+.react-date-field--theme-default { border: 1px solid #ddd !important;}
 /*////////////////////////------Packaging------ /////////////////////////////*/
 .base_bg th label{  margin-left: 6px !important;}
 .view_table-queue table td label.control {margin-left: 6px !important;}
@@ -281,14 +285,15 @@ legend.scheduler-border { text-transform:uppercase !important;font-weight: bold 
 
 
 .bages_estimated{color:red;  margin-bottom:5px; text-align:right;padding-right: 5px;}
-.edit_Packaging .textarea{ height:142px;  resize: none; width: 100%;}
-.edit_Packaging .labelArea .textarea#Notes{width: 97%;}
+.edit_.scheduler-border .form-control .textarea{ height:142px;  resize: none; width: 100%;}
+.edit_Packaging .textareaLabel{width: 97%; height:142px;  resize: none;}
 .edit_Packaging .textarea_label{ height:208px;  resize: none;}
+.edit_Packaging .textarea-entry{height: 150px !important; resize: none;}
 .add_btn{cursor:pointer; padding:0px !important;}
 .Packaging_footer{ background:#f7f7f7; min-height:150px; padding:20px 0px; clear:both;}
  .add_btn{margin-left: 0px !important;padding-left: 0px !important;padding-top: 0px; margin: 0 auto;
     text-align: left !important;}
- .add_btn i{ border: 1px solid #ddd;font-size: 18px;padding: 6px 8px;border-radius: 3px;     margin-left: -5px;}
+ .add_btn i{ border: 1px solid #ddd;font-size: 18px;padding: 5px 8px;border-radius: 3px;     margin-left: -5px;}
 .edit_Packaging{ margin-top: 8px; min-width:300px;}
 .edit_Packaging .control__indicator {top:3px;}
 
