@@ -537,7 +537,7 @@ class ShipmentViewDataComponent extends React.Component {
                                 <th style={{display :this.props.showAlloc}}></th>
                                 <th style={{display : this.props.showEno}}></th>
                                 <th style={{display : this.props.showBags}}></th>
-                                <th style={{display : this.props.showInInvt}}></th>
+                                {/*<th style={{display : this.props.showInInvt}}></th>*/}
                                 <th style={{display : this.props.showERD}}></th>
                                 <th style={{display : this.props.showCutoff}}></th>
                                 <th style={{display : this.props.showVessel}}></th>
@@ -549,35 +549,7 @@ class ShipmentViewDataComponent extends React.Component {
                                 {/* <th style={{display : this.props.showTrucker}}></th>*/}
 
                             </tr>
-                            <tr>
-                                <td></td>
-                                <td style={{display : this.props.showARB}}></td>
-                                <td style={{display : this.props.showCustomer}}></td>
-                                <td style={{display : this.props.showRelease}}></td>
-                                <td style={{display : this.props.showShipmentType}}></td>
-                                <td style={{display : this.props.showBooking}}></td>
-                                <td style={{display : this.props.showPO}}></td>
-                                <td style={{display : this.props.showLot}}></td>
-                                <td style={{display : this.props.showMaterial}}></td>
-                                <td style={{display : this.props.showConfmd}}></td>
-                                <td style={{display : this.props.showForwarder}}></td>
-                                <td style={{display : this.props.showCntrSize}}></td>
-                                <td style={{display : this.props.showQty}}></td>
-                                <td style={{display :this.props.showAlloc}}></td>
-                                <td style={{display : this.props.showEno}}></td>
-                                <td style={{display : this.props.showBags}}></td>
-                                <td style={{display : this.props.showInInvt}}></td>
-                                <td style={{display : this.props.showERD}}></td>
-                                <td style={{display : this.props.showCutoff}}></td>
-                                <td style={{display : this.props.showVessel}}></td>
-                                <td style={{display : this.props.showSteamShip}}></td>
-                                <td style={{display : this.props.showPU}}></td>
-                                <td style={{display : this.props.showRet}}></td>
-                                <td style={{display : this.props.showDoc}}></td>
-                                <td style={{display : this.props.showStatus}}></td>
-                                {/* <td style={{display : this.props.showTrucker}}></td> */}
 
-                            </tr>
 
                             {
 
@@ -645,7 +617,7 @@ class ShipmentViewDataComponent extends React.Component {
                                                     <td style={{display : this.props.showQty}}>{view.numberOfContainers ? view.numberOfContainers : ''}</td>
                                                     <td style={{display : this.props.showAlloc}}>{alloc ? alloc : "N/A"}</td>
                                                     <td style={{display : this.props.showEno}}>{eno}</td>
-                                                    <td style={{display : this.props.showBags}}>{data.noOfBags ? data.noOfBags : ''}</td>
+                                                    <td style={{display : this.props.showBags}}>{data.noOfBags ? data.noOfBags : 0}</td>
                                                     {/*<td style ={{display : this.props.showInInvt}}>{}</td>*/}
                                                     <td style={{display : this.props.showERD}}>{view.isDomestic == 1 ? 'N/A' : erd}</td>
                                                     <td style={{display : this.props.showCutoff}}>{view.isDomestic == 1 ? 'N/A' : cutOff}</td>
