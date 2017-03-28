@@ -1039,7 +1039,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
                       <legend className="scheduler-border">PACKAGING INSTRUCTIONS</legend>
                       <div className="form-group">
                         <label htmlFor="customer_name" className={this.state.errors.customer_id ? "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label has error" : "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label"}>Customer Name</label>
-                        <div className="col-lg-8   col-sm-11 col-xs-11 ">
+                        <div className="col-lg-9   col-sm-11 col-xs-11 ">
                           {this.props.data == undefined ?
                               <select
                                   className="form-control"
@@ -1069,7 +1069,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
 
                       <div className="form-group">
                         <label htmlFor="ar_bulk_location" className={this.state.errors.location_id ? "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label has error" : "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label"}>AR Bulk Location</label>
-                        <div className="col-lg-8    col-sm-11 col-xs-11 ">
+                        <div className="col-lg-9    col-sm-11 col-xs-11 ">
                           {this.props.data != undefined ?
                               <select
                                   className="form-control"
@@ -1096,7 +1096,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
 
                       <div className="form-group">
                         <label htmlFor="Purchase_Order" className={this.state.errors.po_number ? "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label has error" : "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label"}>Purchase Order</label>
-                        <div className="col-lg-8    col-sm-11 col-xs-11 ">
+                        <div className="col-lg-9    col-sm-11 col-xs-11 ">
                           {this.props.data != undefined ?
                               <input
                                   type="text"
@@ -1226,7 +1226,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
 
                       <div className="form-group ">
                         <label htmlFor="Material" className={this.state.errors.material ? "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label has error" : "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label"}>Material</label>
-                        <div className="col-lg-8 col-sm-11 col-xs-11 ">
+                        <div className="col-lg-9 col-sm-11 col-xs-11 ">
                           {this.props.data != undefined ?
                               <input
                                   type="text"
@@ -1253,7 +1253,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
 
                       <div className="form-group">
                         <label htmlFor="Origin" className = { this.state.errors.origin_id ? "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label has error" : "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label" }  >Origin</label>
-                        <div className="col-lg-8   col-sm-11 col-xs-11 ">
+                        <div className="col-lg-9   col-sm-11 col-xs-11 ">
                           {this.props.data != undefined ?
                               <select
                                   className="form-control"
@@ -1280,7 +1280,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
 
                       <div className="form-group">
                         <label htmlFor="Type_of_Packaging" className= { this.state.errors.bag_id ? "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label has error" : "col-lg-3 col-md-3 col-sm-11 col-xs-11 control-label" } >Unit of Packaging</label>
-                        <div className="col-lg-8    col-sm-11 col-xs-11 ">
+                        <div className="col-lg-9    col-sm-11 col-xs-11 ">
                           {
                             this.props.data !=undefined ?
                                 <select
@@ -1309,7 +1309,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
 
                       <div className="form-group">
                         <label htmlFor="Type_of_Unit" className = {this.state.errors.packaging_material_id ? "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label has error" : "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label"} >Type of Packaging</label>
-                        <div className="col-lg-8    col-sm-11 col-xs-11 ">
+                        <div className="col-lg-9    col-sm-11 col-xs-11 ">
                           {this.props.data != undefined ?
                               <select
                                   className="form-control"
@@ -1337,7 +1337,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
 
                       <div className="form-group">
                         <label htmlFor="Type_of_Pallet" className= { this.state.errors.pallet_type_id ? "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label has error" : "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label"} >Type of Pallet</label>
-                        <div className="col-lg-8    col-sm-11 col-xs-11 ">
+                        <div className="col-lg-9    col-sm-11 col-xs-11 ">
                           {this.props.data != undefined ?
                               <select
                                   className = "form-control"
@@ -1364,7 +1364,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
 
                       <div className="form-group">
                         <label htmlFor="No_of_Bags_Pallet" className= {this.state.errors.bags_per_pallet ? "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label has error" : "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label"}>{(this.obj.bag_id==2 || (this.props!=undefined && this.props.data!=undefined && this.props.data.bag_id==2))?"# Boxes per Pallet":"# Bags per Pallet"}</label>
-                        <div className="col-lg-8   col-sm-11 col-xs-11 ">
+                        <div className="col-lg-9   col-sm-11 col-xs-11 ">
                           {this.props.data != undefined ?
                               <input
                                   type="number"
@@ -1391,7 +1391,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
 
                       <div className="form-group">
                         <label htmlFor="Stretch_wrap" className={ this.state.errors.wrap_type_id ? "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label has error" : "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label"}>Stretch wrap</label>
-                        <div className="col-lg-8    col-sm-11 col-xs-11 ">
+                        <div className="col-lg-9    col-sm-11 col-xs-11 ">
                           {this.props.data != undefined ?
                               <select
                                   className="form-control"
@@ -1418,7 +1418,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
 
                       <div className="form-group">
                         <label htmlFor="No_of_Bags_Pallat" className="col-lg-12 control-label">Notes</label>
-                        <div className="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+                        <div className="col-lg-121 col-md-12 col-sm-12 col-xs-12">
                           {this.props.data != undefined ?
                               <textarea
                                   className="form-control textarea"

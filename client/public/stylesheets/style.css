@@ -500,8 +500,8 @@ legend.scheduler-border {font-size: 14px;}
 .shipment_edit fieldset.scheduler-border {padding: 15px 5px 15px 20px;}
 }
 @media (min-width: 1200px) and (max-width: 1800px) {
-.edit_Packaging fieldset.scheduler-border {padding: 15px 5px 15px 20px;}
-.shipment_edit fieldset.scheduler-border {padding: 15px 5px 15px 20px;}
+.edit_Packaging fieldset.scheduler-border {padding: 15px 15px 15px 15px;}
+.shipment_edit fieldset.scheduler-border {padding: 15px 15px 15px 15px;}
 }
 
 
@@ -543,3 +543,5 @@ input[type=number]::-webkit-outer-spin-button {
 
 .customtabContent{margin-top:-1px;}
 .customtabContent .tab-pane.active{ border-top-left-radius: 0px !important;border-top-right-radius: 0px !important;}
+
+.RailCarAdd{ border-top: 1px solid #ddd;  padding-top: 10px;}

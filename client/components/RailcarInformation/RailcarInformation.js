@@ -34,7 +34,7 @@ componentDidMount(){
 
 	  render() {
 	   return (
-    	<div>
+    	<div className="RailCarAdd">
        		<div className="form-group ">
 					<label htmlFor="Rail_Car_Number" className="col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label">Railcar #</label>
 					<div className="col-lg-8    col-sm-11 col-xs-11 ">
@@ -80,7 +80,7 @@ componentDidMount(){
 
 				<div className="form-group">
 					<label htmlFor="Lot_Number" className="col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label">Lot #</label>
-					<div className="col-lg-8   col-sm-11 col-xs-11 ">
+					<div className="col-lg-8    col-sm-11 col-xs-11 ">
 					    {this.props.data != undefined ?
 					     <input
 					     type="text"
@@ -107,7 +107,7 @@ componentDidMount(){
 
 				<div className="form-group">
 					<label htmlFor="Weight" className="col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label">Weight</label>
-					<div className="col-lg-8   col-sm-11 col-xs-11 ">
+					<div className="col-lg-8    col-sm-11 col-xs-11 ">
 					    {this.props.data != undefined ?
 					    <input
 					    type="number"
