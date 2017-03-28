@@ -423,6 +423,10 @@ border-color: #ff4800; border: 1px solid transparent; font-weight: 400;line-heig
 .admin .verticalLine {border-right: 1px solid #ccc; min-height:383px; margin:-27px 0px !important; }
 .admin .horizontallLine {border-bottom: 1px solid #ccc; min-height:1px;  margin: 32px -36px !important;   width: auto;}
 .admin .textarea{ height:120px;  resize: none;}
+
+
+.adminViewTableMaterialpage{ max-height: 500px; overflow: auto; margin-top: 25px;}
+
 /*////////////////////////------media------ /////////////////////////////*/
 
 .custom-LABEL p{

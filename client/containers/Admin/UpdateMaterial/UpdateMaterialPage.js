@@ -62,7 +62,7 @@ componentWillMount() {
 }
 render(){
   return(
-  <div className="wrapper-inner">
+<div className="wrapper-inner ">
 <div className="content-inside">
 <AdminHeader routes = {this.props.routes}/>
 <UpdateMaterial viewData={this.state.viewData} customer={this.state.customer} packType = {this.state.packType} location = {this.state.location}/>

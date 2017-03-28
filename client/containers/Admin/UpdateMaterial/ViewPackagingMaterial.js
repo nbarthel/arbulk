@@ -76,7 +76,7 @@ class ViewPackagingMaterial extends React.Component{
         <td>{view.fullWrapLength}</td>
         <td>{view.halfWrapLength}</td>
         <td>{view.ActiveBags}</td>
-        <td>{view.notes}</td>
+        <td >{view.notes}</td>
         </tr>
       </tbody>
     )
@@ -84,31 +84,32 @@ class ViewPackagingMaterial extends React.Component{
     return (
         <div className="wrapper-inner">
             <div className="content-inside">
-            <div className="container-fluid">
-              <div className="row-fluid">
+
               <AdminHeader routes = {this.props.routes}/>
-              <div style={{"height":"500px","overflow":"scroll"}}>
-                <table id="PackagingData" className="table table-expandable" cellSpacing="0">
-                  <thead id="PackagingDataHead" className="table_head header-fixed header red">
-                    <tr>
-                      <th></th>
-                      <th>Packaging Type</th>
-                      <th>Cutomer</th>
-                      <th>Location</th>
-                      <th>Packaging Name</th>
-                      <th>Empty Weight</th>
-                      <th>Average Material Weight</th>
-                      <th>Threshold</th>
-                      <th>Quanity</th>
-                      <th>FullWrap</th>
-                      <th>HalfWrap</th>
-                      <th>ActiveBags</th>
-                      <th>Notes</th>
-                    </tr>
-                  </thead>
-                    {listData}
-                </table>
-              </div>
+              <div className="container-fluid">
+                <div className="row-fluid">
+                <div className="adminViewTableMaterialpage" >
+                  <table id="PackagingData" className="table table-expandable" cellSpacing="0">
+                    <thead id="PackagingDataHead" className="table_head header-fixed header red">
+                      <tr>
+                        <th></th>
+                        <th>Packaging Type</th>
+                        <th>Cutomer</th>
+                        <th>Location</th>
+                        <th>Packaging Name</th>
+                        <th>Empty Weight</th>
+                        <th>Average Material Weight</th>
+                        <th>Threshold</th>
+                        <th>Quanity</th>
+                        <th>FullWrap</th>
+                        <th>HalfWrap</th>
+                        <th>ActiveBags</th>
+                        <th >Notes</th>
+                      </tr>
+                    </thead>
+                      {listData}
+                  </table>
+                </div>
             </div>
             </div>
 
