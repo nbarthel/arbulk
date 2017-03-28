@@ -410,25 +410,24 @@ return (
                         <legend className="scheduler-border">Shipment Info</legend>
                         <div className="form-group">
                             <label htmlFor="customer_name"
-                                className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Customer Name
+                                className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Customer Name
                             </label>
-                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                            <div className="col-lg-8    col-sm-11 col-xs-11 ">
                                 <select
                                     className="form-control"
                                     id="customer_name"
                                     name="customer_id"
                                     value = {this.props.editData.customerId}
                                     onChange={this.customerChange}
-                                    disabled
-                                    >
+                                    disabled>
                                     <option value="Please Select An Option" disabled selected>Customer Name</option>
                                     {this.customers ? this.customers : ''}
                                 </select>
                             </div>
                         </div>
                         <div className="form-group">
-                            <label for="ar_bulk_location" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Release #</label>
-                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                            <label for="ar_bulk_location" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Release #</label>
+                            <div className="col-lg-8    col-sm-11 col-xs-11 ">
                                 <input type="text"
                                 className="form-control"
                                 id=""
@@ -439,8 +438,8 @@ return (
                             </div>
                         </div>
                         <div className="form-group">
-                            <label for="Purchase_Order" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"># Containers</label>
-                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                            <label for="Purchase_Order" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"># Containers</label>
+                            <div className="col-lg-8   col-sm-11 col-xs-11 ">
                                 <input type="text"
                                 className="form-control"
                                 id=""
@@ -456,8 +455,8 @@ return (
                         <legend className="scheduler-border">Material Info</legend>
                         <div className="bages_estimated col-lg-11 col-md-11 col-sm-11 col-xs-11"><span></span></div>
                         <div className="form-group ">
-                            <label for="Rail_Car_Number" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Purchase Order Number</label>
-                            <div className="col-lg-6  col-sm-11  col-xs-11">
+                            <label for="Rail_Car_Number" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Purchase Order Number</label>
+                            <div className="col-lg-8  col-sm-11  col-xs-11">
                                 <select value = {this.props.editData.TShipmentLots[0].TPackagingInstructions.po_number} onChange = {this.poChange}  className="form-control" id="" >
                                     <option>{this.props.editData.TShipmentLots[0].TPackagingInstructions.po_number}</option>
                                 </select>
@@ -465,8 +464,8 @@ return (
                             </div>
                         </div>
                         <div className="form-group">
-                            <label for="Weight" className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Lot #</label>
-                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                            <label for="Weight" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Lot #</label>
+                            <div className="col-lg-8   col-sm-11 col-xs-11 ">
                                 <select value ={this.props.lotId} className="form-control" id="" >
                                 {this.lotNumber}
                                 </select>
@@ -475,9 +474,9 @@ return (
                         </div>
                           <div className="form-group ">
                                         <label htmlFor="Bags_To_Ship"
-                                               className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Bags To Ship</label>
+                                               className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Bags To Ship</label>
 
-                                        <div className="col-lg-6  col-sm-11  col-xs-11">
+                                        <div className="col-lg-8  col-sm-11  col-xs-11">
                                             <input type = "number" className="form-control"
                                                    id="bags_to_ship"
                                                    name="bags_to_ship"
@@ -493,10 +492,10 @@ return (
                                     </div>
                                     <div className="form-group">
                                          <label htmlFor="Lot_Number"
-                                                className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label" ># Bags
+                                                className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label" ># Bags
                                              for Lot</label>
 
-                                         <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                         <div className="col-lg-8    col-sm-11 col-xs-11 ">
                                           <span style = {{color: "red"}}>{this.props.editData.TShipmentLots[0].TPackagingInstructionLots.inInventory ? this.props.editData.TShipmentLots[0].TPackagingInstructionLots.inInventory : 0 }</span>
                                              <div className="error"><span></span></div>
                                          </div>
@@ -508,8 +507,8 @@ return (
                     <fieldset className="scheduler-border no-right-border">
                         <legend className="scheduler-border">Shipment Info</legend>
                         <div className="form-group ">
-                            <label for="" className="col-lg-5 col-md-5 col-sm-11  col-xs-11 control-label">Booking #</label>
-                            <div className="col-lg-6  col-sm-11 col-xs-11 ">
+                            <label for="" className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label">Booking #</label>
+                            <div className="col-lg-8  col-sm-11 col-xs-11 ">
                                 <input type="text"
                                 className="form-control"
                                 id=""
@@ -523,9 +522,9 @@ return (
                         </div>
                         <div className="form-group ">
                             <label htmlFor="Material"
-                                className="col-lg-5 col-md-5 col-sm-11  col-xs-11 control-label">Type of
+                                className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label">Type of
                             Shipment</label>
-                            <div className="col-lg-6  col-sm-11 col-xs-11 ">
+                            <div className="col-lg-8  col-sm-11 col-xs-11 ">
                                 <select className="form-control" id="Type_of_Packaging"
                                     name="typeOfShipment"
                                     onChange={this.shipmentChange}
@@ -539,9 +538,9 @@ return (
                         </div>
                         <div className="form-group">
                             <label htmlFor="Origin"
-                                className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Shipping
+                                className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Shipping
                             Ref Number</label>
-                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                            <div className="col-lg-8   col-sm-11 col-xs-11 ">
                                 <input type="text"
                                 className="form-control"
                                 id=""
@@ -555,8 +554,8 @@ return (
                         </div>
                         <div className="form-group">
                             <label htmlFor="Type_of_Bag"
-                            className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Reciepient</label>
-                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                            className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label">Reciepient</label>
+                            <div className="col-lg-8    col-sm-11 col-xs-11 ">
                                 <input type="text"
                                 className="form-control"
                                 id="" placeholder="Reciepient"
@@ -569,9 +568,9 @@ return (
                         </div>
                         <div className="form-group">
                             <label htmlFor="No_of_Bages_Pallat"
-                                className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Reciepient
+                                className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Reciepient
                             Contact</label>
-                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                            <div className="col-lg-8    col-sm-11 col-xs-11 ">
                                 <input type="text"
                                 className="form-control"
                                 id="No_of_Bages_Pallat"
@@ -585,9 +584,9 @@ return (
                         </div>
                         <div className="form-group">
                             <label htmlFor="Type_of_Packaging"
-                                className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Reciepient Telephone
+                                className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Reciepient Telephone
                             </label>
-                            <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                            <div className="col-lg-8    col-sm-11 col-xs-11 ">
                                 <input type="text"
                                 className="form-control"
                                 id=""
@@ -602,9 +601,9 @@ return (
                         <div className="pddn-30-top">
                             <div className="form-group">
                                 <label htmlFor="Stretch_wrap"
-                                    className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Ship
+                                    className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Ship
                                 to Address</label>
-                                <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                <div className="col-lg-8    col-sm-11 col-xs-11 ">
                                     <input type="text"
                                     className="form-control"
                                     id="No_of_Bages_Pallat"
@@ -618,9 +617,9 @@ return (
                                </div>
                             <div className="form-group">
                                 <label htmlFor="Stretch_wrap"
-                                    className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Ship
+                                    className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Ship
                                 to Zip Code</label>
-                                <div className="col-lg-6   col-sm-11 col-xs-11 ">
+                                <div className="col-lg-8   col-sm-11 col-xs-11 ">
                                     <input type="text"
                                     className="form-control"
                                     id="No_of_Bages_Pallat"
@@ -634,9 +633,9 @@ return (
                             </div>
                             <div className="form-group">
                                 <label htmlFor="Stretch_wrap"
-                                    className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Ship
+                                    className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Ship
                                 to City</label>
-                                <div className="col-lg-6   col-sm-11 col-xs-11 ">
+                                <div className="col-lg-8   col-sm-11 col-xs-11 ">
                                     <input type="text"
                                     className="form-control"
                                     id="No_of_Bages_Pallat"
@@ -650,9 +649,9 @@ return (
                             </div>
                             <div className="form-group">
                                 <label htmlFor="Stretch_wrap"
-                                    className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Ship
+                                    className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Ship
                                 to State</label>
-                                <div className="col-lg-6   col-sm-11 col-xs-11 ">
+                                <div className="col-lg-8   col-sm-11 col-xs-11 ">
                                     <input type="text"
                                     className="form-control"
                                     id="No_of_Bages_Pallat"
@@ -669,8 +668,8 @@ return (
                         <div className="pddn-30-top">
                             <div className="form-group">
                                 <label htmlFor="Stretch_wrap"
-                                className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Carrier</label>
-                                <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Carrier</label>
+                                <div className="col-lg-8  col-sm-11 col-xs-11 ">
                                     <input type="text"
                                     className="form-control"
                                     id="No_of_Bages_Pallat"
@@ -684,9 +683,9 @@ return (
                             </div>
                             <div className="form-group">
                                 <label htmlFor="Stretch_wrap"
-                                    className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Carrier
+                                    className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Carrier
                                 Account Number</label>
-                                <div className="col-lg-6   col-sm-11 col-xs-11 ">
+                                <div className="col-lg-8   col-sm-11 col-xs-11 ">
                                     <input type="text"
                                     className="form-control"
                                     id="No_of_Bages_Pallat"
@@ -700,9 +699,9 @@ return (
                             </div>
                             <div className="form-group">
                                 <label htmlFor="Stretch_wrap"
-                                    className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Shipping
+                                    className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Shipping
                                 Payment Type</label>
-                                <div className="col-lg-6   col-sm-11 col-xs-11 ">
+                                <div className="col-lg-8  col-sm-11 col-xs-11 ">
                                     <select className="form-control"
                                         id="No_of_Bages_Pallat"
                                         placeholder="Shipping Payment Type"
@@ -718,9 +717,9 @@ return (
                             </div>
                             <div className="form-group">
                                 <label htmlFor="Stretch_wrap"
-                                    className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Shipping
+                                    className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Shipping
                                 Paid By</label>
-                                <div className="col-lg-6   col-sm-11 col-xs-11 ">
+                                <div className="col-lg-8   col-sm-11 col-xs-11 ">
                                     <input type="text"
                                     className="form-control"
                                     id="No_of_Bages_Pallat"
@@ -734,9 +733,9 @@ return (
                             </div>
                             <div className="form-group">
                                 <label htmlFor="No_of_Bages_Pallat"
-                                    className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Requested
+                                    className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Requested
                                 Ship Date</label>
-                                <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                <div className="col-lg-8   col-sm-11 col-xs-11 ">
                                     <div className="right-inner-addon "><i className="fa fa-calendar"
                                         aria-hidden="true"></i>
                                         <input type = "date"
@@ -751,9 +750,9 @@ return (
                             </div>
                             <div className="form-group">
                                 <label htmlFor="No_of_Bages_Pallat"
-                                    className="col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label">Requested
+                                    className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Requested
                                 Delivery Date</label>
-                                <div className="col-lg-6    col-sm-11 col-xs-11 ">
+                                <div className="col-lg-8   col-sm-11 col-xs-11 ">
                                     <div className="right-inner-addon "><i className="fa fa-calendar" aria-hidden="true"></i>
                                         <input type = "date"
                                         className = "form-control"
