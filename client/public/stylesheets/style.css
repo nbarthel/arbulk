@@ -35,6 +35,7 @@ hr {height: 1px; background: #ccc;border: none;margin: 15px 0 15px 0;}
 .pos-relative-b{ position:fixed;bottom:0;left:0;}
 .pos-fixed-b{ position:fixed;bottom:0;left:0;}
 .table> thead> tr> th{z-index: 99;}
+.nopadding{padding-right: 0px !important;padding-left: 0px !important;}
 /*input::-webkit-datetime-edit{ color: transparent; }*/
 
 /* Include this to make it visible when input is clicked */
@@ -290,7 +291,7 @@ legend.scheduler-border { text-transform:uppercase !important;font-weight: bold 
 .set-password{ margin-top: 10%;}
 .set-password input{ font-size: 14px !important; }
 
-
+.textarea.form-control{resize: none;}
 .bages_estimated{color:red;  margin-bottom:5px; text-align:right;padding-right: 5px;}
 .edit_.scheduler-border .form-control .textarea{ height:142px;  resize: none; width: 100%;}
 .edit_Packaging .textareaLabel{width: 97%; height:142px;  resize: none;}

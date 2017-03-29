@@ -42,20 +42,22 @@ import React, { Component } from 'react';
 								<span className="margin-top-10">&nbsp;</span>
 								<fieldset className="scheduler-border  ">
 								 <legend className="scheduler-border font-size-12">Lot Number Allowed </legend>
-								 <ul className="no-space list-style-disc">
-									{this.lotList}
+								 <ul className="no-space ">
+							        <li>	{this.lotList}</li>
 								</ul>
 								</fieldset>
 							</div>
 							<div className=" col-lg-9 col-md-9 col-sm-9 col-xs-12 ">
 								<div className="row">
 									<div className=" col-lg-4 col-md-4 col-sm-4 col-xs-12 ">
+										<ul className="no-space" >
 										<li>Recipient:<b>{this.props.shipInfo ? this.props.shipInfo.TShipmentent.TShipmentDomestic[0].recipent : ''}</b></li>
 										<li>Recipient Contact: <b>{this.props.shipInfo ? this.props.shipInfo.TShipmentent.TShipmentDomestic[0].recipentContact : ''} </b></li>
 										<li>Recipient Tel #:<b> {this.props.shipInfo ? this.props.shipInfo.TShipmentent.TShipmentDomestic[0].recipentTelNumber : ''}</b></li>
+										</ul>
 										{this.addressList}
 									</div>
-									<div className=" col-lg-4 col-md-4 col-sm-4 col-xs-12 ">
+									<div className=" col-lg-4 col-md-4 col-sm-4 col-xs-12 nopadding ">
 										<ul className="no-space" >
 											<li>Carrier : <b>{this.props.shipInfo ? this.props.shipInfo.TShipmentent.TShipmentDomestic[0].carrier : ''}</b></li>
 											<li>Carrier AC Number :<b>{this.props.shipInfo ? this.props.shipInfo.TShipmentent.TShipmentDomestic[0].carrierAcNumber :''} </b></li>

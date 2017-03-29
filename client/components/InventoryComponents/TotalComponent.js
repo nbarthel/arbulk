@@ -43,10 +43,11 @@ export class TotalComponent extends Component {
 								<td>{ this.props.lotIdArray.length<2?totalGainOrLoss:0 } </td>
 							</tr>
 
-						</tbody>
+						<tr>
+							<td colSpan="2">
 						<div className="form-group">
-							<label htmlFor="No_of_Bags_Pallat" className="col-lg-12 control-label">Notes</label>
-							<div className="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+							<label htmlFor="No_of_Bags_Pallat" className="control-label">Notes</label>
+							<div className="">
 							<textarea
 							 className="form-control textarea"
                ref="notes"
@@ -59,7 +60,10 @@ export class TotalComponent extends Component {
 							</div>
 										</div>
 
+						    </td>
+						</tr>
 
+						</tbody>
 					</table>
 		);
 	}
