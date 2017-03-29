@@ -74,7 +74,7 @@ return  (<li key={customer.id}>
                         <h6 className="pull-left text_left">CUSTOMER  </h6>
                         <a href="javascript:void()"  className="pull-right text_right"> Show All</a>
                     </div>
-                    <ul className=" ht">
+                    <ul className="scroll ht">
                         {customers}
                     </ul>
                 </div>

@@ -70,7 +70,7 @@ class CompanyNameFilterPage extends React.Component{
                         <h6 className="pull-left">AR BULK  </h6>
                         <a href="javascript:void(0)"  className="pull-right text_right"> Show All</a>
                     </div>
-                    <ul>
+                    <ul className="">
                        {locations}
                     </ul>
                 </div>
