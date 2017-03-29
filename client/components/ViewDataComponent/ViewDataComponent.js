@@ -16,14 +16,15 @@ var sortedDataflag = false
 var sortedData = []
 var flagSorting = false
 const MUL_FACTOR = 2.204625
+var grouping = false
 class ViewDataComponent extends React.Component {
 
     constructor(props) {
         super(props);
         this.isAsc = false
         this.state = {
-            loaded: false
-        }
+        loaded: false
+    }
         this.PIData = {}
         this.myObj = {}
         this.qArray = []
@@ -32,6 +33,7 @@ class ViewDataComponent extends React.Component {
         this.onToggel = this.onToggel.bind(this)
         this.onClickRow = this.onClickRow.bind(this)
         this.press = this.press.bind(this)
+        this.onGroupBy = this.onGroupBy.bind(this)
 
     }
 
@@ -165,7 +167,6 @@ class ViewDataComponent extends React.Component {
             }, 2000);
 
         });
-
     }
 
     checkclick(data, value) {
@@ -175,7 +176,17 @@ class ViewDataComponent extends React.Component {
         localStorage.setItem('queue_Sequence', this.state.queue_Sequence[0].max_mark)
         console.log("clicked>>>>>>>>", value)
     }
-
+    onGroupBy(e,head){
+        debugger
+        var groupData = _.groupBy(this.state.viewData, function (item){
+            return (item.TPackagingInstructionLots != undefined ? (item.TPackagingInstructionLots[0] ? item.TPackagingInstructionLots[0].lot_number.toLowerCase() : '') : '');
+        })
+        this.setState({
+            viewData: groupData
+        })
+        localStorage.setItem('piViewData', JSON.stringify(groupData));
+        grouping = true
+    }
     onAscending(e, head) {
 
         sortedDataflag = true;
@@ -374,6 +385,7 @@ class ViewDataComponent extends React.Component {
             viewData: sortedData
         })
         localStorage.setItem('piViewData', JSON.stringify(sortedData));
+        //this.onGroupBy(e,head)
     }
 
     onToggel(e, elm) {
@@ -569,7 +581,7 @@ class ViewDataComponent extends React.Component {
                             </th>
                             <th style={{display : this.props.showARB }} onKeyDown={(e)=>this.press(e)}
                                 onClick={(e)=> this.onAscending(e,'location')}>ARB
-                           <span className="fa-stack ">
+                                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                            </span>
@@ -577,28 +589,28 @@ class ViewDataComponent extends React.Component {
                             <th style={{display : this.props.showCustomer}}
                                 onClick={(e)=> this.onAscending(e,'company')}>Customer
 
-                               <span className="fa-stack ">
+                                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
 
                             </th>
                             <th style={{display : this.props.showPO}} onClick={(e)=> this.onAscending(e,'po_number')}>PO#
-                        <span className="fa-stack ">
+                                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
                             </th>
                             <th style={{display : this.props.Railcar}}
                                 onClick={(e)=> this.onAscending(e,'railcar_number')}>Railcar#
-                      <span className="fa-stack ">
+                                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
                             </th>
                             <th style={{display : this.props.showLot}} onClick={(e)=> this.onAscending(e,'lot_number')}>
                                 Lot#
-                       <span className="fa-stack ">
+                                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -606,7 +618,7 @@ class ViewDataComponent extends React.Component {
                             </th>
                             <th style={{display : this.props.showMaterial}}
                                 onClick={(e)=> this.onAscending(e,'Material')}>Material
-                      <span className="fa-stack ">
+                                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -614,21 +626,21 @@ class ViewDataComponent extends React.Component {
                             </th>
                             <th style={{display : this.props.showConfmd}} onClick={(e)=> this.onAscending(e,'Confmd')}>
                                 Confirmed?
-                      <span className="fa-stack ">
+                                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
                             </th>
                             <th style={{display : this.props.showArrvd}} onClick={(e)=> this.onAscending(e,'Arrvd')}>
                                 Arrived?
-                       <span className="fa-stack ">
+                                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
 
                             </th>
                             <th style={{display : this.props.showRecd}} onClick={(e)=> this.onAscending(e,'Recd')}>Shipment Received?
-                       <span className="fa-stack ">
+                                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -636,7 +648,7 @@ class ViewDataComponent extends React.Component {
                             </th>
                             <th style={{display : this.props.showCutoff}} onClick={(e)=> this.onAscending(e,'Cutoff')}>
                                 Cutoff
-                       <span className="fa-stack ">
+                                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -644,7 +656,7 @@ class ViewDataComponent extends React.Component {
                             </th>
                             <th style={{display : this.props.showWeight}} onClick={(e)=> this.onAscending(e,'weight')}>
                                 Weight
-                      <span className="fa-stack ">
+                                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -653,7 +665,7 @@ class ViewDataComponent extends React.Component {
                             </th>
                             <th style={{display : this.props.showBag}} onClick={(e)=> this.onAscending(e,'Bags')}>Qty
                                 Allocated
-                      <span className="fa-stack ">
+                                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -661,7 +673,7 @@ class ViewDataComponent extends React.Component {
                             </th>
                             <th style={{display : this.props.showInInvt}} onClick={(e)=> this.onAscending(e,'InInvt')}>
                                 Qty Packaged
-                      <span className="fa-stack ">
+                                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -669,7 +681,7 @@ class ViewDataComponent extends React.Component {
                             </th>
                             <th style={{display : this.props.showStatus}} onClick={(e)=> this.onAscending(e,'Status')}>
                                 Status
-                      <span className="fa-stack ">
+                                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -677,42 +689,42 @@ class ViewDataComponent extends React.Component {
 
                             <th style={{display : this.props.showRailcarArr}}
                                 onClick={(e)=> this.onAscending(e,'RailcarArrival')}>Railcar Arrival
-                      <span className="fa-stack ">
+                                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
                             </th>
                             <th style={{display : this.props.showRailcarArrD}}
                                 onClick={(e)=> this.onAscending(e,'RailcarArrivalDate')}>Railcar Arrival Date
-                      <span className="fa-stack ">
+                                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
                             </th>
                             <th style={{display : this.props.showRailcarDep}}
                                 onClick={(e)=> this.onAscending(e,'RailcarDeparture')}>Railcar Departure
-                      <span className="fa-stack ">
+                                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
                             </th>
                             <th style={{display : this.props.showRailcarDepDate}}
                                 onClick={(e)=> this.onAscending(e,'RailcarDepartureDate')}>Railcar Departure Date
-                      <span className="fa-stack ">
+                                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
                             </th>
                             <th style={{display : this.props.showDaysPresent}}
                                 onClick={(e)=> this.onAscending(e,'RailcarDaysPresent')}>Railcar Days Present
-                      <span className="fa-stack ">
+                                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
                             </th>
                             <th style={{display : this.props.showRailcarStatus}}
                                 onClick={(e)=> this.onAscending(e,'RailcarStatus')}>Railcar Status
-                      <span className="fa-stack ">
+                                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
