@@ -131,7 +131,7 @@ class ContainerFilter extends React.Component {
 					<div className="left-inner-addon ">
 						<i className="fa fa-search" aria-hidden="true"></i>
 						<input type="search" onKeyUp={this.onKeyUp}  id="LotSearch" onChange = {this.props.onTextChange}  className="form-control" placeholder="Search" />
-						<ul className = "list-hover">
+						<ul className = "list-hover scrollshow">
 							{ this.state.show== true? this.expandList : ''}
 						</ul>
 

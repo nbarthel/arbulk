@@ -371,9 +371,10 @@ border-color: #ff4800; border: 1px solid transparent; font-weight: 400;line-heig
 .filter_bg ul, ul li .control{ margin-bottom:10px;  font-weight:400 !important;font-size:12px;}
 .filter_bg  #search {padding-top: 25px;}
 .filter_bg .scroll{ overflow:auto; height:200px; overflow-x:hidden;}
+.filter_bg .scrollshow{ overflow:auto;height:100%; max-height:200px; overflow-x:hidden;     margin-top: 10px;}
 .filter_bg .more{ overflow:scroll; height:100px; overflow-x:hidden;}
 
-.side-filter .head_bg{background: #e5e5ff;color: #000; padding:10px 20px; margin:0px -20px 12px -20px !important; height:30px; }
+.side-filter .head_bg{background: #e5e5ff;color: #000; padding:8px 20px; margin:0px -20px 12px -20px !important; height:30px; }
 
 /*////////////////////////------shipment------ /////////////////////////////*/
 .confirm_shipment{ margin-top: 2%; min-width:300px; }

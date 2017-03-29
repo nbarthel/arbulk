@@ -127,7 +127,7 @@ else{
                         <div className="left-inner-addon ">
                             <i className="fa fa-search" aria-hidden="true"></i>
                             <input type="search"className="form-control" onKeyUp={this.onKeyUp}  id="railcarSearch"  onChange = {this.props.onTextChange}  placeholder="Search" />
-                            <ul className = "list-hover">
+                            <ul className = "list-hover scrollshow">
                             { this.state.show== true? this.expandList : ''}
                             </ul>
                         </div>
