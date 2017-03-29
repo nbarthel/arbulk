@@ -164,7 +164,7 @@ class ViewDataComponent extends React.Component {
         $(function () {
             setTimeout(function () {
                 $("#Packaging_Instruction_View").tableHeadFixer({'head': true})
-            }, 2000);
+            }, 3000);
 
         });
     }
