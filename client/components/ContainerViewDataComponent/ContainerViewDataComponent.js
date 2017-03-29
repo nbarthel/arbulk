@@ -48,19 +48,18 @@ componentWillMount(){
              }
         }]
       })
-    console.log("I have recieved props")
+
     //
 
     var base = 'TPackagingInstructions'+'/'+id;
     this.url = PIview._buildUrl(base, {
       include: ['TPackagingInstructionLots',"TLocation","TCompany"]
     })
-    console.log(this.url,"<<<<<<<<<<<<<<<<<<<<URL")
 
       $.ajax({
             url: this.url,
             success:function(data){
-                console.log('ajax ',data);
+
               this.setState({
                   viewData : [data],
                   loaded:true
@@ -106,7 +105,7 @@ componentWillMount(){
       $.ajax({
             url: this.url,
             success:function(data){
-                console.log('ajax ',data);
+
 
                this.setState(
                    {
@@ -135,8 +134,9 @@ componentWillMount(){
   }
 componentDidMount() {
   $(function () {
-    setTimeout(function(){  ;$("#Packaging_Instruction_View").tableHeadFixer({'head' : true})}, 1000);
-      //$(".Packaging_Instruction_View").tableHeadFixer({'head' : true});
+    setTimeout(function(){
+        $("#Packaging_Instruction_View").tableHeadFixer({'head' : true})}, 3000);
+
   });
 }
 checkclick(data , value)
@@ -300,7 +300,7 @@ localStorage.setItem('conViewData', JSON.stringify(sortedData));
 
 
 onToggel(e ,elm){
-console.log('>>>>>>' , $(elm))
+
 
     ;
   $( "button" ).click(function() {

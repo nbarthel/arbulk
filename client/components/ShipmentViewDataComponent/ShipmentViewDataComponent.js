@@ -178,9 +178,10 @@ class ShipmentViewDataComponent extends React.Component {
     componentDidMount() {
         $(function () {
             setTimeout(function () {
-                ;
+
                 $("#Packaging_Instruction_View").tableHeadFixer({'head': true})
-            }, 2000);
+            },
+                3000);
         });
     }
 
@@ -645,17 +646,16 @@ class ShipmentViewDataComponent extends React.Component {
                 }
             }
         )
-       // console.log("sss",listData);
+
         listData = _.filter(listData, function (param) {
             return param !== undefined;
         });
-        //}
+      
         return (
             <Loader loaded={this.state.loaded}>
                 <div className="loadedContentNew">
-                    <table id="Packaging_Instruction_View" className="table table-expandable table-striped"
-                           cellSpacing="0">
-                        <thead className="table_head header-fixed header">
+                    <table id="Packaging_Instruction_View" className="table table-expandable table-striped" cellSpacing="0">
+                        <thead className="table_head header-fixed header ">
                         <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
                             <th>
 
