@@ -226,7 +226,7 @@ header .pageTitle i{padding: 0 10px;}
 
 /*////////////////////////------footer------ /////////////////////////////*/
 
-footer{  width:100%; background:#eaeaea; padding:15px 0px; height: 50px;margin-top: -50px;}
+footer{  width:100%; background:#eaeaea; padding:10px 0px; height: 35px;margin-top: -35px;}
 .Copyright{ text-align:center; margin: 0px auto;  font-family: 'Open Sans', sans-serif;}
 
 /*////////////////////////------breadcrumb------ /////////////////////////////*/
