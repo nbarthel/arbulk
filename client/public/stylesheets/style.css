@@ -274,9 +274,12 @@ legend.scheduler-border { text-transform:uppercase !important;font-weight: bold 
 .scheduler-border .form-group .react-date-field__input{padding: 4px 5px !important;}
 .react-date-field--theme-default { border: 1px solid #ddd !important;}
 /*////////////////////////------Packaging------ /////////////////////////////*/
+/*
 .base_bg th label{  margin-left: 6px !important;}
 .view_table-queue table td label.control {margin-left: 6px !important;}
-.table_head tr th label{margin-left: 5px !important;}
+
+.table_head tr th label{margin-left: 5px !important; margin-bottom: 0px;}
+*/
 .table th,td{ font-weight:300 !important; font-size:12px; white-space: nowrap;  overflow: hidden;  text-overflow: ellipsis;}
 
 /*.set-password .form-horizontal .form-group {padding-right: 15px !important; padding-left: 15px !important;}*/
@@ -340,9 +343,11 @@ legend.scheduler-border { text-transform:uppercase !important;font-weight: bold 
 .view_table table { border-top: 0px solid #f3f3f3;}
 .view_table table td{ vertical-align: middle !important;font-weight:300 !important; font-size:12px !important; color:#000; white-space: nowrap;  overflow: hidden;  text-overflow: ellipsis;}
 .view_table table thead{ cursor:pointer;}
-.view_table table td label{margin-left: 6px;}
-.view_table table td label .control__indicator{}
 
+.view_table table td label{margin:0px; position: relative;margin-bottom: 10px;}
+.view_table table td label .control__indicator{position: absolute;    left: 15px;    top:0px;}
+.view_table table th label{ margin: 0px;position: relative; margin-bottom: 10px;}
+.view_table table th label .control__indicator{position: absolute;    left: 15px;    top:0px;}
 
 .filter-btn button{margin-right: 10px !important;padding: 3px 5px; font-size: 11px;border-radius: 3px;margin-bottom: 10px;  }
 .filter-btn a{ text-decoration: none; color:#fff; margin-right: 10px !important;padding: 3px 5px; font-size: 11px;border-radius: 3px;margin-bottom: 10px;     background-color: #fe5716;
@@ -402,7 +407,7 @@ border-color: #ff4800; border: 1px solid transparent; font-weight: 400;line-heig
 
 .container_detils{margin-top: 2%; }
 .container_detils .tab-bg{ border-top-left-radius: 5px; border-top-right-radius: 5px;background:#f4f4f4; margin-bottom:10px; margin-top: 10px;border-bottom: 1px solid #ddd; cursor:pointer;}
-.container_detils .sameHeight{height:405px; min-width:300px; }
+.container_detils .sameHeight{height:385px; min-width:300px; }
 .container_detils .label_details .sameHeight{height:305px; }
 .container_detils .panel-group .panel{border-radius: 0px;}
 .container_detils .panel-default { border-color: #ddd;border-radius: 0px;}
@@ -410,7 +415,6 @@ border-color: #ff4800; border: 1px solid transparent; font-weight: 400;line-heig
 .container_detils .panel-default > .panel-heading{color: #004a98;background-color: #f5f5f5; border-bottom:1px solid #fff; text-decoration:none; cursor:pointer;border-radius: 0px;}
 .container_detils .panel-default > .panel-heading a:focus,.panel-heading a:active{text-decoration:none;}
 .container_detils .panel-default > .panel-heading i{color:#333;}
-.container_detils .sameHeight{height:500px;}
 .container_detils .textarea-note{height:200px; resize:none;}
 .container_detils .more_load{background:#f9f9f9; color:red; padding:4px; text-align:center;}
 .container_detils .arrow-btn{ vertical-align:middle; padding-top:50%; text-align:center;}
@@ -525,6 +529,9 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 0;
 }
 /*============================================================*/
+
+
+
 .tableViewDragQvList{ max-height: 350px; overflow: auto;}
 
 #hide2{margin-top: -43px;}
@@ -550,3 +557,12 @@ input[type=number]::-webkit-outer-spin-button {
 .customtabContent .tab-pane.active{ border-top-left-radius: 0px !important;border-top-right-radius: 0px !important;}
 
 .RailCarAdd{ border-top: 1px solid #ddd;  padding-top: 10px;}
+
+
+
+
+
+
+
+
+
