@@ -10,20 +10,29 @@ import request from '../../utils/request';
 import { Base_Url } from '../../constants'
 var moment = require('moment');
 import './js/tableHeadFixer.js'
-import './js/jquery.dataTables.min.js'
+import './js/jquery.dataTables.min.js';
+import './js/jquery.dragtable.js';
+import './stylesheet/dragtable.css';
+import './js/jquery-sortable-min.js'
 var Loader = require('react-loader');
 var sortedDataflag = false
 var sortedData = []
 var flagSorting = false
 const MUL_FACTOR = 2.204625
-var grouping = false
+var grouping = false;
+var headerArr=  [{col_Name:"ARB",index:1},{col_Name:"Customer",index:2}, {col_Name:"PO#",index:3},{col_Name:"Railcar#",index:4},{col_Name:"Lot#",index:5},
+    ,{col_Name:"Material",index:6},{col_Name:"Confirmed?",index:7},{col_Name:"Arrived?",index:8},{col_Name:"Shipment Received?",index:9},
+    {col_Name:"Cutoff",index:10},{col_Name:"Weight",index:11},{col_Name:"Qty Allocated",index:12},
+    {col_Name:"Qty Packaged",index:13},{col_Name:"Status",index:14},{col_Name:"Railcar Arrival",index:15},{col_Name:"Railcar Arrival Date",index:16},{col_Name:"Railcar Departure",index:17},{col_Name:"Railcar Departure Date",index:18},
+    {col_Name:"Railcar Days Present",index:19}, {col_Name:"Railcar Status",index:20}]
 class ViewDataComponent extends React.Component {
 
     constructor(props) {
         super(props);
         this.isAsc = false
         this.state = {
-        loaded: false
+        loaded: false,
+
     }
         this.PIData = {}
         this.myObj = {}
@@ -33,9 +42,9 @@ class ViewDataComponent extends React.Component {
         this.onToggel = this.onToggel.bind(this)
         this.onClickRow = this.onClickRow.bind(this)
         this.press = this.press.bind(this)
-        this.onGroupBy = this.onGroupBy.bind(this)
-
+        this.onGroupBy = this.onGroupBy.bind(this);
     }
+
 
     press(e) {
 
@@ -161,12 +170,53 @@ class ViewDataComponent extends React.Component {
     }
 
     componentDidMount() {
+
         $(function () {
             setTimeout(function () {
-                $("#Packaging_Instruction_View").tableHeadFixer({'head': true})
-            }, 3000);
+                $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
+                var oldIndex;
+                $('.sorted_head tr').sortable({
+                    containerSelector: 'tr',
+                    itemSelector: 'th',
+                    vertical: false,
+                    onDragStart: function ($item, container, _super) {
+
+                        oldIndex = $item.index();
+                      //  console.log("Drag",oldIndex);
+                        $item.appendTo($item.parent());
+                        _super($item, container);
+                    },
+                    onDrop: function  ($item, container, _super) {
+
+                        var field,tmp,
+                            newIndex = $item.index();
+                        if(newIndex != oldIndex) {
+                           // console.log("drop",newIndex);
+                                $item.closest('table').find('tbody tr').each(function (i, row) {
+                                    row = $(row);
+                                    if(newIndex < oldIndex) {
+                                        row.children().eq(newIndex).before(row.children()[oldIndex]);
+                                    } else if (newIndex > oldIndex) {
+                                        row.children().eq(newIndex).after(row.children()[oldIndex]);
+                                    }
+                                });
+                        }
+
+                        _super($item, container);
+                    }
+
+
+
+
+            });
+
+                //jQuery('#Packaging_Instruction_View').dragtable({maxMovingRows:1,dragHandle:'.some-handle'});
+            }, 5000);
 
         });
+
+
+
     }
 
     checkclick(data, value) {
@@ -188,7 +238,8 @@ class ViewDataComponent extends React.Component {
         grouping = true
     }
     onAscending(e, head) {
-
+        console.log(e);
+        console.log(head);
         sortedDataflag = true;
         flagSorting = true;
         var switchvalue = head;
@@ -402,8 +453,6 @@ class ViewDataComponent extends React.Component {
         if ($('#Packaging_Instruction_View').find('.' + aa).length >= 2) {
             $('#Packaging_Instruction_View').find('.' + aa).toggleClass('hide')
         }
-
-
         else {
             $('#Packaging_Instruction_View').find('.' + aa).toggleClass('hide')
         }
@@ -411,6 +460,7 @@ class ViewDataComponent extends React.Component {
 
 
     render() {
+
         var filterData
         if (!flagSorting) {
             filterData = this.props.filterData
@@ -431,38 +481,38 @@ class ViewDataComponent extends React.Component {
                     var count = index;
                     return (
                         <tbody key={index}>
-
                         <tr className="base_bg clickable" ref="clickable">
-                            <th>
+                            <td>
                                 <label className="control control--checkbox">
                                     <input type="checkbox" onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
                                            value={view.id} id={view.id}/>
                                     <div className="control__indicator"></div>
                                 </label>
-                            </th>
-                            <th style={{display : this.props.showARB}}><i className="fa fa-chevron-down"
+                            </td>
+                            <td style={{display : this.props.showARB}}>
+                                <i className="fa fa-chevron-down"
                                                                           aria-hidden="false" data-target={count}
                                                                           onClick={(e) => {this.onClickRow(e)}}></i> {view.TLocation ? view.TLocation.locationName : ''}
-                            </th>
-                            <th style={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</th>
-                            <th style={{display : this.props.showPO}}>{view.po_number} </th>
-                            <th style={{display : this.props.Railcar}}></th>
-                            <th style={{display : this.props.showMaterial}}></th>
-                            <th style={{display : this.props.showConfmd}}></th>
-                            <th style={{display : this.props.showArrvd}}></th>
-                            <th style={{display : this.props.showRecd}}></th>
-                            <th style={{display : this.props.showCutoff}}></th>
-                            <th style={{display : this.props.showWeight}}></th>
-                            <th style={{display : this.props.showBag}}></th>
-                            <th style={{display : this.props.showInInvt}}></th>
-                            <th style={{display : this.props.showStatus}}></th>
-                            <th style={{display : this.props.showRailcarArr}}></th>
-                            <th style={{display : this.props.showRailcarArrD}}></th>
-                            <th style={{display : this.props.showRailcarDep}}></th>
-                            <th style={{display : this.props.showRailcarDepDate}}></th>
-                            <th style={{display : this.props.showDaysPresent}}></th>
-                            <th></th>
-                            <th style={{display : this.props.showRailcarStatus}}></th>
+                            </td>
+                            <td style={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</td>
+                            <td style={{display : this.props.showPO}}>{view.po_number} </td>
+                            <td style={{display : this.props.Railcar}}></td>
+                            <td style={{display : this.props.showMaterial}}></td>
+                            <td style={{display : this.props.showConfmd}}></td>
+                            <td style={{display : this.props.showArrvd}}></td>
+                            <td style={{display : this.props.showRecd}}></td>
+                            <td style={{display : this.props.showCutoff}}></td>
+                            <td style={{display : this.props.showWeight}}></td>
+                            <td style={{display : this.props.showBag}}></td>
+                            <td style={{display : this.props.showInInvt}}></td>
+                            <td style={{display : this.props.showStatus}}></td>
+                            <td style={{display : this.props.showRailcarArr}}></td>
+                            <td style={{display : this.props.showRailcarArrD}}></td>
+                            <td style={{display : this.props.showRailcarDep}}></td>
+                            <td style={{display : this.props.showRailcarDepDate}}></td>
+                            <td style={{display : this.props.showDaysPresent}}></td>
+                            <td></td>
+                            <td style={{display : this.props.showRailcarStatus}}></td>
 
                         </tr>
                         {
@@ -571,16 +621,19 @@ class ViewDataComponent extends React.Component {
         });
 
         return (
+
             <Loader loaded={this.state.loaded} id="loaded">
                 <div className="loadedContentNew">
+
                     <table id="Packaging_Instruction_View" className="table table-expandable sort" cellSpacing="0">
-                        <thead id="table_head1" className="table_head header-fixed header red">
+                        <thead id="table_head1" className="table_head header-fixed header red sorted_head">
                         <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
                             <th>
 
                             </th>
                             <th style={{display : this.props.showARB }} onKeyDown={(e)=>this.press(e)}
-                                onClick={(e)=> this.onAscending(e,'location')}>ARB
+                                onClick={(e)=> this.onAscending(e,'location')}>
+                              ARB
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>

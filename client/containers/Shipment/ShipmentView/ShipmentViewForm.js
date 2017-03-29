@@ -212,7 +212,7 @@ PrintScreen(){
         }
 
       onClickPo(e){
-         ;
+
            this.Query[e.target.id] = e.target.getAttribute('value')
 
           document.getElementById('POSearch').value = e.target.getAttribute('value')
@@ -222,7 +222,7 @@ PrintScreen(){
       }
 
       lotSearch(e){
-           ;
+
            this.Query[e.target.id] = e.target.getAttribute('value')
            console.log(this.Query)
            document.getElementById('LotSearch').value = e.target.getAttribute('value')
@@ -850,7 +850,7 @@ onClickli(e){
 
    saveView(e){
 
-        ;
+
         var saveCustomView = {
             "id": 0,
             "screenName": "SHIPMENT",
@@ -1728,7 +1728,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                               <option value="Please Select An Option" disabled selected>Select custom view</option>
                              {
                                  _.map(this.state.savedViews , (views,index)=>{
-                                      ;
+
                                      if(views.screenName == "SHIPMENT")
                                      {
                                      return(
