@@ -15,12 +15,12 @@ class CutOffDateFilterPage extends React.Component {
 
                 <div className="">
                     <div id="date" className="row">
-                        <div className="col-md-6 col-sm-6 col-xs-6">
+                        <div className="col-md-6 col-sm-6 col-xs-6 pr-5">
                             <DatePicker
                                 selected={this.props.startDate}
                                 onChange={this.props.handleChange} placeholderText="from" />
                      </div>
-                        <div className="col-md-6 col-sm-6 col-xs-6">
+                        <div className="col-md-6 col-sm-6 col-xs-6 pl-5">
 
                             <DatePicker
                                 selected={this.props.endDate}

@@ -63,13 +63,13 @@ constructor(props){
 
                 <div className="">
                     <div id="date" className="row">
-                        <div className="col-md-6 col-sm-6 col-xs-6">
+                        <div className="col-md-6 col-sm-6 col-xs-6 pr-5">
                             <DatePicker
                                 id="startDate"
                                 selected={this.state.startDate}
                                 onChange={this.handleChange} placeholderText="from" />
                      </div>
-                        <div className="col-md-6 col-sm-6 col-xs-6">
+                        <div className="col-md-6 col-sm-6 col-xs-6 pl-5">
 
                             <DatePicker
                                 id="endDate"

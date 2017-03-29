@@ -373,6 +373,8 @@ border-color: #ff4800; border: 1px solid transparent; font-weight: 400;line-heig
 .filter_bg .scroll{ overflow:auto; height:200px; overflow-x:hidden;}
 .filter_bg .scrollshow{ overflow:auto;height:100%; max-height:200px; overflow-x:hidden;}
 .filter_bg .more{ overflow:scroll; height:100px; overflow-x:hidden;}
+.filter_bg .pr-5{padding-right:5px;}
+.filter_bg .pl-5{padding-left:5px;}
 
 .side-filter .head_bg{background: #e5e5ff;color: #000; padding:8px 20px; margin:0px -20px 12px -20px !important; height:30px; }
 
