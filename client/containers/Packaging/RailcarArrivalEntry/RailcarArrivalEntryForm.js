@@ -648,7 +648,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 								<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 "><hr/></div>
 
 								<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-									<div className="table-responsive view_table  mega" style={{"max-height":"350","overflow-y":"scroll"}}>
+									<div className="table-responsive view_table  mega" style={{"max-height":"390","overflow-y":"scroll"}}>
 										<table id="tableRailCarArrival" className="table table-expandable" cellSpacing="0">
 											<thead id="headerRailCarArrival" className="table_head header-fixed header red">
 											<tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
