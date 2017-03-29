@@ -101,7 +101,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 	}
 
 	onSearch(e){
-		debugger;
+		 ;
 		if(this.Query != undefined){
 			Object.defineProperty(this.Where,"Query",{enumerable:true ,
 				writable: true,
@@ -382,7 +382,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 	}
 	click(data,value,index)
 	{
-		debugger
+		 
 
 		if(data.target.checked){
 			//this.checked = true
@@ -522,7 +522,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 
 		if(fiterData != undefined){
 			var railCarFilterData = _.map(fiterData , (view ,index)=>{
-				debugger
+				 
 				if(view.TPackagingInstructions && (view.status == "CONFIRMED" || view.status == "UNCONFIRMED"|| view.status == "READY") && (view.arrived != 1) ){
 					return (
 						<tr>
@@ -571,10 +571,10 @@ export default class RailcarArrivalEntryForm extends React.Component {
 
 		const railCart = this.props.data
 		var railcartData = _.map(railCart , (view ,index)=>{
-			debugger;
+			 ;
 
 			if(view.TPackagingInstructions && (view.status == "CONFIRMED" || view.status == "UNCONFIRMED" || view.status == "QUEUED")) {
-				debugger
+				 
 				return(
 					<tr>
 						<td>{view.TPackagingInstructions.TCompany? view.TPackagingInstructions.TCompany.name : ''}</td>
@@ -648,7 +648,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 								<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 "><hr/></div>
 
 								<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-									<div className="table-responsive view_table  mega" style={{"max-height":"550","overflow-y":"scroll"}}>
+									<div className="table-responsive view_table  mega" style={{"max-height":"350","overflow-y":"scroll"}}>
 										<table id="tableRailCarArrival" className="table table-expandable" cellSpacing="0">
 											<thead id="headerRailCarArrival" className="table_head header-fixed header red">
 											<tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
@@ -662,10 +662,6 @@ export default class RailcarArrivalEntryForm extends React.Component {
 												<th>Arrived</th>
 												<th></th>
 												<th>Arrival Date</th>
-												<th>
-													<label className="control control--checkbox">
-													</label>
-												</th>
 											</tr>
 											</thead>
 											<tbody >
