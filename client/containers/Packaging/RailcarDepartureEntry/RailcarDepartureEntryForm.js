@@ -529,7 +529,7 @@ onClickli(e){
 										<div className=" ">
 											<div className="pull-left pddn-10-top ">
 												<div className="padding-10-last-l" >
-													<div className="right-inner-addon "><i className="fa fa-calendar" aria-hidden="true"></i>
+													<div className="right-inner-addon mw-200"><i className="fa fa-calendar" aria-hidden="true"></i>
 														<DatePicker
 															dateFormat="MM-DD-YYYY"
 															selected={this.state.startDate}
