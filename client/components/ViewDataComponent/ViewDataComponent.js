@@ -172,7 +172,7 @@ class ViewDataComponent extends React.Component {
         var that = this;
         $(function () {
             setTimeout(function () {
-                // $("table").colResizable();
+                 $("table").colResizable();
                 //$("#Packaging_Instruction_View").tableHeadFixer({'head': true});
                 var oldIndex;
                 $('.sorted_head tr').sortable({
