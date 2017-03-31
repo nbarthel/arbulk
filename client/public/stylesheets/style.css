@@ -32,7 +32,7 @@ hr {height: 1px; background: #ccc;border: none;margin: 15px 0 15px 0;}
 .bold{ font-weight:bold;}
 .error{color:red;}
 .pos-absolute-b{ position:absolute;bottom:0;left:0;}
-.pos-relative-b{ position:fixed;bottom:0;left:0;}
+.pos-relative-b{ position:fixed;bottom:0;left:0; z-index: 99999;}
 .pos-fixed-b{ position:fixed;bottom:0;left:0;}
 .table> thead> tr> th{z-index: 99;}
 .nopadding{padding-right: 0px !important;padding-left: 0px !important;}
@@ -149,7 +149,11 @@ ul.list-style-disc > li {list-style-type:disc;}
 .orange-orange{color:#ff4800;}
 
 .header-fixed{}
-.header-fixed th{ border-right: 1px solid #ddd; min-width: 50px;}
+.header-fixed th{ border-right: 1px solid #ddd;}
+/*
+#Packaging_Instruction_View td{min-width: 100px !important;}
+#Packaging_Instruction_View th{min-width: 100px !important;}
+*/
 
 /*////////////////////////------FONT------ /////////////////////////////*/
 .font-size-11{ font-size:11px !important;}
