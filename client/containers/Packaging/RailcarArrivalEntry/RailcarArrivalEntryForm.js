@@ -537,7 +537,6 @@ export default class RailcarArrivalEntryForm extends React.Component {
 							<td>
 								<label className="control control--checkbox">
 									<input type="checkbox" id={"row1"+ index} value={view} onChange={(e) => this.click(e,view,index)} disabled/>
-
 									<div className="control__indicator"></div>
 								</label>
 							</td>
