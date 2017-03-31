@@ -16,6 +16,12 @@ import { Base_Url } from '../../constants'
 var moment = require('moment');
 //import "./ShpmentViewData.json"
 import './js/tableHeadFixer';
+import './js/jquery.dataTables.min.js';
+import './js/jquery.dragtable.js';
+import './stylesheet/dragtable.css';
+import './js/jquery-sortable-min.js'
+import './js/colResizable-1.6.min.js';
+import './stylesheet/main.css';
 /*import './stylesheet/jquery.dataTables.min.css'*/
 var Loader = require('react-loader');
 var sortedDataflag = false
@@ -28,6 +34,9 @@ class ShipmentViewDataComponent extends React.Component {
         this.isAsc = false
         this.state = {
             loaded: false,
+            headerArray: ["ARB", "Customer", "Release", "Shipment Type", "Booking", "Po#", "Lot#", "Material", "Confirmed?", "Forwarder", "Cntr Size",
+                "Qty", " Allocated", "Enough", "# of Bags To Ship", "ERD", "CutOff", "Vessel", "Steamship Line", "PU Location", "Return Location", "Docs Cutoff", "Status"],
+
             //viewData : shipmentViewData
         }
         this.PIData = {}
@@ -176,13 +185,46 @@ class ShipmentViewDataComponent extends React.Component {
     }
 
     componentDidMount() {
+        var shipState = this;
         $(function () {
             setTimeout(function () {
+                //$("table").colResizable();
+                //$("#Packaging_Instruction_View").tableHeadFixer({'head': true});
+                var oldIndex;
+                $('.sorted_head tr').sortable({
+                    containerSelector: 'tr',
+                    itemSelector: 'th',
+                    vertical: false,
+                    exclude: ".exclude-drag",
+                    placeholder: '<th class="placeholder"/>',
+                    onDragStart: function ($item, container, _super) {
 
-                $("#Packaging_Instruction_View").tableHeadFixer({'head': true})
-            },
-                3000);
+                        oldIndex = $item.index();
+
+                        $item.appendTo($item.parent());
+                        _super($item, container);
+                    },
+                    onDrop: function ($item, container, _super) {
+                        var headerArray = shipState.state.headerArray;
+                        var field, tmp,
+                            newIndex = $item.index();
+                        if (newIndex != oldIndex) {
+                            let dragHeaderValue = headerArray.splice(oldIndex - 1, 1);
+                            headerArray.splice(newIndex - 1, 0, dragHeaderValue[0]);
+                        }
+
+                        _super($item, container);
+                        shipState.setState({
+                            headerArray: headerArray
+                        });
+                    }
+
+                });
+            }, 7000);
+
         });
+
+
     }
 
     checkclick(data, value) {
@@ -460,13 +502,11 @@ class ShipmentViewDataComponent extends React.Component {
         return true;
     }
 
-
     render() {
 
         var filterData
         if (!flagSorting) {
             filterData = this.props.filterData
-
             if (filterData.constructor === Array) {
                 this.state.viewData = filterData
             }
@@ -477,9 +517,9 @@ class ShipmentViewDataComponent extends React.Component {
             flagSorting = false
         }
 
-
+        var shipmentThis = this;
         var selectedWeight = this.props.weight;
-
+        var shipState = this;
 
         var listData = _.map(this.state.viewData, (view, index)=> {
                 if (sortedDataflag || (view.TShipmentInternational != undefined && view.TShipmentInternational.length > 0) || (view.TShipmentInternational != undefined && view.TShipmentDomestic.length > 0)) {
@@ -503,51 +543,102 @@ class ShipmentViewDataComponent extends React.Component {
                         }
                     }
                     var count = index
-
+                    //headerArray : ["ARB","Customer", "Release","Shipment Type","Booking","Po#","Lot#","Material","Confirmed?",
+                    // "Forwarder","Cntr Size",
+                    //    "Qty"," Allocated",    "Enough","# of Bags To Ship","ERD","CutOff","Vessel"
+                    // ,"","PU Location", "Return Location","Docs Cutoff","Status"],
                     if (view.TShipmentLots.length > 0) {
+                        var subheaderObj = {};
+                        subheaderObj["ARB"] = (
+                            <td key= "" style={{display : this.props.showARB}}><i className="fa fa-chevron-down"
+                                                                          aria-hidden="false"
+                                                                          data-target={count}
+                                                                          onClick={(e) => {this.onClickRow(e)}}></i> {view.TLocation ? view.TLocation.locationName : ''}
+                            </td>
+                        );
+                        subheaderObj["Customer"] = (
+                            <td key= "Customer" style={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</td>
+                        );
+                        subheaderObj["Release"] = (
+                            <td key="Release" style={{display : this.props.showRelease}}>{view.releaseNumber ? view.releaseNumber : ''}</td>
+                        );
+                        subheaderObj["Shipment Type"] = (
+                            <td key= " Shipment" style={{display : this.props.showShipmentType}}>{view.isDomestic == 1 ? 'DOMESTIC' : 'INTERNATIONAL'}</td>
+                        );
+                        subheaderObj["Booking"] = (
+                            <td key= "Booking" style={{display : this.props.showBooking}}></td>
+                        );
+                        subheaderObj["Po#"] = (
+                            <td key="Po" style={{display : this.props.showPO}}></td>
+                        );
+                        subheaderObj["Lot#"] = (
+                            <td key= "Lot" style={{display : this.props.showLot}}></td>
+                        );
+                        subheaderObj["Material"] = (
+                            <td  key= "Material" style={{display : this.props.showMaterial}}></td>
 
-
+                        );
+                        subheaderObj["Confirmed?"] = (
+                            <td key= "Confirmed" style={{display : this.props.showConfmd}}></td>
+                        );
+                        subheaderObj["Forwarder"] = (
+                            <td  key= "Forwarder" style={{display : this.props.showForwarder}}></td>
+                        );
+                        subheaderObj["Cntr Size"] = (
+                            <td key= "Cntr" style={{display : this.props.showCntrSize}}></td>
+                        );
+                        subheaderObj["Qty"] = (
+                            <td key= "Qty" style={{display : this.props.showQty}}></td>
+                        );
+                        subheaderObj["Allocated"] = (
+                            <td  key= "" style={{display :this.props.showAlloc}}></td>
+                        );
+                        subheaderObj["Enough"] = (
+                            <td key= "Enough" style={{display : this.props.showEno}}></td>
+                        );
+                        subheaderObj["# of Bags To Ship"] = (
+                            <td key= "Bags" style={{display : this.props.showBags}}></td>
+                        );
+                        subheaderObj["ERD"] = (
+                            <td key= "ERD" style={{display : this.props.showERD}}></td>
+                        );
+                        subheaderObj["CutOff"] = (
+                            <td key= "CutOff" style={{display : this.props.showCutoff}}></td>
+                        );
+                        subheaderObj["Vessel"] = (
+                            <td key= "Vessel"style={{display : this.props.showVessel}}></td>
+                        );
+                        subheaderObj["Steamship Line"] = (
+                            <td key= "Steamship" style={{display : this.props.showSteamShip}}></td>
+                        );
+                        subheaderObj["PU Location"] = (
+                            <td key= "PU" style={{display : this.props.showPU}}></td>
+                        );
+                        subheaderObj["Return Location"] = (
+                            <td key= "Return" style={{display : this.props.showRet}}></td>
+                        );
+                        subheaderObj["Docs Cutoff"] = (
+                            <td key= "Docs" style={{display : this.props.showDoc}}></td>
+                        );
+                        subheaderObj["Status"] = (
+                            <td key= "Status" style={{display : this.props.showStatus}}></td>
+                        );
+                        
                         return (
                             <tbody key={index}>
                             <tr className="base_bg clickable" ref="clickable"
                                 style={{"backgroundColor": "#e5e5ff"}}>
-                                <th><label className="control control--checkbox">
+                                <td><label className="control control--checkbox">
                                         <input type="checkbox"
                                                onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
                                                value={view.id} id={view.id}/>
 
                                         <div className="control__indicator"></div>
                                     </label>
-                                </th>
-                                <th style={{display : this.props.showARB}}><i className="fa fa-chevron-down"
-                                                                              aria-hidden="false"
-                                                                              data-target={count}
-                                                                              onClick={(e) => {this.onClickRow(e)}}></i> {view.TLocation ? view.TLocation.locationName : ''}
-                                </th>
-                                <th style={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</th>
-                                <th style={{display : this.props.showRelease}}>{view.releaseNumber ? view.releaseNumber : ''}</th>
-                                <th style={{display : this.props.showShipmentType}}>{view.isDomestic == 1 ? 'DOMESTIC' : 'INTERNATIONAL'}</th>
-                                <th style={{display : this.props.showBooking}}></th>
-                                <th style={{display : this.props.showPO}}></th>
-                                <th style={{display : this.props.showLot}}></th>
-                                <th style={{display : this.props.showMaterial}}></th>
-                                <th style={{display : this.props.showConfmd}}></th>
-                                <th style={{display : this.props.showForwarder}}></th>
-                                <th style={{display : this.props.showCntrSize}}></th>
-                                <th style={{display : this.props.showQty}}></th>
-                                <th style={{display :this.props.showAlloc}}></th>
-                                <th style={{display : this.props.showEno}}></th>
-                                <th style={{display : this.props.showBags}}></th>
-                                {/*<th style={{display : this.props.showInInvt}}></th>*/}
-                                <th style={{display : this.props.showERD}}></th>
-                                <th style={{display : this.props.showCutoff}}></th>
-                                <th style={{display : this.props.showVessel}}></th>
-                                <th style={{display : this.props.showSteamShip}}></th>
-                                <th style={{display : this.props.showPU}}></th>
-                                <th style={{display : this.props.showRet}}></th>
-                                <th style={{display : this.props.showDoc}}></th>
-                                <th style={{display : this.props.showStatus}}></th>
-                                {/* <th style={{display : this.props.showTrucker}}></th>*/}
+                                </td>
+                                {shipState.state.headerArray.map(obj => {
+                                    return subheaderObj[obj];
+                                })}
 
                             </tr>
 
@@ -591,6 +682,79 @@ class ShipmentViewDataComponent extends React.Component {
                                                 var confd = (view.TShipmentDomestic && view.TShipmentDomestic.length > 0) ? (view.TShipmentDomestic[0].status == "UNCONFIRMED" ? "NO" : "YES") : "NO"
 
                                             }
+                                            var cellObj = {};
+                                            var ship=this;
+                                            cellObj["ARB"] = (
+                                                <td  key="ARB" style={{display : this.props.showARB}}></td>
+                                            );
+                                            cellObj["Customer"] = (
+                                                <td  key="Customer" style={{display : this.props.showCustomer}}></td>
+                                            );
+                                            cellObj["Release"] = (
+                                                <td  key="Release" style={{display : this.props.showRelease}}></td>
+                                            );
+                                            cellObj["Shipment Type"] = (
+                                                <td  key="Shipment"  style={{display : this.props.showShipmentType}}></td>
+                                            );
+                                            cellObj["Booking"] = (
+                                                <td  key="Booking" style={{display : this.props.showBooking}}>{(view.isDomestic == 1 && view.TShipmentDomestic && view.TShipmentDomestic.length > 0) ? view.TShipmentDomestic[0].bookingNumber : ((view.TShipmentInternational && view.TShipmentInternational.length > 0) ? view.TShipmentInternational[0].bookingNumber : '')}</td>
+                                            );
+                                            cellObj["Po#"] = (
+                                                <td key="Po"  style={{display : this.props.showPO}}>{data.TPackagingInstructions ? data.TPackagingInstructions.po_number : 'N/A'}</td>
+                                            );
+                                            cellObj["Lot#"] = (
+                                                <td  key="Lot" style={{display : this.props.showLot}}>{data.TPackagingInstructionLots.length != 0 ? data.TPackagingInstructionLots.lot_number : 'N/A'}</td>
+                                            );
+                                            cellObj["Material"] = (
+                                                <td key="Material"  style={{display : this.props.showMaterial}}>{data.TPackagingInstructions ? data.TPackagingInstructions.material : ''}</td>
+
+                                            );
+                                            cellObj["Confirmed?"] = (
+                                                <td  key="Confirmed" style={{display : this.props.showConfmd}}>{confd ? confd : "NO"}</td>
+                                            );
+                                            cellObj["Forwarder"] = (
+                                                <td  key="Forwarder" style={{display : this.props.showForwarder}}>{view.isDomestic == 1 ? 'N/A' : freightForwarder}</td>
+                                            );
+                                            cellObj["Cntr Size"] = (
+                                                <td  key="Cntr" style={{display : this.props.showCntrSize}}>{CType ? CType : "N/A"}</td>
+                                            );
+                                            cellObj["Qty"] = (
+                                                <td  key="" style={{display : this.props.showQty}}>{view.numberOfContainers ? view.numberOfContainers : ''}</td>
+                                            );
+                                            cellObj["Allocated"] = (
+                                                <td  key="Allocated" style={{display : this.props.showAlloc}}>{alloc ? alloc : "N/A"}</td>
+                                            );
+                                            cellObj["Enough"] = (
+                                                <td  key="Enough" style={{display : this.props.showEno}}>{eno}</td>
+                                            );
+                                            cellObj["# of Bags To Ship"] = (
+                                                <td  key="Bags" style={{display : this.props.showBags}}>{data.noOfBags ? data.noOfBags : 0}</td>
+                                            );
+                                            cellObj["ERD"] = (
+                                                <td  key="ERD"  style={{display : this.props.showERD}}>{view.isDomestic == 1 ? 'N/A' : erd}</td>
+                                            );
+                                            cellObj["CutOff"] = (
+                                                <td  key="CutOff" style={{display : this.props.showCutoff}}>{view.isDomestic == 1 ? 'N/A' : cutOff}</td>
+                                            );
+                                            cellObj["Vessel"] = (
+                                                <td  key="Vessel" style={{display : this.props.showVessel}}>{view.isDomestic == 1 ? 'N/A' : vessel}</td>
+                                            );
+                                            cellObj["Steamship Line"] = (
+                                                <td  key="Steamship" style={{display : this.props.showSteamShip}}>{view.isDomestic == 1 ? 'N/A' : steamShipline}</td>
+                                            );
+                                            cellObj["PU Location"] = (
+                                                <td  key="PU" style={{display : this.props.showPU}}>{view.isDomestic == 1 ? 'N/A' : puLocation}</td>
+                                            );
+                                            cellObj["Return Location"] = (
+                                                <td key="Return"  style={{display : this.props.showRet}}>{view.isDomestic == 1 ? 'N/A' : returnLocation}</td>
+                                            );
+                                            cellObj["Docs Cutoff"] = (
+                                                <td  key="Docs" style={{display : this.props.showDoc}}>{view.isDomestic == 1 ? 'N/A' : docCutoff}</td>
+                                            );
+                                            cellObj["Status"] = (
+                                                <td key="Status"  style={{display : this.props.showStatus}}>{status == null ? "UNCONFIRMED" : status}</td>
+                                            );
+
                                             return (
                                                 <tr key={index} className={count}>
                                                     <td>
@@ -604,32 +768,11 @@ class ShipmentViewDataComponent extends React.Component {
                                                             <div className="control__indicator"></div>
                                                         </label>
                                                     </td>
-                                                    <td style={{display : this.props.showARB}}></td>
-                                                    <td style={{display : this.props.showCustomer}}></td>
-                                                    <td style={{display : this.props.showRelease}}></td>
-                                                    <td style={{display : this.props.showShipmentType}}>{}</td>
-                                                    <td style={{display : this.props.showBooking}}>{(view.isDomestic == 1 && view.TShipmentDomestic && view.TShipmentDomestic.length > 0) ? view.TShipmentDomestic[0].bookingNumber : ((view.TShipmentInternational && view.TShipmentInternational.length > 0) ? view.TShipmentInternational[0].bookingNumber : '')}</td>
-                                                    <td style={{display : this.props.showPO}}>{data.TPackagingInstructions ? data.TPackagingInstructions.po_number : 'N/A'}</td>
-                                                    <td style={{display : this.props.showLot}}>{data.TPackagingInstructionLots.length != 0 ? data.TPackagingInstructionLots.lot_number : 'N/A'}</td>
-                                                    <td style={{display : this.props.showMaterial}}>{data.TPackagingInstructions ? data.TPackagingInstructions.material : ''}</td>
-                                                    <td style={{display : this.props.showConfmd}}>{confd ? confd : "NO"}</td>
-                                                    <td style={{display : this.props.showForwarder}}>{view.isDomestic == 1 ? 'N/A' : freightForwarder}</td>
-                                                    <td style={{display : this.props.showCntrSize}}>{CType ? CType : "N/A"}</td>
-                                                    <td style={{display : this.props.showQty}}>{view.numberOfContainers ? view.numberOfContainers : ''}</td>
-                                                    <td style={{display : this.props.showAlloc}}>{alloc ? alloc : "N/A"}</td>
-                                                    <td style={{display : this.props.showEno}}>{eno}</td>
-                                                    <td style={{display : this.props.showBags}}>{data.noOfBags ? data.noOfBags : 0}</td>
-                                                    {/*<td style ={{display : this.props.showInInvt}}>{}</td>*/}
-                                                    <td style={{display : this.props.showERD}}>{view.isDomestic == 1 ? 'N/A' : erd}</td>
-                                                    <td style={{display : this.props.showCutoff}}>{view.isDomestic == 1 ? 'N/A' : cutOff}</td>
-                                                    <td style={{display : this.props.showVessel}}>{view.isDomestic == 1 ? 'N/A' : vessel}</td>
-                                                    <td style={{display : this.props.showSteamShip}}>{view.isDomestic == 1 ? 'N/A' : steamShipline}</td>
-                                                    <td style={{display : this.props.showPU}}>{view.isDomestic == 1 ? 'N/A' : puLocation}</td>
-                                                    <td style={{display : this.props.showRet}}>{view.isDomestic == 1 ? 'N/A' : returnLocation}</td>
-                                                    <td style={{display : this.props.showDoc}}>{view.isDomestic == 1 ? 'N/A' : docCutoff}</td>
-                                                    <td style={{display : this.props.showStatus}}>{status == null ? "UNCONFIRMED" : status}</td>
-                                                    { /* <td style ={{display : this.props.showTrucker}}>N/A</td> */}
 
+
+                                                    {shipState.state.headerArray.map(obj => {
+                                                        return cellObj[obj];
+                                                    })}
                                                 </tr>
                                             )
                                         }
@@ -650,213 +793,243 @@ class ShipmentViewDataComponent extends React.Component {
         listData = _.filter(listData, function (param) {
             return param !== undefined;
         });
-      
-        return (
-            <Loader loaded={this.state.loaded}>
-                <div className="loadedContentNew">
-                    <table id="Packaging_Instruction_View" className="table table-expandable table-striped" cellSpacing="0">
-                        <thead className="table_head header-fixed header ">
-                        <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
-                            <th>
-
-                            </th>
-                            <th style={{display : this.props.showARB}} onClick={(e)=> this.onAscending(e,'location')}>
-                                ARB
+        
+        var headerObj = {};
+        headerObj["ARB"] = (
+            <th key="ARB" style={{display : this.props.showARB}}
+                onClick={(e)=> this.onAscending(e,'location')} className="exclude-drag">
+                ARB
                     <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                     </span>
-                            </th>
-                            <th style={{display : this.props.showCustomer}}
-                                onClick={(e)=> this.onAscending(e,'company')}>Customer
-
+            </th>
+        );
+        headerObj["Customer"] = (
+            <th key="customer" style={{display : this.props.showCustomer}}
+                onClick={(e)=> this.onAscending(e,'company')}>Customer
                         <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
-
-                            </th>
-                            <th style={{display : this.props.showRelease}}
-                                onClick={(e)=> this.onAscending(e,'Release')}>Release
-
+            </th>
+        );
+        headerObj["Release"] = (
+            <th key="Release" style={{display : this.props.showRelease}}
+                onClick={(e)=> this.onAscending(e,'Release')}>Release
                         <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
-                            </th>
-                            <th style={{display : this.props.showShipmentType}}
-                                onClick={(e)=> this.onAscending(e,'ShipmentType')}>Shipment Type
+            </th>
+        );
+        headerObj["Shipment Type"] = (
+            <th key="Shipment" style={{display : this.props.showShipmentType}}
+                onClick={(e)=> this.onAscending(e,'ShipmentType')}>Shipment Type
               <span className="fa-stack ">
                       <i className="fa fa-sort-asc fa-stack-1x"></i>
                       <i className="fa fa-sort-desc fa-stack-1x"></i>
               </span>
-
-                            </th>
-                            <th style={{display : this.props.showBooking}}
-                                onClick={(e)=> this.onAscending(e,'Booking')}>Booking
-
+            </th>
+        );
+        headerObj["Booking"] = (
+            <th key="Booking" style={{display : this.props.showBooking}}
+                onClick={(e)=> this.onAscending(e,'Booking')}>Booking
                         <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
-                            </th>
-                            <th style={{display : this.props.showPO}} onClick={(e)=> this.onAscending(e,'po_number')}>PO#
+            </th>
+        );
+        headerObj["Po#"] = (
+            <th key="Po" style={{display : this.props.showPO}} onClick={(e)=> this.onAscending(e,'po_number')}>PO#
                  <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
-                            </th>
-                            <th style={{display : this.props.showLot}} onClick={(e)=> this.onAscending(e,'lot_number')}>
-                                Lot#
+            </th>
+        );
+        headerObj["Lot#"] = (
+
+            <th key="Lot" style={{display : this.props.showLot}} onClick={(e)=> this.onAscending(e,'lot_number')}>
+                Lot#
+                <span className="fa-stack ">
+                        <i className="fa fa-sort-asc fa-stack-1x"></i>
+                        <i className="fa fa-sort-desc fa-stack-1x"></i>
+                </span>
+            </th>
+
+        );
+        headerObj["Material"] = (
+            <th key="Material" style={{display : this.props.showMaterial}}
+                onClick={(e)=> this.onAscending(e,'Material')}>Material
+               <span className="fa-stack ">
+                        <i className="fa fa-sort-asc fa-stack-1x"></i>
+                        <i className="fa fa-sort-desc fa-stack-1x"></i>
+                </span>
+
+            </th>
+        );
+        headerObj["Confirmed?"] = (
+            <th key="Confirmed" style={{display : this.props.showConfmd}} onClick={(e)=> this.onAscending(e,'Confmd')}>
+                Confirmed?
+               <span className="fa-stack ">
+                        <i className="fa fa-sort-asc fa-stack-1x"></i>
+                        <i className="fa fa-sort-desc fa-stack-1x"></i>
+                </span>
+            </th>
+        );
+        headerObj["Forwarder"] = (
+            <th key="Forwarder" style={{display : this.props.showForwarder}}
+                onClick={(e)=> this.onAscending(e,'Forwarder')}>Forwarder
+                <span className="fa-stack ">
+                        <i className="fa fa-sort-asc fa-stack-1x"></i>
+                        <i className="fa fa-sort-desc fa-stack-1x"></i>
+                </span>
+            </th>
+        );
+        headerObj["Cntr Size"] = (
+
+            <th key="Cntr" style={{display : this.props.showCntrSize}}
+                onClick={(e)=> this.onAscending(e,'CntrSize')}>Cntr Size
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
-                            </th>
-
-                            <th style={{display : this.props.showMaterial}}
-                                onClick={(e)=> this.onAscending(e,'Material')}>Material
-               <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x"></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
-
-                            </th>
-                            <th style={{display : this.props.showConfmd}} onClick={(e)=> this.onAscending(e,'Confmd')}>
-                                Confirmed?
-               <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x"></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
-                            </th>
-                            <th style={{display : this.props.showForwarder}}
-                                onClick={(e)=> this.onAscending(e,'Forwarder')}>Forwarder
+            </th>
+        );
+        headerObj["Qty"] = (
+            <th key="Qty" style={{display : this.props.showQty}} onClick={(e)=> this.onAscending(e,'Qty')}>Qty
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
-                            </th>
-                            <th style={{display : this.props.showCntrSize}}
-                                onClick={(e)=> this.onAscending(e,'CntrSize')}>Cntr Size
+            </th>
+        );
+        headerObj["Allocated"] = (
+            <th  key="Allocated" style={{display : this.props.showAlloc}}
+                onClick={(e)=> this.onAscending(e,'Allocated')}>Allocated
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
-                            </th>
-                            <th style={{display : this.props.showQty}} onClick={(e)=> this.onAscending(e,'Qty')}>Qty
+            </th>
+        );
+        headerObj["Enough"] = (
+            <th key="Enough" style={{display : this.props.showEno}} onClick={(e)=> this.onAscending(e,'Enough')}>
+                Enough?
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
-                            </th>
-                            <th style={{display : this.props.showAlloc}}
-                                onClick={(e)=> this.onAscending(e,'Allocated')}>Allocated
+            </th>
+        );
+        headerObj["# of Bags To Ship"] = (
+            <th key = "Bags" style={{display : this.props.showBags}} onClick={(e)=> this.onAscending(e,'Bags')}>
+                # of Bags To Ship
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
-                            </th>
-                            <th style={{display : this.props.showEno}} onClick={(e)=> this.onAscending(e,'Enough')}>
-                                Enough?
+            </th>
+        );
+        headerObj["ERD"] = (
+            <th  key = "ERD" style={{display : this.props.showERD}} onClick={(e)=> this.onAscending(e,'ERD')}>ERD
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
-                            </th>
-                            <th style={{display : this.props.showBags}} onClick={(e)=> this.onAscending(e,'Bags')}>
-                                # of Bags To Ship
-                <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x"></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
-
-                            </th>
-                            {/*
-                             <th style ={{display : this.props.showInInvt}} onClick={(e)=> this.onAscending(e,'lot_number')}>(InInvt.)
-                             <span className="fa-stack ">
-                             <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                             <i className="fa fa-sort-desc fa-stack-1x"></i>
-                             </span>
-
-                             </th>
-                             */}
-                            <th style={{display : this.props.showERD}} onClick={(e)=> this.onAscending(e,'ERD')}>ERD
-                <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x"></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
-
-                            </th>
-                            <th style={{display : this.props.showCutoff}} onClick={(e)=> this.onAscending(e,'CutOff')}>
-                                CutOff
-               <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x"></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
-
-
-                            </th>
-                            <th style={{display : this.props.showVessel}} onClick={(e)=> this.onAscending(e,'Vessel')}>
-                                Vessel
-               <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x"></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
-
-                            </th>
-                            <th style={{display : this.props.showSteamShip}}
-                                onClick={(e)=> this.onAscending(e,'SteamshipLine')}>Steamship Line
+            </th>
+        );
+        headerObj["CutOff"] = (
+            <th key = "CutOff" style={{display : this.props.showCutoff}} onClick={(e)=> this.onAscending(e,'CutOff')}>
+                CutOff
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
                             </th>
-                            <th style={{display : this.props.showPU}} onClick={(e)=> this.onAscending(e,'PULocation')}>
-                                PU Location
+        );
+        headerObj["Vessel"] = (
+            <th key = "Vessel" style={{display : this.props.showVessel}} onClick={(e)=> this.onAscending(e,'Vessel')}>
+                Vessel
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
-                            </th>
-                            <th style={{display : this.props.showRet}}
-                                onClick={(e)=> this.onAscending(e,'ReturnLocation')}>Return Location
+            </th>
+        );
+        headerObj["Steamship Line"] = (
+            <th key = "Steamship"style={{display : this.props.showSteamShip}}
+                onClick={(e)=> this.onAscending(e,'SteamshipLine')}>Steamship Line
+               <span className="fa-stack ">
+                        <i className="fa fa-sort-asc fa-stack-1x"></i>
+                        <i className="fa fa-sort-desc fa-stack-1x"></i>
+                </span>
+            </th>
+        );
+        headerObj["PU Location"] = (
+            <th key = "PU"style={{display : this.props.showPU}} onClick={(e)=> this.onAscending(e,'PULocation')}>
+                PU Location
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
-                            </th>
-                            <th style={{display : this.props.showDoc}} onClick={(e)=> this.onAscending(e,'DocsCutoff')}>
-                                Docs Cutoff
+            </th>
+        );
+        headerObj["Return Location"] = (
+
+            <th key = "Return" style={{display : this.props.showRet}}
+                onClick={(e)=> this.onAscending(e,'ReturnLocation')}>Return Location
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
-                            </th>
-                            <th style={{display : this.props.showStatus}} onClick={(e)=> this.onAscending(e,'Status')}>
-                                Status
+            </th>
+        );
+        headerObj["Docs Cutoff"] = (
+            <th key = "Docs" style={{display : this.props.showDoc}} onClick={(e)=> this.onAscending(e,'DocsCutoff')}>
+                Docs Cutoff
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
+
+            </th>
+        );
+        headerObj["Status"] = (
+            <th key = "Status" style={{display : this.props.showStatus}} onClick={(e)=> this.onAscending(e,'Status')}>
+                Status
+               <span className="fa-stack ">
+                        <i className="fa fa-sort-asc fa-stack-1x"></i>
+                        <i className="fa fa-sort-desc fa-stack-1x"></i>
+                </span>
+            </th>
+
+        );
+
+        return (
+            <Loader loaded={this.state.loaded}>
+                <div className="loadedContentNew">
+                    <table id="Packaging_Instruction_View" className="table table-expandable table-striped" cellSpacing="0">
+                        <thead className="table_head header-fixed header sorted_head ">
+                        <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
+                            <th className="exclude-drag">
+
                             </th>
 
-                            {/*
-                             <th style ={{display : this.props.showTrucker}} >Trucker
-                             <span className="fa-stack ">
-                             <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                             <i className="fa fa-sort-desc fa-stack-1x"></i>
-                             </span>
-                             </th>
-                             */}
+                            {this.state.headerArray.map(obj => {
+                                return headerObj[obj];
+                            })}
 
                         </tr>
                         </thead>
