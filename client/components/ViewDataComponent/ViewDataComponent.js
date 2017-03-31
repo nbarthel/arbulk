@@ -7,23 +7,28 @@ import  { PropTypes } from 'react';
 import { createDataLoader } from 'react-loopback';
 
 import request from '../../utils/request';
-import { Base_Url } from '../../constants'
+import { Base_Url } from '../../constants';
 var moment = require('moment');
 import './js/tableHeadFixer.js'
-import './js/jquery.dataTables.min.js'
+import './js/jquery.dataTables.min.js';
+import './js/jquery.dragtable.js';
+import './stylesheet/dragtable.css';
+import './js/jquery-sortable-min.js'
+import './js/colResizable-1.6.min.js';
+import './stylesheet/main.css';
 var Loader = require('react-loader');
 var sortedDataflag = false
 var sortedData = []
 var flagSorting = false
 const MUL_FACTOR = 2.204625
-var grouping = false
+var grouping = false;
 class ViewDataComponent extends React.Component {
 
     constructor(props) {
         super(props);
         this.isAsc = false
         this.state = {
-        loaded: false,
+        loaded: false, headerArray : ["ARB","Customer", "PO#","Railcar#","Lot#","Material","Confirmed?","Arrived?","Shipment Received?",    "Cutoff","Weight","Qty Allocated",    "Qty Packaged","Status","Railcar Arrival","Railcar Arrival Date","Railcar Departure","Railcar Departure Date","Railcar Days Present", "Railcar Status"],
         GroupedData : {}
     }
         this.PIData = {}
@@ -163,12 +168,62 @@ class ViewDataComponent extends React.Component {
     }
 
     componentDidMount() {
+
+        var that = this;
         $(function () {
             setTimeout(function () {
-                $("#Packaging_Instruction_View").tableHeadFixer({'head': true})
-            }, 3000);
+                // $("table").colResizable();
+                //$("#Packaging_Instruction_View").tableHeadFixer({'head': true});
+                var oldIndex;
+                $('.sorted_head tr').sortable({
+                    containerSelector: 'tr',
+                    itemSelector: 'th',
+                    vertical: false,
+                    exclude: ".exclude-drag",
+                    placeholder: '<th class="placeholder"/>',
+                    onDragStart: function ($item, container, _super) {
+
+                        oldIndex = $item.index();
+                        //  console.log("Drag",oldIndex);
+                        $item.appendTo($item.parent());
+                        _super($item, container);
+                    },
+                    onDrop: function  ($item, container, _super) {
+                        var headerArray = that.state.headerArray;
+                        var field,tmp,
+                            newIndex = $item.index();
+                        if(newIndex != oldIndex) {
+
+                            console.log(oldIndex, newIndex);
+                            console.log("before:", headerArray);
+                            let dragHeaderValue = headerArray.splice(oldIndex-1,1);
+                            headerArray.splice(newIndex-1,0,dragHeaderValue[0]);
+                            console.log("after:", headerArray);
+
+                            //     $item.closest('table').find('tbody tr').each(function (i, row) {
+                            //         row = $(row);
+                            //         if(newIndex < oldIndex) {
+                            //             row.children().eq(newIndex).before(row.children()[oldIndex]);
+                            //         } else if (newIndex > oldIndex) {
+                            //             row.children().eq(newIndex).after(row.children()[oldIndex]);
+                            //         }
+                            //     });
+                        }
+
+                        _super($item, container);
+                        that.setState({
+                            headerArray: headerArray
+                        });
+                    }
+
+                });
+
+                //jQuery('#Packaging_Instruction_View').dragtable({maxMovingRows:1,dragHandle:'.some-handle'});
+            }, 5000);
 
         });
+
+
     }
 
     checkclick(data, value) {
@@ -179,6 +234,7 @@ class ViewDataComponent extends React.Component {
         console.log("clicked>>>>>>>>", value)
     }
     onGroupBy(e,head,value,data) {
+
         debugger
         value = value === undefined ? 'Status' : value
         grouping = true
@@ -594,56 +650,101 @@ class ViewDataComponent extends React.Component {
         }
         else {
             filterData = sortedData
-
             flagSorting = false
         }
         var selectedWeight = this.props.weight;
         var i=0;
-      var listData =   _.map(data, (view, index) => {
+        var that=this;
+        var listData = _.map(this.state.viewData, (view, index)=> {
                 if (view.TPackagingInstructionLots.length > 0) {
                     var count = index;
+                    var subheaderObj={};
+                    subheaderObj["ARB"] = (
+                        <td style={{display : this.props.showARB}}>
+                            <i className="fa fa-chevron-down"
+                               aria-hidden="false" data-target={count}
+                               onClick={(e) => {this.onClickRow(e)}}></i> {view.TLocation ? view.TLocation.locationName : ''}
+                        </td>
+                    );
+                    subheaderObj["Customer"] = (
+                        <td style={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</td>
+                    );
+
+                    subheaderObj["PO#"] = (
+                        <td style={{display : this.props.showPO}}>{view.po_number} </td>
+                    );
+                    subheaderObj["Railcar#"] = (
+                        <td style={{display : this.props.Railcar}}></td>
+                    );
+
+                    subheaderObj["Lot#"] = (
+                        <td style={{display : this.props.showLot}}></td>
+                    );
+
+                    subheaderObj["Material"] = (
+                        <td style={{display : this.props.showMaterial}}></td>
+                    );
+                    subheaderObj["Confirmed?"] = (
+                        <td style={{display : this.props.showConfmd}}></td>
+                    );
+                    subheaderObj["Arrived?"] = (
+                        <td style={{display : this.props.showArrvd}}></td>
+                    );
+                    subheaderObj["Shipment Received?"] = (
+                        <td style={{display : this.props.showRecd}}></td>
+                    );
+                    subheaderObj["Cutoff"] = (
+                        <td style={{display : this.props.showCutoff}}></td>
+                    );
+                    subheaderObj["Weight"] = (
+                        <td style={{display : this.props.showWeight}}></td>
+                    );
+                    subheaderObj["Qty Allocated"] = (
+                        <td style={{display : this.props.showBag}}></td>
+                    );
+                    subheaderObj["Qty Packaged"] = (
+                        <td style={{display : this.props.showInInvt}}></td>
+                    );
+                    subheaderObj["Status"] = (
+                        <td style={{display : this.props.showStatus}}></td>
+                    );
+                    subheaderObj["Railcar Arrival"] = (
+                        <td style={{display : this.props.showRailcarArr}}></td>
+                    );
+                    subheaderObj["Railcar Arrival Date"] = (
+                        <td style={{display : this.props.showRailcarArrD}}></td>
+                    );
+                    subheaderObj["Railcar Departure"] = (
+                        <td style={{display : this.props.showRailcarDep}}></td>
+                    );
+                    subheaderObj["Railcar Departure Date"] = (
+                        <td style={{display : this.props.showRailcarDepDate}}></td>
+                    );
+
+                    subheaderObj["Railcar Days Present"] = (
+                        <td style={{display : this.props.showDaysPresent}}></td>
+                    );
+
+                    subheaderObj["Railcar Status"] = (
+                        <td style={{display : this.props.showRailcarStatus}}></td>
+                    );
+
                     return (
                         <tbody key={index}>
-
                         <tr className="base_bg clickable" ref="clickable">
-                            <th>
+                            <td>
                                 <label className="control control--checkbox">
-                                    <input type="checkbox" onChange={(e) => {
-                                        this.props.headerCheckboxChange(e, view)
-                                    }}
+                                    <input type="checkbox" onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
                                            value={view.id} id={view.id}/>
                                     <div className="control__indicator"></div>
                                 </label>
-                            </th>
-                            <th style={{display: this.props.showARB}}><i className="fa fa-chevron-down"
-                                                                         aria-hidden="false" data-target={count}
-                                                                         onClick={(e) => {
-                                                                             this.onClickRow(e)
-                                                                         }}></i> {view.TLocation ? view.TLocation.locationName : ''}
-                            </th>
-                            <th style={{display: this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</th>
-                            <th style={{display: this.props.showPO}}>{view.po_number} </th>
-                            <th style={{display: this.props.Railcar}}></th>
-                            <th style={{display: this.props.showMaterial}}></th>
-                            <th style={{display: this.props.showConfmd}}></th>
-                            <th style={{display: this.props.showArrvd}}></th>
-                            <th style={{display: this.props.showRecd}}></th>
-                            <th style={{display: this.props.showCutoff}}></th>
-                            <th style={{display: this.props.showWeight}}></th>
-                            <th style={{display: this.props.showBag}}></th>
-                            <th style={{display: this.props.showInInvt}}></th>
-                            <th style={{display: this.props.showStatus}}></th>
-                            <th style={{display: this.props.showRailcarArr}}></th>
-                            <th style={{display: this.props.showRailcarArrD}}></th>
-                            <th style={{display: this.props.showRailcarDep}}></th>
-                            <th style={{display: this.props.showRailcarDepDate}}></th>
-                            <th style={{display: this.props.showDaysPresent}}></th>
-                            <th></th>
-                            <th style={{display: this.props.showRailcarStatus}}></th>
-
+                            </td>
+                            {that.state.headerArray.map(obj => {
+                                return subheaderObj[obj];
+                            })}
                         </tr>
                         {
-                            _.map(view.TPackagingInstructionLots, (data, index) => {
+                            _.map(view.TPackagingInstructionLots, (data, index)=> {
                                     let diff;
                                     var bagsallocated = 0
                                     if (this.props.contanerLoad != undefined) {
@@ -696,42 +797,89 @@ class ViewDataComponent extends React.Component {
                                                 }
                                             }
 
+                                            var cellObj = {};
+                                            cellObj["ARB"] = (
+                                                <td style={{display : this.props.showARB}}></td>
+                                            );
+                                            cellObj["Customer"] = (
+                                                <td style={{display : this.props.showCustomer}}></td>
+                                            );
+
+                                            cellObj["PO#"] = (
+                                                <td style={{display : this.props.showPO}}></td>
+                                            );
+                                            cellObj["Railcar#"] = (
+                                                <td style={{display : this.props.Railcar}}>{data.railcar_number ? data.railcar_number : ''}</td>
+                                            );
+
+                                            cellObj["Lot#"] = (
+                                                <td style={{display : this.props.showLot}}>{data.lot_number ? data.lot_number : ''}</td>
+                                            );
+
+                                            cellObj["Material"] = (
+                                                <td style={{display : this.props.showMaterial}}>{view.material}</td>
+                                            );
+                                            cellObj["Confirmed?"] = (
+                                                <td style={{display : this.props.showConfmd}}>{data.status == "UNCONFIRMED" ? 'NO' : 'YES'}</td>
+                                            );
+                                            cellObj["Arrived?"] = (
+                                                <td style={{display : this.props.showArrvd}}>{data.railcar_arrived_on != null ? 'YES' : 'NO'}</td>
+                                            );
+                                            cellObj["Shipment Received?"] = (
+                                                <td style={{display : this.props.showRecd}}>{(data.TShipmentLots && data.TShipmentLots.length > 0 && data.status != "SHIPPED") ? "YES" : "NO"}</td>
+                                            );
+                                            cellObj["Cutoff"] = (
+                                                <td style={{display : this.props.showCutoff}}>{(data.TShipmentLots && data.TShipmentLots.length > 0 && data.TShipmentLots[0].TShipmentent && data.TShipmentLots[0].TShipmentent.TShipmentInternational && data.TShipmentLots[0].TShipmentent.TShipmentInternational.length > 0 ) ? moment(data.TShipmentLots[0].TShipmentent.TShipmentInternational[0].cargoCutoffDate).format("MM-DD-YYYY") : 'NA'}</td>
+                                            );
+                                            cellObj["Weight"] = (
+                                                <td style={{display : this.props.showWeight}}>{selectedWeight == 'lbs' ? data.weight : (data.weight / MUL_FACTOR).toFixed(2)}</td>
+                                            );
+                                            cellObj["Qty Allocated"] = (
+                                                <td style={{display : this.props.showBag}}>{bagsallocated > 0 ? bagsallocated : 0}</td>
+                                            );
+                                            cellObj["Qty Packaged"] = (
+                                                <td style={{display : this.props.showInInvt}}>{(data.inInventory && bagsallocated > 0) ? (data.inInventory - bagsallocated ) : parseInt(data.inInventory) > 0 ? parseInt(data.inInventory) : 0 }</td>
+                                            );
+                                            cellObj["Status"] = (
+                                                <td style={{display : this.props.showStatus}}>{data.status ? data.status : '' }</td>
+                                            );
+                                            cellObj["Railcar Arrival"] = (
+                                                <td style={{display : this.props.showRailcarArr}}>{data.arrived != null && data.arrived == 1 ? "Yes" : "No"}</td>
+                                            );
+                                            cellObj["Railcar Arrival Date"] = (
+                                                <td style={{display : this.props.showRailcarArrD}}>{data.railcar_arrived_on != null ? moment(data.railcar_arrived_on).format("MM-DD-YYYY") : "N/A"}</td>
+                                            );
+                                            cellObj["Railcar Departure"] = (
+                                                <td style={{display : this.props.showRailcarDep}}>{data.railcar_departed_on != null ? "YES" : "NO"}</td>
+                                            );
+                                            cellObj["Railcar Departure Date"] = (
+                                                <td style={{display : this.props.showRailcarDepDate}}>{data.railcar_departed_on != null ? moment(data.railcar_departed_on).format("MM-DD-YYYY") : "N/A"}</td>
+                                            );
+
+                                            cellObj["Railcar Days Present"] = (
+                                                <td style={{display : this.props.showDaysPresent}}>{diff ? diff + 1 : 'N/A'}</td>
+                                            );
+
+                                            cellObj["Railcar Status"] = (
+                                                <td style={{display : this.props.showRailcarStatus}}>{data.railcar_status ? data.railcar_status : ''}</td>
+                                            );
+
+
                                             return (
                                                 <tr key={index} className={count}>
                                                     <td>
                                                         <label className="control control--checkbox">
                                                             <input type="checkbox"
-                                                                   onClick={(e) => this.checkclick(e, data)}
-                                                                   onChange={(e) => {
-                                                                       this.props.checkboxChange(e, data)
-                                                                   }}
+                                                                   onClick={(e) => this.checkclick(e,data)}
+                                                                   onChange={(e)=>{this.props.checkboxChange(e,data)}}
                                                                    value={view.id}
                                                                    id={view.TPackagingInstructionLots[index].id}/>
-
                                                             <div className="control__indicator"></div>
                                                         </label>
                                                     </td>
-                                                    <td style={{display: this.props.showARB}}></td>
-                                                    <td style={{display: this.props.showCustomer}}></td>
-                                                    <td style={{display: this.props.showPO}}></td>
-                                                    <td style={{display: this.props.Railcar}}>{data.railcar_number ? data.railcar_number : ''}</td>
-                                                    <td style={{display: this.props.showLot}}>{data.lot_number ? data.lot_number : ''}</td>
-                                                    <td style={{display: this.props.showMaterial}}>{view.material}</td>
-                                                    <td style={{display: this.props.showConfmd}}>{data.status == "UNCONFIRMED" ? 'NO' : 'YES'}</td>
-                                                    <td style={{display: this.props.showArrvd}}>{data.railcar_arrived_on != null ? 'YES' : 'NO'}</td>
-                                                    <td style={{display: this.props.showRecd}}>{(data.TShipmentLots && data.TShipmentLots.length > 0 && data.status != "SHIPPED") ? "YES" : "NO"}</td>
-                                                    <td style={{display: this.props.showCutoff}}>{(data.TShipmentLots && data.TShipmentLots.length > 0 && data.TShipmentLots[0].TShipmentent && data.TShipmentLots[0].TShipmentent.TShipmentInternational && data.TShipmentLots[0].TShipmentent.TShipmentInternational.length > 0 ) ? moment(data.TShipmentLots[0].TShipmentent.TShipmentInternational[0].cargoCutoffDate).format("MM-DD-YYYY") : 'NA'}</td>
-                                                    <td style={{display: this.props.showWeight}}>{selectedWeight == 'lbs' ? data.weight : (data.weight / MUL_FACTOR).toFixed(2)}</td>
-                                                    <td style={{display: this.props.showBag}}>{bagsallocated > 0 ? bagsallocated : 0}</td>
-                                                    <td style={{display: this.props.showInInvt}}>{(data.inInventory && bagsallocated > 0) ? (data.inInventory - bagsallocated ) : parseInt(data.inInventory) > 0 ? parseInt(data.inInventory) : 0 }</td>
-                                                    <td style={{display: this.props.showStatus}}>{data.status ? data.status : '' }</td>
-                                                    <td style={{display: this.props.showRailcarArr}}>{data.arrived != null && data.arrived == 1 ? "Yes" : "No"}</td>
-                                                    <td style={{display: this.props.showRailcarArrD}}>{data.railcar_arrived_on != null ? moment(data.railcar_arrived_on).format("MM-DD-YYYY") : "N/A"}</td>
-                                                    <td style={{display: this.props.showRailcarDep}}>{data.railcar_departed_on != null ? "YES" : "NO"}</td>
-                                                    <td style={{display: this.props.showRailcarDepDate}}>{data.railcar_departed_on != null ? moment(data.railcar_departed_on).format("MM-DD-YYYY") : "N/A"}</td>
-                                                    <td style={{display: this.props.showDaysPresent}}>{diff ? diff + 1 : 'N/A'}</td>
-                                                    <td style={{display: this.props.showRailcarStatus}}>{data.railcar_status ? data.railcar_status : ''}</td>
-
+                                                    {that.state.headerArray.map(obj => {
+                                                        return cellObj[obj];
+                                                    })}
                                                 </tr>
                                             )
                                         }
@@ -744,6 +892,7 @@ class ViewDataComponent extends React.Component {
                 }
             }
         );
+
         return listData
     }
 
@@ -815,180 +964,229 @@ class ViewDataComponent extends React.Component {
             return param !== undefined;
         });
 
-        return (
-            <Loader loaded={this.state.loaded} id="loaded">
-                <div className="loadedContentNew">
-                    <table id="Packaging_Instruction_View" className="table table-expandable sort" cellSpacing="0">
-                        <thead id="table_head1" className="table_head header-fixed header red">
-                        <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
-                            <th>
-
-                            </th>
-                            <th style={{display : this.props.showARB }} onKeyDown={(e)=>this.press(e)}
-                                onClick={(e)=> this.onAscending(e,'location')}>ARB
+        var headerObj = {};
+        headerObj["ARB"] = (
+            <th key="arb" style={{display : this.props.showARB }} onKeyDown={(e)=>this.press(e)}
+                onClick={(e)=> this.onAscending(e,'location')} className="exclude-drag">
+                ARB
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                            </span>
-                            </th>
-                            <th style={{display : this.props.showCustomer}}
-                                onClick={(e)=> this.onAscending(e,'company')}>Customer
-
+            </th>
+        );
+        headerObj["Customer"] = (
+            <th key="customer" style={{display : this.props.showCustomer}}
+                onClick={(e)=> this.onAscending(e,'company')}>Customer
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
 
-                            </th>
-                            <th style={{display : this.props.showPO}} onClick={(e)=> this.onAscending(e,'po_number')}>PO#
+            </th>
+        );
+
+        headerObj["PO#"] = (
+            <th key="po" style={{display : this.props.showPO}} onClick={(e)=> this.onAscending(e,'po_number')}>PO#
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
-                            </th>
-                            <th style={{display : this.props.Railcar}}
-                                onClick={(e)=> this.onAscending(e,'railcar_number')}>Railcar#
+            </th>
+        );
+        headerObj["Railcar#"] = (
+            <th key="railecar" style={{display : this.props.Railcar}}
+                onClick={(e)=> this.onAscending(e,'railcar_number')}>Railcar#
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
-                            </th>
-                            <th style={{display : this.props.showLot}} onClick={(e)=> this.onAscending(e,'lot_number')}>
-                                Lot#
+            </th>
+        );
+
+        headerObj["Lot#"] = (
+            <th key="lot" style={{display : this.props.showLot}} onClick={(e)=> this.onAscending(e,'lot_number')}>
+                Lot#
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
 
-                            </th>
-                            <th style={{display : this.props.showMaterial}}
-                                onClick={(e)=> this.onAscending(e,'Material')}>Material
+            </th>
+        );
+
+        headerObj["Material"] = (
+            <th key="material" style={{display : this.props.showMaterial}}
+                onClick={(e)=> this.onAscending(e,'Material')}>Material
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
 
-                            </th>
-                            <th style={{display : this.props.showConfmd}} onClick={(e)=> this.onAscending(e,'Confmd')}>
-                                Confirmed?
+            </th>
+        );
+        headerObj["Confirmed?"] = (
+            <th key="confirmed" style={{display : this.props.showConfmd}} onClick={(e)=> this.onAscending(e,'Confmd')}>
+                Confirmed?
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
-                            </th>
-                            <th style={{display : this.props.showArrvd}} onClick={(e)=> this.onAscending(e,'Arrvd')}>
-                                Arrived?
-                                <span className="fa-stack ">
-                               <i className="fa fa-sort-asc fa-stack-1x"></i>
-                               <i className="fa fa-sort-desc fa-stack-1x"></i>
-                       </span>
-
-                            </th>
-                            <th style={{display : this.props.showRecd}} onClick={(e)=> this.onAscending(e,'Recd')}>Shipment Received?
-                                <span className="fa-stack ">
-                               <i className="fa fa-sort-asc fa-stack-1x"></i>
-                               <i className="fa fa-sort-desc fa-stack-1x"></i>
-                       </span>
-
-                            </th>
-                            <th style={{display : this.props.showCutoff}} onClick={(e)=> this.onAscending(e,'Cutoff')}>
-                                Cutoff
+            </th>
+        );
+        headerObj["Arrived?"] = (
+            <th key="arrived" style={{display : this.props.showArrvd}} onClick={(e)=> this.onAscending(e,'Arrvd')}>
+                Arrived?
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
 
-                            </th>
-                            <th style={{display : this.props.showWeight}} onClick={(e)=> this.onAscending(e,'weight')}>
-                                Weight
+            </th>
+        );
+        headerObj["Shipment Received?"] = (
+            <th key="shipmentreceived" style={{display : this.props.showRecd}} onClick={(e)=> this.onAscending(e,'Recd')}>Shipment Received?
+                                <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x"></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
+
+            </th>
+        );
+        headerObj["Cutoff"] = (
+            <th key="cutoff" style={{display : this.props.showCutoff}} onClick={(e)=> this.onAscending(e,'Cutoff')}>
+                Cutoff
+                                <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x"></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
+
+            </th>
+        );
+        headerObj["Weight"] = (
+            <th key="weight" style={{display : this.props.showWeight}} onClick={(e)=> this.onAscending(e,'weight')}>
+                Weight
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
 
 
-                            </th>
-                            <th style={{display : this.props.showBag}} onClick={(e)=> this.onAscending(e,'Bags')}>Qty
-                                Allocated
+            </th>
+        );
+        headerObj["Qty Allocated"] = (
+            <th key="qtyallocated" style={{display : this.props.showBag}} onClick={(e)=> this.onAscending(e,'Bags')}>Qty
+                Allocated
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
 
-                            </th>
-                            <th style={{display : this.props.showInInvt}} onClick={(e)=> this.onAscending(e,'InInvt')}>
-                                Qty Packaged
+            </th>
+        );
+        headerObj["Qty Packaged"] = (
+            <th key="qtypackaged" style={{display : this.props.showInInvt}} onClick={(e)=> this.onAscending(e,'InInvt')}>
+                Qty Packaged
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
 
-                            </th>
-                            <th style={{display : this.props.showStatus}} onClick={(e)=> this.onAscending(e,'Status')}>
-                                Status
+            </th>
+        );
+        headerObj["Status"] = (
+            <th key="status" style={{display : this.props.showStatus}} onClick={(e)=> this.onAscending(e,'Status')}>
+                Status
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
-                            </th>
+            </th>
+        );
+        headerObj["Railcar Arrival"] = (
+            <th key="railcararrival" style={{display : this.props.showRailcarArr}}
+                onClick={(e)=> this.onAscending(e,'RailcarArrival')}>Railcar Arrival
+                                <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x"></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
+            </th>
+        );
+        headerObj["Railcar Arrival Date"] = (
+            <th key="railcalarrivaldate" style={{display : this.props.showRailcarArrD}}
+                onClick={(e)=> this.onAscending(e,'RailcarArrivalDate')}>Railcar Arrival Date
+                                <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x"></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
+            </th>
+        );
+        headerObj["Railcar Departure"] = (
+            <th key="railcardeparture" style={{display : this.props.showRailcarDep}}
+                onClick={(e)=> this.onAscending(e,'RailcarDeparture')}>Railcar Departure
+                                <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x"></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
+            </th>
+        );
+        headerObj["Railcar Departure Date"] = (
+            <th key="railcardeparturedate" style={{display : this.props.showRailcarDepDate}}
+                onClick={(e)=> this.onAscending(e,'RailcarDepartureDate')}>Railcar Departure Date
+                                <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x"></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
+            </th>
 
-                            <th style={{display : this.props.showRailcarArr}}
-                                onClick={(e)=> this.onAscending(e,'RailcarArrival')}>Railcar Arrival
-                                <span className="fa-stack ">
-                               <i className="fa fa-sort-asc fa-stack-1x"></i>
-                               <i className="fa fa-sort-desc fa-stack-1x"></i>
-                       </span>
-                            </th>
-                            <th style={{display : this.props.showRailcarArrD}}
-                                onClick={(e)=> this.onAscending(e,'RailcarArrivalDate')}>Railcar Arrival Date
-                                <span className="fa-stack ">
-                               <i className="fa fa-sort-asc fa-stack-1x"></i>
-                               <i className="fa fa-sort-desc fa-stack-1x"></i>
-                       </span>
-                            </th>
-                            <th style={{display : this.props.showRailcarDep}}
-                                onClick={(e)=> this.onAscending(e,'RailcarDeparture')}>Railcar Departure
-                                <span className="fa-stack ">
-                               <i className="fa fa-sort-asc fa-stack-1x"></i>
-                               <i className="fa fa-sort-desc fa-stack-1x"></i>
-                       </span>
-                            </th>
-                            <th style={{display : this.props.showRailcarDepDate}}
-                                onClick={(e)=> this.onAscending(e,'RailcarDepartureDate')}>Railcar Departure Date
-                                <span className="fa-stack ">
-                               <i className="fa fa-sort-asc fa-stack-1x"></i>
-                               <i className="fa fa-sort-desc fa-stack-1x"></i>
-                       </span>
-                            </th>
-                            <th style={{display : this.props.showDaysPresent}}
-                                onClick={(e)=> this.onAscending(e,'RailcarDaysPresent')}>Railcar Days Present
-                                <span className="fa-stack ">
-                               <i className="fa fa-sort-asc fa-stack-1x"></i>
-                               <i className="fa fa-sort-desc fa-stack-1x"></i>
-                       </span>
-                            </th>
-                            <th style={{display : this.props.showRailcarStatus}}
-                                onClick={(e)=> this.onAscending(e,'RailcarStatus')}>Railcar Status
-                                <span className="fa-stack ">
-                               <i className="fa fa-sort-asc fa-stack-1x"></i>
-                               <i className="fa fa-sort-desc fa-stack-1x"></i>
-                       </span>
-                            </th>
+        );
 
+        headerObj["Railcar Days Present"] = (
+            <th key="railcardayspresent" style={{display : this.props.showDaysPresent}}
+                onClick={(e)=> this.onAscending(e,'RailcarDaysPresent')}>Railcar Days Present
+                                <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x"></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
+            </th>
+
+        );
+
+        headerObj["Railcar Status"] = (
+            <th key="railcarstatus" style={{display : this.props.showRailcarStatus}}
+                onClick={(e)=> this.onAscending(e,'RailcarStatus')}>Railcar Status
+                                <span className="fa-stack ">
+                               <i className="fa fa-sort-asc fa-stack-1x"></i>
+                               <i className="fa fa-sort-desc fa-stack-1x"></i>
+                       </span>
+            </th>
+
+        );
+
+        return (
+
+            <Loader loaded={this.state.loaded} id="loaded">
+                <div className="loadedContentNew">
+
+                    <table id="Packaging_Instruction_View" className="table table-expandable sort" cellSpacing="0">
+                        <thead id="table_head1" className="table_head header-fixed header red sorted_head">
+                        <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
+                            <th className="exclude-drag"></th>
+                            {this.state.headerArray.map(obj => {
+                                return headerObj[obj];
+                            })}
                         </tr>
                         </thead>
-                        { ( (listData == undefined || listData.length == 0) && (groupedData === undefined || groupedData.length===0))
+                        { ( listData == undefined || listData.length == 0)
                             ?
                             <tbody>
                             <tr>
                                 <td colSpan="15" className="noresult">No results match your entered criteria.</td>
                                 <td colSpan="6" className="noresult"></td>
                             </tr>
-                            </tbody> : (grouping?groupedData:listData)
+                            </tbody> : listData
                         }
                     </table>
-
-                    {}
 
                 </div>
             </Loader>)
