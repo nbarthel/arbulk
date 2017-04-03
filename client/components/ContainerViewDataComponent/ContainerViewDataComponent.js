@@ -148,7 +148,7 @@ componentDidMount() {
     $(function () {
         setTimeout(function () {
             //$("table").colResizable();
-            //$("#Packaging_Instruction_View").tableHeadFixer({'head': true});
+            $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
             var oldIndex;
             $('.sorted_head tr').sortable({
                 containerSelector: 'tr',
@@ -571,14 +571,14 @@ onClickRow(e){
                        return (
                            <tbody key={index}>
                            <tr className="base_bg clickable" ref="clickable" style={{"backgroundColor": "#e5e5ff"}}>
-                               <th>
+                               <td>
                                    <label className="control control--checkbox">
                                        <input type="checkbox" onChange={(e)=>{this.props.onCheckboxChange(e,view)}}
                                               value={view.id} id={view.id}/>
 
                                        <div className="control__indicator"></div>
                                    </label>
-                               </th>
+                               </td>
 
                                {dataState.state.headerArray.map(obj => {
                                    return subheaderObj[obj];
