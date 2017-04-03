@@ -44,7 +44,9 @@ export default class PackagingInstructionViewForm extends React.Component {
             showDaysPresent:"",
             showRailcarStatus:"",
             startDate:'',
-            endDate:''
+            endDate:'',
+            OptionToGroupby :["lot#","customer","Railcar","location","Material","Status"],
+            SelcetedOptionForGroupBy : ""
         }
         this.status
         this.buttonDisplay = [ ]
@@ -81,10 +83,10 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.StartDate = ''
         this.getdt = this.getdt.bind(this)
         this.PrintScreen = this.PrintScreen.bind(this)
+        this.OnGroupBy = this.OnGroupBy.bind(this)
+
     }
     componentWillMount() {
-
-
         axios.get(Base_Url+"TCustomViews").then(response=>{
             this.setState({
                 savedViews : response.data
@@ -115,7 +117,12 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.Query[idValue] = e.target.value
         this.onSearch(e)
     }
-
+    OnGroupBy(e){
+        this.setState({
+            SelcetedOptionForGroupBy : e.target.value
+        })
+        this.forceUpdate()
+    }
     onClickPo(e){
         this.Query[e.target.id] = e.target.getAttribute('value')
         document.getElementById('POSearch').value = e.target.getAttribute('value')
@@ -769,7 +776,6 @@ export default class PackagingInstructionViewForm extends React.Component {
 
 
         this.buttonDisplay = [];
-
         this.checkedCustomer = []
         this.checkedStatus = []
         this.checkedCompany = []
@@ -778,9 +784,11 @@ export default class PackagingInstructionViewForm extends React.Component {
         delete this.Where.Customer
         delete this.Where.status
         delete this.state.viewData
+        delete this.state.SelcetedOptionForGroupBy
         this.setState({
             key : this.state.key +1,
-            index : this.state.index +1
+            index : this.state.index +1,
+            SelcetedOptionForGroupBy : ""
         })
         document.getElementById('customer_name').selectedIndex = 0
         localStorage.removeItem('piViewData')
@@ -1200,6 +1208,17 @@ export default class PackagingInstructionViewForm extends React.Component {
                                     <div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs pull-right mb-10">
                                         <div className="pull-right " id="hide5">
 
+                                            <select className="form-control" id="groupBy" name="groupBy" onChange={this.OnGroupBy}>
+                                                <option value="Please Select An Option To Group by" disabled selected>Please Select An Option To Group by</option>
+                                                {
+                                                    _.map(this.state.OptionToGroupby,(views,index)=>{
+                                                        return (
+                                                            <option key={index} value={views}>{views}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </select>
+
                                             <select className="form-control"   id="customer_name" name="customer_name" onChange={this.viewChange}>
                                                 <option value="Please Select An Option" disabled selected>Select custom view</option>
                                                 {
@@ -1248,6 +1267,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                                 <div className=" table-responsive view_table  mega">
 
                                     {this.props.id != undefined ? <ViewDataComponent
+                                        SelcetedOptionForGroupBy = {this.state.SelcetedOptionForGroupBy}
                                         headerCheckboxChange = {this.headerCheckboxChange}
                                         showARB = {this.state.showARB}
                                         showCustomer = {this.state.showCustomer}
@@ -1277,6 +1297,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                                         contanerLoad = {this.state.contanerLoad}/>
                                         :
                                         <ViewDataComponent
+                                            SelcetedOptionForGroupBy = {this.state.SelcetedOptionForGroupBy}
                                             checkboxChange = {this.checkboxChange}
                                             headerCheckboxChange = {this.headerCheckboxChange}
                                             key={this.state.index}

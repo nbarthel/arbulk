@@ -165,14 +165,22 @@ class ViewDataComponent extends React.Component {
 
 
         }
+
     }
-
+    componentWillReceiveProps(next){
+        debugger
+        if(next.SelcetedOptionForGroupBy && next.SelcetedOptionForGroupBy!="" && next.SelcetedOptionForGroupBy!=''){
+            this.onGroupBy(next.SelcetedOptionForGroupBy)
+        }
+        else{
+            grouping = false
+        }
+    }
     componentDidMount() {
-
         var that = this;
         $(function () {
             setTimeout(function () {
-                 $("table").colResizable();
+                 // $("table").colResizable();
                 //$("#Packaging_Instruction_View").tableHeadFixer({'head': true});
                 var oldIndex;
                 $('.sorted_head tr').sortable({
@@ -225,7 +233,6 @@ class ViewDataComponent extends React.Component {
 
 
     }
-
     checkclick(data, value) {
         var queueArray = []
         this.qArray.push(value.id)
@@ -233,10 +240,7 @@ class ViewDataComponent extends React.Component {
         localStorage.setItem('queue_Sequence', this.state.queue_Sequence[0].max_mark)
         console.log("clicked>>>>>>>>", value)
     }
-    onGroupBy(e,head,value,data) {
-
-        debugger
-        value = value === undefined ? 'Status' : value
+    onGroupBy(value,data) {
         grouping = true
         var tempData = []
         if (data === undefined) {
@@ -247,7 +251,6 @@ class ViewDataComponent extends React.Component {
                     tempObj[props] = JSON.parse(JSON.stringify(this.state.viewData[i][props]))
                 }
             }
-
             for (var j in this.state.viewData[i].TPackagingInstructionLots) {
                 var tempLots = JSON.parse(JSON.stringify(this.state.viewData[i].TPackagingInstructionLots[j]))
                 tempObj.TPackagingInstructionLots = []
@@ -297,9 +300,10 @@ class ViewDataComponent extends React.Component {
             this.setState({
                 GroupedData: groupData
             })
+            localStorage.setItem('piViewData', JSON.stringify(groupData));
+            localStorage.setItem('piGrouped', JSON.stringify(grouping));
         }
-        localStorage.setItem('piViewData', JSON.stringify(groupData));
-        localStorage.setItem('piGrouped', JSON.stringify(grouping));
+
         return groupData
 
     }
@@ -501,7 +505,6 @@ class ViewDataComponent extends React.Component {
             viewData: sortedData
         })
         localStorage.setItem('piViewData', JSON.stringify(sortedData));
-        this.onGroupBy(e,head)
     }
 
     onToggel(e, elm) {
@@ -523,7 +526,7 @@ class ViewDataComponent extends React.Component {
     }
     GetHead(index,i,length){
         return (
-            <tr className="base_bg clickable" ref="clickable" key={i++}>
+            <tr className="base_bg clickable" ref="clickable" key={i}>
                 <th><i className="fa fa-chevron-down"
                        aria-hidden="false" data-target={length}
                        onClick={(e) => {
@@ -608,7 +611,7 @@ class ViewDataComponent extends React.Component {
                         }
 
                         return (
-                            <tr key={i++} className={count}>
+                            <tr key={count++} className={count}>
                                 <td>
                                 </td>
                                 <th style={{display: this.props.showARB}}>{view.TLocation ? view.TLocation.locationName : ''}
@@ -901,7 +904,6 @@ class ViewDataComponent extends React.Component {
         var filterData
         if (!flagSorting) {
             filterData = this.props.filterData
-
             if (filterData.constructor === Array) {
                 this.state.viewData = filterData
             }
@@ -911,43 +913,22 @@ class ViewDataComponent extends React.Component {
             flagSorting = false
         }
         var selectedWeight = this.props.weight;
-        if (grouping) {
+
+        if (grouping && this.props.SelcetedOptionForGroupBy!="") {
             var groupedData = _.map(this.state.GroupedData, (data, index) => {
-                debugger
                return(
                     <tbody key={i++}>
                     {
-                        this.GetHead(index,i,data.length)
+                        this.GetHead(index,i++,data.length)
                     }
+
                     {
-                       _.map(data,(view,index)=>{
-                           debugger
-                           if(true){
-                               var tempData = this.onGroupBy(undefined,undefined,'customer',data)
-                               return _.map(tempData,(view,index)=>{
-                                   return(
-                                       <tr>
-                                       {
-                                           this.GetHead(index,i,view.length)
-                                       }
-                                       </tr>
-                                   )
-
-                               })
-                           }
-
-                       })
+                        _.map(data, (view, index) => {
+                            if (view.TPackagingInstructionLots.length > 0) {
+                                return (this.GetRows(view,i++,selectedWeight))
+                            }
+                        })
                     }
-                   {
-                            _.map(data,(view,index)=>{
-                                if (view.TPackagingInstructionLots.length>0) {
-                                    var count = index;
-                                    return this.GetRows(view,count,selectedWeight)
-                            }
-                            }
-
-                            )
-                        }
                    </tbody>
 
                )
@@ -964,7 +945,7 @@ class ViewDataComponent extends React.Component {
             return param !== undefined;
         });
 
-        var headerObj = {};
+        var headerObj = {};0
         headerObj["ARB"] = (
             <th key="arb" style={{display : this.props.showARB }} onKeyDown={(e)=>this.press(e)}
                 onClick={(e)=> this.onAscending(e,'location')} className="exclude-drag">
@@ -1177,14 +1158,14 @@ class ViewDataComponent extends React.Component {
                             })}
                         </tr>
                         </thead>
-                        { ( listData == undefined || listData.length == 0)
+                        { (( listData == undefined || listData.length == 0) && (groupedData==undefined || groupedData.length==0))
                             ?
                             <tbody>
                             <tr>
                                 <td colSpan="15" className="noresult">No results match your entered criteria.</td>
                                 <td colSpan="6" className="noresult"></td>
                             </tr>
-                            </tbody> : listData
+                            </tbody> : grouping&&this.props.SelcetedOptionForGroupBy!=""?groupedData:listData
                         }
                     </table>
 
