@@ -167,12 +167,13 @@ class ViewDataComponent extends React.Component {
         }
 
     }
-    componentWillReceiveProps(next){
+
+    componentWillReceiveProps(next) {
         debugger
-        if(next.SelcetedOptionForGroupBy && next.SelcetedOptionForGroupBy!="" && next.SelcetedOptionForGroupBy!=''){
+        if (next.SelcetedOptionForGroupBy && next.SelcetedOptionForGroupBy != "" && next.SelcetedOptionForGroupBy != '') {
             this.onGroupBy(next.SelcetedOptionForGroupBy)
         }
-        else{
+        else {
             grouping = false
         }
     }
@@ -180,8 +181,8 @@ class ViewDataComponent extends React.Component {
         var that = this;
         $(function () {
             setTimeout(function () {
-                 // $("table").colResizable();
-                //$("#Packaging_Instruction_View").tableHeadFixer({'head': true});
+                // $("table").colResizable();
+                $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
                 var oldIndex;
                 $('.sorted_head tr').sortable({
                     containerSelector: 'tr',
@@ -207,15 +208,6 @@ class ViewDataComponent extends React.Component {
                             let dragHeaderValue = headerArray.splice(oldIndex-1,1);
                             headerArray.splice(newIndex-1,0,dragHeaderValue[0]);
                             console.log("after:", headerArray);
-
-                            //     $item.closest('table').find('tbody tr').each(function (i, row) {
-                            //         row = $(row);
-                            //         if(newIndex < oldIndex) {
-                            //             row.children().eq(newIndex).before(row.children()[oldIndex]);
-                            //         } else if (newIndex > oldIndex) {
-                            //             row.children().eq(newIndex).after(row.children()[oldIndex]);
-                            //         }
-                            //     });
                         }
 
                         _super($item, container);
@@ -226,11 +218,9 @@ class ViewDataComponent extends React.Component {
 
                 });
 
-                //jQuery('#Packaging_Instruction_View').dragtable({maxMovingRows:1,dragHandle:'.some-handle'});
-            }, 5000);
+            }, 3000);
 
         });
-
 
     }
     checkclick(data, value) {
@@ -240,7 +230,8 @@ class ViewDataComponent extends React.Component {
         localStorage.setItem('queue_Sequence', this.state.queue_Sequence[0].max_mark)
         console.log("clicked>>>>>>>>", value)
     }
-    onGroupBy(value,data) {
+
+    onGroupBy(value, data) {
         grouping = true
         var tempData = []
         if (data === undefined) {
@@ -614,8 +605,7 @@ class ViewDataComponent extends React.Component {
                             <tr key={count++} className={count}>
                                 <td>
                                 </td>
-                                <th style={{display: this.props.showARB}}>{view.TLocation ? view.TLocation.locationName : ''}
-                                </th>
+
                                 <th style={{display: this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</th>
                                 <th style={{display: this.props.showPO}}>{view.po_number} </th>
                                 <td style={{display: this.props.Railcar}}>{data.railcar_number ? data.railcar_number : ''}</td>
@@ -663,73 +653,75 @@ class ViewDataComponent extends React.Component {
                     var count = index;
                     var subheaderObj={};
                     subheaderObj["ARB"] = (
-                        <td style={{display : this.props.showARB}}>
+                        <td key="arb" style={{display : this.props.showARB}}>
                             <i className="fa fa-chevron-down"
                                aria-hidden="false" data-target={count}
                                onClick={(e) => {this.onClickRow(e)}}></i> {view.TLocation ? view.TLocation.locationName : ''}
                         </td>
                     );
                     subheaderObj["Customer"] = (
-                        <td style={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</td>
+                        <td key="customer"
+                            style={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</td>
                     );
 
                     subheaderObj["PO#"] = (
-                        <td style={{display : this.props.showPO}}>{view.po_number} </td>
+                        <td key="Po" style={{display : this.props.showPO}}>{view.po_number} </td>
                     );
                     subheaderObj["Railcar#"] = (
-                        <td style={{display : this.props.Railcar}}></td>
+                        <td key="rail" style={{display : this.props.Railcar}}></td>
                     );
 
                     subheaderObj["Lot#"] = (
-                        <td style={{display : this.props.showLot}}></td>
+                        <td key="Lot" style={{display : this.props.showLot}}></td>
                     );
 
                     subheaderObj["Material"] = (
-                        <td style={{display : this.props.showMaterial}}></td>
+                        <td key="maetrial" style={{display : this.props.showMaterial}}></td>
                     );
                     subheaderObj["Confirmed?"] = (
                         <td style={{display : this.props.showConfmd}}></td>
                     );
                     subheaderObj["Arrived?"] = (
-                        <td style={{display : this.props.showArrvd}}></td>
+                        <td key="Arrived" style={{display : this.props.showArrvd}}></td>
                     );
                     subheaderObj["Shipment Received?"] = (
-                        <td style={{display : this.props.showRecd}}></td>
+                        <td key="Shipment"
+                            style={{display : this.props.showRecd}}></td>
                     );
                     subheaderObj["Cutoff"] = (
-                        <td style={{display : this.props.showCutoff}}></td>
+                        <td key="cutoff" style={{display : this.props.showCutoff}}></td>
                     );
                     subheaderObj["Weight"] = (
-                        <td style={{display : this.props.showWeight}}></td>
+                        <td key="weight" style={{display : this.props.showWeight}}></td>
                     );
                     subheaderObj["Qty Allocated"] = (
-                        <td style={{display : this.props.showBag}}></td>
+                        <td key="qty" style={{display : this.props.showBag}}></td>
                     );
                     subheaderObj["Qty Packaged"] = (
-                        <td style={{display : this.props.showInInvt}}></td>
+                        <td key="qty_p" style={{display : this.props.showInInvt}}></td>
                     );
                     subheaderObj["Status"] = (
                         <td style={{display : this.props.showStatus}}></td>
                     );
                     subheaderObj["Railcar Arrival"] = (
-                        <td style={{display : this.props.showRailcarArr}}></td>
+                        <td key="Railcar" style={{display : this.props.showRailcarArr}}></td>
                     );
                     subheaderObj["Railcar Arrival Date"] = (
-                        <td style={{display : this.props.showRailcarArrD}}></td>
+                        <td key="railDate" style={{display : this.props.showRailcarArrD}}></td>
                     );
                     subheaderObj["Railcar Departure"] = (
-                        <td style={{display : this.props.showRailcarDep}}></td>
+                        <td key="railDept" style={{display : this.props.showRailcarDep}}></td>
                     );
                     subheaderObj["Railcar Departure Date"] = (
-                        <td style={{display : this.props.showRailcarDepDate}}></td>
+                        <td key="railDdate" style={{display : this.props.showRailcarDepDate}}></td>
                     );
 
                     subheaderObj["Railcar Days Present"] = (
-                        <td style={{display : this.props.showDaysPresent}}></td>
+                        <td key="railDays" style={{display : this.props.showDaysPresent}}></td>
                     );
 
                     subheaderObj["Railcar Status"] = (
-                        <td style={{display : this.props.showRailcarStatus}}></td>
+                        <td key="railstatus" style={{display : this.props.showRailcarStatus}}></td>
                     );
 
                     return (
@@ -802,69 +794,86 @@ class ViewDataComponent extends React.Component {
 
                                             var cellObj = {};
                                             cellObj["ARB"] = (
-                                                <td style={{display : this.props.showARB}}></td>
+                                                <td key="arb" style={{display : this.props.showARB}}></td>
                                             );
                                             cellObj["Customer"] = (
-                                                <td style={{display : this.props.showCustomer}}></td>
+                                                <td key="customer" style={{display : this.props.showCustomer}}></td>
                                             );
 
                                             cellObj["PO#"] = (
-                                                <td style={{display : this.props.showPO}}></td>
+                                                <td key="po" style={{display : this.props.showPO}}></td>
                                             );
                                             cellObj["Railcar#"] = (
-                                                <td style={{display : this.props.Railcar}}>{data.railcar_number ? data.railcar_number : ''}</td>
+                                                <td key="railcar"
+                                                    style={{display : this.props.Railcar}}>{data.railcar_number ? data.railcar_number : ''}</td>
                                             );
 
                                             cellObj["Lot#"] = (
-                                                <td style={{display : this.props.showLot}}>{data.lot_number ? data.lot_number : ''}</td>
+                                                <td key="lot"
+                                                    style={{display : this.props.showLot}}>{data.lot_number ? data.lot_number : ''}</td>
                                             );
 
                                             cellObj["Material"] = (
-                                                <td style={{display : this.props.showMaterial}}>{view.material}</td>
+                                                <td key="material"
+                                                    style={{display : this.props.showMaterial}}>{view.material}</td>
                                             );
                                             cellObj["Confirmed?"] = (
-                                                <td style={{display : this.props.showConfmd}}>{data.status == "UNCONFIRMED" ? 'NO' : 'YES'}</td>
+                                                <td key="confirmed"
+                                                    style={{display : this.props.showConfmd}}>{data.status == "UNCONFIRMED" ? 'NO' : 'YES'}</td>
                                             );
                                             cellObj["Arrived?"] = (
-                                                <td style={{display : this.props.showArrvd}}>{data.railcar_arrived_on != null ? 'YES' : 'NO'}</td>
+                                                <td key=" Arrived"
+                                                    style={{display : this.props.showArrvd}}>{data.railcar_arrived_on != null ? 'YES' : 'NO'}</td>
                                             );
                                             cellObj["Shipment Received?"] = (
-                                                <td style={{display : this.props.showRecd}}>{(data.TShipmentLots && data.TShipmentLots.length > 0 && data.status != "SHIPPED") ? "YES" : "NO"}</td>
+                                                <td key="shipmentR"
+                                                    style={{display : this.props.showRecd}}>{(data.TShipmentLots && data.TShipmentLots.length > 0 && data.status != "SHIPPED") ? "YES" : "NO"}</td>
                                             );
                                             cellObj["Cutoff"] = (
-                                                <td style={{display : this.props.showCutoff}}>{(data.TShipmentLots && data.TShipmentLots.length > 0 && data.TShipmentLots[0].TShipmentent && data.TShipmentLots[0].TShipmentent.TShipmentInternational && data.TShipmentLots[0].TShipmentent.TShipmentInternational.length > 0 ) ? moment(data.TShipmentLots[0].TShipmentent.TShipmentInternational[0].cargoCutoffDate).format("MM-DD-YYYY") : 'NA'}</td>
+                                                <td key="cutoff"
+                                                    style={{display : this.props.showCutoff}}>{(data.TShipmentLots && data.TShipmentLots.length > 0 && data.TShipmentLots[0].TShipmentent && data.TShipmentLots[0].TShipmentent.TShipmentInternational && data.TShipmentLots[0].TShipmentent.TShipmentInternational.length > 0 ) ? moment(data.TShipmentLots[0].TShipmentent.TShipmentInternational[0].cargoCutoffDate).format("MM-DD-YYYY") : 'NA'}</td>
                                             );
                                             cellObj["Weight"] = (
-                                                <td style={{display : this.props.showWeight}}>{selectedWeight == 'lbs' ? data.weight : (data.weight / MUL_FACTOR).toFixed(2)}</td>
+                                                <td key="weight"
+                                                    style={{display : this.props.showWeight}}>{selectedWeight == 'lbs' ? data.weight : (data.weight / MUL_FACTOR).toFixed(2)}</td>
                                             );
                                             cellObj["Qty Allocated"] = (
-                                                <td style={{display : this.props.showBag}}>{bagsallocated > 0 ? bagsallocated : 0}</td>
+                                                <td key="qtyAllo"
+                                                    style={{display : this.props.showBag}}>{bagsallocated > 0 ? bagsallocated : 0}</td>
                                             );
                                             cellObj["Qty Packaged"] = (
-                                                <td style={{display : this.props.showInInvt}}>{(data.inInventory && bagsallocated > 0) ? (data.inInventory - bagsallocated ) : parseInt(data.inInventory) > 0 ? parseInt(data.inInventory) : 0 }</td>
+                                                <td key="qtyPack"
+                                                    style={{display : this.props.showInInvt}}>{(data.inInventory && bagsallocated > 0) ? (data.inInventory - bagsallocated ) : parseInt(data.inInventory) > 0 ? parseInt(data.inInventory) : 0 }</td>
                                             );
                                             cellObj["Status"] = (
-                                                <td style={{display : this.props.showStatus}}>{data.status ? data.status : '' }</td>
+                                                <td key="status"
+                                                    style={{display : this.props.showStatus}}>{data.status ? data.status : '' }</td>
                                             );
                                             cellObj["Railcar Arrival"] = (
-                                                <td style={{display : this.props.showRailcarArr}}>{data.arrived != null && data.arrived == 1 ? "Yes" : "No"}</td>
+                                                <td key="railarrival"
+                                                    style={{display : this.props.showRailcarArr}}>{data.arrived != null && data.arrived == 1 ? "Yes" : "No"}</td>
                                             );
                                             cellObj["Railcar Arrival Date"] = (
-                                                <td style={{display : this.props.showRailcarArrD}}>{data.railcar_arrived_on != null ? moment(data.railcar_arrived_on).format("MM-DD-YYYY") : "N/A"}</td>
+                                                <td key="railarr"
+                                                    style={{display : this.props.showRailcarArrD}}>{data.railcar_arrived_on != null ? moment(data.railcar_arrived_on).format("MM-DD-YYYY") : "N/A"}</td>
                                             );
                                             cellObj["Railcar Departure"] = (
-                                                <td style={{display : this.props.showRailcarDep}}>{data.railcar_departed_on != null ? "YES" : "NO"}</td>
+                                                <td key="railDept"
+                                                    style={{display : this.props.showRailcarDep}}>{data.railcar_departed_on != null ? "YES" : "NO"}</td>
                                             );
                                             cellObj["Railcar Departure Date"] = (
-                                                <td style={{display : this.props.showRailcarDepDate}}>{data.railcar_departed_on != null ? moment(data.railcar_departed_on).format("MM-DD-YYYY") : "N/A"}</td>
+                                                <td key="railDeptd"
+                                                    style={{display : this.props.showRailcarDepDate}}>{data.railcar_departed_on != null ? moment(data.railcar_departed_on).format("MM-DD-YYYY") : "N/A"}</td>
                                             );
 
                                             cellObj["Railcar Days Present"] = (
-                                                <td style={{display : this.props.showDaysPresent}}>{diff ? diff + 1 : 'N/A'}</td>
+                                                <td key="raildays"
+                                                    style={{display : this.props.showDaysPresent}}>{diff ? diff + 1 : 'N/A'}</td>
                                             );
 
                                             cellObj["Railcar Status"] = (
-                                                <td style={{display : this.props.showRailcarStatus}}>{data.railcar_status ? data.railcar_status : ''}</td>
+                                                <td key="railstatus"
+                                                    style={{display : this.props.showRailcarStatus}}>{data.railcar_status ? data.railcar_status : ''}</td>
                                             );
 
 
@@ -914,18 +923,18 @@ class ViewDataComponent extends React.Component {
         }
         var selectedWeight = this.props.weight;
 
-        if (grouping && this.props.SelcetedOptionForGroupBy!="") {
+        if (grouping && this.props.SelcetedOptionForGroupBy != "") {
             var groupedData = _.map(this.state.GroupedData, (data, index) => {
                return(
                     <tbody key={i++}>
                     {
-                        this.GetHead(index,i++,data.length)
+                        this.GetHead(index, i++, data.length)
                     }
 
                     {
                         _.map(data, (view, index) => {
                             if (view.TPackagingInstructionLots.length > 0) {
-                                return (this.GetRows(view,i++,selectedWeight))
+                                return (this.GetRows(view, i++, selectedWeight))
                             }
                         })
                     }
@@ -945,7 +954,7 @@ class ViewDataComponent extends React.Component {
             return param !== undefined;
         });
 
-        var headerObj = {};0
+        var headerObj = {};
         headerObj["ARB"] = (
             <th key="arb" style={{display : this.props.showARB }} onKeyDown={(e)=>this.press(e)}
                 onClick={(e)=> this.onAscending(e,'location')} className="exclude-drag">
@@ -1158,14 +1167,14 @@ class ViewDataComponent extends React.Component {
                             })}
                         </tr>
                         </thead>
-                        { (( listData == undefined || listData.length == 0) && (groupedData==undefined || groupedData.length==0))
+                        { (( listData == undefined || listData.length == 0) && (groupedData == undefined || groupedData.length == 0))
                             ?
                             <tbody>
                             <tr>
                                 <td colSpan="15" className="noresult">No results match your entered criteria.</td>
                                 <td colSpan="6" className="noresult"></td>
                             </tr>
-                            </tbody> : grouping&&this.props.SelcetedOptionForGroupBy!=""?groupedData:listData
+                            </tbody> : grouping && this.props.SelcetedOptionForGroupBy != "" ? groupedData : listData
                         }
                     </table>
 

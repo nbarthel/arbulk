@@ -98,15 +98,17 @@ th.placeholder{
 	height: 0;
 	border: 5px solid transparent;
 	border-top-color: red;
-	top: -6px;
-	margin-left: -5px;
+	top:0px;
+	margin-left: 0px;
 	border-bottom: none; }
 
 .dragged {
 	position: absolute;
 	top: 0;
-	opacity: 0.5;
+	opacity: 0.9;
 	z-index: 2000; }
+
+.zxc{position: relative; top:106px; background-color: rgb(46, 109, 164);}
 
 
 
