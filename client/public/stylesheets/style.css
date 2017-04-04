@@ -149,7 +149,7 @@ ul.list-style-disc > li {list-style-type:disc;}
 .orange-orange{color:#ff4800;}
 
 .header-fixed{}
-.header-fixed th{ border-right: 1px solid #ddd;}
+/*.header-fixed th{ border-right: 1px solid #ddd;}*/
 /*
 #Packaging_Instruction_View td{min-width: 100px !important;}
 #Packaging_Instruction_View th{min-width: 100px !important;}

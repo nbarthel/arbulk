@@ -35,7 +35,7 @@ class ShipmentViewDataComponent extends React.Component {
         this.state = {
             loaded: false,
             headerArray: ["ARB", "Customer", "Release", "Shipment Type", "Booking", "Po#", "Lot#", "Material", "Confirmed?", "Forwarder", "Cntr Size",
-                "Qty", " Allocated", "Enough", "# of Bags To Ship", "ERD", "CutOff", "Vessel", "Steamship Line", "PU Location", "Return Location", "Docs Cutoff", "Status"],
+                "Qty", "Allocated", "Enough", "# of Bags To Ship", "ERD", "CutOff", "Vessel", "Steamship Line", "PU Location", "Return Location", "Docs Cutoff", "Status"],
 
             //viewData : shipmentViewData
         }
@@ -189,7 +189,7 @@ class ShipmentViewDataComponent extends React.Component {
         $(function () {
             setTimeout(function () {
                 //$("table").colResizable();
-                //$("#Packaging_Instruction_View").tableHeadFixer({'head': true});
+                $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
                 var oldIndex;
                 $('.sorted_head tr').sortable({
                     containerSelector: 'tr',
@@ -220,7 +220,7 @@ class ShipmentViewDataComponent extends React.Component {
                     }
 
                 });
-            }, 7000);
+            }, 3000);
 
         });
 
@@ -543,10 +543,7 @@ class ShipmentViewDataComponent extends React.Component {
                         }
                     }
                     var count = index
-                    //headerArray : ["ARB","Customer", "Release","Shipment Type","Booking","Po#","Lot#","Material","Confirmed?",
-                    // "Forwarder","Cntr Size",
-                    //    "Qty"," Allocated",    "Enough","# of Bags To Ship","ERD","CutOff","Vessel"
-                    // ,"","PU Location", "Return Location","Docs Cutoff","Status"],
+
                     if (view.TShipmentLots.length > 0) {
                         var subheaderObj = {};
                         subheaderObj["ARB"] = (
@@ -915,7 +912,6 @@ class ShipmentViewDataComponent extends React.Component {
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
-
             </th>
         );
         headerObj["Enough"] = (
