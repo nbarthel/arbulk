@@ -47,11 +47,13 @@ class  ShipmentViewForm extends React.Component
            showRet: "",
            showDoc: "",
            showStatus: "",
-           showTrucker: ""
+           showTrucker: "",
+            SelcetedOptionForGroupBy :"",
+            OptionToGroupby : ["ARB","customer","Release","Booking","PO#","Lot#","Material","Forwarder","Cntr Size","Qty","Allocated","Enough?","Vessel","Shipment Type","Steamship Line","PULocation","Return Location","Status"]
     }
             this.status
             this.handleChange = this.handleChange.bind(this);
-             this.handleChange1 = this.handleChange1.bind(this);
+            this.handleChange1 = this.handleChange1.bind(this);
             this.buttonDisplay = [ ]
             this.checkedCustomer = [ ]
             this.checkedStatus = [ ]
@@ -61,7 +63,7 @@ class  ShipmentViewForm extends React.Component
             this.qArray = []
             this.selected = null
             this.piID = null
-		      	this.conFirmID = null
+		     this.conFirmID = null
              this.ShipmentType = this.ShipmentType.bind(this)
              this.getDates = this.getDates.bind(this)
             this.onClickli = this.onClickli.bind(this)
@@ -83,6 +85,13 @@ class  ShipmentViewForm extends React.Component
             this.tempLotId = ""
             this.PrintScreen = this.PrintScreen.bind(this)
             this.headerCheckboxChange = this.headerCheckboxChange.bind(this)
+        this.OnGroupBy = this.OnGroupBy.bind(this)
+    }
+    OnGroupBy(e){
+        this.setState({
+            SelcetedOptionForGroupBy : e.target.value
+        })
+        this.forceUpdate()
     }
     allocateContainer(e){
         hashHistory.push('/Container/containerarrivalentry')
@@ -124,7 +133,7 @@ onViewClick(e){
  componentWillMount() {
 
 
-  axios.get(Base_Url+"TCustomViews").then(response=>{
+     axios.get(Base_Url+"TCustomViews").then(response=>{
          this.setState({
              savedViews : response.data
          })
@@ -355,13 +364,14 @@ onClickli(e){
             delete this.state.viewData
             delete this.Where.CutofFilter
             delete this.Where.shipMentType
-
+            delete this.state.SelcetedOptionForGroupBy
            delete this.startdate
            delete this.endDate
         delete this.Where.Query
             this.setState({
                 key : this.state.key +1,
-                index : this.state.index +1
+                index : this.state.index +1,
+                SelcetedOptionForGroupBy :""
             })
             document.getElementById('customer_name').selectedIndex = 0
             localStorage.removeItem('siViewData')
@@ -1724,6 +1734,18 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                                                                        <FilterButton buttonDisplay = {this.buttonDisplay}  onButtonRemove = {this.onButtonRemove} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
                                                                         <div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs mb-10">
                                                                             <div className="pull-right " id="hide5">
+
+                                                                                <select className="form-control" id="groupBy" name="groupBy" onChange={this.OnGroupBy}>
+                                                                                    <option value="Please Select An Option To Group by" disabled selected>Please Select An Option To Group by</option>
+                                                                                    {
+                                                                                        _.map(this.state.OptionToGroupby,(views,index)=>{
+                                                                                            return (
+                                                                                                <option key={index} value={views}>{views}</option>
+                                                                                            )
+                                                                                        })
+                                                                                    }
+                                                                                </select>
+
                                                                                 <select className="form-control"   id="customer_name" name="customer_name" onChange={this.viewChange}>
                               <option value="Please Select An Option" disabled selected>Select custom view</option>
                              {
@@ -1776,6 +1798,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                                                                             <div className=" table-responsive view_table viewLoad">
                                                                             <ShipmentViewDataComponent key={this.state.index} headerCheckboxChange={this.headerCheckboxChange} filterData = {filterData} checkboxChange = {this.checkboxChange} showARB = {this.state.showARB}
                         showCustomer = {this.state.showCustomer}
+                        SelcetedOptionForGroupBy = {this.state.SelcetedOptionForGroupBy}
                         showPO = {this.state.showPO}
                         showRelease = {this.state.showRelease}
                         showLot = {this.state.showLot}
