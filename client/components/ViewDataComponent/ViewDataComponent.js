@@ -10,11 +10,12 @@ import request from '../../utils/request';
 import { Base_Url } from '../../constants';
 var moment = require('moment');
 import './js/tableHeadFixer.js'
-import './js/jquery.dataTables.min.js';
-import './js/jquery.dragtable.js';
-import './stylesheet/dragtable.css';
+//import './js/jquery.dataTables.min.js';
+//import './js/jquery.dragtable.js';
+//import './stylesheet/dragtable.css';
 import './js/jquery-sortable-min.js'
 import './js/colResizable-1.6.min.js';
+
 import './stylesheet/main.css';
 var Loader = require('react-loader');
 var sortedDataflag = false
@@ -181,7 +182,7 @@ class ViewDataComponent extends React.Component {
         var that = this;
         $(function () {
             setTimeout(function () {
-                // $("table").colResizable();
+                 $("table").colResizable();
                 $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
                 var oldIndex;
                 $('.sorted_head tr').sortable({
@@ -602,7 +603,7 @@ class ViewDataComponent extends React.Component {
                         }
 
                         return (
-                            <tr key={count++} className={count}>
+                            <tr key={count} className={count}>
                                 <td>
                                 </td>
 
@@ -728,11 +729,10 @@ class ViewDataComponent extends React.Component {
                         <tbody key={index}>
                         <tr className="base_bg clickable" ref="clickable">
                             <td>
-                                <label className="control control--checkbox">
-                                    <input type="checkbox" onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
+
+                                    <input type="checkbox" className="checkBox" onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
                                            value={view.id} id={view.id}/>
-                                    <div className="control__indicator"></div>
-                                </label>
+                                <label htmlFor={view.id}></label>
                             </td>
                             {that.state.headerArray.map(obj => {
                                 return subheaderObj[obj];
@@ -880,14 +880,14 @@ class ViewDataComponent extends React.Component {
                                             return (
                                                 <tr key={index} className={count}>
                                                     <td>
-                                                        <label className="control control--checkbox">
-                                                            <input type="checkbox"
+
+                                                            <input className="checkBox" type="checkbox"
                                                                    onClick={(e) => this.checkclick(e,data)}
                                                                    onChange={(e)=>{this.props.checkboxChange(e,data)}}
                                                                    value={view.id}
                                                                    id={view.TPackagingInstructionLots[index].id}/>
-                                                            <div className="control__indicator"></div>
-                                                        </label>
+
+                                                        <label htmlFor={view.TPackagingInstructionLots[index].id}></label>
                                                     </td>
                                                     {that.state.headerArray.map(obj => {
                                                         return cellObj[obj];
@@ -955,6 +955,7 @@ class ViewDataComponent extends React.Component {
         });
 
         var headerObj = {};
+
         headerObj["ARB"] = (
             <th key="arb" style={{display : this.props.showARB }} onKeyDown={(e)=>this.press(e)}
                 onClick={(e)=> this.onAscending(e,'location')} className="exclude-drag">
@@ -1156,7 +1157,7 @@ class ViewDataComponent extends React.Component {
         return (
 
             <Loader loaded={this.state.loaded} id="loaded">
-                <div className="loadedContentNew">
+
 
                     <table id="Packaging_Instruction_View" className="table table-expandable sort" cellSpacing="0">
                         <thead id="table_head1" className="table_head header-fixed header red sorted_head">
@@ -1178,7 +1179,7 @@ class ViewDataComponent extends React.Component {
                         }
                     </table>
 
-                </div>
+
             </Loader>)
     }
 }

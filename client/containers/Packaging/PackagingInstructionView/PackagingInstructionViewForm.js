@@ -1205,11 +1205,11 @@ export default class PackagingInstructionViewForm extends React.Component {
 
                                 <div className="row">
                                     <FilterButton buttonDisplay = {this.buttonDisplay}  onButtonRemove = {this.onButtonRemove} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
-                                    <div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs pull-right mb-10">
+                                    <div className="col-lg-3 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
                                         <div className="pull-right " id="hide5">
 
                                             <select className="form-control" id="groupBy" name="groupBy" onChange={this.OnGroupBy}>
-                                                <option value="Please Select An Option To Group by" disabled selected>Please Select An Option To Group by</option>
+                                                <option value="Please Select An Option To Group by" disabled selected>Select An Option To Group by</option>
                                                 {
                                                     _.map(this.state.OptionToGroupby,(views,index)=>{
                                                         return (
@@ -1218,6 +1218,13 @@ export default class PackagingInstructionViewForm extends React.Component {
                                                     })
                                                 }
                                             </select>
+                                        </div>
+
+                                    </div>
+                                    <div className="col-lg-3 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
+                                        <div className="pull-right " id="hide5">
+
+
 
                                             <select className="form-control"   id="customer_name" name="customer_name" onChange={this.viewChange}>
                                                 <option value="Please Select An Option" disabled selected>Select custom view</option>
@@ -1233,6 +1240,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                                                     })
                                                 }
                                             </select>
+
                                         </div>
 
                                     </div>
