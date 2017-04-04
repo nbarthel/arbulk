@@ -1272,7 +1272,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                             </div>
 
                             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12"  >
-                                <div className=" table-responsive view_table  mega">
+                                <div className="">
 
                                     {this.props.id != undefined ? <ViewDataComponent
                                         SelcetedOptionForGroupBy = {this.state.SelcetedOptionForGroupBy}

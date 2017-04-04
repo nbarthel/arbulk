@@ -15,7 +15,8 @@ import './js/tableHeadFixer.js'
 //import './stylesheet/dragtable.css';
 import './js/jquery-sortable-min.js'
 import './js/colResizable-1.6.min.js';
-
+//import './js/jquery-resizable.js';
+//import './js/jquery-resizableTableColumns.js'
 import './stylesheet/main.css';
 var Loader = require('react-loader');
 var sortedDataflag = false
@@ -204,11 +205,9 @@ class ViewDataComponent extends React.Component {
                             newIndex = $item.index();
                         if(newIndex != oldIndex) {
 
-                            console.log(oldIndex, newIndex);
-                            console.log("before:", headerArray);
                             let dragHeaderValue = headerArray.splice(oldIndex-1,1);
                             headerArray.splice(newIndex-1,0,dragHeaderValue[0]);
-                            console.log("after:", headerArray);
+                           // console.log("after:", headerArray);
                         }
 
                         _super($item, container);
@@ -1157,7 +1156,7 @@ class ViewDataComponent extends React.Component {
         return (
 
             <Loader loaded={this.state.loaded} id="loaded">
-
+                <div className="loadedContentNew">
 
                     <table id="Packaging_Instruction_View" className="table table-expandable sort" cellSpacing="0">
                         <thead id="table_head1" className="table_head header-fixed header red sorted_head">
@@ -1179,7 +1178,7 @@ class ViewDataComponent extends React.Component {
                         }
                     </table>
 
-
+                </div>
             </Loader>)
     }
 }
