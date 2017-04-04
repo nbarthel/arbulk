@@ -27,7 +27,7 @@ import './stylesheet/main.css';
 var flagSorting = false;
 var sortedData = [];
 var Loader = require('react-loader');
-
+var grouping =false
 class ContainerViewDataComponent extends React.Component{
 
     constructor(props){
@@ -35,6 +35,7 @@ class ContainerViewDataComponent extends React.Component{
         this.isAsc = false
         this.state = {
             loaded: false,
+            GroupedData:"",
             headerArray: ["ARB", "Customer", "Release#", "Booking#","Container","Trucker","Arrived?","SteamShip Line","Type","Status","Shipment Type"]
             //viewData : shipmentViewData
         }
@@ -46,7 +47,20 @@ class ContainerViewDataComponent extends React.Component{
         //this.onAscending = this.onAscending.bind(this)
         this.onToggel = this.onToggel.bind(this)
         this.onClickRow = this.onClickRow.bind(this)
+        this.onGroupBy = this.onGroupBy.bind(this)
+        this.SelcetedOptionForGroupBy = ""
       }
+
+    componentWillReceiveProps(next){
+        debugger
+        if(next.SelcetedOptionForGroupBy && next.SelcetedOptionForGroupBy!="" && next.SelcetedOptionForGroupBy!=''){
+            this.onGroupBy(next.SelcetedOptionForGroupBy)
+            this.SelcetedOptionForGroupBy = next.SelcetedOptionForGroupBy
+        }
+        else{
+            grouping = false
+        }
+    }
 componentWillMount(){
    let id = this.props.id
       if(this.props.id != undefined){
@@ -190,7 +204,167 @@ checkclick(data , value)
     localStorage.setItem('queue_Sequence',this.state.queue_Sequence[0].max_mark)
 
 }
+    onGroupBy(switchvalue){
+        grouping = true
+        var tempData = [],
+            groupData ={}
+        for (var i in this.state.viewData) {
+            var tempObj = new Object()
+            for (var props in this.state.viewData[i]) {
+                if (props != "TContainerInternational" && props!="TContainerDomestic") {
+                    tempObj[props] = JSON.parse(JSON.stringify(this.state.viewData[i][props]))
+                }
+            }
+            if(this.state.viewData[i].isDomestic==0){
+                for (var j in this.state.viewData[i].TContainerInternational) {
+                    var tempLots = JSON.parse(JSON.stringify(this.state.viewData[i].TContainerInternational[j]))
+                    tempObj.TContainerInternational = []
+                    tempObj.TContainerInternational.push(JSON.parse(JSON.stringify(tempLots)))
+                    tempData.push(tempObj)
+                }
+            }
+            else{
+                for (var j in this.state.viewData[i].TContainerDomestic) {
+                    var tempLots = JSON.parse(JSON.stringify(this.state.viewData[i].TContainerDomestic[j]))
+                    tempObj.TContainerDomestic = []
+                    tempObj.TContainerDomestic.push(JSON.parse(JSON.stringify(tempLots)))
+                    tempData.push(tempObj)
+                }
+            }
 
+        }
+        switch(switchvalue) {
+            case 'Release#':
+                groupData = _.groupBy(tempData, function(item) {
+                    return item.releaseNumber.toLowerCase();
+                });
+
+                break;
+            case 'Container#':
+                groupData = _.groupBy(tempData, function(item) {
+                    if(item.TContainerDomestic.length>0){
+                        return item.TContainerDomestic[0].containerNumber.toLowerCase()
+                    }
+                    else if(item.TContainerInternational.length>0){
+                        return item.TContainerInternational[0].containerNumber.toLowerCase()
+                    }
+                });
+
+                break;
+            case 'Booking#':
+                groupData = _.groupBy(tempData, function(item) {
+                    if(item.TShipmentInternational.length>0){
+                        return item.TShipmentInternational[0].bookingNumber.toLowerCase()
+                    }
+                    else if(item.TShipmentDomestic.length>0){
+                        return item.TShipmentDomestic[0].bookingNumber.toLowerCase()
+                    }
+                });
+
+                break;
+            case 'weight':
+                groupData = _.groupBy(tempData, function(item) {
+                    return (item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].weight : '');
+                });
+
+                break;
+            case 'ARB':
+                groupData = _.groupBy(tempData, function(item) {
+                    return item.TLocation.locationName.toLowerCase();
+                });
+
+                break;
+            case 'Customer':
+                groupData = _.groupBy(tempData, function(item) {
+                    return item.TCompany.name.toLowerCase();
+                });
+
+                break;
+            case 'Trucker':
+                groupData = _.groupBy(tempData, function(item) {
+                    if(item.TContainerDomestic.length>0){
+                        return item.TContainerDomestic[0].TCompany.name.toLowerCase()
+                    }
+                    else if(item.TContainerInternational.length>0){
+                        return item.TContainerInternational[0].TCompany.name.toLowerCase()
+                    }
+                    else{
+                        return item
+                    }
+
+
+                });
+                break;
+            case 'Arrived':
+                groupData = _.groupBy(tempData, function(item) {
+                    if(item.TContainerDomestic.length>0){
+                        return item.TContainerDomestic[0].containerArrived
+                    }
+                    else if(item.TContainerInternational.length>0){
+                        return item.TContainerInternational[0].containerArrived
+                    }
+                    else{
+                        return item
+                    }
+                });
+
+                break;//view.TShipmentInternational[0].TSteamshipLine
+            case 'SteamshipLine':
+                groupData = _.groupBy(tempData, function(item) {
+
+                    if(item.TShipmentInternational.length>0){
+                        return item.TShipmentInternational[0].TSteamshipLine.name.toLowerCase()
+                    }
+                    else if(item.TShipmentDomestic.length>0){
+                        return item
+                    }
+                    return item
+                });
+
+                break;
+            case 'Type':
+                groupData = _.groupBy(tempData, function(item) {
+
+                    if(item.TContainerInternational.length>0){
+                        return item.TShipmentInternational[0].TContainerType.name.toLowerCase()
+                    }
+                    else{
+                        return 'z'
+                    }
+
+                });
+
+                break;
+            case 'status':
+                groupData = _.groupBy(tempData, function(item) {
+
+                    if(item.TContainerInternational.length>0){
+                        return item.TContainerInternational[0].status.toLowerCase()
+                    }
+                    else if(item.TContainerDomestic.length>0){
+                        return item.TContainerDomestic[0].status.toLowerCase()
+                    }
+                    return item
+                });
+
+                break;
+            case 'shipmentType':
+                groupData = _.groupBy(tempData, function(item) {
+
+                    if(item.isDomestic==1){
+                        return item
+                    }
+                });
+
+                break;
+            default:
+                tempData
+        }
+        this.setState({
+            GroupedData: groupData
+        })
+        localStorage.setItem('containerGrouped', JSON.stringify(grouping));
+    }
 onAscending(e,head){
 
   flagSorting = true;
@@ -352,32 +526,14 @@ onToggel(e ,elm){
 
 onClickRow(e){
 
-           var rowObj = $(this.refs.clickable)
-            //var aa= rowObj.attr('data-target')
-            var aa = e.target.getAttribute('data-target')
-            //$('#Packaging_Instruction_View').find('.'+aa).toggleClass('hide')
+    var rowObj = $(this.refs.clickable)
 
-
-      if($('#Packaging_Instruction_View').find('.'+aa).length > 2)
-      {
-        $('#Packaging_Instruction_View').find('.'+aa).each(function(index){
-           $('#Packaging_Instruction_View').find('.'+aa).toggleClass('hide')
-
-
-        })
-      }
-
-        else if($('#Packaging_Instruction_View').find('.'+aa).length ==2)
-{
-        for(var i in $('#Packaging_Instruction_View').find('.'+aa))
-        {
-
-         $('#Packaging_Instruction_View').find('.'+aa).toggleClass('hide')
-             }
-         }
-         else{
-           $('#Packaging_Instruction_View').find('.'+aa).toggleClass('hide')
-         }
+    var aa = e.target.getAttribute('data-target')
+    var nextTd = e.target.parentNode.closest('tr').nextElementSibling
+    for(var i =0;i<=aa;i++){
+        $(nextTd).toggleClass('hide')
+        nextTd = nextTd.nextElementSibling
+    }
  }
 
 
@@ -401,7 +557,102 @@ onClickRow(e){
         var selectedWeight = this.props.weight;
 
         var dataState=this;
-        var listData =  _.map(this.state.viewData,(view,index) => {
+        var listData = ""
+        var i =0
+        if (grouping && this.props.SelcetedOptionForGroupBy!="") {
+            listData =  _.map(this.state.GroupedData,(views,index) => {
+                return(
+                    <tbody key={i++}>
+                    <tr className="base_bg clickable" key = {i++} style={{"backgroundColor": "#e5e5ff"}}>
+                        <td><i className="fa fa-chevron-down"
+                               aria-hidden="false"
+                               data-target={views.length}
+                               onClick={(e) => {this.onClickRow(e)}}></i>{index.toUpperCase()}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {
+                        _.map(views,(view,index) => {
+                            if(view.isDomestic == 1){
+                                var bookingNumber = (view.TShipmentDomestic && view.TShipmentDomestic.length>0 )? view.TShipmentDomestic[0].bookingNumber : ''
+                                var count = index
+                                var shipType = view.isDomestic == 1 ? "DOMESTIC" : "INTERNATIONAL";
+                                return _.map(view.TContainerDomestic,(data,index)=>{
+                                    if(data.containerArrived == 1){
+                                        var Arr = 'YES'
+                                    } else{
+                                        var Arr = 'NO'
+                                    }
+                                    return(
+                                        <tr key={i++}>
+                                            <td></td>
+                                            <td  key="Arb" style={{display : this.props.showARB}}>{view.TLocation ? view.TLocation.locationName : ''}</td>
+                                            <td key ="Customer "style={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</td>
+                                            <td key ="Release"  style={{display : this.props.showRelease}}>{view.releaseNumber}</td>
+                                            <td key ="Booking"style={{display : this.props.showBooking}}>{data.containerNumber}</td>
+                                            <td key="container" style={{display : this.props.showContainer}}>{data.containerNumber}</td>
+                                            <td key=" trucker" style={{display : this.props.showTrucker}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0)?(view.TContainerDomestic[index].TCompany?view.TContainerDomestic[index].TCompany.name:'') : "N/A"}</td>
+                                            <td key="Arrived" style={{display : this.props.showArrived}}>{Arr ? Arr : 'No'}</td>
+                                            <td style={{display : this.props.showSteamShip}}>{'N/A'}</td>
+                                            <td key="Type" style={{display : this.props.showType}}>{'N/A'}</td>
+                                            <td key="status" style={{display : this.props.showType}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0) ? (view.TContainerDomestic[index].status == null ? "ALLOCATED" : view.TContainerDomestic[index].status) : 'ALLOCATED'}</td>
+                                            <td key="ship" style={{display : this.props.showType}}>{shipType}</td>
+                                        </tr>
+                                    )
+                                })
+
+                            }
+                            else if(view.isDomestic == 0){
+                                if(view.TContainerInternational && view.TContainerInternational.length > 0) {
+                                    var shipType = view.isDomestic == 0 ? "INTERNATIONAL" : "DOMESTIC"
+                                    var bookingNumber = (view.TShipmentInternational && view.TShipmentInternational.length > 0) ? view.TShipmentInternational[0].bookingNumber : 'NA'
+                                    var type = (view.TShipmentInternational && view.TShipmentInternational.length > 0 && view.TShipmentInternational[0].TContainerType) ? view.TShipmentInternational[0].TContainerType.name : 'N/A'
+                                    var steamship = (view.TShipmentInternational && view.TShipmentInternational.length > 0 && view.TShipmentInternational[0].TSteamshipLine) ? view.TShipmentInternational[0].TSteamshipLine.name : 'N/A'
+                                    var count = index
+                                }
+                                return _.map(view.TContainerInternational , (data ,index)=>{
+                                    if(data.containerArrived == 1){
+                                        var Arr = 'YES'
+                                    } else{
+                                        var Arr = 'NO'
+                                    }
+                                    return(
+                                        <tr key={i++}>
+                                        <td></td>
+                                        <td  key="Arb" style={{display : this.props.showARB}}>{view.TLocation ? view.TLocation.locationName : ''}</td>
+                                        <td key ="Customer "style={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</td>
+                                        <td key ="Release"  style={{display : this.props.showRelease}}>{view.releaseNumber}</td>
+                                        <td key ="Booking"style={{display : this.props.showBooking}}>{data.containerNumber}</td>
+                                        <td key ="container" style={{display : this.props.showContainer}}>{data.containerNumber}</td>
+                                        <td key="trucker" style={{display : this.props.showTrucker}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0)?(view.TContainerDomestic[index].TCompany?view.TContainerDomestic[index].TCompany.name:'') : "N/A"}</td>
+                                        <td key="arrived" style={{display : this.props.showArrived}}>{Arr ? Arr : 'No'}</td>
+                                        <td key= "steamShip" style={{display : this.props.showSteamShip}}>{steamship ? steamship : 'N/A'}</td>
+                                        <td key="type" style={{display : this.props.showType}}>{type}</td>
+                                        <td key= "status" style={{display : this.props.showType}}>{(view.TContainerInternational && view.TContainerInternational.length > 0) ?
+                                                (view.TContainerInternational[index].status == null ?"ALLOCATED" : view.TContainerInternational[index].status ): 'NA'}</td>
+                                        <td key="shipType"style={{display : this.props.showType}}>{shipType}</td>
+                                        </tr>
+                                    )
+                                })
+
+                            }
+                        })
+                    }
+                    </tbody>
+                )
+            })
+        }
+        else{
+        listData =  _.map(this.state.viewData,(view,index) => {
                 if(view.isDomestic == 1){
                                if(view.TContainerDomestic && view.TContainerDomestic.length > 0){
                                  var bookingNumber = (view.TShipmentDomestic && view.TShipmentDomestic.length>0 )? view.TShipmentDomestic[0].bookingNumber : ''
@@ -656,7 +907,7 @@ onClickRow(e){
                    }
 
                }
-            })
+            })}
 
         listData = _.filter(listData, function (param) {
             return param !== undefined;

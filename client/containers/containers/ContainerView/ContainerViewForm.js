@@ -27,7 +27,9 @@ class  ContainerViewForm extends React.Component {
                 key: 0,
                 selectedOption: 'lbs',
                 index: 0,
-                selectedOption1: 'kg'
+                selectedOption1: 'kg',
+                SelcetedOptionForGroupBy :"",
+                OptionToGroupby : ["ARB","Customer","Release#","Booking#","Container#","Trucker","Steamship Line","Type","Status","Shipment Type"]
             }
             this.containerId=''
             this.isDomestic=false
@@ -60,6 +62,7 @@ class  ContainerViewForm extends React.Component {
         this.PrintScreen = this.PrintScreen.bind(this)
         this.onSteamShipFilter = this.onSteamShipFilter.bind(this)
         this.SteamLineArray = []
+        this.OnGroupBy = this.OnGroupBy.bind(this)
         }
 
 
@@ -96,6 +99,13 @@ class  ContainerViewForm extends React.Component {
         else{
             swal('','Domestic Container report is not available');
         }
+    }
+
+    OnGroupBy(e){
+        this.setState({
+            SelcetedOptionForGroupBy : e.target.value
+        })
+        this.forceUpdate()
     }
 
   printLoadOrder(e){
@@ -315,9 +325,11 @@ class  ContainerViewForm extends React.Component {
         delete this.state.Container
         delete this.state.Arrival
         delete this.state.SteamLine
+        delete this.state.SelcetedOptionForGroupBy
             this.setState({
                 key : this.state.key +1,
-                index : this.state.index +1
+                index : this.state.index +1,
+                SelcetedOptionForGroupBy:""
             })
             document.getElementById('customer_name').selectedIndex = 0
          localStorage.removeItem('conViewData')
@@ -1263,6 +1275,18 @@ onViewClick(e){
    <FilterButton buttonDisplay = {this.buttonDisplay}  onButtonRemove = {this.onButtonRemove} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
     <div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs mb-10">
         <div className="pull-right " id="hide5">
+
+            <select className="form-control" id="groupBy" name="groupBy" onChange={this.OnGroupBy}>
+                <option value="Please Select An Option To Group by" disabled selected>Please Select An Option To Group by</option>
+                {
+                    _.map(this.state.OptionToGroupby,(views,index)=>{
+                        return (
+                            <option key={index} value={views}>{views}</option>
+                        )
+                    })
+                }
+            </select>
+
             <select className="form-control"   id="customer_name" name="customer_name" onChange={this.viewChange}>
                 <option value="Please Select An Option" disabled selected>Select custom view</option>
                 {
@@ -1296,6 +1320,7 @@ onViewClick(e){
         <div className="table-responsive view_table viewLoad">
            <ContainerViewDataComponent  showARB = {this.state.showARB}
                         showCustomer = {this.state.showCustomer}
+                        SelcetedOptionForGroupBy = {this.state.SelcetedOptionForGroupBy}
                         showRelease = {this.state.showRelease}
                         showBooking = {this.state.showBooking}
                         showContainer = {this.state.showContainer}
