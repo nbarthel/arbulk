@@ -261,22 +261,22 @@ class ViewDataComponent extends React.Component {
         }
         var groupData
         switch(value){
-            case ('lot#'):
+            case ('Lot#'):
                 groupData = _.groupBy(tempData, function (item){
                     return (item.TPackagingInstructionLots != undefined ? (item.TPackagingInstructionLots[0] ? item.TPackagingInstructionLots[0].lot_number.toLowerCase() : '') : '');
                 })
                 break
-            case ('customer'):
+            case ('Customer'):
                 groupData = _.groupBy(tempData,function(item){
                     return item.TCompany.name.toLowerCase();
                 })
                 break
-            case ('Railcar'):
+            case ('Railcar#'):
                 groupData = _.groupBy(tempData, function (item){
                     return (item.TPackagingInstructionLots != undefined ? (item.TPackagingInstructionLots[0] ? item.TPackagingInstructionLots[0].railcar_number.toLowerCase() : '') : '');
                 })
                 break
-            case ('location'):
+            case ('ARB'):
                 groupData = _.groupBy(tempData,function(item){
                     return item.TLocation.locationName.toLowerCase();
                 })
@@ -291,6 +291,57 @@ class ViewDataComponent extends React.Component {
                     return item.TPackagingInstructionLots[0].status.toLowerCase();
                 })
                 break
+            case 'PO#':
+                groupData = _.groupBy(tempData, function (item) {
+                    if (item.po_number != "") {
+                        return item.po_number.toLowerCase();
+                        ;
+                    }
+                });
+                break
+            case 'Confirmed?':
+                groupData = _.groupBy(tempData, function (item) {
+                    if (item.TPackagingInstructionLots.length > 0) {
+                        if (item.TPackagingInstructionLots[0].status != "UNCONFIRMED") {
+                            return item.TPackagingInstructionLots[0].status.toLowerCase();
+                        }
+                    }
+                });
+                break
+            case 'Arrived':
+                groupData = _.groupBy(tempData, function (item) {
+
+                    if (item.TPackagingInstructionLots.length > 0) {
+                        if (item.TPackagingInstructionLots[0].railcar_arrived_on != null)
+                            return item.TPackagingInstructionLots[0]
+                    }
+                });
+                break
+            case 'Shipment Received':
+                groupData = _.groupBy(tempData, function (item) {
+                    if (item.TPackagingInstructionLots.length > 0) {
+                        if (item.TPackagingInstructionLots[0].status == "SHIPPED") {
+                            return item.TPackagingInstructionLots[0]
+                        }
+                    }
+                });
+                break
+            case 'Status':
+                groupData = _.groupBy(tempData, function (item) {
+                    if (item.TPackagingInstructionLots.length > 0) {
+                        return item.TPackagingInstructionLots[0].status.toLowerCase();
+                    }
+                    return 'A'
+                });
+                break
+            case 'Railcar Status':
+                groupData = _.groupBy(tempData, function (item) {
+                    if (item.TPackagingInstructionLots.length > 0) {
+                        return item.TPackagingInstructionLots[0].railcar_status.toLowerCase();
+                    }
+                });
+                break
+
 
         }
         if (data === undefined) {
@@ -524,31 +575,31 @@ class ViewDataComponent extends React.Component {
     GetHead(index,i,length){
         return (
             <tr className="base_bg clickable" ref="clickable" key={i}>
-                <th><i className="fa fa-chevron-down"
+                <td><i className="fa fa-chevron-down"
                        aria-hidden="false" data-target={length}
                        onClick={(e) => {
-                           this.onClickRow(e)
-                       }}></i>{index}</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
+                           tdis.onClickRow(e)
+                       }}></i>{index}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
 
             )
@@ -609,11 +660,10 @@ class ViewDataComponent extends React.Component {
 
                         return (
                             <tr key={count} className={count}>
-                                <td>
-                                </td>
-
-                                <th style={{display: this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</th>
-                                <th style={{display: this.props.showPO}}>{view.po_number} </th>
+                                <td></td>
+                                <td key="arb" style={{display : this.props.showARB}}>{view.TLocation ? view.TLocation.locationName : ''}</td>
+                                <td style={{display: this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</td>
+                                <td style={{display: this.props.showPO}}>{view.po_number} </td>
                                 <td style={{display: this.props.Railcar}}>{data.railcar_number ? data.railcar_number : ''}</td>
                                 <td style={{display: this.props.showLot}}>{data.lot_number ? data.lot_number : ''}</td>
                                 <td style={{display: this.props.showMaterial}}>{view.material}</td>

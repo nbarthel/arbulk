@@ -45,7 +45,7 @@ export default class PackagingInstructionViewForm extends React.Component {
             showRailcarStatus:"",
             startDate:'',
             endDate:'',
-            OptionToGroupby :["lot#","customer","Railcar","location","Material","Status"],
+            OptionToGroupby :["ARB","Customer","PO#","Railcar#","Lot#","Material","Confirmed?","Material","Status","Railcar Status"],
             SelcetedOptionForGroupBy : ""
         }
         this.status
