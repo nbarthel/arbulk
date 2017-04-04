@@ -183,7 +183,13 @@ class ViewDataComponent extends React.Component {
         var that = this;
         $(function () {
             setTimeout(function () {
-                 $("table").colResizable();
+                $("#Packaging_Instruction_View").colResizable({
+                    liveDrag:true,
+                    gripInnerHtml:"<div class='grip'></div>",
+                    draggingClass:"dragging",
+                    resizeMode:'overflow'
+                });
+                 //$("table").colResizable();
                 $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
                 var oldIndex;
                 $('.sorted_head tr').sortable({
