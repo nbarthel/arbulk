@@ -15,10 +15,10 @@ import request from '../../utils/request';
 import { Base_Url } from '../../constants'
 var moment = require('moment');
 import './js/tableHeadFixer.js';
-import './js/tableHeadFixer';
-import './js/jquery.dataTables.min.js';
-import './js/jquery.dragtable.js';
-import './stylesheet/dragtable.css';
+//import './js/tableHeadFixer';
+//import './js/jquery.dataTables.min.js';
+//import './js/jquery.dragtable.js';
+//import './stylesheet/dragtable.css';
 import './js/jquery-sortable-min.js'
 import './js/colResizable-1.6.min.js';
 import './stylesheet/main.css';
@@ -161,7 +161,12 @@ componentDidMount() {
     var ContainerState = this;
     $(function () {
         setTimeout(function () {
-            //$("table").colResizable();
+            $("#Packaging_Instruction_View").colResizable({
+                liveDrag:false,
+                gripInnerHtml:"<div class='grip'></div>",
+                draggingClass:"dragging",
+                // resizeMode:'overflow'
+            });
             $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
             var oldIndex;
             $('.sorted_head tr').sortable({
@@ -183,7 +188,6 @@ componentDidMount() {
                         let dragHeaderValue = headerArray.splice(oldIndex - 1, 1);
                         headerArray.splice(newIndex - 1, 0, dragHeaderValue[0]);
                     }
-
                     _super($item, container);
                     ContainerState.setState({
                         headerArray: headerArray
