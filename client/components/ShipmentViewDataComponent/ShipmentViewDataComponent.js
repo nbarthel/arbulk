@@ -16,9 +16,9 @@ import { Base_Url } from '../../constants'
 var moment = require('moment');
 //import "./ShpmentViewData.json"
 import './js/tableHeadFixer';
-import './js/jquery.dataTables.min.js';
-import './js/jquery.dragtable.js';
-import './stylesheet/dragtable.css';
+//import './js/jquery.dataTables.min.js';
+//import './js/jquery.dragtable.js';
+//import './stylesheet/dragtable.css';
 import './js/jquery-sortable-min.js'
 import './js/colResizable-1.6.min.js';
 import './stylesheet/main.css';
@@ -201,6 +201,12 @@ class ShipmentViewDataComponent extends React.Component {
         var shipState = this;
         $(function () {
             setTimeout(function () {
+                $("#Packaging_Instruction_View").colResizable({
+                    liveDrag:true,
+                    gripInnerHtml:"<div class='grip'></div>",
+                    draggingClass:"dragging",
+                    resizeMode:'overflow'
+                });
                 //$("table").colResizable();
                 $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
                 var oldIndex;
@@ -225,7 +231,6 @@ class ShipmentViewDataComponent extends React.Component {
                             let dragHeaderValue = headerArray.splice(oldIndex - 1, 1);
                             headerArray.splice(newIndex - 1, 0, dragHeaderValue[0]);
                         }
-
                         _super($item, container);
                         shipState.setState({
                             headerArray: headerArray
@@ -999,22 +1004,24 @@ class ShipmentViewDataComponent extends React.Component {
                         subheaderObj["Status"] = (
                             <td key= "Status" style={{display : this.props.showStatus}}></td>
                         );
-                        
+                        {/* <th style={{display : this.props.showTrucker}}></th>*/}
+
+
                         return (
                             <tbody key={index}>
                             <tr className="base_bg clickable" ref="clickable"
                                 style={{"backgroundColor": "#e5e5ff"}}>
-                                <td><label className="control control--checkbox">
-                                        <input type="checkbox"
+                                <td>
+                                        <input type="checkbox" className="checkBox"
                                                onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
                                                value={view.id} id={view.id}/>
+                                    <label htmlFor={view.id}></label>
 
-                                        <div className="control__indicator"></div>
-                                    </label>
                                 </td>
                                 {shipState.state.headerArray.map(obj => {
                                     return subheaderObj[obj];
                                 })}
+                                <td></td>
 
                             </tr>
 
@@ -1134,15 +1141,14 @@ class ShipmentViewDataComponent extends React.Component {
                                             return (
                                                 <tr key={index} className={count}>
                                                     <td>
-                                                        <label className="control control--checkbox">
-                                                            <input type="checkbox"
+
+                                                            <input className="checkBox" type="checkbox"
                                                                    onClick={(e) => this.checkclick(e,data)}
                                                                    id={data.TPackagingInstructionLots ? data.TPackagingInstructionLots.id : ''}
                                                                    value={view.id}
                                                                    onChange={(e)=>{this.props.checkboxChange(e,view,data)}}/>
 
-                                                            <div className="control__indicator"></div>
-                                                        </label>
+                                                        <label htmlFor={data.TPackagingInstructionLots ? data.TPackagingInstructionLots.id : ''}></label>
                                                     </td>
 
 

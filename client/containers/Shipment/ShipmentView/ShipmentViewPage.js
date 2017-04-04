@@ -5,7 +5,7 @@ import Footer from '../../../components/Footer'
 class ShipmentViewPage  extends React.Component{
     render(){
         return(
-            <div className="wrapper">
+            <div className="wrapper-inner">
             <Header routes = {this.props.routes}/>
                 <ShipmentViewForm/>
                 <Footer />

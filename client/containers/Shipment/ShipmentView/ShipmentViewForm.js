@@ -1732,11 +1732,12 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                                                                 <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
                                                                     <div className="row">
                                                                        <FilterButton buttonDisplay = {this.buttonDisplay}  onButtonRemove = {this.onButtonRemove} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
-                                                                        <div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding-top-btm-xs mb-10">
+
+                                                                        <div className="col-lg-3 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
                                                                             <div className="pull-right " id="hide5">
 
                                                                                 <select className="form-control" id="groupBy" name="groupBy" onChange={this.OnGroupBy}>
-                                                                                    <option value="Please Select An Option To Group by" disabled selected>Please Select An Option To Group by</option>
+                                                                                    <option value="Please Select An Option To Group by" disabled selected> Select An Option To Group by</option>
                                                                                     {
                                                                                         _.map(this.state.OptionToGroupby,(views,index)=>{
                                                                                             return (
@@ -1745,25 +1746,32 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                                                                                         })
                                                                                     }
                                                                                 </select>
-
-                                                                                <select className="form-control"   id="customer_name" name="customer_name" onChange={this.viewChange}>
-                              <option value="Please Select An Option" disabled selected>Select custom view</option>
-                             {
-                                 _.map(this.state.savedViews , (views,index)=>{
-
-                                     if(views.screenName == "SHIPMENT")
-                                     {
-                                     return(
-
-                                         <option key = {index} value={views.viewFilters}>{views.viewName }</option>
-                                     )
-                                 }
-                                 })
-                             }
-                        </select>
                                                                             </div>
 
                                                                         </div>
+                                                                        <div className="col-lg-3 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
+                                                                            <div className="pull-right " id="hide5">
+
+
+
+                                                                                <select className="form-control"   id="customer_name" name="customer_name" onChange={this.viewChange}>
+                                                                                    <option value="Please Select An Option" disabled selected>Select custom view</option>
+                                                                                    {
+                                                                                        _.map(this.state.savedViews , (views,index)=>{
+
+                                                                                            if(views.screenName == "SHIPMENT")
+                                                                                            {
+                                                                                                return(
+
+                                                                                                    <option key = {index} value={views.viewFilters}>{views.viewName }</option>
+                                                                                                )
+                                                                                            }
+                                                                                        })
+                                                                                    }
+                                                                                </select>                    </div>
+
+                                                                        </div>
+
                   <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 " id="hide4">
                  <a href="javascript:void(0)" name = "ARB" onClick = {(e) => {this.onHideColumn(e,name)}}>ARB</a>
                  <a href="javascript:void(0)" name = "Customer" onClick = {(e) => {this.onHideColumn(e)}}>Customer</a>
@@ -1795,7 +1803,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
 </div>
 
                                                                         <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                                            <div className=" table-responsive view_table viewLoad">
+                                                                            <div className=" ">
                                                                             <ShipmentViewDataComponent key={this.state.index} headerCheckboxChange={this.headerCheckboxChange} filterData = {filterData} checkboxChange = {this.checkboxChange} showARB = {this.state.showARB}
                         showCustomer = {this.state.showCustomer}
                         SelcetedOptionForGroupBy = {this.state.SelcetedOptionForGroupBy}
