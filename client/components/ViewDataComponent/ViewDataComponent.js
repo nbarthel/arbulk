@@ -183,12 +183,14 @@ class ViewDataComponent extends React.Component {
         var that = this;
         $(function () {
             setTimeout(function () {
+
                 $("#Packaging_Instruction_View").colResizable({
                     liveDrag:false,
                     gripInnerHtml:"<div class='grip'></div>",
                     draggingClass:"dragging",
                    // resizeMode:'overflow'
                 });
+
                  //$("table").colResizable();
                 $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
                 var oldIndex;
@@ -983,7 +985,7 @@ class ViewDataComponent extends React.Component {
                return(
                     <tbody key={i++}>
                     {
-                        this.GetHead(index, i++, data.length)
+                        this.GetHead(index.toUpperCase(), i++, data.length)
                     }
 
                     {
@@ -1217,7 +1219,9 @@ class ViewDataComponent extends React.Component {
                     <table id="Packaging_Instruction_View" className="table table-expandable sort" cellSpacing="0">
                         <thead id="table_head1" className="table_head header-fixed header red sorted_head">
                         <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
-                            <th className="exclude-drag"></th>
+                            <th className="exclude-drag">
+                                {grouping && this.props.SelcetedOptionForGroupBy!="" ? this.props.SelcetedOptionForGroupBy:""}
+                            </th>
                             {this.state.headerArray.map(obj => {
                                 return headerObj[obj];
                             })}
