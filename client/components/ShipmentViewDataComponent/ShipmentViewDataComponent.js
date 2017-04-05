@@ -52,7 +52,7 @@ class ShipmentViewDataComponent extends React.Component {
         this.SelcetedOptionForGroupBy= ""
     }
     componentWillReceiveProps(next){
-        debugger
+
         if(next.SelcetedOptionForGroupBy && next.SelcetedOptionForGroupBy!="" && next.SelcetedOptionForGroupBy!=''){
             this.onGroupBy(next.SelcetedOptionForGroupBy)
             this.SelcetedOptionForGroupBy = next.SelcetedOptionForGroupBy
@@ -60,6 +60,13 @@ class ShipmentViewDataComponent extends React.Component {
         else{
             grouping = false
         }
+        $(function(){
+            setTimeout(function () {
+                if($('.noresult').hasClass('noresult')){
+                    $('.loadedContentNew').addClass('noresultdata');
+                }
+            },200);
+        })
     }
     componentWillMount() {
         let id = this.props.id
@@ -201,10 +208,7 @@ class ShipmentViewDataComponent extends React.Component {
         var shipState = this;
         $(function () {
             setTimeout(function () {
-                if($('.noresult')){
 
-                    $('.loadedContentNew').addClass('noresultdata');
-                }
                 $("#Packaging_Instruction_View").colResizable({
                     liveDrag:false,
                     gripInnerHtml:"<div class='grip'></div>",
@@ -268,7 +272,7 @@ class ShipmentViewDataComponent extends React.Component {
     }
 
     onGroupBy(switchvalue){
-        debugger
+
         grouping = true
         var tempData = [],groupData ={}
         for (var i in this.state.viewData) {
@@ -743,7 +747,6 @@ class ShipmentViewDataComponent extends React.Component {
     }
 
     onClickRow(e) {
-        debugger
         var rowObj = $(this.refs.clickable)
 
         var aa = e.target.getAttribute('data-target')
@@ -765,7 +768,7 @@ class ShipmentViewDataComponent extends React.Component {
     }
 
     render() {
-        debugger
+
         var filterData
         if (!flagSorting) {
             filterData = this.props.filterData
@@ -784,11 +787,11 @@ class ShipmentViewDataComponent extends React.Component {
         var shipState = this;
         var listData = ""
         var i=0
-        debugger
+
         if (grouping && this.props.SelcetedOptionForGroupBy!="") {
             listData = _.map(this.state.GroupedData, (views, index)=> {
                 var subheaderObj = {};
-                debugger
+
               return(
                   <tbody key={i++}>
                   <tr className="base_bg clickable" key = {i++} style={{"backgroundColor": "#e5e5ff"}}>

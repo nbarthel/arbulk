@@ -52,7 +52,7 @@ class ContainerViewDataComponent extends React.Component {
     }
 
     componentWillReceiveProps(next) {
-        debugger
+
         if (next.SelcetedOptionForGroupBy && next.SelcetedOptionForGroupBy != "" && next.SelcetedOptionForGroupBy != '') {
             this.onGroupBy(next.SelcetedOptionForGroupBy)
             this.SelcetedOptionForGroupBy = next.SelcetedOptionForGroupBy
@@ -60,6 +60,13 @@ class ContainerViewDataComponent extends React.Component {
         else {
             grouping = false
         }
+        $(function(){
+            setTimeout(function () {
+                if($('.noresult').hasClass('noresult')){
+                    $('.loadedContentNew').addClass('noresultdata');
+                }
+            },200);
+        })
     }
 
     componentWillMount() {
@@ -174,9 +181,7 @@ class ContainerViewDataComponent extends React.Component {
         var ContainerState = this;
         $(function () {
             setTimeout(function () {
-                if($('.noresult')){
-                    $('.loadedContentNew').addClass('noresultdata');
-                }
+
                 $("#Packaging_Instruction_View").colResizable({
                     liveDrag: false,
                     gripInnerHtml: "<div class='grip'></div>",

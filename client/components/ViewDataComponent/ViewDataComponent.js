@@ -192,7 +192,6 @@ class ViewDataComponent extends React.Component {
 
         $(function () {
             setTimeout(function () {
-
                 $("#Packaging_Instruction_View").colResizable({
                     liveDrag:false,
                     gripInnerHtml:"<div class='grip'></div>",
