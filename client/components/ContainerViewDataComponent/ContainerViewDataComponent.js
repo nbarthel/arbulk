@@ -174,6 +174,9 @@ class ContainerViewDataComponent extends React.Component {
         var ContainerState = this;
         $(function () {
             setTimeout(function () {
+                if($('.noresult')){
+                    $('.loadedContentNew').addClass('noresultdata');
+                }
                 $("#Packaging_Instruction_View").colResizable({
                     liveDrag: false,
                     gripInnerHtml: "<div class='grip'></div>",
@@ -1083,7 +1086,8 @@ class ContainerViewDataComponent extends React.Component {
                             ?
                             <tbody>
                             <tr>
-                                <td colSpan="12" className="noresult">No results match your entered criteria.</td>
+                                <td colSpan="5" className="noresult">No results match your entered criteria.</td>
+                                <td colSpan="7" className="noresult"></td>
                             </tr>
                             </tbody> : listData
                         }

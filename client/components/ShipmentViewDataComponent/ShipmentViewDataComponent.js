@@ -201,6 +201,10 @@ class ShipmentViewDataComponent extends React.Component {
         var shipState = this;
         $(function () {
             setTimeout(function () {
+                if($('.noresult')){
+
+                    $('.loadedContentNew').addClass('noresultdata');
+                }
                 $("#Packaging_Instruction_View").colResizable({
                     liveDrag:false,
                     gripInnerHtml:"<div class='grip'></div>",
@@ -1427,8 +1431,8 @@ class ShipmentViewDataComponent extends React.Component {
                             ?
                             <tbody>
                             <tr>
-                                <td colSpan="15" className="noresult"><p>No results match your entered criteria.</p></td>
-                                <td colSpan="9" className="noresult"><p></p></td>
+                                <td colSpan="11" className="noresult"><p>No results match your entered criteria.</p></td>
+                                <td colSpan="13" className="noresult"><p></p></td>
                             </tr>
                             </tbody> : listData
                         }

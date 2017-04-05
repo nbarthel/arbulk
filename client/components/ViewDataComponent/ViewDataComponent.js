@@ -52,6 +52,7 @@ class ViewDataComponent extends React.Component {
 
     componentWillMount() {
 
+
         let id = this.props.id
         if (this.props.id != undefined) {
             var PIview = createDataLoader(ViewDataComponent, {
@@ -180,9 +181,13 @@ class ViewDataComponent extends React.Component {
         }
     }
     componentDidMount() {
-        var that = this;
+         var that = this;
         $(function () {
             setTimeout(function () {
+                if($('.noresult')){
+
+                    $('.loadedContentNew').addClass('noresultdata');
+                }
                 $("#Packaging_Instruction_View").colResizable({
                     liveDrag:false,
                     gripInnerHtml:"<div class='grip'></div>",
@@ -1224,7 +1229,7 @@ class ViewDataComponent extends React.Component {
             <Loader loaded={this.state.loaded} id="loaded">
                 <div className="loadedContentNew">
 
-                    <table id="Packaging_Instruction_View" className="table table-expandable sort" cellSpacing="0">
+                    <table id="Packaging_Instruction_View" className="table table-expandable sort kksky11" cellSpacing="0">
                         <thead id="table_head1" className="table_head header-fixed header red sorted_head">
                         <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
                             <th className="exclude-drag">
@@ -1235,12 +1240,13 @@ class ViewDataComponent extends React.Component {
                             })}
                         </tr>
                         </thead>
+
                         { (( listData == undefined || listData.length == 0) && (groupedData == undefined || groupedData.length == 0))
                             ?
                             <tbody>
                             <tr>
-                                <td colSpan="15" className="noresult">No results match your entered criteria.</td>
-                                <td colSpan="6" className="noresult"></td>
+                                <td colSpan="9" className="noresult">No results match your entered criteria.</td>
+                                <td colSpan="12" className="noresult"></td>
                             </tr>
                             </tbody> : grouping && this.props.SelcetedOptionForGroupBy != "" ? groupedData : listData
                         }
