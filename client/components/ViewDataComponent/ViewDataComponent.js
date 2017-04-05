@@ -77,7 +77,7 @@ class ViewDataComponent extends React.Component {
             $.ajax({
                 url: this.url,
                 success: function (data) {
-                    console.log('ajax ', data);
+
                     this.setState({
                         viewData: [data],
                         loaded: true
@@ -196,9 +196,10 @@ class ViewDataComponent extends React.Component {
                     liveDrag:false,
                     gripInnerHtml:"<div class='grip'></div>",
                     draggingClass:"dragging",
-                   // resizeMode:'overflow'
+                    resizeMode:'flex',
+                    minWidth:100
                 });
-                 //$("table").colResizable();
+
                 $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
                 var oldIndex;
                 $('.sorted_head tr').sortable({
@@ -210,7 +211,7 @@ class ViewDataComponent extends React.Component {
                     onDragStart: function ($item, container, _super) {
 
                         oldIndex = $item.index();
-                        //  console.log("Drag",oldIndex);
+
                         $item.appendTo($item.parent());
                         _super($item, container);
                     },
@@ -222,7 +223,7 @@ class ViewDataComponent extends React.Component {
 
                             let dragHeaderValue = headerArray.splice(oldIndex-1,1);
                             headerArray.splice(newIndex-1,0,dragHeaderValue[0]);
-                           // console.log("after:", headerArray);
+
                         }
 
                         _super($item, container);
@@ -231,13 +232,15 @@ class ViewDataComponent extends React.Component {
                         });
                         $("#Packaging_Instruction_View").colResizable({
                             disable: true
-                            // resizeMode:'overflow'
+
                         });
                         $("#Packaging_Instruction_View").colResizable({
                             liveDrag:false,
                             gripInnerHtml:"<div class='grip'></div>",
                             draggingClass:"dragging",
-                            // resizeMode:'overflow'
+                            resizeMode:'flex',
+                            minWidth:100
+
                         });
                     }
 
@@ -253,7 +256,7 @@ class ViewDataComponent extends React.Component {
         this.qArray.push(value.id)
         localStorage.setItem('qArray', this.qArray)
         localStorage.setItem('queue_Sequence', this.state.queue_Sequence[0].max_mark)
-        console.log("clicked>>>>>>>>", value)
+
     }
 
     onGroupBy(value, data) {
