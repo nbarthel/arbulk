@@ -745,7 +745,7 @@ class ContainerViewDataComponent extends React.Component {
                             <tbody key={index}>
                             <tr className="base_bg clickable" ref="clickable" style={{"backgroundColor": "#e5e5ff"}}>
 
-                                <td style={{position:"relative"}}>
+                                <td >
                                     <input type="checkbox" className="checkBox"
                                            onChange={(e)=>{this.props.onCheckboxChange(e,view)}}
                                            value={view.id} id={"DH"+view.id}/>
@@ -807,7 +807,7 @@ class ContainerViewDataComponent extends React.Component {
                                     );
                                     return (
                                         <tr key={index} className={count}>
-                                            <td style={{position:"relative"}}>
+                                            <td >
                                                 <input type="checkbox" className="checkBox"
                                                        onClick={(e) => this.checkclick(e,view)}
                                                        onChange={(e)=>{this.props.onCheckboxChange(e,view,data)}}
@@ -878,7 +878,7 @@ class ContainerViewDataComponent extends React.Component {
                         return (
                             <tbody key={index}>
                             <tr className="base_bg clickable" ref="clickable" style={{"backgroundColor": "#e5e5ff"}}>
-                                <td style={{position:"relative"}}>
+                                <td >
                                     <input type="checkbox" className="checkBox" onChange={(e)=>{this.props.onCheckboxChange(e,view)}}
                                            value={view.id} id={"IH"+view.id}/>
                                     <label htmlFor={"IH"+view.id}></label>
@@ -941,7 +941,7 @@ class ContainerViewDataComponent extends React.Component {
                                     );
                                     return (
                                         <tr key={index} className={count}>
-                                            <td style={{position:"relative"}}>
+                                            <td >
                                                 <input type="checkbox" className="checkBox"
                                                        onClick={(e) => this.checkclick(e,view)}
                                                        onChange={(e)=>{this.props.onCheckboxChange(e,view,data)}}
