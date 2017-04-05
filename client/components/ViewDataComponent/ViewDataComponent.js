@@ -179,10 +179,10 @@ class ViewDataComponent extends React.Component {
         else {
             grouping = false
         }
-        debugger
+
         $(function(){
             setTimeout(function () {
-                debugger
+
                 if($('.noresult').hasClass('noresult')){
                     $('.loadedContentNew').addClass('noresultdata');
                 }
