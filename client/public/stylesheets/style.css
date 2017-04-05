@@ -605,7 +605,7 @@ input[type=number]::-webkit-outer-spin-button {
 .JCLRFlex{width:auto!important;}
 .JCLRgrip.JCLRdisabledGrip .JColResizer{cursor:default; display:none;}
 
-.table {width: 2500px !important; max-width: 2500px !important;  margin-bottom: 20px;}
+.JColResizer.table {width: 2500px !important; max-width: 2500px !important;  margin-bottom: 20px;}
 .JCLRgrips{min-width: 2500px !important;}
 #Packaging_Instruction_View tr th:first-child{min-width:40px !important;}
 
