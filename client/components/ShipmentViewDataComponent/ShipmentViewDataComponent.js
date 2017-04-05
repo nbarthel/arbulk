@@ -213,9 +213,10 @@ class ShipmentViewDataComponent extends React.Component {
                     liveDrag:false,
                     gripInnerHtml:"<div class='grip'></div>",
                     draggingClass:"dragging",
-                    // resizeMode:'overflow'
+                    resizeMode:'flex',
+                    minWidth:100
                 });
-                //$("table").colResizable();
+
                 $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
                 var oldIndex;
                 $('.sorted_head tr').sortable({
@@ -225,9 +226,7 @@ class ShipmentViewDataComponent extends React.Component {
                     exclude: ".exclude-drag",
                     placeholder: '<th class="placeholder"/>',
                     onDragStart: function ($item, container, _super) {
-
                         oldIndex = $item.index();
-
                         $item.appendTo($item.parent());
                         _super($item, container);
                     },
@@ -245,13 +244,14 @@ class ShipmentViewDataComponent extends React.Component {
                         });
                         $("#Packaging_Instruction_View").colResizable({
                             disable: true
-                            // resizeMode:'overflow'
+                            
                         });
                         $("#Packaging_Instruction_View").colResizable({
                             liveDrag:false,
                             gripInnerHtml:"<div class='grip'></div>",
                             draggingClass:"dragging",
-                            // resizeMode:'overflow'
+                            resizeMode:'flex',
+                            minWidth:100
                         });
                     }
 
