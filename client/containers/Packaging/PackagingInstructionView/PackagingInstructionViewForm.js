@@ -790,6 +790,7 @@ export default class PackagingInstructionViewForm extends React.Component {
             index : this.state.index +1,
             SelcetedOptionForGroupBy : ""
         })
+        document.getElementById('groupBy').selectedIndex = 0
         document.getElementById('customer_name').selectedIndex = 0
         localStorage.removeItem('piViewData')
         this.forceUpdate();
@@ -1310,7 +1311,6 @@ export default class PackagingInstructionViewForm extends React.Component {
                                             headerCheckboxChange = {this.headerCheckboxChange}
                                             key={this.state.index}
                                             showARB = { this.state.showARB }
-                                            showARB = {this.state.showARB}
                                             showCustomer = {this.state.showCustomer}
                                             showPO = {this.state.showPO}
                                             Railcar = {this.state.showRailcar}

@@ -331,6 +331,7 @@ class  ContainerViewForm extends React.Component {
                 index : this.state.index +1,
                 SelcetedOptionForGroupBy:""
             })
+        document.getElementById('groupBy').selectedIndex = 0
             document.getElementById('customer_name').selectedIndex = 0
          localStorage.removeItem('conViewData')
          this.forceUpdate();
