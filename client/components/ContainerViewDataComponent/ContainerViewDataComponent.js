@@ -189,7 +189,8 @@ class ContainerViewDataComponent extends React.Component {
                     liveDrag: false,
                     gripInnerHtml: "<div class='grip'></div>",
                     draggingClass: "dragging",
-                    // resizeMode:'overflow'
+                    resizeMode:'flex',
+                    minWidth:100
                 });
                 $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
                 var oldIndex;
@@ -224,7 +225,9 @@ class ContainerViewDataComponent extends React.Component {
                             liveDrag:false,
                             gripInnerHtml:"<div class='grip'></div>",
                             draggingClass:"dragging",
-                            // resizeMode:'overflow'
+                            resizeMode:'flex',
+                            minWidth:100
+
                         });
                     }
                 });
