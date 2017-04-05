@@ -71,7 +71,7 @@
 
 
 thead.sorted_head tr th {
-	background-color: rgb(46,109,164);;
+	background-color: rgb(46,109,164) !important;
 }
 
 th.placeholder{
@@ -84,12 +84,13 @@ th.placeholder{
 /* line 116, /Users/jonasvonandrian/jquery-sortable/source/css/application.css.sass */
 .sorted_head th.placeholder {
 	display: block;
-	background: red;
+	background-color: rgb(46,109,164) !important;
 	position: relative;
 	width: 0;
 	height: 0;
 	margin: 0;
-	padding: 0; }
+	padding: 0;
+}
 /* line 124, /Users/jonasvonandrian/jquery-sortable/source/css/application.css.sass */
 .sorted_head th.placeholder:before {
 	content: "";
@@ -100,15 +101,19 @@ th.placeholder{
 	border-top-color: red;
 	top:0px;
 	margin-left: 0px;
-	border-bottom: none; }
+	border-bottom: none;
+	background-color: rgb(46,109,164) !important;
+}
 
 .dragged {
 	position: absolute;
 	top: 0;
 	opacity: 0.9;
-	z-index: 2000; }
+	z-index: 2000;
 
-.zxc{position: relative; top:106px; background-color: rgb(46, 109, 164);}
+}
+
+.zxc{position: relative; top:106px; background-color: rgb(46,109,164) !important;}
 
 
 

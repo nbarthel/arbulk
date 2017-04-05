@@ -76,7 +76,7 @@ ul.list-style-disc > li {list-style-type:disc;}
 .sorting_head th{background-color: rgb(46,109,164) !important;}
 th.placeholder{background-color: rgb(46,109,164) !important;}
 
-.sorted_head tr td:first-child{position: relative;}
+.table-expandable tr td:first-child{position: relative;}
 
 
 /*////////////////////////------border------ /////////////////////////////*/

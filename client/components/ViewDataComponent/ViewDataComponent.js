@@ -183,14 +183,12 @@ class ViewDataComponent extends React.Component {
         var that = this;
         $(function () {
             setTimeout(function () {
-
                 $("#Packaging_Instruction_View").colResizable({
                     liveDrag:false,
                     gripInnerHtml:"<div class='grip'></div>",
                     draggingClass:"dragging",
                    // resizeMode:'overflow'
                 });
-
                  //$("table").colResizable();
                 $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
                 var oldIndex;
@@ -221,6 +219,16 @@ class ViewDataComponent extends React.Component {
                         _super($item, container);
                         that.setState({
                             headerArray: headerArray
+                        });
+                        $("#Packaging_Instruction_View").colResizable({
+                            disable: true
+                            // resizeMode:'overflow'
+                        });
+                        $("#Packaging_Instruction_View").colResizable({
+                            liveDrag:false,
+                            gripInnerHtml:"<div class='grip'></div>",
+                            draggingClass:"dragging",
+                            // resizeMode:'overflow'
                         });
                     }
 
@@ -787,9 +795,9 @@ class ViewDataComponent extends React.Component {
                         <tr className="base_bg clickable" ref="clickable">
                             <td>
 
-                                    <input type="checkbox" className="checkBox" onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
-                                           value={view.id} id={view.id}/>
-                                <label htmlFor={view.id}></label>
+                                <input type="checkbox" className="checkBox" onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
+                                       value={view.id} id={view.id +"VC"}/>
+                                <label htmlFor={view.id+"VC"}></label>
                             </td>
                             {that.state.headerArray.map(obj => {
                                 return subheaderObj[obj];
@@ -938,11 +946,11 @@ class ViewDataComponent extends React.Component {
                                                 <tr key={index} className={count}>
                                                     <td>
 
-                                                            <input className="checkBox" type="checkbox"
-                                                                   onClick={(e) => this.checkclick(e,data)}
-                                                                   onChange={(e)=>{this.props.checkboxChange(e,data)}}
-                                                                   value={view.id}
-                                                                   id={view.TPackagingInstructionLots[index].id}/>
+                                                        <input className="checkBox" type="checkbox"
+                                                               onClick={(e) => this.checkclick(e,data)}
+                                                               onChange={(e)=>{this.props.checkboxChange(e,data)}}
+                                                               value={view.id}
+                                                               id={view.TPackagingInstructionLots[index].id}/>
 
                                                         <label htmlFor={view.TPackagingInstructionLots[index].id}></label>
                                                     </td>
