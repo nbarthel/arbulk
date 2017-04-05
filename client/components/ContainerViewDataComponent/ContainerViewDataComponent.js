@@ -27,21 +27,21 @@ import './stylesheet/main.css';
 var flagSorting = false;
 var sortedData = [];
 var Loader = require('react-loader');
-var grouping =false
-class ContainerViewDataComponent extends React.Component{
+var grouping = false
+class ContainerViewDataComponent extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.isAsc = false
         this.state = {
             loaded: false,
-            GroupedData:"",
-            headerArray: ["ARB", "Customer", "Release#", "Booking#","Container","Trucker","Arrived?","SteamShip Line","Type","Status","Shipment Type"]
+            GroupedData: "",
+            headerArray: ["ARB", "Customer", "Release#", "Booking#", "Container", "Trucker", "Arrived?", "SteamShip Line", "Type", "Status", "Shipment Type"]
             //viewData : shipmentViewData
         }
 
-        this.PIData = { }
-        this.myObj = { }
+        this.PIData = {}
+        this.myObj = {}
         this.qArray = []
         this.checkclick = this.checkclick.bind(this);
         //this.onAscending = this.onAscending.bind(this)
@@ -49,177 +49,201 @@ class ContainerViewDataComponent extends React.Component{
         this.onClickRow = this.onClickRow.bind(this)
         this.onGroupBy = this.onGroupBy.bind(this)
         this.SelcetedOptionForGroupBy = ""
-      }
+    }
 
-    componentWillReceiveProps(next){
+    componentWillReceiveProps(next) {
         debugger
-        if(next.SelcetedOptionForGroupBy && next.SelcetedOptionForGroupBy!="" && next.SelcetedOptionForGroupBy!=''){
+        if (next.SelcetedOptionForGroupBy && next.SelcetedOptionForGroupBy != "" && next.SelcetedOptionForGroupBy != '') {
             this.onGroupBy(next.SelcetedOptionForGroupBy)
             this.SelcetedOptionForGroupBy = next.SelcetedOptionForGroupBy
         }
-        else{
+        else {
             grouping = false
         }
     }
-componentWillMount(){
-   let id = this.props.id
-      if(this.props.id != undefined){
-        var PIview = createDataLoader(ContainerViewDataComponent,{
-           queries:[{
-           endpoint: 'TPackagingInstructions',
-              filter: {
-              include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
-             }
-        }]
-      })
+
+    componentWillMount() {
+        let id = this.props.id
+        if (this.props.id != undefined) {
+            var PIview = createDataLoader(ContainerViewDataComponent, {
+                queries: [{
+                    endpoint: 'TPackagingInstructions',
+                    filter: {
+                        include: ['TPackagingInstructionLots', {
+                            "relation": "TPackagingInstructions",
+                            "scope": {"include": ["TLocation"]}
+                        }]
+                    }
+                }]
+            })
 
 
+            var base = 'TPackagingInstructions' + '/' + id;
+            this.url = PIview._buildUrl(base, {
+                include: ['TPackagingInstructionLots', "TLocation", "TCompany"]
+            })
 
-    var base = 'TPackagingInstructions'+'/'+id;
-    this.url = PIview._buildUrl(base, {
-      include: ['TPackagingInstructionLots',"TLocation","TCompany"]
-    })
+            $.ajax({
+                url: this.url,
+                success: function (data) {
 
-      $.ajax({
-            url: this.url,
-            success:function(data){
-
-              this.setState({
-                  viewData : [data],
-                  loaded:true
-                })
-                var tableData = JSON.parse(localStorage.getItem('conViewData'))
-                if(tableData && tableData.length>0){
-                  this.setState({
-                      viewData : tableData
+                    this.setState({
+                        viewData: [data],
+                        loaded: true
                     })
-                  }
-          }.bind(this)
+                    var tableData = JSON.parse(localStorage.getItem('conViewData'))
+                    if (tableData && tableData.length > 0) {
+                        this.setState({
+                            viewData: tableData
+                        })
+                    }
+                }.bind(this)
 
-        })
+            })
 
-    }
-   else {
-
-  var PIview = createDataLoader(ContainerViewDataComponent,{
-      queries:[{
-        endpoint: 'TPackagingInstructions',
-        filter: {
-          include: ['TPackagingInstructionLots',{"relation":"TPackagingInstructions","scope":{"include":["TLocation"]}}]
         }
-      }]
-    })
-       var base = 'TShipmentents';
-        //TPackagingInstructionLots
-        this.url = PIview._buildUrl(base, {
-             "include" : [
-               {"relation":"TContainerDomestic" ,
-                            "scope":{"include" : "TCompany"}},
-                {"relation":"TContainerInternational" ,
-                            "scope":{"include" : "TCompany"}},
-                "TCompany" ,
-                "TLocation",
-                "TShipmentDomestic",
-                {"relation":"TShipmentInternational" ,
-                            "scope":{"include":["TContainerType" , "TSteamshipLine"]}}]
+        else {
 
+            var PIview = createDataLoader(ContainerViewDataComponent, {
+                queries: [{
+                    endpoint: 'TPackagingInstructions',
+                    filter: {
+                        include: ['TPackagingInstructionLots', {
+                            "relation": "TPackagingInstructions",
+                            "scope": {"include": ["TLocation"]}
+                        }]
+                    }
+                }]
+            })
+            var base = 'TShipmentents';
+            //TPackagingInstructionLots
+            this.url = PIview._buildUrl(base, {
+                "include": [
+                    {
+                        "relation": "TContainerDomestic",
+                        "scope": {"include": "TCompany"}
+                    },
+                    {
+                        "relation": "TContainerInternational",
+                        "scope": {"include": "TCompany"}
+                    },
+                    "TCompany",
+                    "TLocation",
+                    "TShipmentDomestic",
+                    {
+                        "relation": "TShipmentInternational",
+                        "scope": {"include": ["TContainerType", "TSteamshipLine"]}
+                    }]
+
+
+            });
+
+            $.ajax({
+                url: this.url,
+                success: function (data) {
+
+
+                    this.setState(
+                        {
+                            viewData: data,
+                            loaded: true
+                        }
+                    )
+                    var tableData = JSON.parse(localStorage.getItem('conViewData'))
+                    if (tableData && tableData.length > 0) {
+                        this.setState({
+                            viewData: tableData
+                        })
+                    }
+                }.bind(this)
+            })
+
+            axios.get(Base_Url + "TPackagingInstructionLots/getMaxQueue").then(response=> {
+                ;
+                this.setState({
+                    queue_Sequence: response.data
+                })
+            })
+
+
+        }
+    }
+
+    componentDidMount() {
+
+        var ContainerState = this;
+        $(function () {
+            setTimeout(function () {
+                $("#Packaging_Instruction_View").colResizable({
+                    liveDrag: false,
+                    gripInnerHtml: "<div class='grip'></div>",
+                    draggingClass: "dragging",
+                    // resizeMode:'overflow'
+                });
+                $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
+                var oldIndex;
+                $('.sorted_head tr').sortable({
+                    containerSelector: 'tr',
+                    itemSelector: 'th',
+                    vertical: false,
+                    exclude: ".exclude-drag",
+                    placeholder: '<th class="placeholder"/>',
+                    onDragStart: function ($item, container, _super) {
+                        oldIndex = $item.index();
+                        $item.appendTo($item.parent());
+                        _super($item, container);
+                    },
+                    onDrop: function ($item, container, _super) {
+                        var headerArray = ContainerState.state.headerArray;
+                        var field, tmp,
+                            newIndex = $item.index();
+                        if (newIndex != oldIndex) {
+                            let dragHeaderValue = headerArray.splice(oldIndex - 1, 1);
+                            headerArray.splice(newIndex - 1, 0, dragHeaderValue[0]);
+                        }
+                        _super($item, container);
+                        ContainerState.setState({
+                            headerArray: headerArray
+                        });
+                        $("#Packaging_Instruction_View").colResizable({
+                            disable: true
+                        });
+                        //
+                        $("#Packaging_Instruction_View").colResizable({
+                            liveDrag:false,
+                            gripInnerHtml:"<div class='grip'></div>",
+                            draggingClass:"dragging",
+                            // resizeMode:'overflow'
+                        });
+                    }
+                });
+            }, 3000);
 
         });
 
-      $.ajax({
-            url: this.url,
-            success:function(data){
+    }
 
+    checkclick(data, value) {
 
-               this.setState(
-                   {
-                       viewData : data,
-                       loaded:true
-                   }
-               )
-               var tableData = JSON.parse(localStorage.getItem('conViewData'))
-               if(tableData && tableData.length>0){
-                 this.setState({
-                     viewData : tableData
-                   })
-                 }
-        }.bind(this)
-        })
-
-     axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
-      ;
-    this.setState({
-        queue_Sequence : response.data
-    })
-})
-
+        var queueArray = []
+        this.qArray.push(value.id)
+        localStorage.setItem('qArray', this.qArray)
+        localStorage.setItem('queue_Sequence', this.state.queue_Sequence[0].max_mark)
 
     }
-  }
-componentDidMount() {
 
-    var ContainerState = this;
-    $(function () {
-        setTimeout(function () {
-            $("#Packaging_Instruction_View").colResizable({
-                liveDrag:false,
-                gripInnerHtml:"<div class='grip'></div>",
-                draggingClass:"dragging",
-                // resizeMode:'overflow'
-            });
-            $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
-            var oldIndex;
-            $('.sorted_head tr').sortable({
-                containerSelector: 'tr',
-                itemSelector: 'th',
-                vertical: false,
-                exclude: ".exclude-drag",
-                placeholder: '<th class="placeholder"/>',
-                onDragStart: function ($item, container, _super) {
-                    oldIndex = $item.index();
-                    $item.appendTo($item.parent());
-                    _super($item, container);
-                },
-                onDrop: function ($item, container, _super) {
-                    var headerArray = ContainerState.state.headerArray;
-                    var field, tmp,
-                        newIndex = $item.index();
-                    if (newIndex != oldIndex) {
-                        let dragHeaderValue = headerArray.splice(oldIndex - 1, 1);
-                        headerArray.splice(newIndex - 1, 0, dragHeaderValue[0]);
-                    }
-                    _super($item, container);
-                    ContainerState.setState({
-                        headerArray: headerArray
-                    });
-                }
-            });
-        }, 3000);
-
-    });
-
-}
-checkclick(data , value)
-{
-
-    var queueArray = []
-    this.qArray.push(value.id)
-    localStorage.setItem('qArray',this.qArray)
-    localStorage.setItem('queue_Sequence',this.state.queue_Sequence[0].max_mark)
-
-}
-    onGroupBy(switchvalue){
+    onGroupBy(switchvalue) {
         grouping = true
         var tempData = [],
-            groupData ={}
+            groupData = {}
         for (var i in this.state.viewData) {
             var tempObj = new Object()
             for (var props in this.state.viewData[i]) {
-                if (props != "TContainerInternational" && props!="TContainerDomestic") {
+                if (props != "TContainerInternational" && props != "TContainerDomestic") {
                     tempObj[props] = JSON.parse(JSON.stringify(this.state.viewData[i][props]))
                 }
             }
-            if(this.state.viewData[i].isDomestic==0){
+            if (this.state.viewData[i].isDomestic == 0) {
                 for (var j in this.state.viewData[i].TContainerInternational) {
                     var tempLots = JSON.parse(JSON.stringify(this.state.viewData[i].TContainerInternational[j]))
                     tempObj.TContainerInternational = []
@@ -227,7 +251,7 @@ checkclick(data , value)
                     tempData.push(tempObj)
                 }
             }
-            else{
+            else {
                 for (var j in this.state.viewData[i].TContainerDomestic) {
                     var tempLots = JSON.parse(JSON.stringify(this.state.viewData[i].TContainerDomestic[j]))
                     tempObj.TContainerDomestic = []
@@ -237,62 +261,62 @@ checkclick(data , value)
             }
 
         }
-        switch(switchvalue) {
+        switch (switchvalue) {
             case 'Release#':
-                groupData = _.groupBy(tempData, function(item) {
+                groupData = _.groupBy(tempData, function (item) {
                     return item.releaseNumber.toLowerCase();
                 });
 
                 break;
             case 'Container#':
-                groupData = _.groupBy(tempData, function(item) {
-                    if(item.TContainerDomestic.length>0){
+                groupData = _.groupBy(tempData, function (item) {
+                    if (item.TContainerDomestic.length > 0) {
                         return item.TContainerDomestic[0].containerNumber.toLowerCase()
                     }
-                    else if(item.TContainerInternational.length>0){
+                    else if (item.TContainerInternational.length > 0) {
                         return item.TContainerInternational[0].containerNumber.toLowerCase()
                     }
                 });
 
                 break;
             case 'Booking#':
-                groupData = _.groupBy(tempData, function(item) {
-                    if(item.TShipmentInternational.length>0){
+                groupData = _.groupBy(tempData, function (item) {
+                    if (item.TShipmentInternational.length > 0) {
                         return item.TShipmentInternational[0].bookingNumber.toLowerCase()
                     }
-                    else if(item.TShipmentDomestic.length>0){
+                    else if (item.TShipmentDomestic.length > 0) {
                         return item.TShipmentDomestic[0].bookingNumber.toLowerCase()
                     }
                 });
 
                 break;
             case 'weight':
-                groupData = _.groupBy(tempData, function(item) {
-                    return (item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].weight : '');
+                groupData = _.groupBy(tempData, function (item) {
+                    return (item.TPackagingInstructionLots[0] ? item.TPackagingInstructionLots[0].weight : '');
                 });
 
                 break;
             case 'ARB':
-                groupData = _.groupBy(tempData, function(item) {
+                groupData = _.groupBy(tempData, function (item) {
                     return item.TLocation.locationName.toLowerCase();
                 });
 
                 break;
             case 'Customer':
-                groupData = _.groupBy(tempData, function(item) {
+                groupData = _.groupBy(tempData, function (item) {
                     return item.TCompany.name.toLowerCase();
                 });
 
                 break;
             case 'Trucker':
-                groupData = _.groupBy(tempData, function(item) {
-                    if(item.TContainerDomestic.length>0){
+                groupData = _.groupBy(tempData, function (item) {
+                    if (item.TContainerDomestic.length > 0) {
                         return item.TContainerDomestic[0].TCompany.name.toLowerCase()
                     }
-                    else if(item.TContainerInternational.length>0){
+                    else if (item.TContainerInternational.length > 0) {
                         return item.TContainerInternational[0].TCompany.name.toLowerCase()
                     }
-                    else{
+                    else {
                         return item
                     }
 
@@ -300,26 +324,26 @@ checkclick(data , value)
                 });
                 break;
             case 'Arrived':
-                groupData = _.groupBy(tempData, function(item) {
-                    if(item.TContainerDomestic.length>0){
+                groupData = _.groupBy(tempData, function (item) {
+                    if (item.TContainerDomestic.length > 0) {
                         return item.TContainerDomestic[0].containerArrived
                     }
-                    else if(item.TContainerInternational.length>0){
+                    else if (item.TContainerInternational.length > 0) {
                         return item.TContainerInternational[0].containerArrived
                     }
-                    else{
+                    else {
                         return item
                     }
                 });
 
                 break;//view.TShipmentInternational[0].TSteamshipLine
             case 'SteamshipLine':
-                groupData = _.groupBy(tempData, function(item) {
+                groupData = _.groupBy(tempData, function (item) {
 
-                    if(item.TShipmentInternational.length>0){
+                    if (item.TShipmentInternational.length > 0) {
                         return item.TShipmentInternational[0].TSteamshipLine.name.toLowerCase()
                     }
-                    else if(item.TShipmentDomestic.length>0){
+                    else if (item.TShipmentDomestic.length > 0) {
                         return item
                     }
                     return item
@@ -327,12 +351,12 @@ checkclick(data , value)
 
                 break;
             case 'Type':
-                groupData = _.groupBy(tempData, function(item) {
+                groupData = _.groupBy(tempData, function (item) {
 
-                    if(item.TContainerInternational.length>0){
+                    if (item.TContainerInternational.length > 0) {
                         return item.TShipmentInternational[0].TContainerType.name.toLowerCase()
                     }
-                    else{
+                    else {
                         return 'z'
                     }
 
@@ -340,12 +364,12 @@ checkclick(data , value)
 
                 break;
             case 'status':
-                groupData = _.groupBy(tempData, function(item) {
+                groupData = _.groupBy(tempData, function (item) {
 
-                    if(item.TContainerInternational.length>0){
+                    if (item.TContainerInternational.length > 0) {
                         return item.TContainerInternational[0].status.toLowerCase()
                     }
-                    else if(item.TContainerDomestic.length>0){
+                    else if (item.TContainerDomestic.length > 0) {
                         return item.TContainerDomestic[0].status.toLowerCase()
                     }
                     return item
@@ -353,9 +377,9 @@ checkclick(data , value)
 
                 break;
             case 'shipmentType':
-                groupData = _.groupBy(tempData, function(item) {
+                groupData = _.groupBy(tempData, function (item) {
 
-                    if(item.isDomestic==1){
+                    if (item.isDomestic == 1) {
                         return item
                     }
                 });
@@ -369,205 +393,203 @@ checkclick(data , value)
         })
         localStorage.setItem('containerGrouped', JSON.stringify(grouping));
     }
-onAscending(e,head){
 
-  flagSorting = true;
+    onAscending(e, head) {
 
-
-var switchvalue = head;
-
-                            switch(switchvalue) {
-                            case 'po_number':
-                           sortedData = _.sortBy(this.state.viewData, function(item) {
-                            return item.releaseNumber.toLowerCase();
-                           });
-
-                             break;
-                   case 'lot_number':
-                     sortedData = _.sortBy(this.state.viewData, function(item) {
-                     if(item.TContainerDomestic.length>0){
-                       return item.TContainerDomestic[0].containerNumber.toLowerCase()
-                     }
-                     else if(item.TContainerInternational.length>0){
-                       return item.TContainerInternational[0].containerNumber.toLowerCase()
-                     }
-                     });
-
-                       break;
-                               case 'railcar_number':
-                                sortedData = _.sortBy(this.state.viewData, function(item) {
-                                  if(item.TShipmentInternational.length>0){
-                                    return item.TShipmentInternational[0].bookingNumber.toLowerCase()
-                                  }
-                                  else if(item.TShipmentDomestic.length>0){
-                                    return item.TShipmentDomestic[0].bookingNumber.toLowerCase()
-                                  }
-                                });
-
-                      break;
-                       case 'weight':
-                                sortedData = _.sortBy(this.state.viewData, function(item) {
-                                return (item.TPackagingInstructionLots[0]? item.TPackagingInstructionLots[0].weight : '');
-                                });
-
-                      break;
-                      case 'location':
-                                sortedData = _.sortBy(this.state.viewData, function(item) {
-                                return item.TLocation.locationName.toLowerCase();
-                                });
-
-                      break;
-                      case 'company':
-                                sortedData = _.sortBy(this.state.viewData, function(item) {
-                                return item.TCompany.name.toLowerCase();
-                                });
-
-                      break;
-                      case 'Trucker':
-                                sortedData = _.sortBy(this.state.viewData, function(item) {
-                                  if(item.TContainerDomestic.length>0){
-                                    return item.TContainerDomestic[0].TCompany.name.toLowerCase()
-                                  }
-                                  else if(item.TContainerInternational.length>0){
-                                    return item.TContainerInternational[0].TCompany.name.toLowerCase()
-                                  }
-                                  else{
-                                    return item
-                                  }
+        flagSorting = true;
 
 
-                                });
-                      break;
-                      case 'Arrived':
-                                sortedData = _.sortBy(this.state.viewData, function(item) {
-                                if(item.TContainerDomestic.length>0){
-                                return item.TContainerDomestic[0].containerArrived
-                              }
-                              else if(item.TContainerInternational.length>0){
-                                return item.TContainerInternational[0].containerArrived
-                              }
-                              else{
-                                return item
-                              }
-                                });
+        var switchvalue = head;
 
-                      break;//view.TShipmentInternational[0].TSteamshipLine
-                      case 'SteamshipLine':
-                                sortedData = _.sortBy(this.state.viewData, function(item) {
+        switch (switchvalue) {
+            case 'po_number':
+                sortedData = _.sortBy(this.state.viewData, function (item) {
+                    return item.releaseNumber.toLowerCase();
+                });
 
-                                if(item.TShipmentInternational.length>0){
-                                  return item.TShipmentInternational[0].TSteamshipLine.name.toLowerCase()
-                                }
-                                else if(item.TShipmentDomestic.length>0){
-                                  return item
-                                }
-                                return item
-                                });
+                break;
+            case 'lot_number':
+                sortedData = _.sortBy(this.state.viewData, function (item) {
+                    if (item.TContainerDomestic.length > 0) {
+                        return item.TContainerDomestic[0].containerNumber.toLowerCase()
+                    }
+                    else if (item.TContainerInternational.length > 0) {
+                        return item.TContainerInternational[0].containerNumber.toLowerCase()
+                    }
+                });
 
-                      break;
-                      case 'Type':
-                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                break;
+            case 'railcar_number':
+                sortedData = _.sortBy(this.state.viewData, function (item) {
+                    if (item.TShipmentInternational.length > 0) {
+                        return item.TShipmentInternational[0].bookingNumber.toLowerCase()
+                    }
+                    else if (item.TShipmentDomestic.length > 0) {
+                        return item.TShipmentDomestic[0].bookingNumber.toLowerCase()
+                    }
+                });
 
-                                if(item.TContainerInternational.length>0){
-                                  return item.TShipmentInternational[0].TContainerType.name.toLowerCase()
-                                }
-                                else{
-                                  return 'z'
-                                }
+                break;
+            case 'weight':
+                sortedData = _.sortBy(this.state.viewData, function (item) {
+                    return (item.TPackagingInstructionLots[0] ? item.TPackagingInstructionLots[0].weight : '');
+                });
 
-                                });
+                break;
+            case 'location':
+                sortedData = _.sortBy(this.state.viewData, function (item) {
+                    return item.TLocation.locationName.toLowerCase();
+                });
 
-                      break;
-                      case 'status':
-                                sortedData = _.sortBy(this.state.viewData, function(item) {
+                break;
+            case 'company':
+                sortedData = _.sortBy(this.state.viewData, function (item) {
+                    return item.TCompany.name.toLowerCase();
+                });
 
-                                if(item.TContainerInternational.length>0){
-                                  return item.TContainerInternational[0].status.toLowerCase()
-                                }
-                                else if(item.TContainerDomestic.length>0){
-                                  return item.TContainerDomestic[0].status.toLowerCase()
-                                }
-                                return item
-                                });
-
-                      break;
-                      case 'shipmentType':
-                                sortedData = _.sortBy(this.state.viewData, function(item) {
-
-                                if(item.isDomestic==1){
-                                  return item
-                                }
-                              });
-
-                      break;
-    default:
-        this.state.viewData
-}
-
-if(this.isAsc == false)
-{
-  this.isAsc = true;
-}
-else{
-  sortedData = sortedData.reverse()
-  this.isAsc = false;
-}
-this.setState({
-     viewData  : sortedData
-             })
-localStorage.setItem('conViewData', JSON.stringify(sortedData));
-}
+                break;
+            case 'Trucker':
+                sortedData = _.sortBy(this.state.viewData, function (item) {
+                    if (item.TContainerDomestic.length > 0) {
+                        return item.TContainerDomestic[0].TCompany.name.toLowerCase()
+                    }
+                    else if (item.TContainerInternational.length > 0) {
+                        return item.TContainerInternational[0].TCompany.name.toLowerCase()
+                    }
+                    else {
+                        return item
+                    }
 
 
-onToggel(e ,elm){
+                });
+                break;
+            case 'Arrived':
+                sortedData = _.sortBy(this.state.viewData, function (item) {
+                    if (item.TContainerDomestic.length > 0) {
+                        return item.TContainerDomestic[0].containerArrived
+                    }
+                    else if (item.TContainerInternational.length > 0) {
+                        return item.TContainerInternational[0].containerArrived
+                    }
+                    else {
+                        return item
+                    }
+                });
 
+                break;//view.TShipmentInternational[0].TSteamshipLine
+            case 'SteamshipLine':
+                sortedData = _.sortBy(this.state.viewData, function (item) {
 
+                    if (item.TShipmentInternational.length > 0) {
+                        return item.TShipmentInternational[0].TSteamshipLine.name.toLowerCase()
+                    }
+                    else if (item.TShipmentDomestic.length > 0) {
+                        return item
+                    }
+                    return item
+                });
 
-  $( "button" ).click(function() {
-  $( "p" ).slideToggle( "slow" );
-});
-}
+                break;
+            case 'Type':
+                sortedData = _.sortBy(this.state.viewData, function (item) {
 
-onClickRow(e){
+                    if (item.TContainerInternational.length > 0) {
+                        return item.TShipmentInternational[0].TContainerType.name.toLowerCase()
+                    }
+                    else {
+                        return 'z'
+                    }
 
-    var rowObj = $(this.refs.clickable)
+                });
 
-    var aa = e.target.getAttribute('data-target')
-    var nextTd = e.target.parentNode.closest('tr').nextElementSibling
-    for(var i =0;i<=aa;i++){
-        $(nextTd).toggleClass('hide')
-        nextTd = nextTd.nextElementSibling
+                break;
+            case 'status':
+                sortedData = _.sortBy(this.state.viewData, function (item) {
+
+                    if (item.TContainerInternational.length > 0) {
+                        return item.TContainerInternational[0].status.toLowerCase()
+                    }
+                    else if (item.TContainerDomestic.length > 0) {
+                        return item.TContainerDomestic[0].status.toLowerCase()
+                    }
+                    return item
+                });
+
+                break;
+            case 'shipmentType':
+                sortedData = _.sortBy(this.state.viewData, function (item) {
+
+                    if (item.isDomestic == 1) {
+                        return item
+                    }
+                });
+
+                break;
+            default:
+                this.state.viewData
+        }
+
+        if (this.isAsc == false) {
+            this.isAsc = true;
+        }
+        else {
+            sortedData = sortedData.reverse()
+            this.isAsc = false;
+        }
+        this.setState({
+            viewData: sortedData
+        })
+        localStorage.setItem('conViewData', JSON.stringify(sortedData));
     }
- }
 
 
-    render(){
+    onToggel(e, elm) {
+
+
+        $("button").click(function () {
+            $("p").slideToggle("slow");
+        });
+    }
+
+    onClickRow(e) {
+
+        var rowObj = $(this.refs.clickable)
+
+        var aa = e.target.getAttribute('data-target')
+        var nextTd = e.target.parentNode.closest('tr').nextElementSibling
+        for (var i = 0; i <= aa; i++) {
+            $(nextTd).toggleClass('hide')
+            nextTd = nextTd.nextElementSibling
+        }
+    }
+
+
+    render() {
 
         var filterData
-        if(!flagSorting){
-        filterData = this.props.filterData
+        if (!flagSorting) {
+            filterData = this.props.filterData
 
-         if(filterData.constructor === Array)
-         {
-         this.state.viewData = filterData
-         }
-       }
-       else{
-         filterData = sortedData
+            if (filterData.constructor === Array) {
+                this.state.viewData = filterData
+            }
+        }
+        else {
+            filterData = sortedData
 
-         flagSorting =false
-       }
+            flagSorting = false
+        }
 
         var selectedWeight = this.props.weight;
 
-        var dataState=this;
+        var dataState = this;
         var listData = ""
-        var i =0
-        if (grouping && this.props.SelcetedOptionForGroupBy!="") {
-            listData =  _.map(this.state.GroupedData,(views,index) => {
-                return(
+        var i = 0
+        if (grouping && this.props.SelcetedOptionForGroupBy != "") {
+            listData = _.map(this.state.GroupedData, (views, index) => {
+                return (
                     <tbody key={i++}>
-                    <tr className="base_bg clickable" key = {i++} style={{"backgroundColor": "#e5e5ff"}}>
+                    <tr className="base_bg clickable" key={i++} style={{"backgroundColor": "#e5e5ff"}}>
                         <td><i className="fa fa-chevron-down"
                                aria-hidden="false"
                                data-target={views.length}
@@ -585,65 +607,82 @@ onClickRow(e){
                         <td></td>
                     </tr>
                     {
-                        _.map(views,(view,index) => {
-                            if(view.isDomestic == 1){
-                                var bookingNumber = (view.TShipmentDomestic && view.TShipmentDomestic.length>0 )? view.TShipmentDomestic[0].bookingNumber : ''
+                        _.map(views, (view, index) => {
+                            if (view.isDomestic == 1) {
+                                var bookingNumber = (view.TShipmentDomestic && view.TShipmentDomestic.length > 0 ) ? view.TShipmentDomestic[0].bookingNumber : ''
                                 var count = index
                                 var shipType = view.isDomestic == 1 ? "DOMESTIC" : "INTERNATIONAL";
-                                return _.map(view.TContainerDomestic,(data,index)=>{
-                                    if(data.containerArrived == 1){
+                                return _.map(view.TContainerDomestic, (data, index)=> {
+                                    if (data.containerArrived == 1) {
                                         var Arr = 'YES'
-                                    } else{
+                                    } else {
                                         var Arr = 'NO'
                                     }
-                                    return(
+                                    return (
                                         <tr key={i++}>
                                             <td></td>
-                                            <td  key="Arb" style={{display : this.props.showARB}}>{view.TLocation ? view.TLocation.locationName : ''}</td>
-                                            <td key ="Customer "style={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</td>
-                                            <td key ="Release"  style={{display : this.props.showRelease}}>{view.releaseNumber}</td>
-                                            <td key ="Booking"style={{display : this.props.showBooking}}>{data.containerNumber}</td>
-                                            <td key="container" style={{display : this.props.showContainer}}>{data.containerNumber}</td>
-                                            <td key=" trucker" style={{display : this.props.showTrucker}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0)?(view.TContainerDomestic[index].TCompany?view.TContainerDomestic[index].TCompany.name:'') : "N/A"}</td>
-                                            <td key="Arrived" style={{display : this.props.showArrived}}>{Arr ? Arr : 'No'}</td>
+                                            <td key="Arb"
+                                                style={{display : this.props.showARB}}>{view.TLocation ? view.TLocation.locationName : ''}</td>
+                                            <td key="Customer "
+                                                style={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</td>
+                                            <td key="Release"
+                                                style={{display : this.props.showRelease}}>{view.releaseNumber}</td>
+                                            <td key="Booking"
+                                                style={{display : this.props.showBooking}}>{data.containerNumber}</td>
+                                            <td key="container"
+                                                style={{display : this.props.showContainer}}>{data.containerNumber}</td>
+                                            <td key=" trucker"
+                                                style={{display : this.props.showTrucker}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0) ? (view.TContainerDomestic[index].TCompany ? view.TContainerDomestic[index].TCompany.name : '') : "N/A"}</td>
+                                            <td key="Arrived"
+                                                style={{display : this.props.showArrived}}>{Arr ? Arr : 'No'}</td>
                                             <td style={{display : this.props.showSteamShip}}>{'N/A'}</td>
                                             <td key="Type" style={{display : this.props.showType}}>{'N/A'}</td>
-                                            <td key="status" style={{display : this.props.showType}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0) ? (view.TContainerDomestic[index].status == null ? "ALLOCATED" : view.TContainerDomestic[index].status) : 'ALLOCATED'}</td>
+                                            <td key="status"
+                                                style={{display : this.props.showType}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0) ? (view.TContainerDomestic[index].status == null ? "ALLOCATED" : view.TContainerDomestic[index].status) : 'ALLOCATED'}</td>
                                             <td key="ship" style={{display : this.props.showType}}>{shipType}</td>
                                         </tr>
                                     )
                                 })
 
                             }
-                            else if(view.isDomestic == 0){
-                                if(view.TContainerInternational && view.TContainerInternational.length > 0) {
+                            else if (view.isDomestic == 0) {
+                                if (view.TContainerInternational && view.TContainerInternational.length > 0) {
                                     var shipType = view.isDomestic == 0 ? "INTERNATIONAL" : "DOMESTIC"
                                     var bookingNumber = (view.TShipmentInternational && view.TShipmentInternational.length > 0) ? view.TShipmentInternational[0].bookingNumber : 'NA'
                                     var type = (view.TShipmentInternational && view.TShipmentInternational.length > 0 && view.TShipmentInternational[0].TContainerType) ? view.TShipmentInternational[0].TContainerType.name : 'N/A'
                                     var steamship = (view.TShipmentInternational && view.TShipmentInternational.length > 0 && view.TShipmentInternational[0].TSteamshipLine) ? view.TShipmentInternational[0].TSteamshipLine.name : 'N/A'
                                     var count = index
                                 }
-                                return _.map(view.TContainerInternational , (data ,index)=>{
-                                    if(data.containerArrived == 1){
+                                return _.map(view.TContainerInternational, (data, index)=> {
+                                    if (data.containerArrived == 1) {
                                         var Arr = 'YES'
-                                    } else{
+                                    } else {
                                         var Arr = 'NO'
                                     }
-                                    return(
+                                    return (
                                         <tr key={i++}>
-                                        <td></td>
-                                        <td  key="Arb" style={{display : this.props.showARB}}>{view.TLocation ? view.TLocation.locationName : ''}</td>
-                                        <td key ="Customer "style={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</td>
-                                        <td key ="Release"  style={{display : this.props.showRelease}}>{view.releaseNumber}</td>
-                                        <td key ="Booking"style={{display : this.props.showBooking}}>{data.containerNumber}</td>
-                                        <td key ="container" style={{display : this.props.showContainer}}>{data.containerNumber}</td>
-                                        <td key="trucker" style={{display : this.props.showTrucker}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0)?(view.TContainerDomestic[index].TCompany?view.TContainerDomestic[index].TCompany.name:'') : "N/A"}</td>
-                                        <td key="arrived" style={{display : this.props.showArrived}}>{Arr ? Arr : 'No'}</td>
-                                        <td key= "steamShip" style={{display : this.props.showSteamShip}}>{steamship ? steamship : 'N/A'}</td>
-                                        <td key="type" style={{display : this.props.showType}}>{type}</td>
-                                        <td key= "status" style={{display : this.props.showType}}>{(view.TContainerInternational && view.TContainerInternational.length > 0) ?
-                                                (view.TContainerInternational[index].status == null ?"ALLOCATED" : view.TContainerInternational[index].status ): 'NA'}</td>
-                                        <td key="shipType"style={{display : this.props.showType}}>{shipType}</td>
+                                            <td></td>
+                                            <td key="Arb"
+                                                style={{display : this.props.showARB}}>{view.TLocation ? view.TLocation.locationName : ''}</td>
+                                            <td key="Customer "
+                                                style={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</td>
+                                            <td key="Release"
+                                                style={{display : this.props.showRelease}}>{view.releaseNumber}</td>
+                                            <td key="Booking"
+                                                style={{display : this.props.showBooking}}>{data.containerNumber}</td>
+                                            <td key="container"
+                                                style={{display : this.props.showContainer}}>{data.containerNumber}</td>
+                                            <td key="trucker"
+                                                style={{display : this.props.showTrucker}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0) ? (view.TContainerDomestic[index].TCompany ? view.TContainerDomestic[index].TCompany.name : '') : "N/A"}</td>
+                                            <td key="arrived"
+                                                style={{display : this.props.showArrived}}>{Arr ? Arr : 'No'}</td>
+                                            <td key="steamShip"
+                                                style={{display : this.props.showSteamShip}}>{steamship ? steamship : 'N/A'}</td>
+                                            <td key="type" style={{display : this.props.showType}}>{type}</td>
+                                            <td key="status"
+                                                style={{display : this.props.showType}}>{(view.TContainerInternational && view.TContainerInternational.length > 0) ?
+                                                (view.TContainerInternational[index].status == null ? "ALLOCATED" : view.TContainerInternational[index].status ) : 'NA'}</td>
+                                            <td key="shipType" style={{display : this.props.showType}}>{shipType}</td>
                                         </tr>
                                     )
                                 })
@@ -655,298 +694,320 @@ onClickRow(e){
                 )
             })
         }
-        else{
-        listData =  _.map(this.state.viewData,(view,index) => {
-                if(view.isDomestic == 1){
-                               if(view.TContainerDomestic && view.TContainerDomestic.length > 0){
-                                 var bookingNumber = (view.TShipmentDomestic && view.TShipmentDomestic.length>0 )? view.TShipmentDomestic[0].bookingNumber : ''
-                                 var count = index
-                                   var shipType = view.isDomestic == 1 ? "DOMESTIC" : "INTERNATIONAL";
+        else {
+            listData = _.map(this.state.viewData, (view, index) => {
+                if (view.isDomestic == 1) {
+                    if (view.TContainerDomestic && view.TContainerDomestic.length > 0) {
+                        var bookingNumber = (view.TShipmentDomestic && view.TShipmentDomestic.length > 0 ) ? view.TShipmentDomestic[0].bookingNumber : ''
+                        var count = index
+                        var shipType = view.isDomestic == 1 ? "DOMESTIC" : "INTERNATIONAL";
 
-                                   var subheaderObj = {};
-                                   subheaderObj["ARB"] = (
-                                       <td  key="Arb" style={{display : this.props.showARB}}>
-                                           <i className="fa fa-chevron-down"
-                                              aria-hidden="false" data-target={count}
-                                              onClick={(e) => {this.onClickRow(e)}}></i> {view.TLocation ? view.TLocation.locationName : ''}
-                                       </td>);
-                                   subheaderObj["Customer"] = (
-                                       <td key ="Customer "style={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</td>
-                                   );
-                                   subheaderObj["Release#"] = (
-                                       <td key ="Release"  style={{display : this.props.showRelease}}></td>
-                                   );
-                                   subheaderObj["Booking#"] = (
-                                       <td key ="Booking"style={{display : this.props.showBooking}}></td>
-                                   );
-                                   subheaderObj["Container"] = (
-                                       <td key ="container" style={{display : this.props.showContainer}}></td>
-                                   );
-                                   subheaderObj["Trucker"] = (
-                                       <td key="Trucker" style={{display : this.props.showTrucker}}></td>
-                                   );
-                                   subheaderObj["Arrived?"] = (
-                                       <td key=" Arrived" style={{display : this.props.showArrived}}></td>
-                                   );
-                                   subheaderObj["SteamShip Line"] = (
-                                       <td key="steam" style={{display : this.props.showSteamShip}}></td>
-                                   );
-                                   subheaderObj["Type"] = (
-                                       <td key="type" style = {{display : this.props.showType}}></td>
-                                   ); subheaderObj["Status"] = (
-                                       <td key =" status"style = {{display : this.props.showType}}></td>
-                                   ); subheaderObj["Shipment Type"] = (
-                                       <td key ="shipment" style = {{display : this.props.showType}}></td>
-                                   );
+                        var subheaderObj = {};
+                        subheaderObj["ARB"] = (
+                            <td key="Arb" style={{display : this.props.showARB}}>
+                                <i className="fa fa-chevron-down"
+                                   aria-hidden="false" data-target={count}
+                                   onClick={(e) => {this.onClickRow(e)}}></i> {view.TLocation ? view.TLocation.locationName : ''}
+                            </td>);
+                        subheaderObj["Customer"] = (
+                            <td key="Customer "
+                                style={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</td>
+                        );
+                        subheaderObj["Release#"] = (
+                            <td key="Release" style={{display : this.props.showRelease}}></td>
+                        );
+                        subheaderObj["Booking#"] = (
+                            <td key="Booking" style={{display : this.props.showBooking}}></td>
+                        );
+                        subheaderObj["Container"] = (
+                            <td key="container" style={{display : this.props.showContainer}}></td>
+                        );
+                        subheaderObj["Trucker"] = (
+                            <td key="Trucker" style={{display : this.props.showTrucker}}></td>
+                        );
+                        subheaderObj["Arrived?"] = (
+                            <td key=" Arrived" style={{display : this.props.showArrived}}></td>
+                        );
+                        subheaderObj["SteamShip Line"] = (
+                            <td key="steam" style={{display : this.props.showSteamShip}}></td>
+                        );
+                        subheaderObj["Type"] = (
+                            <td key="type" style={{display : this.props.showType}}></td>
+                        );
+                        subheaderObj["Status"] = (
+                            <td key=" status" style={{display : this.props.showType}}></td>
+                        );
+                        subheaderObj["Shipment Type"] = (
+                            <td key="shipment" style={{display : this.props.showType}}></td>
+                        );
 
-                                   return (
-                                        <tbody key={index}>
-                                        <tr className="base_bg clickable" ref="clickable" style={{"backgroundColor": "#e5e5ff"}}>
+                        return (
+                            <tbody key={index}>
+                            <tr className="base_bg clickable" ref="clickable" style={{"backgroundColor": "#e5e5ff"}}>
 
-                                                <td>
-                                                <label className="control control--checkbox">
-                                                    <input type="checkbox" onChange={(e)=>{this.props.onCheckboxChange(e,view)}}
-                                                           value={view.id} id={view.id}/>
+                                <td style={{position:"relative"}}>
+                                    <input type="checkbox" className="checkBox"
+                                           onChange={(e)=>{this.props.onCheckboxChange(e,view)}}
+                                           value={view.id} id={"DH"+view.id}/>
 
-                                                    <div className="control__indicator"></div>
-                                                </label>
+                                    <label htmlFor={"DH"+view.id}></label>
+                                </td>
+                                {dataState.state.headerArray.map(obj => {
+                                    return subheaderObj[obj];
+                                })}
+
+                            </tr>
+                            {
+                                _.map(view.TContainerDomestic, (data, index)=> {
+                                    if (data.containerArrived == 1) {
+                                        var Arr = 'YES'
+                                    } else {
+                                        var Arr = 'NO'
+                                    }
+
+                                    var cellObj = {};
+                                    cellObj["ARB"] = (
+                                        <td key="Arb" style={{display : this.props.showARB}}></td>
+                                    );
+                                    cellObj["Customer"] = (
+                                        <td key="customer" style={{display : this.props.showCustomer}}></td>
+                                    );
+                                    cellObj["Release#"] = (
+                                        <td key="Release"
+                                            style={{display : this.props.showRelease}}>{view.releaseNumber} </td>
+                                    );
+                                    cellObj["Booking#"] = (
+                                        <td key="Booking"
+                                            style={{display : this.props.showBooking}}>{bookingNumber ? bookingNumber : 'N/A'}</td>
+                                    );
+                                    cellObj["Container"] = (
+                                        <td key="container"
+                                            style={{display : this.props.showContainer}}>{data.containerNumber}</td>
+                                    );
+                                    cellObj["Trucker"] = (
+                                        <td key=" trucker"
+                                            style={{display : this.props.showTrucker}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0) ? (view.TContainerDomestic[index].TCompany ? view.TContainerDomestic[index].TCompany.name : '') : "N/A"}</td>
+                                    );
+                                    cellObj["Arrived?"] = (
+                                        <td key="Arrived"
+                                            style={{display : this.props.showArrived}}>{Arr ? Arr : 'No'}</td>
+                                    );
+                                    cellObj["SteamShip Line"] = (
+                                        <td style={{display : this.props.showSteamShip}}>{'N/A'}</td>
+                                    );
+                                    cellObj["Type"] = (
+                                        <td key="Type" style={{display : this.props.showType}}>{'N/A'}</td>
+                                    );
+                                    cellObj["Status"] = (
+                                        <td key="status"
+                                            style={{display : this.props.showType}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0) ? (view.TContainerDomestic[index].status == null ? "ALLOCATED" : view.TContainerDomestic[index].status) : 'ALLOCATED'}</td>
+                                    );
+                                    cellObj["Shipment Type"] = (
+                                        <td key="ship" style={{display : this.props.showType}}>{shipType}</td>
+                                    );
+                                    return (
+                                        <tr key={index} className={count}>
+                                            <td style={{position:"relative"}}>
+                                                <input type="checkbox" className="checkBox"
+                                                       onClick={(e) => this.checkclick(e,view)}
+                                                       onChange={(e)=>{this.props.onCheckboxChange(e,view,data)}}
+                                                       value={view.id} id={"DD"+view.id + "_" +index}/>
+
+                                                <label htmlFor={"DD"+view.id + "_" +index}></label>
+
                                             </td>
                                             {dataState.state.headerArray.map(obj => {
-                                                return subheaderObj[obj];
+                                                return cellObj[obj];
+                                            })}
+                                        </tr>
+                                    )
+                                })
+
+                            }
+
+
+                            </tbody>
+                        )
+                    }
+                }
+                else if (view.isDomestic == 0) {
+                    if (view.TContainerInternational && view.TContainerInternational.length > 0) {
+                        var shipType = view.isDomestic == 0 ? "INTERNATIONAL" : "DOMESTIC"
+                        var bookingNumber = (view.TShipmentInternational && view.TShipmentInternational.length > 0) ? view.TShipmentInternational[0].bookingNumber : 'NA'
+                        var type = (view.TShipmentInternational && view.TShipmentInternational.length > 0 && view.TShipmentInternational[0].TContainerType) ? view.TShipmentInternational[0].TContainerType.name : 'N/A'
+                        var steamship = (view.TShipmentInternational && view.TShipmentInternational.length > 0 && view.TShipmentInternational[0].TSteamshipLine) ? view.TShipmentInternational[0].TSteamshipLine.name : 'N/A'
+                        var count = index
+                        var subheaderObj = {};
+                        subheaderObj["ARB"] = (
+                            <td key="arb" style={{display : this.props.showARB}}><i className="fa fa-chevron-down"
+                                                                                    aria-hidden="false"
+                                                                                    data-target={count}
+                                                                                    onClick={(e) => {this.onClickRow(e)}}></i> {view.TLocation ? view.TLocation.locationName : ''}
+                            </td>);
+                        subheaderObj["Customer"] = (
+                            <td key="customer"
+                                style={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</td>
+                        );
+                        subheaderObj["Release#"] = (
+                            <td key="release" style={{display : this.props.showRelease}}></td>
+                        );
+                        subheaderObj["Booking#"] = (
+                            <td key="Booking" style={{display : this.props.showBooking}}></td>
+                        );
+                        subheaderObj["Container"] = (
+                            <td key="Container" style={{display : this.props.showContainer}}></td>
+                        );
+                        subheaderObj["Trucker"] = (
+                            <td key="Trucker" style={{display : this.props.showTrucker}}></td>
+                        );
+                        subheaderObj["Arrived?"] = (
+                            <td key="Arrived" style={{display : this.props.showArrived}}></td>
+                        );
+                        subheaderObj["SteamShip Line"] = (
+                            <td key="" style={{display : this.props.showSteamShip}}></td>
+                        );
+                        subheaderObj["Type"] = (
+                            <td key="type" style={{display : this.props.showType}}></td>
+                        );
+                        subheaderObj["Status"] = (
+                            <td style={{display : this.props.showType}}></td>
+                        );
+                        subheaderObj["Shipment Type"] = (
+                            <td key="ship" style={{display : this.props.showType}}></td>
+                        );
+                        return (
+                            <tbody key={index}>
+                            <tr className="base_bg clickable" ref="clickable" style={{"backgroundColor": "#e5e5ff"}}>
+                                <td style={{position:"relative"}}>
+                                    <input type="checkbox" className="checkBox" onChange={(e)=>{this.props.onCheckboxChange(e,view)}}
+                                           value={view.id} id={"IH"+view.id}/>
+                                    <label htmlFor={"IH"+view.id}></label>
+                                </td>
+
+                                {dataState.state.headerArray.map(obj => {
+                                    return subheaderObj[obj];
+                                })}
+
+                            </tr>
+                            {
+                                _.map(view.TContainerInternational, (data, index)=> {
+
+                                    if (data.containerArrived == 1) {
+                                        var Arr = 'YES'
+                                    } else {
+                                        var Arr = 'NO'
+                                    }
+                                    var cellObj = {};
+                                    cellObj["ARB"] = (
+                                        <td key="ar" style={{display : this.props.showARB}}></td>
+                                    );
+                                    cellObj["Customer"] = (
+                                        <td key="customer" style={{display : this.props.showCustomer}}></td>
+                                    );
+                                    cellObj["Release#"] = (
+                                        <td key="release"
+                                            style={{display : this.props.showRelease}}>{view.releaseNumber} </td>
+                                    );
+                                    cellObj["Booking#"] = (
+                                        <td key="booking"
+                                            style={{display : this.props.showBooking}}>{bookingNumber ? bookingNumber : 'N/A'}</td>
+                                    );
+                                    cellObj["Container"] = (
+                                        <td key="container"
+                                            style={{display : this.props.showContainer}}>{data.containerNumber}</td>
+                                    );
+                                    cellObj["Trucker"] = (
+                                        <td key="trucker"
+                                            style={{display : this.props.showTrucker}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0) ? (view.TContainerDomestic[index].TCompany ? view.TContainerDomestic[index].TCompany.name : '') : "N/A"}</td>
+                                    );
+                                    cellObj["Arrived?"] = (
+                                        <td key="arrived"
+                                            style={{display : this.props.showArrived}}>{Arr ? Arr : 'No'}</td>
+                                    );
+                                    cellObj["SteamShip Line"] = (
+                                        <td key="steamShip"
+                                            style={{display : this.props.showSteamShip}}>{steamship ? steamship : 'N/A'}</td>
+                                    );
+                                    cellObj["Type"] = (
+                                        <td key="type" style={{display : this.props.showType}}>{type}</td>
+                                    );
+                                    cellObj["Status"] = (
+                                        <td key="status"
+                                            style={{display : this.props.showType}}>{(view.TContainerInternational && view.TContainerInternational.length > 0) ?
+                                            (view.TContainerInternational[index].status == null ? "ALLOCATED" : view.TContainerInternational[index].status ) : 'NA'}</td>
+                                    );
+                                    cellObj["Shipment Type"] = (
+                                        <td key="shipType" style={{display : this.props.showType}}>{shipType}</td>
+                                    );
+                                    return (
+                                        <tr key={index} className={count}>
+                                            <td style={{position:"relative"}}>
+                                                <input type="checkbox" className="checkBox"
+                                                       onClick={(e) => this.checkclick(e,view)}
+                                                       onChange={(e)=>{this.props.onCheckboxChange(e,view,data)}}
+                                                       value={view.id} id={"ID"+view.id + "_" +index}/>
+
+                                                <label htmlFor={"ID"+view.id + "_" +index}></label>
+                                            </td>
+
+                                            {dataState.state.headerArray.map(obj => {
+                                                return cellObj[obj];
                                             })}
 
+
                                         </tr>
-                                        {
-                                        _.map(view.TContainerDomestic , (data ,index)=>{
-                                          if(data.containerArrived == 1){
-                                            var Arr = 'YES'
-                                          } else{
-                                            var Arr = 'NO'
-                                          }
+                                    )
+                                })
 
-                                            var cellObj = {};
-                                            cellObj["ARB"] = (
-                                                <td key="Arb" style={{display : this.props.showARB}}></td>
-                                            );
-                                            cellObj["Customer"] = (
-                                                <td key ="customer" style={{display : this.props.showCustomer}}></td>
-                                            );
-                                            cellObj["Release#"] = (
-                                                <td key="Release" style={{display : this.props.showRelease}}>{view.releaseNumber} </td>
-                                            );
-                                            cellObj["Booking#"] = (
-                                                <td key="Booking" style={{display : this.props.showBooking}}>{bookingNumber ? bookingNumber : 'N/A'}</td>
-                                            );
-                                            cellObj["Container"] = (
-                                                <td key="container" style={{display : this.props.showContainer}}>{data.containerNumber}</td>
-                                            );
-                                            cellObj["Trucker"] = (
-                                                <td key=" trucker" style={{display : this.props.showTrucker}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0)?(view.TContainerDomestic[index].TCompany?view.TContainerDomestic[index].TCompany.name:'') : "N/A"}</td>
-                                            );
-                                            cellObj["Arrived?"] = (
-                                                <td key="Arrived" style={{display : this.props.showArrived}}>{Arr ? Arr : 'No'}</td>
-                                            );
-                                            cellObj["SteamShip Line"] = (
-                                                <td style={{display : this.props.showSteamShip}}>{'N/A'}</td>
-                                            );
-                                            cellObj["Type"] = (
-                                                <td key="Type" style={{display : this.props.showType}}>{'N/A'}</td>
-                                            );
-                                            cellObj["Status"] = (
-                                               <td key="status" style={{display : this.props.showType}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0) ? (view.TContainerDomestic[index].status == null ? "ALLOCATED" : view.TContainerDomestic[index].status) : 'ALLOCATED'}</td>
-                                            );
-                                            cellObj["Shipment Type"] = (
-                                            <td key="ship" style={{display : this.props.showType}}>{shipType}</td>
-                                            );
-                                            return(
-                                                <tr key={index} className={count}>
-                                                  <td>
-                                                        <label className="control control--checkbox">
-                                                            <input type="checkbox" onClick={(e) => this.checkclick(e,view)}
-                                                                   onChange={(e)=>{this.props.onCheckboxChange(e,view,data)}} value={view.id}
-                                                                   id={''}/>
+                            }
 
-                                                            <div className="control__indicator"></div>
-                                                        </label>
-                                                    </td>
-                                                    {dataState.state.headerArray.map(obj => {
-                                                        return cellObj[obj];
-                                                    })}
-                                                </tr>
-                                            )
-                                        })
+                            </tbody>
+                        )
+                    }
 
-                                        }
-
-
-                                        </tbody>
-                                 )}
-                              }
-                  else if(view.isDomestic == 0){
-                  if(view.TContainerInternational && view.TContainerInternational.length > 0) {
-                  var shipType = view.isDomestic == 0 ? "INTERNATIONAL" : "DOMESTIC"
-                  var bookingNumber = (view.TShipmentInternational && view.TShipmentInternational.length>0)? view.TShipmentInternational[0].bookingNumber : 'NA'
-                  var type = (view.TShipmentInternational && view.TShipmentInternational.length > 0 && view.TShipmentInternational[0].TContainerType) ? view.TShipmentInternational[0].TContainerType.name:'N/A'
-                  var steamship = (view.TShipmentInternational && view.TShipmentInternational.length > 0 && view.TShipmentInternational[0].TSteamshipLine)? view.TShipmentInternational[0].TSteamshipLine.name : 'N/A'
-                  var count = index
-                      var subheaderObj = {};
-                      subheaderObj["ARB"] = (
-                          <td key="arb" style={{display : this.props.showARB}}><i className="fa fa-chevron-down"
-                                                                        aria-hidden="false" data-target={count}
-                                                                        onClick={(e) => {this.onClickRow(e)}}></i> {view.TLocation ? view.TLocation.locationName : ''}
-                          </td>);
-                      subheaderObj["Customer"] = (
-                          <td key="customer" style={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</td>
-                      );
-                      subheaderObj["Release#"] = (
-                          <td key="release" style={{display : this.props.showRelease}}></td>
-                      );
-                      subheaderObj["Booking#"] = (
-                          <td key ="Booking"style={{display : this.props.showBooking}}></td>
-                      );
-                      subheaderObj["Container"] = (
-                          <td key ="Container" style={{display : this.props.showContainer}}></td>
-                      );
-                      subheaderObj["Trucker"] = (
-                          <td key ="Trucker" style={{display : this.props.showTrucker}}></td>
-                      );
-                      subheaderObj["Arrived?"] = (
-                          <td key="Arrived" style={{display : this.props.showArrived}}></td>
-                      );
-                      subheaderObj["SteamShip Line"] = (
-                          <td key=""style={{display : this.props.showSteamShip}}></td>
-                      );
-                      subheaderObj["Type"] = (
-                          <td key="type"style = {{display : this.props.showType}}></td>
-                      ); subheaderObj["Status"] = (
-                          <td style = {{display : this.props.showType}}></td>
-                      ); subheaderObj["Shipment Type"] = (
-                          <td key="ship"style = {{display : this.props.showType}}></td>
-                      );
-                       return (
-                           <tbody key={index}>
-                           <tr className="base_bg clickable" ref="clickable" style={{"backgroundColor": "#e5e5ff"}}>
-                               <td>
-                                   <label className="control control--checkbox">
-                                       <input type="checkbox" onChange={(e)=>{this.props.onCheckboxChange(e,view)}}
-                                              value={view.id} id={view.id}/>
-
-                                       <div className="control__indicator"></div>
-                                   </label>
-                               </td>
-
-                               {dataState.state.headerArray.map(obj => {
-                                   return subheaderObj[obj];
-                               })}
-
-                           </tr>
-                           {
-                          _.map(view.TContainerInternational , (data ,index)=>{
-
-                             if(data.containerArrived == 1){
-                                      var Arr = 'YES'
-                                          } else{
-                                            var Arr = 'NO'
-                                          }
-                              var cellObj = {};
-                              cellObj["ARB"] = (
-                                  <td key="ar"style={{display : this.props.showARB}}></td>
-                              );
-                              cellObj["Customer"] = (
-                                  <td key="customer" style={{display : this.props.showCustomer}}></td>
-                              );
-                              cellObj["Release#"] = (
-                                  <td key= "release" style={{display : this.props.showRelease}}>{view.releaseNumber} </td>
-                              );
-                              cellObj["Booking#"] = (
-                                  <td key="booking"style={{display : this.props.showBooking}}>{bookingNumber ? bookingNumber : 'N/A'}</td>
-                              );
-                              cellObj["Container"] = (
-                                  <td key ="container" style={{display : this.props.showContainer}}>{data.containerNumber}</td>
-                              );
-                              cellObj["Trucker"] = (
-                                  <td key="trucker" style={{display : this.props.showTrucker}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0)?(view.TContainerDomestic[index].TCompany?view.TContainerDomestic[index].TCompany.name:'') : "N/A"}</td>
-                              );
-                              cellObj["Arrived?"] = (
-                                  <td key="arrived" style={{display : this.props.showArrived}}>{Arr ? Arr : 'No'}</td>
-                              );
-                              cellObj["SteamShip Line"] = (
-                                  <td key= "steamShip" style={{display : this.props.showSteamShip}}>{steamship ? steamship : 'N/A'}</td>
-                              );
-                              cellObj["Type"] = (
-                                  <td key="type" style={{display : this.props.showType}}>{type}</td>
-                              );
-                              cellObj["Status"] = (
-                                  <td key= "status" style={{display : this.props.showType}}>{(view.TContainerInternational && view.TContainerInternational.length > 0) ?
-                                      (view.TContainerInternational[index].status == null ?"ALLOCATED" : view.TContainerInternational[index].status ): 'NA'}</td>
-                              );
-                              cellObj["Shipment Type"] = (
-                                  <td key="shipType"style={{display : this.props.showType}}>{shipType}</td>
-                              );
-                                   return(
-                                       <tr key={index} className={count}>
-                                           <td>
-                                               <label className="control control--checkbox">
-                                                   <input type="checkbox" onClick={(e) => this.checkclick(e,view)}
-                                                          onChange={(e)=>{this.props.onCheckboxChange(e,view,data)}} value={view.id}
-                                                          id={''}/>
-
-                                                   <div className="control__indicator"></div>
-                                               </label>
-                                           </td>
-
-                                           {dataState.state.headerArray.map(obj => {
-                                               return cellObj[obj];
-                                           })}
-
-
-                                       </tr>
-                                   )
-                               })
-
-                           }
-
-                           </tbody>
-                       )
-                   }
-
-               }
-            })}
+                }
+            })
+        }
 
         listData = _.filter(listData, function (param) {
             return param !== undefined;
         });
-var headerObj={};
-        headerObj["ARB"]=( <th key="Arb" className="exclude-drag" style = {{display : this.props.showARB}} onClick={(e)=> this.onAscending(e,'location')}>ARB
+        var headerObj = {};
+        headerObj["ARB"] = (<th key="Arb" className="exclude-drag" style={{display : this.props.showARB}}
+                                onClick={(e)=> this.onAscending(e,'location')}>ARB
                     <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                        <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                     </span>
         </th>);
-        headerObj["Customer"]=(  <th key ="customer" style = {{display : this.props.showCustomer}} onClick={(e)=> this.onAscending(e,'company')}>Customer
+        headerObj["Customer"] = (<th key="customer" style={{display : this.props.showCustomer}}
+                                     onClick={(e)=> this.onAscending(e,'company')}>Customer
 
                         <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                        <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
         </th>);
         headerObj["Release#"] = (
-            <th key ="Release#" style={{display : this.props.showRelease}} onClick={(e)=> this.onAscending(e,'po_number')}>Release#
+            <th key="Release#" style={{display : this.props.showRelease}}
+                onClick={(e)=> this.onAscending(e,'po_number')}>Release#
                  <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
             </th>);
         headerObj["Booking#"] = (
-            <th key ="Booking#" style={{display : this.props.showBooking}} onClick={(e)=> this.onAscending(e,'railcar_number')}>Booking#
+            <th key="Booking#" style={{display : this.props.showBooking}}
+                onClick={(e)=> this.onAscending(e,'railcar_number')}>Booking#
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
             </th>);
         headerObj["Container"] = (
-            <th key="Container" style={{display : this.props.showContainer}} onClick={(e)=> this.onAscending(e,'lot_number')}>Container#
+            <th key="Container" style={{display : this.props.showContainer}}
+                onClick={(e)=> this.onAscending(e,'lot_number')}>Container#
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -954,75 +1015,82 @@ var headerObj={};
 
             </th>);
         headerObj["Trucker"] = (
-            <th key="Trucker" style ={{display : this.props.showTrucker}} onClick={(e)=> this.onAscending(e,'Trucker')}>Trucker
+            <th key="Trucker" style={{display : this.props.showTrucker}} onClick={(e)=> this.onAscending(e,'Trucker')}>
+                Trucker
                <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                        <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
             </th>);
-        headerObj["Arrived?"]=( <th  key ="Arrived" style ={{display : this.props.showArrived}} onClick={(e)=> this.onAscending(e,'Arrived')}>Arrived?
+        headerObj["Arrived?"] = (
+            <th key="Arrived" style={{display : this.props.showArrived}} onClick={(e)=> this.onAscending(e,'Arrived')}>
+                Arrived?
                <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                        <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
-        </th>)
-        headerObj["SteamShip Line"]=(
-            <th key ="SteamShip" style ={{display : this.props.showSteamShip}} onClick={(e)=> this.onAscending(e,'SteamshipLine')}>Steamship Line
+            </th>)
+        headerObj["SteamShip Line"] = (
+            <th key="SteamShip" style={{display : this.props.showSteamShip}}
+                onClick={(e)=> this.onAscending(e,'SteamshipLine')}>Steamship Line
                 <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                        <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
             </th>
         );
-        headerObj["Type"]=( <th key=" type" style ={{display : this.props.showType}} onClick={(e)=> this.onAscending(e,'Type')}>Type
+        headerObj["Type"] = (
+            <th key=" type" style={{display : this.props.showType}} onClick={(e)=> this.onAscending(e,'Type')}>Type
                 <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                        <i className="fa fa-sort-asc fa-stack-1x"></i>
+                        <i className="fa fa-sort-desc fa-stack-1x"></i>
+                </span>
+
+            </th>);
+        headerObj["Status"] = (
+            <th key="status" style={{display : this.props.showType}} onClick={(e)=> this.onAscending(e,'status')}>Status
+                <span className="fa-stack ">
+                        <i className="fa fa-sort-asc fa-stack-1x"></i>
+                        <i className="fa fa-sort-desc fa-stack-1x"></i>
+                </span>
+
+            </th>);
+        headerObj["Shipment Type"] = (<th key="Shipment" style={{display : this.props.showType}}
+                                          onClick={(e)=> this.onAscending(e,'shipmentType')}>Shipment Type
+                <span className="fa-stack ">
+                        <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
         </th>);
-        headerObj["Status"]=(<th key ="status" style ={{display : this.props.showType}} onClick={(e)=> this.onAscending(e,'status')}>Status
-                <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
-
-        </th>);
-        headerObj["Shipment Type"]=(<th key="Shipment" style ={{display : this.props.showType}} onClick={(e)=> this.onAscending(e,'shipmentType')}>Shipment Type
-                <span className="fa-stack ">
-                        <i className="fa fa-sort-asc fa-stack-1x" ></i>
-                        <i className="fa fa-sort-desc fa-stack-1x"></i>
-                </span>
-
-        </th>);
 
 
-
-        return(
+        return (
             <Loader loaded={this.state.loaded}>
-            <div className="loadedContentNew">
-                <table id="Packaging_Instruction_View" className="table table-expandable table-striped sorted_head" cellSpacing="0" >
-                    <thead className="table_head">
-                    <tr className="sorting_head"  style={{"backgroundColor" : "#2e6da4"}}>
-                        <th className="exclude-drag">
+                <div className="loadedContentNew">
+                    <table id="Packaging_Instruction_View" className="table table-expandable table-striped sorted_head"
+                           cellSpacing="0">
+                        <thead className="table_head">
+                        <tr className="sorting_head" style={{"backgroundColor" : "#2e6da4"}}>
+                            <th className="exclude-drag">
 
-                        </th>
-                        {this.state.headerArray.map(obj => {
-                            return headerObj[obj];
-                        })}
+                            </th>
+                            {this.state.headerArray.map(obj => {
+                                return headerObj[obj];
+                            })}
                         </tr>
-                    </thead>
-                    { ( listData == undefined || listData.length == 0)
-                        ?
-                        <tbody>
-                        <tr>
-                            <td colSpan="12" className="noresult">No results match your entered criteria.</td>
-                        </tr>
-                        </tbody> : listData
-                    }
-                </table>
+                        </thead>
+                        { ( listData == undefined || listData.length == 0)
+                            ?
+                            <tbody>
+                            <tr>
+                                <td colSpan="12" className="noresult">No results match your entered criteria.</td>
+                            </tr>
+                            </tbody> : listData
+                        }
+                    </table>
                 </div>
             </Loader>)
     }
