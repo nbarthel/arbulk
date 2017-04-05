@@ -65,6 +65,9 @@ class ContainerViewDataComponent extends React.Component {
                 if($('.noresult').hasClass('noresult')){
                     $('.loadedContentNew').addClass('noresultdata');
                 }
+                else{
+                    $('.loadedContentNew').removeClass('noresultdata')
+                }
             },200);
         })
     }

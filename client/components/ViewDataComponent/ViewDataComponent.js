@@ -179,10 +179,15 @@ class ViewDataComponent extends React.Component {
         else {
             grouping = false
         }
+        debugger
         $(function(){
             setTimeout(function () {
+                debugger
                 if($('.noresult').hasClass('noresult')){
                     $('.loadedContentNew').addClass('noresultdata');
+                }
+                else{
+                    $('.loadedContentNew').removeClass('noresultdata')
                 }
             },200);
         })
@@ -246,7 +251,7 @@ class ViewDataComponent extends React.Component {
 
                 });
 
-            }, 3000);
+            }, 2800);
 
         });
 
