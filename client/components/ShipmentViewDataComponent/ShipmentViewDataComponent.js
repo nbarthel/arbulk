@@ -202,10 +202,10 @@ class ShipmentViewDataComponent extends React.Component {
         $(function () {
             setTimeout(function () {
                 $("#Packaging_Instruction_View").colResizable({
-                    liveDrag:true,
+                    liveDrag:false,
                     gripInnerHtml:"<div class='grip'></div>",
                     draggingClass:"dragging",
-                    resizeMode:'overflow'
+                    // resizeMode:'overflow'
                 });
                 //$("table").colResizable();
                 $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
@@ -234,6 +234,16 @@ class ShipmentViewDataComponent extends React.Component {
                         _super($item, container);
                         shipState.setState({
                             headerArray: headerArray
+                        });
+                        $("#Packaging_Instruction_View").colResizable({
+                            disable: true
+                            // resizeMode:'overflow'
+                        });
+                        $("#Packaging_Instruction_View").colResizable({
+                            liveDrag:false,
+                            gripInnerHtml:"<div class='grip'></div>",
+                            draggingClass:"dragging",
+                            // resizeMode:'overflow'
                         });
                     }
 
@@ -722,7 +732,7 @@ class ShipmentViewDataComponent extends React.Component {
 
     onToggel(e, elm) {
 
-        ;
+
         $("button").click(function () {
             $("p").slideToggle("slow");
         });
@@ -1014,8 +1024,8 @@ class ShipmentViewDataComponent extends React.Component {
                                 <td>
                                         <input type="checkbox" className="checkBox"
                                                onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
-                                               value={view.id} id={view.id}/>
-                                    <label htmlFor={view.id}></label>
+                                               value={view.id} id={view.id+"SC"}/>
+                                    <label htmlFor={view.id+"SC"}></label>
 
                                 </td>
                                 {shipState.state.headerArray.map(obj => {
@@ -1150,7 +1160,6 @@ class ShipmentViewDataComponent extends React.Component {
 
                                                         <label htmlFor={data.TPackagingInstructionLots ? data.TPackagingInstructionLots.id : ''}></label>
                                                     </td>
-
 
                                                     {shipState.state.headerArray.map(obj => {
                                                         return cellObj[obj];

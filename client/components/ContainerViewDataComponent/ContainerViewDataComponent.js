@@ -953,8 +953,6 @@ class ContainerViewDataComponent extends React.Component {
                                             {dataState.state.headerArray.map(obj => {
                                                 return cellObj[obj];
                                             })}
-
-
                                         </tr>
                                     )
                                 })
@@ -1070,8 +1068,8 @@ class ContainerViewDataComponent extends React.Component {
         return (
             <Loader loaded={this.state.loaded}>
             <div className="loadedContentNew">
-                <table id="Packaging_Instruction_View" className="table table-expandable table-striped sorted_head" cellSpacing="0" >
-                    <thead className="table_head">
+                <table id="Packaging_Instruction_View" className="table table-expandable table-striped " cellSpacing="0" >
+                    <thead className="table_head sorted_head">
                     <tr className="sorting_head"  style={{"backgroundColor" : "#2e6da4"}}>
                         <th className="exclude-drag">
                             {grouping && this.props.SelcetedOptionForGroupBy!="" ? this.props.SelcetedOptionForGroupBy:""}
