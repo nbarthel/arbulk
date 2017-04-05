@@ -175,7 +175,7 @@ PrintScreen(){
         console.log(value,data)
         if(e.target.checked){
             this.conFirmID = e.target.value
-            this.selected = e.target.id
+            this.selected = e.target.id.split(":")[0]
             this.confId = data.id
             this.status = value.status
             this.shipId = value.id

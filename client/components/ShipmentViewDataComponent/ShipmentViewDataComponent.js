@@ -925,6 +925,7 @@ class ShipmentViewDataComponent extends React.Component {
             })
         }
         else{
+            var i=0;
         listData = _.map(this.state.viewData, (view, index)=> {
                 if (sortedDataflag || (view.TShipmentInternational != undefined && view.TShipmentInternational.length > 0) || (view.TShipmentInternational != undefined && view.TShipmentDomestic.length > 0)) {
                     var alloc = "No"
@@ -1041,7 +1042,7 @@ class ShipmentViewDataComponent extends React.Component {
                                 {shipState.state.headerArray.map(obj => {
                                     return subheaderObj[obj];
                                 })}
-                               
+
 
                             </tr>
 
@@ -1164,11 +1165,11 @@ class ShipmentViewDataComponent extends React.Component {
 
                                                             <input className="checkBox" type="checkbox"
                                                                    onClick={(e) => this.checkclick(e,data)}
-                                                                   id={data.TPackagingInstructionLots ? data.TPackagingInstructionLots.id : ''}
+                                                                   id={data.TPackagingInstructionLots ? data.TPackagingInstructionLots.id + ":" + (++i): ''}
                                                                    value={view.id}
                                                                    onChange={(e)=>{this.props.checkboxChange(e,view,data)}}/>
 
-                                                        <label htmlFor={data.TPackagingInstructionLots ? data.TPackagingInstructionLots.id : ''}></label>
+                                                        <label htmlFor={data.TPackagingInstructionLots ? data.TPackagingInstructionLots.id + ":" + i : ''}></label>
                                                     </td>
 
                                                     {shipState.state.headerArray.map(obj => {
