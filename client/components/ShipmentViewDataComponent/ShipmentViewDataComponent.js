@@ -247,7 +247,7 @@ class ShipmentViewDataComponent extends React.Component {
                         });
                         $("#Packaging_Instruction_View").colResizable({
                             disable: true
-                            
+
                         });
                         $("#Packaging_Instruction_View").colResizable({
                             liveDrag:false,
@@ -1041,7 +1041,7 @@ class ShipmentViewDataComponent extends React.Component {
                                 {shipState.state.headerArray.map(obj => {
                                     return subheaderObj[obj];
                                 })}
-                                <td></td>
+                               
 
                             </tr>
 
