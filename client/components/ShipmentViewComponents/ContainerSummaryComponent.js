@@ -99,7 +99,7 @@ class ContainerSummaryComponent extends Component {
                                     <td>{contLoaded.sealNumber}</td>
                                     <td>{contLoaded.TContainerLoad.length == 1 ? contLoaded.TContainerLoad[0].noOfBags : (contLoaded.TContainerLoad.length == 2 ? (parseInt(contLoaded.TContainerLoad[0].noOfBags) + parseInt(contLoaded.TContainerLoad[1].noOfBags) ) : (contLoaded.TContainerLoad.length == 3) ? (parseInt(contLoaded.TContainerLoad[0].noOfBags) + parseInt(contLoaded.TContainerLoad[1].noOfBags) ) + +parseInt(contLoaded.TContainerLoad[2].noOfBags) : (contLoaded.TContainerLoad.length == 4) ? (parseInt(contLoaded.TContainerLoad[0].noOfBags) + parseInt(contLoaded.TContainerLoad[1].noOfBags) ) + parseInt(contLoaded.TContainerLoad[2].noOfBags) + parseInt(contLoaded.TContainerLoad[3].noOfBags) : '')}</td>
                                     <td>{contLoaded.TContainerLoad.length == 1 ? contLoaded.TContainerLoad[0].weight : (contLoaded.TContainerLoad.length == 2 ? (parseInt(contLoaded.TContainerLoad[0].weight) + parseInt(contLoaded.TContainerLoad[1].weight) ) : (contLoaded.TContainerLoad.length == 3) ? (parseInt(contLoaded.TContainerLoad[0].weight) + parseInt(contLoaded.TContainerLoad[1].weight) ) + +parseInt(contLoaded.TContainerLoad[2].weight) : (contLoaded.TContainerLoad.length == 4) ? (parseInt(contLoaded.TContainerLoad[0].weight) + parseInt(contLoaded.TContainerLoad[1].weight) ) + parseInt(contLoaded.TContainerLoad[2].weight) + parseInt(contLoaded.TContainerLoad[3].weight) : '')}</td>
-                                    <td></td>
+
                                 </tr>
                             )
                         })
@@ -231,7 +231,6 @@ class ContainerSummaryComponent extends Component {
                                                 <td>{contLoaded.sealNumber}</td>
                                                 <td>{contLoaded.TContainerLoad.length==1 ?contLoaded.TContainerLoad[0].noOfBags : (contLoaded.TContainerLoad.length ==2 ? (parseInt(contLoaded.TContainerLoad[0].noOfBags) + parseInt(contLoaded.TContainerLoad[1].noOfBags) ): (contLoaded.TContainerLoad.length ==3)?(parseInt(contLoaded.TContainerLoad[0].noOfBags) + parseInt(contLoaded.TContainerLoad[1].noOfBags) ) + + parseInt(contLoaded.TContainerLoad[2].noOfBags) :(contLoaded.TContainerLoad.length ==4)?(parseInt(contLoaded.TContainerLoad[0].noOfBags) + parseInt(contLoaded.TContainerLoad[1].noOfBags) ) + parseInt(contLoaded.TContainerLoad[2].noOfBags)  + parseInt(contLoaded.TContainerLoad[3].noOfBags) :'')}</td>
                                                 <td>{contLoaded.TContainerLoad.length==1 ?contLoaded.TContainerLoad[0].weight : (contLoaded.TContainerLoad.length ==2 ? (parseInt(contLoaded.TContainerLoad[0].weight) + parseInt(contLoaded.TContainerLoad[1].weight) ): (contLoaded.TContainerLoad.length ==3)?(parseInt(contLoaded.TContainerLoad[0].weight) + parseInt(contLoaded.TContainerLoad[1].weight) ) + + parseInt(contLoaded.TContainerLoad[2].weight) :(contLoaded.TContainerLoad.length ==4)?(parseInt(contLoaded.TContainerLoad[0].weight) + parseInt(contLoaded.TContainerLoad[1].weight) ) + parseInt(contLoaded.TContainerLoad[2].weight)  + parseInt(contLoaded.TContainerLoad[3].weight) :'')}</td>
-                                                <td></td>
                                             </tr>
                                         )
                                     })
@@ -245,7 +244,7 @@ class ContainerSummaryComponent extends Component {
                           this.notArrivedTruckersTable = _.map(this.arr,(notArr,index) => {
                                                     return(<tr key = {index}>
                                                                                                   <td>NOT ARRIVED</td>
-                                                                                                 <td></td>
+                                                                                                  <td></td>
                                                                                                   <td>{this.unAllocatedContainers - this.arrivedTruckersCount}</td>
                                                                                                   <td></td>
                                                                                                   <td></td>
@@ -324,6 +323,7 @@ class ContainerSummaryComponent extends Component {
                                                 <th>Seal #</th>
                                                 <th># of Bags</th>
                                                 <th>Weight</th>
+
                                             </tr>
                                             </thead>
                                             <tbody>

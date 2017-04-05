@@ -1409,10 +1409,6 @@ class ShipmentViewDataComponent extends React.Component {
                             </th>
 
                             {this.state.headerArray.map(obj => {
-                                debugger
-                                if(obj!=this.props.SelcetedOptionForGroupBy){
-
-                                }
                                 return headerObj[obj];
                             })}
 

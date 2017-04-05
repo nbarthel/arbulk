@@ -269,11 +269,11 @@ class ContainerViewDataComponent extends React.Component {
 
                 break;
             case 'Container#':
-                groupData = _.groupBy(tempData, function (item) {
-                    if (item.TContainerDomestic.length > 0) {
+                groupData = _.groupBy(tempData, function(item) {
+                    if(item.TContainerDomestic && item.TContainerDomestic.length>0){
                         return item.TContainerDomestic[0].containerNumber.toLowerCase()
                     }
-                    else if (item.TContainerInternational.length > 0) {
+                    else if(item.TContainerInternational && item.TContainerInternational.length>0){
                         return item.TContainerInternational[0].containerNumber.toLowerCase()
                     }
                 });
@@ -337,8 +337,8 @@ class ContainerViewDataComponent extends React.Component {
                 });
 
                 break;//view.TShipmentInternational[0].TSteamshipLine
-            case 'SteamshipLine':
-                groupData = _.groupBy(tempData, function (item) {
+            case 'Steamship Line':
+                groupData = _.groupBy(tempData, function(item) {
 
                     if (item.TShipmentInternational.length > 0) {
                         return item.TShipmentInternational[0].TSteamshipLine.name.toLowerCase()
@@ -353,7 +353,7 @@ class ContainerViewDataComponent extends React.Component {
             case 'Type':
                 groupData = _.groupBy(tempData, function (item) {
 
-                    if (item.TContainerInternational.length > 0) {
+                    if(item.TContainerInternational && item.TContainerInternational.length>0){
                         return item.TShipmentInternational[0].TContainerType.name.toLowerCase()
                     }
                     else {
@@ -363,21 +363,21 @@ class ContainerViewDataComponent extends React.Component {
                 });
 
                 break;
-            case 'status':
-                groupData = _.groupBy(tempData, function (item) {
+            case 'Status':
+                groupData = _.groupBy(tempData, function(item) {
 
-                    if (item.TContainerInternational.length > 0) {
+                    if(item.TContainerInternational && item.TContainerInternational.length>0){
                         return item.TContainerInternational[0].status.toLowerCase()
                     }
-                    else if (item.TContainerDomestic.length > 0) {
+                    else if(item.TContainerDomestic && item.TContainerDomestic.length>0){
                         return item.TContainerDomestic[0].status.toLowerCase()
                     }
                     return item
                 });
 
                 break;
-            case 'shipmentType':
-                groupData = _.groupBy(tempData, function (item) {
+            case 'Shipment Type':
+                groupData = _.groupBy(tempData, function(item) {
 
                     if (item.isDomestic == 1) {
                         return item
@@ -1069,17 +1069,16 @@ class ContainerViewDataComponent extends React.Component {
 
         return (
             <Loader loaded={this.state.loaded}>
-                <div className="loadedContentNew">
-                    <table id="Packaging_Instruction_View" className="table table-expandable table-striped sorted_head"
-                           cellSpacing="0">
-                        <thead className="table_head">
-                        <tr className="sorting_head" style={{"backgroundColor" : "#2e6da4"}}>
-                            <th className="exclude-drag">
-
-                            </th>
-                            {this.state.headerArray.map(obj => {
-                                return headerObj[obj];
-                            })}
+            <div className="loadedContentNew">
+                <table id="Packaging_Instruction_View" className="table table-expandable table-striped sorted_head" cellSpacing="0" >
+                    <thead className="table_head">
+                    <tr className="sorting_head"  style={{"backgroundColor" : "#2e6da4"}}>
+                        <th className="exclude-drag">
+                            {grouping && this.props.SelcetedOptionForGroupBy!="" ? this.props.SelcetedOptionForGroupBy:""}
+                        </th>
+                        {this.state.headerArray.map(obj => {
+                            return headerObj[obj];
+                        })}
                         </tr>
                         </thead>
                         { ( listData == undefined || listData.length == 0)

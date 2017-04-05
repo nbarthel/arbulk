@@ -195,7 +195,7 @@ class  ShipmentDetailsForm extends React.Component {
 
         if(e.target.checked) {
         this.piLotIdArray.push(value.TPackagingInstructionLots.id)
-        document.getElementById("ContainerSummary").style.display = "table"
+        // document.getElementById("ContainerSummary").style.display = "table"
         console.log("value", value)
         this.sID = value.shipmentId
         this.shipmentId = value.shipmentId
@@ -745,7 +745,7 @@ else
                                         <i className="indicator glyphicon glyphicon-chevron-down  pull-right"></i>
                                     </h4>
                                 </div>
-                                <div id="ContainerSummary" className="panel-collapse collapse ">
+                                <div id="ContainerSummary" className="panel-collapse collapse in">
 
                                     <div id="edit" className="edit row pddn-10-btm" style={{display:this.state.hideEdit}}>
                                             <form action="" method="post">
