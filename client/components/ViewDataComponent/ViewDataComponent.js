@@ -172,22 +172,27 @@ class ViewDataComponent extends React.Component {
     }
 
     componentWillReceiveProps(next) {
-        debugger
+         
         if (next.SelcetedOptionForGroupBy && next.SelcetedOptionForGroupBy != "" && next.SelcetedOptionForGroupBy != '') {
             this.onGroupBy(next.SelcetedOptionForGroupBy)
         }
         else {
             grouping = false
         }
+        $(function(){
+            setTimeout(function () {
+                if($('.noresult').hasClass('noresult')){
+                    $('.loadedContentNew').addClass('noresultdata');
+                }
+            },200);
+        })
     }
     componentDidMount() {
          var that = this;
+
         $(function () {
             setTimeout(function () {
-                if($('.noresult')){
 
-                    $('.loadedContentNew').addClass('noresultdata');
-                }
                 $("#Packaging_Instruction_View").colResizable({
                     liveDrag:false,
                     gripInnerHtml:"<div class='grip'></div>",
@@ -1227,7 +1232,7 @@ class ViewDataComponent extends React.Component {
         return (
 
             <Loader loaded={this.state.loaded} id="loaded">
-                <div className="loadedContentNew">
+                <div className="loadedContentNew" id="loadedNew">
 
                     <table id="Packaging_Instruction_View" className="table table-expandable sort kksky11" cellSpacing="0">
                         <thead id="table_head1" className="table_head header-fixed header red sorted_head">
