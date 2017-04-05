@@ -893,7 +893,7 @@ class ShipmentViewDataComponent extends React.Component {
                                           <td  key="Confirmed" style={{display : this.props.showConfmd}}>{confd ? confd : "NO"}</td>
                                           <td  key="Forwarder" style={{display : this.props.showForwarder}}>{view.isDomestic == 1 ? 'N/A' : freightForwarder}</td>
                                           <td  key="Cntr" style={{display : this.props.showCntrSize}}>{CType ? CType : "N/A"}</td>
-                                          <td  key="" style={{display : this.props.showQty}}>{view.numberOfContainers ? view.numberOfContainers : ''}</td>
+                                          <td  key="Qty" style={{display : this.props.showQty}}>{view.numberOfContainers ? view.numberOfContainers : ''}</td>
                                           <td  key="Allocated" style={{display : this.props.showAlloc}}>{alloc ? alloc : "N/A"}</td>
                                           <td  key="Enough" style={{display : this.props.showEno}}>{eno}</td>
                                           <td  key="Bags" style={{display : this.props.showBags}}>{data.noOfBags ? data.noOfBags : 0}</td>
@@ -986,7 +986,7 @@ class ShipmentViewDataComponent extends React.Component {
                             <td key= "Qty" style={{display : this.props.showQty}}></td>
                         );
                         subheaderObj["Allocated"] = (
-                            <td  key= "" style={{display :this.props.showAlloc}}></td>
+                            <td  key= "allocated" style={{display :this.props.showAlloc}}></td>
                         );
                         subheaderObj["Enough"] = (
                             <td key= "Enough" style={{display : this.props.showEno}}></td>
