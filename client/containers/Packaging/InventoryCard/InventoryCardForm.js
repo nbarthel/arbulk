@@ -442,9 +442,10 @@ debugger
 			</div>
 		</div>
 
-		 <div className="col-lg-12 margin-btm-40 label-gray font-size-16" >
+		{/* <div className="col-lg-12 margin-btm-40 label-gray font-size-16" >
 		   Inventory Card
-		 </div>
+		 </div>*/}
+		<hr/>
 	</div>
 
 
@@ -453,7 +454,7 @@ debugger
 
 	<br className="clearfix"/>
 	<div >
-	<div className="row pddn-40-top">
+	<div className="row">
 
 	 <CurrentInventory viewData = {this.props.viewData} key={this.state.index} length = {this.length}  onCancel = {this.onCancel} lid={this.props.lid} id = {this.props.id} lID={this.props.cId} checked = {this.checked} lotId = {this.id}  onCheckBoxChange = {this.onCheckBoxChange} onSaveChange = {this.onSaveChange} lots = {this.props.lots} lotIdArray = {this.lotIdArray}/>
 	<InventoryHistory pID ={this.props.id} lotIdArray = {this.lotIdArray}/>

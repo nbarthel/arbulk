@@ -1047,10 +1047,10 @@ var tempThis = this
 	return (
 		<Loader loaded={this.state.loaded} >
 			 <div className=" col-lg-6 col-md-6 col-sm-6 col-xs-12">
-	 <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 active">
+	 <div className="row active">
 	 	 <div className=" col-lg-7 col-md-7 col-sm-7 col-xs-12">
 				<div className="table-responsive">
-				 <h5>Current Inventory</h5>
+				 <h5 className="current-Inv">Current Inventory</h5>
 				 <div id="edit" className="edit" style={{display: this.state.showEdit}}>
 			    <div className="form-group">
 					<div className="col-md-3  col-sm-6 col-xs-6">
