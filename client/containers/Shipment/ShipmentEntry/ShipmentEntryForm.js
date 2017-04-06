@@ -161,13 +161,7 @@ class ShipmentEntryForm extends React.Component {
             containerReturnLocation: "",
             notes: ""
         }
-
-
-        //this.Allobjs.SI = this.SIobj
-
-
-
-
+        this.utcNow = new Date().setHours("00","00")
     }
     componentDidMount() {
         var PIview = createDataLoader(ShipmentEntryForm,{
@@ -711,6 +705,7 @@ class ShipmentEntryForm extends React.Component {
     }
 
     onSubmit(e){
+        debugger
       DisableDoubleClick('submit')
       var bagsLeftTemp = 0
         if(!(this.isValid())){
@@ -1580,7 +1575,7 @@ DisableDoubleClick('submitContainer')
                                                 forceValidDate={true}
                                                 updateOnDateClick={true}
                                                 collapseOnDateClick={true}
-                                                defaultValue={1486619937042}
+                                                defaultValue={  this.utcNow}
                                                 showClock={false}
                                                 onChange={this.InternationalReturnDate}
                                                 selected={this.state.EarliestReturnDate}
@@ -1611,7 +1606,7 @@ DisableDoubleClick('submitContainer')
                                      forceValidDate={true}
                                      updateOnDateClick={true}
                                      collapseOnDateClick={true}
-                                     defaultValue={1486619937042}
+                                     defaultValue={  this.utcNow}
                                      showClock={false}
                                      onChange={this.DocCutOffDate}
                                      selected={this.state.DocCutoffDate}
@@ -1647,7 +1642,7 @@ DisableDoubleClick('submitContainer')
                                                forceValidDate={true}
                                                updateOnDateClick={true}
                                                collapseOnDateClick={true}
-                                               defaultValue={1486619937042}
+                                               defaultValue={  this.utcNow}
                                                showClock={false}
                                                onChange={this.InternationalCargoDate}
                                                selected={this.state.InternationalCargoDate}
