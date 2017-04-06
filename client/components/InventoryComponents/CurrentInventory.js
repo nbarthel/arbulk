@@ -610,7 +610,7 @@ var calcWeight = this.state.weightBox
 			if(this.addPostArray.length == 0 && this.editPostArray.length == 0 && this.splitAddPostArray.length == 0 && this.splitPostArray.length == 0 && this.addPostArray.length == 0 && this.deletePostArray.length == 0){
 				var tempThis = this
 				if(packStatus == 'true' && this.refs.noOfBags.value=="" && this.refs.locationName.value==""){
-						axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"In Inventory"})
+						axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"IN INVENTORY"})
 						swal({
 							title:"Edited",
 							text:"Data Has Been Successfully Edited",
@@ -668,10 +668,10 @@ var calcWeight = this.state.weightBox
 				//localStorage.removeItem('packagingFlag')
 			}
 			if(packStatus == 'true' ){
-					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"In Inventory",inInventory:this.totalBags})
+					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"IN INVENTORY",inInventory:this.totalBags})
 					swal("Edited","Data Has Been Successfully Edited","success")
 				}else {
-					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"PARTIALLYPACKED",inInventory:this.totalBags})
+					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"PARTIALLY PACKAGED",inInventory:this.totalBags})
 				}
 			this.edit = false
 			this.editPostArray = [ ]
@@ -732,10 +732,10 @@ var calcWeight = this.state.weightBox
 				}
 
 			if(packStatus == 'true'){
-					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"In Inventory",inInventory:this.totalBags})
+					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"IN INVENTORY",inInventory:this.totalBags})
 					swal("Edited","Data Has Been Successfully Edited","success")
 				}else {
-					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"PARTIALLYPACKED",inInventory:this.totalBags})
+					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"PARTIALLY PACKAGED",inInventory:this.totalBags})
 					swal("Edited","Data Has Been Successfully Edited","success")
 				}
 			this.splRow = false
@@ -785,11 +785,11 @@ var calcWeight = this.state.weightBox
 					//localStorage.removeItem('packagingFlag')
 				}
 			if(packStatus == 'true'){
-					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"In Inventory",inInventory:this.totalBags}).then((response)=>{
+					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"IN INVENTORY",inInventory:this.totalBags}).then((response)=>{
 					})
 
 				}else {
-					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"PARTIALLYPACKED",inInventory : this.totalBags}).then((response)=>{
+					axios.put(Base_Url + "TPackagingInstructionLots/"+this.CID,{status:"PARTIALLY PACKAGED",inInventory : this.totalBags}).then((response)=>{
 					})
 
 				}
@@ -857,7 +857,7 @@ var calcWeight = this.state.weightBox
 			}
 var tempThis = this
 			if(packStatus == 'true'){
-					axios.put(Base_Url + "TPackagingInstructionLots/"+	this.CID,{status:"In Inventory",inInventory:this.totalBags}).then((response)=>{
+					axios.put(Base_Url + "TPackagingInstructionLots/"+	this.CID,{status:"IN INVENTORY",inInventory:this.totalBags}).then((response)=>{
 						swal({
 							text:"Data Has Been Successfully Edited",
 							title:"Edited",
@@ -875,7 +875,7 @@ var tempThis = this
 					})
 				}else {
 
-					axios.put(Base_Url + "TPackagingInstructionLots/"+	this.CID,{status:"PARTIALLYPACKED",inInventory : this.totalBags}).then((response)=>{
+					axios.put(Base_Url + "TPackagingInstructionLots/"+	this.CID,{status:"PARTIALLY PACKAGED",inInventory : this.totalBags}).then((response)=>{
 						swal({
 							title:"Edited",
 							text:"Data Has Been Successfully Edited",
