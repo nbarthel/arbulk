@@ -405,9 +405,9 @@ debugger
 					<div  className="col-lg-2 col-sm-2 col-xs-2">:</div>
 					<div className="col-lg-5 col-sm-5 col-xs-5"><b>{this.props.viewData ? this.props.viewData[0].TWrapType.name : ''}</b></div>
 
-					<div className="col-lg-5 col-sm-5 col-xs-5">ORIGIN</div>
+					<div className="col-lg-5 col-sm-5 col-xs-5">Origin</div>
 					<div  className="col-lg-2 col-sm-2 col-xs-2 ">:</div>
-					<div className="col-lg-5 col-sm-5 col-xs-5"><b>Made in {this.props.viewData ? this.props.viewData[0].TOrigin.origin : ''}</b></div>
+					<div className="col-lg-5 col-sm-5 col-xs-5"><b>{this.props.viewData ? this.props.viewData[0].TOrigin.origin : ''}</b></div>
 
 				</fieldset>
 			</div>
