@@ -7,14 +7,11 @@ class StatusFilterPage extends React.Component {
         {name:"CONFIRMED",id:1},
         {name:"READY",id:2},
         {name:"QUEUED",id:3},
-        {name:"PARTIALLYPACKED",id:4},
-        {name:"In Inventory",id:5},
+        {name:"PARTIALLY PACKAGED",id:4},
+        {name:"IN INVENTORY",id:5},
         {name:"SHIPPED",id:6}]
 
         this.checkedStatus = { }
-
-
-
     }
     /*onClick(e,status){
         if(e.target.checked){
