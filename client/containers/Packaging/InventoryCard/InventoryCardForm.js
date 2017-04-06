@@ -35,6 +35,7 @@ constructor(){
 	this.lotIdArray = []
 	this.flagforceUpdate = false
 	this.flagStampconfirm = false
+	this.selectedIndex = 0
 	//this.onCancel = this.onCancel.bind(this)
 	//this.onSaveChange = this.onSaveChange.bind(this)
 	}
@@ -300,11 +301,26 @@ componentWillMount() {
 else{
 	return
 }
-if(when==0 ){
-	this.forceUpdate()
-	this.flagforceUpdate = true;
+var hasIndexFound = false
+if(this.lotIdArray && this.lotIdArray.length==1 ){
+	for(var i in this.props.viewData[0].TPackagingInstructionLots){
+		if(this.props.viewData[0].TPackagingInstructionLots[i].id == this.lotIdArray[0]){
+			this.selectedIndex = i
+            hasIndexFound = true
+			break
+		}
+	}
 }
-
+// if(!hasIndexFound){
+//     this.selectedIndex = 0
+// }
+else{
+    this.selectedIndex
+}
+if(when==0 ){
+            this.forceUpdate()
+            this.flagforceUpdate = true;
+        }
 }
 	onStampConfirmed(e){
 debugger
@@ -400,11 +416,11 @@ debugger
 					<div className=" col-lg-4 col-md-4 col-sm-6 col-xs-12">
 						<fieldset className="scheduler-border custom-LABEL">
 							<legend className="scheduler-border">PACKAGING LABEL </legend>
-							<p>{this.props.viewData? this.props.viewData[0].custom_label.split('\n')[0] : ''}</p>
-							<p>{this.props.viewData? this.props.viewData[0].custom_label.split('\n')[1] : ''}</p>
-							<p>{this.props.viewData? this.props.viewData[0].custom_label.split('\n')[2] : ''}</p>
-							<p>{this.props.viewData? this.props.viewData[0].custom_label.split('\n')[3] : ''}</p>
-							<p>{this.props.viewData? this.props.viewData[0].custom_label.split('\n')[4] : ''}</p>
+							<p>{this.props.viewData? this.props.viewData[0].TPackagingInstructionLots[this.selectedIndex].custom_label.split('\n')[0] : ''}</p>
+							<p>{this.props.viewData? this.props.viewData[0].TPackagingInstructionLots[this.selectedIndex].custom_label.split('\n')[1] : ''}</p>
+							<p>{this.props.viewData? this.props.viewData[0].TPackagingInstructionLots[this.selectedIndex].custom_label.split('\n')[2] : ''}</p>
+							<p>{this.props.viewData? this.props.viewData[0].TPackagingInstructionLots[this.selectedIndex].custom_label.split('\n')[3] : ''}</p>
+							<p>{this.props.viewData? this.props.viewData[0].TPackagingInstructionLots[this.selectedIndex].custom_label.split('\n')[4] : ''}</p>
 						</fieldset>
 					</div>
 					<div className=" col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
