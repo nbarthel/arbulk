@@ -162,6 +162,7 @@ export default class PackagingInstructionViewForm extends React.Component {
 
     }
     onSearch(e){
+        debugger
         var cutofFilter = []
         var flagForcutOffFilter = false
         if(this.startDate && this.endDate) {
@@ -212,16 +213,18 @@ export default class PackagingInstructionViewForm extends React.Component {
                 }
 
             }
-
+            var Railstatus = [];
             if(this.Where.status && this.Where.status.length){
 
-                var Railstatus = [];
+
+                var temp = []
                 var objStatus = {};
                 for(var z in this.Where.status){
                     objStatus = {"status" : this.Where.status[z]}
                     Railstatus.push(objStatus)
                 }
-                serachObjLots.push(Railstatus)
+                //Railstatus.push(temp)
+                //serachObjLots.push(Railstatus)
             }
 
             if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.POSearch && this.Where.Query.POSearch!= undefined ){
@@ -264,7 +267,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                                     "scope":{"include" : "TShipmentInternational",
                                         "scope":{"where" : {"and" : cutofFilter }}
                                     }}}},
-                        "where":{ "and": [{"and":serachObjLots},{active:1}]}
+                        "where":{ "and": [{"and":serachObjLots},{active:1},{"or":Railstatus}]}
                     }
                     }
                     ],
@@ -272,7 +275,8 @@ export default class PackagingInstructionViewForm extends React.Component {
                         {"or":customer},
                         {"or":company},
                         {"and":serachObjLots},
-                        { "or": serachObj }
+                        { "or": serachObj },
+                        {"or":Railstatus}
                     ]
                     }
                 });
@@ -291,7 +295,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                                             "scope":{"include" : "TShipmentInternational",
                                                 "scope":{"where" : {"and" : cutofFilter }}
                                             }}}},
-                                "where":{ "and": [{"and":serachObjLots},{active:1}]}
+                                "where":{ "and": [{"and":serachObjLots},{active:1},{"or":Railstatus}]}
                             }},
                         "TLocation" ,
                         "TCompany"],
