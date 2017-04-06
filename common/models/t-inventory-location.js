@@ -103,7 +103,6 @@ module.exports = function(Tinventorylocation) {
 
     };
 
-
     Tinventorylocation.deleteLocation = function(tinventory, cb) {
         var d = new Date();
 	  	var date_with_time =     d.getFullYear()+"-"+(parseInt(d.getMonth())+parseInt(1))+"-"+d.getDate()+" "
@@ -181,17 +180,10 @@ module.exports = function(Tinventorylocation) {
 
     };
 
-
-
-
-
-
-
     Tinventorylocation.updatebagweight = function(tinventory, cb) {
         var d = new Date();
-        var date_with_time =     d.getFullYear()+"-"+(parseInt(d.getMonth())+parseInt(1))+"-"+d.getDate()+" "
-                              +d.getHours()+":"
-                              +d.getMinutes()+":"+d.getSeconds()
+        var date_with_time =       d.getFullYear()+"-"+(parseInt(d.getMonth())+parseInt(1))+"-"+d.getDate()+" "
+                                  +d.getHours()+":" +d.getMinutes()+":"+d.getSeconds()
       	console.log("Here is the date",date_with_time)
         var inventoryData = Tinventorylocation.app.models.TPiInventory;
       	var InventoryHistoryLog = Tinventorylocation.app.models.TPiInventoryHistory;
@@ -209,12 +201,10 @@ module.exports = function(Tinventorylocation) {
             },
             function (err, obj) {
                 if (err) {
-                   // logger.error("errooorrrrr" , JSON.stringify(obj));
                     return cb(null, {errors: err});
                 }
                 if(obj!= null && obj!= undefined){
                     console.log(">>>>>>>>>>>>>>>>>>>>>>.Object" , JSON.stringify((obj)))
-                    console.log(">>>>>>>>>>>.Invnetory lacation table entry done" ,JSON.stringify(obj) )
                     if(!(tinventory.Tinventory)){
                         return cb(null, {errors: err});
                     }
@@ -228,7 +218,7 @@ module.exports = function(Tinventorylocation) {
                             "noOfBags": tinventory.Tinventory.noOfBags,
                             "notes" : tinventory.Tinventory.notes,
                             "weight": tinventory.Tinventory.weight,
-                            "createdOn": '',
+                            "createdOn": date_with_time,
                             "createdBy": 1,
                             "modifiedOn": date_with_time,
                             "modifiedBy": 1,
@@ -248,7 +238,7 @@ module.exports = function(Tinventorylocation) {
                         "noOfBags": tinventory.Tinventory.noOfBags,
                         "notes" : tinventory.Tinventory.notes,
                         "weight": tinventory.Tinventory.weight,
-                         "createdOn": '',
+                         "createdOn": date_with_time,
                         "modifiedOn": date_with_time,
                         "createdBy": 1,
                         "modifiedBy": 1,

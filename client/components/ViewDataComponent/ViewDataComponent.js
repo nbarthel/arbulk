@@ -605,7 +605,7 @@ class ViewDataComponent extends React.Component {
                 <td><i className="fa fa-chevron-down"
                        aria-hidden="false" data-target={length}
                        onClick={(e) => {
-                           tdis.onClickRow(e)
+                           this.onClickRow(e)
                        }}></i>{index}</td>
                 <td></td>
                 <td></td>

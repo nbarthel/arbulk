@@ -29,7 +29,7 @@ onClick(e){
 	}
 }
 onSubmit(e){
-
+debugger
 	if(this.check.length < 14)
 {
 		sweetAlert("Submit","Please Select All The Fields!!!","error")
@@ -335,11 +335,11 @@ render(){
 					<fieldset className="scheduler-border custom-LABEL">
 						<legend className="scheduler-border">LABEL INFORMATION</legend>
 
-						<p>{this.props.data.TPackagingInstructions? this.props.data.TPackagingInstructions.custom_label.split('\n')[0] : ''}</p>
-						<p>{this.props.data.TPackagingInstructions? this.props.data.TPackagingInstructions.custom_label.split('\n')[1] : ''}</p>
-						<p>{this.props.data.TPackagingInstructions? this.props.data.TPackagingInstructions.custom_label.split('\n')[2] : ''}</p>
-						<p>{this.props.data.TPackagingInstructions? this.props.data.TPackagingInstructions.custom_label.split('\n')[3] : ''}</p>
-						<p>{this.props.data.TPackagingInstructions? this.props.data.TPackagingInstructions.custom_label.split('\n')[4] : ''}</p>
+						<p>{this.props.data.TPackagingInstructions? this.props.data.custom_label.split('\n')[0] : ''}</p>
+						<p>{this.props.data.TPackagingInstructions? this.props.data.custom_label.split('\n')[1] : ''}</p>
+						<p>{this.props.data.TPackagingInstructions? this.props.data.custom_label.split('\n')[2] : ''}</p>
+						<p>{this.props.data.TPackagingInstructions? this.props.data.custom_label.split('\n')[3] : ''}</p>
+						<p>{this.props.data.TPackagingInstructions? this.props.data.custom_label.split('\n')[4] : ''}</p>
 
 					</fieldset>
 

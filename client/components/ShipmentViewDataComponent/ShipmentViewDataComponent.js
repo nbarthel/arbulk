@@ -801,7 +801,7 @@ class ShipmentViewDataComponent extends React.Component {
                       <td><i className="fa fa-chevron-down"
                              aria-hidden="false"
                              data-target={views.length}
-                             onClick={(e) => {this.onClickRow(e)}}></i>{index}</td>
+                             onClick={(e) => {this.onClickRow(e)}}></i>{index!="undefined" && index!="[object Object]"?index.toUpperCase():"DOMESTIC"}</td>
                       <td></td>
                       <td></td>
                       <td></td>

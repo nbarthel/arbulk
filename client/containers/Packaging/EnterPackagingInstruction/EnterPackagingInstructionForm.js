@@ -53,7 +53,8 @@ export default class EnterPackagingInstructionForm extends React.Component {
       labelLength : [],
       selectedOption: 'lbs',
       haveSpecialChar :0,
-      loaded : false
+      loaded : false,
+      customLabel :[]
     }
     this.userId = localStorage.getItem('userId')
     //this.index = 0
@@ -88,8 +89,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
     this.ValidateRailCar = this.ValidateRailCar.bind(this)
     this.SetUnitType = this.SetUnitType.bind(this)
   }
-// componentDidMount() {
-// }
+
   componentDidMount() {
     var PIview = createDataLoader(EnterPackagingInstructionForm,{
       queries:[{
@@ -394,9 +394,18 @@ export default class EnterPackagingInstructionForm extends React.Component {
     console.log(this.props.data)
   }
   handleLabelChange(e){
-    this.props.data.custom_label = e.target.value
-    //this.props.data.custom_label = this.refs.customLabel.value
-    this.forceUpdate()
+    debugger
+      this.state.customLabel[parseInt(e.target.id)] = e.target.value
+      if(this.props.data){
+          //this.props.data.custom_label = e.target.value
+          //this.props.data.custom_label = this.refs.customLabel.value
+          this.props.data.TPackagingInstructionLots[parseInt(e.target.id)].custom_label = e.target.value
+      }
+      else{
+          this.obj.custom_label =  this.state.customLabel[0]
+      }
+      this.forceUpdate() 
+
     console.log(this.props.data)
   }
   handleRailCarNumberEdit(e,index){
@@ -581,11 +590,12 @@ export default class EnterPackagingInstructionForm extends React.Component {
         this.state.labelLength.unshift(this.obj.custom_label)
 
         for(var i in this.railCarObjects){
-          let tempcustomlabel = this.state.labelLength[i]
-          if(i>0){
-            tempcustomlabel = tempcustomlabel.poNumber+tempcustomlabel.lotNumber+tempcustomlabel.material+tempcustomlabel.originName+tempcustomlabel.weight
-          }
-          this.railCarObjects[i].custom_label = tempcustomlabel
+          // let tempcustomlabel = this.state.labelLength[i]
+          // if(i>0){
+          //   tempcustomlabel = tempcustomlabel.poNumber+tempcustomlabel.lotNumber+tempcustomlabel.material+tempcustomlabel.originName+tempcustomlabel.weight
+          // }
+          //this.railCarObjects[i].custom_label = tempcustomlabel
+            this.railCarObjects[i].custom_label = this.state.customLabel[i]
         }
       }
       if(this.state.selectedOption == 'kg'){
@@ -674,6 +684,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
     this.state.index = 0;
     this.railCarObjects=[]
     this.RailCarArray.splice(1,this.RailCarArray.length-1)
+    this.state.customLabel.splice(1,this.state.customLabel.length-1)
   }
   ValidateRailCar(RailCarByProps){
     debugger
@@ -790,7 +801,6 @@ export default class EnterPackagingInstructionForm extends React.Component {
     this.forceUpdate()
   }
   onChekBoxClick(e){
-    debugger
     var labelArray = []
     var obj1 = {}
     var flag = false
@@ -911,7 +921,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
 
       }
 //this.state.labelLength.push(labelArray)
-
+  debugger
       this.state.labelLength = [].concat.apply([],this.state.labelLength)
       if(weightForLabel>-1){
         var obj =  this.obj.po_number +'\n'+ this.obj.material +'\n' + uniquelot[0] + '\n'  +  weightForLabel+ " "+weightUnit+ " Net \n" + "Made in "+originName
@@ -939,6 +949,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
       this.state.labelLength.splice( 0 ,1)
       this.autolabel = obj
       this.obj.custom_label = obj
+      this.state.customLabel.push(obj)
       this.setState({
         labelObject : obj,
         customChecked : true
@@ -948,7 +959,8 @@ export default class EnterPackagingInstructionForm extends React.Component {
       this.setState({
         labelObject : null,
         customChecked : true,
-        labelLength : []
+        labelLength : [],
+        customLabel :[]
       })
       this.obj.custom_label = ""
       this.state.labelLength = []
@@ -991,6 +1003,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
     var wraptypes = _.map(this.state.wrapType,(wraptype) => {
       return <option key={wraptype.id} value={wraptype.id}>{wraptype.name}</option>
     })
+      var tempThis = this
     if(this.props.data != undefined){
       var editableLots = []
       var index= 0
@@ -1472,16 +1485,16 @@ export default class EnterPackagingInstructionForm extends React.Component {
                                   onChange ={(e)=>{this.handleLabelChange(e)}}
                                   ref="customLabel"
                                   rows="3"
-                                  id="Notes"
+                                  id="0"
                                   value = {this.props.lotInfo[0].custom_label}
                                   placeholder="Enter Custom Label information"></textarea>
                               :
                               <textarea
                                   className="form-control  textareaLabel"
                                   name = "custom_label"
-                                  onChange ={this.handlePIChange}
+                                  onChange ={(e)=>{this.handleLabelChange(e)}}
                                   rows="3"
-                                  id="Notes"
+                                  id="0"
                                   value={ this.obj.custom_label }
                                   placeholder="Enter Custom Label information"></textarea>
                         }
@@ -1493,10 +1506,13 @@ export default class EnterPackagingInstructionForm extends React.Component {
                   }
 
                   {
-
-
                     _.map(this.state.labelLength , function(element , index){
                       debugger
+                        var temObj = Object.keys(element).length==5?(element.poNumber+element.material+element.lotNumber+element.weight+element.originName):(element.poNumber+element.material+element.lotNumber+element.originName)
+                        if((tempThis.state.customLabel.length<2)||(tempThis.state.customLabel.length > 1 && tempThis.state.customLabel.length == index+1)){
+                            tempThis.state.customLabel.push(temObj)
+                        }
+
                       return(
                           <div className=" col-lg-3 col-md-3 col-sm-3 col-xs-12 pddn-10-top labelArea">
                             <div className="form-group">
@@ -1505,20 +1521,20 @@ export default class EnterPackagingInstructionForm extends React.Component {
                                     <textarea
                                         className="form-control  textareaLabel"
                                         name= "custom_label"
-                                        onChange ={(e)=>{this.handleLabelChange(e)}}
+                                        onChange ={(e)=>{tempThis.handleLabelChange(e)}}
                                         ref="customLabel"
                                         rows="3"
-                                        id="Notes"
+                                        id={index+1}
                                         value = {this.props.data.custom_label}
                                         placeholder="Enter Custom Label information"></textarea>
                                     :
                                     <textarea
                                         className="form-control  textareaLabel"
                                         name = "custom_label"
-
+                                        onChange ={(e)=>{tempThis.handleLabelChange(e)}}
                                         rows="3"
-                                        id="Notes"
-                                        value={Object.keys(element).length==5?(element.poNumber+element.material+element.lotNumber+element.weight+element.originName):(element.poNumber+element.material+element.lotNumber+element.originName)}
+                                        id={index+1}
+                                        value={tempThis.state.customLabel[index+1]}
                                         placeholder="Enter Custom Label information"></textarea>
                               }
                               <div className="error"><span>{}</span></div>

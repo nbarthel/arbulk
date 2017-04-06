@@ -597,7 +597,6 @@ var calcWeight = this.state.weightBox
 	}
 
 		onSaveChange(e){
-			debugger
 			if(this.state.notes && this.state.notes.length > 100){
 				swal("Warning","Length of Notes can't be greater than 100","warning")
 				return
