@@ -54,7 +54,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
       selectedOption: 'lbs',
       haveSpecialChar :0,
       loaded : false,
-      customLabel :[]
+      customLabel :[],
     }
     this.userId = localStorage.getItem('userId')
     //this.index = 0
@@ -65,7 +65,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
       location_id : '',
       po_number : '',
       material : '',
-      origin_id : '',
+      origin_id : "1",
       packaging_material_id : '',
       pallet_type_id : '',
       bags_per_pallet : '',
@@ -267,6 +267,8 @@ export default class EnterPackagingInstructionForm extends React.Component {
     }
   }
   handlePIChange(e){
+
+  console.log("ssss",e.target.value)
     debugger
     this.obj[e.target.name] = e.target.value
     if(this.obj.bag_id == 1){
@@ -404,7 +406,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
       else{
           this.obj.custom_label =  this.state.customLabel[0]
       }
-      this.forceUpdate() 
+      this.forceUpdate()
 
     console.log(this.props.data)
   }
@@ -532,6 +534,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
 
 
   onSubmit(e){
+    console.log("Submit");
     debugger
     var checkPo = []
 
@@ -1283,7 +1286,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
                                   id="Origin"
                                   name="origin_id"
                                   onChange={this.handlePIChange}>
-                                <option value="Please Select An Option" disabled selected>Origin</option>
+                                value= {parseInt(this.obj.origin_id)}
                                 {origins}
                               </select>
                           }
