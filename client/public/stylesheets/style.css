@@ -75,7 +75,6 @@ ul.list-style-disc > li {list-style-type:disc;}
 
 .sorting_head th{background-color: rgb(46,109,164) !important;}
 th.placeholder{background-color: rgb(46,109,164) !important;}
-
 .table-expandable tr td:first-child{position: relative;}
 
 
@@ -554,6 +553,10 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 0;
 }
 /*============================================================*/
+select{text-transform: uppercase !important;}
+.table>tbody>tr>td{text-transform: uppercase !important;}
+.table>thead>tr>th{text-transform: uppercase !important;}
+
 
 
 .tableViewDragQvList{ max-height: 350px; overflow: auto;}
