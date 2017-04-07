@@ -557,7 +557,7 @@ select{text-transform: uppercase !important;}
 .table>tbody>tr>td{text-transform: uppercase !important;}
 .table>thead>tr>th{text-transform: uppercase !important;}
 
-.table>thead>tr>th .fa-stack .fa-stack-1x{font-size: 18px;color: #ddd;}
+.table>thead>tr>th .fa-stack .fa-stack-1x{font-size: 16px;color:#f5f4f4;}
 
 
 .tableViewDragQvList{ max-height: 350px; overflow: auto;}
