@@ -123,7 +123,6 @@ class ShipmentEntryForm extends React.Component {
             location_id : '',
             customer_id: '',
             isDomestic : '',
-
             numberOfContainers : '',
             releaseNumber : ''
 
@@ -705,9 +704,12 @@ class ShipmentEntryForm extends React.Component {
     }
 
     onSubmit(e){
-        debugger
-        DisableDoubleClick('submit')
+        //console.log("pressed");
+
+        DisableDoubleClick('submit');
+
         var bagsLeftTemp = 0
+
         if(!(this.isValid())){
             EnableClick('submit')
             if(this.haveSpecial==0){
@@ -726,7 +728,6 @@ class ShipmentEntryForm extends React.Component {
             }
         }
         if(!this.isDomestic){
-
             if(!(this.isValidInt())) {
                 EnableClick('submit')
                 if(this.haveSpecial==0){
@@ -824,7 +825,7 @@ class ShipmentEntryForm extends React.Component {
         }
         if(this.state.lotInfoList.length > 0 && this.comPo.lot_id != '' && flagToDecideLotNumber){
             this.LIObjects.push(_.cloneDeep(this.comPo))
-            console.log("SAVEDAFTERADD",this.LIObjects)
+            //console.log("SAVEDAFTERADD",this.LIObjects)
         }
         this.Allobjs.lotInformation = this.LIObjects
         this.Domesticobj.created_on = today
@@ -834,7 +835,6 @@ class ShipmentEntryForm extends React.Component {
 
         }
         this.Allobjs.Address = this.DomesticInfoObjects
-
         this.Allobjs.Domestic.domesticCarear = this.DomesticCaraerObjects
         this.Allobjs.Domestic.RequestedDeliveryDate = this.deliveryDate
         this.Allobjs.Domestic.RequestedShipDate = this.shipDate
@@ -842,78 +842,105 @@ class ShipmentEntryForm extends React.Component {
         this.Allobjs.International = this.Internationalobj
         this.Allobjs.International.EarliestReturnDate = this.internationalEarliestReturnDate
         this.Allobjs.International.CargoCutoffDate = this.internationalCargoCutOffDate
-        this.Allobjs.International.DocCutoffDate = this.DocCutoffDate
-
-        axios.post(Base_Url+"TShipmentents/createShipMentEntry",this.Allobjs).then((response)=>{
-
-
-            //if(parseInt(this.SIObj.numberOfBags) == parseInt(this.Total)){
-            // var Lilength = this.LIObjects.length
-            // if(this.LIObjects.length > 1) {
-            //      this.LIObjects.forEach(function (element, index) {
-            //          if (parseInt(element.bagsToShip) == parseInt(element.inInventorybags)) {
-            //
-            //               axios.put(Base_Url + "TPackagingInstructionLots/" + element.lot_id).then((response)=> {
-            //
-            //             }).then((response)=> {
-            //
-            //                 if (Lilength == index + 1) {
-            //                     swal("Posted", "Success", "success")
-            //                     hashHistory.push("/Shipment/shipmentview")
-            //                 }
-            //             })
-            //         }
-            //         else{
-            //             if (Lilength == index + 1) {
-            //                 swal("Posted", "Success", "success")
-            //                 hashHistory.push("/Shipment/shipmentview")
-            //             }
-            //         }
-            //
-            //
-            //     });
-            // }
-            // else if(this.LIObjects.length <=1){
-            //     this.LIObjects.forEach(function (element, index) {
-            //         if (parseInt(element.bagsToShip) == parseInt(element.inInventorybags)) {
-            //             axios.put(Base_Url + "TPackagingInstructionLots/" + element.lot_id, {status: "SHIPPED"}).then((response)=> {
-            //                 swal("Posted", "Success", "success")
-            //                 hashHistory.push("/Shipment/shipmentview")
-            //             }).then((response)=> {
-            //
-            //                 //if (Lilength == index + 1) {
-            //                 //    swal("Posted", "Success", "success")
-            //                 //    hashHistory.push("/Shipment/shipmentview")
-            //                 //}
-            //             })
-            //         }
-            //         else{
-            //             swal("Posted","Success","success")
-            //             hashHistory.push("/Shipment/shipmentview")
-            //         }
-            //
-            //
-            //     });
-            // }
-            // }
-
-            if(response.data.errors){
-                EnableClick('submit')
-                if(response.data.errors.code == "Release Number Already Exist" || response.data.errors.code == "Booking Number Already Exist"){
-                    swal(response.data.errors.code)
-                    return
-                }}
-            else{
-                swal("Posted","Success","success")
-                hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/-'+ 1 )
-            }
+        this.Allobjs.International.DocCutoffDate = this.DocCutoffDate;
+        var tempThis=this;
+        if (parseInt(this.comPo.bagsToShip) > parseInt(this.comPo.inInventorybags)) {
+            swal({
+                title: "Are you sure?",
+                text: "Lesser number of bags in inventory to ship",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Continue",
+                cancelButtonText: "Cancel",
+                closeOnConfirm: false,
+                closeOnCancel: true
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    console.log("axios");
+                    console.log("onConfirm",tempThis.Allobjs);
+                    axios.post(Base_Url + "TShipmentents/createShipMentEntry", tempThis.Allobjs).then((response)=> {
+                        console.log("response data",response)
 
 
+                        //if(parseInt(this.SIObj.numberOfBags) == parseInt(this.Total)){
+                        // var Lilength = this.LIObjects.length
+                        // if(this.LIObjects.length > 1) {
+                        //      this.LIObjects.forEach(function (element, index) {
+                        //          if (parseInt(element.bagsToShip) == parseInt(element.inInventorybags)) {
+                        //
+                        //               axios.put(Base_Url + "TPackagingInstructionLots/" + element.lot_id).then((response)=> {
+                        //
+                        //             }).then((response)=> {
+                        //
+                        //                 if (Lilength == index + 1) {
+                        //                     swal("Posted", "Success", "success")
+                        //                     hashHistory.push("/Shipment/shipmentview")
+                        //                 }
+                        //             })
+                        //         }
+                        //         else{
+                        //             if (Lilength == index + 1) {
+                        //                 swal("Posted", "Success", "success")
+                        //                 hashHistory.push("/Shipment/shipmentview")
+                        //             }
+                        //         }
+                        //
+                        //
+                        //     });
+                        // }
+                        // else if(this.LIObjects.length <=1){
+                        //     this.LIObjects.forEach(function (element, index) {
+                        //         if (parseInt(element.bagsToShip) == parseInt(element.inInventorybags)) {
+                        //             axios.put(Base_Url + "TPackagingInstructionLots/" + element.lot_id, {status: "SHIPPED"}).then((response)=> {
+                        //                 swal("Posted", "Success", "success")
+                        //                 hashHistory.push("/Shipment/shipmentview")
+                        //             }).then((response)=> {
+                        //
+                        //                 //if (Lilength == index + 1) {
+                        //                 //    swal("Posted", "Success", "success")
+                        //                 //    hashHistory.push("/Shipment/shipmentview")
+                        //                 //}
+                        //             })
+                        //         }
+                        //         else{
+                        //             swal("Posted","Success","success")
+                        //             hashHistory.push("/Shipment/shipmentview")
+                        //         }
+                        //
+                        //
+                        //     });
+                        // }
+                        // }
 
-        }).catch(function (error) {
-            EnableClick('submit')
-            console.log(error);
-        });
+                        if (response.data.errors) {
+                            EnableClick('submit')
+                            if (response.data.errors.code == "Release Number Already Exist" || response.data.errors.code == "Booking Number Already Exist") {
+                                swal(response.data.errors.code)
+                                return
+                            }
+                        }
+                        else {
+                            swal("Posted", "Success", "success")
+                            hashHistory.push('/Shipment/shipmentDetails/' + response.data.id + '/-' + 1)
+                        }
+                    }).catch(function (error) {
+                        EnableClick('submit')
+                        //console.log(error);
+                    });
+                }
+                else {
+                    tempThis.LIObjects=[]
+                    tempThis.Allobjs={ };
+                    tempThis.Allobjs.lotInformation=[];
+
+                    EnableClick('submit');
+                    return false
+
+                }
+            });
+        }
+
 
 
 
@@ -940,6 +967,7 @@ class ShipmentEntryForm extends React.Component {
     onSubmitContainer(e){
         var bagsLeftTemp =0
         DisableDoubleClick('submitContainer')
+
         if(!(this.isValid())){
             EnableClick('submitContainer')
             if(this.haveSpecial==0){
@@ -969,10 +997,7 @@ class ShipmentEntryForm extends React.Component {
             }
         }
 
-        if(parseInt(this.comPo.bagsToShip) > parseInt(this.comPo.inInventorybags)){
-            //swal("" , "Shipped bags must not be greater than Inventory bags" , "info")
-            //return
-        }
+
 
         var flagToDecideLotNumber = false;
         if(this.comPo.lot_id == ''){
@@ -1094,11 +1119,24 @@ class ShipmentEntryForm extends React.Component {
         this.Allobjs.International.EarliestReturnDate = this.internationalEarliestReturnDate
         this.Allobjs.International.CargoCutoffDate = this.internationalCargoCutOffDate
         this.Allobjs.International.DocCutoffDate = this.DocCutoffDate
+        var tempThis=this;
+        if (parseInt(tempThis.comPo.bagsToShip) > parseInt(tempThis.comPo.inInventorybags)) {
+            swal({
+                title: "Are you sure?",
+                text: "Lesser number of bags in inventory to ship",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Continue",
+                cancelButtonText: "Cancel",
+                closeOnConfirm: true,
+                closeOnCancel: true
+            }, function (isConfirm) {
+                if (isConfirm) {
 
-        axios.post(Base_Url+"TShipmentents/createShipMentEntry",this.Allobjs).then((response)=>{
+                    axios.post(Base_Url+"TShipmentents/createShipMentEntry",tempThis.Allobjs).then((response)=>{
 
-
-            //if(parseInt(this.SIObj.numberOfBags) == parseInt(this.Total)){
+                        //if(parseInt(this.SIObj.numberOfBags) == parseInt(this.Total)){
 //         var Lilength = this.LIObjects.length
 //         if(this.LIObjects.length > 1) {
 //             this.LIObjects.forEach(function (element, index) {
@@ -1125,33 +1163,41 @@ class ShipmentEntryForm extends React.Component {
 //         }
 //         else if(this.LIObjects.length ==1){
 //             this.LIObjects.forEach(function (element, index) {
-            // if (parseInt(element.bagsToShip) == parseInt(element.inInventorybags)) {
-            //     axios.put(Base_Url + "TPackagingInstructionLots/" + element.lot_id, {status: "SHIPPED"}).then((data)=> {
-            //         swal("Posted", "Success", "success")
-            //         hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/'+ 1 )
-            //     }).then((data)=> {
-            //
-            //         //if (Lilength == index + 1) {
-            //         //    swal("Posted", "Success", "success")
-            //         //    hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/'+ response.data.isDomestic )
-            //         //}
-            //     })
-            // }
-            if(response.data.errors){
-                EnableClick('submitContainer')
-                if(response.data.errors.code == "Release Number Already Exist" || response.data.errors.code == "Booking Number Already Exist"){
-                    swal(response.data.errors.code)
-                    return
-                }}
-            else{
-                swal("Posted", "Success", "success")
-                hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/-'+ 1 )
-            }
+                        // if (parseInt(element.bagsToShip) == parseInt(element.inInventorybags)) {
+                        //     axios.put(Base_Url + "TPackagingInstructionLots/" + element.lot_id, {status: "SHIPPED"}).then((data)=> {
+                        //         swal("Posted", "Success", "success")
+                        //         hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/'+ 1 )
+                        //     }).then((data)=> {
+                        //
+                        //         //if (Lilength == index + 1) {
+                        //         //    swal("Posted", "Success", "success")
+                        //         //    hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/'+ response.data.isDomestic )
+                        //         //}
+                        //     })
+                        // }
+                        if(response.data.errors){
+                            EnableClick('submitContainer')
+                            if(response.data.errors.code == "Release Number Already Exist" || response.data.errors.code == "Booking Number Already Exist"){
+                                swal(response.data.errors.code)
+                                return
+                            }}
+                        else{
+                            swal("Posted", "Success", "success")
+                            hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/-'+ 1 )
+                        }
 
+                    }).catch(function(error){
+                        EnableClick('submitContainer')
+                    })
+                } else {
+                    tempThis.LIObjects=[],
+                        tempThis.Allobjs={ }
+                    EnableClick('submitContainer')
+                    return false
+                }
+            });
+        }
 
-        }).catch(function(error){
-            EnableClick('submitContainer')
-        })
         // }ss
         // }
         // else{
@@ -1188,14 +1234,17 @@ class ShipmentEntryForm extends React.Component {
     }
 
     onCancel(e){
-        windoew.location.reload()
+        window.location.reload()
     }
 
-    handlebagsToShip(e){
+    handlebagsToShip( e) {
 
         this.comPo.bagsToShip = e.target.value
-        console.log("bagsToShip",this.LIobj)
+        console.log("bagsToShip", this.LIobj);
+
+
     }
+
 
 
     render() {
@@ -1412,11 +1461,11 @@ class ShipmentEntryForm extends React.Component {
                                                        name="bags_to_ship"
                                                        placeholder = "Bags To Ship"
                                                        onChange={this.handlebagsToShip.bind(this)}
+                                                    // onBlur={this.validate1.bind(this)}
                                                        defaultValue = ""/>
 
 
-
-                                                <div className="error"><span></span></div>
+                                                <div className="error"><span>{this.state.no_error_text}</span></div>
                                             </div>
                                         </div>
 
@@ -1917,8 +1966,7 @@ class ShipmentEntryForm extends React.Component {
                                                                id="No_of_Bages_Pallat"
                                                                placeholder="Carrier"
                                                                name="carrier"
-                                                               onChange={this.DomesticChange}
-                                                        />
+                                                               onChange={this.DomesticChange}/>
 
                                                         <div className="error"><span></span></div>
                                                     </div>
@@ -1937,8 +1985,7 @@ class ShipmentEntryForm extends React.Component {
                                                                placeholder="Carrier Account #"
                                                                name="carrierAcNumber"
                                                                onChange={this.DomesticChange}
-
-                                                        />
+                                                            />
 
                                                         <div className="error"><span></span></div>
                                                     </div>
@@ -2040,7 +2087,9 @@ class ShipmentEntryForm extends React.Component {
                                         </button>
                                     </div>
                                     <div className="pull-left margin-10-all">
-                                        <button type="button" className="btn  btn-primary text-uppercase" id="submit" onClick = {this.onSubmit}>Save</button>
+                                        <button type="button" className="btn  btn-primary text-uppercase" id="submit"
+                                                onClick={this.onSubmit}>Save
+                                        </button>
                                     </div>
                                     <div className="pull-left margin-10-all">
                                         <button type="button" className="btn  btn-gray text-uppercase" onClick={this.onCancel}>Cancel</button>
