@@ -77,7 +77,8 @@ class ShipmentEntryForm extends React.Component {
             errors : { },
             errorsd : { },
             errorsI : { },
-            loaded : false
+            loaded : false,
+            lots:[]
         }
         this.haveSpecial = 0
         this.Address = {
@@ -115,6 +116,7 @@ class ShipmentEntryForm extends React.Component {
         //this.onCancel = this.onCancel.bind(this)
         this.isValid = this.isValid.bind(this)
         this.convertDate = this.convertDate.bind(this)
+
         this.Total = 0
         // numberOfBags : '',
 
@@ -325,6 +327,7 @@ class ShipmentEntryForm extends React.Component {
     }
     GetTotalbags(event,next)
     {
+          
         var bags;
         var totalAllocatedbags=0;
         var MIView = createDataLoader(ShipmentEntryForm, {
@@ -373,7 +376,7 @@ class ShipmentEntryForm extends React.Component {
 
     }
     handleMIChange(e){
-
+  
         totalBagsInPO =0
         totalBagsOrderForPO = 0
         if(e.target.name == "po_number"){
@@ -511,47 +514,58 @@ class ShipmentEntryForm extends React.Component {
      console.log(this.DomesticInfoObjects);
      }*/
     onAdd(){
-
+          
+        var tempObj = {
+            bagsToShip:"",
+            inInventorybags:"",
+            lot_id:"",
+            pi_id:""
+        }
+        this.state.lots.push(tempObj)
+        var count = this.state.index+1
+        this.state.index = count
         if(this.state.materialInfoList.length == 0 && Object.keys(this.MIobj).length != 0) {
             if(this.LIobj.lot_id == undefined){
                 swal("Empty Lot","Please select a lot number before adding new lots","error")
                 return
             }
             this.addMIObject();
-            this.LIObjects.push(this.LIobj)
+            //this.LIObjects.push(this.LIobj)
             console.log("LIOBJECTS",this.LIObjects)
             const materialInfoList = this.state.materialInfoList;
-            var count = this.state.index+1
+
 
             this.setState({
                 index:count,
-                materialInfoList: materialInfoList.concat(<MaterialInformation key={materialInfoList.length} poNumber = {this.poNumber} onChange={(e) => {this.handleCompPOChange(e,value)}} comPo = {this.comPo}
+                materialInfoList: materialInfoList.concat(<MaterialInformation count={this.state.index } lots={this.state.lots} GetTotalbags={this.GetTotalbags} key={materialInfoList.length} poNumber = {this.poNumber} onChange={(e) => {this.handleCompPOChange(e,value)}} comPo = {this.comPo}
                                                                                lastSelectedPo = {this.lastSelectedPo}    onhandleComplotNumberChange = {this.handleComplotNumberChange.bind(this)}/>)
             })
         }
         else if(this.state.materialInfoList.length > 0){
-            if(this.comPo.lot_id == ""){
-                swal("Empty Lot","Please select a lot number before adding new lots","info")
-                return
-            }
-            this.LIObjects.push(_.cloneDeep(this.comPo))
+            // if(this.comPo.lot_id == ""){
+            //     this.state.index = this.state.index-1
+            //     swal("Empty Lot","Please select a lot number before adding new lots","info")
+            //     return
+            // }
+            //this.LIObjects.push(_.cloneDeep(this.comPo))
             console.log("AFTERCOMPADD",this.LIObjects)
-            var count = this.state.index+1
             const materialInfoList = this.state.materialInfoList;
             this.setState({
                 index:count,
-                materialInfoList: materialInfoList.concat(<MaterialInformation key={materialInfoList.length} poNumber = {this.poNumber} onChange={(e) => {this.handleCompPOChange(e,value)}} lastSelectedPo = {this.lastSelectedPo} comPo = {this.comPo}
+                materialInfoList: materialInfoList.concat(<MaterialInformation count={this.state.index } lots={this.state.lots} GetTotalbags={this.GetTotalbags} key={materialInfoList.length} poNumber = {this.poNumber} onChange={(e) => {this.handleCompPOChange(e,value)}} lastSelectedPo = {this.lastSelectedPo} comPo = {this.comPo}
                                                                                onhandleComplotNumberChange = {this.handleComplotNumberChange.bind(this)}/>)
             })
-            this.comPo.lot_id = ''
+            //this.comPo.lot_id = ''
         }
 
         else {
+            this.state.index = this.state.index-1
             swal("Empty Fields","Please Enter All The Fields Before Adding New Lots.","error")
         }
 
     }
     onLotAdd(){
+          
         if(this.comPo.lot_id != "") {
 
             this.LIObjects.push(_.cloneDeep(this.comPo))
@@ -570,29 +584,27 @@ class ShipmentEntryForm extends React.Component {
 
     }
     onMinus(e){
+          
         this.minus=this.minus + 1
 
         console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",this.minus)
-        if(this.minus==1){
-            this.addMIObject();
-            this.addLIObject();
-
-
-        }
+        // if(this.minus==1){
+        //     this.addMIObject();
+        //     this.addLIObject();
+        //
+        //
+        // }
 
 
         console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>minus",this.state.materialInfoList)
         this.setState({
-
             materialInfoList :this.state.materialInfoList.slice(0,-1)
-
-
-
         })
 
-        this.MIObjects= this.MIObjects.slice(0,-1)
-        this.LIObjects= this.LIObjects.slice(0,-1)
-
+        //this.MIObjects= this.MIObjects.slice(0,-1)
+        //this.LIObjects= this.LIObjects.slice(0,-1)
+        this.state.index = this.state.index - 1
+        this.state.lots.splice(this.state.lots.length-1,1)
 
 
 
@@ -606,12 +618,10 @@ class ShipmentEntryForm extends React.Component {
         //React.unmountComponentAtNode(document.getElementById(''));
     }
     onLotMinus(e) {
+          
         this.lotminus=this.lotminus+1
         if(this.lotminus==1){
-
             this.addLIObject();
-
-
         }
 
         this.setState({
@@ -755,49 +765,54 @@ class ShipmentEntryForm extends React.Component {
         }
         if(!flagToDecideLotNumber){
 
-            let bagsAdded = 0;
-            let bagsrequested = parseInt(this.comPo.bagsToShip)
-            let bagsLeft = bagsrequested - bagsAdded
             var obj = {};
-            var flag = false
             obj.pi_id = this.comPo.pi_id
-            for(var i in this.state.lotNumber){
-                flag = false
-                if(parseInt(bagsLeft)>0){
-                    if(parseInt(bagsLeft)>=parseInt(this.state.lotNumber[i].inInventory) && parseInt(this.state.lotNumber[i].inInventory) >0){
-                        obj.bagsToShip = this.state.lotNumber[i].inInventory
-                        bagsAdded = parseInt(bagsAdded)+parseInt(this.state.lotNumber[i].inInventory);
-                        flag = true
-                    }
-                    else if(parseInt(bagsLeft)<parseInt(this.state.lotNumber[i].inInventory) && parseInt(this.state.lotNumber[i].inInventory)>0){
-                        obj.bagsToShip = bagsLeft
-                        bagsAdded = parseInt(bagsAdded) + parseInt(bagsLeft)
-                        flag = true
-                    }
-                    if(flag){
-                        obj.lot_id = this.state.lotNumber[i].id
-                        obj.inInventorybags = this.state.lotNumber[i].inInventory
-                        this.LIObjects.push(_.cloneDeep(obj));
-                        bagsLeft = this.comPo.bagsToShip - bagsAdded
-                    }
+            obj.lot_id = this.state.lotNumber[0].id
+            obj.inInventorybags = this.state.lotNumber[0].inInventory
+            obj.bagsToShip = this.comPo.bagsToShip
+            this.LIObjects.push(_.cloneDeep(obj));
 
-                }
-                else{
-                    break;
-                }
-                if(i==this.state.lotNumber.length-1 && this.LIObjects.length<1){
-                    obj.lot_id = this.state.lotNumber[0].id
-                    obj.inInventorybags = this.state.lotNumber[0].inInventory
-                    obj.bagsToShip = bagsrequested
-                    bagsLeft = 0
-                    this.LIObjects.push(_.cloneDeep(obj));
-                }
-            }
-            bagsLeftTemp = bagsLeft
+            // let bagsAdded = 0;
+            // let bagsrequested = parseInt(this.comPo.bagsToShip)
+            // let bagsLeft = bagsrequested - bagsAdded
+
+            // for(var i in this.state.lotNumber){
+            //     flag = false
+            //     if(parseInt(bagsLeft)>0){
+            //         if(parseInt(bagsLeft)>=parseInt(this.state.lotNumber[i].inInventory) && parseInt(this.state.lotNumber[i].inInventory) >0){
+            //             obj.bagsToShip = this.state.lotNumber[i].inInventory
+            //             bagsAdded = parseInt(bagsAdded)+parseInt(this.state.lotNumber[i].inInventory);
+            //             flag = true
+            //         }
+            //         else if(parseInt(bagsLeft)<parseInt(this.state.lotNumber[i].inInventory) && parseInt(this.state.lotNumber[i].inInventory)>0){
+            //             obj.bagsToShip = bagsLeft
+            //             bagsAdded = parseInt(bagsAdded) + parseInt(bagsLeft)
+            //             flag = true
+            //         }
+            //         if(flag){
+            //             obj.lot_id = this.state.lotNumber[i].id
+            //             obj.inInventorybags = this.state.lotNumber[i].inInventory
+            //             this.LIObjects.push(_.cloneDeep(obj));
+            //             bagsLeft = this.comPo.bagsToShip - bagsAdded
+            //         }
+            //
+            //     }
+            //     else{
+            //         break;
+            //     }
+            //     if(i==this.state.lotNumber.length-1 && this.LIObjects.length<1){
+            //         obj.lot_id = this.state.lotNumber[0].id
+            //         obj.inInventorybags = this.state.lotNumber[0].inInventory
+            //         obj.bagsToShip = bagsrequested
+            //         bagsLeft = 0
+            //         this.LIObjects.push(_.cloneDeep(obj));
+            //     }
+            // }
+            // bagsLeftTemp = bagsLeft
         }
-        if(bagsLeftTemp>0){
-            this.LIObjects[this.LIObjects.length-1].bagsToShip = parseInt(this.LIObjects[this.LIObjects.length-1].bagsToShip) + parseInt(bagsLeftTemp)
-        }
+        // if(bagsLeftTemp>0){
+        //     this.LIObjects[this.LIObjects.length-1].bagsToShip = parseInt(this.LIObjects[this.LIObjects.length-1].bagsToShip) + parseInt(bagsLeftTemp)
+        // }
         this.SIObj.isDomestic = this.isDomestic
 
         if(this.minus==0){
@@ -861,7 +876,11 @@ class ShipmentEntryForm extends React.Component {
                     console.log("onConfirm",tempThis.Allobjs);
                     axios.post(Base_Url + "TShipmentents/createShipMentEntry", tempThis.Allobjs).then((response)=> {
                         console.log("response data",response)
-
+        for(var i in this.state.lots){
+            var tempObj = JSON.parse(JSON.stringify(this.state.lots[i]))
+            this.Allobjs.lotInformation.push(tempObj)
+        }
+    console.log(this.Allobjs)
 
                         //if(parseInt(this.SIObj.numberOfBags) == parseInt(this.Total)){
                         // var Lilength = this.LIObjects.length
@@ -943,6 +962,7 @@ class ShipmentEntryForm extends React.Component {
 
 
 
+        EnableClick('submit')
 
 
         //axios.post(Base_Url+"TShipmentents/createShipMentEntry",this.Allobjs)
@@ -1014,49 +1034,56 @@ class ShipmentEntryForm extends React.Component {
         }
         if(!flagToDecideLotNumber){
 
-            let bagsAdded = 0;
-            let bagsrequested = parseInt(this.comPo.bagsToShip)
-            let bagsLeft = bagsrequested - bagsAdded
             var obj = {};
-            var flag = false
             obj.pi_id = this.comPo.pi_id
-            for(var i in this.state.lotNumber){
-                flag = false
-                if(parseInt(bagsLeft)>0){
-                    if(parseInt(bagsLeft)>=parseInt(this.state.lotNumber[i].inInventory) && parseInt(this.state.lotNumber[i].inInventory) >0){
-                        obj.bagsToShip = this.state.lotNumber[i].inInventory
-                        bagsAdded = parseInt(bagsAdded)+parseInt(this.state.lotNumber[i].inInventory);
-                        flag = true
-                    }
-                    else if(parseInt(bagsLeft)<parseInt(this.state.lotNumber[i].inInventory) && parseInt(this.state.lotNumber[i].inInventory)>0){
-                        obj.bagsToShip = bagsLeft
-                        bagsAdded = parseInt(bagsAdded) + parseInt(bagsLeft)
-                        flag = true
-                    }
-                    if(flag){
-                        obj.lot_id = this.state.lotNumber[i].id
-                        obj.inInventorybags = this.state.lotNumber[i].inInventory
-                        this.LIObjects.push(_.cloneDeep(obj));
-                        bagsLeft = this.comPo.bagsToShip - bagsAdded
-                    }
+            obj.lot_id = this.state.lotNumber[0].id
+            obj.inInventorybags = this.state.lotNumber[0].inInventory
+            obj.bagsToShip = this.comPo.bagsToShip
+            this.LIObjects.push(_.cloneDeep(obj));
 
-                }
-                else{
-                    break;
-                }
-                if(i==this.state.lotNumber.length-1 && this.LIObjects.length<1){
-                    obj.lot_id = this.state.lotNumber[0].id
-                    obj.inInventorybags = this.state.lotNumber[0].inInventory
-                    obj.bagsToShip = bagsrequested
-                    bagsLeft = 0
-                    this.LIObjects.push(_.cloneDeep(obj));
-                }
-            }
-            bagsLeftTemp = bagsLeft
+            // let bagsAdded = 0;
+            // let bagsrequested = parseInt(this.comPo.bagsToShip)
+            // let bagsLeft = bagsrequested - bagsAdded
+            // var obj = {};
+            // var flag = false
+            // obj.pi_id = this.comPo.pi_id
+            // for(var i in this.state.lotNumber){
+            //     flag = false
+            //     if(parseInt(bagsLeft)>0){
+            //         if(parseInt(bagsLeft)>=parseInt(this.state.lotNumber[i].inInventory) && parseInt(this.state.lotNumber[i].inInventory) >0){
+            //             obj.bagsToShip = this.state.lotNumber[i].inInventory
+            //             bagsAdded = parseInt(bagsAdded)+parseInt(this.state.lotNumber[i].inInventory);
+            //             flag = true
+            //         }
+            //         else if(parseInt(bagsLeft)<parseInt(this.state.lotNumber[i].inInventory) && parseInt(this.state.lotNumber[i].inInventory)>0){
+            //             obj.bagsToShip = bagsLeft
+            //             bagsAdded = parseInt(bagsAdded) + parseInt(bagsLeft)
+            //             flag = true
+            //         }
+            //         if(flag){
+            //             obj.lot_id = this.state.lotNumber[i].id
+            //             obj.inInventorybags = this.state.lotNumber[i].inInventory
+            //             this.LIObjects.push(_.cloneDeep(obj));
+            //             bagsLeft = this.comPo.bagsToShip - bagsAdded
+            //         }
+            //
+            //     }
+            //     else{
+            //         break;
+            //     }
+            //     if(i==this.state.lotNumber.length-1 && this.LIObjects.length<1){
+            //         obj.lot_id = this.state.lotNumber[0].id
+            //         obj.inInventorybags = this.state.lotNumber[0].inInventory
+            //         obj.bagsToShip = bagsrequested
+            //         bagsLeft = 0
+            //         this.LIObjects.push(_.cloneDeep(obj));
+            //     }
+            // }
+            // bagsLeftTemp = bagsLeft
         }
-        if(bagsLeftTemp>0){
-            this.LIObjects[this.LIObjects.length-1].bagsToShip = parseInt(this.LIObjects[this.LIObjects.length-1].bagsToShip) + parseInt(bagsLeftTemp)
-        }
+        // if(bagsLeftTemp>0){
+        //     this.LIObjects[this.LIObjects.length-1].bagsToShip = parseInt(this.LIObjects[this.LIObjects.length-1].bagsToShip) + parseInt(bagsLeftTemp)
+        // }
         this.SIObj.isDomestic = this.isDomestic
         if(this.minus==0){
             this.addMIObject();
@@ -1446,7 +1473,7 @@ class ShipmentEntryForm extends React.Component {
                                                 <div className="error"><span></span></div>
                                             </div>
                                             <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1 add_btn text_left">
-                                                <i className="fa-2x fa fa-plus base_color" onClick={this.onLotAdd} aria-hidden="true" ></i>
+                                                <i className="fa-2x fa fa-plus base_color" onClick={this.onAdd} aria-hidden="true" ></i>
                                             </div>
 
                                         </div>

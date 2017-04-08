@@ -849,7 +849,6 @@ class ShipmentViewDataComponent extends React.Component {
                           }
                           var count = index
                           return _.map(view.TShipmentLots, (data, index)=> {
-
                                   if (sortedDataflag || (view.TShipmentInternational != undefined && view.TShipmentInternational.length > 0) || (view.TShipmentInternational != undefined && view.TShipmentDomestic.length > 0)) {
                                       this.statusArray = []
                                       if (view.TContainerDomestic && view.TContainerDomestic.length > 0) {
@@ -1073,7 +1072,7 @@ class ShipmentViewDataComponent extends React.Component {
                                                 var cutOff = (view.TShipmentInternational && view.TShipmentInternational.length > 0) ? moment(view.TShipmentInternational[0].cargoCutoffDate).format("MM-DD-YYYY HH:MM") : ''
                                                 var puLocation = (view.TShipmentInternational && view.TShipmentInternational.length > 0) ? view.TShipmentInternational[0].containerPickupLocation : ''
                                                 var returnLocation = (view.TShipmentInternational && view.TShipmentInternational.length > 0) ? view.TShipmentInternational[0].containerReturnLocation : ''
-                                                var docCutoff = (view.TShipmentInternational && view.TShipmentInternational.length > 0) ? moment(view.TShipmentInternational[0].docCutoffDate).format("MM-DD-YYY HH:MM") : ''
+                                                var docCutoff = (view.TShipmentInternational && view.TShipmentInternational.length > 0) ? moment(view.TShipmentInternational[0].docCutoffDate).format("MM-DD-YYYY HH:MM") : ''
                                                 var steamShipline = (view.TShipmentInternational && view.TShipmentInternational.length > 0) ? view.TShipmentInternational[0].TSteamshipLine.name : ''
                                                 var status = (view.TShipmentInternational && view.TShipmentInternational.length > 0 ) ? view.TShipmentInternational[0].status : 'NA'
                                                 var CType = ((view.TShipmentInternational && view.TShipmentInternational.length > 0) ? (view.TShipmentInternational[0].TContainerType ? view.TShipmentInternational[0].TContainerType.name : "N/A") : "N/A")

@@ -353,7 +353,6 @@ else{
 				}
 			}
 		onAdd(){
- ;
 var calcWeight = this.state.weightBox
  if(this.state.weightBox){
 	 this.state.weightBox = ''
