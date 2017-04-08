@@ -760,11 +760,11 @@ class ContainerViewDataComponent extends React.Component {
                             <tr className="base_bg clickable" ref="clickable" style={{"backgroundColor": "#e5e5ff"}}>
 
                                 <td >
-                                    <input type="checkbox" className="checkBox"
-                                           onChange={(e)=>{this.props.onCheckboxChange(e,view)}}
-                                           value={view.id} id={"DH"+view.id}/>
+                                    {/*<input type="checkbox" className="checkBox"
+                                     onChange={(e)=>{this.props.onCheckboxChange(e,view)}}
+                                     value={view.id} id={"DH"+view.id}/>
 
-                                    <label htmlFor={"DH"+view.id}></label>
+                                     <label htmlFor={"DH"+view.id}></label>*/}
                                 </td>
                                 {dataState.state.headerArray.map(obj => {
                                     return subheaderObj[obj];
@@ -893,9 +893,10 @@ class ContainerViewDataComponent extends React.Component {
                             <tbody key={index}>
                             <tr className="base_bg clickable" ref="clickable" style={{"backgroundColor": "#e5e5ff"}}>
                                 <td >
-                                    <input type="checkbox" className="checkBox" onChange={(e)=>{this.props.onCheckboxChange(e,view)}}
-                                           value={view.id} id={"IH"+view.id}/>
-                                    <label htmlFor={"IH"+view.id}></label>
+                                    {/*  <input type="checkbox" className="checkBox" onChange={(e)=>{this.props.onCheckboxChange(e,view)}}
+                                     value={view.id} id={"IH"+view.id}/>
+                                     <label htmlFor={"IH"+view.id}></label>*/}
+
                                 </td>
 
                                 {dataState.state.headerArray.map(obj => {
