@@ -514,7 +514,7 @@ class ShipmentEntryForm extends React.Component {
      console.log(this.DomesticInfoObjects);
      }*/
     onAdd(){
-          
+          debugger
         var tempObj = {
             bagsToShip:"",
             inInventorybags:"",
@@ -525,10 +525,10 @@ class ShipmentEntryForm extends React.Component {
         var count = this.state.index+1
         this.state.index = count
         if(this.state.materialInfoList.length == 0 && Object.keys(this.MIobj).length != 0) {
-            if(this.LIobj.lot_id == undefined){
-                swal("Empty Lot","Please select a lot number before adding new lots","error")
-                return
-            }
+            // if(this.LIobj.lot_id == undefined){
+            //     swal("Empty Lot","Please select a lot number before adding new lots","error")
+            //     return
+            // }
             this.addMIObject();
             //this.LIObjects.push(this.LIobj)
             console.log("LIOBJECTS",this.LIObjects)
@@ -858,6 +858,10 @@ class ShipmentEntryForm extends React.Component {
         this.Allobjs.International.EarliestReturnDate = this.internationalEarliestReturnDate
         this.Allobjs.International.CargoCutoffDate = this.internationalCargoCutOffDate
         this.Allobjs.International.DocCutoffDate = this.DocCutoffDate;
+        for(var i in this.state.lots){
+            var tempObj = JSON.parse(JSON.stringify(this.state.lots[i]))
+            this.Allobjs.lotInformation.push(tempObj)
+        }
         var tempThis=this;
         if (parseInt(this.comPo.bagsToShip) > parseInt(this.comPo.inInventorybags)) {
             swal({
@@ -872,16 +876,7 @@ class ShipmentEntryForm extends React.Component {
                 closeOnCancel: true
             }, function (isConfirm) {
                 if (isConfirm) {
-                    console.log("axios");
-                    console.log("onConfirm",tempThis.Allobjs);
                     axios.post(Base_Url + "TShipmentents/createShipMentEntry", tempThis.Allobjs).then((response)=> {
-                        console.log("response data",response)
-        for(var i in this.state.lots){
-            var tempObj = JSON.parse(JSON.stringify(this.state.lots[i]))
-            this.Allobjs.lotInformation.push(tempObj)
-        }
-    console.log(this.Allobjs)
-
                         //if(parseInt(this.SIObj.numberOfBags) == parseInt(this.Total)){
                         // var Lilength = this.LIObjects.length
                         // if(this.LIObjects.length > 1) {
@@ -1146,6 +1141,10 @@ class ShipmentEntryForm extends React.Component {
         this.Allobjs.International.EarliestReturnDate = this.internationalEarliestReturnDate
         this.Allobjs.International.CargoCutoffDate = this.internationalCargoCutOffDate
         this.Allobjs.International.DocCutoffDate = this.DocCutoffDate
+        for(var i in this.state.lots){
+            var tempObj = JSON.parse(JSON.stringify(this.state.lots[i]))
+            this.Allobjs.lotInformation.push(tempObj)
+        }
         var tempThis=this;
         if (parseInt(tempThis.comPo.bagsToShip) > parseInt(tempThis.comPo.inInventorybags)) {
             swal({
