@@ -33,7 +33,7 @@ export default class RailcarDepartureEntryPage extends React.Component {
               viewRailcartData : data
             }
         )
-        console.log( '>>>>>>>>>>>>raillcart' , this.state.viewRailcartData)
+      //  console.log( '>>>>>>>>>>>>raillcart' , this.state.viewRailcartData)
       }.bind(this)
 
     })
@@ -50,7 +50,7 @@ export default class RailcarDepartureEntryPage extends React.Component {
    $.ajax({
       url: this.url,
       success:function(data){
-        console.log('ajax ',data);
+    //    console.log('ajax ',data);
 
         this.setState(
             {
@@ -58,7 +58,7 @@ export default class RailcarDepartureEntryPage extends React.Component {
               loaded : true
             }
         )
-        console.log( '>>>>>>>>>>>>raillcart' , this.state.viewRailcartData)
+       // console.log( '>>>>>>>>>>>>raillcart' , this.state.viewRailcartData)
       }.bind(this)
 
     })

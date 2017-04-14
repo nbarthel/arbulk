@@ -382,7 +382,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 	}
 	click(data,value,index)
 	{
-		 
+
 
 		if(data.target.checked){
 			//this.checked = true
@@ -391,7 +391,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 			document.getElementById('th'+ index).innerText = "YES"
 			for(var i=0;i<this.props.data.length;i++){
 				if(this.props.data[i].TPackagingInstructions.po_number == value.TPackagingInstructions.po_number){
-					this.props.data[i].arrived = 1
+					this.props.data[i].arrived = 1;
 					break;
 				}
 			}
@@ -582,6 +582,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 						<td>{view.weight?(this.state.selectedOption=='lbs'?view.weight:(view.weight/MUL_FACTOR).toFixed(2)):''}</td>
 						<td>{view.lot_number ? view.lot_number: ''}</td>
 						<td>{view.TPackagingInstructions ? view.TPackagingInstructions.material : ''}</td>
+
 						<td> {view.status == "UNCONFIRMED" ? "NO" : "YES"}</td>
 						<td ref="arrived" id={"th"+index}> {view.arrived == 1 || this.checked==true ? "YES" : "NO"}</td>
 						<td>

@@ -207,7 +207,7 @@ class ViewDataComponent extends React.Component {
 
                 $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
                 var oldIndex;
-                $('.sorted_head tr').sortable({
+                $('.sorted_head tr').sortable2({
                     containerSelector: 'tr',
                     itemSelector: 'th',
                     vertical: false,

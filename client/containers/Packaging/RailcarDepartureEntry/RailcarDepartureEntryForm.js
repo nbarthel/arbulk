@@ -194,7 +194,7 @@ onClickli(e){
 				url: this.urlSearch,
 				success:function(data){
 					debugger;
-					console.log('ajax ',data);
+					console.log('ajax11 ',data);
 
 					this.setState(
 						{
@@ -206,6 +206,7 @@ onClickli(e){
 
 			})
 		}
+		console.log("sss",this.state.viewData);
 	}
 
 	componentDidMount() {
@@ -348,7 +349,7 @@ onClickli(e){
 			selectedOption: changeEvent.target.value
 
 		});
-		console.log( selectedOption);
+		//console.log( selectedOption);
 	}
 	handleOptionChange1(e) {
 		debugger;
@@ -363,7 +364,7 @@ onClickli(e){
 		this.cartArray.push(value.id)
 
 
-		console.log("clicked" , data , value)
+		//console.log("clicked" , data , value)
 	};
 	updateCartArrival(){
 
@@ -376,11 +377,9 @@ onClickli(e){
   	return
   }
    var option = {
-
       railcar_status:'RETURNED',
       railcar_departed_on : parseInt(this.state.startDate._d.getMonth()) +1 +'/'+this.state.startDate._d.getDate()+'/' +this.state.startDate._d.getFullYear()
    }
-
 
    this.cartArray.forEach((id)=>{
       axios.put(Base_Url+"TPackagingInstructionLots/" + id , option).then(function(response){
@@ -402,13 +401,16 @@ onClickli(e){
 
 }
 	render() {
+
 		debugger;
 		var fiterData = undefined ;
-		fiterData = this.state.viewData ? this.state.viewData : undefined ;
+		 var fiterData = this.state.viewData ? this.state.viewData : undefined ;
+		debugger
 
 		if(fiterData != undefined){
 			var railCarFilterData = _.map(fiterData , (view ,index)=>{
-					if(view.TPackagingInstructions && (view.status == "In Inventory") ){
+				console.log("----",fiterData)
+					if(view.TPackagingInstructions && (view.status == "IN INVENTORY") ){
 
 					return (
 						<tr key={index}>
@@ -428,6 +430,8 @@ onClickli(e){
 						</tr>
 					)
 				}
+
+
 				//else{
 				//	return (
 				//		<tr>
@@ -454,9 +458,12 @@ onClickli(e){
 
 		const railCart = this.props.data
 
-
 		var railcartData = _.map(railCart , (view , index)=>{
-			if(view.TPackagingInstructions && (view.status == "In Inventory") ){
+			//console.log(view.TPackagingInstructions);
+			//console.log(view.status);
+
+			if(view.TPackagingInstructions && (view.status == "IN INVENTORY") ){
+				debugger
 			return(
 
 				<tr key={index}>
@@ -477,6 +484,11 @@ onClickli(e){
 			)
 		}
 		})
+
+		//railcartData = _.filter(railcartData, function (param) {
+		//	return param !== undefined;
+		//});
+
 		return (
 
 			<section className="side-filter">
@@ -501,7 +513,7 @@ onClickli(e){
 									<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 "><hr/></div>
 
 									<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-										<div className="table-responsive view_table  mega" style={{"max-height":"550px","overflowY":"scroll"}}>
+										<div className="table-responsive view_table  mega" style={{"maxHeight":"550px","overflowY":"scroll"}}>
 											<table id="tableRailCarDeparture" className="table table-expandable" cellSpacing="0">
 												<thead className="table_head header-fixed header red">
 												<tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>

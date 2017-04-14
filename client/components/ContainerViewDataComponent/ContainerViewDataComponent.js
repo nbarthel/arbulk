@@ -194,7 +194,7 @@ class ContainerViewDataComponent extends React.Component {
                 });
                 $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
                 var oldIndex;
-                $('.sorted_head tr').sortable({
+                $('.sorted_head tr').sortable2({
                     containerSelector: 'tr',
                     itemSelector: 'th',
                     vertical: false,
@@ -238,12 +238,10 @@ class ContainerViewDataComponent extends React.Component {
     }
 
     checkclick(data, value) {
-
         var queueArray = []
         this.qArray.push(value.id)
         localStorage.setItem('qArray', this.qArray)
         localStorage.setItem('queue_Sequence', this.state.queue_Sequence[0].max_mark)
-
     }
 
     onGroupBy(switchvalue) {
@@ -660,6 +658,7 @@ class ContainerViewDataComponent extends React.Component {
 
                             }
                             else if (view.isDomestic == 0) {
+
                                 if (view.TContainerInternational && view.TContainerInternational.length > 0) {
                                     var shipType = view.isDomestic == 0 ? "INTERNATIONAL" : "DOMESTIC"
                                     var bookingNumber = (view.TShipmentInternational && view.TShipmentInternational.length > 0) ? view.TShipmentInternational[0].bookingNumber : 'NA'
@@ -710,8 +709,10 @@ class ContainerViewDataComponent extends React.Component {
         }
         else {
             listData = _.map(this.state.viewData, (view, index) => {
+
                 if (view.isDomestic == 1) {
                     if (view.TContainerDomestic && view.TContainerDomestic.length > 0) {
+
                         var bookingNumber = (view.TShipmentDomestic && view.TShipmentDomestic.length > 0 ) ? view.TShipmentDomestic[0].bookingNumber : ''
                         var count = index
                         var shipType = view.isDomestic == 1 ? "DOMESTIC" : "INTERNATIONAL";
@@ -773,6 +774,7 @@ class ContainerViewDataComponent extends React.Component {
                             </tr>
                             {
                                 _.map(view.TContainerDomestic, (data, index)=> {
+
                                     if (data.containerArrived == 1) {
                                         var Arr = 'YES'
                                     } else {
@@ -845,6 +847,7 @@ class ContainerViewDataComponent extends React.Component {
                     }
                 }
                 else if (view.isDomestic == 0) {
+
                     if (view.TContainerInternational && view.TContainerInternational.length > 0) {
                         var shipType = view.isDomestic == 0 ? "INTERNATIONAL" : "DOMESTIC"
                         var bookingNumber = (view.TShipmentInternational && view.TShipmentInternational.length > 0) ? view.TShipmentInternational[0].bookingNumber : 'NA'
@@ -853,7 +856,8 @@ class ContainerViewDataComponent extends React.Component {
                         var count = index
                         var subheaderObj = {};
                         subheaderObj["ARB"] = (
-                            <td key="arb" style={{display : this.props.showARB}}><i className="fa fa-chevron-down"
+                            <td key="arb" style={{display : this.props.showARB}}>
+                                <i className="fa fa-chevron-down"
                                                                                     aria-hidden="false"
                                                                                     data-target={count}
                                                                                     onClick={(e) => {this.onClickRow(e)}}></i> {view.TLocation ? view.TLocation.locationName : ''}
@@ -933,7 +937,8 @@ class ContainerViewDataComponent extends React.Component {
                                     );
                                     cellObj["Trucker"] = (
                                         <td key="trucker"
-                                            style={{display : this.props.showTrucker}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0) ? (view.TContainerDomestic[index].TCompany ? view.TContainerDomestic[index].TCompany.name : '') : "N/A"}</td>
+                                            style={{display : this.props.showTrucker}}>{(view.TContainerInternational && view.TContainerInternational.length > 0) ?
+                                            (view.TContainerInternational[index].TCompany ? view.TContainerInternational[index].TCompany.name : '') : "N/A"}</td>
                                     );
                                     cellObj["Arrived?"] = (
                                         <td key="arrived"

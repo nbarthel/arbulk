@@ -57,10 +57,10 @@ export default function validateDomesticInput(data){
         errorsd.paidBy = 'Customer Name field is required';
         isError = true;
     }
-    if (data.recipentTelNumber.length!=10){
-        errorsd.recipentTelNumber = 'Telephone Number must be of 10 digit';
-        isError = true;
-    }
+    //if (data.recipentTelNumber.length!=10){
+    //    errorsd.recipentTelNumber = 'Telephone Number must be of 10 digit';
+    //    isError = true;
+    //}
     if(!isError){
   		ValidateAlphaNumeric(data,errorsd)
   	}

@@ -327,7 +327,7 @@ class ShipmentEntryForm extends React.Component {
     }
     GetTotalbags(event,next)
     {
-          
+
         var bags;
         var totalAllocatedbags=0;
         var MIView = createDataLoader(ShipmentEntryForm, {
@@ -376,7 +376,7 @@ class ShipmentEntryForm extends React.Component {
 
     }
     handleMIChange(e){
-  
+
         totalBagsInPO =0
         totalBagsOrderForPO = 0
         if(e.target.name == "po_number"){
@@ -414,7 +414,6 @@ class ShipmentEntryForm extends React.Component {
                 this.Total = inventoryBags.reduce(function(a,b){return parseInt(a)+parseInt(b) ;},0)
 
                 this.lotNumber = _.map(this.state.lotNumber,(lotNum,index) => {
-
                     if(isNaN(lotNum.inInventory) || lotNum.inInventory == null){
                         lotNum.inInventory = 0;
                     }
@@ -426,9 +425,8 @@ class ShipmentEntryForm extends React.Component {
                         totalBagsOrderForPO += tempvalue['totalBags']
                         tempthis.inInventoryBags = totalBagsInPO - totalBagsOrderForPO
                         tempthis.comPo.inInventorybags = totalBagsInPO - totalBagsOrderForPO
-                        tempthis.forceUpdate()
+                        tempthis.forceUpdate();
                     })
-
                     return <option key = {index}  value = {lotNum.id}>{lotNum.lot_number}</option>
                 })
                 this.inInventoryBags = totalBagsInPO //- totalBagsOrderForPO
@@ -565,9 +563,8 @@ class ShipmentEntryForm extends React.Component {
 
     }
     onLotAdd(){
-          
-        if(this.comPo.lot_id != "") {
 
+        if(this.comPo.lot_id != "") {
             this.LIObjects.push(_.cloneDeep(this.comPo))
             this.comPo.lot_id = ""
             const lotInfoList = this.state.lotInfoList;
@@ -584,7 +581,7 @@ class ShipmentEntryForm extends React.Component {
 
     }
     onMinus(e){
-          
+
         this.minus=this.minus + 1
 
         console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",this.minus)
@@ -618,7 +615,7 @@ class ShipmentEntryForm extends React.Component {
         //React.unmountComponentAtNode(document.getElementById(''));
     }
     onLotMinus(e) {
-          
+
         this.lotminus=this.lotminus+1
         if(this.lotminus==1){
             this.addLIObject();
@@ -714,7 +711,7 @@ class ShipmentEntryForm extends React.Component {
     }
 
     onSubmit(e){
-        //console.log("pressed");
+  //      console.log("Dom pressed");
 
         DisableDoubleClick('submit');
 
@@ -847,7 +844,6 @@ class ShipmentEntryForm extends React.Component {
         this.Allobjs.Domestic = this.Domesticobj
         if (Object.keys(this.Address).length != 0) {
             this.addDomesticshipObject()
-
         }
         this.Allobjs.Address = this.DomesticInfoObjects
         this.Allobjs.Domestic.domesticCarear = this.DomesticCaraerObjects
@@ -876,6 +872,7 @@ class ShipmentEntryForm extends React.Component {
                 closeOnCancel: true
             }, function (isConfirm) {
                 if (isConfirm) {
+ //                   console.log("Domestic",tempThis.Allobjs);
                     axios.post(Base_Url + "TShipmentents/createShipMentEntry", tempThis.Allobjs).then((response)=> {
                         //if(parseInt(this.SIObj.numberOfBags) == parseInt(this.Total)){
                         // var Lilength = this.LIObjects.length
@@ -944,6 +941,7 @@ class ShipmentEntryForm extends React.Component {
                     });
                 }
                 else {
+       //             console.log("DomesticF",tempThis.Allobjs);
                     tempThis.LIObjects=[]
                     tempThis.Allobjs={ };
                     tempThis.Allobjs.lotInformation=[];
@@ -1159,7 +1157,7 @@ class ShipmentEntryForm extends React.Component {
                 closeOnCancel: true
             }, function (isConfirm) {
                 if (isConfirm) {
-
+        //            console.log("Domestic",tempThis.Allobjs);
                     axios.post(Base_Url+"TShipmentents/createShipMentEntry",tempThis.Allobjs).then((response)=>{
 
                         //if(parseInt(this.SIObj.numberOfBags) == parseInt(this.Total)){
@@ -1216,8 +1214,10 @@ class ShipmentEntryForm extends React.Component {
                         EnableClick('submitContainer')
                     })
                 } else {
+
                     tempThis.LIObjects=[],
                         tempThis.Allobjs={ }
+            //        console.log("DomesticF",tempThis.Allobjs);
                     EnableClick('submitContainer')
                     return false
                 }
@@ -1266,7 +1266,7 @@ class ShipmentEntryForm extends React.Component {
     handlebagsToShip( e) {
 
         this.comPo.bagsToShip = e.target.value
-        console.log("bagsToShip", this.LIobj);
+       // console.log("bagsToShip", this.LIobj);
 
 
     }
@@ -1299,7 +1299,7 @@ class ShipmentEntryForm extends React.Component {
             return <option key = {index} id = {pType.id} value = {pType.id}>{pType.type}</option>
         })
         if(this.state.lotNumber){
-            console.log(this.state.lotNumber[0].TPackagingInstructionLots)
+         //   console.log(this.state.lotNumber[0].TPackagingInstructionLots)
 
 
         }
@@ -1386,9 +1386,7 @@ class ShipmentEntryForm extends React.Component {
                                                        name="numberOfContainers"
                                                        onChange={this.handleSIChange}
                                                        value={this.state.noofContainers}
-                                                       type="number"
-
-                                                />
+                                                       type="number"/>
 
                                                 <div className="error"><span>{this.state.errors.numberOfBags}</span></div>
                                             </div>
@@ -1463,8 +1461,7 @@ class ShipmentEntryForm extends React.Component {
                                                     ref="Lot"
                                                     name="lot_id"
                                                     onChange = {this.handleLIChange}
-                                                    defaultValue = ""
-                                                >
+                                                    defaultValue = "">
                                                     <option value="" disabled>Lot Number</option>
                                                     {this.lotNumber}
                                                 </select>
@@ -1491,7 +1488,7 @@ class ShipmentEntryForm extends React.Component {
                                                        defaultValue = ""/>
 
 
-                                                <div className="error"><span>{this.state.no_error_text}</span></div>
+                                                <div className="error"><span></span></div>
                                             </div>
                                         </div>
 
@@ -1605,8 +1602,7 @@ class ShipmentEntryForm extends React.Component {
                                                             id="Type_of_Bag"
                                                             name="steamshipLineId"
                                                             onChange={this.InternationalChange}
-                                                            defaultValue = ""
-                                                    >
+                                                            defaultValue = "">
                                                         <option disabled value = "">Select</option>
                                                         {steamShipLine}
 
@@ -1876,7 +1872,7 @@ class ShipmentEntryForm extends React.Component {
                                             </div>
                                             <div className="form-group">
                                                 <label htmlFor="Type_of_Packaging"
-                                                       className={this.state.errorsd.recipentTelNumber ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Reciepient Telephone
+                                                       className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Reciepient Telephone
                                                 </label>
 
                                                 <div className="col-lg-8 col-sm-11 col-xs-11 ">
@@ -1886,11 +1882,9 @@ class ShipmentEntryForm extends React.Component {
                                                            placeholder="Reciepient Telephone"
                                                            name="recipentTelNumber"
                                                            onChange={this.DomesticChange}
+                                                        />
 
-
-                                                    />
-
-                                                    <div className="error"><span>{this.state.errorsd.recipentTelNumber ? this.state.errorsd.recipentTelNumber : '' }</span></div>
+                                                    <div className="error"><span></span></div>
                                                 </div>
                                             </div>
 
