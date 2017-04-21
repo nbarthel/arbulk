@@ -93,15 +93,19 @@ class  ShipmentViewForm extends React.Component
         })
         this.forceUpdate()
     }
-    allocateContainer(e){
-        hashHistory.push('/Container/containerarrivalentry')
-    }
-    headerCheckboxChange(e,data){
 
+    //allocateContainer(e){
+    //    console.log(e);
+    //    hashHistory.push('/Container/containerarrivalentry')
+    //}
+    headerCheckboxChange(e, data) {
+        //console.log(data, "hhh");
+        //console.log(e, "eee");
       if(e.target.checked){
           this.conFirmID = e.target.value
           this.selected = e.target.id
           this.confId = data.id
+          // this.tempLotId = data.piLotsId
       }
       else if(!e.target.checked){
           this.selected = null
@@ -112,6 +116,10 @@ class  ShipmentViewForm extends React.Component
           //this.piID = null
 
       }
+        //console.log("--->selected", this.selected);
+        //console.log("--->confId", this.conFirmID);
+        // console.log("--->tempLotId",this.tempLotId);
+
     }
     onConfirmClick(e){
       if(this.confId != null || undefined){
@@ -124,7 +132,7 @@ class  ShipmentViewForm extends React.Component
 onViewClick(e){
 
       if(this.conFirmID != null || undefined){
-          hashHistory.push('/Shipment/shipmentDetails/'+this.conFirmID+'/'+this.tempLotId);
+          hashHistory.push('/Shipment/shipmentDetails/'+this.conFirmID+'/'+this.tempLotId+'/'+1+'/');
     }else{
       swal("Selection Missing","Please Select A Shipment Lot","info")
     }
@@ -190,18 +198,25 @@ PrintScreen(){
             //this.piID = null
 
         }
-        console.log("SelectedID >>>>>>>>>>>>.",this.selected)
-        console.log("ConfirmID><^><^><^>^<^>^<",this.conFirmID)
+        //console.log("SelectedID >>>>>>>>>>>>.",this.selected)
+        //console.log("shipId >>>>>>>>>>>>.",this.shipId)
+        //console.log("ConfirmID><^><^><^>^<^>^<",this.conFirmID)
+        //console.log("templotId><^><^><^>^<^>^<", this.tempLotId)
     }
 
     allocateContainer(e){
-        hashHistory.push('/Shipment/shipmentDetails/'+this.shipId+'/'+ 1 )
+
+        if (this.conFirmID != null || undefined) {
+            hashHistory.push('/Shipment/shipmentDetails/' + this.conFirmID + '/' + this.tempLotId);
+        } else {
+            swal("Selection Missing", "Please Select A Shipment Lot", "info")
+        }
     }
 
 
     addToQueue(e){
-         ;
-      var option = {
+
+        var option = {
           "queueSequence" : parseInt(this.state.queue_Sequence[0].max_mark) +1
       }
     axios.put(Base_Url+"TShipmentLots/"+this.shipLotid ,option).then((response)=>{
@@ -1800,8 +1815,9 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                  <a href="javascript:void(0)" name = "Ret" onClick={(e) => {this.onHideColumn(e)}}>Return</a>
                  <a href="javascript:void(0)" name = "Doc" onClick={(e) => {this.onHideColumn(e)}}>Doc</a>
                  <a href="javascript:void(0)" name = "Status" onClick={(e) => {this.onHideColumn(e)}}>Status</a>
-                 <a href="javascript:void(0)" name = "Trucker" onClick={(e) => {this.onHideColumn(e)}}>Trucker</a>
-</div>
+
+
+                  </div>
 
                                                                         <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                                             <div className=" ">

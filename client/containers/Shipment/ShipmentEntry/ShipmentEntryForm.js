@@ -208,9 +208,11 @@ class ShipmentEntryForm extends React.Component {
             })
         })
         axios.get(Base_Url + "TPaymentTypes").then((response) => {
+            console.log(response.data);
             this.setState({
                 paymentType : response.data
             })
+
         })
         axios.get(Base_Url + "TLocations").then((response) => {
             this.setState({
@@ -503,7 +505,7 @@ class ShipmentEntryForm extends React.Component {
         var DomesticInfoObjects = Object.assign({},this.Address)
         this.DomesticInfoObjects.push(DomesticInfoObjects)
 
-        console.log("DomesticInfoObjects",this.DomesticInfoObjects);
+       // console.log("DomesticInfoObjects",this.DomesticInfoObjects);
     }
     /* addDomesticcarearObject(){
      var DomesticcarearObjects = Object.assign({},this.DomesticCarearobj)
@@ -647,7 +649,7 @@ class ShipmentEntryForm extends React.Component {
             })
             this.Address={}
 
-            console.log(this.DomesticInfoObjects);
+            //console.log(this.DomesticInfoObjects);
         }
         else {
             swal("Empty Fields","Please Enter All The Fields Before Adding New Lots.","error")
@@ -872,7 +874,8 @@ class ShipmentEntryForm extends React.Component {
                 closeOnCancel: true
             }, function (isConfirm) {
                 if (isConfirm) {
- //                   console.log("Domestic",tempThis.Allobjs);
+                    console.log("Domestic",tempThis.Allobjs);
+
                     axios.post(Base_Url + "TShipmentents/createShipMentEntry", tempThis.Allobjs).then((response)=> {
                         //if(parseInt(this.SIObj.numberOfBags) == parseInt(this.Total)){
                         // var Lilength = this.LIObjects.length
@@ -925,23 +928,26 @@ class ShipmentEntryForm extends React.Component {
                         // }
 
                         if (response.data.errors) {
+
                             EnableClick('submit')
-                            if (response.data.errors.code == "Release Number Already Exist" || response.data.errors.code == "Booking Number Already Exist") {
+                            if (response.data.errors.code == "Release Number Already Exist" ||
+                                response.data.errors.code == "Booking Number Already Exist") {
                                 swal(response.data.errors.code)
                                 return
                             }
                         }
                         else {
-                            swal("Posted", "Success", "success")
-                            hashHistory.push('/Shipment/shipmentDetails/' + response.data.id + '/-' + 1)
+                            swal("Posted", "Success", "success");
+                            console.log("here");
+                            hashHistory.push('/Shipment/shipmentview/')
                         }
                     }).catch(function (error) {
                         EnableClick('submit')
-                        //console.log(error);
+                        console.log(error);
                     });
                 }
                 else {
-       //             console.log("DomesticF",tempThis.Allobjs);
+                    console.log("DomesticFalse",tempThis.Allobjs);
                     tempThis.LIObjects=[]
                     tempThis.Allobjs={ };
                     tempThis.Allobjs.lotInformation=[];
@@ -1443,9 +1449,8 @@ class ShipmentEntryForm extends React.Component {
                                                 <div className="error"><span></span></div>
                                             </div>
                                             <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1 add_btn text_left">
-                                                <i className="fa-2x fa fa-plus base_color hidden" aria-hidden="true" onClick={this.onAdd}></i>
+                                                <i className="fa-2x fa fa-plus base_color" onClick={this.onAdd} aria-hidden="true" ></i>
                                             </div>
-
                                         </div>
 
 
@@ -1468,8 +1473,10 @@ class ShipmentEntryForm extends React.Component {
 
                                                 <div className="error"><span></span></div>
                                             </div>
+
                                             <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1 add_btn text_left">
-                                                <i className="fa-2x fa fa-plus base_color" onClick={this.onAdd} aria-hidden="true" ></i>
+                                                {this.state.materialInfoList.length> 0 ? <i className="fa-2x fa fa-minus base_color" onClick={this.onMinus} aria-hidden="true"></i> : null}
+
                                             </div>
 
                                         </div>
@@ -1506,10 +1513,7 @@ class ShipmentEntryForm extends React.Component {
 
                                                 <div className="error"><span></span></div>
                                             </div>
-                                            <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1 add_btn text_left">
-                                                {this.state.materialInfoList.length> 0 ? <i className="fa-2x fa fa-minus base_color" onClick={this.onMinus} aria-hidden="true"></i> : null}
 
-                                            </div>
                                             <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1 add_btn text_left">
 
                                                 {this.state.lotInfoList.length> 0 ? <i className="fa-2x fa fa-minus base_color" onClick={this.onLotMinus} aria-hidden="true"></i> : null}
@@ -1785,7 +1789,7 @@ class ShipmentEntryForm extends React.Component {
 
                                         <fieldset className="scheduler-border tab-pane " id="Domestic">
                                             <div className="form-group ">
-                                                <label for="" className={this.state.errorsd.bookingNumber ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Booking #</label>
+                                                <label htmlFor="" className={this.state.errorsd.bookingNumber ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Booking #</label>
                                                 <div className="col-lg-8  col-sm-11 col-xs-11 ">
                                                     <input type="text"
                                                            className="form-control"
@@ -1921,7 +1925,7 @@ class ShipmentEntryForm extends React.Component {
                                                     <div className="col-lg-8  col-sm-11 col-xs-11 ">
                                                         <input
                                                             type = "number"
-                                                            maxlength = "3"
+                                                            maxLength = "3"
                                                             className="form-control"
                                                             id="No_of_Bages_Pallat"
                                                             placeholder="Ship to Zip Code"

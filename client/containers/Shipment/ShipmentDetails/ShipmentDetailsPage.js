@@ -64,15 +64,17 @@ class ShipmentDetailsPage  extends React.Component{
     }
 
     render(){
+        //console.log("-->aa",this.state.allData.isDomestic);
       if(this.state.allData !=  undefined){
         var isDomestic =  this.state.allData.isDomestic
+
       }
         return(
             <div className="wrapper-inner">
             <div className="content-inside">
             <Header routes = {this.props.routes} />
             <Loader loaded={this.state.loaded}>
-                <ShipmentDetailsForm lotId={this.lotId} data = {this.state.allData} id = {this.id} allocShipment = {this.props.params.isDomestic} isDomestic = {isDomestic} pckData = {this.state.packData}/>
+                <ShipmentDetailsForm lotId={this.lotId} data = {this.state.allData} id = {this.id} allocShipment = {1} isDomestic = {isDomestic} pckData = {this.state.packData}/>
             </Loader>
                 </div>
            <Footer />

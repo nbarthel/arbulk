@@ -2,6 +2,7 @@ import React from 'react';
 //import '../../public/stylesheets/style.css';
 //import '../../public/stylesheets/bootstrap.min.css';
 import { Link } from 'react-router';
+
 import ShipmentDetailsTable from '../../../components/ShipmentViewComponents/ShipmentDetailsTable'
 import ShipmentSummaryComponent from '../../../components/ShipmentViewComponents/ShipmentSummaryComponent'
 import ContainerSummaryComponent from '../../../components/ShipmentViewComponents/ContainerSummaryComponent'
@@ -57,13 +58,30 @@ class  ShipmentDetailsForm extends React.Component {
         this.piLotIdArray = []
     }
     componentDidMount() {
-       console.log("aloc",this.props.allocShipment)
-       if(this.props.allocShipment == 1){
-        this.setState({
-            hideEdit : 'block',
-                showEdit : 'none'
-        })
-       }
+
+        var a = window.location.href;
+        console.log("path", a);
+        var p = a.split('/')[8];
+        if (p == 1) {
+            this.setState({
+                hideEdit: 'none',
+                showEdit: 'block'
+            })
+        } else {
+            console.log("else");
+            this.setState({
+                hideEdit: 'block',
+                showEdit: 'none'
+            })
+        }
+        //  console.log("aloc",this.props.allocShipment)
+        //if(this.props.allocShipment == 1){
+        // this.setState({
+        //     hideEdit : 'block',
+        //     showEdit : 'none'
+        // })
+        //}
+
        var PIview = createDataLoader(ShipmentDetailsForm,{
           queries:[{
               endpoint: 'TPackagingInstructions',
@@ -98,7 +116,6 @@ class  ShipmentDetailsForm extends React.Component {
           break
         }
       }
-
       this.forceUpdate()
     }
     checkConfirmation()
@@ -154,7 +171,7 @@ class  ShipmentDetailsForm extends React.Component {
                             type:"info"
                           },function(){
                             debugger
-                              hashHistory.push('/Shipment/shipmentview')
+                              hashHistory.push('/Shipment/shipmentview');
                           })
 
                           }
@@ -179,14 +196,14 @@ class  ShipmentDetailsForm extends React.Component {
         }
   	}
 
-    onAllocateContainer(){
+    onAllocateContainer() {
       this.setState({
                    hideEdit: 'block',
                    showEdit: 'none'
                });
     }
 
-    onDelete(){
+    onDelete() {
       this.checkConfirmation(function(res){
       });
     }
@@ -196,7 +213,7 @@ class  ShipmentDetailsForm extends React.Component {
         if(e.target.checked) {
         this.piLotIdArray.push(value.TPackagingInstructionLots.id)
         // document.getElementById("ContainerSummary").style.display = "table"
-        console.log("value", value)
+            //console.log("value", value)
         this.sID = value.shipmentId
         this.shipmentId = value.shipmentId
         this.piLotId = value.TPackagingInstructionLots.id
@@ -204,7 +221,7 @@ class  ShipmentDetailsForm extends React.Component {
         this.getCurrentInventry(this.piLotId)
         this.state.CI = true
         /*this.forceUpdate()*/
-        console.log(this.shipmentId, this.piLotId)
+            //console.log(this.shipmentId, this.piLotId)
             var CSView = createDataLoader(ShipmentDetailsForm,{
                 queries:[{
                     endpoint: 'TPackagingInstructions',
@@ -217,11 +234,11 @@ class  ShipmentDetailsForm extends React.Component {
             this.url = CSView._buildUrl(base,{
                 "include" : [{"relation": "TContainerAllocation","scope":{"relation":"TCompany" , "scope":{"where" : {"type":"TRUCKER"}}}},{"relation": "TContainerDomestic","scope":{"include":["TCompany","TContainerLoad"]}},{"relation": "TContainerInternational","scope":{"include":["TCompany","TContainerLoad"]}}]
             })
-            console.log(this.url)
+            //console.log(this.url)
             axios.get(this.url).then((response)=>{
                 this.data = response.data
                this.TotalSum = this.sum(this.data.TContainerAllocation, 'noOfContainer');
-
+                console.log("--->tt", this.TotalSum)
                 this.setState({
                     CSummaryData : response.data,
                     total : this.TotalSum
@@ -270,7 +287,7 @@ class  ShipmentDetailsForm extends React.Component {
             url: this.urlnew,
             success:function(data){
                 debugger;
-                console.log(">>>>>>>>>>>> ajax" , data)
+                //console.log(">>>>>>>>>>>> ajax" , data)
                 this.CIData = data
                 this.setState({
                     currentIntObject : this.CIData,
@@ -295,24 +312,20 @@ class  ShipmentDetailsForm extends React.Component {
 };
 
 
-
-
-
-
     handleNumberOfContainers(e){
         this.truckerDetail.noOfContainer = e.target.value
     }
 
 
     handleTruckerSelect(e){
-        console.log("value",e.target.selectedIndex)
+        //console.log("value",e.target.selectedIndex)
         let value = this.state.trucker[e.target.selectedIndex-1]
         this.truckerDetail = {
                                 "id" : 0,
                                 "truckerName" : value.name,
                               "truckerId" : value.id,
                                 "shipment_id" : this.props.id}
-                              console.log(this.truckerDetail)
+        //console.log(this.truckerDetail)
     }
 
 
@@ -320,10 +333,8 @@ class  ShipmentDetailsForm extends React.Component {
         var trimmedArray = [];
         var values = [];
         var value;
-
         for(var i = 0; i < originalArray.length; i++) {
             value = originalArray[i][objKey];
-
             if(values.indexOf(value) === -1) {
                 trimmedArray.push(originalArray[i]);
                 values.push(value);
@@ -350,8 +361,6 @@ class  ShipmentDetailsForm extends React.Component {
       delArray.push(this.deleteArray[i])
     }
   }
-
-
 
         if(this.state.CSummaryData.numberOfContainers < TotalSum){
           window.location.reload()
@@ -457,9 +466,7 @@ if(unique.length >0 && delArray.length == 0){
 onDeleteFunction(deleteArray){
   var unique = deleteArray
   unique.forEach(function(element,index) {
-
       var length = unique.length
-
         axios.patch(Base_Url +"/TContainerAllocations",element).then((response)=>{
           if(length == index+1){
             swal({
@@ -479,13 +486,13 @@ onDeleteFunction(deleteArray){
 
 
   onClick(){
-        if (this.state.hideEdit === 'block'){
+
+      if (this.state.hideEdit === 'block') {
             this.setState({
                 hideEdit : 'none',
                 showEdit : 'block'
             })
             $('.panel-group').removeClass('active');
-
         }
         else {
             this.setState({
@@ -498,12 +505,12 @@ onDeleteFunction(deleteArray){
  }
 
  onAdd(e){
-debugger
+
      var bArray = []
      this.flag = "false"
-if(this.length > 0){
-bArray = this.b
-}
+     if (this.length > 0) {
+         bArray = this.b
+     }
        if(this.allocatedArray.length == 0) {
          var tkId = this.truckerDetail.truckerId
 
@@ -534,7 +541,6 @@ bArray = this.b
 
            if(this.b.length > 1){
               var lastId;
-
               for (var i = 0; i < this.b.length; i++) {
                   if (lastId == this.b[i]['truckerId']) {
                       this.b[this.b.length-1]['noOfContainer'] = parseInt(this.b[this.b.length-1]['noOfContainer']) +parseInt(this.b[i]['noOfContainer']);
@@ -543,20 +549,17 @@ bArray = this.b
                       //b[b.length-1]['noOfContainer'] += this.allocatedArray[i]['noOfContainer'];
 
                   } else {
-
                       this.b[this.b.length] = (this.b[i]);
                        var id =  (this.b[i+1]) ? (this.b[i+1].id) : (this.b[i].id)
                       this.b[i].id = id
                       lastId = this.b[i]['truckerId'];
                   }
               }
-
           }
           else{
 
               this.b = this.allocatedArray
           }
-
 
 
       }
@@ -573,16 +576,13 @@ bArray = this.b
                   this.refs.NC.value = ""
                   this.b.push(_.cloneDeep(this.truckerDetail))
                  this.b =  this.b.concat(this.state.CSummaryData.TContainerAllocation)
-
               }else {
-
                   this.b.push(_.cloneDeep(this.truckerDetail))
-
       }
    }
  }
-else{
-this.b.push(_.cloneDeep(this.truckerDetail))
+            else{
+            this.b.push(_.cloneDeep(this.truckerDetail))
 
 }
 
@@ -649,25 +649,38 @@ deleteAllocate(e){
   }
   var index = e.target.getAttribute('value')
 //  alert(e.target.getAttribute('value'))
-  console.log(this.b)
-  if(this.b.length == 0){
-    this.b = this.state.CSummaryData.TContainerAllocation
-    var obj =   this.b.splice(index , 1)
-    this.deleteArray.push(obj)
-    console.log(this.b)
-    this.unique = this.removeDuplicates(this.b , "truckerId")
-    this.addSum = this.sum(this.unique, 'noOfContainer');
-    this.unAllacated  =   this.addSum
-    this.forceUpdate()
-  }else{
-   var obj1 = this.b.splice(index , 1)
-   this.deleteArray.push(obj1)
-  console.log(this.state.CSummaryData.TContainerAllocation.length , "lengthhhh")
-  this.unique = this.removeDuplicates(this.b , "truckerId")
-  this.addSum = this.sum(this.unique, 'noOfContainer');
-    this.unAllacated  =   this.addSum
-  this.forceUpdate()
-  }
+
+        this.b = this.state.CSummaryData.TContainerAllocation
+        var obj = this.b.splice(index, 1);
+        this.deleteArray.push(obj)
+        this.unique = this.removeDuplicates(this.b, "truckerId");
+        this.addSum = this.sum(this.unique, 'noOfContainer');
+        this.unAllacated = this.addSum
+          console.log("ss", this.unAllacated);
+        if (this.unAllacated == 0) {
+            this.setState({
+                total: 0
+            })
+        }
+        this.forceUpdate();
+
+    //else {
+    //      console.log("else");
+    //    this.b = this.state.CSummaryData.TContainerAllocation;
+    //    console.log("else",this.b);
+    //    var obj1 = this.b.splice(index, 1);
+    //    this.deleteArray.push(obj1);
+    //    this.unique = this.removeDuplicates(this.b, "truckerId")
+    //    this.addSum = this.sum(this.unique, 'noOfContainer');
+    //    this.unAllacated = this.addSum
+    //     console.log("ss4", this.unAllacated);
+    //    if (this.unAllacated == 0) {
+    //        this.setState({
+    //            total: 0
+    //        })
+    //    }
+    //    this.forceUpdate();
+    //}
 }
 
 onConfirmClick(e){
@@ -690,6 +703,7 @@ else
 }
 
     render() {
+        console.log(this.state.CSummaryData)
         return (
             <section className="shipment">
                 <div className="container-fluid">
@@ -772,9 +786,22 @@ else
                                                         </div>
                                                     </form>
                                                 </div>
-                                   <div className="table-responsive">
-                                        <ContainerSummaryComponent deleteClick={this.deleteAllocate} flag={this.flag}  hide={this.props.allocShipment} SId = {this.shipmentId} isDomestic = {this.props.isDomestic} allocatedTruckers = {this.b.length == 0 ?((this.state.CSummaryData && this.state.CSummaryData.TContainerAllocation) ?this.state.CSummaryData.TContainerAllocation:''):this.b} allocated={this.unAllacated} total = {this.state.total } />
-                                        <div className="more_load" style={{display:((this.state.CSummaryData && this.state.CSummaryData.numberOfContainers) ?this.state.CSummaryData && (this.state.CSummaryData.numberOfContainers == this.state.total || this.state.CSummaryData.numberOfContainers == this.unAllacated ) : '') ? 'none' : 'block'}}>More containers are required to be allocated to this
+                                    <div className="table-responsive">
+                                        <ContainerSummaryComponent deleteClick={this.deleteAllocate}
+                                                                   flag={this.flag} hide={this.props.allocShipment}
+                                                                   SId={this.shipmentId}
+                                                                   isDomestic={this.props.isDomestic}
+                                                                   allocatedTruckers={this.b.length == 0 ?((this.state.CSummaryData && this.state.CSummaryData.TContainerAllocation) ?this.state.CSummaryData.TContainerAllocation:''):this.b}
+                                                                   allocated={this.unAllacated}
+                                                                   total={this.state.total }/>
+
+                                        <div className="more_load" style={{display:((this.state.CSummaryData && this.state.CSummaryData.numberOfContainers) ?
+                                       this.state.CSummaryData
+                                        && (this.state.CSummaryData.numberOfContainers == this.state.total ||
+                                         this.state.CSummaryData.numberOfContainers == this.unAllacated ) : '') ? 'none' : 'block'}}>
+
+                                            ff{this.state.total}
+                                            More containers are required to be allocated to this
                                             shipment!
                                         </div>
                                     </div>
@@ -802,11 +829,9 @@ else
                                 </div>
                                 <div id="CurrentInventory" className="panel-collapse collapse ">
                                     <div className="">
-
-
                                         <div className="table-responsive">
-                                                  {this.state.CI == true ? <CurrentInventoryComponent key={this.state.index}  currentInventory = {this.state.currentIntObject } /> : ''}
-
+                                            {this.state.CI == true ? <CurrentInventoryComponent key={this.state.index}
+                                                                                                currentInventory={this.state.currentIntObject }/> : ''}
                                         </div>
                                     </div>
                                 </div>
