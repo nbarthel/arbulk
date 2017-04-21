@@ -26,7 +26,7 @@ export default class RailcarDepartureEntryPage extends React.Component {
     $.ajax({
       url: this.url,
       success:function(data){
-        console.log('ajax ',data);
+      //  console.log('ajax ',data);
 
         this.setState(
             {

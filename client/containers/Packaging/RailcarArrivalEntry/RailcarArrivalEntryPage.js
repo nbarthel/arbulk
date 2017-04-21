@@ -28,12 +28,12 @@ export default class RailcarArrivalEntryPage extends React.Component {
             "where" : {"railcar_status": {"neq":"ARRIVED"},"active":1}
         });
 
-        console.log('sdsddsdsdsdsd' , this.url);
+      //  console.log('sdsddsdsdsdsd' , this.url);
 
         $.ajax({
             url: this.url,
             success:function(data){
-                console.log('ajax ',data);
+              //  console.log('ajax ',data);
 
                 this.setState(
                     {
@@ -41,7 +41,7 @@ export default class RailcarArrivalEntryPage extends React.Component {
                         loaded:true
                     }
                 )
-                console.log( '>>>>>>>>>>>>raillcart' , this.state.viewRailcartData)
+             //   console.log( '>>>>>>>>>>>>raillcart' , this.state.viewRailcartData)
             }.bind(this)
 
         })

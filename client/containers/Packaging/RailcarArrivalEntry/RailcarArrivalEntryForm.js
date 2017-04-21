@@ -55,27 +55,24 @@ export default class RailcarArrivalEntryForm extends React.Component {
 		var datear = inputDate.split('-')
 		return (datear[1] +'-'+ datear[2] +'-'+ datear[0])
 	}
+
 	onTextChange(e){
 		this.Query[e.target.id] = e.target.value
 		console.log(this.Query)
 		this.onSearch(e)
 	}
-	handleChange1(x,event) {
 
+	handleChange1(x,event) {
 		var dateValue = this.onformat(x.target.value)
 		console.log("date value is" , dateValue)
-
 		document.getElementById('row1'+ x.target.id).disabled = false
-
 		this.dateArray.push(dateValue)
         this.onSearch(x)
-
 	}
 
 	onClickPo(e){
-		//debugger;
+		debugger;
 		this.Query[e.target.id] = e.target.getAttribute('value')
-
 		document.getElementById('POSearch').value = e.target.getAttribute('value')
 		console.log(this.Query)
 		console.log('>>>>>> target Value' , e.target.value)
@@ -93,7 +90,6 @@ export default class RailcarArrivalEntryForm extends React.Component {
 
 	onClickli(e){
 		this.Query[e.target.id] = e.target.getAttribute('value')
-
 		document.getElementById('railcarSearch').value = e.target.getAttribute('value')
 		console.log(this.Query)
 		console.log('>>>>>> target Value' , e.target.value)
@@ -101,7 +97,6 @@ export default class RailcarArrivalEntryForm extends React.Component {
 	}
 
 	onSearch(e){
-		 ;
 		if(this.Query != undefined){
 			Object.defineProperty(this.Where,"Query",{enumerable:true ,
 				writable: true,
@@ -147,9 +142,8 @@ export default class RailcarArrivalEntryForm extends React.Component {
 
 			if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.POSearch && this.Where.Query.POSearch!= undefined ){
 				var poSearch =  [ {'po_number': {"like": "%" + this.Where.Query.POSearch + "%"}}]
-				serachObj.push(poSearch)
+				serachObj.push(poSearch);
 			}
-
 
 			if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.railcarSearch && this.Where.Query.railcarSearch!= undefined ){
 				var railSearch = [{'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}}]
@@ -522,7 +516,6 @@ export default class RailcarArrivalEntryForm extends React.Component {
 
 		if(fiterData != undefined){
 			var railCarFilterData = _.map(fiterData , (view ,index)=>{
-				 
 				if(view.TPackagingInstructions && (view.status == "CONFIRMED" || view.status == "UNCONFIRMED"|| view.status == "READY") && (view.arrived != 1) ){
 					return (
 						<tr>
@@ -567,10 +560,14 @@ export default class RailcarArrivalEntryForm extends React.Component {
 				//}
 			})
 		}
+		railCarFilterData = _.filter(railCarFilterData, function (param) {
+			return param !== undefined;
+		});
+
 
 		const railCart = this.props.data
 		var railcartData = _.map(railCart , (view ,index)=>{
-			 ;
+
 
 			if(view.TPackagingInstructions && (view.status == "CONFIRMED" || view.status == "UNCONFIRMED" || view.status == "QUEUED")) {
 				 
@@ -665,7 +662,11 @@ export default class RailcarArrivalEntryForm extends React.Component {
 											</tr>
 											</thead>
 											<tbody >
-											{fiterData != undefined ? railCarFilterData :  railcartData}
+
+											{fiterData != undefined ? (railCarFilterData.length == 0)?
+												<tr>
+													<td colSpan="10" className="noresult">No results match your entered criteria.</td>
+												</tr> :railCarFilterData:  railcartData}
 											</tbody>
 										</table>
 									</div>

@@ -216,8 +216,8 @@ class ShipmentViewDataComponent extends React.Component {
                     liveDrag:false,
                     gripInnerHtml:"<div class='grip'></div>",
                     draggingClass:"dragging",
-                    resizeMode:'flex',
-                    minWidth:100
+                    //resizeMode:'flex',
+                    //minWidth:100
                 });
 
                 $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
@@ -253,8 +253,8 @@ class ShipmentViewDataComponent extends React.Component {
                             liveDrag:false,
                             gripInnerHtml:"<div class='grip'></div>",
                             draggingClass:"dragging",
-                            resizeMode:'flex',
-                            minWidth:100
+                            //resizeMode:'flex',
+                            //minWidth:100
                         });
                     }
 
@@ -1194,7 +1194,7 @@ class ShipmentViewDataComponent extends React.Component {
         listData = _.filter(listData, function (param) {
             return param !== undefined;
         });
-        
+
         var headerObj = {};
         headerObj["ARB"] = (
             <th key="ARB" style={{display : this.props.showARB}}

@@ -28,7 +28,6 @@ export default class RailcarArrivalEntryForm extends React.Component {
 			startDate : '',
 			key:0,
 			selectedOption: 'lbs',
-
 			selectedOption1: 'kg'
 		}
 		this.updateCartArrival = this.updateCartArrival.bind(this);
@@ -48,37 +47,36 @@ export default class RailcarArrivalEntryForm extends React.Component {
 		this.handleOptionChange1 = this.handleOptionChange1.bind(this)
 	}
 	  onClickPo(e){
-        debugger;
-           this.Query[e.target.id] = e.target.getAttribute('value')
+		  this.Query[e.target.id] = e.target.getAttribute('value');
 
-          document.getElementById('POSearch').value = e.target.getAttribute('value')
-           console.log(this.Query)
-           console.log('>>>>>> target Value' , e.target.value)
+		  document.getElementById('POSearch').value = e.target.getAttribute('value');
+
+		  this.onSearch(e);
       }
 
       lotSearch(e){
           debugger;
            this.Query[e.target.id] = e.target.getAttribute('value')
-           console.log(this.Query)
            document.getElementById('LotSearch').value = e.target.getAttribute('value')
-           console.log('>>>>>> target Value' , e.target.value)
+		  this.onSearch(e);
       }
 
 onClickli(e){
   this.Query[e.target.id] = e.target.getAttribute('value')
+	document.getElementById('railcarSearch').value = e.target.getAttribute('value');
+	this.onSearch(e);
 
-    document.getElementById('railcarSearch').value = e.target.getAttribute('value')
-  console.log(this.Query)
-  console.log('>>>>>> target Value' , e.target.value)
 }
 	onTextChange(e){
 		this.Query[e.target.id] = e.target.value
-		console.log(this.Query)
+
+		this.onSearch(e)
 	}
 	handleChange1(x,event) {
 		this.setState({
 			startDate:x
 		});
+
 	}
 	onSearch(e){
 		debugger;
@@ -88,12 +86,13 @@ onClickli(e){
 				configurable: true,
 				value:this.Query})
 		}
-		console.log(this.Where)
+
 		var serachObj = []
-		 var serachObjLots =[]
+		var serachObjLots = []
 
 		if (this.Where != undefined && this.Where!= null)
 		{
+
 			if(this.Where.Customer && this.Where.Customer.length >0){
 				var customer = []
 				var obj = {}
@@ -189,24 +188,22 @@ onClickli(e){
 				});
 			}
 
-			console.log(this.urlSearch , ">>>>>>>>>>>d,lpwkdlwjldjwlkdjwo");
+
 			$.ajax({
 				url: this.urlSearch,
 				success:function(data){
 					debugger;
-					console.log('ajax11 ',data);
-
 					this.setState(
 						{
 							viewData : data
 						}
 					)
-					console.log( "ajax>>>>>>>")
+
 				}.bind(this)
 
 			})
 		}
-		console.log("sss",this.state.viewData);
+
 	}
 
 	componentDidMount() {
@@ -218,6 +215,7 @@ onClickli(e){
 	  });
 
 	}
+
 	onCompanyFilter(e,location){
 		if(e.target.checked){
 			this.forceUpdate()
@@ -226,26 +224,29 @@ onClickli(e){
 				writable: true,
 				configurable:true,
 				value:this.checkedCompany})
-			this.buttonDisplay.push(e.target.value)
+			//	this.buttonDisplay.push(e.target.value)
 		}
 		else if (!e.target.checked){
 
 			let id = e.target.id
 			this.checkedCompany = _.without(this.checkedCompany,id)
-			this.Where.Company = this.checkedCompany
+			this.Where.Company = this.checkedCompany;
+
 			if(Object.keys(this.Where.Company).length === 0){
 				this.Where.Company = undefined
-				//console.log(this.Where)
+
 				delete this.Where.Company
 			}
-			let value = e.target.value
-			let index = this.buttonDisplay.indexOf(e.target.value)
-			if(index !== -1)
-				this.buttonDisplay = _.without(this.buttonDisplay,value)
+			//let value = e.target.value
+			//let index = this.buttonDisplay.indexOf(e.target.value)
+			//if(index !== -1)
+			//	this.buttonDisplay = _.without(this.buttonDisplay,value)
 			this.forceUpdate()
 		}
+		this.onSearch(e);
 	}
 	onCustomerFilter(e,customer){
+
 		if(e.target.checked){
 			this.forceUpdate()
 			this.checkedCustomer.push(e.target.id)
@@ -253,35 +254,37 @@ onClickli(e){
 				writable: true,
 				configurable:true,
 				value:this.checkedCustomer})
-			this.buttonDisplay.push(e.target.value)
+			//this.buttonDisplay.push(e.target.value)
 			//console.log(this.props.checkedCompany)
 			//console.log(this.props.buttonDisplay)
-			console.log(this.checkedCustomer)
+			//console.log(this.checkedCustomer)
 		}
 		else if (!e.target.checked){
 			let id = e.target.id
 			this.checkedCustomer = _.without(this.checkedCustomer,id)
-			this.Where.Customer = this.checkedCustomer
+			this.Where.Customer = this.checkedCustomer;
+
 			if(Object.keys(this.Where.Customer).length === 0){
 				this.Where.Customer = undefined
 				delete this.Where.Customer
 			}
-			let value = e.target.value
-			let index = this.buttonDisplay.indexOf(e.target.value)
-			if(index !== -1)
-				this.buttonDisplay = _.without(this.buttonDisplay,value)
-			this.forceUpdate()
+			//let value = e.target.value
+			//let index = this.buttonDisplay.indexOf(e.target.value)
+			//if(index !== -1)
+			//	this.buttonDisplay = _.without(this.buttonDisplay,value)
+			this.forceUpdate();
+
 		}
+		this.onSearch(e);
 	}
 	onStatusFilter(e,status){
 		if(e.target.checked){
-
 			this.checkedStatus.push(e.target.value);
 			Object.defineProperty(this.Where,"status",{enumerable: true ,
 				writable: true,
 				configurable:true,
 				value:this.checkedStatus})
-			this.buttonDisplay.push(e.target.value)
+			//	this.buttonDisplay.push(e.target.value)
 			this.forceUpdate()
 
 			//console.log(this.props.buttonDisplay)
@@ -299,17 +302,18 @@ onClickli(e){
 				this.Where.status = undefined
 				delete this.Where.status
 			}
-			console.log(this.Where)
-			//let value = e.target.value
-			let index = this.buttonDisplay.indexOf(e.target.value)
-			if(index !== -1)
-				this.buttonDisplay = _.without(this.buttonDisplay,value)
+			//console.log(this.Where)
+			//	let value = e.target.value
+			//let index = this.buttonDisplay.indexOf(e.target.value)
+			//if(index !== -1)
+			//	this.buttonDisplay = _.without(this.buttonDisplay,value)
 			//console.log(this.buttonDisplay)
 			this.forceUpdate()
 		}
+		this.onSearch(e);
 	}
 	onRemove(e){
-		console.log("clicked")
+		//	console.log("clicked")
 		this.buttonDisplay = [];
 		//this.buttonDisplay = []
 		this.checkedCustomer = []
@@ -344,10 +348,8 @@ onClickli(e){
 	handleOptionChange(changeEvent) {
 		debugger;
 		var selectedOption = changeEvent.target.value
-
 		this.setState({
 			selectedOption: changeEvent.target.value
-
 		});
 		//console.log( selectedOption);
 	}
@@ -361,9 +363,7 @@ onClickli(e){
 	click(data , value)
 	{
 		var cartDataArray = []
-		this.cartArray.push(value.id)
-
-
+		this.cartArray.push(value.id);
 		//console.log("clicked" , data , value)
 	};
 	updateCartArrival(){
@@ -389,13 +389,18 @@ onClickli(e){
                       text: "Departure Submitted",
                       type: "success",
                       showCancelButton: true,
+				  closeOnConfirm: true
                         },
                      function(isConfirm){
-                      hashHistory.push('/Packaging/packaginginstview/')
+						 if(isConfirm){ hashHistory.push('/Packaging/packaginginstview/')}
+						 else{
+
+						 }
+
                  });
 
       }).catch(function(err){
-         console.log("Error Is" + err)
+		  // console.log("Error Is" + err)
       })
    })
 
@@ -409,7 +414,7 @@ onClickli(e){
 
 		if(fiterData != undefined){
 			var railCarFilterData = _.map(fiterData , (view ,index)=>{
-				console.log("----",fiterData)
+				//	console.log("----",fiterData)
 					if(view.TPackagingInstructions && (view.status == "IN INVENTORY") ){
 
 					return (
@@ -421,16 +426,18 @@ onClickli(e){
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.material : ''}</td>
 							<td>YES</td>
 							<td>
-								<label className="control control--checkbox">
-									<input type="checkbox" id="row1" value={view} onChange={(e) => this.click(e,view)}/>
+								<input className="checkBox" type="checkbox"
+									   onChange={(e) => this.click(e,view)}
+									   value={view}
+									   id={index}/>
 
-									<div className="control__indicator"></div>
-								</label>
+								<label htmlFor={index}></label>
+
+
 							</td>
 						</tr>
 					)
 				}
-
 
 				//else{
 				//	return (
@@ -453,14 +460,13 @@ onClickli(e){
 				//}
 			})
 		}
-
-
+		railCarFilterData = _.filter(railCarFilterData, function (param) {
+			return param !== undefined;
+		});
 
 		const railCart = this.props.data
 
 		var railcartData = _.map(railCart , (view , index)=>{
-			//console.log(view.TPackagingInstructions);
-			//console.log(view.status);
 
 			if(view.TPackagingInstructions && (view.status == "IN INVENTORY") ){
 				debugger
@@ -474,20 +480,22 @@ onClickli(e){
 							<td>{view.TPackagingInstructions ? view.TPackagingInstructions.material : ''}</td>
 							<td>YES</td>
 							<td>
-								<label className="control control--checkbox">
-									<input type="checkbox" id="row1" value={view} onChange={(e) => this.click(e,view)}/>
+								<input className="checkBox" type="checkbox"
+									   onChange={(e) => this.click(e,view)}
+									   value={view}
+									   id={view.id}/>
 
-									<div className="control__indicator"></div>
-								</label>
+								<label htmlFor={view.id}></label>
+
 							</td>
 						</tr>
 			)
 		}
 		})
+		railcartData = _.filter(railcartData, function (param) {
+			return param !== undefined;
+		});
 
-		//railcartData = _.filter(railcartData, function (param) {
-		//	return param !== undefined;
-		//});
 
 		return (
 
@@ -525,14 +533,18 @@ onClickli(e){
 													<th>Material </th>
 													<th>In Inventory?</th>
 													<th>
-														<label className="control control--checkbox">
-															<input type="checkbox" id="row1"/><div className="control__indicator"></div>
-														</label>
+
 													</th>
 												</tr>
 												</thead>
+
 												<tbody>
-												{fiterData != undefined ? railCarFilterData :  railcartData}
+												{fiterData != undefined ? (railCarFilterData.length == 0) ?
+													<tr>
+														<td colSpan="7" className="noresult">No results match your
+															entered criteria.
+														</td>
+													</tr> : railCarFilterData : railcartData}
 												</tbody>
 											</table>
 										</div>

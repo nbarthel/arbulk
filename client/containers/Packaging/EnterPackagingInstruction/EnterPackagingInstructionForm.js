@@ -268,7 +268,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
   }
   handlePIChange(e){
 
-  console.log("ssss",e.target.value)
+    console.log("ssss",e.target.value)
     debugger
     this.obj[e.target.name] = e.target.value
     if(this.obj.bag_id == 1){
@@ -397,16 +397,16 @@ export default class EnterPackagingInstructionForm extends React.Component {
   }
   handleLabelChange(e){
     debugger
-      this.state.customLabel[parseInt(e.target.id)] = e.target.value
-      if(this.props.data){
-          //this.props.data.custom_label = e.target.value
-          //this.props.data.custom_label = this.refs.customLabel.value
-          this.props.data.TPackagingInstructionLots[parseInt(e.target.id)].custom_label = e.target.value
-      }
-      else{
-          this.obj.custom_label =  this.state.customLabel[0]
-      }
-      this.forceUpdate()
+    this.state.customLabel[parseInt(e.target.id)] = e.target.value
+    if(this.props.data){
+      //this.props.data.custom_label = e.target.value
+      //this.props.data.custom_label = this.refs.customLabel.value
+      this.props.data.TPackagingInstructionLots[parseInt(e.target.id)].custom_label = e.target.value
+    }
+    else{
+      this.obj.custom_label =  this.state.customLabel[0]
+    }
+    this.forceUpdate()
 
     console.log(this.props.data)
   }
@@ -583,9 +583,9 @@ export default class EnterPackagingInstructionForm extends React.Component {
         configurable:true,
         value:this.obj})
 //if(this.state.customChecked == false){
-      // 	if(Object.keys(this.railcarObj).length != 0){
-      // 		this.addrailcarObject();
-      // 	}
+      //   if(Object.keys(this.railcarObj).length != 0){
+      //      this.addrailcarObject();
+      //   }
 //}
       this.railCarObjects = this.RailCarArray
       console.log(this.railCarObjects)
@@ -598,7 +598,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
           //   tempcustomlabel = tempcustomlabel.poNumber+tempcustomlabel.lotNumber+tempcustomlabel.material+tempcustomlabel.originName+tempcustomlabel.weight
           // }
           //this.railCarObjects[i].custom_label = tempcustomlabel
-            this.railCarObjects[i].custom_label = this.state.customLabel[i]
+          this.railCarObjects[i].custom_label = this.state.customLabel[i]
         }
       }
       if(this.state.selectedOption == 'kg'){
@@ -676,18 +676,20 @@ export default class EnterPackagingInstructionForm extends React.Component {
   }
 
   onMinus(e){
+    //this.setState({
+    //  railCarInfoList : [ ],
+    //  labelLength : []
+    //})
+    //this.railCarObjects.splice(1,this.railCarObjects.length-1)
+    //this.Add = false
+    //this.state.rObjects = []
+    //this.railcarObj = this.railCarObjects[0]
+    //this.state.index = 0;
+    //this.railCarObjects=[]
+    this.RailCarArray.splice(this.RailCarArray.length-1,1);
+    //this.state.customLabel.splice(1,this.state.customLabel.length-1)
     this.setState({
-      railCarInfoList : [ ],
-      labelLength : []
-    })
-    this.railCarObjects.splice(1,this.railCarObjects.length-1)
-    this.Add = false
-    this.state.rObjects = []
-    this.railcarObj = this.railCarObjects[0]
-    this.state.index = 0;
-    this.railCarObjects=[]
-    this.RailCarArray.splice(1,this.RailCarArray.length-1)
-    this.state.customLabel.splice(1,this.state.customLabel.length-1)
+    });
   }
   ValidateRailCar(RailCarByProps){
     debugger
@@ -708,7 +710,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
 
     for(var i =0; i <obj.length;i++){
       if(Object.keys(obj[i]).length<3){
-        swal("","Please Enter all fields of Railcar: "+i,"info")
+        swal("","Please Enter all fields of Railcar: "+(i + 1),"info")
         isError = true;
         break
       }
@@ -739,14 +741,14 @@ export default class EnterPackagingInstructionForm extends React.Component {
     if(this.ValidateRailCar()){
       return
     }
-
     position = this.addrailcarObject();
-    const railCarInfoList = this.state.railCarInfoList;
-    var count = this.state.index+1
+    //const railCarInfoList = this.state.railCarInfoList;
+    var count = this.state.index+1;
+
     this.setState
     ({
       index:count,
-      railCarInfoList	: railCarInfoList.concat(<RailcarInformation key={railCarInfoList.length} onChange={this.handleRailcarChange.bind(this)} idd = {position-1} />),
+      //railCarInfoList    : railCarInfoList.concat(<RailcarInformation onAdd={this.onAdd} addkey={this.state.railCarInfoList} key={railCarInfoList.length} onChange={this.handleRailcarChange.bind(this)} idd = {position-1} />),
 
     })
   }
@@ -786,7 +788,6 @@ export default class EnterPackagingInstructionForm extends React.Component {
     this.forceUpdate()
   }
   AddRailCarForProps(){
-    debugger
     var a = JSON.parse(JSON.stringify(this.props.lotInfo[0]))
     if(this.ValidateRailCar(1)){
       return
@@ -924,7 +925,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
 
       }
 //this.state.labelLength.push(labelArray)
-  debugger
+      debugger
       this.state.labelLength = [].concat.apply([],this.state.labelLength)
       if(weightForLabel>-1){
         var obj =  this.obj.po_number +'\n'+ this.obj.material +'\n' + uniquelot[0] + '\n'  +  weightForLabel+ " "+weightUnit+ " Net \n" + "Made in "+originName
@@ -1006,7 +1007,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
     var wraptypes = _.map(this.state.wrapType,(wraptype) => {
       return <option key={wraptype.id} value={wraptype.id}>{wraptype.name}</option>
     })
-      var tempThis = this
+    var tempThis = this
     if(this.props.data != undefined){
       var editableLots = []
       var index= 0
@@ -1014,6 +1015,18 @@ export default class EnterPackagingInstructionForm extends React.Component {
         return <RailcarInformation lotInfo={this.props.lotInfo} MinusRailCarFromProps = {this.MinusRailCarFromProps} onChange={this.ChangeRailCarForProps} haveProps = {"1"} idForadd={"add"+index} idForminus={"minus"+index} AddRailCarForProps = {this.AddRailCarForProps} key={index} id = {index} data = {lotInfo} handleRailCarNumberEdit = {(e)=>{this.handleRailCarNumberEdit(e,index)}} handleWeightEdit = {(e)=>{this.handleWeightEdit(e,index) }} handleLotNumberEdit = {(e)=>{this.handleLotNumberEdit(e,index)}}/>
       })
     }
+    var railCarInfoList = [];
+    if(this.RailCarArray != undefined) {
+      railCarInfoList = _.map(this.RailCarArray,(obj, index) => {
+        if(index >0 ){
+          return <RailcarInformation onAdd={this.onAdd} onMinus={this.onMinus} addkey={this.RailCarArray} key={index} onChange={this.handleRailcarChange.bind(this)} idd = {index} />
+        } else {
+          return "";
+        }
+      });
+    }
+
+
     return (
         <Loader loaded={this.state.loaded} id="loaded">
           <section className="edit_Packaging">
@@ -1163,13 +1176,15 @@ export default class EnterPackagingInstructionForm extends React.Component {
                                         id="Rail_Car_Number"
                                         placeholder="Railcar #"
                                         onChange={this.handleRailcarChange}
-                                        value ={this.state.railcarnumber} />	}
+                                        value ={this.state.railcarnumber} />   }
                                 <div className="error"><span></span></div>
                               </div>
-                              <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1 add_btn text_left">
-                                <i className="fa-2x fa fa-plus base_color" onClick={this.onAdd.bind(this)} aria-hidden="true"></i>
-                              </div>
+                              { this.RailCarArray != undefined && this.RailCarArray.length == 1 ?
+                                  <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1 add_btn text_left">
+                                    <i className="fa-2x fa fa-plus base_color" onClick={this.onAdd.bind(this)} aria-hidden="true"></i>
+                                  </div>:""}
                             </div>
+
 
                             <div className="form-group">
                               <label htmlFor="Lot_Number" className="col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label pr-0">Lot #</label>
@@ -1226,7 +1241,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
                                 <div className="error"><span></span></div>
                               </div>
                             </div>
-                            {this.state.railCarInfoList}
+                            {railCarInfoList}
                           </div>
                           :
                           <div>
@@ -1511,10 +1526,10 @@ export default class EnterPackagingInstructionForm extends React.Component {
                   {
                     _.map(this.state.labelLength , function(element , index){
                       debugger
-                        var temObj = Object.keys(element).length==5?(element.poNumber+element.material+element.lotNumber+element.weight+element.originName):(element.poNumber+element.material+element.lotNumber+element.originName)
-                        if((tempThis.state.customLabel.length<2)||(tempThis.state.customLabel.length > 1 && tempThis.state.customLabel.length == index+1)){
-                            tempThis.state.customLabel.push(temObj)
-                        }
+                      var temObj = Object.keys(element).length==5?(element.poNumber+element.material+element.lotNumber+element.weight+element.originName):(element.poNumber+element.material+element.lotNumber+element.originName)
+                      if((tempThis.state.customLabel.length<2)||(tempThis.state.customLabel.length > 1 && tempThis.state.customLabel.length == index+1)){
+                        tempThis.state.customLabel.push(temObj)
+                      }
 
                       return(
                           <div className=" col-lg-3 col-md-3 col-sm-3 col-xs-12 pddn-10-top labelArea">
@@ -1547,8 +1562,6 @@ export default class EnterPackagingInstructionForm extends React.Component {
                           </div>
                       )})
                   }
-
-
 
 
                   <div className=" col-lg-12 col-md-12 col-sm-12 col-xs-12   padding-20-last-l ">

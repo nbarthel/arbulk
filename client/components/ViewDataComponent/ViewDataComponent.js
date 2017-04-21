@@ -172,7 +172,7 @@ class ViewDataComponent extends React.Component {
     }
 
     componentWillReceiveProps(next) {
-         
+
         if (next.SelcetedOptionForGroupBy && next.SelcetedOptionForGroupBy != "" && next.SelcetedOptionForGroupBy != '') {
             this.onGroupBy(next.SelcetedOptionForGroupBy)
         }
@@ -201,8 +201,8 @@ class ViewDataComponent extends React.Component {
                     liveDrag:false,
                     gripInnerHtml:"<div class='grip'></div>",
                     draggingClass:"dragging",
-                    resizeMode:'flex',
-                    minWidth:100
+                    //resizeMode:'flex',
+                    //minWidth:100
                 });
 
                 $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
@@ -235,16 +235,17 @@ class ViewDataComponent extends React.Component {
                         that.setState({
                             headerArray: headerArray
                         });
+
                         $("#Packaging_Instruction_View").colResizable({
                             disable: true
-
                         });
+
                         $("#Packaging_Instruction_View").colResizable({
                             liveDrag:false,
                             gripInnerHtml:"<div class='grip'></div>",
                             draggingClass:"dragging",
-                            resizeMode:'flex',
-                            minWidth:100
+                            //resizeMode:'flex',
+                            //minWidth:100
 
                         });
                     }
@@ -1032,6 +1033,7 @@ class ViewDataComponent extends React.Component {
         listData = _.filter(listData, function (param) {
             return param !== undefined;
         });
+       // console.log("lll",listData)
         groupedData = _.filter(groupedData, function (param) {
             return param !== undefined;
         });

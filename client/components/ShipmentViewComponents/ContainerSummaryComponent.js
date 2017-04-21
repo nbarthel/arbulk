@@ -38,7 +38,7 @@ class ContainerSummaryComponent extends Component {
                                this.url = CSView._buildUrl(base,{
                                 "include" : [{"relation": "TContainerAllocation","scope":{"relation":"TCompany" , "scope":{"where" : {"type":"TRUCKER"}}}},{"relation": "TContainerDomestic","scope":{"include":["TCompany","TContainerLoad"]}},{"relation": "TContainerInternational","scope":{"include":["TCompany","TContainerLoad"]}}]
                                })
-                               console.log(this.url)
+                //  console.log(this.url)
                                axios.get(this.url).then((response)=>{
                                 this.setState({
                                     CSummaryData : response.data
@@ -46,7 +46,7 @@ class ContainerSummaryComponent extends Component {
                                })
             }            }
 	render() {
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>" , this.arrivedTruckersList)
+
         this.arrivedLength = (this.arrivedTruckersList && this.arrivedTruckersList.length > 0) ? this.arrivedTruckersList.length : 0
         this.allocatedTruckersTable
         this.arrivedTruckersTable
@@ -58,9 +58,9 @@ class ContainerSummaryComponent extends Component {
         this.allocatedContainers = 0
         this.arrivedContainers = 0
         this.notArrivedContainers = 0
-        console.log("props" , this.props.allocated)
+        //  console.log("props" , this.props.allocated)
         if(this.props.SId != null){
-            console.log("CSUMMDATA",this.state.CSummaryData)
+            //  console.log("CSUMMDATA",this.state.CSummaryData)
             if(this.state.CSummaryData != undefined && (this.state.CSummaryData.TContainerDomestic.length == 0 || this.state.CSummaryData.TContainerInternational.length ==0) ){
                 this.unAllocatedContainers = this.state.CSummaryData.numberOfContainers
             }
@@ -70,7 +70,7 @@ class ContainerSummaryComponent extends Component {
                    // this.unAllocatedContainers = this.state.CSummaryData.numberOfContainers - this.state.CSummaryData.TContainerInternational.length
                     this.truckerCount = _.toArray(_.countBy(this.state.CSummaryData.TContainerInternational, 'truckerId'))
                     this.sortedTruckerList = _.sortBy(this.state.CSummaryData.TContainerInternational, 'truckerId')
-                    console.log("sorted", this.sortedTruckerList)
+                    //  console.log("sorted", this.sortedTruckerList)
                     for (var k = 0; k < this.sortedTruckerList.length; k++) {
                         if (this.sortedTruckerList[k].containerArrived == 0) {
                             this.notArrivedTruckers.push(this.sortedTruckerList[k])
@@ -83,7 +83,7 @@ class ContainerSummaryComponent extends Component {
                     this.notArrivedTruckersCount = _.toArray(_.countBy(this.notArrivedTruckers, 'truckerId'))
                     this.notArrivedTruckersList = _.uniqBy(this.notArrivedTruckers, 'truckerId')
                     this.arrivedTruckersList = _.uniqBy(this.arrivedTruckers, 'truckerId')
-                    console.log(this.notArrivedTruckers)
+                    //   console.log(this.notArrivedTruckers)
                     this.allocatedTruckers = _.uniqBy(this.sortedTruckerList, 'truckerId')
 
 
@@ -144,7 +144,7 @@ class ContainerSummaryComponent extends Component {
 
 
                     if (this.props.allocatedTruckers.length == 0) {
-   console.log("alloctrucker", this.props.allocatedTruckers);
+                        //  console.log("alloctrucker", this.props.allocatedTruckers);
    this.allocTruckers = []
                         // if (this.state.CSummaryData != undefined && this.state.CSummaryData.TContainerAllocation.length > 0) {
                         //       this.allocTruckers = _.map(this.state.CSummaryData.TContainerAllocation, (allocTruck, index)=> {
@@ -167,13 +167,16 @@ class ContainerSummaryComponent extends Component {
 
                         this.state.CSummaryData.TContainerAllocation = []
 
-                            console.log("alloctrucker" , this.props.allocatedTruckers)
+                        //   console.log("alloctrucker" , this.props.allocatedTruckers)
                             this.allocatedTruckersTable = _.map(this.props.allocatedTruckers,(allocTable,index) => {
                                 return(<tr key = {allocTable.truckerId} >
                                     <td >ALLOCATED</td>
                                     <td>{allocTable.truckerName}</td>
                                     <td>{allocTable.noOfContainer}</td>
-                                  <td><a style={{display : this.props.hide ==1 ? "block" : "none"}} href="javascript:void(0)"><i onClick={this.props.deleteClick} value={index} className="fa fa-times" aria-hidden="true"></i></a></td>
+                                    <td><a style={{display : this.props.hide ==1 ? "block" : "none"}}
+                                           href="javascript:void(0)">
+                                        <i onClick={this.props.deleteClick} value={index} className="fa fa-times"
+                                           aria-hidden="true"></i></a></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -190,7 +193,7 @@ class ContainerSummaryComponent extends Component {
                    //  this.unAllocatedContainers = this.state.CSummaryData.numberOfContainers - this.state.CSummaryData.TContainerDomestic.length
                        this.truckerCount =_.toArray(_.countBy(this.state.CSummaryData.TContainerDomestic,'truckerId'))
                         this.sortedTruckerList = _.sortBy(this.state.CSummaryData.TContainerDomestic,'truckerId')
-                          console.log("sorted",this.sortedTruckerList)
+                    //  console.log("sorted",this.sortedTruckerList)
                         for(var k = 0; k < this.sortedTruckerList.length; k++){
                           debugger
                             if(this.sortedTruckerList[k].containerArrived == 0){
@@ -204,10 +207,10 @@ class ContainerSummaryComponent extends Component {
                         this.notArrivedTruckersCount = _.toArray(_.countBy(this.notArrivedTruckers,'truckerId'))
                         this.notArrivedTruckersList = _.uniqBy(this.notArrivedTruckers,'truckerId')
                         this.arrivedTruckersList = _.uniqBy(this.arrivedTruckers,'truckerId')
-                        console.log(this.notArrivedTruckers)
+                    //   console.log(this.notArrivedTruckers)
                         this.allocatedTruckers = _.uniqBy(this.sortedTruckerList,'truckerId')
 
-                        console.log(this.allocatedTruckers,this.truckerCount)
+                    //   console.log(this.allocatedTruckers,this.truckerCount)
                        if(this.state.CSummaryData && this.state.CSummaryData.TContainerDomestic && this.state.CSummaryData.TContainerDomestic.length > 0)
                     {
                       //  this.LoadedTruckerList = _.map(this.sortedTruckerList,(loadedArr,index) => {
@@ -218,8 +221,8 @@ class ContainerSummaryComponent extends Component {
                           addBags.push(this.state.CSummaryData.TContainerDomestic.TContainerLoad[z].noOfBags)
                           addWeight.push(this.state.CSummaryData.TContainerDomestic.TContainerLoad[z].weight)
                       }
-                        console.log("addBags" , addBags)
-                        console.log("addBags" , addWeight)
+                        //  console.log("addBags" , addBags)
+                        // console.log("addBags" , addWeight)
                          //   if(loadedArr.containerLoaded == 1 || loadedArr.containerInTransit == 1 || loadedArr.containerDelivered == 1){
                             this.LoadedTruckerList =    _.map(this.state.CSummaryData.TContainerDomestic,(contLoaded,loadedIndex) => {
                                         return (<tr key = {loadedIndex}>
@@ -272,7 +275,7 @@ class ContainerSummaryComponent extends Component {
 
                         if (this.state.CSummaryData != undefined && this.state.CSummaryData.TContainerAllocation.length > 0) {
                             this.allocTruckers = _.map(this.state.CSummaryData.TContainerAllocation, (allocTruck, index)=> {
-                                return (<tr >
+                                return (<tr>
                                         <td ></td>
                                         <td></td>
                                         <td></td>
@@ -281,23 +284,24 @@ class ContainerSummaryComponent extends Component {
                                         <td></td>
                                         <td></td>
                                         <td></td>
-
                                     </tr>
                                 )
                             })
                         }
                     }
                     else if (this.props.allocatedTruckers.length > 0) {
-
+                        //  console.log("alloctrucker", this.props.allocatedTruckers)
                         this.state.CSummaryData.TContainerAllocation = []
 
-                        console.log("alloctrucker" , this.props.allocatedTruckers)
                         this.allocatedTruckersTable = _.map(this.props.allocatedTruckers,(allocTable,index) => {
                             return(<tr key = {allocTable.truckerId}>
                                 <td >ALLOCATED</td>
                                 <td>{allocTable.truckerName}</td>
                                 <td>{allocTable.noOfContainer}</td>
-                                <td><a onClick={this.props.deleteClick}   style={{display : this.props.hide ==1 ? "block" : "none"}}   href="javascript:void(0)"><i  value={index} className="fa fa-times" aria-hidden="true"></i></a></td>
+                                <td><a onClick={this.props.deleteClick}
+                                       style={{display : this.props.hide ==1 ? "block" : "none"}}
+                                       href="javascript:void(0)">
+                                    <i value={index} className="fa fa-times" aria-hidden="true"></i></a></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -330,11 +334,17 @@ class ContainerSummaryComponent extends Component {
                                             <tr>
                                           <td>UNALLOCATED</td>
                                             <td></td>
-                                            <td style={{display :(this.props.allocated > 0) ?'block' : 'none' }}>{parseInt(this.unAllocatedContainers) - parseInt(this.props.allocated) }</td>
-                                            <td style={{display :(this.props.allocated == 0) ? 'block' : 'none' }}>{(this.props.total !=undefined && this.props.total !=0) ? (parseInt(this.unAllocatedContainers)-parseInt(this.props.total)):parseInt(this.unAllocatedContainers) - parseInt(this.props.allocated) }</td>
+                                                <td style={{display :(this.props.allocated > 0) ?'block' : 'none' }}>
+                                                {parseInt(this.unAllocatedContainers) - parseInt(this.props.allocated) }</td>
+                                                <td style={{display :(this.props.allocated == 0) ? 'block' : 'none' }}>
+                                                  {(this.props.total != undefined && this.props.total != 0) ?
+                                                        (parseInt(this.unAllocatedContainers) - parseInt(this.props.total)) :
+                                                    parseInt(this.unAllocatedContainers) - parseInt(this.props.allocated) }</td>
+
                                             <td></td>
                                             <td></td>
                                             <td></td>
+
                                             <td></td>
                                             <td></td>
 
@@ -350,7 +360,8 @@ class ContainerSummaryComponent extends Component {
                                             <td>&nbsp;</td>
 
                                             </tr>
-                                            {(this.allocatedTruckersTable  && this.props.allocatedTruckers.length >0 ) ? this.allocatedTruckersTable :  ''}
+                                            {(this.allocatedTruckersTable && this.props.allocatedTruckers.length > 0 ) ?
+                                                this.allocatedTruckersTable : ''}
                                             {(this.allocTruckers && this.props.allocatedTruckers.length >0) ? this.allocTruckers :  ''}
                                             <tr>
                                             <td>&nbsp;</td>
@@ -385,7 +396,10 @@ class ContainerSummaryComponent extends Component {
                                             <td>&nbsp;</td>
 
                                             </tr>
-                                            {(this.props.CSummaryData && (this.props.CSummaryData.TContainerDomestic || this.props.CSummaryData.TContainerInternational) && (this.props.CSummaryData.TContainerDomestic.length == 0 && this.props.CSummaryData.TContainerInternational.length == 0)) ? <tr>
+
+                                            {(this.props.CSummaryData && (this.props.CSummaryData.TContainerDomestic || this.props.CSummaryData.TContainerInternational)
+                                            && (this.props.CSummaryData.TContainerDomestic.length == 0 && this.props.CSummaryData.TContainerInternational.length == 0)) ?
+                                                <tr>
                                                                           <td>ARRIVED</td>
                                                                           <td></td>
                                                                           <td>0</td>

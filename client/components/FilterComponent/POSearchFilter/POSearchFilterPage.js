@@ -20,14 +20,14 @@ class POSearchFilterPage extends React.Component {
             })
         })
             .catch(function(err){
-                console.log(err)
+              //  console.log(err)
             })
 }
 
 onKeyUp(e){
 
  var poArray = [];
-    console.log(">>>>>>>>>>>>" , e.target.value)
+   // console.log(">>>>>>>>>>>>" , e.target.value)
      var PIview = createDataLoader(POSearchFilterPage, {
                         queries: [{
                             endpoint: 'TPackagingInstructions',
@@ -70,7 +70,7 @@ if(e.target.value.length > 2){
 
         })
             .catch(function(err){
-                console.log(err)
+              //  console.log(err)
             })
 }
 else{
