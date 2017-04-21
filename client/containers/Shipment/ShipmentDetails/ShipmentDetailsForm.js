@@ -649,7 +649,7 @@ deleteAllocate(e){
   }
   var index = e.target.getAttribute('value')
 //  alert(e.target.getAttribute('value'))
-
+    if (this.b.length == 0) {
         this.b = this.state.CSummaryData.TContainerAllocation
         var obj = this.b.splice(index, 1);
         this.deleteArray.push(obj)
@@ -663,24 +663,23 @@ deleteAllocate(e){
             })
         }
         this.forceUpdate();
-
-    //else {
-    //      console.log("else");
-    //    this.b = this.state.CSummaryData.TContainerAllocation;
-    //    console.log("else",this.b);
-    //    var obj1 = this.b.splice(index, 1);
-    //    this.deleteArray.push(obj1);
-    //    this.unique = this.removeDuplicates(this.b, "truckerId")
-    //    this.addSum = this.sum(this.unique, 'noOfContainer');
-    //    this.unAllacated = this.addSum
-    //     console.log("ss4", this.unAllacated);
-    //    if (this.unAllacated == 0) {
-    //        this.setState({
-    //            total: 0
-    //        })
-    //    }
-    //    this.forceUpdate();
-    //}
+  }
+    else {
+          console.log("else");
+        this.b = this.state.CSummaryData.TContainerAllocation
+        var obj1 = this.b.splice(index, 1);
+        this.deleteArray.push(obj1);
+        this.unique = this.removeDuplicates(this.b, "truckerId")
+        this.addSum = this.sum(this.unique, 'noOfContainer');
+        this.unAllacated = this.addSum
+         console.log("ss4", this.unAllacated);
+        if (this.unAllacated == 0) {
+            this.setState({
+                total: 0
+            })
+        }
+        this.forceUpdate();
+    }
 }
 
 onConfirmClick(e){
@@ -703,7 +702,7 @@ else
 }
 
     render() {
-        console.log(this.state.CSummaryData)
+     //   console.log(this.state.CSummaryData.numberOfContainers)
         return (
             <section className="shipment">
                 <div className="container-fluid">
