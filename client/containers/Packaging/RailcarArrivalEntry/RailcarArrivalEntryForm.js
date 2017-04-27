@@ -58,41 +58,41 @@ export default class RailcarArrivalEntryForm extends React.Component {
 
 	onTextChange(e){
 		this.Query[e.target.id] = e.target.value
-		console.log(this.Query)
+	//	console.log(this.Query)
 		this.onSearch(e)
 	}
 
 	handleChange1(x,event) {
 		var dateValue = this.onformat(x.target.value)
-		console.log("date value is" , dateValue)
+	//	console.log("date value is" , dateValue)
 		document.getElementById('row1'+ x.target.id).disabled = false
 		this.dateArray.push(dateValue)
         this.onSearch(x)
 	}
 
 	onClickPo(e){
-		debugger;
+		//debugger;
 		this.Query[e.target.id] = e.target.getAttribute('value')
 		document.getElementById('POSearch').value = e.target.getAttribute('value')
-		console.log(this.Query)
-		console.log('>>>>>> target Value' , e.target.value)
+		//console.log(this.Query)
+		//console.log('>>>>>> target Value' , e.target.value)
 		this.onSearch(e)
 	}
 
 	lotSearch(e){
 		//debugger;
 		this.Query[e.target.id] = e.target.getAttribute('value')
-		console.log(this.Query)
+	///	console.log(this.Query)
 		document.getElementById('LotSearch').value = e.target.getAttribute('value')
-		console.log('>>>>>> target Value' , e.target.value)
+	//	console.log('>>>>>> target Value' , e.target.value)
 		this.onSearch(e)
 	}
 
 	onClickli(e){
 		this.Query[e.target.id] = e.target.getAttribute('value')
 		document.getElementById('railcarSearch').value = e.target.getAttribute('value')
-		console.log(this.Query)
-		console.log('>>>>>> target Value' , e.target.value)
+		//console.log(this.Query)
+		//console.log('>>>>>> target Value' , e.target.value)
 		this.onSearch(e)
 	}
 
@@ -103,7 +103,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 				configurable: true,
 				value:this.Query})
 		}
-		console.log(this.Where)
+	//	console.log(this.Where)
 		var serachObj = []
 		var serachObjLots =[]
 
@@ -171,8 +171,8 @@ export default class RailcarArrivalEntryForm extends React.Component {
 			});
 			var base = 'TPackagingInstructionLots';
 			//TPackagingInstructionLots
-
-			if(serachObj && serachObj != undefined && serachObjLots.length == 0){
+			//debugger;
+			if(serachObj && serachObj != undefined &&serachObj.length > 0 && serachObjLots.length == 0){
 				//debugger;
 				this.urlSearch = PIview._buildUrl(base, {
 
@@ -214,12 +214,12 @@ export default class RailcarArrivalEntryForm extends React.Component {
 				});
 			}
 
-			console.log(this.urlSearch , ">>>>>>>>>>>d,lpwkdlwjldjwlkdjwo");
+			//console.log(this.urlSearch , ">>>>>>>>>>>d,lpwkdlwjldjwlkdjwo");
 			$.ajax({
 				url: this.urlSearch,
 				success:function(data){
 					//debugger;
-					console.log('ajax ',data);
+				//	console.log('ajax ',data);
 
 					this.setState(
 						{
@@ -227,7 +227,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 						}
 					)
 					this.forceUpdate()
-					console.log( "ajax>>>>>>>")
+				//	console.log( "ajax>>>>>>>")
 				}.bind(this)
 
 			})
@@ -239,7 +239,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 		this.setState({
 			selectedOption: changeEvent.target.value
 		});
-		console.log( selectedOption);
+		//console.log( selectedOption);
 	}
 	handleOptionChange1(e) {
 		this.setState({
@@ -288,7 +288,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 			// this.buttonDisplay.push(e.target.value)
 			//console.log(this.props.checkedCompany)
 			//console.log(this.props.buttonDisplay)
-			console.log(this.checkedCustomer)
+			//console.log(this.checkedCustomer)
 		}
 		else if (!e.target.checked){
 			let id = e.target.id
@@ -332,7 +332,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 				this.Where.status = undefined
 				delete this.Where.status
 			}
-			console.log(this.Where)
+		//	console.log(this.Where)
 			//let value = e.target.value
 			let index = this.buttonDisplay.indexOf(e.target.value)
 			if(index !== -1)
@@ -343,7 +343,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
         this.onSearch(e)
 	}
 	onRemove(e){
-		console.log("clicked")
+		//console.log("clicked")
 		this.buttonDisplay = [];
 		//this.buttonDisplay = []
 		this.checkedCustomer = []
@@ -411,7 +411,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 
 		this.lotOrderValue = value
 
-		console.log("clicked" , data , value)
+		//console.log("clicked" , data , value)
 	};
 
 
@@ -441,7 +441,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 							hashHistory.push('/Packaging/packaginginstview/')
 						});
 				}).catch(function(err){
-					console.log("Error Is" + err)
+					//console.log("Error Is" + err)
 				})
 			})
 		}
@@ -460,7 +460,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 							hashHistory.push('/Packaging/packaginginstview/')
 						});
 				}).catch(function(err){
-					console.log("Error Is" + err)
+					//console.log("Error Is" + err)
 				})
 			})
 		}
@@ -570,7 +570,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 
 
 			if(view.TPackagingInstructions && (view.status == "CONFIRMED" || view.status == "UNCONFIRMED" || view.status == "QUEUED")) {
-				 
+
 				return(
 					<tr>
 						<td>{view.TPackagingInstructions.TCompany? view.TPackagingInstructions.TCompany.name : ''}</td>

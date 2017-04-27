@@ -112,6 +112,7 @@ onClickli(e){
 					company.push(objCompany);
 				}
 				serachObj.push(company)
+				//console.log("company",serachObj);
 			}
 
 			if(this.Where.status && this.Where.status.length){
@@ -154,8 +155,9 @@ onClickli(e){
 			var base = 'TPackagingInstructionLots';
 			//TPackagingInstructionLots
 
-			if(serachObj && serachObj != undefined && serachObjLots.length == 0){
+			if(serachObj && serachObj != undefined && serachObj.length > 0 && serachObjLots.length == 0){
 				debugger;
+
 				this.urlSearch = PIview._buildUrl(base, {
 
 					include : {"relation": "TPackagingInstructions", "scope":{  where:{  "or":serachObj} ,"include": ["TOrigin" , "TCompany"]}},
@@ -166,6 +168,7 @@ onClickli(e){
 				})
 			}
 			else if(serachObjLots.length > 0 && serachObj.length > 0) {
+
 				debugger;
 				this.urlSearch = PIview._buildUrl(base, {
 					include : {"relation": "TPackagingInstructions", "scope":{where:{  "or":serachObj} ,"include": ["TOrigin" , "TCompany"]}},
@@ -176,6 +179,7 @@ onClickli(e){
 				});
 			}
 			else{
+
 				debugger;
 				this.urlSearch = PIview._buildUrl(base, {
 					include : {"relation": "TPackagingInstructions", "scope":{"include": ["TOrigin" , "TCompany"]}},
@@ -217,6 +221,7 @@ onClickli(e){
 	}
 
 	onCompanyFilter(e,location){
+
 		if(e.target.checked){
 			this.forceUpdate()
 			this.checkedCompany.push(e.target.id)
@@ -287,10 +292,7 @@ onClickli(e){
 			//	this.buttonDisplay.push(e.target.value)
 			this.forceUpdate()
 
-			//console.log(this.props.buttonDisplay)
-			/* console.log(this.Where)
-			 console.log(this.checkedStatus)
-			 console.log(this.checkedStatus.length)*/
+
 		}
 		else if (!e.target.checked){
 			let value = e.target.value
