@@ -104,12 +104,12 @@ class  ShipmentViewForm extends React.Component
       if(e.target.checked){
           this.conFirmID = e.target.value
           this.selected = e.target.id
-          this.confId = data.id
+        //  this.confId = data.id
           // this.tempLotId = data.piLotsId
       }
       else if(!e.target.checked){
           this.selected = null
-          this.confId = null
+      //    this.confId = null
           this.selected = null
           this.conFirmID = null
           this.tempLotId = null
@@ -122,11 +122,23 @@ class  ShipmentViewForm extends React.Component
 
     }
     onConfirmClick(e){
-      if(this.confId != null || undefined){
-              hashHistory.push('/Shipment/shipmentConfirmation/'+this.confId)}
-              else{
-                swal("Selection Missing","Please Select A Shipment Lot","info")
-              }
+
+        if( this.confId != undefined && this.confId != null){
+
+            if(this.status == "UNCONFIRMED"){
+                hashHistory.push('/Shipment/shipmentConfirmation/'+this.confId)
+            }
+
+            else{
+                swal("Error","Please select unconfirmed order","error")
+            }
+        }
+        else
+        {
+
+            swal("Selection Missing", "Please Select A Shipment Lot.","error")
+        }
+
     }
 
 onViewClick(e){
@@ -180,12 +192,19 @@ PrintScreen(){
 
     checkboxChange(e,value,data){
 
-        console.log(value,data)
+        console.log("vvv",value)
+        console.log("dd",data)
         if(e.target.checked){
             this.conFirmID = e.target.value
             this.selected = e.target.id.split(":")[0]
             this.confId = data.id
-            this.status = value.status
+            if(value.isDomestic== 0){
+                this.status = value.TShipmentInternational[0].status;
+                // this.confId = value.TShipmentInternational[0].id
+            }else{
+                this.status = value.TShipmentDomestic[0].status;
+                // this.confId = value.TShipmentDomestic[0].id
+            }
             this.shipId = value.id
             this.tempLotId = data.piLotsId
         }
@@ -198,12 +217,11 @@ PrintScreen(){
             //this.piID = null
 
         }
-        //console.log("SelectedID >>>>>>>>>>>>.",this.selected)
-        //console.log("shipId >>>>>>>>>>>>.",this.shipId)
-        //console.log("ConfirmID><^><^><^>^<^>^<",this.conFirmID)
+        //console.log("SelectedID >>>>>>>>>>>>.", this.selected)
+        //console.log("shipId >>>>>>>>>>>>.",this.selected)
+       // console.log("ConfirmID><^><^><^>^<^>^<",this.confId)
         //console.log("templotId><^><^><^>^<^>^<", this.tempLotId)
     }
-
     allocateContainer(e){
 
         if (this.conFirmID != null || undefined) {
