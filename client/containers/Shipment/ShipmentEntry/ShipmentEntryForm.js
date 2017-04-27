@@ -713,7 +713,6 @@ class ShipmentEntryForm extends React.Component {
     }
 
     onSubmit(e){
-  //      console.log("Dom pressed");
 
         DisableDoubleClick('submit');
 
@@ -861,7 +860,9 @@ class ShipmentEntryForm extends React.Component {
             this.Allobjs.lotInformation.push(tempObj)
         }
         var tempThis=this;
+
         if (parseInt(this.comPo.bagsToShip) > parseInt(this.comPo.inInventorybags)) {
+
             swal({
                 title: "Are you sure?",
                 text: "Lesser number of bags in inventory to ship",
@@ -874,7 +875,7 @@ class ShipmentEntryForm extends React.Component {
                 closeOnCancel: true
             }, function (isConfirm) {
                 if (isConfirm) {
-                    console.log("Domestic",tempThis.Allobjs);
+
 
                     axios.post(Base_Url + "TShipmentents/createShipMentEntry", tempThis.Allobjs).then((response)=> {
                         //if(parseInt(this.SIObj.numberOfBags) == parseInt(this.Total)){
@@ -958,8 +959,78 @@ class ShipmentEntryForm extends React.Component {
                 }
             });
         }
+        else{
 
+            axios.post(Base_Url + "TShipmentents/createShipMentEntry", tempThis.Allobjs).then((response)=> {
+                //if(parseInt(this.SIObj.numberOfBags) == parseInt(this.Total)){
+                // var Lilength = this.LIObjects.length
+                // if(this.LIObjects.length > 1) {
+                //      this.LIObjects.forEach(function (element, index) {
+                //          if (parseInt(element.bagsToShip) == parseInt(element.inInventorybags)) {
+                //
+                //               axios.put(Base_Url + "TPackagingInstructionLots/" + element.lot_id).then((response)=> {
+                //
+                //             }).then((response)=> {
+                //
+                //                 if (Lilength == index + 1) {
+                //                     swal("Posted", "Success", "success")
+                //                     hashHistory.push("/Shipment/shipmentview")
+                //                 }
+                //             })
+                //         }
+                //         else{
+                //             if (Lilength == index + 1) {
+                //                 swal("Posted", "Success", "success")
+                //                 hashHistory.push("/Shipment/shipmentview")
+                //             }
+                //         }
+                //
+                //
+                //     });
+                // }
+                // else if(this.LIObjects.length <=1){
+                //     this.LIObjects.forEach(function (element, index) {
+                //         if (parseInt(element.bagsToShip) == parseInt(element.inInventorybags)) {
+                //             axios.put(Base_Url + "TPackagingInstructionLots/" + element.lot_id, {status: "SHIPPED"}).then((response)=> {
+                //                 swal("Posted", "Success", "success")
+                //                 hashHistory.push("/Shipment/shipmentview")
+                //             }).then((response)=> {
+                //
+                //                 //if (Lilength == index + 1) {
+                //                 //    swal("Posted", "Success", "success")
+                //                 //    hashHistory.push("/Shipment/shipmentview")
+                //                 //}
+                //             })
+                //         }
+                //         else{
+                //             swal("Posted","Success","success")
+                //             hashHistory.push("/Shipment/shipmentview")
+                //         }
+                //
+                //
+                //     });
+                // }
+                // }
 
+                if (response.data.errors) {
+
+                    EnableClick('submit')
+                    if (response.data.errors.code == "Release Number Already Exist" ||
+                        response.data.errors.code == "Booking Number Already Exist") {
+                        swal(response.data.errors.code)
+                        return
+                    }
+                }
+                else {
+                    swal("Posted", "Success", "success");
+                    console.log("here");
+                    hashHistory.push('/Shipment/shipmentview/')
+                }
+            }).catch(function (error) {
+                EnableClick('submit')
+              //  console.log(error);
+            });
+        }
 
         EnableClick('submit')
 
@@ -984,6 +1055,7 @@ class ShipmentEntryForm extends React.Component {
     }
     //  hashHistory.push('/Container/containerarrivalentry/'+response.data.id+'/'+this.SIObj.isDomestic )
     onSubmitContainer(e){
+
         var bagsLeftTemp =0
         DisableDoubleClick('submitContainer')
 
@@ -1150,7 +1222,9 @@ class ShipmentEntryForm extends React.Component {
             this.Allobjs.lotInformation.push(tempObj)
         }
         var tempThis=this;
+
         if (parseInt(tempThis.comPo.bagsToShip) > parseInt(tempThis.comPo.inInventorybags)) {
+
             swal({
                 title: "Are you sure?",
                 text: "Lesser number of bags in inventory to ship",
@@ -1161,9 +1235,10 @@ class ShipmentEntryForm extends React.Component {
                 cancelButtonText: "Cancel",
                 closeOnConfirm: true,
                 closeOnCancel: true
-            }, function (isConfirm) {
+            },
+                function (isConfirm) {
                 if (isConfirm) {
-        //            console.log("Domestic",tempThis.Allobjs);
+
                     axios.post(Base_Url+"TShipmentents/createShipMentEntry",tempThis.Allobjs).then((response)=>{
 
                         //if(parseInt(this.SIObj.numberOfBags) == parseInt(this.Total)){
@@ -1223,11 +1298,69 @@ class ShipmentEntryForm extends React.Component {
 
                     tempThis.LIObjects=[],
                         tempThis.Allobjs={ }
-            //        console.log("DomesticF",tempThis.Allobjs);
+
                     EnableClick('submitContainer')
                     return false
                 }
             });
+        }
+        else{
+
+            axios.post(Base_Url+"TShipmentents/createShipMentEntry",tempThis.Allobjs).then((response)=>{
+
+                //if(parseInt(this.SIObj.numberOfBags) == parseInt(this.Total)){
+//         var Lilength = this.LIObjects.length
+//         if(this.LIObjects.length > 1) {
+//             this.LIObjects.forEach(function (element, index) {
+// //                 if (parseInt(element.bagsToShip) == parseInt(element.inInventorybags)) {
+// //                     axios.put(Base_Url + "TPackagingInstructionLots/" + element.lot_id, {status: "SHIPPED"}).then((data)=> {
+// //
+// // }).then((data)=> {
+// //
+// //                         if (Lilength == index + 1) {
+// //                             swal("Posted", "Success", "success")
+// //                             hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/'+ 1 )
+// //                         }
+// //                     })
+// //                 }
+//                 //else{
+//                     if (Lilength == index + 1) {
+//                         swal("Posted", "Success", "success")
+//                         hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/'+1 )
+//                     }
+//                 //}
+//
+//
+//             });
+//         }
+//         else if(this.LIObjects.length ==1){
+//             this.LIObjects.forEach(function (element, index) {
+                // if (parseInt(element.bagsToShip) == parseInt(element.inInventorybags)) {
+                //     axios.put(Base_Url + "TPackagingInstructionLots/" + element.lot_id, {status: "SHIPPED"}).then((data)=> {
+                //         swal("Posted", "Success", "success")
+                //         hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/'+ 1 )
+                //     }).then((data)=> {
+                //
+                //         //if (Lilength == index + 1) {
+                //         //    swal("Posted", "Success", "success")
+                //         //    hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/'+ response.data.isDomestic )
+                //         //}
+                //     })
+                // }
+                if(response.data.errors){
+                    EnableClick('submitContainer')
+                    if(response.data.errors.code == "Release Number Already Exist" || response.data.errors.code == "Booking Number Already Exist"){
+                        swal(response.data.errors.code)
+                        return
+                    }}
+                else{
+                    swal("Posted", "Success", "success")
+                    hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/-'+ 1 )
+                }
+
+            }).catch(function(error){
+                EnableClick('submitContainer')
+            })
         }
 
         // }ss
