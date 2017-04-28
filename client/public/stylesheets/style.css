@@ -623,3 +623,6 @@ select{text-transform: uppercase !important;}
     position:relative;
 }
 .current-Inv{padding-top: 5px;}
+
+.summary_list{}
+.summary_list li{ font-size:12px;}

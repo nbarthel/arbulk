@@ -86,14 +86,13 @@ var intStat = []
 
   })
 
- console.log("container url" , this.containerUrl)
+
 
 
  axios.get(this.containerUrl).then((response)=>{
  this.noOfContainers = response.data.numberOfContainers
  this.domSum = (response.data && response.data.TContainerDomestic) ? response.data.TContainerDomestic.length : 0
  this.intSum = (response.data && response.data.TContainerInternational) ? response.data.TContainerInternational.length : 0
- console.log("saasasa" ,this.noOfContainers ,this.domSum , this.intSum)
 if(this.domSum> 0){
    domStat = response.data.TContainerDomestic.map(function(obj){
     return (obj.status)
@@ -114,7 +113,6 @@ if(this.statusArray.length > 0){
   this.sameStatus = this. allValuesSame(this.statusArray)
 }
 
-console.log("status Array..." , this.statusArray)
 if(this.sameStatus && (this.noOfContainers == parseInt(this.domSum) + parseInt(this.intSum)) )
 {
 if(this.props.isDomestic == "1"){
@@ -175,8 +173,6 @@ getSeal(e){
              this.loadNewData()
            });
 
-
-
      }}
       else{
           swal("Missing","Please Select A Inventory","info")
@@ -187,10 +183,8 @@ getSeal(e){
     handleCheckbox(e){
 //"addloaded"
 debugger;
-        console.log(this.props.containerTable.containerLoaded)
-
+        console.log(e.target.value)
       if(e.target.checked){
-          console.log("dddsdsds" , e.target.name)
           if(e.target.name == "containerInTransit" && !this.props.containerTable.containerLoaded){
               swal("" , "Container is not loaded yet" , 'info')
               e.target.checked = false;
@@ -225,7 +219,6 @@ debugger;
             else if(!e.target.checked){
               this.SaveObj[e.target.name] = 0
             }
-            console.log(this.SaveObj)
     }
 
     onRightClick(e){
@@ -318,7 +311,6 @@ handleCurrentInvChecks(e,data){
     var temp = new Object()
     temp = JSON.parse(JSON.stringify(this.obj));
     this.cIArray.push(temp)
-    console.log("object",this.obj,this.delObject)
   }
   else if(!e.target.checked){
     for(var i in this.cIArray){
@@ -371,7 +363,6 @@ loadNewData(){
 
 
         });
-        console.log(this.urlnew)
         var base2 = "TContainerLoads/"
         if(this.props.isDomestic == 0){
            this.CLoadURL = PIview._buildUrl(base2,{
@@ -401,7 +392,6 @@ loadNewData(){
           })
 
         })
-          console.log("contLoadData",this.state.contLoadData);
         })
 
        /* $.ajax({
@@ -441,7 +431,6 @@ changeLot(e){
 
 
         });
-        console.log(this.urlnew)
         var base2 = "TContainerLoads/"
          if(this.props.isDomestic == 0){
            this.CLoadURL = PIview._buildUrl(base2,{
@@ -462,14 +451,12 @@ changeLot(e){
           this.setState({
             contLoadData : response.data
           })
-          console.log("contLoadData",this.state.contLoadData);
         })
 
         $.ajax({
             url: this.urlnew,
             success:function(data){
                 debugger;
-                console.log(">>>>>>>>>>>> ajax" , data)
                 this.CIData = data
                 this.setState({
                     currentIntObject : this.CIData,
@@ -482,6 +469,14 @@ changeLot(e){
 
     }
     onEditClick(e){
+
+            if (this.props.containerTable.status == "DELIVERED") {
+                swal("", "Container is delivered", 'info')
+                return;
+            }
+
+
+
        if(this.props.isDomestic == 0){
            if(this.props.containerTable.status == "ARRIVED"){
                swal("", "Container must be queued" , 'info')
@@ -490,13 +485,12 @@ changeLot(e){
 
        }
 
-       if(this.props.isDomestic == 1){
-                if(this.props.containerTable.containerArrived == 0){
-               swal("" , "Container is not arrived" , "info")
+        if (this.props.isDomestic == 1) {
+            if (this.props.containerTable.containerArrived == 0) {
+                swal("", "Container is not arrived", "info")
                return;
            }
        }
-
 
       if(this.state.editing == false){
         this.setState({
@@ -680,28 +674,42 @@ changeLot(e){
                         <ContainerLoadComponent key = {this.state.ContainerLoadKey} handleContainerLoadChecks = {this.handleContainerLoadChecks} contLoadData = {this.state.contLoadData} />
                     </div>
 
-                    <div className="form-group" >
-                      <label htmlFor="SealNumber" className="col-lg-2 control-label"style={{"padding-top":"10"}}>Seal #</label>
+                        <div className="form-group" style={{"marginBottom":"20",height:"30px"}}>
+                            <label htmlFor="SealNumber" className="col-lg-2 control-label" style={{"paddingTop":"10"}}>Seal
+                                #</label>
                       <div className="col-lg-10" >
                        <input type="text" className="form-control s_width" onChange={this.getSeal}   id="SealNumber" placeholder="Seal Number" />
                        <div className="error"><span></span></div>
                        </div>
                    </div>
 
-                    <ul className={this.state.editing ? "no-space" : "no-space hidden"} style={{"margin-top":"20"}}>
+                        <ul className={this.state.editing ? "no-space" : "no-space hidden"} style={{"marginTop":"20"}}>
                     <li >
                        <label className="control control--checkbox ">Confirmed Loaded?
-                          <input type="checkbox" style={{"margin-top":"10"}} onChange={this.handleCheckbox} name = "containerLoaded" /><div className="control__indicator" style={{"margin-top":"15"}}></div>
+                           {(this.props.containerTable.containerLoaded == 1) ?
+                               <input type="checkbox" name="containerInTransit" disabled="disabled"
+                                      checked="checked"/> :
+                               <input type="checkbox" onChange={this.handleCheckbox} name="containerLoaded"/>}
+
+                           <div className="control__indicator"></div>
                         </label>
                     </li>
                     <li >
                         <label className="control control--checkbox ">Confirmed In Transit?
-                          <input type="checkbox" name = "containerInTransit" onChange = {this.handleCheckbox}  /><div className="control__indicator"></div>
+                            {(this.props.containerTable.containerInTransit == 1) ?
+                                <input type="checkbox" name="containerInTransit" disabled="disabled"
+                                       checked="checked"/> :
+                                <input type="checkbox" name="containerInTransit" onChange={this.handleCheckbox}/>}
+                            <div className="control__indicator"></div>
                         </label>
                     </li>
-                    <li >
+                            <li>
                        <label className="control control--checkbox ">Confirmed Delivered?
-                          <input type="checkbox" name = "containerDelivered" onChange= {this.handleCheckbox}  /><div className="control__indicator"></div>
+                           { (this.props.containerTable.containerDelivered == 1) ?
+                               <input type="checkbox" name="containerInTransit" disabled="disabled"
+                                      checked="checked"/> :
+                               <input type="checkbox" name="containerDelivered" onChange={this.handleCheckbox}/>}
+                           <div className="control__indicator"></div>
                         </label>
                     </li>
                     </ul>

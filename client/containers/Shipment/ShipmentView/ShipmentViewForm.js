@@ -99,8 +99,6 @@ class  ShipmentViewForm extends React.Component
     //    hashHistory.push('/Container/containerarrivalentry')
     //}
     headerCheckboxChange(e, data) {
-        //console.log(data, "hhh");
-        //console.log(e, "eee");
       if(e.target.checked){
           this.conFirmID = e.target.value
           this.selected = e.target.id
@@ -112,7 +110,7 @@ class  ShipmentViewForm extends React.Component
       //    this.confId = null
           this.selected = null
           this.conFirmID = null
-          this.tempLotId = null
+        //  this.tempLotId = null
           //this.piID = null
 
       }
@@ -165,8 +163,6 @@ onViewClick(e){
     })
 })
 
-
-
  }
 PrintScreen(){
   var scrollLeft = document.getElementsByClassName("loadedContent")[0].scrollLeft
@@ -192,8 +188,8 @@ PrintScreen(){
 
     checkboxChange(e,value,data){
 
-        console.log("vvv",value)
-        console.log("dd",data)
+        console.log("vvv",e.target.checked)
+       // console.log("dd",data)
         if(e.target.checked){
             this.conFirmID = e.target.value
             this.selected = e.target.id.split(":")[0]

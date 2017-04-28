@@ -40,10 +40,10 @@ var moment = require('moment')
 		return (
 			<fieldset className="scheduler-border sameHeight">
                                     <legend className="scheduler-border">Shipment Summary </legend>
-                                    <div className=" col-lg-5 col-md-5 col-sm-6 col-xs-12 ">
+                                    <div className=" col-lg-6 col-md-6 col-sm-6 col-xs-12 ">
                                         <div className="row">
                                             <div className="col-lg-6  col-sm-6 col-xs-12">
-                                                <ul className="no-space">
+                                                <ul className="no-space summary_list">
                                                     <li>Container Type: <b>{containerType} </b></li>
                                                     <li>Number of Containers:<b> {numberOfContainer}</b></li>
                                                     <li># of Bags / Container: <b>{numberOfBags}</b></li>
@@ -51,7 +51,7 @@ var moment = require('moment')
                                                 <span className="margin-top-10">&nbsp;</span>
                                                 <fieldset className="scheduler-border  ">
                                                     <legend className="scheduler-border font-size-12">Lot Number Allowed </legend>
-                                                    <ul className="no-space list-style-disc">
+                                                    <ul className="no-space list-style-disc summary_list">
                                                         {
 
                                                            list
@@ -62,9 +62,9 @@ var moment = require('moment')
                                                 </fieldset>
                                             </div>
                                             <div className="col-lg-6  col-sm-6  col-xs-12">
-                                                <ul className="no-space" >
+                                                <ul className="no-space summary_list" >
                                                     <li>Steamship Line:<b> {shipMentLine} </b></li>
-                                                    <li>Steamline Vessel: <b>{shipvessel}</b></li>
+                                                    <li>Steamline Vessel:<b>{shipvessel}</b></li>
                                                     <li>Freight Forwarder:<b> {FrFor}</b></li>
                                                     <li>Earliest Return Date:<b>{(erDate !='NA') ?moment(erDate).format('MM-DD-YYYY'): 'NA' }</b></li>
                                                     <li>Doc Cutoff Date: <b>{ (docCutOffDate !='NA') ?moment(docCutOffDate).format('MM-DD-YYYY'): 'NA' }</b></li>
@@ -76,7 +76,7 @@ var moment = require('moment')
                                         </div>
                                     </div>
 
-                                    <div className=" col-lg-4  col-sm-4 col-xs-12 ">
+                                    <div className=" col-lg-3  col-sm-3 col-xs-12 ">
                                         <div className="form-group">
                                             <textarea className="form-control textarea-note" rows="3" id="Notes"placeholder="Notes" value={notes}></textarea>
                                             <div className="error"><span></span></div>
@@ -84,7 +84,7 @@ var moment = require('moment')
                                     </div>
 
                                     <div className=" col-lg-3 col-md-3 col-sm-6 col-xs-12 ">
-                                        <ul className="no-space">
+                                        <ul className="no-space summary_list">
                                             <li>Body Type: <b>{bagType}</b></li>
                                             <li>Pallet Type:<b> {palletType}</b></li>
                                             <li>Bags per Pallet:<b> {noOfBagsPerPallet}</b></li>
