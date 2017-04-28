@@ -51,18 +51,19 @@ class ContainerInfoComponent extends Component {
                                         <li>Seal #    <b>{seal_number}</b></li>
                                         <li> Material  Net Weight     <b>{containerTareWeight}</b></li>
                                         <li> {isDomestic==0?"Container Tare Weight":""}<b>{isDomestic==0?containerTareWeight:""}</b></li>
-                                        <li className=" pddn-10-top">
+                                        <br></br>
+                                        {(isDomestic==0)?<li className=" pddn-10-top">
                                             <label className="control control--checkbox " >Container Type Confirmed?
                                                 {(this.props.info && (this.props.info.containerTypeConfirmed == 1)) ?
                                                     <input type="checkbox" disabled="disabled" checked="checked" id="cType"/>:""}<div className="control__indicator"></div>
                                             </label>
-                                        </li>
-                                        <li >
+                                        </li>:""}
+                                        {(isDomestic==0)? <li >
                                             <label className="control control--checkbox " >Container Steamship Line Confirmed?
                                                 {(this.props.info && (this.props.info.containerSteamshipLineConfirmed == 1))?
                                                 <input type="checkbox"  disabled="disabled" checked="checked" id="sType"/>:""}<div className="control__indicator"></div>
                                             </label>
-                                        </li>
+                                        </li>:""}
                                         <li >
                                             <label className="control control--checkbox " >Confirmed Loaded?
                                                 {(this.props.info &&( this.props.info.containerLoaded == 1))?
