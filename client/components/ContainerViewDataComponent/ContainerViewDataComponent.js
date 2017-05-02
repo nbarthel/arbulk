@@ -322,16 +322,26 @@ class ContainerViewDataComponent extends React.Component {
                 break;
             case 'Trucker':
                 groupData = _.groupBy(tempData, function (item) {
-
-                    if (item.TContainerDomestic.length > 0) {
+             if(item.isDomestic == 1){
+                         //   console.log("dom",item.TContainerDomestic[0].TCompany.name);
                         return item.TContainerDomestic[0].TCompany.name.toLowerCase()
                     }
-                    else if (item.TContainerInternational.length > 0) {
+                    else{
+                         //   console.log("intr",item.TContainerInternational[0].TCompany.name);
                         return item.TContainerInternational[0].TCompany.name.toLowerCase()
                     }
-                    else {
-                        return item
-                    }
+                    //if (item.TContainerDomestic.length >= 0) {
+                    //    console.log("dom");
+                    //    return item.TContainerDomestic[0].TCompany.name.toLowerCase()
+                    //}
+                    //else if (item.TContainerInternational.length > 0) {
+                    //    console.log("intr")
+                    //    return item.TContainerInternational[0].TCompany.name.toLowerCase()
+                    //}
+                    //else {
+                    //    console.log("else")
+                    //    return item
+                    //}
 
                 });
                 break;
@@ -391,17 +401,20 @@ class ContainerViewDataComponent extends React.Component {
                 groupData = _.groupBy(tempData, function(item) {
 
                     if (item.isDomestic == 1) {
-                        return item
+                        return "Domestic"
+                    }else{
+                        return "International"
                     }
                 });
-
                 break;
             default:
                 tempData
         }
+      //  console.log("gg1",groupData)
         this.setState({
             GroupedData: groupData
         })
+
         localStorage.setItem('containerGrouped', JSON.stringify(grouping));
     }
 
@@ -559,7 +572,6 @@ class ContainerViewDataComponent extends React.Component {
     onClickRow(e) {
 
         var rowObj = $(this.refs.clickable)
-
         var aa = e.target.getAttribute('data-target')
         var nextTd = e.target.parentNode.closest('tr').nextElementSibling
         for (var i = 0; i <= aa; i++) {
