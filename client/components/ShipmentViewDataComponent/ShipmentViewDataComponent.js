@@ -739,11 +739,7 @@ class ShipmentViewDataComponent extends React.Component {
         localStorage.setItem('siViewData', JSON.stringify(sortedData));
         this.forceUpdate();
 
-        if (grouping && this.props.SelcetedOptionForGroupBy) {
-            console.log("sorting clicked1", this.props.SelcetedOptionForGroupBy);
-            this.onGroupBy(this.props.SelcetedOptionForGroupBy);
 
-        }
     }
 
     onToggel(e, elm) {
@@ -797,8 +793,7 @@ class ShipmentViewDataComponent extends React.Component {
         var i=0
 
         if (grouping && this.props.SelcetedOptionForGroupBy != "") {
-            debugger
-            console.log(this.state.GroupedData);
+
             listData = _.map(this.state.GroupedData, (views, index)=> {
                 var subheaderObj = {};
 
@@ -1199,7 +1194,6 @@ class ShipmentViewDataComponent extends React.Component {
         listData = _.filter(listData, function (param) {
             return param !== undefined;
         });
-        var excludeHeader = (grouping && this.props.SelcetedOptionForGroupBy != "") ? "exclude-drag" : "";
 
         var headerObj = {};
         headerObj["ARB"] = (
@@ -1214,7 +1208,7 @@ class ShipmentViewDataComponent extends React.Component {
         );
         headerObj["Customer"] = (
             <th key="customer" style={{display : this.props.showCustomer}}
-                onClick={(e)=> this.onAscending(e,'company')} className={excludeHeader}>Customer
+                onClick={(e)=> this.onAscending(e,'company')} >Customer
                         <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1223,7 +1217,7 @@ class ShipmentViewDataComponent extends React.Component {
         );
         headerObj["Release"] = (
             <th key="Release" style={{display : this.props.showRelease}}
-                onClick={(e)=> this.onAscending(e,'Release')} className={excludeHeader}>Release
+                onClick={(e)=> this.onAscending(e,'Release')}>Release
                         <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1232,7 +1226,7 @@ class ShipmentViewDataComponent extends React.Component {
         );
         headerObj["Shipment Type"] = (
             <th key="Shipment" style={{display : this.props.showShipmentType}}
-                onClick={(e)=> this.onAscending(e,'ShipmentType')} className={excludeHeader}>Shipment Type
+                onClick={(e)=> this.onAscending(e,'ShipmentType')}>Shipment Type
               <span className="fa-stack ">
                       <i className="fa fa-sort-asc fa-stack-1x"></i>
                       <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1241,7 +1235,7 @@ class ShipmentViewDataComponent extends React.Component {
         );
         headerObj["Booking"] = (
             <th key="Booking" style={{display : this.props.showBooking}}
-                onClick={(e)=> this.onAscending(e,'Booking')} className={excludeHeader}>Booking
+                onClick={(e)=> this.onAscending(e,'Booking')} >Booking
                         <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1249,8 +1243,7 @@ class ShipmentViewDataComponent extends React.Component {
             </th>
         );
         headerObj["Po#"] = (
-            <th key="Po" style={{display : this.props.showPO}} onClick={(e)=> this.onAscending(e,'po_number')}
-                className={excludeHeader}>PO#
+            <th key="Po" style={{display : this.props.showPO}} onClick={(e)=> this.onAscending(e,'po_number')}>PO#
                  <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1259,8 +1252,7 @@ class ShipmentViewDataComponent extends React.Component {
         );
         headerObj["Lot#"] = (
 
-            <th key="Lot" style={{display : this.props.showLot}} onClick={(e)=> this.onAscending(e,'lot_number')}
-                className={excludeHeader}>
+            <th key="Lot" style={{display : this.props.showLot}} onClick={(e)=> this.onAscending(e,'lot_number')}>
                 Lot#
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
@@ -1271,7 +1263,7 @@ class ShipmentViewDataComponent extends React.Component {
         );
         headerObj["Material"] = (
             <th key="Material" style={{display : this.props.showMaterial}}
-                onClick={(e)=> this.onAscending(e,'Material')} className={excludeHeader}>Material
+                onClick={(e)=> this.onAscending(e,'Material')} >Material
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1280,8 +1272,7 @@ class ShipmentViewDataComponent extends React.Component {
             </th>
         );
         headerObj["Confirmed?"] = (
-            <th key="Confirmed" style={{display : this.props.showConfmd}} onClick={(e)=> this.onAscending(e,'Confmd')}
-                className={excludeHeader}>
+            <th key="Confirmed" style={{display : this.props.showConfmd}} onClick={(e)=> this.onAscending(e,'Confmd')}>
                 Confirmed?
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
@@ -1291,7 +1282,7 @@ class ShipmentViewDataComponent extends React.Component {
         );
         headerObj["Forwarder"] = (
             <th key="Forwarder" style={{display : this.props.showForwarder}}
-                onClick={(e)=> this.onAscending(e,'Forwarder')} className={excludeHeader}>Forwarder
+                onClick={(e)=> this.onAscending(e,'Forwarder')}>Forwarder
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1301,7 +1292,7 @@ class ShipmentViewDataComponent extends React.Component {
         headerObj["Cntr Size"] = (
 
             <th key="Cntr" style={{display : this.props.showCntrSize}}
-                onClick={(e)=> this.onAscending(e,'CntrSize')} className={excludeHeader}>Cntr Size
+                onClick={(e)=> this.onAscending(e,'CntrSize')}>Cntr Size
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1310,8 +1301,7 @@ class ShipmentViewDataComponent extends React.Component {
             </th>
         );
         headerObj["Qty"] = (
-            <th key="Qty" style={{display : this.props.showQty}} onClick={(e)=> this.onAscending(e,'Qty')}
-                className={excludeHeader}>Qty
+            <th key="Qty" style={{display : this.props.showQty}} onClick={(e)=> this.onAscending(e,'Qty')}>Qty
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1321,7 +1311,7 @@ class ShipmentViewDataComponent extends React.Component {
         );
         headerObj["Allocated"] = (
             <th  key="Allocated" style={{display : this.props.showAlloc}}
-                 onClick={(e)=> this.onAscending(e,'Allocated')} className={excludeHeader}>Allocated
+                 onClick={(e)=> this.onAscending(e,'Allocated')}>Allocated
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1329,8 +1319,7 @@ class ShipmentViewDataComponent extends React.Component {
             </th>
         );
         headerObj["Enough"] = (
-            <th key="Enough" style={{display : this.props.showEno}} onClick={(e)=> this.onAscending(e,'Enough')}
-                className={excludeHeader}>
+            <th key="Enough" style={{display : this.props.showEno}} onClick={(e)=> this.onAscending(e,'Enough')}>
                 Enough?
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
@@ -1340,8 +1329,7 @@ class ShipmentViewDataComponent extends React.Component {
             </th>
         );
         headerObj["# of Bags To Ship"] = (
-            <th key="Bags" style={{display : this.props.showBags}} onClick={(e)=> this.onAscending(e,'Bags')}
-                className={excludeHeader}>
+            <th key="Bags" style={{display : this.props.showBags}} onClick={(e)=> this.onAscending(e,'Bags')}>
                 # of Bags To Ship
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
@@ -1351,8 +1339,7 @@ class ShipmentViewDataComponent extends React.Component {
             </th>
         );
         headerObj["ERD"] = (
-            <th key="ERD" style={{display : this.props.showERD}} onClick={(e)=> this.onAscending(e,'ERD')}
-                className={excludeHeader}>ERD
+            <th key="ERD" style={{display : this.props.showERD}} onClick={(e)=> this.onAscending(e,'ERD')}>ERD
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1361,8 +1348,7 @@ class ShipmentViewDataComponent extends React.Component {
             </th>
         );
         headerObj["CutOff"] = (
-            <th key="CutOff" style={{display : this.props.showCutoff}} onClick={(e)=> this.onAscending(e,'CutOff')}
-                className={excludeHeader}>
+            <th key="CutOff" style={{display : this.props.showCutoff}} onClick={(e)=> this.onAscending(e,'CutOff')}>
                 CutOff
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
@@ -1371,8 +1357,7 @@ class ShipmentViewDataComponent extends React.Component {
                             </th>
         );
         headerObj["Vessel"] = (
-            <th key="Vessel" style={{display : this.props.showVessel}} onClick={(e)=> this.onAscending(e,'Vessel')}
-                className={excludeHeader}>
+            <th key="Vessel" style={{display : this.props.showVessel}} onClick={(e)=> this.onAscending(e,'Vessel')}>
                 Vessel
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
@@ -1383,7 +1368,7 @@ class ShipmentViewDataComponent extends React.Component {
         );
         headerObj["Steamship Line"] = (
             <th key = "Steamship"style={{display : this.props.showSteamShip}}
-                onClick={(e)=> this.onAscending(e,'SteamshipLine')} className={excludeHeader}>Steamship Line
+                onClick={(e)=> this.onAscending(e,'SteamshipLine')}>Steamship Line
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1391,8 +1376,7 @@ class ShipmentViewDataComponent extends React.Component {
             </th>
         );
         headerObj["PU Location"] = (
-            <th key="PU" style={{display : this.props.showPU}} onClick={(e)=> this.onAscending(e,'PULocation')}
-                className={excludeHeader}>
+            <th key="PU" style={{display : this.props.showPU}} onClick={(e)=> this.onAscending(e,'PULocation')}>
                 PU Location
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
@@ -1404,7 +1388,7 @@ class ShipmentViewDataComponent extends React.Component {
         headerObj["Return Location"] = (
 
             <th key = "Return" style={{display : this.props.showRet}}
-                onClick={(e)=> this.onAscending(e,'ReturnLocation')} className={excludeHeader}>Return Location
+                onClick={(e)=> this.onAscending(e,'ReturnLocation')} >Return Location
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1413,8 +1397,7 @@ class ShipmentViewDataComponent extends React.Component {
             </th>
         );
         headerObj["Docs Cutoff"] = (
-            <th key="Docs" style={{display : this.props.showDoc}} onClick={(e)=> this.onAscending(e,'DocsCutoff')}
-                className={excludeHeader}>
+            <th key="Docs" style={{display : this.props.showDoc}} onClick={(e)=> this.onAscending(e,'DocsCutoff')}>
                 Docs Cutoff
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
@@ -1424,8 +1407,7 @@ class ShipmentViewDataComponent extends React.Component {
             </th>
         );
         headerObj["Status"] = (
-            <th key="Status" style={{display : this.props.showStatus}} onClick={(e)=> this.onAscending(e,'Status')}
-                className={excludeHeader}>
+            <th key="Status" style={{display : this.props.showStatus}} onClick={(e)=> this.onAscending(e,'Status')}>
                 Status
                <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
@@ -1440,16 +1422,63 @@ class ShipmentViewDataComponent extends React.Component {
                 <div className="loadedContentNew">
                     <table id="Packaging_Instruction_View" className="table table-expandable table-striped" cellSpacing="0">
                         <thead className="table_head header-fixed header sorted_head ">
+                        {(grouping && this.props.SelcetedOptionForGroupBy != "") ?
                         <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
                             <th className="exclude-drag">
-                                {grouping && this.props.SelcetedOptionForGroupBy!="" ? this.props.SelcetedOptionForGroupBy:""}
+                                {this.props.SelcetedOptionForGroupBy}
+                            </th>
+                            <th className="exclude-drag" style={{display : this.props.showARB}}>ARB</th>
+                            <th className="exclude-drag" style={{display : this.props.showCustomer}}>Customer</th>
+                            <th className="exclude-drag"style={{display : this.props.showRelease}}>Release</th>
+                            <th className="exclude-drag"style={{display : this.props.showShipmentType}}>Shipment Type</th>
+                            <th className="exclude-drag" style={{display : this.props.showBooking}}>Booking</th>
+                            <th className="exclude-drag" style={{display : this.props.showPO}} >PO#</th>
+                            <th className="exclude-drag" style={{display : this.props.showLot}}>Lot#</th>
+                            <th className="exclude-drag" style={{display : this.props.showMaterial}}>Material</th>
+                            <th className="exclude-drag" style={{display : this.props.showConfmd}}>Confirmed?</th>
+                            <th className="exclude-drag" style={{display : this.props.showForwarder}}>Forwarder</th>
+                            <th className="exclude-drag" style={{display : this.props.showCntrSize}}>Cntr Size </th>
+                            <th className="exclude-drag"  style={{display : this.props.showQty}} >Qty</th>
+                            <th className="exclude-drag" style={{display : this.props.showAlloc}}>Allocated</th>
+                            <th className="exclude-drag" style={{display : this.props.showEno}} >Enough?</th>
+                            <th className="exclude-drag" style={{display : this.props.showBags}} ># of Bags To Ship</th>
+                            {/*
+                             <th style ={{display : this.props.showInInvt}} onClick={(e)=> this.onAscending(e,'lot_number')}>(InInvt.)
+                             <span className="fa-stack ">
+                             <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                             <i className="fa fa-sort-desc fa-stack-1x"></i>
+                             </span>
+                             </th>
+                             */}
+                            <th className="exclude-drag" style={{display : this.props.showERD}}>ERD</th>
+                            <th className="exclude-drag" style={{display : this.props.showCutoff}}>CutOff</th>
+                            <th className="exclude-drag" style={{display : this.props.showVessel}}>Vessel</th>
+                            <th className="exclude-drag" style={{display : this.props.showSteamShip}}>Steamship Line</th>
+                            <th className="exclude-drag" style={{display : this.props.showPU}} >PU Location</th>
+                            <th className="exclude-drag" style={{display : this.props.showRet}}>Return Location</th>
+                            <th className="exclude-drag" style={{display : this.props.showDoc}} >Docs Cutoff</th>
+                            <th className="exclude-drag" style={{display : this.props.showStatus}} >Status</th>
+
+                            {/*
+                             <th style ={{display : this.props.showTrucker}} >Trucker
+                             <span className="fa-stack ">
+                             <i className="fa fa-sort-asc fa-stack-1x" ></i>
+                             <i className="fa fa-sort-desc fa-stack-1x"></i>
+                             </span>
+                             </th>
+                             */}
+
+                        </tr> :
+                            <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
+                            <th className="exclude-drag">
+
                             </th>
 
                             {this.state.headerArray.map(obj => {
                                 return headerObj[obj];
                             })}
 
-                        </tr>
+                            </tr>}
                         </thead>
                         { ( listData == undefined || listData.length == 0)
                             ?

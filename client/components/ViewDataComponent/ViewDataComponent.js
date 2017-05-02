@@ -282,7 +282,7 @@ class ViewDataComponent extends React.Component {
                 tempObj.TPackagingInstructionLots.push(JSON.parse(JSON.stringify(tempLots)))
                 tempData.push(tempObj)
             }
-            //  console.log("sss",tempData);
+
         }
     }
     else{
@@ -291,7 +291,7 @@ class ViewDataComponent extends React.Component {
 
         }
         var groupData;
-        console.log("switch value", value)
+
         switch(value){
             case ('Lot#'):
                 groupData = _.groupBy(tempData, function (item){
@@ -343,7 +343,6 @@ class ViewDataComponent extends React.Component {
                 break
             case 'Arrived':
                 groupData = _.groupBy(tempData, function (item) {
-
                     if (item.TPackagingInstructionLots.length > 0) {
                         if (item.TPackagingInstructionLots[0].railcar_arrived_on != null)
                             return item.TPackagingInstructionLots[0]
@@ -376,13 +375,12 @@ class ViewDataComponent extends React.Component {
                 break
 
         }
-        console.log("aa",groupData);
+
         if (data === undefined) {
             this.setState({
                 GroupedData: groupData
             })
 
-            console.log("gg",this.state.GroupedData);
             localStorage.setItem('piViewData', JSON.stringify(groupData));
             localStorage.setItem('piGrouped', JSON.stringify(grouping));
         }
@@ -391,11 +389,11 @@ class ViewDataComponent extends React.Component {
 
     }
     onAscending(e, head) {
-        console.log("sorting clicked")
+
         sortedDataflag = true;
         flagSorting = true;
         var switchvalue = head;
-        console.log("sorting value", switchvalue);
+
         var tempThis = this
         switch (switchvalue) {
             case 'location':
@@ -410,7 +408,7 @@ class ViewDataComponent extends React.Component {
                 break;
             case 'po_number':
                 sortedData = _.sortBy(this.state.viewData, function (item) {
-                    console.log("ss",item.po_number);
+
                     if (item.po_number != "") {
                         return item.po_number.toLowerCase();
                     }
@@ -590,12 +588,12 @@ class ViewDataComponent extends React.Component {
         })
         localStorage.setItem('piViewData', JSON.stringify(sortedData));
         this.forceUpdate();
-        console.log("view",this.state.viewData);
-        if (grouping && this.props.SelcetedOptionForGroupBy) {
-            console.log("sorting clicked1", this.props.SelcetedOptionForGroupBy);
-            this.onGroupBy(this.props.SelcetedOptionForGroupBy);
 
-        }
+        //if (grouping && this.props.SelcetedOptionForGroupBy) {
+        //    console.log("sorting clicked1", this.props.SelcetedOptionForGroupBy);
+        //    this.onGroupBy(this.props.SelcetedOptionForGroupBy);
+        //
+        //}
     }
 
     onToggel(e, elm) {
@@ -614,7 +612,7 @@ class ViewDataComponent extends React.Component {
         }
     }
     GetHead(index,i,length){
-        // console.log("groupby head")
+
         return (
             <tr className="base_bg clickable" ref="clickable" key={i}>
                 <td><i className="fa fa-chevron-down"
@@ -645,7 +643,7 @@ class ViewDataComponent extends React.Component {
             )
     }
     GetRows(view,count,selectedWeight){
-        // console.log("groupbyRows");
+
        return _.map(view.TPackagingInstructionLots, (data, index) => {
                 let diff;
                 var bagsallocated = 0
@@ -1019,7 +1017,7 @@ class ViewDataComponent extends React.Component {
 
         if (grouping && this.props.SelcetedOptionForGroupBy != "") {
             debugger;
-            console.log("group",this.state.GroupedData)
+
             var groupedData = _.map(this.state.GroupedData, (data, index) => {
                return(
                     <tbody key={i++}>
@@ -1037,7 +1035,7 @@ class ViewDataComponent extends React.Component {
 
                )
             })
-            console.log("ggg",this.state.GroupedData);
+
         }
         else {
         var listData = this.GetData(this.state.viewData,false)
@@ -1049,7 +1047,7 @@ class ViewDataComponent extends React.Component {
         groupedData = _.filter(groupedData, function (param) {
             return param !== undefined;
         });
-        var excludeHeader = (grouping && this.props.SelcetedOptionForGroupBy != "") ? "exclude-drag" : "";
+
         var headerObj = {};
         headerObj["ARB"] = (
             <th key="arb" style={{display : this.props.showARB }} onKeyDown={(e)=>this.press(e)}
@@ -1063,7 +1061,7 @@ class ViewDataComponent extends React.Component {
         );
         headerObj["Customer"] = (
             <th key="customer" style={{display : this.props.showCustomer}}
-                onClick={(e)=> this.onAscending(e,'company')} className={excludeHeader}>Customer
+                onClick={(e)=> this.onAscending(e,'company')}>Customer
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1071,10 +1069,8 @@ class ViewDataComponent extends React.Component {
 
             </th>
         );
-
         headerObj["PO#"] = (
-            <th key="po" style={{display : this.props.showPO}} onClick={(e)=> this.onAscending(e,'po_number')}
-                className={excludeHeader}>PO#
+            <th key="po" style={{display : this.props.showPO}} onClick={(e)=> this.onAscending(e,'po_number')}>PO#
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1083,7 +1079,7 @@ class ViewDataComponent extends React.Component {
         );
         headerObj["Railcar#"] = (
             <th key="railecar" style={{display : this.props.Railcar}}
-                onClick={(e)=> this.onAscending(e,'railcar_number')} className={excludeHeader}>Railcar#
+                onClick={(e)=> this.onAscending(e,'railcar_number')}>Railcar#
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1093,8 +1089,7 @@ class ViewDataComponent extends React.Component {
 
         headerObj["Lot#"] = (
             <th key="lot" style={{display : this.props.showLot}} onClick={(e)=> this.onAscending(e,'lot_number')}
-                className={excludeHeader}>
-                Lot#
+                >Lot#
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1105,7 +1100,7 @@ class ViewDataComponent extends React.Component {
 
         headerObj["Material"] = (
             <th key="material" style={{display : this.props.showMaterial}}
-                onClick={(e)=> this.onAscending(e,'Material')} className={excludeHeader}>Material
+                onClick={(e)=> this.onAscending(e,'Material')}>Material
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1115,7 +1110,7 @@ class ViewDataComponent extends React.Component {
         );
         headerObj["Confirmed?"] = (
             <th key="confirmed" style={{display : this.props.showConfmd}} onClick={(e)=> this.onAscending(e,'Confmd')}
-                className={excludeHeader}>
+                >
                 Confirmed?
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
@@ -1125,7 +1120,7 @@ class ViewDataComponent extends React.Component {
         );
         headerObj["Arrived?"] = (
             <th key="arrived" style={{display : this.props.showArrvd}} onClick={(e)=> this.onAscending(e,'Arrvd')}
-                className={excludeHeader}>
+                >
                 Arrived?
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
@@ -1136,7 +1131,7 @@ class ViewDataComponent extends React.Component {
         );
         headerObj["Shipment Received?"] = (
             <th key="shipmentreceived" style={{display : this.props.showRecd}}
-                onClick={(e)=> this.onAscending(e,'Recd')} className={excludeHeader}>Shipment Received?
+                onClick={(e)=> this.onAscending(e,'Recd')}>Shipment Received?
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1145,8 +1140,7 @@ class ViewDataComponent extends React.Component {
             </th>
         );
         headerObj["Cutoff"] = (
-            <th key="cutoff" style={{display : this.props.showCutoff}} onClick={(e)=> this.onAscending(e,'Cutoff')}
-                className={excludeHeader}>
+            <th key="cutoff" style={{display : this.props.showCutoff}} onClick={(e)=> this.onAscending(e,'Cutoff')}>
                 Cutoff
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
@@ -1156,8 +1150,7 @@ class ViewDataComponent extends React.Component {
             </th>
         );
         headerObj["Weight"] = (
-            <th key="weight" style={{display : this.props.showWeight}} onClick={(e)=> this.onAscending(e,'weight')}
-                className={excludeHeader}>
+            <th key="weight" style={{display : this.props.showWeight}} onClick={(e)=> this.onAscending(e,'weight')}>
                 Weight
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
@@ -1168,8 +1161,7 @@ class ViewDataComponent extends React.Component {
             </th>
         );
         headerObj["Qty Allocated"] = (
-            <th key="qtyallocated" style={{display : this.props.showBag}} onClick={(e)=> this.onAscending(e,'Bags')}
-                className={excludeHeader}>Qty
+            <th key="qtyallocated" style={{display : this.props.showBag}} onClick={(e)=> this.onAscending(e,'Bags')}>Qty
                 Allocated
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
@@ -1179,8 +1171,8 @@ class ViewDataComponent extends React.Component {
             </th>
         );
         headerObj["Qty Packaged"] = (
-            <th key="qtypackaged" style={{display : this.props.showInInvt}} onClick={(e)=> this.onAscending(e,'InInvt')}
-                className={excludeHeader}>
+            <th key="qtypackaged" style={{display : this.props.showInInvt}}
+                onClick={(e)=> this.onAscending(e,'InInvt')}>
                 Qty Packaged
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
@@ -1190,8 +1182,7 @@ class ViewDataComponent extends React.Component {
             </th>
         );
         headerObj["Status"] = (
-            <th key="status" style={{display : this.props.showStatus}} onClick={(e)=> this.onAscending(e,'Status')}
-                className={excludeHeader}>
+            <th key="status" style={{display : this.props.showStatus}} onClick={(e)=> this.onAscending(e,'Status')}>
                 Status
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
@@ -1201,7 +1192,7 @@ class ViewDataComponent extends React.Component {
         );
         headerObj["Railcar Arrival"] = (
             <th key="railcararrival" style={{display : this.props.showRailcarArr}}
-                onClick={(e)=> this.onAscending(e,'RailcarArrival')} className={excludeHeader}>Railcar Arrival
+                onClick={(e)=> this.onAscending(e,'RailcarArrival')} >Railcar Arrival
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1210,7 +1201,7 @@ class ViewDataComponent extends React.Component {
         );
         headerObj["Railcar Arrival Date"] = (
             <th key="railcalarrivaldate" style={{display : this.props.showRailcarArrD}}
-                onClick={(e)=> this.onAscending(e,'RailcarArrivalDate')} className={excludeHeader}>Railcar Arrival Date
+                onClick={(e)=> this.onAscending(e,'RailcarArrivalDate')}>Railcar Arrival Date
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1219,7 +1210,7 @@ class ViewDataComponent extends React.Component {
         );
         headerObj["Railcar Departure"] = (
             <th key="railcardeparture" style={{display : this.props.showRailcarDep}}
-                onClick={(e)=> this.onAscending(e,'RailcarDeparture')} className={excludeHeader}>Railcar Departure
+                onClick={(e)=> this.onAscending(e,'RailcarDeparture')}>Railcar Departure
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1228,8 +1219,7 @@ class ViewDataComponent extends React.Component {
         );
         headerObj["Railcar Departure Date"] = (
             <th key="railcardeparturedate" style={{display : this.props.showRailcarDepDate}}
-                onClick={(e)=> this.onAscending(e,'RailcarDepartureDate')} className={excludeHeader}>Railcar Departure
-                Date
+                onClick={(e)=> this.onAscending(e,'RailcarDepartureDate')}>Railcar Departure Date
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1240,7 +1230,7 @@ class ViewDataComponent extends React.Component {
 
         headerObj["Railcar Days Present"] = (
             <th key="railcardayspresent" style={{display : this.props.showDaysPresent}}
-                onClick={(e)=> this.onAscending(e,'RailcarDaysPresent')} className={excludeHeader}>Railcar Days Present
+                onClick={(e)=> this.onAscending(e,'RailcarDaysPresent')}>Railcar Days Present
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1251,7 +1241,7 @@ class ViewDataComponent extends React.Component {
 
         headerObj["Railcar Status"] = (
             <th key="railcarstatus" style={{display : this.props.showRailcarStatus}}
-                onClick={(e)=> this.onAscending(e,'RailcarStatus')} className={excludeHeader}>Railcar Status
+                onClick={(e)=> this.onAscending(e,'RailcarStatus')}>Railcar Status
                                 <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
@@ -1264,19 +1254,40 @@ class ViewDataComponent extends React.Component {
 
             <Loader loaded={this.state.loaded} id="loaded">
                 <div className="loadedContentNew" id="loadedNew">
-
                     <table id="Packaging_Instruction_View" className="table table-expandable sort kksky11" cellSpacing="0">
                         <thead id="table_head1" className="table_head header-fixed header red sorted_head">
+                        {(grouping && this.props.SelcetedOptionForGroupBy != "") ?
+                            <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
+                                <th className="exclude-drag">{ this.props.SelcetedOptionForGroupBy}</th>
+                                <th className="exclude-drag" style={{display : this.props.showARB }}>ARB</th>
+                                <th className="exclude-drag" style={{display : this.props.showCustomer}}>Customer</th>
+                                <th className="exclude-drag" style={{display : this.props.showPO}}>PO#</th>
+                                <th className="exclude-drag" style={{display : this.props.Railcar}}>Railcar#</th>
+                                <th className="exclude-drag" style={{display : this.props.showLot}}>Lot#</th>
+                                <th className="exclude-drag" style={{display : this.props.showMaterial}}>Material</th>
+                                <th className="exclude-drag" style={{display : this.props.showConfmd}}>Confirmed?</th>
+                                <th className="exclude-drag" style={{display : this.props.showArrvd}}>Arrived?</th>
+                                <th className="exclude-drag" style={{display : this.props.showRecd}}>Shipment Received?</th>
+                                <th className="exclude-drag" style={{display : this.props.showCutoff}}>Cutoff</th>
+                                <th className="exclude-drag" style={{display : this.props.showWeight}}>Weight</th>
+                                <th className="exclude-drag" style={{display : this.props.showBag}}>Qty Allocated</th>
+                                <th className="exclude-drag" style={{display : this.props.showInInvt}}>Qty Packaged</th>
+                                <th className="exclude-drag" style={{display : this.props.showStatus}}>Status</th>
+                                <th className="exclude-drag" style={{display : this.props.showRailcarArr}}>Railcar Arrival</th>
+                                <th className="exclude-drag" style={{display : this.props.showRailcarArrD}}>Railcar Arrival Date</th>
+                                <th className="exclude-drag" style={{display : this.props.showRailcarDep}}>Railcar Departure</th>
+                                <th className="exclude-drag" style={{display : this.props.showRailcarDepDate}}>Railcar Departure Date</th>
+                                <th className="exclude-drag" style={{display : this.props.showDaysPresent}}>Railcar Days Present</th>
+                                <th className="exclude-drag" style={{display : this.props.showRailcarStatus}}>Railcar Status</th>
+                            </tr> :
                         <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
                             <th className="exclude-drag">
-                                {grouping && this.props.SelcetedOptionForGroupBy!="" ? this.props.SelcetedOptionForGroupBy:""}
                             </th>
                             {this.state.headerArray.map(obj => {
                                 return headerObj[obj];
                             })}
-                        </tr>
+                        </tr>}
                         </thead>
-
                         { (( listData == undefined || listData.length == 0) && (groupedData == undefined || groupedData.length == 0))
                             ?
                             <tbody>

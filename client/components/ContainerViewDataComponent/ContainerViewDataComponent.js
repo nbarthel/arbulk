@@ -322,6 +322,7 @@ class ContainerViewDataComponent extends React.Component {
                 break;
             case 'Trucker':
                 groupData = _.groupBy(tempData, function (item) {
+
                     if (item.TContainerDomestic.length > 0) {
                         return item.TContainerDomestic[0].TCompany.name.toLowerCase()
                     }
@@ -331,7 +332,6 @@ class ContainerViewDataComponent extends React.Component {
                     else {
                         return item
                     }
-
 
                 });
                 break;
@@ -377,7 +377,6 @@ class ContainerViewDataComponent extends React.Component {
                 break;
             case 'Status':
                 groupData = _.groupBy(tempData, function(item) {
-
                     if(item.TContainerInternational && item.TContainerInternational.length>0){
                         return item.TContainerInternational[0].status.toLowerCase()
                     }
@@ -407,12 +406,8 @@ class ContainerViewDataComponent extends React.Component {
     }
 
     onAscending(e, head) {
-
         flagSorting = true;
-
-
         var switchvalue = head;
-
         switch (switchvalue) {
             case 'po_number':
                 sortedData = _.sortBy(this.state.viewData, function (item) {
@@ -472,7 +467,6 @@ class ContainerViewDataComponent extends React.Component {
                         return item
                     }
 
-
                 });
                 break;
             case 'Arrived':
@@ -491,7 +485,6 @@ class ContainerViewDataComponent extends React.Component {
                 break;//view.TShipmentInternational[0].TSteamshipLine
             case 'SteamshipLine':
                 sortedData = _.sortBy(this.state.viewData, function (item) {
-
                     if (item.TShipmentInternational.length > 0) {
                         return item.TShipmentInternational[0].TSteamshipLine.name.toLowerCase()
                     }
@@ -581,7 +574,6 @@ class ContainerViewDataComponent extends React.Component {
         var filterData
         if (!flagSorting) {
             filterData = this.props.filterData
-
             if (filterData.constructor === Array) {
                 this.state.viewData = filterData
             }
@@ -627,7 +619,8 @@ class ContainerViewDataComponent extends React.Component {
                                 return _.map(view.TContainerDomestic, (data, index)=> {
                                     if (data.containerArrived == 1) {
                                         var Arr = 'YES'
-                                    } else {
+                                    }
+                                    else {
                                         var Arr = 'NO'
                                     }
                                     return (
@@ -686,7 +679,7 @@ class ContainerViewDataComponent extends React.Component {
                                             <td key="container"
                                                 style={{display : this.props.showContainer}}>{data.containerNumber}</td>
                                             <td key="trucker"
-                                                style={{display : this.props.showTrucker}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0) ? (view.TContainerDomestic[index].TCompany ? view.TContainerDomestic[index].TCompany.name : '') : "N/A"}</td>
+                                                style={{display : this.props.showTrucker}}>{(view.TContainerInternational && view.TContainerInternational.length > 0) ? (view.TContainerInternational[index].TCompany ? view.TContainerInternational[index].TCompany.name : '') : "N/A"}</td>
                                             <td key="arrived"
                                                 style={{display : this.props.showArrived}}>{Arr ? Arr : 'No'}</td>
                                             <td key="steamShip"
@@ -990,6 +983,7 @@ class ContainerViewDataComponent extends React.Component {
         listData = _.filter(listData, function (param) {
             return param !== undefined;
         });
+
         var headerObj = {};
         headerObj["ARB"] = (<th key="Arb" className="exclude-drag" style={{display : this.props.showARB}}
                                 onClick={(e)=> this.onAscending(e,'location')}>ARB
@@ -1090,14 +1084,27 @@ class ContainerViewDataComponent extends React.Component {
             <div className="loadedContentNew">
                 <table id="Packaging_Instruction_View" className="table table-expandable table-striped " cellSpacing="0" >
                     <thead className="table_head sorted_head">
+                    {(grouping && this.props.SelcetedOptionForGroupBy!="") ?
                     <tr className="sorting_head"  style={{"backgroundColor" : "#2e6da4"}}>
-                        <th className="exclude-drag">
-                            {grouping && this.props.SelcetedOptionForGroupBy!="" ? this.props.SelcetedOptionForGroupBy:""}
-                        </th>
+                        <th className="exclude-drag">{this.props.SelcetedOptionForGroupBy}</th>
+                        <th className="exclude-drag" style = {{display : this.props.showARB}}>ARB</th>
+                        <th className="exclude-drag" style = {{display : this.props.showCustomer}}>Customer</th>
+                        <th className="exclude-drag" style ={{display : this.props.showRelease}} >Release#</th>
+                        <th className="exclude-drag" style ={{display : this.props.showBooking}}>Booking#</th>
+                        <th className="exclude-drag" style ={{display : this.props.showContainer}}>Container#</th>
+                        <th className="exclude-drag" style ={{display : this.props.showTrucker}} >Trucker</th>
+                        <th className="exclude-drag" style ={{display : this.props.showArrived}}>Arrived?</th>
+                        <th className="exclude-drag" style ={{display : this.props.showSteamShip}}>Steamship Line</th>
+                        <th className="exclude-drag" style ={{display : this.props.showType}}>Type</th>
+                        <th className="exclude-drag" style ={{display : this.props.showType}}>Status</th>
+                        <th className="exclude-drag" style ={{display : this.props.showType}}>Shipment Type</th>
+                    </tr>:
+                    <tr className="sorting_head"  style={{"backgroundColor" : "#2e6da4"}}>
+                        <th className="exclude-drag"></th>
                         {this.state.headerArray.map(obj => {
                             return headerObj[obj];
                         })}
-                        </tr>
+                        </tr>}
                         </thead>
                         { ( listData == undefined || listData.length == 0)
                             ?
