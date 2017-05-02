@@ -361,14 +361,17 @@ class ContainerViewDataComponent extends React.Component {
                 break;//view.TShipmentInternational[0].TSteamshipLine
             case 'Steamship Line':
                 groupData = _.groupBy(tempData, function(item) {
-
-                    if (item.TShipmentInternational.length > 0) {
+console.log("item",item)
+                    if(item.isDomestic == 0) {
+                        console.log("aa",item.TShipmentInternational[0].TSteamshipLine.name)
                         return item.TShipmentInternational[0].TSteamshipLine.name.toLowerCase()
                     }
-                    else if (item.TShipmentDomestic.length > 0) {
-                        return item
-                    }
-                    return item
+
+                    //else  {
+                    //    console.log("aa1",)
+                    //    return item
+                    //}
+                   // return item
                 });
 
                 break;
@@ -410,7 +413,7 @@ class ContainerViewDataComponent extends React.Component {
             default:
                 tempData
         }
-      //  console.log("gg1",groupData)
+        console.log("gg1",groupData)
         this.setState({
             GroupedData: groupData
         })
