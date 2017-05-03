@@ -245,6 +245,9 @@ class ContainerViewDataComponent extends React.Component {
     }
 
     onGroupBy(switchvalue) {
+        $("#Packaging_Instruction_View").colResizable({
+            disable: true
+        });
         grouping = true
         var tempData = [],
             groupData = {}
@@ -322,27 +325,21 @@ class ContainerViewDataComponent extends React.Component {
                 break;
             case 'Trucker':
                 groupData = _.groupBy(tempData, function (item) {
-             if(item.isDomestic == 1){
-                         //   console.log("dom",item.TContainerDomestic[0].TCompany.name);
+                    if(item.isDomestic == 1){
                         return item.TContainerDomestic[0].TCompany.name.toLowerCase()
                     }
                     else{
-                         //   console.log("intr",item.TContainerInternational[0].TCompany.name);
                         return item.TContainerInternational[0].TCompany.name.toLowerCase()
                     }
                     //if (item.TContainerDomestic.length >= 0) {
-                    //    console.log("dom");
                     //    return item.TContainerDomestic[0].TCompany.name.toLowerCase()
                     //}
                     //else if (item.TContainerInternational.length > 0) {
-                    //    console.log("intr")
                     //    return item.TContainerInternational[0].TCompany.name.toLowerCase()
                     //}
                     //else {
-                    //    console.log("else")
                     //    return item
                     //}
-
                 });
                 break;
             case 'Arrived':
@@ -358,20 +355,17 @@ class ContainerViewDataComponent extends React.Component {
                     }
                 });
 
-                break;//view.TShipmentInternational[0].TSteamshipLine
+                break;
             case 'Steamship Line':
                 groupData = _.groupBy(tempData, function(item) {
-console.log("item",item)
+
                     if(item.isDomestic == 0) {
-                        console.log("aa",item.TShipmentInternational[0].TSteamshipLine.name)
+
                         return item.TShipmentInternational[0].TSteamshipLine.name.toLowerCase()
                     }
-
-                    //else  {
-                    //    console.log("aa1",)
-                    //    return item
-                    //}
-                   // return item
+                    else {
+                        return "N/A";
+                    }
                 });
 
                 break;
@@ -413,7 +407,7 @@ console.log("item",item)
             default:
                 tempData
         }
-        console.log("gg1",groupData)
+
         this.setState({
             GroupedData: groupData
         })
@@ -1102,7 +1096,8 @@ console.log("item",item)
                     {(grouping && this.props.SelcetedOptionForGroupBy!="") ?
                     <tr className="sorting_head"  style={{"backgroundColor" : "#2e6da4"}}>
                         <th className="exclude-drag">{this.props.SelcetedOptionForGroupBy}</th>
-                        <th className="exclude-drag" style = {{display : this.props.showARB}}>ARB</th>
+                        <th className="exclude-drag" style = {{display : this.props.showARB}}>ARB
+                         <span className="fa-stack "></span></th>
                         <th className="exclude-drag" style = {{display : this.props.showCustomer}}>Customer</th>
                         <th className="exclude-drag" style ={{display : this.props.showRelease}} >Release#</th>
                         <th className="exclude-drag" style ={{display : this.props.showBooking}}>Booking#</th>

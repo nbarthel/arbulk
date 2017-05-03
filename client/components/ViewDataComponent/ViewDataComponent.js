@@ -266,6 +266,9 @@ class ViewDataComponent extends React.Component {
     }
 
     onGroupBy(value, data) {
+        $("#Packaging_Instruction_View").colResizable({
+            disable: true
+        });
         grouping = true
         var tempData = []
         if (data === undefined) {
@@ -589,11 +592,7 @@ class ViewDataComponent extends React.Component {
         localStorage.setItem('piViewData', JSON.stringify(sortedData));
         this.forceUpdate();
 
-        //if (grouping && this.props.SelcetedOptionForGroupBy) {
-        //    console.log("sorting clicked1", this.props.SelcetedOptionForGroupBy);
-        //    this.onGroupBy(this.props.SelcetedOptionForGroupBy);
-        //
-        //}
+
     }
 
     onToggel(e, elm) {
@@ -1259,7 +1258,8 @@ class ViewDataComponent extends React.Component {
                         {(grouping && this.props.SelcetedOptionForGroupBy != "") ?
                             <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
                                 <th className="exclude-drag">{ this.props.SelcetedOptionForGroupBy}</th>
-                                <th className="exclude-drag" style={{display : this.props.showARB }}>ARB</th>
+                                <th className="exclude-drag" style={{display : this.props.showARB }}>ARB
+                                 <span className="fa-stack "></span></th>
                                 <th className="exclude-drag" style={{display : this.props.showCustomer}}>Customer</th>
                                 <th className="exclude-drag" style={{display : this.props.showPO}}>PO#</th>
                                 <th className="exclude-drag" style={{display : this.props.Railcar}}>Railcar#</th>

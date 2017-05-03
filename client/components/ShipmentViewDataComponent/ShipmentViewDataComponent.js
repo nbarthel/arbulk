@@ -264,6 +264,7 @@ class ShipmentViewDataComponent extends React.Component {
         });
 
 
+
     }
 
     checkclick(data, value) {
@@ -275,6 +276,9 @@ class ShipmentViewDataComponent extends React.Component {
     }
 
     onGroupBy(switchvalue){
+        $("#Packaging_Instruction_View").colResizable({
+            disable: true
+        });
 
         grouping = true
         var tempData = [],groupData ={}
@@ -1427,7 +1431,8 @@ class ShipmentViewDataComponent extends React.Component {
                             <th className="exclude-drag">
                                 {this.props.SelcetedOptionForGroupBy}
                             </th>
-                            <th className="exclude-drag" style={{display : this.props.showARB}}>ARB</th>
+                            <th className="exclude-drag" style={{display : this.props.showARB}}>ARB
+                             <span className="fa-stack "></span></th>
                             <th className="exclude-drag" style={{display : this.props.showCustomer}}>Customer</th>
                             <th className="exclude-drag"style={{display : this.props.showRelease}}>Release</th>
                             <th className="exclude-drag"style={{display : this.props.showShipmentType}}>Shipment Type</th>
