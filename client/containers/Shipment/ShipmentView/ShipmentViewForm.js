@@ -188,8 +188,7 @@ PrintScreen(){
 
     checkboxChange(e,value,data){
 
-        console.log("vvv",e.target.checked)
-       // console.log("dd",data)
+
         if(e.target.checked){
             this.conFirmID = e.target.value
             this.selected = e.target.id.split(":")[0]
@@ -213,10 +212,7 @@ PrintScreen(){
             //this.piID = null
 
         }
-        //console.log("SelectedID >>>>>>>>>>>>.", this.selected)
-        //console.log("shipId >>>>>>>>>>>>.",this.selected)
-       // console.log("ConfirmID><^><^><^>^<^>^<",this.confId)
-        //console.log("templotId><^><^><^>^<^>^<", this.tempLotId)
+
     }
     allocateContainer(e){
 
@@ -245,7 +241,7 @@ PrintScreen(){
          var idValue = e.target.id
 
           this.Query[idValue] = e.target.value
-          console.log(this.Query)
+
           this.onSearch(e)
         }
 
@@ -254,29 +250,26 @@ PrintScreen(){
            this.Query[e.target.id] = e.target.getAttribute('value')
 
           document.getElementById('POSearch').value = e.target.getAttribute('value')
-           console.log(this.Query)
-           console.log('>>>>>> target Value' , e.target.value)
+
            this.onSearch(e)
       }
 
       lotSearch(e){
 
            this.Query[e.target.id] = e.target.getAttribute('value')
-           console.log(this.Query)
+
            document.getElementById('LotSearch').value = e.target.getAttribute('value')
-           console.log('>>>>>> target Value' , e.target.value)
+
            this.onSearch(e)
       }
 
 onClickli(e){
   this.Query[e.target.id] = e.target.getAttribute('value')
-
     document.getElementById('railcarSearch').value = e.target.getAttribute('value')
-  console.log(this.Query)
-  console.log('>>>>>> target Value' , e.target.value)
+
 }
  onCompanyFilter(e,location){
-
+//console.log("group",e.target.checked);
             if(e.target.checked){
             this.forceUpdate()
             this.checkedCompany.push(e.target.id)
@@ -290,7 +283,6 @@ onClickli(e){
 
            }
             else if (!e.target.checked){
-
             let id = e.target.id
             this.checkedCompany = _.without(this.checkedCompany,id)
             this.Where.Company = this.checkedCompany
@@ -348,24 +340,23 @@ onClickli(e){
                                                       value:this.checkedStatus})
             // this.buttonDisplay.push(e.target.value)
             // this.forceUpdate()
-
             //console.log(this.props.buttonDisplay)
            /* console.log(this.Where)
             console.log(this.checkedStatus)
             console.log(this.checkedStatus.length)*/
-           }
+
+            }
             else if (!e.target.checked){
             let value = e.target.value
             //let pos = this.checkedStatus.indexOf(e.target.value)
             this.checkedStatus = _.without(this.checkedStatus,value)
             this.Where.status = this.checkedStatus
-            //console.log(this.Where.status)
             if(Object.keys(this.Where.status).length === 0){
               this.Where.status = undefined
               delete this.Where.status
             }
-            console.log(this.Where)
-            //let value = e.target.value
+
+                //let value = e.target.value
                 let index = this.buttonDisplay.indexOf(e.target.value)
                 if(index !== -1)
                 this.buttonDisplay = _.without(this.buttonDisplay,value)
@@ -380,9 +371,8 @@ onClickli(e){
 
 }
     onRemove(e){
-        console.log("clicked")
-        console.log("WHERE",this.Where)
-            this.buttonDisplay = [];
+
+        this.buttonDisplay = [];
             this.checkedCustomer = []
             this.checkedStatus = []
             this.checkedCompany = []
@@ -862,17 +852,17 @@ onClickli(e){
                 }
               }
 
-                console.log('ajax ',data);
 
-              localStorage.setItem('siViewData', JSON.stringify(data));
+                localStorage.setItem('siViewData', JSON.stringify(data));
                this.setState(
                    {
                        viewData : data,
                        loaded:true
                    }
                )
-               //console.log( this.state.xyz)
-        }.bind(this)
+
+
+            }.bind(this)
         })
 
 
@@ -902,15 +892,16 @@ onClickli(e){
             "modifiedOn": "2016-09-26",
             "active": 1
         }
-        console.log("Save Customer View" , saveCustomView);
-        if(saveCustomView.viewFilters != undefined && saveCustomView.viewFilters != null && saveCustomView.viewFilters != {} ){
+
+       if(saveCustomView.viewFilters != undefined && saveCustomView.viewFilters != null && saveCustomView.viewFilters != {} ){
         axios.post(Base_Url + "TCustomViews", saveCustomView).then(response=> {
         swal('Success' , "Successfully Saved..." , 'success');
-        console.log("response", response)
 
-         axios.get(Base_Url+"TCustomViews").then(response=>{
+
+            axios.get(Base_Url+"TCustomViews").then(response=>{
          this.setState({
-             savedViews : response.data
+             savedViews: response.data,
+             Text: ""
              })
          })
        })
@@ -1293,8 +1284,8 @@ onClickli(e){
           });
           }
         }
-console.log('sdsddsdsdssdssssssssssd' , this.url);
-$.ajax({
+
+                 $.ajax({
 url: this.url,
 success:function(data){
   var i =0
@@ -1326,23 +1317,16 @@ success:function(data){
     }
   }
   localStorage.setItem('siViewData', JSON.stringify(data));
-    console.log('ajax ',data);
-
    this.setState(
        {
            viewData : data,
            loaded:true
        }
    )
-   //console.log( this.state.xyz)
+    this.forceUpdate();
 }.bind(this)
 })
-
-
-
-
      }
-
 
  }
 
@@ -1353,7 +1337,7 @@ success:function(data){
             startDate: date,
         });
         this.startdate = date
-        console.log("THESTARTDATE",this.startdate.format('MM-DD-YYYY'))
+
         this.onSearch()
     }
 
@@ -1363,7 +1347,7 @@ success:function(data){
             endDate: date
         });
         this.endDate = date ;
-        console.log("THEENDDATE",this.endDate.format('MM-DD-YYYY'))
+
         this.onSearch()
     }
 
@@ -1371,7 +1355,7 @@ success:function(data){
         var cfg = {interval: interval || 'days'};
         var dateArray = [];
         var currentDate = moment(startDate);
-        console.log('-->', currentDate._i, '<=', endDate._i, currentDate <= endDate);
+
         while (currentDate <= endDate) {
             dateArray.push(currentDate.format('YYYY-MM-DD') )
             currentDate = currentDate.add(1, cfg.interval);
@@ -1381,7 +1365,7 @@ success:function(data){
     }
 
     ShipmentType(e){
-        console.log("valueShipment type" , e.target.value)
+
         this.shipMentType = e.target.value
         this.onSearch(e)
     }
@@ -1389,13 +1373,13 @@ success:function(data){
     print(e){
 
         if(this.selected != undefined || this.conFirmID != undefined){
-            console.log('print view',this.conFirmID+'/'+this.selected)
+
             hashHistory.push('/Shipment/shipmentPrint/'+this.conFirmID)
             //hashHistory.push('/Packaging/inventorycard/'+this.piID+'/'+this.selected)
         }
         else
         {
-            console.log('mmmmmmmmmmmmmmmmmmmmm');
+
             //hashHistory.push('/Shipment/shipmentPrint/')
             swal("Selection Missing", "Please Select A Lot To View.","error")
         }
@@ -1413,7 +1397,18 @@ success:function(data){
     }
   }
 onHideColumn(e,name){
-    console.log(e.target.name)
+
+    setTimeout(function () {
+        $("#Packaging_Instruction_View").colResizable({
+            disable: true
+        });
+        $("#Packaging_Instruction_View").colResizable({
+            liveDrag: false,
+            gripInnerHtml: "<div class='grip'></div>",
+            draggingClass: "dragging",
+        });
+    }, 100);
+
     switch(e.target.name){
     case "ARB" :
     if(this.state.showARB == ""){
@@ -1452,8 +1447,8 @@ else{
 }
 break;
  case "Release" :
- console.log(e.target.name)
-  if(this.state.showRelease == ""){
+
+     if(this.state.showRelease == ""){
     this.setState({
        showRelease : "none"
     })
@@ -1465,8 +1460,8 @@ else{
 }
 break;
  case "Lot" :
- console.log(e.target.name)
-  if(this.state.showLot == ""){
+
+     if(this.state.showLot == ""){
     this.setState({
         showLot : "none"
     })
@@ -1478,8 +1473,8 @@ else{
 }
 break;
  case "Material" :
- console.log(e.target.name)
-  if(this.state.showMaterial == ""){
+
+     if(this.state.showMaterial == ""){
     this.setState({
         showMaterial : "none"
     })
@@ -1491,8 +1486,8 @@ else{
 }
 break;
  case "Confmd" :
- console.log(e.target.name)
-  if(this.state.showConfmd == ""){
+
+     if(this.state.showConfmd == ""){
     this.setState({
         showConfmd : "none"
     })
@@ -1504,8 +1499,8 @@ else{
 }
 break;
  case "Booking" :
- console.log(e.target.name)
-  if(this.state.showBooking == ""){
+
+     if(this.state.showBooking == ""){
     this.setState({
         showBooking : "none"
     })
@@ -1517,8 +1512,8 @@ else{
 }
 break;
  case "ShipmentType" :
- console.log(e.target.name)
-  if(this.state.showShipmentType == ""){
+
+     if(this.state.showShipmentType == ""){
     this.setState({
         showShipmentType : "none"
     })
@@ -1530,8 +1525,8 @@ else{
 }
 break;
  case "Cutoff" :
- console.log(e.target.name)
-  if(this.state.showCutoff == ""){
+
+     if(this.state.showCutoff == ""){
     this.setState({
         showCutoff : "none"
     })
@@ -1543,8 +1538,8 @@ else{
 }
 break;
  case "Forwarder" :
- console.log(e.target.name)
-  if(this.state.showForwarder == ""){
+
+     if(this.state.showForwarder == ""){
     this.setState({
         showForwarder : "none"
     })
@@ -1556,8 +1551,8 @@ else{
 }
 break;
  case "CntrSize" :
- console.log(e.target.name)
-  if(this.state.showCntrSize == ""){
+
+     if(this.state.showCntrSize == ""){
     this.setState({
         showCntrSize : "none"
     })
@@ -1569,8 +1564,8 @@ else{
 }
 break;
  case "InInvt" :
- console.log(e.target.name)
-  if(this.state.showInInvt == ""){
+
+     if(this.state.showInInvt == ""){
     this.setState({
         showInInvt : "none"
     })
@@ -1582,8 +1577,8 @@ else{
 }
 break;
  case "Qty" :
- console.log(e.target.name)
-  if(this.state.showQty == ""){
+
+     if(this.state.showQty == ""){
     this.setState({
         showQty : "none"
     })
@@ -1595,8 +1590,8 @@ else{
 }
 break;
  case "Alloc" :
- console.log(e.target.name)
-  if(this.state.showAlloc == ""){
+
+     if(this.state.showAlloc == ""){
     this.setState({
         showAlloc : "none"
     })
@@ -1608,8 +1603,8 @@ else{
 }
 break;
  case "Enough" :
- console.log(e.target.name)
-  if(this.state.showEno == ""){
+
+     if(this.state.showEno == ""){
     this.setState({
         showEno : "none"
     })
@@ -1621,8 +1616,8 @@ else{
 }
 break;
  case "Bags" :
- console.log(e.target.name)
-  if(this.state.showBags == ""){
+
+     if(this.state.showBags == ""){
     this.setState({
         showBags : "none"
     })
@@ -1634,8 +1629,8 @@ else{
 }
 break;
  case "ERD" :
- console.log(e.target.name)
-  if(this.state.showERD == ""){
+
+     if(this.state.showERD == ""){
     this.setState({
         showERD : "none"
     })
@@ -1647,8 +1642,8 @@ else{
 }
 break;
  case "Vessel" :
- console.log(e.target.name)
-  if(this.state.showVessel == ""){
+
+     if(this.state.showVessel == ""){
     this.setState({
         showVessel : "none"
     })
@@ -1660,8 +1655,8 @@ else{
 }
 break;
  case "SteamShip" :
- console.log(e.target.name)
-  if(this.state.showSteamShip == ""){
+
+     if(this.state.showSteamShip == ""){
     this.setState({
         showSteamShip : "none"
     })
@@ -1673,8 +1668,8 @@ else{
 }
 break;
 case "PU" :
- console.log(e.target.name)
-  if(this.state.showPU == ""){
+
+    if(this.state.showPU == ""){
     this.setState({
         showPU : "none"
     })
@@ -1686,8 +1681,8 @@ else{
 }
 break;
  case "Ret" :
- console.log(e.target.name)
-  if(this.state.showRet == ""){
+
+     if(this.state.showRet == ""){
     this.setState({
         showRet : "none"
     })
@@ -1699,8 +1694,8 @@ else{
 }
 break;
  case "Doc" :
- console.log(e.target.name)
-  if(this.state.showDoc == ""){
+
+     if(this.state.showDoc == ""){
     this.setState({
         showDoc : "none"
     })
@@ -1712,8 +1707,8 @@ else{
 }
 break;
  case "Status" :
- console.log(e.target.name)
-  if(this.state.showStatus == ""){
+
+     if(this.state.showStatus == ""){
     this.setState({
         showStatus : "none"
     })
@@ -1725,8 +1720,8 @@ else{
 }
 break;
  case "Trucker" :
- console.log(e.target.name)
-  if(this.state.showTrucker == ""){
+
+     if(this.state.showTrucker == ""){
     this.setState({
         showTrucker : "none"
     })

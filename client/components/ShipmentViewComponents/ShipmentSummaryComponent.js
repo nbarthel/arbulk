@@ -6,11 +6,12 @@ import React, { Component } from 'react';
         this.lotList
     }
     render() {
+        console.log("sss",this.props.summaryData);
+
         if(this.props.summaryData){
                 this.lotList = _.map(this.props.summaryData.TShipmentLots,(list,index) => {
                     return (<li key = {index}>{list.TPackagingInstructionLots.lot_number}</li>)
                 })
-
 
                 if(this.props.summaryData.isDomestic == 1){
                     var contType = this.props.summaryData.TShipmentDomestic[0].TContainerType.name
@@ -18,8 +19,6 @@ import React, { Component } from 'react';
                 }else{
                     var contType = this.props.summaryData.TShipmentInternational[0].TContainerType.name
                 }
-
-
             }
 		return (
 			 <fieldset className="scheduler-border">
@@ -58,7 +57,7 @@ import React, { Component } from 'react';
                                     <div className=" col-lg-5  col-sm-5 col-xs-12 ">
                                         <div className="form-group">
                                             <textarea className="form-control textarea-note" rows="3" id="Notes"
-                                                      placeholder="Notes"></textarea>
+                                                    disabled  placeholder="Notes">{this.props.summaryData ? this.props.summaryData.TShipmentInternational[0].notes : ''}</textarea>
 
                                             <div className="error"><span></span></div>
                                         </div>
