@@ -64,10 +64,10 @@ export default class RailcarArrivalEntryForm extends React.Component {
 
 	handleChange1(x,event) {
 		var dateValue = this.onformat(x.target.value)
-	//	console.log("date value is" , dateValue)
+		console.log("date value is" , dateValue)
 		document.getElementById('row1'+ x.target.id).disabled = false
 		this.dateArray.push(dateValue)
-        this.onSearch(x)
+        //this.onSearch(x)
 	}
 
 	onClickPo(e){
@@ -380,7 +380,6 @@ export default class RailcarArrivalEntryForm extends React.Component {
 
 		if(data.target.checked){
 			//this.checked = true
-
 			document.getElementById('th'+ index).value = "YES"
 			document.getElementById('th'+ index).innerText = "YES"
 			for(var i=0;i<this.props.data.length;i++){
@@ -389,7 +388,6 @@ export default class RailcarArrivalEntryForm extends React.Component {
 					break;
 				}
 			}
-
 			//this.forceUpdate()
 		}
 		else if(!data.target.checked){
@@ -404,19 +402,16 @@ export default class RailcarArrivalEntryForm extends React.Component {
 			}
 			//this.forceUpdate()
 		}
-
 		var cartDataArray = []
 		//	var dateArray = []
 		this.cartArray.push(value.id)
-
 		this.lotOrderValue = value
-
 		//console.log("clicked" , data , value)
 	};
 
 
 	updateCartArrival(){
-		//zdebugger;
+
 		if(this.cartArray.length < 1 && (this.state.startDate=null || this.state.startDate=== undefined || this.state.startDate=== '' || this.state.startDate=== false)){
 			swal('Info' , 'Please select arrival Date and or row' , 'info')
 			return
@@ -579,14 +574,14 @@ export default class RailcarArrivalEntryForm extends React.Component {
 						<td>{view.weight?(this.state.selectedOption=='lbs'?view.weight:(view.weight/MUL_FACTOR).toFixed(2)):''}</td>
 						<td>{view.lot_number ? view.lot_number: ''}</td>
 						<td>{view.TPackagingInstructions ? view.TPackagingInstructions.material : ''}</td>
-
 						<td> {view.status == "UNCONFIRMED" ? "NO" : "YES"}</td>
 						<td ref="arrived" id={"th"+index}> {view.arrived == 1 || this.checked==true ? "YES" : "NO"}</td>
 						<td>
+
 							<label className="control control--checkbox">
 								<input type="checkbox" id={"row1"+ index} value={view} onChange={(e) => this.click(e,view,index)} disabled/>
-
-								<div className="control__indicator"></div>
+								<div className="control__indicator">
+								</div>
 							</label>
 						</td>
 						<td>
@@ -645,7 +640,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 								<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 "><hr/></div>
 
 								<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-									<div className="table-responsive view_table  mega" style={{"max-height":"390","overflow-y":"scroll"}}>
+									<div className="table-responsive view_table  mega" style={{"maxHeight":"390px","overflowY":"scroll"}}>
 										<table id="tableRailCarArrival" className="table table-expandable" cellSpacing="0">
 											<thead id="headerRailCarArrival" className="table_head header-fixed header red">
 											<tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>

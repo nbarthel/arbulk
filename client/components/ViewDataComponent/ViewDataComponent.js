@@ -1288,12 +1288,10 @@ class ViewDataComponent extends React.Component {
                             })}
                         </tr>}
                         </thead>
-                        { (( listData == undefined || listData.length == 0) && (groupedData == undefined || groupedData.length == 0))
-                            ?
+                        { (( listData == undefined || listData.length == 0) && (groupedData == undefined || groupedData.length == 0)) ?
                             <tbody>
                             <tr>
                                 <td colSpan="9" className="noresult">No results match your entered criteria.</td>
-                                <td colSpan="12" className="noresult"></td>
                             </tr>
                             </tbody> : grouping && this.props.SelcetedOptionForGroupBy != "" ? groupedData : listData
                         }
