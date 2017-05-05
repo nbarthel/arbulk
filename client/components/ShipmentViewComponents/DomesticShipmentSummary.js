@@ -40,7 +40,7 @@ import React, { Component } from 'react';
 						</div>
 						<div className=" col-lg-9 col-md-9 col-sm-9 col-xs-12 ">
 							<div className="row">
-								<div className="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<div className="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 								<ul className="no-space" >
 									<li>Recipient: <b>{this.props.summaryData ? this.props.summaryData.TShipmentDomestic[0].recipent : ''}</b></li>
 									<li>Recipient Contact: <b>{this.props.summaryData ? this.props.summaryData.TShipmentDomestic[0].recipentContact : ''} </b></li>
@@ -48,7 +48,7 @@ import React, { Component } from 'react';
 								</ul>
 								{this.addressList}
 								</div>
-								<div className="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<div className="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 									<ul className="no-space" >
 										<li>Carrier :<b>{this.props.summaryData ? this.props.summaryData.TShipmentDomestic[0].carrier : ''}</b></li>										
 										<li>Carrier Acc Number :<b>{this.props.summaryData ? this.props.summaryData.TShipmentDomestic[0].carrierAcNumber : ''} </b></li>
@@ -59,14 +59,14 @@ import React, { Component } from 'react';
 									</ul>
 								</div>
 								
-								<div className="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+								{/*<div className="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 									<div className="form-group">
 										 <textarea className="form-control textarea-note" rows="3" id="Notes"placeholder="Notes"></textarea>
 										 <div className="error"><span></span></div>
 									 </div>
-								</div>
-								
-								<div className="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+								</div>*/}
+
+								<div className="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 									<ul className="no-space">
 										 <li>Body Type: <b>{this.props.pSumData ? (this.props.pSumData.TPackagingType != undefined ? this.props.pSumData.TPackagingType.packagingType : '') : ''}</b></li>
                                             <li>Pallet Type:<b> {this.props.pSumData ? this.props.pSumData.TPalletType.palletType : ''} </b></li>
