@@ -149,6 +149,7 @@ getSeal(e){
   this.sealNumber = e.target.value;
 }
     onLeftClick(e){
+
       debugger
       var temObj,tempDelObj,len=this.cIArray.length;
     if(len > 0){
@@ -172,7 +173,6 @@ getSeal(e){
              console.log(error);
              this.loadNewData()
            });
-
      }}
       else{
           swal("Missing","Please Select A Inventory","info")
@@ -222,9 +222,13 @@ debugger;
     }
 
     onRightClick(e){
-      debugger
+        debugger
       var temp,len = this.removeArray.length;
       if(len>0){
+          if(this.props.containerTable.containerLoaded == 1 ){
+              swal("" , "Lots can't be removed for loaded container" , 'info') ;
+              return
+          }
         for(var i=0;i<len;i++){
         temp = new Object();
         temp.contLoadid = this.removeArray[i].contLoadid
@@ -238,13 +242,13 @@ debugger;
             this.removeArray = []
           }
         }).catch(function (error) {
-            console.log(error);
+
             this.loadNewData()
           });
 
     }}
     else{
-      swal("please select a row")
+      swal("Please select a row")
       return
     }
   }
@@ -521,6 +525,10 @@ changeLot(e){
       for(var i in this.state.contLoadData){
         bagsLoadedInContainer+=this.state.contLoadData[i].noOfBags
       }
+        if (bagsLoadedInContainer == "") {
+            swal("Please select a lot and load it to container.");
+            return
+        }
       if(this.SaveObj.containerDelivered){
           this.SaveObj.status = "DELIVERED"
       }
@@ -571,7 +579,6 @@ changeLot(e){
             axios.put(Base_Url+"TContainerDomestics/" + this.props.containerId ,this.SaveObj).then((response)=>{
             if(flagToSaveSealNumber){
             axios.put(Base_Url+"TContainerDomestics/"+this.props.containerTable.id,{sealNumber:this.sealNumber}).then((response)=>{
-
             })}
                   this.shipmentStatus()
                   if(!flagToDecideStatus){
@@ -614,6 +621,7 @@ changeLot(e){
 
 }
     render() {
+        console.log("this.props.containerTable", this.props.containerTable)
       debugger
       if(this.props.containerTable && this.props.containerTable.TShipmentent && this.props.containerTable.TShipmentent.TShipmentLots && this.props.containerTable.TShipmentent.TShipmentLots.length>0){
     var lotList = _.map(this.props.containerTable.TShipmentent.TShipmentLots , (data ,index)=>{
@@ -631,8 +639,6 @@ changeLot(e){
         return (
            <section className="container_detils">
         <div className="container-fluid">
-
-
         <div className="row ">
         <div className="col-lg-12">
              <div className="table-responsive border-bottom">
@@ -678,7 +684,13 @@ changeLot(e){
                             <label htmlFor="SealNumber" className="col-lg-2 control-label" style={{"paddingTop":"10"}}>Seal
                                 #</label>
                       <div className="col-lg-10" >
-                       <input type="text" className="form-control s_width" onChange={this.getSeal}   id="SealNumber" placeholder="Seal Number" />
+                          {(this.props.containerTable.sealNumber) ?
+                              <input type="text" className="form-control s_width"
+                                     value={this.props.containerTable.sealNumber} id="SealNumber"
+                                     placeholder="Seal Number"/>
+                              :
+                              <input type="text" className="form-control s_width" onChange={this.getSeal}
+                                     id="SealNumber" placeholder="Seal Number"/>}
                        <div className="error"><span></span></div>
                        </div>
                    </div>

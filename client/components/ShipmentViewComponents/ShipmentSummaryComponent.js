@@ -72,7 +72,9 @@ import React, { Component } from 'react';
                                             <li>Origin: <b>Made in {this.props.pSumData ? this.props.pSumData.TOrigin.origin : ''}</b></li>
                                             <li className=" pddn-20-top">
                                                 <label className="control control--checkbox "><b>Shipment Complete </b>
-                                                <input type="checkbox"  id="row1"/>
+                                                    {(this.props.summaryData.TShipmentInternational[0].status == "COMPLETED") ?
+                                                        <input type="checkbox" checked id="row1"/> :
+                                                        <input type="checkbox" disabled id="row1"/>}
 
                                                 <div className="control__indicator"></div>
                                             </label>

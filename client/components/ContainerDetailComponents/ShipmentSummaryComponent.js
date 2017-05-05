@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 var moment = require('moment')
  class ShipmentSummaryComponent extends Component {
 	render() {
+        console.log("aa",this.props.shipInfo.TShipmentent.TShipmentInternational[0].status)
         debugger
         var containerType = (this.props.shipInfo && this.props.shipInfo.TShipmentent && this.props.shipInfo.TShipmentent.TShipmentInternational &&  this.props.shipInfo.TShipmentent.TShipmentInternational.length > 0 && this.props.shipInfo.TShipmentent.TShipmentInternational[0].TContainerType) ? this.props.shipInfo.TShipmentent.TShipmentInternational[0].TContainerType.name : 'NA'
         var numberOfContainer = (this.props.shipInfo && this.props.shipInfo.TShipmentent) ? this.props.shipInfo && this.props.shipInfo.TShipmentent.numberOfContainers : 'NA'
@@ -91,9 +92,11 @@ var moment = require('moment')
                                             <li>Stretch Wrap: <b>{wrap}</b></li>
                                             <li>Origin: <b>Made in {origin}</b></li>
                                             <li className=" pddn-20-top">
+                                                {(this.props.shipInfo.TShipmentent.TShipmentInternational[0].status=="COMPLETED")?
                                                 <label className="control control--checkbox ">Shipment Complete
-                                                    <input type="checkbox"  /><div className="control__indicator"></div>
-                                                </label>
+                                                    <input type="checkbox" checked/>
+                                                    <div className="control__indicator"></div>
+                                                </label>:""}
                                             </li>
                                         </ul>
                                     </div>

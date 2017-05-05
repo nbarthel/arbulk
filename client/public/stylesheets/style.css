@@ -431,7 +431,7 @@ border-color: #ff4800; border: 1px solid transparent; font-weight: 400;line-heig
 
 .container_detils{margin-top: 2%; }
 .container_detils .tab-bg{ border-top-left-radius: 5px; border-top-right-radius: 5px;background:#f4f4f4; margin-bottom:10px; margin-top: 10px;border-bottom: 1px solid #ddd; cursor:pointer;}
-.container_detils .sameHeight{height:385px; min-width:300px; }
+.container_detils .sameHeight{height:400px; min-width:300px; }
 .container_detils .label_details .sameHeight{height:305px; }
 .container_detils .panel-group .panel{border-radius: 0px;}
 .container_detils .panel-default { border-color: #ddd;border-radius: 0px;}
