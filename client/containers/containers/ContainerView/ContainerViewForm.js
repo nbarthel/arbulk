@@ -84,7 +84,7 @@ class ContainerViewForm extends React.Component {
 
     print(e) {
         if (this.containerId != '' && this.isDomestic == false) {
-            console.log('print view', this.containerId)
+            //console.log('print view', this.containerId)
             hashHistory.push('/Container/containerPrint/' + this.contId)
             //hashHistory.push('/Packaging/inventorycard/'+this.piID+'/'+this.selected)
         }
@@ -110,12 +110,12 @@ class ContainerViewForm extends React.Component {
     printLoadOrder(e) {
 
         if (this.editId != undefined || this.contId != undefined) {
-            console.log('print view', this.editId + '/' + this.contId)
+            //console.log('print view', this.editId + '/' + this.contId)
             hashHistory.push('/Shipment/shipmentPrint/' + this.editId + '/' + this.contId)
             //hashHistory.push('/Packaging/inventorycard/'+this.piID+'/'+this.selected)
         }
         else {
-            console.log('mmmmmmmmmmmmmmmmmmmmm');
+            //console.log('mmmmmmmmmmmmmmmmmmmmm');
             //hashHistory.push('/Shipment/shipmentPrint/')
             swal("Selection Missing", "Please Select A Lot To View.", "error")
         }
@@ -123,7 +123,7 @@ class ContainerViewForm extends React.Component {
 
     Arrival(e) {
 
-        console.log("valueShipment type", e.target.value)
+        //console.log("valueShipment type", e.target.value)
         this.arrivalType = e.target.value
 
         Object.defineProperty(this.Where, "Arrival", {
@@ -261,7 +261,7 @@ class ContainerViewForm extends React.Component {
             //this.buttonDisplay.push(e.target.value)
             //console.log(this.props.checkedCompany)
             //console.log(this.props.buttonDisplay)
-            console.log(this.checkedCustomer)
+            //console.log(this.checkedCustomer)
         }
         else if (!e.target.checked) {
             let id = e.target.id
@@ -281,8 +281,8 @@ class ContainerViewForm extends React.Component {
     }
 
     onStatusFilter(e, status) {
-        if (e.target.checked) {
 
+        if (e.target.checked) {
             this.checkedStatus.push(e.target.value);
             Object.defineProperty(this.Where, "status", {
                 enumerable: true,
@@ -290,9 +290,10 @@ class ContainerViewForm extends React.Component {
                 configurable: true,
                 value: this.checkedStatus
             })
+                console.log( this.checkedStatus);
+            console.log(this.Where)
             //this.buttonDisplay.push(e.target.value)
             this.forceUpdate()
-
             //console.log(this.props.buttonDisplay)
             /* console.log(this.Where)
              console.log(this.checkedStatus)
@@ -300,7 +301,7 @@ class ContainerViewForm extends React.Component {
         }
         else if (!e.target.checked) {
             let value = e.target.value
-            //let pos = this.checkedStatus.indexOf(e.target.value)
+            let pos = this.checkedStatus.indexOf(e.target.value)
             this.checkedStatus = _.without(this.checkedStatus, value)
             this.Where.status = this.checkedStatus
             //console.log(this.Where.status)
@@ -308,7 +309,7 @@ class ContainerViewForm extends React.Component {
                 this.Where.status = undefined
                 delete this.Where.status
             }
-            console.log(this.Where)
+
             //let value = e.target.value
             let index = this.buttonDisplay.indexOf(e.target.value)
             if (index !== -1)
@@ -326,8 +327,8 @@ class ContainerViewForm extends React.Component {
     }
 
     onRemove(e) {
-        console.log("clicked")
-        console.log("WHERE", this.Where)
+        //console.log("clicked")
+        //console.log("WHERE", this.Where)
         this.buttonDisplay = [];
         this.checkedCustomer = []
         this.checkedStatus = []
@@ -356,11 +357,11 @@ class ContainerViewForm extends React.Component {
 
     onCheckboxChange(e, data, contData) {
         this.containerData = contData
-        console.log(">>>>>>>>>>>>>Contaimner Data", this.containerData)
+        //console.log(">>>>>>>>>>>>>Contaimner Data", this.containerData)
         this.contId = contData.id
         this.type = data.isDomestic
         this.editId = data.id
-        console.log("DATA", data)
+        //console.log("DATA", data)
         this.parentShipId = (data.TContainerInternational && data.TContainerInternational.length > 0 ) ? data.TContainerInternational[0].id : ''
         this.shipmentid = (data.TShipmentInternational && data.TShipmentInternational.length > 0) ? data.TShipmentInternational[0].id : ''
         if (data.isDomestic == 1) {
@@ -465,7 +466,6 @@ class ContainerViewForm extends React.Component {
             var container = []
             var obj2 = {}
             for (var i in this.Where.Container) {
-
                 obj2 = {"containerTypeId": this.Where.Container[i]}
                 container.push(obj2);
             }
@@ -473,7 +473,7 @@ class ContainerViewForm extends React.Component {
             searchContainerFlag = true
         }
 
-        console.log("Search object", serachObj)
+        //console.log("Search object", serachObj)
 
         if (this.Where != undefined && this.Where != null) {
             if (this.Where.Customer && this.Where.Customer.length > 0) {
@@ -497,6 +497,7 @@ class ContainerViewForm extends React.Component {
             }
 
             if (this.Where.status && this.Where.status.length) {
+
                 var Railstatus = [];
                 var objStatus = {};
                 for (var z in this.Where.status) {
@@ -504,6 +505,7 @@ class ContainerViewForm extends React.Component {
                     Railstatus.push(objStatus)
                 }
                 serachObjLots.push(Railstatus)
+                console.log("abc")
             }
 
             if (this.Where.Query && this.Where.Query != null && this.Where.Query != undefined && this.Where.Query.POSearch && this.Where.Query.POSearch != undefined) {
@@ -566,8 +568,9 @@ class ContainerViewForm extends React.Component {
 
                 });
             }
-
+            console.log("d",serachObjLots.length);
             if (serachObjLots && serachObjLots.length > 0) {
+                console.log("aaa");
                 this.url = PIview._buildUrl(base, {
                     "include": [{
                         "relation": "TContainerDomestic",
@@ -584,12 +587,17 @@ class ContainerViewForm extends React.Component {
                         "and": [
                             {"or": customer},
                             {"or": company},
-                            {"or": lotSearch}
+                            {"or": lotSearch},
+
                         ]
                     }
 
                 });
             }
+            //console.log("a",tempsteamp);
+            //console.log("b",serachObj.length);
+            //console.log("c",arrival.length);
+
             if (tempsteamp != -1 && serachObj.length > 0 && arrival.length > 0 && serachObjLots.length == 0) {
                 this.url = PIview._buildUrl(base, {
                     "include": [{
@@ -635,7 +643,6 @@ class ContainerViewForm extends React.Component {
                             {"or": customer},
                             {"or": company},
                             {"or": lotSearch}
-
                         ]
                     }
 
@@ -729,6 +736,24 @@ class ContainerViewForm extends React.Component {
 
                 });
             }
+            else {
+                console.log("xyz")
+                this.url = PIview._buildUrl(base, {
+                    "include":
+                    [{
+                        "relation": "TContainerDomestic",
+                        "scope": {"include": "TCompany"}
+                    }, {
+                        "relation": "TContainerInternational",
+                        "scope": {"include": "TCompany"}
+                    }, "TCompany", "TLocation", "TShipmentDomestic", {
+                        "relation": "TShipmentInternational",
+                        "scope": {"include": ["TContainerType", "TSteamshipLine"]}
+                    }]
+                });
+
+
+            }
             $.ajax({
                 url: this.url,
                 success: function (data) {
@@ -781,12 +806,13 @@ class ContainerViewForm extends React.Component {
                     }
                     searchContainerFlag = false
                     steamflag = false
-                    console.log('ajax ', data);
+
                     localStorage.setItem('conViewData', JSON.stringify(data))
                     this.setState({
                         viewData: data,
                         loaded: true
                     })
+
                     this.forceUpdate()
 
                 }.bind(this)
@@ -872,8 +898,9 @@ class ContainerViewForm extends React.Component {
                 }
                 serachObj.push(company)
             }
-
+            console.log("aaa");
             if (this.Where.status && this.Where.status.length) {
+                console.log("aa1a");
                 var Railstatus = [];
                 var objStatus = {};
                 for (var z in this.Where.status) {
@@ -881,6 +908,7 @@ class ContainerViewForm extends React.Component {
                     Railstatus.push(objStatus)
                 }
                 serachObjLots.push(Railstatus)
+               // console.log(serachObjLots)
             }
 
             if (this.Where.Query && this.Where.Query != null && this.Where.Query != undefined && this.Where.Query.POSearch && this.Where.Query.POSearch != undefined) {
@@ -915,7 +943,7 @@ class ContainerViewForm extends React.Component {
             serachObj = [].concat.apply([], serachObj);
             serachObjLots = [].concat.apply([], serachObjLots);
             containerSearch = [].concat.apply([], containerSearch);
-            console.log("search obj second", serachObj, serachObjLots)
+            //console.log("search obj second", serachObj, serachObjLots)
             var PIview = createDataLoader(ContainerViewForm, {
                 queries: [{
                     endpoint: 'TPackagingInstructions',
@@ -990,7 +1018,6 @@ class ContainerViewForm extends React.Component {
                             {"or": customer},
                             {"or": company},
                             {"or": lotSearch}
-
                         ]
                     }
 
@@ -1184,11 +1211,11 @@ class ContainerViewForm extends React.Component {
             "modifiedOn": "2016-09-26",
             "active": 1
         }
-        console.log("Save Customer View", saveCustomView);
+        //console.log("Save Customer View", saveCustomView);
         if (saveCustomView.viewFilters != undefined && saveCustomView.viewFilters != null && saveCustomView.viewFilters != {}) {
             axios.post(Base_Url + "TCustomViews", saveCustomView).then(response=> {
                 swal('Success', "Successfully Saved...", 'success');
-                console.log("response", response)
+                //console.log("response", response)
 
                 axios.get(Base_Url + "TCustomViews").then(response=> {
                     this.setState({
@@ -1339,12 +1366,12 @@ class ContainerViewForm extends React.Component {
     onTextChange(e) {
         var idValue = e.target.id
         this.Query[idValue] = e.target.value
-        console.log(this.Query)
+        //console.log(this.Query)
         this.onSearch(e)
     }
 
     SteamLine(e) {
-        console.log("valueShipment type", e.target.value)
+        //console.log("valueShipment type", e.target.value)
         this.SteamLine = e.target.value
         Object.defineProperty(this.Where, "SteamLine", {
             enumerable: true,
@@ -1357,7 +1384,7 @@ class ContainerViewForm extends React.Component {
 
     lotSearch(e) {
         this.Query[e.target.id] = e.target.getAttribute('value')
-        console.log(this.Query)
+        //console.log(this.Query)
         document.getElementById('LotSearch').value = e.target.getAttribute('value')
         this.onSearch(e)
 
@@ -1384,6 +1411,7 @@ class ContainerViewForm extends React.Component {
 
             filterData = this.state.viewData;
         }
+
         return (
             <section className="side-filter">
                 <div className="menu-bg hidden-md hidden-lg hidden-sm  visible-xs-block">
