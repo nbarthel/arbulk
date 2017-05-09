@@ -103,17 +103,13 @@ export default class PackagingInstructionViewForm extends React.Component {
             })
         })
 
-
-
     }
     getdt(a){
         a.id=="1"?this.startDate = a.tempDate:this.endDate=a.tempDate;
         this.onSearch(a)
     }
     onTextChange(e){
-
         var idValue = e.target.id
-
         this.Query[idValue] = e.target.value
         this.onSearch(e)
     }
@@ -366,7 +362,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                             viewData : data
                         }
                     )
-
+                    this.forceUpdate();
                 }.bind(this)
 
             })
@@ -382,11 +378,8 @@ export default class PackagingInstructionViewForm extends React.Component {
                 configurable:true,
                 value:this.checkedCompany})
 
-
-
         }
         else if (!e.target.checked){
-
             let id = e.target.id
             this.checkedCompany = _.without(this.checkedCompany,id)
             this.Where.Company = this.checkedCompany
@@ -474,7 +467,7 @@ export default class PackagingInstructionViewForm extends React.Component {
         var blob = e.target.value
         var changedView = this.state.savedViews[index -1]
         this.Where = JSON.parse(blob)
-        console.log(this.Where)
+
         var serachObj = []
         var serachObjLots =[]
         var cutofFilter = []
@@ -679,6 +672,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                             viewData : data
                         }
                     )
+                    this.forceUpdate()
 
                 }.bind(this)
 
@@ -880,7 +874,19 @@ export default class PackagingInstructionViewForm extends React.Component {
         }
     }
     onHideColumn(e,name){
-        console.log(e.target.name)
+
+        setTimeout(function () {
+        $("#Packaging_Instruction_View").colResizable({
+            disable: true
+        });
+
+        $("#Packaging_Instruction_View").colResizable({
+            liveDrag:false,
+            gripInnerHtml:"<div class='grip'></div>",
+            draggingClass:"dragging",
+        });
+        },100);
+
         switch(e.target.name){
             case "ARB" :
                 if(this.state.showARB == ""){

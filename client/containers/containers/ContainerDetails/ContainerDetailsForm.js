@@ -21,8 +21,8 @@ class ContainerDetailsForm extends React.Component {
             editing : false,
             currentIntObject : undefined,
             ContainerLoadKey : 0,
-            currentInventoryKey : 0
-
+            currentInventoryKey : 0,
+            sealNumber:''
         }
         this.lotId
         this.obj = { }
@@ -54,7 +54,9 @@ class ContainerDetailsForm extends React.Component {
         this.getSeal = this.getSeal.bind(this)
         this.sealNumber = ''
     }
-
+    componentWillMount() {
+        this.state.sealNumber = this.props.containerTable?this.props.containerTable.sealNumber:''
+    }
     allValuesSame(arr) {
 
        for(var i = 1; i < arr.length; i++)
@@ -67,7 +69,7 @@ class ContainerDetailsForm extends React.Component {
    }
 
 shipmentStatus(){
-  debugger;
+
 this.sID = this.props.shipID
  var CDView = createDataLoader(ContainerDetailsForm, {
      queries:[{
@@ -125,7 +127,7 @@ if(this.props.isDomestic == "1"){
   })
 }
 else if(this.props.isDomestic == "0" ){
-  debugger;
+
   let shipInt = this.props.containerTable.TShipmentent.TShipmentInternational[0].id
     var stat = this.statusArray[0] == "DELIVERED" ? "COMPLETED" : this.statusArray[0]
   axios.put(Base_Url + "TShipmentInternationals/"+ shipInt , {status : stat}).then((response)=>{
@@ -145,12 +147,16 @@ else{
 }
 
 getSeal(e){
-  debugger
-  this.sealNumber = e.target.value;
+
+this.setState({
+    sealNumber:e.target.value
+})
+
+
+
 }
     onLeftClick(e){
 
-      debugger
       var temObj,tempDelObj,len=this.cIArray.length;
     if(len > 0){
       for(var i=0;i<len;i++){
@@ -163,13 +169,13 @@ getSeal(e){
       axios.post(Base_Url+"TContainerLoads",temObj)
       axios.post(Base_Url+"TPiInventories/SubtractInventory",id).then((response) => {
            if(i>=len-1){
-             debugger
+
              this.loadNewData()
              swal("","Loaded","success")
              this.removeArray = []
            }
          }).catch(function (error) {
-           debugger
+
              console.log(error);
              this.loadNewData()
            });
@@ -181,9 +187,7 @@ getSeal(e){
 
     }
     handleCheckbox(e){
-//"addloaded"
-debugger;
-        console.log(e.target.value)
+
       if(e.target.checked){
           if(e.target.name == "containerInTransit" && !this.props.containerTable.containerLoaded){
               swal("" , "Container is not loaded yet" , 'info')
@@ -222,7 +226,7 @@ debugger;
     }
 
     onRightClick(e){
-        debugger
+
       var temp,len = this.removeArray.length;
       if(len>0){
           if(this.props.containerTable.containerLoaded == 1 ){
@@ -254,11 +258,6 @@ debugger;
   }
     componentDidMount(){
      this.containertable = this.props.containerTable
-
-
-
-
-
      //this.load_cont_Id  = this.props.containerTable.id
      //this.lotId = (this.props.containerTable && this.props.containerTable.TShipmentLots && this.props.containerTable.TShipmentLots.length>0 && this.props.containerTable.TShipmentLots[0].TPackagingInstructionsLots ) ? this.props.containerTable.TShipmentLots[0].TPackagingInstructionsLots.id : ''
       /*      this.url = Base_Url+"TInventoryLocations/addbagweight"
@@ -270,7 +269,7 @@ onCancelClick(e){
   })
 }
 handleContainerLoadChecks(e,data){
-  debugger
+
   if(e.target.checked){
  this.contLoadid = data.id
  this.pInventId = data.piInventId
@@ -288,7 +287,7 @@ handleContainerLoadChecks(e,data){
  }
 }
 handleCurrentInvChecks(e,data){
-  debugger
+
 
   if(e.target.checked){
     this.obj.id = 0
@@ -303,9 +302,6 @@ handleCurrentInvChecks(e,data){
             this.obj.loadContId = this.props.containerTable.id
             this.obj.loadContDId =null
         }
-
-
-
     this.obj.lotId = parseInt(this.lotId)
     this.obj.createdBy = this.userId
     this.obj.active = 1
@@ -401,7 +397,7 @@ loadNewData(){
        /* $.ajax({
             url: this.urlnew,
             success:function(data){
-                debugger;
+                ;
                 console.log(">>>>>>>>>>>> ajax" , data)
                 this.CIData = data
                 this.setState({
@@ -460,7 +456,7 @@ changeLot(e){
         $.ajax({
             url: this.urlnew,
             success:function(data){
-                debugger;
+
                 this.CIData = data
                 this.setState({
                     currentIntObject : this.CIData,
@@ -508,13 +504,14 @@ changeLot(e){
       }
     }
     onSaveClick(e){
-      debugger
+
       var bagsLoadedInContainer =0
       var flagToDecideStatus = false;
       var flagToSaveSealNumber = false;
-      if(this.sealNumber==''){
-        this.sealNumber = this.props.containerTable?this.props.containerTable.sealNumber:''
-        if(this.sealNumber==''){
+
+      if(this.state.sealNumber==''){
+        this.state.sealNumber = this.props.containerTable?this.props.containerTable.sealNumber:''
+        if(this.state.sealNumber==''){
         swal("Please Enter Seal Number");
         return
       }
@@ -555,7 +552,7 @@ changeLot(e){
         if(this.props.isDomestic == 0){
             axios.put(Base_Url+"TContainerInternationals/" + this.props.containerTable.id ,this.SaveObj).then((response)=>{
           if(flagToSaveSealNumber){
-            axios.put(Base_Url+"TContainerInternationals/"+this.props.containerTable.id,{sealNumber:this.sealNumber}).then((response)=>{
+            axios.put(Base_Url+"TContainerInternationals/"+this.props.containerTable.id,{sealNumber:this.state.sealNumber}).then((response)=>{
             })}
           // if(flagToDecideStatus){
           //   for(var i in array){
@@ -578,7 +575,7 @@ changeLot(e){
         else if(this.props.isDomestic == 1){
             axios.put(Base_Url+"TContainerDomestics/" + this.props.containerId ,this.SaveObj).then((response)=>{
             if(flagToSaveSealNumber){
-            axios.put(Base_Url+"TContainerDomestics/"+this.props.containerTable.id,{sealNumber:this.sealNumber}).then((response)=>{
+            axios.put(Base_Url+"TContainerDomestics/"+this.props.containerTable.id,{sealNumber:this.state.sealNumber}).then((response)=>{
             })}
                   this.shipmentStatus()
                   if(!flagToDecideStatus){
@@ -589,7 +586,7 @@ changeLot(e){
             })
         }
           if(flagToDecideStatus){
-            debugger
+
                for(var i in array){
                  var sum =0;
                  var temp=0
@@ -621,11 +618,11 @@ changeLot(e){
 
 }
     render() {
-        console.log("this.props.containerTable", this.props.containerTable)
-      debugger
+
+
       if(this.props.containerTable && this.props.containerTable.TShipmentent && this.props.containerTable.TShipmentent.TShipmentLots && this.props.containerTable.TShipmentent.TShipmentLots.length>0){
     var lotList = _.map(this.props.containerTable.TShipmentent.TShipmentLots , (data ,index)=>{
-        debugger;
+
         return(
             <option value={data.TPackagingInstructionLots.id}>{data.TPackagingInstructionLots.lot_number}</option>
 
@@ -684,13 +681,11 @@ changeLot(e){
                             <label htmlFor="SealNumber" className="col-lg-2 control-label" style={{"paddingTop":"10"}}>Seal
                                 #</label>
                       <div className="col-lg-10" >
-                          {(this.props.containerTable.sealNumber) ?
-                              <input type="text" className="form-control s_width"
-                                     value={this.props.containerTable.sealNumber} id="SealNumber"
+
+                              <input type="text" className="form-control s_width"  onChange={this.getSeal}
+                                     value={this.state.sealNumber} id="SealNumber"
                                      placeholder="Seal Number"/>
-                              :
-                              <input type="text" className="form-control s_width" onChange={this.getSeal}
-                                     id="SealNumber" placeholder="Seal Number"/>}
+
                        <div className="error"><span></span></div>
                        </div>
                    </div>

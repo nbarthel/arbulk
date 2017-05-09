@@ -84,7 +84,7 @@ class ContainerViewForm extends React.Component {
 
     print(e) {
         if (this.containerId != '' && this.isDomestic == false) {
-            //console.log('print view', this.containerId)
+
             hashHistory.push('/Container/containerPrint/' + this.contId)
             //hashHistory.push('/Packaging/inventorycard/'+this.piID+'/'+this.selected)
         }
@@ -290,8 +290,7 @@ class ContainerViewForm extends React.Component {
                 configurable: true,
                 value: this.checkedStatus
             })
-                console.log( this.checkedStatus);
-            console.log(this.Where)
+
             //this.buttonDisplay.push(e.target.value)
             this.forceUpdate()
             //console.log(this.props.buttonDisplay)
@@ -380,7 +379,7 @@ class ContainerViewForm extends React.Component {
     }
 
     addToqueue() {
-        debugger;
+
         if (!this.containerData.containerSteamshipLineConfirmed) {
             swal("", "Domestic container can not be in queue", 'info')
             return;
@@ -462,6 +461,7 @@ class ContainerViewForm extends React.Component {
         }
 
         var searchContainerFlag = false
+
         if (this.Where.Container && this.Where.Container.length > 0) {
             var container = []
             var obj2 = {}
@@ -505,7 +505,7 @@ class ContainerViewForm extends React.Component {
                     Railstatus.push(objStatus)
                 }
                 serachObjLots.push(Railstatus)
-                console.log("abc")
+
             }
 
             if (this.Where.Query && this.Where.Query != null && this.Where.Query != undefined && this.Where.Query.POSearch && this.Where.Query.POSearch != undefined) {
@@ -540,7 +540,7 @@ class ContainerViewForm extends React.Component {
             serachObj = [].concat.apply([], serachObj);
             serachObjLots = [].concat.apply([], serachObjLots);
             containerSearch = [].concat.apply([], containerSearch);
-            console.log("search obj second", serachObj, serachObjLots)
+
             var PIview = createDataLoader(ContainerViewForm, {
                 queries: [{
                     endpoint: 'TPackagingInstructions',
@@ -555,7 +555,9 @@ class ContainerViewForm extends React.Component {
 
             var base = 'TShipmentents';
             //TPackagingInstructionLots TContainerInternational
-            if ((containerSearch && containerSearch.length > 0)) {
+
+            if ((containerSearch && containerSearch.length > 0  )) {
+
 
                 this.url = PIview._buildUrl(base, {
                     "include": ["TContainerInternational", "TCompany", "TLocation", "TShipmentDomestic",
@@ -568,9 +570,9 @@ class ContainerViewForm extends React.Component {
 
                 });
             }
-            console.log("d",serachObjLots.length);
-            if (serachObjLots && serachObjLots.length > 0) {
-                console.log("aaa");
+
+            if (serachObjLots && serachObjLots.length > 0 ) {
+
                 this.url = PIview._buildUrl(base, {
                     "include": [{
                         "relation": "TContainerDomestic",
@@ -593,6 +595,23 @@ class ContainerViewForm extends React.Component {
                     }
 
                 });
+            }
+            else {
+
+                this.url = PIview._buildUrl(base, {
+                    "include":
+                    [{
+                        "relation": "TContainerDomestic",
+                        "scope": {"include": "TCompany"}
+                    }, {
+                        "relation": "TContainerInternational",
+                        "scope": {"include": "TCompany"}
+                    }, "TCompany", "TLocation", "TShipmentDomestic", {
+                        "relation": "TShipmentInternational",
+                        "scope": {"include": ["TContainerType", "TSteamshipLine"]}
+                    }]
+                });
+
             }
             //console.log("a",tempsteamp);
             //console.log("b",serachObj.length);
@@ -629,7 +648,7 @@ class ContainerViewForm extends React.Component {
             }
 
             else if (tempsteamp != -1 && serachObj.length >= 0 && arrival.length >= 0 && serachObjLots.length == 0) {
-                debugger;
+
                 this.url = PIview._buildUrl(base, {
                     "include": [{
                         "relation": "TContainerInternational",
@@ -650,7 +669,7 @@ class ContainerViewForm extends React.Component {
             }
 
             else if (tempsteamp != -1 && arrival.length >= 0 && serachObj.length == 0 && serachObjLots.length == 0) {
-                debugger;
+
                 this.url = PIview._buildUrl(base, {
                     "include": [{
                         "relation": "TContainerInternational",
@@ -736,28 +755,11 @@ class ContainerViewForm extends React.Component {
 
                 });
             }
-            else {
-                console.log("xyz")
-                this.url = PIview._buildUrl(base, {
-                    "include":
-                    [{
-                        "relation": "TContainerDomestic",
-                        "scope": {"include": "TCompany"}
-                    }, {
-                        "relation": "TContainerInternational",
-                        "scope": {"include": "TCompany"}
-                    }, "TCompany", "TLocation", "TShipmentDomestic", {
-                        "relation": "TShipmentInternational",
-                        "scope": {"include": ["TContainerType", "TSteamshipLine"]}
-                    }]
-                });
 
-
-            }
             $.ajax({
                 url: this.url,
                 success: function (data) {
-                    debugger;
+
                     if (searchContainerFlag) {
                         var temp = []
                         for (var i in containerSearch) {
@@ -898,9 +900,9 @@ class ContainerViewForm extends React.Component {
                 }
                 serachObj.push(company)
             }
-            console.log("aaa");
+
             if (this.Where.status && this.Where.status.length) {
-                console.log("aa1a");
+
                 var Railstatus = [];
                 var objStatus = {};
                 for (var z in this.Where.status) {
@@ -908,7 +910,7 @@ class ContainerViewForm extends React.Component {
                     Railstatus.push(objStatus)
                 }
                 serachObjLots.push(Railstatus)
-               // console.log(serachObjLots)
+
             }
 
             if (this.Where.Query && this.Where.Query != null && this.Where.Query != undefined && this.Where.Query.POSearch && this.Where.Query.POSearch != undefined) {
@@ -922,7 +924,6 @@ class ContainerViewForm extends React.Component {
             }
             var arrivalData = {"containerArrived": -1}
             if (this.Where.Arrival == "1" || this.Where.Arrival == "0") {
-
                 arrivalData = {"containerArrived": parseInt(this.Where.Arrival)}
                 arrival.push(arrivalData)
                 intl.push(arrivalData)
@@ -943,7 +944,7 @@ class ContainerViewForm extends React.Component {
             serachObj = [].concat.apply([], serachObj);
             serachObjLots = [].concat.apply([], serachObjLots);
             containerSearch = [].concat.apply([], containerSearch);
-            //console.log("search obj second", serachObj, serachObjLots)
+
             var PIview = createDataLoader(ContainerViewForm, {
                 queries: [{
                     endpoint: 'TPackagingInstructions',
@@ -1025,7 +1026,7 @@ class ContainerViewForm extends React.Component {
             }
 
             else if (tempsteamp != -1 && serachObj.length >= 0 && arrival.length >= 0 && serachObjLots.length == 0) {
-                debugger;
+
                 this.url = PIview._buildUrl(base, {
                     "include": [{
                         "relation": "TContainerInternational",
@@ -1047,7 +1048,7 @@ class ContainerViewForm extends React.Component {
             }
 
             else if (tempsteamp != -1 && arrival.length >= 0 && serachObj.length == 0 && serachObjLots.length == 0) {
-                debugger;
+
                 this.url = PIview._buildUrl(base, {
                     "include": [{
                         "relation": "TContainerInternational",
@@ -1136,7 +1137,7 @@ class ContainerViewForm extends React.Component {
             $.ajax({
                 url: this.url,
                 success: function (data) {
-                    debugger;
+
                     if (searchContainerFlag) {
                         var temp = []
                         for (var i in containerSearch) {
@@ -1211,11 +1212,11 @@ class ContainerViewForm extends React.Component {
             "modifiedOn": "2016-09-26",
             "active": 1
         }
-        //console.log("Save Customer View", saveCustomView);
+
         if (saveCustomView.viewFilters != undefined && saveCustomView.viewFilters != null && saveCustomView.viewFilters != {}) {
             axios.post(Base_Url + "TCustomViews", saveCustomView).then(response=> {
                 swal('Success', "Successfully Saved...", 'success');
-                //console.log("response", response)
+
 
                 axios.get(Base_Url + "TCustomViews").then(response=> {
                     this.setState({
@@ -1366,12 +1367,12 @@ class ContainerViewForm extends React.Component {
     onTextChange(e) {
         var idValue = e.target.id
         this.Query[idValue] = e.target.value
-        //console.log(this.Query)
+
         this.onSearch(e)
     }
 
     SteamLine(e) {
-        //console.log("valueShipment type", e.target.value)
+
         this.SteamLine = e.target.value
         Object.defineProperty(this.Where, "SteamLine", {
             enumerable: true,
@@ -1384,7 +1385,7 @@ class ContainerViewForm extends React.Component {
 
     lotSearch(e) {
         this.Query[e.target.id] = e.target.getAttribute('value')
-        //console.log(this.Query)
+
         document.getElementById('LotSearch').value = e.target.getAttribute('value')
         this.onSearch(e)
 

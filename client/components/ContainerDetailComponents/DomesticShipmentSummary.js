@@ -76,9 +76,10 @@ import React, { Component } from 'react';
 											<li>Stretch Wrap: <b>{this.props.shipInfo ? this.props.shipInfo.TShipmentent.TShipmentLots[0].TPackagingInstructions.TWrapType.name:''}</b></li>
 											<li>Origin: <b>Made in {this.props.shipInfo ? this.props.shipInfo.TShipmentent.TShipmentLots[0].TPackagingInstructions.TOrigin.origin:''}</b></li>
 											<li className=" pddn-20-top">
+												{(this.props.shipInfo.TShipmentent.TShipmentDomestic[0].status=="COMPLETED")?
 											   <label className="control control--checkbox ">Shipment Complete
-												  <input type="checkbox"  /><div className="control__indicator"></div>
-												</label>
+												  <input type="checkbox"  checked/><div className="control__indicator"></div>
+												</label>:""}
 											</li>
 										</ul>
 									</div>
