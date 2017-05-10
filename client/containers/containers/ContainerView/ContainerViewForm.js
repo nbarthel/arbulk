@@ -239,6 +239,13 @@ class ContainerViewForm extends React.Component {
                 //console.log(this.Where)
                 delete this.Where.Company
             }
+            Object.defineProperty(this.Where, "Container", {
+                enumerable: true,
+                writable: true,
+                configurable: true,
+                value: this.checkedContainer
+            });
+
             let value = e.target.value
             let index = this.buttonDisplay.indexOf(e.target.value)
             if (index !== -1)
