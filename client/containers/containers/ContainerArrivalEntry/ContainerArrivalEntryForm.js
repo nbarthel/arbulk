@@ -50,9 +50,9 @@ class  ContainerArrivalEntryForm extends React.Component {
         this.pickupTrucker = ''
         this.containerNumber = ''
         this.trackingNumber = ''
-        this.containerArrived = 0
+        this.containerArrived = 1
         this.containerTNumber = ''
-        this.ContainerArrivedInt = 0
+        this.ContainerArrivedInt = 1
         this.ContainerSteamLineConfirmed = 0
         this.ContainerTypeConfirmed = 0
         this.chassisNumber = ''
@@ -355,12 +355,12 @@ onTrackChange(e){
   console.log("Track",this.trackNumber)
 }
 handleContainerCheck(e){
-  if(e.target.checked){
-    this.containerArrived = 1
-  }
-  else if(!e.target.checked){
-    this.containerArrived = 0
-  }
+    if(e.target.checked){
+        this.containerArrived = 1
+    }
+    else if(!e.target.checked){
+        this.containerArrived = 0
+    }
 }
 isValid(){
   const { domesticErrors , isValid, haveSpecialChar } = validateInput(this.postObj);
@@ -635,7 +635,7 @@ if(e.target.checked){
   }
 
   toogleTab(e){
-    
+
     this.refs.international.value = ""
      this.refs.domestic.value = ""
      this.IntPostObj = { }
@@ -650,9 +650,9 @@ if(e.target.checked){
      this.containerNumber = ''
      this.sealNumber = ''
      this.trackingNumber = ''
-     this.containerArrived = 0
+     this.containerArrived = 1
      this.containerTNumber = ''
-     this.ContainerArrivedInt = 0
+     this.ContainerArrivedInt = 1
      this.ContainerSteamLineConfirmed = 0
      this.ContainerTypeConfirmed = 0
      this.chassisNumber = ''
@@ -824,7 +824,7 @@ if(e.target.checked){
                                <div className="form-group">
                                     <div className=" col-lg-6 col-md-8 col-sm-6 col-xs-12 ">
                                         <label className="control control--checkbox ">Container Arrived?
-                                          <input type="checkbox"  onChange = {this.handleContainerArrivedCheck} id="row1"/><div className="control__indicator"></div>
+                                          <input type="checkbox" defaultChecked={this.ContainerArrivedInt} onChange = {this.handleContainerArrivedCheck} id="row1"/><div className="control__indicator"></div>
                                         </label>
                                     </div>
 
@@ -967,7 +967,7 @@ if(e.target.checked){
                             <div className="form-group pddn-10-top">
                                 <div className=" col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
                                     <label className="control control--checkbox "> Container Arrived?
-                                      <input type="checkbox" onChange = {this.handleContainerCheck}  id="row1"/><div className="control__indicator"></div>
+                                      <input type="checkbox" onChange = {this.handleContainerCheck} defaultChecked={this.containerArrived} id="row1"/><div className="control__indicator"></div>
                                     </label>
                                 </div>
                             </div>
