@@ -101,7 +101,7 @@ var moment = require('moment')
                                         </ul>
                                     </div>
                                 </fieldset>
-		);
+		); 
 	}
 }
 export default ShipmentSummaryComponent
