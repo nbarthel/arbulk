@@ -571,7 +571,7 @@ debugger
 
 
         return (
-            <div style={{marginLeft: '20%',marginRight: '18%'}}>
+            <div style={{}}>
 
  {formData}
   <button id="create_print" type="button" className="create_btn_shipment" onClick = {this.onPrint} style={{"float" : "left"}} data-html2canvas-ignore="true">Print </button>

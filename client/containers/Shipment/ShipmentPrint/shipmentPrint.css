@@ -3,13 +3,13 @@ body {font-size: 14px;  font-weight:300; margin: 0; padding: 0;   background:#ff
 .warpper-inner_shipment{min-height: 100%; padding:50px 0px; width:800px;  height:100%; }
 .content-inside_shipment{padding-bottom: 50px;   position:relative;  z-index:1; }
 h3{margin:0px; padding:0px; font-weight:600;}
-.logoShipment{width:100%; padding-bottom: 25px;}
+.logoShipment{width:100%; padding-bottom: 50px;}
 .logoShipment .img{width:30%; text-align:left; }
 .logoShipment .text{width:70%; text-align:right; font-size:24px; text-transform:uppercase; font-weight:600;  vertical-align:middle;}
 .door{ float:right; text-align:right;}
 
 .loadOrder{ width:100%; clear:both; padding-top: 30px; padding: 5px;}
-.loadOrder .loadOrder_data{width:33.33%; padding-bottom: 50px; float: left;padding-top: 5px;}
+.loadOrder .loadOrder_data{width:33.33%; padding-bottom: 100px; float: left;padding-top: 5px;}
 .loadOrder .loadOrder_data table{border:1px solid #000;  border-collapse: collapse;}
 .loadOrder .loadOrder_data table td{padding: 6px 10px;font-size: 14px;white-space:normal;overflow:  hidden;text-overflow: ellipsis;  vertical-align: middle; border:1px solid #000;}
 .loadOrder .loadOrder_data table tr.spacel{height: 60px;}
@@ -38,7 +38,7 @@ h3{margin:0px; padding:0px; font-weight:600;}
 
 .verification{ border-top:1px solid #000; width:100%; clear:both; padding-bottom: 50px;}
 .verification .verification_data{ width:60%;}
-.verification .verification_data span{display:block; text-align:right; line-height:50px}
+.verification .verification_data span{display:block; text-align:right; line-height:25px}
 .create_btn_shipment{float: right;padding: 10px 15px;width: 188px;margin-top: 10px;margin-bottom: 50px;}
 .create_btn1_shipment{float: left;padding: 10px 15px;width: 188px;margin-top: 10px;margin-bottom: 50px;}
 .logo_icon_shipment{background: url("../../../public/img/logo.png");height: 50px; width: 200px; background-repeat: no-repeat;}

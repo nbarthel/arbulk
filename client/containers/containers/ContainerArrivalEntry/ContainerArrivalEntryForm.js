@@ -28,7 +28,9 @@ class  ContainerArrivalEntryForm extends React.Component {
         index:0,
         domesticErrors : { },
         intErrors : { },
-        loaded : false
+        loaded : false,
+        ContainerTypeConfirmed:0,
+        ContainerSteamLineConfirmed:0,
         }
         this.IntPostObj = {containerNumber: '',
                         pickupTruckerId: '',
@@ -395,7 +397,7 @@ onSave(e){
   if(parseInt(arrivedDom) + parseInt(arrivedInt) == parseInt(totalContainer))
   {
   EnableClick('Save')
-  swal("" , "Arrived containers can not be more than assigned containers" , "info")
+  swal("" , "Arrived containers can not be more than assigned containers", "info")
   return
 }
 }
@@ -429,6 +431,7 @@ else if(this.shipmentType == 0){
     swal("Missing","Please Select A Booking Number","info")
     return
       }
+
   this.postObj.shipmentId = parseInt(this.shipmentId)
   this.postObj.truckerId = this.truckerId
   this.postObj.pickupTrucker = this.pickupTrucker
@@ -502,6 +505,18 @@ if(this.shipmentId == ""){
   swal("Missing","Please Select A Booking Number","info")
   return
 }
+
+    if(this.state.ContainerTypeConfirmed===0){
+        EnableClick('IntSave')
+        swal("Missing","Please confirm container type ","info")
+        return
+    }
+    console.log(this.state.ContainerSteamLineConfirmed);
+    if(this.state.ContainerSteamLineConfirmed===0){
+        EnableClick('IntSave')
+        swal("Missing","Please confirm steamship line","info")
+        return
+    }
   this.IntPostObj.shipmentId = parseInt(this.shipmentId)
   this.IntPostObj.truckerId = this.truckerId
   this.IntPostObj.pickupTruckerId = this.pickupTrucker
@@ -539,17 +554,22 @@ onContainerTChange(e){
   this.containerTNumber = e.target.value
 }
 handleContainerTypeCheck(e){
+    console.log("container",e);
 if(e.target.checked){
   this.ContainerTypeConfirmed = 1
+    this.setState({ContainerTypeConfirmed:1})
 }else if(!e.target.checked){
   this.ContainerTypeConfirmed = 0
+    this.setState({ContainerTypeConfirmed:0})
 }
 }
 handleContainerSteamLineCheck(e){
 if(e.target.checked){
   this.ContainerSteamLineConfirmed = 1
+    this.setState({ContainerSteamLineConfirmed:1})
 }else if(!e.target.checked){
   this.ContainerSteamLineConfirmed = 0
+    this.setState({ContainerSteamLineConfirmed:0})
 }
 }
 handleContainerArrivedCheck(e){
@@ -798,12 +818,12 @@ if(e.target.checked){
                                 <div className="form-group pddn-10-top">
                                     <div className=" col-lg-6 col-md-8 col-sm-6 col-xs-12 ">
                                         <label className="control control--checkbox ">Container Type Confirmed?
-                                          <input type="checkbox" onChange = {this.handleContainerTypeCheck} id="row1"/><div className="control__indicator"></div>
+                                          <input type="checkbox" onClick = {this.handleContainerTypeCheck} id="row1"/><div className="control__indicator"></div>
                                         </label>
                                     </div>
 
                                     <div className="col-lg-6 col-md-4 col-sm-6 col-xs-12 text_right">
-                                     <label htmlFor="Container_Type"  className="">
+                                     <label htmlFor="Container_Type">
                                     {(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?"Container Type: "+this.state.IntlData.TShipmentInternational[0].TContainerType.name : "Container Type"}
                                      </label>
 
@@ -813,7 +833,7 @@ if(e.target.checked){
                                 <div className="form-group">
                                     <div className=" col-lg-6 col-md-8 col-sm-6 col-xs-12 ">
                                         <label className="control control--checkbox ">Container Steamship Line Type Confirmed?
-                                          <input type="checkbox" onChange = {this.handleContainerSteamLineCheck}  id="row1"/><div className="control__indicator"></div>
+                                          <input type="checkbox" onClick = {this.handleContainerSteamLineCheck}  id="row1"/><div className="control__indicator"></div>
                                         </label>
                                     </div>
 
