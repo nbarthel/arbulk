@@ -149,14 +149,11 @@ componentWillMount() {
 
 
         });
-
-        console.log('sdsddsdsdsdsd' , this.url);
-
-
         $.ajax({
             url: this.url,
             success:function(data){
-                console.log('ajax ',data);
+                console.log('ajax responce'+data);
+                alert(data);
                 this.setState(
                     {
                         viewInventoryCardData : [data]
@@ -246,7 +243,6 @@ componentWillMount() {
 		}
 
     onCheck(e,status,when,stampConfirmed,NumberOfRows){
-			debugger
 			if(this.lotIdArray.length>0){
 				for(var i=0;i<this.lotIdArray.length; i++){
 					this.lotIdArray[i]=parseInt(this.lotIdArray[i])
@@ -323,7 +319,6 @@ if(when==0 ){
         }
 }
 	onStampConfirmed(e){
-debugger
 		let id = this.props.cId
 		var stamp ;
 		var tempThis = this
@@ -441,16 +436,23 @@ debugger
 		<div className="row">
 			<div className=" col-lg-7 col-md-7 col-sm-7 col-xs-12" >
 				<div className="text_left">
-                    { this.status != "UNCONFIRMED" &&
+                    {/*{ this.status != "UNCONFIRMED" &&*/}
 
-						<div className="pull-left margin-10-last-l">
-							<button type="button"  onClick={(e) => {
-                                this.print(e)
-                            }} className="btn  btn-gray ">Print Packaging Instruction
-							</button>
-						</div>
+						{/*<div className="pull-left margin-10-last-l">*/}
+							{/*<button type="button"  onClick={(e) => {*/}
+                                {/*this.print(e)*/}
+                            {/*}} className="btn  btn-gray ">Print Packaging Instruction*/}
+							{/*</button>*/}
+						{/*</div>*/}
 
-                    }
+                    {/*}*/}
+
+					<div className="pull-left margin-10-last-l">
+						<button type="button"  onClick={(e) => {
+                            this.print(e)
+                        }} className="btn  btn-gray ">Print Packaging Instruction
+						</button>
+					</div>
                     <div className="pull-left margin-10-all"><button type="button" onClick = {this.addToQueue}  className="btn  btn-gray">Add To Queue</button> </div>
 
 				 <div className="pull-left margin-10-all"><button type="button"  className="btn btn-gray" onClick={this.onConfirm}>Confirm</button> </div>
