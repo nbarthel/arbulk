@@ -9,7 +9,7 @@ class Footer extends React.Component {
                     <p className="Copyright">@{year} Copyright. A&R Bulk-Pak, Inc. All Rights Reserved</p>
                 </div>
             </footer>
-           )
+           ) 
     }
 }
 export default Footer;
