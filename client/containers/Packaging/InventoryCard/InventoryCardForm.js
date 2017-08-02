@@ -354,16 +354,16 @@ debugger
 
 	render(){
 
-		//console.log("ThisLength",this.length)
 		console.log("status",this.props)
 		if(this.props.lots != undefined){
 			console.log("status",this.props.lots[0].status)
 		}
 
+
 		console.log("OOOOOOOO_____OOOOOOOOO",this.props.viewData)
 		console.log("sssfsdsdsadasdas",this.state.viewInventoryCardData)
 		console.log(">>>>>>>>>>>>>>>>>>>>>...",this.state.currentInventory)
-		debugger
+
 		return(
 
 
@@ -441,10 +441,17 @@ debugger
 		<div className="row">
 			<div className=" col-lg-7 col-md-7 col-sm-7 col-xs-12" >
 				<div className="text_left">
+                    { this.status != "UNCONFIRMED" &&
 
-				 <div className="pull-left margin-10-last-l"><button type="button" onClick = {(e)=>{this.print(e)}} className="btn  btn-gray">Print Packaging Instruction</button> </div>
+						<div className="pull-left margin-10-last-l">
+							<button type="button"  onClick={(e) => {
+                                this.print(e)
+                            }} className="btn  btn-gray ">Print Packaging Instruction
+							</button>
+						</div>
 
-				 <div className="pull-left margin-10-all"><button type="button" onClick = {this.addToQueue}  className="btn  btn-gray">Add To Queue</button> </div>
+                    }
+                    <div className="pull-left margin-10-all"><button type="button" onClick = {this.addToQueue}  className="btn  btn-gray">Add To Queue</button> </div>
 
 				 <div className="pull-left margin-10-all"><button type="button"  className="btn btn-gray" onClick={this.onConfirm}>Confirm</button> </div>
 
