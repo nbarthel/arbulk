@@ -8,9 +8,9 @@ import SweetAlert from 'sweetalert-react'
 import '../../../public/stylesheets/sweetalert.css';
 class CreateUserForm extends React.Component {
 
-
   constructor(props){
        super(props);
+
         this.createUsrObj = {
             "id": 0,
             "firstName" : '',
@@ -46,6 +46,18 @@ class CreateUserForm extends React.Component {
             if(this.isValid() == true){
                         axios.post(Base_Url+"TUsers",this.createUsrObj).then((response)=>{
                             swal("Success","User Created","success")
+                            swal({
+                                title: "Success",
+                                text: "User Created",
+                                type: "success",
+                                showCancelButton: false,
+                                confirmButtonColor: "#DD6B55",
+                                confirmButtonText: "OK",
+                                closeOnConfirm: false,
+                                html: false
+                            }, function(){
+                                window.location.reload();
+                            });
                         })
 
                     }
@@ -67,7 +79,6 @@ class CreateUserForm extends React.Component {
                                       id="firstName"
                                       onChange = {this.onUserInfoChange}
                                       placeholder="Enter First Name"/>
-                                    <div className="error"><span>{this.state.errors.firstName ? this.state.errors.firstName : ''}</span></div>
                                 </div>
                             </div>
                             <div className="col-lg-6  col-md-6 col-sm-6 col-xs-12">
@@ -78,7 +89,6 @@ class CreateUserForm extends React.Component {
                                     onChange = {this.onUserInfoChange}
                                     id="lastName"
                                     placeholder="Enter Last Name"/>
-                                    <div className="error"><span>{this.state.errors.lastName ? this.state.errors.lastName : ''}</span></div>
                                 </div>
                             </div>
                             <div className="col-lg-6  col-md-6 col-sm-6 col-xs-12">
@@ -90,7 +100,6 @@ class CreateUserForm extends React.Component {
                                     id="email"
 
                                     placeholder="Enter Email Address"/>
-                                    <div className="error"><span>{this.state.errors.emailAddr ? this.state.errors.emailAddr : ''}</span></div>
                                 </div>
                             </div>
                             <div className="col-lg-6  col-md-6 col-sm-6 col-xs-12">
@@ -101,7 +110,6 @@ class CreateUserForm extends React.Component {
                                     onChange = {this.onUserInfoChange}
                                     id="confirmEmail"
                                     placeholder="Confirm Email Address"/>
-                                    <div className="error"><span>{this.state.errors.confirmEmail ? this.state.errors.confirmEmail : ''}</span></div>
                                 </div>
                             </div>
                              <div className="col-lg-6  col-md-6 col-sm-6 col-xs-12">
@@ -112,18 +120,16 @@ class CreateUserForm extends React.Component {
                                     onChange = {this.onUserInfoChange}
                                     id="password"
                                     placeholder="Password"/>
-                                    <div className="error"><span>{this.state.errors.password ? this.state.errors.passowrd : ''}</span></div>
                                 </div>
                             </div>
                             <div className="col-lg-6  col-md-6 col-sm-6 col-xs-12">
                                 <div className = {this.state.errors.confirmPassword ? "form-group has error" : "form-group"}>
-                                    <label htmlFor="">Confrim Password</label>
+                                    <label htmlFor="">Confirm Password</label>
                                     <input type="password"
                                     className="form-control"
                                     onChange = {this.onUserInfoChange}
                                     id="confirmPassword"
                                     placeholder="Confirm Password"/>
-                                    <div className="error"><span>{this.state.errors.confirmPassword ? this.state.errors.confirmPassword : ''}</span></div>
                                 </div>
                             </div>
                             <div className="col-lg-6  col-md-6 col-sm-6 col-xs-12">
@@ -134,7 +140,6 @@ class CreateUserForm extends React.Component {
                                         <option value="Admin">Admin</option>
                                         <option value="Employee">Employee</option>
                                         </select>
-                                    <div className="error"><span>{this.state.errors.role ? this.state.errors.role : ''}</span></div>
                                 </div>
                             </div>
                         </fieldset>
