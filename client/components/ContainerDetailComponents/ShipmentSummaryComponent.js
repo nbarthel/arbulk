@@ -79,7 +79,7 @@ var moment = require('moment')
 
                                     <div className=" col-lg-3  col-sm-3 col-xs-12 ">
                                         <div className="form-group">
-                                            <textarea className="form-control textarea-note" rows="3" id="Notes"placeholder="Notes" value={notes}></textarea>
+                                            <textarea className=" textarea-note" rows="3" id="Notes"placeholder="Notes" value={notes} ></textarea>
                                             <div className="error"><span></span></div>
                                         </div>
                                     </div>
