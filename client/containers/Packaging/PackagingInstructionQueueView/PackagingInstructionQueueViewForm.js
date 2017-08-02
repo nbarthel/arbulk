@@ -49,7 +49,6 @@ componentWillMount(){
 
 }
 _throttledMouseMove(e){
-debugger
 
    if(clickOnEdit&&e.buttons){
 
@@ -268,15 +267,17 @@ Print(){
           return Math.sin(n);
 });
      console.log('queueViewProp' , queueViewProp)
-     var queueView = _.map(newArr  ,(queueView)=>{
-       debugger;
+
+            var counter = 0;
+     var queueView = _.map(newArr ,(queueView)=>{
         if(queueView.queue_sequence > 0 && queueView.TPackagingInstructions)
         {
+            counter++;
          return(
    <tr onDoubleClick = {(e) => {this.props.onDoubleClick(e,queueView)}} data-id={queueView.id}
 
-       key = {queueView.queue_sequence}
-       id = {queueView.queue_sequence} className="item">
+       key = {counter}
+       id = {counter} className="item">
          <td>{queueView.TPackagingInstructions.TLocation ? queueView.TPackagingInstructions.TLocation.locationName : ''} </td>
          <td>{queueView.TPackagingInstructions.TCompany ? queueView.TPackagingInstructions.TCompany.name : ''}</td>
          <td>{queueView.TPackagingInstructions ? queueView.TPackagingInstructions.po_number : ''}</td>
