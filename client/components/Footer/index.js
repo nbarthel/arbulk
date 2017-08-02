@@ -6,7 +6,7 @@ class Footer extends React.Component {
         return (
         	   <footer className="pos-relative-b">
                 <div className="container">
-                    <p className="Copyright">@{year} Copyright. AR BulkPak. All Rights Reserved</p>
+                    <p className="Copyright">@{year} Copyright. A&R Bulk-Pak, Inc. All Rights Reserved</p>
                 </div>
             </footer>
            )
