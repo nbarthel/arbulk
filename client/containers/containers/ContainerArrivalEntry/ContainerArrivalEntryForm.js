@@ -58,6 +58,7 @@ class  ContainerArrivalEntryForm extends React.Component {
         this.chassisNumber = ''
         this.userID  = localStorage.getItem('userId')
     this.poNumber
+      this.trackersize = 0;
 
     this.toogleTab = this.toogleTab.bind(this)
       this.index = 0
@@ -193,13 +194,13 @@ class  ContainerArrivalEntryForm extends React.Component {
       })
       console.log("I have recieved props")
       //
-
       var base = 'TCompanies'
       this.urlTrucker = PIview._buildUrl(base, {
           "where" : {type : "TRUCKER" }
       })
 
     axios.get(this.urlTrucker).then((response) => {
+        this.trackersize = response.data.length;
           this.setState({
               trucker: response.data
           })
@@ -283,7 +284,7 @@ onInternational(){
    }
 }
 onBookingChange(e){
-
+    debugger;
     var dataView = createDataLoader(ContainerArrivalEntryForm,{
         queries:[{
             endpoint: 'TShipmentDomestics',
@@ -635,7 +636,7 @@ if(e.target.checked){
   }
 
   toogleTab(e){
-
+    return;
     this.refs.international.value = ""
      this.refs.domestic.value = ""
      this.IntPostObj = { }
@@ -694,7 +695,10 @@ if(e.target.checked){
 
          if(this.state.trucker){
           trucker = _.map(this.state.trucker,(truck,index)=>{
-            return <option key = {index} value ={truck.id}>{truck.name}</option>
+              if(index == 0 && this.trackersize == 1)
+                return <option key = {index} value ={truck.id} selected>{truck.name}</option>
+              else
+                  return <option key = {index} value ={truck.id}>{truck.name}</option>
           })
          }
           var customers = _.map(this.state.customer,(cust,index)=>{
@@ -889,7 +893,7 @@ if(e.target.checked){
                              <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
               <div className="form-group col-lg-12">
                <div className="pull-left margin-10-last-l"> <button type="submit" className="btn  btn-gray text-uppercase " >CANCEL</button> </div>
-                <div className="pull-left margin-10-all"><button type="button" id="cancel" className="btn  btn-primary text-uppercase " id="IntSave" onClick = {this.onIntSave}>Save</button> </div>
+                <div className="pull-left margin-10-all"><button type="button" idi="cancel" className="btn  btn-primary text-uppercase " id="IntSave" onClick = {this.onIntSave}>Save</button> </div>
                </div>
               </div>
                     </div>
@@ -1011,7 +1015,7 @@ if(e.target.checked){
                          <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
               <div className="form-group col-lg-12">
                <div className="pull-left margin-10-last-l"> <button type="submit" className="btn  btn-gray text-uppercase " >CANCEL</button> </div>
-                <div className="pull-left margin-10-all"><button type="button" id="cancel" className="btn  btn-primary text-uppercase " id="Save" onClick = {this.onSave}>Save</button> </div>
+                <div className="pull-left margin-10-all"><button type="button" idi="cancel" className="btn  btn-primary text-uppercase " id="Save" onClick = {this.onSave}>Save</button> </div>
                </div>
               </div>
                     </div>
