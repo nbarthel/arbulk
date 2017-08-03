@@ -105,7 +105,10 @@ componentDidMount() {
 		var invt ;
 		if(this.state.InvtLocationHistory )
 		{
-		 invt = _.map(this.state.InvtLocationHistory,(invent)=>{
+            var newArr = _.sortBy(this.state.InvtLocationHistory, 'locationName', function(n) {
+                return n.TInventoryLocation.locationName.toLowerCase();
+            });
+		 invt = _.map(newArr,(invent)=>{
 
 			return (
 				<tr key={invent.id}>
