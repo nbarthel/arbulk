@@ -171,6 +171,9 @@ export default class PrintPackaging extends React.Component {
         console.log('print view')
         hashHistory.push('/Packaging/packagingInstFormPrint/')
     }
+    printbill(){
+        window.print()
+    }
     render(){
 
       if(this.state.viewData.custom_label!=null){
@@ -334,7 +337,7 @@ export default class PrintPackaging extends React.Component {
                             </div>
                         </div>
 
-                        <button id="create_pdf" type="button" className="create_btn"  >CREATE PDF </button></div>
+                    <button onClick={this.printbill.bind(this)} type="button" className="print_btn" style={{float: "left", padding: "10px 15px", width: "188px",  marginTop: "135px", marginBottom: "50px"}}  >Print</button><button id="create_pdf" type="button" className="create_btn"  >CREATE PDF </button></div>
 );
     }
 }

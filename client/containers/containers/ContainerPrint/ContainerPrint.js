@@ -92,17 +92,17 @@ export default class ContainerPrint extends React.Component {
 
     componentDidMount() {
         (function(){
+            debugger
             var
                 form = $('.bill-of-completed'),
                 cache_width = form.width(),
-                a4  =[ 595.28, 580.89]; // for a4 size paper width and height
-                  $('#create_pdf').on('click',function(){
+                a4  =[615.28, 660.89]; // for a4 size paper width and height
+               $('#create_pdf').on('click',function(){
                 console.log('call create pdf');
                 $('html,body').scrollTop(0);
-                // $(window).scrollTop();
                 createPDF();
             });
-//create pdf
+
             function createPDF(){
                 getCanvas().then(function(canvas){
                     var
@@ -131,6 +131,9 @@ export default class ContainerPrint extends React.Component {
     createPDF(e){
         console.log('print view')
         //hashHistory.push('/Shipment/shipmentPrint/')
+    }
+    printFun(){
+        window.print()
     }
     render(){
       if(this.state.viewData && this.state.viewData.TContainerLoad && this.state.viewData.TContainerLoad.length > 0){
@@ -379,7 +382,7 @@ export default class ContainerPrint extends React.Component {
 
                 </div>
 
-                <button type="button" id="create_pdf" className="create_btn_container">CREATE PDF </button>
+                <button type="button"  className="create_btn_container" onClick={this.printFun.bind(this)}>Print</button><button type="button" id="create_pdf" className="create_btn_container">CREATE PDF </button>
             </div>
         );
 
