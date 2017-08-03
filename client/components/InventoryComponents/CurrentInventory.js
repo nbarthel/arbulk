@@ -1024,7 +1024,7 @@ var tempThis = this
 		var tempWeight=0,tempTotalBags=0
                 var newArr = _.sortBy(this.state.rows, 'locationName', function(n) {
                     return n.TInventoryLocation.locationName.toLowerCase();
-                });
+                }); 
 				var inventory = _.map(newArr,(invent,index) => {
 			if(invent.TInventoryLocation && invent.active==1){
 			tempWeight = tempWeight + parseInt(invent.weight)
