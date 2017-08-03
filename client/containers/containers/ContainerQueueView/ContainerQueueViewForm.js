@@ -21,9 +21,15 @@ class  ContainerQueueViewForm extends React.Component {
         this.handleSortableUpdate  = this.handleSortableUpdate.bind(this)
         this.callonEdit = this.callonEdit.bind(this)
         this._throttledMouseMove = _.throttle(this._throttledMouseMove.bind(this));
+        this.selectedcontainer =[];
     }
     componentDidMount(){
 
+    }
+
+    onCheckboxChange(e, value) {
+        console.log(">>>>>>"+ value.id );
+        this.selectedcontainer.push(value.id);
     }
 
     callonEdit(){
@@ -114,11 +120,15 @@ class  ContainerQueueViewForm extends React.Component {
     }
 
 
+    containerView() {
+        hashHistory.push('/Container/containerview/')
+    }
+
 
 
 
     render() {
-        debugger
+        //console.log(">>>>>>>>>??<<<<<<<<<<<<<"+ JSON.stringify(this.props.queueData));
         var propsdata = (this.props.queueData && this.props.queueData.length > 0 )?this.props.queueData.reverse() : []
         var arrPropsdata = _.sortBy(propsdata, 'sequence', function(n) {
              return Math.sin(n);
@@ -132,7 +142,7 @@ class  ContainerQueueViewForm extends React.Component {
           debugger
             if(data.sequence != null){
                 return(
-                    <tr key={data.sequence} id = {data.sequence} data-id={data.id} className="item">
+                    <tr onDoubleClick={this.containerView.bind(this)} key={data.sequence} id = {data.sequence} data-id={data.id} className="item">
                         <td>{(data.TShipmentent && data.TShipmentent.TLocation) ? data.TShipmentent.TLocation.locationName : 'NA'} </td>
                         <td>{(data.TShipmentent && data.TShipmentent.TCompany) ? data.TShipmentent.TCompany.name : 'NA'}</td>
                         <td>{(data.TShipmentent && data.TShipmentent.TShipmentLots && data.TShipmentent.TShipmentLots.length > 0 && data.TShipmentent.TShipmentLots[0].TPackagingInstructionLots) ? data.TShipmentent.TShipmentLots[0].TPackagingInstructionLots.railcar_number  : 'NA'}</td>
@@ -145,7 +155,7 @@ class  ContainerQueueViewForm extends React.Component {
                         <td>3 of 20</td>
                         <td>
                             <label className="control control--checkbox">
-                                <input type="checkbox" id="row1"/><div className="control__indicator"></div>
+                                <input type="checkbox" id="row1" /><div className="control__indicator"></div>
                             </label>
                         </td>
                     </tr>
@@ -197,6 +207,7 @@ class  ContainerQueueViewForm extends React.Component {
                                 <div className="padding-20-last-l pull-left"><button type="button"    className="btn  btn-gray text-uppercase" onClick={hashHistory.goBack}>Back</button></div>
 
                                <div className="padding-20-all pull-right"><button type="button"   id="edit_btn"  className="btn  btn-orange text-uppercase" onClick={this.callonEdit}>Edit</button></div>
+                                {/*<div class="pull-right margin-10-last-r"><button type="button" class="btn  btn-success">View</button></div>*/}
 
 
                             </div>
