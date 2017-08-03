@@ -597,7 +597,7 @@ changeLot(e){
                    }
                  }
                  if(sum==this.state.contLoadData[temp].TPackagingInstructionLots.inInventory || this.state.currentIntObject.TPiInventory.length<=0){
-                   axios.put(Base_Url + "TPackagingInstructionLots/" + array[i], {status: "SHIPPED"}).then((response)=> {
+                   axios.put(Base_Url + "TPackagingInstructionLots/" + array[i], {status: "SHIPPED",shippedOn:new Date()}).then((response)=> {
                             if(i==array.length-1){
                               swal("Done" , "Saved Successfully" , "info")
                               hashHistory.push('/Container/containerview')

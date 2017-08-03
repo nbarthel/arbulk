@@ -202,7 +202,7 @@ onSave(){
             if(this.postObj.lotInformation.length > 1) {
                     this.postObj.lotInformation.forEach(function (element, index) {
                             if (parseInt(element.noOfBags) == parseInt(element.TPackagingInstructionLots.inInventory)) {
-                                    axios.put(Base_Url + "TPackagingInstructionLots/" + element.piLotsId, {status: "SHIPPED"}).then((response)=> {
+                                    axios.put(Base_Url + "TPackagingInstructionLots/" + element.piLotsId, {status: "SHIPPED",shippedOn:new Date()}).then((response)=> {
 
                                     }).then((response)=> {
 
@@ -226,7 +226,7 @@ onSave(){
                var lotId = this.postObj.lotInformation[0].piLotsId
 
                if (parseInt(this.postObj.lotInformation[0].noOfBags) == parseInt(this.postObj.lotInformation[0].TPackagingInstructionLots.inInventory)) {
-                   axios.put(Base_Url + "TPackagingInstructionLots/" + lotId, {status: "SHIPPED"}).then((response)=> {
+                   axios.put(Base_Url + "TPackagingInstructionLots/" + lotId, {status: "SHIPPED",shippedOn:new Date()}).then((response)=> {
                        swal("Posted", "Success", "success")
                        hashHistory.push("/Shipment/shipmentview")
                    }).then((response)=> {
