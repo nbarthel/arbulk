@@ -240,7 +240,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                             </th>
                           </tr>
                         </thead>
-                        <thead className="base_bg " data-toggle="collapse" data-target="#head1" className="clickable" >
+                        <thead className="base_bg" data-toggle="collapse" data-target="#head1" className="clickable" >
                            <tr >
                                 <th colspan="2"><i className="fa fa-chevron-down" aria-hidden="true"></i> SC </th>
                                 <th colspan="12"><span>Ravago</span><span>123456</span>  </th>

@@ -199,7 +199,7 @@ export default class ShipmentPrint extends React.Component {
       var
                 form = $('.warpper-inner_shipment'),
                 cache_width = form.width(),
-                a3  =[ 595.28,  580.89]; // for a4 size paper width and height
+                a3  =[800,  580.89]; // for a4 size paper width and height
 
             $('#create_pdf').on('click',function(){
                 console.log('call create pdf');
@@ -215,8 +215,8 @@ export default class ShipmentPrint extends React.Component {
                     var
                         img = canvas.toDataURL("image/png",1.0),
                         doc = new jsPDF({
-                            unit:'pt',
-                            format:'a3',
+                            unit:'px',
+                            format:'a4',
 							page:1
                         });
 					doc.internal.scaleFactor = 1.0;
@@ -231,7 +231,7 @@ export default class ShipmentPrint extends React.Component {
 // create canvas object
             function getCanvas(){
 		debugger;
-                form.width((a3[0]*1.33333) -80).css('max-width','none');
+                form.width((a3[0]*1.33333)).css('max-width','none');
                 return html2canvas(document.body,{
                     imageTimeout:2000,
                     removeContainer:false

@@ -136,7 +136,8 @@ export default class PackagingInstructionViewForm extends React.Component {
         document.getElementById('railcarSearch').value = e.target.getAttribute('value')
     }
     PrintScreen(){
-        var scrollLeft = document.getElementsByClassName("loadedContent")[0].scrollLeft
+        var scrollLeft = document.getElementsByClassName("loadedContentNew")[0].scrollLeft
+        debugger;
         document.getElementsByClassName('pos-relative-b')[0].style.display = 'none'
         document.getElementsByClassName('filter-btn')[0].style.display = 'none'
         document.getElementById("nonPrintable").style.display = "none"
@@ -147,11 +148,12 @@ export default class PackagingInstructionViewForm extends React.Component {
         document.getElementById("hide4").style.display = "none"
         document.getElementById("hide5").style.display = "none"
         document.getElementById("customer_name").style.display = "none"
-        document.getElementsByClassName("loadedContent")[0].style.cssText=""
-        document.getElementsByClassName("loadedContent")[0].style.height="100%"
-        document.getElementsByClassName("loadedContent")[0].style.overflowX='auto'
-        document.getElementsByClassName("loadedContent")[0].scrollLeft = scrollLeft
+        document.getElementsByClassName("loadedContentNew")[0].style.cssText=""
+        document.getElementsByClassName("loadedContentNew")[0].style.height="100%"
+        document.getElementsByClassName("loadedContentNew")[0].style.maxHeight="100%"
+        document.getElementsByClassName("loadedContentNew")[0].scrollLeft = scrollLeft
         var printContent = document.getElementById('Packaging_Instruction_View').innerHtml
+        console.log(printContent)
         document.body.innerHtml = printContent
         window.print()
         window.location.reload()
