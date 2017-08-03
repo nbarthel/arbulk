@@ -1366,14 +1366,14 @@ export default class PackagingInstructionViewForm extends React.Component {
                                                 type="text"
                                                 className="form-control"
                                                 id="No_of_Bages_Pallat"
-                                                placeholder="Enter Customer Screen Name "
+                                                placeholder="Enter a name for your custom saved view"
                                                 onChange = {this.handleTextChange}
                                                 value = {this.state.Text}
                                                 />
                                         </div>
 
                                         <div className="col-lg-4 col-sm-4 col-md-4 col-xs-12 padding-top-btm-xs">
-                                            <button type="button" onClick={(e) => this.saveView(e)} className="btn  btn-success margin-left-xs">SAVE CUSTOMER VIEW</button>
+                                            <button type="button" onClick={(e) => this.saveView(e)} className="btn  btn-success margin-left-xs">SAVE CUSTOM VIEW</button>
                                         </div>
                                     </div>
                                 </div>

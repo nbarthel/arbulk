@@ -1883,14 +1883,14 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                                                                                 <div  className="col-lg-12 col-md-12 col-sm-12 col-xs-12"><hr/></div>
 
                                                                                 <div className="col-lg-4 col-sm-4 col-md-4 col-xs-12 ">
-                                                                                    <input type="text" className="form-control" id="No_of_Bages_Pallat" placeholder="Enter Customer Screen Name"
+                                                                                    <input type="text" className="form-control" id="No_of_Bages_Pallat" placeholder="Enter a name for your custom saved view"
                                                                                      onChange = {this.handleTextChange}
                                                                                      value = {this.state.Text}
                                                                                      />
                                                                                     </div>
 
                                                                                     <div className="col-lg-4 col-sm-4 col-md-4 col-xs-12 padding-top-btm-xs">
-                                                                                        <button type="button"   className="btn  btn-success margin-left-xs text-uppercase" onClick={this.saveView}>SAVE CUSTOMER VIEW</button>
+                                                                                        <button type="button"   className="btn  btn-success margin-left-xs text-uppercase" onClick={this.saveView}>SAVE CUSTOM VIEW</button>
                                                                                     </div>
 
                                                                                 </div>

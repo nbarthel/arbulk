@@ -1565,14 +1565,14 @@ class ContainerViewForm extends React.Component {
                                                 </div>
                                                 <div className="col-lg-4 col-sm-4 col-md-4 col-xs-12 ">
                                                     <input type="text" className="form-control" id="No_of_Bages_Pallat"
-                                                           placeholder="Enter Customer Screen Name "
+                                                           placeholder="Enter a name for your custom saved view"
                                                            onChange={this.handleTextChange}
                                                            value={this.state.Text}/>
                                                 </div>
                                                 <div
                                                     className="col-lg-4 col-sm-4 col-md-4 col-xs-12 padding-top-btm-xs">
                                                     <button type="button" className="btn  btn-success margin-left-xs"
-                                                            onClick={this.saveView}>SAVE CUSTOMER VIEW
+                                                            onClick={this.saveView}>SAVE CUSTOM VIEW
                                                     </button>
                                                 </div>
                                             </div>
