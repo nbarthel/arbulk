@@ -95,9 +95,8 @@ export default class ContainerPrint extends React.Component {
             var
                 form = $('.bill-of-completed'),
                 cache_width = form.width(),
-                a4  =[ 595.28,  841.89]; // for a4 size paper width and height
-
-            $('#create_pdf').on('click',function(){
+                a4  =[ 595.28, 580.89]; // for a4 size paper width and height
+                  $('#create_pdf').on('click',function(){
                 console.log('call create pdf');
                 $('html,body').scrollTop(0);
                 // $(window).scrollTop();

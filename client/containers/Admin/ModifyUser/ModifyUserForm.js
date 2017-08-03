@@ -127,12 +127,12 @@ class ModifyUserForm extends React.Component {
                             <div className="col-md-6 ">
                                 <div className="pull-left margin-30-right">
                                     <label className="control control--radio ">Admin
-                                        <input  onChange = {this.handleRadio} type="radio" value = "Adm" id="row1" name="rad"/><div className="control__indicator"></div>
+                                        <input  onClick = {this.handleRadio} type="radio" value = "Adm" id="row1" name="rad"/><div className="control__indicator"></div>
                                     </label>
                                 </div>
                                 <div className="pull-left margin-30-right">
                                     <label className="control control--radio ">Employee
-                                        <input type="radio" onChange = {this.handleRadio} value = "Emp" name = "rad" id="row1"/><div className="control__indicator"></div>
+                                        <input type="radio" onClick = {this.handleRadio} value = "Emp" name = "rad" id="row1"/><div className="control__indicator"></div>
                                     </label>
                                 </div>
                             </div>
