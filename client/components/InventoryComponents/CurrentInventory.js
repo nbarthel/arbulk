@@ -994,8 +994,10 @@ var tempThis = this
 		if(this.state.rows != undefined){
 			if(this.state.showEdit != 'none'){
 		var tempWeight=0,tempTotalBags=0
-		var inventory = _.map(this.state.rows,(invent,index) => {
-
+                var newArr = _.sortBy(this.state.rows, 'locationName', function(n) {
+                    return n.TInventoryLocation.locationName.toLowerCase();
+                });
+		var inventory = _.map(newArr,(invent,index) => {
 			if(invent.TInventoryLocation && (invent.active==1 || invent.added))
 			{
 				tempWeight = tempWeight + parseInt(invent.weight)
@@ -1020,7 +1022,10 @@ var tempThis = this
 	}
 	else {
 		var tempWeight=0,tempTotalBags=0
-				var inventory = _.map(this.state.rows,(invent,index) => {
+                var newArr = _.sortBy(this.state.rows, 'locationName', function(n) {
+                    return n.TInventoryLocation.locationName.toLowerCase();
+                });
+				var inventory = _.map(newArr,(invent,index) => {
 			if(invent.TInventoryLocation && invent.active==1){
 			tempWeight = tempWeight + parseInt(invent.weight)
 			tempTotalBags = tempTotalBags + parseInt(invent.noOfBags)
