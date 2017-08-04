@@ -56,6 +56,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
       loaded : false,
       customLabel :[],
     }
+
     this.userId = localStorage.getItem('userId')
     //this.index = 0
 
@@ -368,9 +369,14 @@ export default class EnterPackagingInstructionForm extends React.Component {
     console.log(this.props.data)
   }
   handleNumberofbagsChange(e){
-    debugger
+      var rx = new RegExp(/^\d+(?:\.\d{1,2})?$/);
     if(this.props.data!==undefined)
     {
+      if(rx.test(e.target.value)){
+        this.setState({topErr:1});
+      }else {
+          this.setState({topErr:0});
+      }
       this.props.data.bags_per_pallet = e.target.value
     }
     else {
@@ -998,7 +1004,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
       return <option key={packagingtype.id} value={packagingtype.id}>{packagingtype.packagingType}</option>
     })
     var unittypes = _.map(this.state.unittype,(unittype) => {
-      return <option key={unittype.id} value={unittype.id}>{unittype.packagingName}</option>
+      return (unittype.packagingName.trim()!='')?<option key={unittype.id} value={unittype.id}>{unittype.packagingName}</option>:''
     })
 
     var pallettypes = _.map(this.state.pallettype,(pallettype) => {
@@ -1416,7 +1422,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
                                   name="bags_per_pallet"
                                   value={this.state.numberofbagsorpallets} />
                           }
-                          <div className="error"><span>{this.state.errors.bags_per_pallet}</span></div>
+                          <div className="error"><span>{(this.state.topErr===0 && this.state.topErr!==undefined)? "Must be a number": ""}</span></div>
                         </div>
                       </div>
 
@@ -1516,9 +1522,8 @@ export default class EnterPackagingInstructionForm extends React.Component {
                                   value={ this.obj.custom_label }
                                   placeholder="Enter Custom Label information"></textarea>
                         }
-                        <div className="error"><span>{this.state.errors.custome_label}</span></div>
-
                       </div>
+                      <div className="error"><span>{(this.state.errors.custome_label)?"Custom Label information required":''}</span></div>
 
                     </div>
                   }

@@ -5,7 +5,6 @@ export default class RailcarInformation extends React.Component {
 		this.state = { }
 		this.add = this.add.bind(this)
 		this.minus = this.minus.bind(this)
-
 	}
 	add(){
 		this.props.AddRailCarForProps()
@@ -89,7 +88,6 @@ export default class RailcarInformation extends React.Component {
 								name="lot_number"
 								onChange={this.props.handleLotNumberEdit}
 								value={this.props.data.lot_number}/>
-
 							:
 							<input
 								type="text"
