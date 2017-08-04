@@ -9,6 +9,7 @@ import StatusFilterPage from './StatusFilter/StatusFilterPage';
 import RailcarArrival from './RailcarArrival/RailcarArrivalFilterPage'
 //import ShippedDateFilter from './ShippedDateFilter/ShippedDateFilter'
 import CreatedOndateFilter from './CreatedOnDateFilter/createdOnDateFilter'
+import ShipmentReceivedFilter from './ShipmentRecievedFilter/shipmentRecievedFilter'
 
 class FilterComponent extends React.Component {
 	constructor(props){
@@ -31,6 +32,7 @@ class FilterComponent extends React.Component {
                 <RailcarArrival onRailCarArrivalFilter = {this.props.onRailCarArrivalFilter} parent={this.props.parent}/>
 
                 <CreatedOndateFilter getCreatedDate={this.props.getCreatedDate}/>
+                <ShipmentReceivedFilter shipmentRecived={this.props.shipmentRecived}/>
             </div>
         </div>
 

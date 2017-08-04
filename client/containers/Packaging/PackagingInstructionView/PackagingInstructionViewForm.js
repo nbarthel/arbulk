@@ -89,6 +89,8 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.OnGroupBy = this.OnGroupBy.bind(this)
         this.railcarArrival = '';
         this.getCreatedDate = this.getCreatedDate.bind(this);
+        this.shipmentRecived = this.shipmentRecived.bind(this);
+        this.flagForShipmentRecivedFilter = ''
     }
     componentWillMount() {
         axios.get(Base_Url+"TCustomViews").then(response=>{
@@ -397,6 +399,44 @@ export default class PackagingInstructionViewForm extends React.Component {
                             }
                         }
                     }
+                    i=0
+                    debugger
+                    if(this.flagForShipmentRecivedFilter!=='' && this.flagForShipmentRecivedFilter){
+                       while(i<data.length){
+                            if(data[i].TPackagingInstructionLots && data[i].TPackagingInstructionLots.length>0){
+                                var tempData = data[i].TPackagingInstructionLots;
+                                var j =0;
+                                while(j<tempData.length){
+                                    if(!(tempData[j].status!=="SHIPPED" && tempData[j].TShipmentLots.length > 0)){
+                                        data[i].TPackagingInstructionLots.splice(j)
+                                        j= j==0?0:j-1
+                                    }
+                                    else{
+                                        j++;
+                                    }
+                                }
+                            }
+                            i++;
+                       }
+                    }
+                    else if(this.flagForShipmentRecivedFilter!=='' && !this.flagForShipmentRecivedFilter){
+                        while(i<data.length){
+                            if(data[i].TPackagingInstructionLots && data[i].TPackagingInstructionLots.length>0){
+                                var tempData = data[i].TPackagingInstructionLots;
+                                var j =0;
+                                while(j<tempData.length){
+                                    if(tempData[j].status!=="SHIPPED" && tempData[j].TShipmentLots.length > 0){
+                                        data[i].TPackagingInstructionLots.splice(j)
+                                        j= j==0?0:j-1
+                                    }
+                                    else{
+                                        j++;
+                                    }
+                                }
+                            }
+                            i++;
+                        }
+                    }
 
                     localStorage.setItem('piViewData', JSON.stringify(data));
                     this.setState(
@@ -411,7 +451,6 @@ export default class PackagingInstructionViewForm extends React.Component {
         }
     }
     onRailCarArrivalFilter(e,option){
-        debugger
         let filterValue = ''
         if(option===1){
             filterValue = true
@@ -516,7 +555,24 @@ export default class PackagingInstructionViewForm extends React.Component {
         }
         this.onSearch(e)
     }
-
+    shipmentRecived(e,option){
+        let filterValue = ''
+        if(option===1){
+            filterValue = true
+        }
+        else if(option===0){
+            filterValue = false;
+        }
+        else{
+            filterValue = ''
+        }
+        this.flagForShipmentRecivedFilter = filterValue;
+        Object.defineProperty(this.Where,"flagForShipmentRecivedFilter",{enumerable: true ,
+            writable: true,
+            configurable:true,
+            value:filterValue})
+        this.onSearch(e);
+    }
 
     handleTextChange(e){
         this.setState({
@@ -743,7 +799,43 @@ export default class PackagingInstructionViewForm extends React.Component {
                             }
                         }
                     }
-
+                    i=0;
+                 if(this.Where.flagForShipmentRecivedFilter){
+                     while(i<data.length){
+                         if(data[i].TPackagingInstructionLots && data[i].TPackagingInstructionLots.length>0){
+                             var tempData = data[i].TPackagingInstructionLots;
+                             var j =0;
+                             while(j<tempData.length){
+                                 if(!(tempData[j].status!=="SHIPPED" && tempData[j].TShipmentLots.length > 0)){
+                                     data[i].TPackagingInstructionLots.splice(j)
+                                     j= j==0?0:j-1
+                                 }
+                                 else{
+                                     j++;
+                                 }
+                             }
+                         }
+                         i++;
+                     }
+                 }
+                 else if(this.Where.flagForShipmentRecivedFilter!==undefined && !this.Where.flagForShipmentRecivedFilter){
+                     while(i<data.length){
+                         if(data[i].TPackagingInstructionLots && data[i].TPackagingInstructionLots.length>0){
+                             var tempData = data[i].TPackagingInstructionLots;
+                             var j =0;
+                             while(j<tempData.length){
+                                 if(tempData[j].status!=="SHIPPED" && tempData[j].TShipmentLots.length > 0){
+                                     data[i].TPackagingInstructionLots.splice(j)
+                                     j= j==0?0:j-1
+                                 }
+                                 else{
+                                     j++;
+                                 }
+                             }
+                         }
+                         i++;
+                     }
+                 }
                     localStorage.setItem('piViewData', JSON.stringify(data));
                     this.setState(
                         {
@@ -1263,7 +1355,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 <div className="container">
                     <div className="row-fluid">
 
-                        <FilterComponent getdt = {this.getdt} startDate = {this.StartDate} endDate = {this.EndDate} key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter} onRailCarArrivalFilter={this.onRailCarArrivalFilter} getCreatedDate={this.getCreatedDate}/>
+                        <FilterComponent getdt = {this.getdt} startDate = {this.StartDate} endDate = {this.EndDate} key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter} onRailCarArrivalFilter={this.onRailCarArrivalFilter} getCreatedDate={this.getCreatedDate} shipmentRecived={this.shipmentRecived}/>
                         <div id="filter-grid">
                             <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
                                 <div className="pull-right margin-30-right" id="hide2">
