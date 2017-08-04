@@ -172,7 +172,6 @@ export default class EnterPackagingInstructionForm extends React.Component {
         tempUnitType : response.data,
         loaded : true
       })
-      debugger
       if(this.props.data){
         var tempObj=[]
         for(var i =0;i<response.data.length;i++){
@@ -211,7 +210,6 @@ export default class EnterPackagingInstructionForm extends React.Component {
 //isWeightconverted = false;
   }
   handleOptionChange1(e) {
-    debugger;
 
     this.setState({
       selectedOption: e.target.value
@@ -268,10 +266,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
     }
   }
   handlePIChange(e){
-
-    console.log("ssss",e.target.value)
-    debugger
-    this.obj[e.target.name] = e.target.value
+    this.obj[e.target.name] = e.target.value.toUpperCase();
     if(this.obj.bag_id == 1){
       flagBoxesSet = false
       if(this.obj.location_id!=="" && (flagsc || flagnj)&& this.obj.location_id!== undefined)
@@ -309,7 +304,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
       flagBoxesSet = false
       flagnj = true;
       flagsc = true;
-      this.obj[e.target.name] = e.target.value
+      this.obj[e.target.name] = e.target.value.toUpperCase();
       if(e.target.name==="bags_per_pallet")
       {
         this.state.numberofbagsorpallets = e.target.value//(this.obj.bags_per_pallet==="")?this.state.numberofbagsorpallets:this.obj.bags_per_pallet
@@ -317,7 +312,6 @@ export default class EnterPackagingInstructionForm extends React.Component {
       }
     }
     this.SetUnitType(e.target.name)
-    console.log(this.obj)
   }
   handleCustomerEditChange(e){
     this.props.data.customer_id = e.target.value
@@ -330,10 +324,9 @@ export default class EnterPackagingInstructionForm extends React.Component {
     this.forceUpdate()
   }
   handlePOEditChange(e){
-    this.props.data.po_number = e.target.value
+    this.props.data.po_number = e.target.value.toUpperCase();
 
     this.forceUpdate()
-    console.log(this.props.data)
   }
   cancel(e){
 
@@ -343,13 +336,11 @@ export default class EnterPackagingInstructionForm extends React.Component {
     this.props.data.material = e.target.value
     //t	his.props.data.material = this.refs.Material.value
     this.forceUpdate()
-    console.log(this.props.data)
   }
   handleOriginEditChange(e){
     this.props.data.origin_id = e.target.value
     //this.props.data.origin_id = this.refs.Origin.value
     this.forceUpdate()
-    console.log(this.props.data)
   }
   handleTypeOfPackagingEditChange(e){
     debugger
@@ -444,12 +435,11 @@ export default class EnterPackagingInstructionForm extends React.Component {
     var number = e.target.id[e.target.id.length-1]
     var propertyName = e.target.name
     if(!isNaN(number) && this.RailCarArray.length>1){
-      this.RailCarArray[number][propertyName] = e.target.value;
+      this.RailCarArray[number][propertyName] = e.target.value.toUpperCase();
     }
     else{
-      this.RailCarArray[0][propertyName] = e.target.value;
+      this.RailCarArray[0][propertyName] = e.target.value.toUpperCase();
     }
-    console.log(this.railcarObj)
   }
   onUpdate(e){
 
@@ -538,6 +528,10 @@ export default class EnterPackagingInstructionForm extends React.Component {
     return isValid;
   }
 
+  onCancelRequest()
+  {
+      hashHistory.push('/Packaging/packaginginstview/');
+  }
 
   onSubmit(e){
     console.log("Submit");
@@ -931,7 +925,6 @@ export default class EnterPackagingInstructionForm extends React.Component {
 
       }
 //this.state.labelLength.push(labelArray)
-      debugger
       this.state.labelLength = [].concat.apply([],this.state.labelLength)
       if(weightForLabel>-1){
         var obj =  this.obj.po_number +'\n'+ this.obj.material +'\n' + uniquelot[0] + '\n'  +  weightForLabel+ " "+weightUnit+ " Net \n" + "Made in "+originName
@@ -1223,7 +1216,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
                             </div>
 
                             <div className="form-group">
-                              <label htmlFor="Weight" className="col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label pr-0">{ this.state.selectedOption=='lbs'?'Weight(lbs)':'Weight(kg)'}</label>
+                              <label htmlFor="Weight" className="col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label pr-0">{ this.state.selectedOption=='lbs'?'Weight (lbs)':'Weight(kg)'}</label>
                               <div className="col-lg-8    col-sm-11 col-xs-11 pr-0 ">
                                 {this.props.lotInfo != undefined ?
                                     <input
@@ -1265,7 +1258,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
                         <label htmlFor="Material" className={this.state.errors.material ? "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label has error" : "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label"}>Material</label>
                         <div className="col-lg-9 col-sm-11 col-xs-11 ">
                           {this.props.data != undefined ?
-                              <input
+                              <input style={{textTransform : "capitalize"}}
                                   type="text"
                                   className="form-control"
                                   id="Material"
@@ -1275,7 +1268,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
                                   onChange={(e)=>{this.handleMaterialEditChange(e)}}
                                   value={this.props.data.material}/>
                               :
-                              <input
+                              <input style={{textTransform : "capitalize"}}
                                   type="text"
                                   className="form-control"
                                   id="Material"
@@ -1575,7 +1568,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
                         this.props.data != undefined ? <button type="button" id="update"  className="btn  btn-primary" onClick = {this.onUpdate}>Update</button> :
                             <button type="button"  className="btn  btn-primary" id="submit" onClick = {this.onSubmit}>SUBMIT</button> }
                     </div>
-                    <div className="pull-left padding-20-all"><button type="button" onClick={(e) => this.cancel(e)}  className="btn  btn-gray">CANCEL</button> </div>
+                    <div className="pull-left padding-20-all"><button type="button" onClick={this.onCancelRequest.bind(this)}  className="btn  btn-gray">CANCEL</button> </div>
                     <div className="pull-left padding-20-all"><button type="button" onClick={hashHistory.goBack}  className="btn  btn-gray">BACK</button> </div>
 
                   </div>

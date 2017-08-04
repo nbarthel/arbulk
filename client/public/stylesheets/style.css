@@ -626,3 +626,16 @@ select{text-transform: uppercase !important;}
 
 .summary_list{}
 .summary_list li{ font-size:12px;}
+
+#Purchase_Order {
+    text-transform: uppercase;
+}
+#Rail_Car_Number{
+    text-transform: uppercase;
+}
+#Lot_Number{
+    text-transform: uppercase;
+}
+#Material{
+    text-transform: capitalize;
+}

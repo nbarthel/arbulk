@@ -11,7 +11,6 @@ export default class EnterPackagingInstructionPage extends React.Component {
             loaded: true}
     }
     componentWillMount(){
-        debugger
         if(this.props.params.id != undefined){
             this.setState({
                 loaded:false
