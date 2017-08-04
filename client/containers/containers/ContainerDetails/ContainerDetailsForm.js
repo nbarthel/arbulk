@@ -55,7 +55,41 @@ class ContainerDetailsForm extends React.Component {
         this.sealNumber = ''
     }
     componentWillMount() {
-        this.state.sealNumber = this.props.containerTable?this.props.containerTable.sealNumber:''
+        this.state.sealNumber = this.props.containerTable?this.props.containerTable.sealNumber:'';
+
+        /*
+        this block of codes will used to show record in Container Load Information.
+         */
+        var PIview = createDataLoader(ContainerDetailsForm, {
+            queries: [{
+                endpoint: 'TPackagingInstructionLots',
+                filter:
+                    {"include" : ["TInventoryLocation","TPackagingInstructionLots"]
+                    }
+
+            }]
+        });
+        var base2 = "TContainerLoads/"
+        if(this.props.isDomestic == 0){
+            this.CLoadURL = PIview._buildUrl(base2,{
+                include : ["TInventoryLocation",{"relation": "TPackagingInstructionLots" , "scope":{"include":"TPackagingInstructions"}}],
+
+                where:{ "loadContId": this.props.containerId }
+            })
+        }
+        else if(this.props.isDomestic == 1){
+            this.CLoadURL = PIview._buildUrl(base2,{
+                include : ["TInventoryLocation",{"relation": "TPackagingInstructionLots" , "scope":{"include":"TPackagingInstructions"}}],
+                //where: { "loadContId": this.props.containerId}
+                where:{"loadContDId": this.props.containerId}
+            })
+        }
+        axios.get(this.CLoadURL).then((response)=>{
+
+            this.setState({
+                contLoadData : response.data
+            })
+        })
     }
     allValuesSame(arr) {
 
