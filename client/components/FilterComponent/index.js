@@ -7,6 +7,8 @@ import LotSearchFilterPage from './LotSearchFilter/LotSearchFilterPage';
 import CutOffDateFilterPage from './CutOffDateFilter/CutOffDateFilterPage';
 import StatusFilterPage from './StatusFilter/StatusFilterPage';
 import RailcarArrival from './RailcarArrival/RailcarArrivalFilterPage'
+//import ShippedDateFilter from './ShippedDateFilter/ShippedDateFilter'
+import CreatedOndateFilter from './CreatedOnDateFilter/createdOnDateFilter'
 
 class FilterComponent extends React.Component {
 	constructor(props){
@@ -27,6 +29,8 @@ class FilterComponent extends React.Component {
                 <CutOffDateFilterPage startDate = {this.props.StartDate} endDate = {this.props.EndDate} getdt={this.props.getdt} parent={this.props.parent} />
                 <StatusFilterPage onStatusFilter = {this.props.onStatusFilter} parent={this.props.parent}/>
                 <RailcarArrival onRailCarArrivalFilter = {this.props.onRailCarArrivalFilter} parent={this.props.parent}/>
+
+                <CreatedOndateFilter getCreatedDate={this.props.getCreatedDate}/>
             </div>
         </div>
 

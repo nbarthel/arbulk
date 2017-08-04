@@ -82,10 +82,13 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.headerCheckboxChange = this.headerCheckboxChange.bind(this)
         this.EndDate = ''
         this.StartDate = ''
+        this.createdOnStartDate = ''
+        this.createdOnEndDate = ''
         this.getdt = this.getdt.bind(this)
         this.PrintScreen = this.PrintScreen.bind(this)
         this.OnGroupBy = this.OnGroupBy.bind(this)
         this.railcarArrival = '';
+        this.getCreatedDate = this.getCreatedDate.bind(this);
     }
     componentWillMount() {
         axios.get(Base_Url+"TCustomViews").then(response=>{
@@ -108,6 +111,11 @@ export default class PackagingInstructionViewForm extends React.Component {
     getdt(a){
         a.id=="1"?this.startDate = a.tempDate:this.endDate=a.tempDate;
         this.onSearch(a)
+    }
+    getCreatedDate(dateObj){
+        debugger
+        dateObj.id=="1"?this.createdOnStartDate = dateObj.tempDate:this.createdOnEndDate=dateObj.tempDate;
+        this.onSearch(dateObj);
     }
     onTextChange(e){
         var idValue = e.target.id
@@ -163,6 +171,8 @@ export default class PackagingInstructionViewForm extends React.Component {
     onSearch(e){
         var cutofFilter = []
         var flagForcutOffFilter = false
+        var CreatedOnfilter = []
+        var flagForCreatedOnfilter = false
         if(this.startDate && this.endDate) {
             var cutoffDate = []
             cutoffDate.push(this.startDate)
@@ -179,6 +189,23 @@ export default class PackagingInstructionViewForm extends React.Component {
                 value:cutofFilter})
             flagForcutOffFilter = true
 
+        }
+        if(this.createdOnEndDate && this.createdOnStartDate){
+            var createdOn = []
+
+            createdOn.push(this.createdOnStartDate)
+            createdOn.push(this.createdOnEndDate)
+
+            var objdate = {}
+            for(var j in createdOn){
+                objdate = {"created_on" : createdOn[j]}
+                CreatedOnfilter.push(objdate)
+            }
+            Object.defineProperty(this.Where,"created_on",{enumerable:true ,
+                writable: true,
+                configurable: true,
+                value:CreatedOnfilter})
+            flagForCreatedOnfilter = true
         }
         if(this.Query != undefined){
             Object.defineProperty(this.Where,"Query",{enumerable:true ,
@@ -230,6 +257,12 @@ export default class PackagingInstructionViewForm extends React.Component {
                 serachObj.push(poSearch)
             }
 
+            if(flagForCreatedOnfilter){
+                var createdStartOnObj = [{'created_on':{'gte':new Date(createdOn[0])}}]
+                var createdEndObj = [{'created_on':{'lte':new Date(createdOn[1])}}]
+                serachObj.push(createdStartOnObj);
+                serachObj.push(createdEndObj);
+            }
 
             if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.railcarSearch && this.Where.Query.railcarSearch!= undefined ){
                 var railSearch = [{'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}}]
@@ -538,6 +571,12 @@ export default class PackagingInstructionViewForm extends React.Component {
             else if(this.Where.railcar_status===false){
                 var arrivalSerach = [{'railcar_status':'INTRANSIT'}]
                 serachObjLots.push(arrivalSerach)
+            }
+            if(this.Where.created_on.length==2){
+                var createdStartOnObj = [{'created_on':{'gte':new Date(this.Where.created_on[0].created_on)}}]
+                var createdEndObj = [{'created_on':{'lte':new Date(this.Where.created_on[1].created_on)}}]
+                serachObj.push(createdStartOnObj);
+                serachObj.push(createdEndObj);
             }
             if(this.Where.Customer && this.Where.Customer.length >0){
                 var customer = []
@@ -1224,7 +1263,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 <div className="container">
                     <div className="row-fluid">
 
-                        <FilterComponent getdt = {this.getdt} startDate = {this.StartDate} endDate = {this.EndDate} key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter} onRailCarArrivalFilter={this.onRailCarArrivalFilter}/>
+                        <FilterComponent getdt = {this.getdt} startDate = {this.StartDate} endDate = {this.EndDate} key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter} onRailCarArrivalFilter={this.onRailCarArrivalFilter} getCreatedDate={this.getCreatedDate}/>
                         <div id="filter-grid">
                             <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
                                 <div className="pull-right margin-30-right" id="hide2">
