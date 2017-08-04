@@ -735,7 +735,6 @@ if(e.target.checked){
                                     return <option key = {index} onChange = {(e)=> this.onHandleIntlChange(e,book)}  value = {book.id +','+book.TShipmentInternational[0].id +','+book.isDomestic}>{book.TShipmentInternational[0].bookingNumber}</option>
                                   }
                     })}
-
           return (
            <Loader loaded={this.state.loaded} id="loaded">
            <section className="container_detils">
@@ -880,12 +879,12 @@ if(e.target.checked){
                                  <label htmlFor="Type_of_Packaging" className="col-lg-4">Number of Containers:</label>
                                  <div className="col-lg-8"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?this.state.IntlData.numberOfContainers : ''}</p></div>
                              </div>
-{/*
+
                                 <div className="form-group">
-                                    <label htmlFor="Type_of_Bag" className="col-lg-6 "># of Bags per Container:</label>
-                                    <div className="col-lg-6"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?this.state.IntlData.numberOfBags : ''}</p></div>
+                                    <label htmlFor="Type_of_Bag" className="col-lg-4 "># of Bags per Container:</label>
+                                    <div className="col-lg-8"><p>{(this.state.IntlData.TShipmentLots && this.state.IntlData.TShipmentLots.length>0)?this.state.IntlData.TShipmentLots[0].noOfBags : ''}</p></div>
                                 </div>
-*/}
+
                                 <div className="form-group">
                                     <label htmlFor="Type_of_Pallet" className="col-lg-4 ">Steamship Line:</label>
                                     <div className="col-lg-8"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?this.state.IntlData.TShipmentInternational[0].TSteamshipLine.name : ''}</p></div>
@@ -895,6 +894,11 @@ if(e.target.checked){
                                     <label htmlFor="No_of_Bages_Pallat" className="col-lg-4 ">Steamship Vessel:</label>
                                     <div className="col-lg-8"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?this.state.IntlData.TShipmentInternational[0].steamshipVessel : ''}</p></div>
                                 </div>
+
+                                 <div className="form-group">
+                                     <label htmlFor="No_of_Bages_Pallat" className="col-lg-4 ">Freight Forwarder:</label>
+                                     <div className="col-lg-8"><p>{(this.state.IntlData.TShipmentInternational && this.state.IntlData.TShipmentInternational.length>0)?this.state.IntlData.TShipmentInternational[0].freightForwarder : ''}</p></div>
+                                 </div>
 
                                 <div className="form-group">
                                     <label htmlFor="Stretch_wrap" className="col-lg-4 ">Earliest Return Date:</label>
