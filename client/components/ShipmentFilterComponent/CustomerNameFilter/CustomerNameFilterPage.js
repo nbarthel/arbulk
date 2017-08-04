@@ -8,11 +8,9 @@ class CustomerNameFilterPage extends React.Component {
     constructor(props){
         super(props);
         this.checkedCustomer = { }
-       this.state = { 
-        }           
+        this.state = { records:8}
     }
-    componentDidMount() {
-
+    collesp(limit){
         var PIview = createDataLoader(CustomerNameFilterPage,{
             queries:[{
                 endpoint: 'TPackagingInstructions',
@@ -25,14 +23,16 @@ class CustomerNameFilterPage extends React.Component {
         //debugger
 
         var base = 'TCompanies'
-        this.urlCustomer = PIview._buildUrl(base, {
-            "where" : {type : "CUSTOMER" }
-        })
 
-
-
-
-
+        if(limit===8){
+            this.urlCustomer = PIview._buildUrl(base, {
+                "where" : {type : "CUSTOMER"},"order": "name asc",limit:limit
+            })
+        }else {
+            this.urlCustomer = PIview._buildUrl(base, {
+                "where" : {type : "CUSTOMER"},"order": "name asc"
+            })
+        }
         axios.get( this.urlCustomer).then((response) => {
             this.setState({
                 name: response.data
@@ -41,23 +41,25 @@ class CustomerNameFilterPage extends React.Component {
             .catch(function(err){
                 console.log('eroor>>>>' , err)
             })
-           
+    }
+    componentDidMount() {
+        this.collesp(8);
+
+    }
+    collespeRec(){
+        if(this.state.records===8){
+            this.setState({records:9})
+            this.forceUpdate()
+            this.collesp(9);
+        }else {
+            this.setState({records:8})
+            this.forceUpdate()
+            this.collesp(8);
+        }
 
     }
 
 
- /* onClick(e,customer){
-        if(e.target.checked){
-            this.props.checkedCustomer[e.target.id] = e.target.value;
-            this.props.buttonDisplay.push(e.target.value)
-            //console.log(this.props.checkedCustomer)
-        }
-        else if (!e.target.checked){
-         delete this.props.checkedCustomer[e.target.id]
-       
-            //console.log(this.props.checkedCustomer)
-        }
-    }*/
     render() {
         var customers = _.map(this.state.name,(customer) => {
 return  (<li key={customer.id}>
@@ -70,7 +72,7 @@ return  (<li key={customer.id}>
                 <hr/>
                     <div className="head_bg">
                         <h6 className="pull-left text_left">CUSTOMER  </h6>
-                        <a href="javascript:void()"  className="pull-right text_right"> Show All</a>
+                        <a href="javascript:void(0)" onClick={this.collespeRec.bind(this)}  className="pull-right text_right">{this.state.records>8? "Show Default": "Show All"}</a>
                     </div>
                     <ul className="scroll ht">
                         {customers}

@@ -116,7 +116,7 @@ export default class PackagingInstructionViewForm extends React.Component {
         //console.log(this.buttonDisplay.length)
 
     }
-       
+
        else if(e.target.checked === false){
         let value = e.target.value
         let index = this.buttonDisplay.indexOf(e.target.value);
@@ -130,12 +130,12 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.buttonDisplay = [];
         this.forceUpdate();
        }*/
-    
+
        //}
     //}
- 
+
     onClick(e){
-    
+
       /* console.log(this.checkedCompany)
         console.log(this.checkedCustomer)
         console.log("checkedStatus>>>>>>>>>>>"+this.checkedStatus)*/
@@ -230,7 +230,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                     </div>
                     
                     <div className="col-lg-4 col-sm-4 col-md-4 col-xs-12 padding-top-btm-xs">
-                        <button type="button"   className="btn  btn-success margin-left-xs">SAVE CUSTOMER VIEW</button>
+                        <button type="button" className="btn  btn-success margin-left-xs">SAVE CUSTOMER VIEW</button>
                     </div>
                     
                 </div>

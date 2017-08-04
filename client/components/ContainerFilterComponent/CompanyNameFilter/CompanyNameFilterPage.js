@@ -68,8 +68,7 @@ class CompanyNameFilterPage extends React.Component{
      return(<div>
                
                     <div className="head_bg">
-                        <h6 className="pull-left">AR BULK  </h6>
-                        <a href="javascript:void(0)"  className="pull-right text_right"> Show All</a>
+                        <h6 className="pull-left">AR BULK LOCATION </h6>
                     </div>
                     <ul>
                        {locations}

@@ -5,7 +5,7 @@ import PackagingInstructionViewForm from './PackagingInstructionViewForm';
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 export default class PackagingInstructionViewPage extends React.Component {
-  
+
 
   render() {
     return (
@@ -14,7 +14,7 @@ export default class PackagingInstructionViewPage extends React.Component {
       <Header />
       <PackagingInstructionViewForm />
 		</div>
-		<Footer/>      
+          <Footer />
 	     </div>
     );
   }

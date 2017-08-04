@@ -168,7 +168,7 @@ export default class PackagingInstructionViewForm extends React.Component {
         window.location.reload()
 
     }
-    onSearch(e){
+    onSearch(e) {
         var cutofFilter = []
         var flagForcutOffFilter = false
         var CreatedOnfilter = []

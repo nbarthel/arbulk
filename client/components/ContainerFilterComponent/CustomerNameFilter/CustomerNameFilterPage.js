@@ -8,11 +8,9 @@ class CustomerNameFilterPage extends React.Component {
     constructor(props){
         super(props);
         this.checkedCustomer = { }
-       this.state = { 
-        }           
+        this.state = { records:8}
     }
-    componentDidMount() {
-
+    collesp(limit){
         var PIview = createDataLoader(CustomerNameFilterPage,{
             queries:[{
                 endpoint: 'TPackagingInstructions',
@@ -23,26 +21,40 @@ class CustomerNameFilterPage extends React.Component {
         })
         console.log("I have recieved props")
         //debugger
-
         var base = 'TCompanies'
-        this.urlCustomer = PIview._buildUrl(base, {
-            "where" : {type : "CUSTOMER" }
-        })
-
-
-
-
+        if(limit===8){
+            this.urlCustomer = PIview._buildUrl(base, {
+                "where" : {type : "CUSTOMER"},"order": "name asc",limit:limit
+            })
+        }else {
+            this.urlCustomer = PIview._buildUrl(base, {
+                "where" : {type : "CUSTOMER"},"order": "name asc"
+            })
+        }
 
         axios.get( this.urlCustomer).then((response) => {
-        this.setState({
-            name: response.data
+            this.setState({
+                name: response.data
+            })
         })
-    })
-    .catch(function(err){
-        console.log('eroor>>>>' , err)
-    })
+            .catch(function(err){
+                console.log('eroor>>>>' , err)
+            })
+    }
+    componentDidMount() {
+        this.collesp(8);
 
-           
+    }
+    collespeRec(){
+        if(this.state.records===8){
+            this.setState({records:9})
+            this.forceUpdate()
+            this.collesp(9);
+        }else {
+            this.setState({records:8})
+            this.forceUpdate()
+            this.collesp(8);
+        }
 
     }
 
@@ -71,7 +83,7 @@ return  (<li key={customer.id}>
               
                     <div className="head_bg">
                         <h6 className="pull-left text_left">CUSTOMER  </h6>
-                        <a href="javascript:void()"  className="pull-right text_right"> Show All</a>
+                        <a href="javascript:void(0)" onClick={this.collespeRec.bind(this)}  className="pull-right text_right">{this.state.records>8? "Show Default": "Show All"}</a>
                     </div>
                     <ul className="scroll ht">
                         {customers}

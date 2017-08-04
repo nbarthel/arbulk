@@ -18,7 +18,7 @@ export default class PackagingInstructionViewForm extends React.Component {
             <div>
                 <hr/>
                 <div className="pddn-25-btm ">
-                    <h6 className="pull-left">AR BULK  </h6>
+                    <h6 className="pull-left">AR BULK Location</h6>
                     <a href=""  className="pull-right text_right"> Show All</a>
                 </div>
                 <ul>
