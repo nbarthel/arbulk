@@ -5,6 +5,7 @@ import axios from 'axios';
 import _ from 'lodash';
 import  { PropTypes } from 'react';
 import { createDataLoader } from 'react-loopback';
+import { hashHistory } from 'react-router'
 
 import request from '../../utils/request';
 import { Base_Url } from '../../constants';
@@ -641,6 +642,15 @@ class ViewDataComponent extends React.Component {
 
             )
     }
+
+    getDetailsGroup(groupID)
+    {
+        hashHistory.push('/Packaging/inventorycard/'+groupID+'/null');
+    }
+    getDetailsSingle(rowID, groupID)
+    {
+        hashHistory.push('/Packaging/inventorycard/'+groupID+'/'+rowID);
+    }
     GetRows(view,count,selectedWeight){
 
        return _.map(view.TPackagingInstructionLots, (data, index) => {
@@ -818,7 +828,7 @@ class ViewDataComponent extends React.Component {
 
                     return (
                         <tbody key={index}>
-                        <tr className="base_bg clickable" ref="clickable">
+                        <tr className="base_bg clickable" ref="clickable" onDoubleClick={this.getDetailsGroup.bind(this, view.id)}>
                             <td>
 
                                 <input type="checkbox" className="checkBox" onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
@@ -969,7 +979,7 @@ class ViewDataComponent extends React.Component {
 
 
                                             return (
-                                                <tr key={index} className={count}>
+                                                <tr key={index} className={count} onDoubleClick={this.getDetailsSingle.bind(this,view.TPackagingInstructionLots[index].id, view.id)}>
                                                     <td>
 
                                                         <input className="checkBox" type="checkbox"
