@@ -39,7 +39,16 @@ export default class AdminHeader extends React.Component {
 						<li><Link to="/Admin/createusr">Create User</Link></li>
 						<li><Link to="/Admin/modifyUser">Modify User</Link></li>
 						<li><Link to = "/Admin/CustAndTruck">Customers & Truckers</Link></li>
-						<li><Link to ="/Admin/AddMaterial">Add Material</Link></li>
+						 <li className="dropdown">
+							 <a href="javascript:void(0)" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Material<span className="caret"></span></a>
+							 <ul className="dropdown-menu">
+								 <li><Link to ="/Admin/AddMaterial">Add Material</Link></li>
+								 <li role="separator" className="divider"></li>
+								 <li><Link to ="/Admin/addPallet">Add Pallet</Link></li>
+								 <li><Link to ="/Admin/addStretchWrap">Add Stretch wrap</Link></li>
+							 </ul>
+						 </li>
+
 						<li><Link to ="/Admin/viewMaterial">View Material</Link></li>
 						<li><Link to = "/Admin/UploadData">Upload Data</Link></li>
 						<li><a href="#">Change History</a></li>

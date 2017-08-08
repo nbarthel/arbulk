@@ -251,6 +251,42 @@ export default function createRoutes(store) {
 		}
 	},
 	{
+		path: '/Admin/addPallet',
+		name: <span>Admin<i className="fa fa-angle-double-right"/>Add Pallet</span>,
+		getComponent(nextState, cb){
+			System.import('./containers/Admin/Pallet/palletPage')
+				.then(loadModule(cb))
+				.catch(errorLoading)
+		}
+	},
+	{
+		path: '/Admin/updatePallet/(:palletId)',
+		name: <span>Admin<i className="fa fa-angle-double-right"/>Add Pallet</span>,
+		getComponent(nextState, cb){
+			System.import('./containers/Admin/Pallet/updatePallet')
+				.then(loadModule(cb))
+				.catch(errorLoading)
+		}
+	},
+	{
+		path: '/Admin/addStretchWrap',
+		name: <span>Admin<i className="fa fa-angle-double-right"/>Add Pallet</span>,
+		getComponent(nextState, cb){
+			System.import('./containers/Admin/ScratchWrap/StretchWrapPage')
+				.then(loadModule(cb))
+				.catch(errorLoading)
+		}
+	},
+	{
+	path: '/Admin/updateStretchWrap/(:scrapID)',
+	name: <span>Admin<i className="fa fa-angle-double-right"/>Add Pallet</span>,
+	getComponent(nextState, cb){
+		System.import('./containers/Admin/ScratchWrap/UpdateStretchWrap')
+			.then(loadModule(cb))
+			.catch(errorLoading)
+	}
+	},
+	{
 		path: '/Admin/AddMaterial',
 		name: <span>Admin<i className="fa fa-angle-double-right"/>Add Material</span>,
 		getComponent(nextState, cb){
