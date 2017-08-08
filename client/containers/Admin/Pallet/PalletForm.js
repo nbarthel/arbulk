@@ -75,7 +75,7 @@ class PalletForm extends React.Component {
             <section className="admin">
                 <div className="container">
                     <div className="create_user col-lg-8 col-md-8 col-sm-12 col-xs-12">
-                        <form className="form-horizontal bs-component">
+                        <form className=" bs-component">
                             <fieldset className="scheduler-border">
                                 <legend className="scheduler-border">Add Pallet</legend>
                                 <div className="col-lg-6  col-md-6 col-sm-6 col-xs-12">
