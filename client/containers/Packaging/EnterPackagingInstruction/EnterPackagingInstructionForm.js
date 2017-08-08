@@ -329,7 +329,6 @@ export default class EnterPackagingInstructionForm extends React.Component {
     this.forceUpdate()
   }
   cancel(e){
-
     window.location.reload();
   }
   handleMaterialEditChange(e){
@@ -432,87 +431,107 @@ export default class EnterPackagingInstructionForm extends React.Component {
 
   handleRailcarChange(e){
     debugger;
-    var number = e.target.id[e.target.id.length-1]
-    var propertyName = e.target.name
-    if(!isNaN(number) && this.RailCarArray.length>1){
-      this.RailCarArray[number][propertyName] = e.target.value.toUpperCase();
-    }
-    else{
-      this.RailCarArray[0][propertyName] = e.target.value.toUpperCase();
-    }
-  }
-  onUpdate(e){
+        var number = e.target.id[e.target.id.length-1];
+        var propertyName = e.target.name;
+        if(!isNaN(number) && this.RailCarArray.length>1){
+            this.RailCarArray[number][propertyName] = e.target.value.toUpperCase();
+        }
+        else{
+            this.RailCarArray[0][propertyName] = e.target.value.toUpperCase();
+        }
 
-    DisableDoubleClick('update')
-    this.obj = {
-      customer_id : this.props.data.customer_id.toString(),
-      location_id : this.props.data.location_id.toString(),
-      po_number : this.props.data.po_number.toString(),
-      material : this.props.data.material.toString(),
-      origin_id : this.props.data.origin_id.toString(),
-      packaging_material_id : this.props.data.packaging_material_id.toString(),
-      pallet_type_id : this.props.data.pallet_type_id.toString(),
-      bags_per_pallet : this.props.data.bags_per_pallet.toString(),
-      wrap_type_id : this.props.data.wrap_type_id.toString(),
-      bag_id : this.props.data.bag_id.toString(),
-      custom_label : this.props.data.custom_label.toString(),
-    }
-    if(this.isValid() != true){
-      EnableClick('update')
-      return
-    }
-    if(this.ValidateRailCar(1)){
-      EnableClick('update')
-      return
-    }
-    var isError = false;
-    for(var i=0;i<this.props.data.TPackagingInstructionLots.length;i++){
-      var lot_number = this.props.data.TPackagingInstructionLots[i].lot_number
-      var railcar_number = this.props.data.TPackagingInstructionLots[i].railcar_number
-      var weight = this.props.data.TPackagingInstructionLots[i].weight
-      if(lot_number==" " || lot_number==null || lot_number == undefined || lot_number==""){
-        swal("Lot Number can't be empty")
-        isError = true;
-        EnableClick('update')
-        return
+
+  }
+  onUpdate(e) {
+
+      DisableDoubleClick('update');
+      var flagForuniqueRailCar = false;
+      for (var i = 0; i < this.props.data.TPackagingInstructionLots.length; i++) {
+          for (var j = i + 1; j < this.props.data.TPackagingInstructionLots.length; j++) {
+              if (this.props.data.TPackagingInstructionLots[i].railcar_number.toUpperCase() === this.props.data.TPackagingInstructionLots[j].railcar_number.toUpperCase()) {
+                  flagForuniqueRailCar = true;
+                  break;
+              }
+          }
+          if (flagForuniqueRailCar)
+              break;
       }
-      if(railcar_number==" " || railcar_number==null || railcar_number == undefined || railcar_number==""){
-        swal("Railcar Number can't be empty")
-        isError = true;
-        EnableClick('update')
-        return
+      if (flagForuniqueRailCar) {
+          e.preventDefault();
+          swal('error', "Railcar Number can't be same", 'error');
+          EnableClick('update')
       }
-      if(weight==" " || weight==null || weight == undefined || weight==0 || weight==""){
-        swal("Weight can't be empty or 0")
-        isError = true;
-        EnableClick('update')
-        return
+      else {
+      this.obj = {
+          customer_id: this.props.data.customer_id.toString(),
+          location_id: this.props.data.location_id.toString(),
+          po_number: this.props.data.po_number.toString(),
+          material: this.props.data.material.toString(),
+          origin_id: this.props.data.origin_id.toString(),
+          packaging_material_id: this.props.data.packaging_material_id.toString(),
+          pallet_type_id: this.props.data.pallet_type_id.toString(),
+          bags_per_pallet: this.props.data.bags_per_pallet.toString(),
+          wrap_type_id: this.props.data.wrap_type_id.toString(),
+          bag_id: this.props.data.bag_id.toString(),
+          custom_label: this.props.data.custom_label.toString(),
       }
-    }
-    if(!document.getElementById('row1').checked){
-      swal("Error","Please check the Create Label Check Box","info")
-      isError = true
-      EnableClick('update')
-      return
-    }
-    if(isError){
-      EnableClick('update')
-      return
-    }
-    var postUrl = Base_Url+"TPackagingInstructions/updatePIEntry"
-    $.ajax({
-      type:"POST",
-      url: postUrl,
-      data:this.props.data,
-      success:function(){
-        swal("Posted" , "Data Has Been Successfully Edited !" , "success");
-        hashHistory.push('/Packaging/packaginginstview/')
-      },
-      Error:function(err){
-        EnableClick('update')
-        swal("Failed" , "Error occured please try later!" , "error");
+      if (this.isValid() != true) {
+          EnableClick('update')
+          return
       }
-    })
+      if (this.ValidateRailCar(1)) {
+          EnableClick('update')
+          return
+      }
+      var isError = false;
+      for (var i = 0; i < this.props.data.TPackagingInstructionLots.length; i++) {
+          var lot_number = this.props.data.TPackagingInstructionLots[i].lot_number
+          var railcar_number = this.props.data.TPackagingInstructionLots[i].railcar_number
+          var weight = this.props.data.TPackagingInstructionLots[i].weight
+          if (lot_number == " " || lot_number == null || lot_number == undefined || lot_number == "") {
+              swal("Lot Number can't be empty")
+              isError = true;
+              EnableClick('update')
+              return
+          }
+          if (railcar_number == " " || railcar_number == null || railcar_number == undefined || railcar_number == "") {
+              swal("Railcar Number can't be empty")
+              isError = true;
+              EnableClick('update')
+              return
+          }
+          if (weight == " " || weight == null || weight == undefined || weight == 0 || weight == "") {
+              swal("Weight can't be empty or 0")
+              isError = true;
+              EnableClick('update')
+              return
+          }
+      }
+      if (!document.getElementById('row1').checked) {
+          swal("Error", "Please check the Create Label Check Box", "info")
+          isError = true
+          EnableClick('update')
+          return
+      }
+      if (isError) {
+          EnableClick('update')
+          return
+      }
+      var postUrl = Base_Url + "TPackagingInstructions/updatePIEntry"
+      $.ajax({
+          type: "POST",
+          url: postUrl,
+          data: this.props.data,
+          success: function () {
+              swal("Posted", "Data Has Been Successfully Edited !", "success");
+              hashHistory.push('/Packaging/packaginginstview/')
+          },
+          Error: function (err) {
+              EnableClick('update')
+              swal("Failed", "Error occured please try later!", "error");
+          }
+      })
+  }
 
   }
   isValid(){
@@ -537,133 +556,150 @@ export default class EnterPackagingInstructionForm extends React.Component {
     console.log("Submit");
     debugger
     var checkPo = []
+      var flagForUniqueRailcar = false
+      for(var i=0;i<this.RailCarArray.length;i++){
+      for(var j=i+i;j<this.RailCarArray.length;j++){
+        if(this.RailCarArray[i].railcar_number.toUpperCase() === this.RailCarArray[j].railcar_number.toUpperCase()){
+            flagForUniqueRailcar = true;
+            break;
+        }
+      }
+      if(flagForUniqueRailcar)
+        break;
+      }
+      if(flagForUniqueRailcar){
+        e.preventDefault();
+        swal('Error',"Railcar Number can't be same",'error')
+      }
+      else{
+          DisableDoubleClick('submit')
 
-    DisableDoubleClick('submit')
+          for(var i in this.state.polList){
+              checkPo.push(this.state.polList[i].poNumber)
+          }
+          if(this.obj.po_number != ""){
+              if(checkPo.indexOf(this.obj.po_number) > 0){
+                  swal('Warning' , "This Purchase order already exists" , 'info')
+                  EnableClick('submit')
+                  return ;
+              }
+          }
+          if(this.isValid() == true){
 
-    for(var i in this.state.polList){
-      checkPo.push(this.state.polList[i].poNumber)
-    }
-    if(this.obj.po_number != ""){
-      if(checkPo.indexOf(this.obj.po_number) > 0){
-        swal('Warning' , "This Purchase order already exists" , 'info')
-        EnableClick('submit')
-        return ;
-      }
-    }
-    if(this.isValid() == true){
-
-      if(!document.getElementById('row1').checked){
-        swal("Error","Please check the Create Label Check Box")
-        EnableClick('submit')
-        return
-      }
-      if(this.ValidateRailCar()){
-        EnableClick('submit')
-        return
-      }
-      console.log("PI Object",this.obj)
-      let today = new Date();
-      let dd = today.getDate();
-      let mm = today.getMonth()+1;
-      var yyyy = today.getFullYear();
-      if(dd<10){
-        dd = '0'+dd
-      }
-      if(mm<10){
-        mm = '0'+mm
-      }
-      today = mm+'/'+dd+'/'+yyyy
-      this.obj.created_by = this.userId
-      this.obj.created_on = today
-      this.obj.packaging_status = "UNCONFIRMED"
-      //this.obj.
-      Object.defineProperty(this.Allobjs,"PI",{
-        enumerable: true ,
-        writable: true,
-        configurable:true,
-        value:this.obj})
+              if(!document.getElementById('row1').checked){
+                  swal("Error","Please check the Create Label Check Box")
+                  EnableClick('submit')
+                  return
+              }
+              if(this.ValidateRailCar()){
+                  EnableClick('submit')
+                  return
+              }
+              console.log("PI Object",this.obj)
+              let today = new Date();
+              let dd = today.getDate();
+              let mm = today.getMonth()+1;
+              var yyyy = today.getFullYear();
+              if(dd<10){
+                  dd = '0'+dd
+              }
+              if(mm<10){
+                  mm = '0'+mm
+              }
+              today = mm+'/'+dd+'/'+yyyy
+              this.obj.created_by = this.userId
+              this.obj.created_on = today
+              this.obj.packaging_status = "UNCONFIRMED"
+              //this.obj.
+              Object.defineProperty(this.Allobjs,"PI",{
+                  enumerable: true ,
+                  writable: true,
+                  configurable:true,
+                  value:this.obj})
 //if(this.state.customChecked == false){
-      //   if(Object.keys(this.railcarObj).length != 0){
-      //      this.addrailcarObject();
-      //   }
+              //   if(Object.keys(this.railcarObj).length != 0){
+              //      this.addrailcarObject();
+              //   }
 //}
-      this.railCarObjects = this.RailCarArray
-      console.log(this.railCarObjects)
-      if(this.railCarObjects && this.railCarObjects.length > 1){
-        this.state.labelLength.unshift(this.obj.custom_label)
+              this.railCarObjects = this.RailCarArray
+              console.log(this.railCarObjects)
+              if(this.railCarObjects && this.railCarObjects.length > 1){
+                  this.state.labelLength.unshift(this.obj.custom_label)
 
-        for(var i in this.railCarObjects){
-          // let tempcustomlabel = this.state.labelLength[i]
-          // if(i>0){
-          //   tempcustomlabel = tempcustomlabel.poNumber+tempcustomlabel.lotNumber+tempcustomlabel.material+tempcustomlabel.originName+tempcustomlabel.weight
-          // }
-          //this.railCarObjects[i].custom_label = tempcustomlabel
-          this.railCarObjects[i].custom_label = this.state.customLabel[i]
-        }
-      }
-      if(this.state.selectedOption == 'kg'){
-        var flag = true;
-        for(var i=0;i<this.railCarObjects.length;i++){
-          this.railCarObjects[i].weight = this.railCarObjects[i].weight*MUL_FACTOR
-        }
-      }
-      if(this.state.labelLength && this.state.labelLength.length == 0){
-        this.railCarObjects[0].custom_label = this.obj.custom_label
-      }
+                  for(var i in this.railCarObjects){
+                      // let tempcustomlabel = this.state.labelLength[i]
+                      // if(i>0){
+                      //   tempcustomlabel = tempcustomlabel.poNumber+tempcustomlabel.lotNumber+tempcustomlabel.material+tempcustomlabel.originName+tempcustomlabel.weight
+                      // }
+                      //this.railCarObjects[i].custom_label = tempcustomlabel
+                      this.railCarObjects[i].custom_label = this.state.customLabel[i]
+                  }
+              }
+              if(this.state.selectedOption == 'kg'){
+                  var flag = true;
+                  for(var i=0;i<this.railCarObjects.length;i++){
+                      this.railCarObjects[i].weight = this.railCarObjects[i].weight*MUL_FACTOR
+                  }
+              }
+              if(this.state.labelLength && this.state.labelLength.length == 0){
+                  this.railCarObjects[0].custom_label = this.obj.custom_label
+              }
 
-      this.Allobjs.packagingLots = JSON.parse(JSON.stringify(this.railCarObjects))
+              this.Allobjs.packagingLots = JSON.parse(JSON.stringify(this.railCarObjects))
 
-      console.log(this.Allobjs)
+              console.log(this.Allobjs)
 
-      var postUrl = Base_Url+"TPackagingInstructions/createPiEntry"
-      if(this.railCarObjects== 0){
-        if(flag){
-          for(var i=0;i<this.railCarObjects.length;i++){
-            this.railCarObjects[i].weight = this.railCarObjects[i].weight/MUL_FACTOR
+              var postUrl = Base_Url+"TPackagingInstructions/createPiEntry"
+              if(this.railCarObjects== 0){
+                  if(flag){
+                      for(var i=0;i<this.railCarObjects.length;i++){
+                          this.railCarObjects[i].weight = this.railCarObjects[i].weight/MUL_FACTOR
+                      }
+                  }
+                  this.state.labelLength.shift()
+                  swal("Error","Please enter railcar Information","error")
+                  EnableClick('submit')
+                  return;
+              }
+              console.log(this.Allobjs)
+              if(this.Allobjs.PI.po_number == "" || this.Allobjs.PI.po_number === undefined){
+                  this.Allobjs.PI.po_number = this.Allobjs.packagingLots[0].lot_number
+              }
+              swal({
+                  title: "Submitting",
+                  text: "Please Wait",
+                  timer: 2500,
+                  showConfirmButton: false
+              })
+              $.ajax({
+                  type:"POST",
+                  url: postUrl,
+                  data:this.Allobjs,
+                  success:function(){
+                      swal("Posted" , "Data Has Been Successfully Posted !" , "success");
+                      hashHistory.push('/Packaging/packaginginstview/')
+                  },
+                  error:function(err){
+                      EnableClick('submit')
+                      if(flag){
+                          for(var i=0;i<this.railCarObjects.length;i++){
+                              this.railCarObjects[i].weight = this.railCarObjects[i].weight/MUL_FACTOR
+                          }
+                      }
+                      this.state.labelLength.shift()
+                      swal("Error","Please enter all the fields","error")
+                  }
+              })
+              this.railCarObjects.splice(this.railCarObjects.length-1,1)
           }
-        }
-        this.state.labelLength.shift()
-        swal("Error","Please enter railcar Information","error")
-        EnableClick('submit')
-        return;
-      }
-      console.log(this.Allobjs)
-      if(this.Allobjs.PI.po_number == "" || this.Allobjs.PI.po_number === undefined){
-        this.Allobjs.PI.po_number = this.Allobjs.packagingLots[0].lot_number
-      }
-      swal({
-        title: "Submitting",
-        text: "Please Wait",
-        timer: 2500,
-        showConfirmButton: false
-      })
-      $.ajax({
-        type:"POST",
-        url: postUrl,
-        data:this.Allobjs,
-        success:function(){
-          swal("Posted" , "Data Has Been Successfully Posted !" , "success");
-          hashHistory.push('/Packaging/packaginginstview/')
-        },
-        error:function(err){
-          EnableClick('submit')
-          if(flag){
-            for(var i=0;i<this.railCarObjects.length;i++){
-              this.railCarObjects[i].weight = this.railCarObjects[i].weight/MUL_FACTOR
-            }
+          else{
+              if(this.state.haveSpecialChar==0){
+                  swal('',"Please complete fields marked as red" , 'info')
+                  EnableClick('submit')
+              }
           }
-          this.state.labelLength.shift()
-          swal("Error","Please enter all the fields","error")
-        }
-      })
-      this.railCarObjects.splice(this.railCarObjects.length-1,1)
-    }
-    else{
-      if(this.state.haveSpecialChar==0){
-        swal('',"Please complete fields marked as red" , 'info')
-        EnableClick('submit')
       }
-    }
+
 
   }
 

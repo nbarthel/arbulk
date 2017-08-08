@@ -800,6 +800,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                         }
                     }
                     i=0;
+                    console.log(">>>>>>>>>>>>>>>>>")
                  if(this.Where.flagForShipmentRecivedFilter){
                      while(i<data.length){
                          if(data[i].TPackagingInstructionLots && data[i].TPackagingInstructionLots.length>0){

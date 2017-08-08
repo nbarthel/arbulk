@@ -105,10 +105,10 @@ componentDidMount() {
 		var invt ;
 		if(this.state.InvtLocationHistory )
 		{
-            var newArr = _.sortBy(this.state.InvtLocationHistory, 'locationName', function(n) {
-                return n.TInventoryLocation.locationName.toLowerCase();
-            });
-		 invt = _.map(newArr,(invent)=>{
+            // var newArr = _.sortBy(this.state.InvtLocationHistory, 'locationName', function(n) {
+            //     return n.TInventoryLocation.locationName.toLowerCase();
+            // });
+		 invt = _.map(this.state.InvtLocationHistory,(invent)=>{
 
 			return (
 				<tr key={invent.id}>
