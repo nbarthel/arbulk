@@ -542,17 +542,18 @@ changeLot(e){
       var bagsLoadedInContainer =0
       var flagToDecideStatus = false;
       var flagToSaveSealNumber = false;
-
-      if(this.state.sealNumber==''){
-        this.state.sealNumber = this.props.containerTable?this.props.containerTable.sealNumber:''
-        if(this.state.sealNumber==''){
-        swal("Please Enter Seal Number");
-        return
-      }
-      }
-      else{
         flagToSaveSealNumber = true
-      }
+
+      // if(this.state.sealNumber==''){
+      //   this.state.sealNumber = this.props.containerTable?this.props.containerTable.sealNumber:''
+      //   if(this.state.sealNumber==''){
+      //   swal("Please Enter Seal Number");
+      //   return
+      // }
+      // }
+      // else{
+       // flagToSaveSealNumber = true
+      //}
       for(var i in this.state.contLoadData){
         bagsLoadedInContainer+=this.state.contLoadData[i].noOfBags
       }
@@ -789,7 +790,6 @@ changeLot(e){
                       </h4>
                     </div>
                     <div id="CurrentInventory" className="panel-collapse collapse in ">
-
                     <div className="table-responsive">
                    <CurrentInventoryComp key = {this.state.currentInventoryKey} currentInventory = {this.state.currentIntObject} handleCurrentInvChecks = {this.handleCurrentInvChecks}/>
                     </div>

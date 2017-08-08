@@ -1240,52 +1240,59 @@ class ContainerViewForm extends React.Component {
 
     onHideColumn(e, name) {
         setTimeout(function () {
-            $("#Packaging_Instruction_View").colResizable({
-                disable: true
-            });
 
-            $("#Packaging_Instruction_View").colResizable({
-                liveDrag:false,
-                gripInnerHtml:"<div class='grip'></div>",
-                draggingClass:"dragging",
-            });
+            // $("#Packaging_Instruction_View").colResizable({
+            //     disable: true
+            // });
+
+            // $("#Packaging_Instruction_View").colResizable({
+            //     liveDrag:false,
+            //     gripInnerHtml:"<div class='grip'></div>",
+            //     draggingClass:"dragging",
+            // });
         },100);
 
 
-        switch (e.target.name) {
+        switch (name) {
             case "ARB" :
                 if (this.state.showARB == "") {
                     this.setState({
-                        showARB: "none"
+                        showARB: "none",
+                        aclass:"ARB"
                     })
                 }
                 else {
                     this.setState({
-                        showARB: ""
+                        showARB: "",
+                        aclass:""
                     })
                 }
                 break;
             case "Customer" :
                 if (this.state.showCustomer == "") {
                     this.setState({
-                        showCustomer: "none"
+                        showCustomer: "none",
+                        aclass:"Customer"
                     })
                 }
                 else {
                     this.setState({
-                        showCustomer: ""
+                        showCustomer: "",
+                        aclass:""
                     })
                 }
                 break;
             case "Container" :
                 if (this.state.showContainer == "") {
                     this.setState({
-                        showContainer: "none"
+                        showContainer: "none",
+                        aclass:"Container"
                     })
                 }
                 else {
                     this.setState({
-                        showContainer: ""
+                        showContainer: "",
+                        aclass:""
                     })
                 }
                 break;
@@ -1293,12 +1300,14 @@ class ContainerViewForm extends React.Component {
 
                 if (this.state.showRelease == "") {
                     this.setState({
-                        showRelease: "none"
+                        showRelease: "none",
+                        aclass:"Release"
                     })
                 }
                 else {
                     this.setState({
-                        showRelease: ""
+                        showRelease: "",
+                        aclass:""
                     })
                 }
                 break;
@@ -1306,12 +1315,14 @@ class ContainerViewForm extends React.Component {
 
                 if (this.state.showBooking == "") {
                     this.setState({
-                        showBooking: "none"
+                        showBooking: "none",
+                        aclass:"Booking"
                     })
                 }
                 else {
                     this.setState({
-                        showBooking: ""
+                        showBooking: "",
+                        aclass:""
                     })
                 }
                 break;
@@ -1319,12 +1330,14 @@ class ContainerViewForm extends React.Component {
 
                 if (this.state.showTrucker == "") {
                     this.setState({
-                        showTrucker: "none"
+                        showTrucker: "none",
+                        aclass:"Trucker"
                     })
                 }
                 else {
                     this.setState({
-                        showTrucker: ""
+                        showTrucker: "",
+                        aclass:""
                     })
                 }
                 break;
@@ -1332,12 +1345,14 @@ class ContainerViewForm extends React.Component {
 
                 if (this.state.showArrived == "") {
                     this.setState({
-                        showArrived: "none"
+                        showArrived: "none",
+                        aclass:"Arrived"
                     })
                 }
                 else {
                     this.setState({
-                        showArrived: ""
+                        showArrived: "",
+                        aclass:""
                     })
                 }
                 break;
@@ -1345,12 +1360,14 @@ class ContainerViewForm extends React.Component {
 
                 if (this.state.showSteamShip == "") {
                     this.setState({
-                        showSteamShip: "none"
+                        showSteamShip: "none",
+                        aclass:"SteamShip"
                     })
                 }
                 else {
                     this.setState({
-                        showSteamShip: ""
+                        showSteamShip: "",
+                        aclass:""
                     })
                 }
                 break;
@@ -1358,12 +1375,14 @@ class ContainerViewForm extends React.Component {
 
                 if (this.state.showType == "") {
                     this.setState({
-                        showType: "none"
+                        showType: "none",
+                        aclass:"Type"
                     })
                 }
                 else {
                     this.setState({
-                        showType: ""
+                        showType: "",
+                        aclass:""
                     })
                 }
                 break;
@@ -1489,25 +1508,25 @@ class ContainerViewForm extends React.Component {
                                         </div>
 
                                     </div>
+                                    <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 "><label>Show / Hide Table Columns</label></div>
                                     <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 " id="hide4">
-                                        <a href="javascript:void(0)" name="ARB"
-                                           onClick={(e) => {this.onHideColumn(e,name)}}>ARB</a>
+                                        <a href="javascript:void(0)"  className={this.state.aclass=="ARB"?"":"active"}><span  onClick={(e,name) => {this.onHideColumn(e,"ARB")}}>ARB</span></a>
                                         <a href="javascript:void(0)" name="Customer"
-                                           onClick={(e) => {this.onHideColumn(e)}}>Customer</a>
+                                           onClick={(e,name) => {this.onHideColumn(e, "Customer")}} className={this.state.aclass=="Customer"?"":"active"}><span >Customer</span></a>
                                         <a href="javascript:void(0)" name="Release"
-                                           onClick={(e) => {this.onHideColumn(e)}}>Release</a>
+                                           onClick={(e,name) => {this.onHideColumn(e, "Release")}} className={this.state.aclass=="Release"?"":"active"}><span>Release</span></a>
                                         <a href="javascript:void(0)" name="Booking"
-                                           onClick={(e) => {this.onHideColumn(e)}}>Booking</a>
+                                           onClick={(e,name) => {this.onHideColumn(e, "Booking")}} className={this.state.aclass=="Booking"?"":"active"}><span>Booking</span></a>
                                         <a href="javascript:void(0)" name="Container"
-                                           onClick={(e) => {this.onHideColumn(e)}}>Container</a>
+                                           onClick={(e,name) => {this.onHideColumn(e, "Container")}} className={this.state.aclass=="Container"?"":"active"}><span>Container</span></a>
                                         <a href="javascript:void(0)" name="Trucker"
-                                           onClick={(e) => {this.onHideColumn(e)}}>Trucker</a>
+                                           onClick={(e,name) => {this.onHideColumn(e, "Trucker")}} className={this.state.aclass=="Trucker"?"":"active"}><span>Trucker</span></a>
                                         <a href="javascript:void(0)" name="Arrived"
-                                           onClick={(e) => {this.onHideColumn(e)}}>Arrived</a>
+                                           onClick={(e,name) => {this.onHideColumn(e, "Arrived")}} className={this.state.aclass=="Aririved"?"":"active"}><span>Arrived</span></a>
                                         <a href="javascript:void(0)" name="SteamShip"
-                                           onClick={(e) => {this.onHideColumn(e)}}>SteamShip Line</a>
+                                           onClick={(e,name) => {this.onHideColumn(e, "SteamShip")}} className={this.state.aclass=="SteamShip"?"":"active"}><span>SteamShip Line</span></a>
                                         <a href="javascript:void(0)" name="Type"
-                                           onClick={(e) => {this.onHideColumn(e)}}>Type</a>
+                                           onClick={(e,name) => {this.onHideColumn(e, "Type")}} className={this.state.aclass=="Type"?"":"active"}><span>Type</span></a>
                                     </div>
                                     <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div className="">

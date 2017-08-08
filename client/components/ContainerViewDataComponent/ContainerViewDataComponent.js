@@ -189,8 +189,8 @@ class ContainerViewDataComponent extends React.Component {
                     liveDrag: false,
                     gripInnerHtml: "<div class='grip'></div>",
                     draggingClass: "dragging",
-                    //resizeMode:'flex',
-                    //minWidth:100
+                    resizeMode:'flex',
+                    minWidth:210
                 });
                 $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
                 var oldIndex;

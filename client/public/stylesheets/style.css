@@ -98,8 +98,12 @@ th.placeholder{background-color: rgb(46,109,164) !important;}
 .text_left{ text-align:left !important;}.text_right{ text-align:right !important;}.text_center{ text-align:center !important;}.text_justify{ text-align:justify !important;}
 
 
-#hide4{ margin-bottom: 10px;}
-#hide4 a{background: #e5e5ff;color: #616161;padding: 2px 10px;border-radius: 2px;text-decoration: none; line-height: 22px;margin-right: 5px;  display: inline-block; margin-bottom: 5px;}
+
+#hide4{ margin-bottom: 10px;  overflow: auto; width:100%; display: table;}
+#hide4{display: table-cell; width:auto}
+#hide4 a.active span{background: #e5e5ff;color: #000;padding: 2px 10px;border-radius: 2px;text-decoration: none; line-height: 22px;margin-right: 5px;  display: inline-block; margin-bottom: 5px; border:1px solid transparent;}
+#hide4 a span{background:#fff;color: #999;padding: 2px 10px;border-radius: 2px;text-decoration: none; line-height: 22px;margin-right: 5px;  display: inline-block; margin-bottom: 5px; border:1px solid #999;
+     text-align: center; display: inline-block;}
 
 
 /*////////////////////////------pddn------ /////////////////////////////*/
