@@ -67,8 +67,8 @@ class ContainerTable extends Component {
                                         <td>{isOrdercnfd}</td>
                                         <td>{(inInventory.toUpperCase() == "IN INVENTORY" || inInventory.toUpperCase() =="SHIPPED")? 'YES' : 'NO'}</td>
                                         <td>{(cutOffDate!= "NA") ? moment(cutOffDate).format('MM-DD-YYYY'):"NA"}</td>
-                                        <td>{QtyReq} Bags</td>
                                         <td>{QtyShip} Bags</td>
+                                        <td>{QtyReq} Bags</td>
                                     </tr>
 
                                     </tbody>

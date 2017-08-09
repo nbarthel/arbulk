@@ -26,13 +26,21 @@ class ShipmentDetailsPage  extends React.Component{
        var base = 'TShipmentents'+'/'+this.id;
         if(parseInt(this.lotId)!=-1){
           this.url = SDview._buildUrl(base, {
-                      "include" : ["TLocation" , "TCompany" ,"TShipmentAddress",{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType","TPaymentType"]}},{"relation" :"TShipmentInternational","scope":{"include":["TSteamshipLine","TContainerType"]}},{"relation" : "TShipmentLots" ,"scope":{"include":["TPackagingInstructionLots","TPackagingInstructions"],"where":{"piLotsId":this.lotId}}}]
+                      "include" : [ "TLocation",
+                                    "TCompany" ,
+                                    "TShipmentAddress",
+                                    {"relation":"TContainerInternational","scope":{"include":["TContainerLoad"]}},
+                                    {"relation":"TContainerDomestic","scope":{"include":["TContainerLoad"]}},
+                                    {"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType","TPaymentType"]}},
+                                    {"relation" :"TShipmentInternational","scope":{"include":["TSteamshipLine","TContainerType"]}},
+                                    {"relation" : "TShipmentLots" ,"scope":{"include":["TPackagingInstructionLots","TPackagingInstructions"],"where":{"piLotsId":this.lotId}}}
+                                  ]
 
           });
         }
         else{
           this.url = SDview._buildUrl(base, {
-                      "include" : ["TLocation" , "TCompany" ,"TShipmentAddress",{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType","TPaymentType"]}},{"relation" :"TShipmentInternational","scope":{"include":["TSteamshipLine","TContainerType"]}},{"relation" : "TShipmentLots" ,"scope":{"include":["TPackagingInstructionLots","TPackagingInstructions"]}}]
+                      "include" : ["TLocation" , "TCompany" ,"TShipmentAddress",{"relation":"TContainerDomestic","scope":{"include":["TContainerLoad"]}},{"relation":"TContainerInternational","scope":{"include":["TContainerLoad"]}},{"relation" :"TShipmentDomestic","scope":{"include":["TShipmentType","TPaymentType"]}},{"relation" :"TShipmentInternational","scope":{"include":["TSteamshipLine","TContainerType"]}},{"relation" : "TShipmentLots" ,"scope":{"include":["TPackagingInstructionLots","TPackagingInstructions"]}}]
 
           });
         }

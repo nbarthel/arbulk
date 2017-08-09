@@ -19,8 +19,44 @@ import React, { Component } from 'react';
           else if(this.props.tabledata.isDomestic ==1 && this.props.tabledata.TShipmentDomestic.length > 0){
             statusConfirmed = this.props.tabledata.TShipmentDomestic[0].status
           }
+          var loadedObj = new Map();
+          if(this.props.tabledata.TContainerInternational.length > 0){
+              _.map(this.props.tabledata.TContainerInternational,(container,index) =>{
+                  _.map(container.TContainerLoad,(lotObj,index)=>{
+                      var num = loadedObj.get(lotObj.lotId)
+                      if(num && !isNaN(num)){
+                          num = num + lotObj.noOfBags;
+                      }
+                      else{
+                          num = lotObj.noOfBags;
+                      }
+                      loadedObj.set(lotObj.lotId, num)
+                  })
+              })
+          }
+          else if(this.props.tabledata.TContainerDomestic.length > 0){
+              _.map(this.props.tabledata.TContainerDomestic,(container,index) =>{
+                  _.map(container.TContainerLoad,(lotObj,index)=>{
+                      var num = loadedObj.get(lotObj.lotId)
+                      if(num && !isNaN(num)){
+                          num = num + lotObj.noOfBags;
+                      }
+                      else{
+                          num = lotObj.noOfBags;
+                      }
+                      loadedObj.set(lotObj.lotId, num)
+                  })
+              })
+          }
+
                  this.Table = _.map(this.props.tabledata.TShipmentLots,(tble,index) =>{
+                     console.log(loadedObj.get(tble.piLotsId));
+                   var bagShipped = loadedObj.get(tble.piLotsId);
+                   if(isNaN(bagShipped)){
+                       bagShipped = 0
+                   }
                    var inInventory = 'UNCONFIRMED'
+                     debugger
                    if(tble.TPackagingInstructionLots!=undefined){
                      inInventory = tble.TPackagingInstructionLots.status
                    }
@@ -47,8 +83,8 @@ import React, { Component } from 'react';
                                                 <td>{statusConfirmed == "UNCONFIRMED" ? 'N' : 'Y'}</td>
                                                 <td>{(inInventory.toUpperCase() == "IN INVENTORY" || inInventory.toUpperCase() =="SHIPPED")? 'Y' : 'N'}</td>
                                                 <td>{cutOff}</td>
-                                                <td>{tble.TPackagingInstructionLots ? (tble.TPackagingInstructionLots.inInventory ? tble.TPackagingInstructionLots.inInventory : 0) : 0} Bags</td>
-                                                  <td>{tble.noOfBags ? tble.noOfBags : 0} Bags</td>
+                                                <td>{tble.noOfBags ? tble.noOfBags : 0} Bags</td>
+                                                <td>{bagShipped} Bags</td>
                                                 <td><label className="control control--checkbox" >
                                                           <input type="checkbox" id={index} onClick = {(e) => this.props.tableCheckBoxChange(e,tble)}/><div className = "control__indicator"></div>
                                                      </label>
