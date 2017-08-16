@@ -179,6 +179,17 @@ class ContainerViewDataComponent extends React.Component {
         }
     }
 
+
+    postbackSample = function(){
+    $("#updatePanelSample").colResizable({
+        liveDrag:true,
+        postbackSafe:true,
+        partialRefresh:true
+    });
+}
+
+
+
     componentDidMount() {
 
         var ContainerState = this;
@@ -186,9 +197,11 @@ class ContainerViewDataComponent extends React.Component {
             setTimeout(function () {
 
                 $("#Packaging_Instruction_View").colResizable({
-                    liveDrag: false,
+                    liveDrag: true,
                     gripInnerHtml: "<div class='grip'></div>",
                     draggingClass: "dragging",
+                    postbackSafe:true,
+                    partialRefresh:true,
                     resizeMode:'flex',
                     minWidth:210
                 });
@@ -224,9 +237,7 @@ class ContainerViewDataComponent extends React.Component {
                         $("#Packaging_Instruction_View").colResizable({
                             liveDrag:false,
                             gripInnerHtml:"<div class='grip'></div>",
-                            draggingClass:"dragging",
-                            //resizeMode:'flex',
-                            //minWidth:100
+                            draggingClass:"dragging"
 
                         });
                     }
@@ -634,7 +645,15 @@ class ContainerViewDataComponent extends React.Component {
                                     }
                                     return (
                                         <tr key={i++}>
-                                            <td></td>
+                                            <td >
+                                                <input type="checkbox" className="checkBox"
+                                                       onClick={(e) => this.checkclick(e,view)}
+                                                       onChange={(e)=>{this.props.onCheckboxChange(e,view,data)}}
+                                                       value={view.id} id={"DD"+view.id + "_" +index}/>
+
+                                                <label htmlFor={"DD"+view.id + "_" +index}></label>
+
+                                            </td>
                                             <td key="Arb"
                                                 style={{display : this.props.showARB}}>{view.TLocation ? view.TLocation.locationName : ''}</td>
                                             <td key="Customer "
@@ -676,9 +695,18 @@ class ContainerViewDataComponent extends React.Component {
                                     }
                                     return (
                                         <tr key={i++}>
-                                            <td></td>
+                                            <td >
+                                                <input type="checkbox" className="checkBox"
+                                                       onClick={(e) => this.checkclick(e,view)}
+                                                       onChange={(e)=>{this.props.onCheckboxChange(e,view,data)}}
+                                                       value={view.id} id={"DD"+view.id + "_" +index}/>
+
+                                                <label htmlFor={"DD"+view.id + "_" +index}></label>
+
+                                            </td>
                                             <td key="Arb"
                                                 style={{display : this.props.showARB}}>{view.TLocation ? view.TLocation.locationName : ''}</td>
+
                                             <td key="Customer "
                                                 style={{display : this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</td>
                                             <td key="Release"

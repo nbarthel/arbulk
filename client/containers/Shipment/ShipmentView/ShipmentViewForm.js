@@ -1405,11 +1405,11 @@ onHideColumn(e,name){
         $("#Packaging_Instruction_View").colResizable({
             liveDrag: false,
             gripInnerHtml: "<div class='grip'></div>",
-            draggingClass: "dragging",
+            draggingClass: "dragging"
         });
     }, 100);
 
-    switch(e.target.name){
+    switch(name){
     case "ARB" :
     if(this.state.showARB == ""){
     this.setState({
@@ -1798,32 +1798,30 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                                                                         </div>
 
                   <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 " id="hide4">
-                 <a href="javascript:void(0)" name = "ARB" onClick = {(e) => {this.onHideColumn(e,name)}}>ARB</a>
-                 <a href="javascript:void(0)" name = "Customer" onClick = {(e) => {this.onHideColumn(e)}}>Customer</a>
-                                                                            <a href="javascript:void(0)" name="PO"
-                                                                               onClick={(e) => {this.onHideColumn(e)}}>PO#</a>
-                 <a href="javascript:void(0)" name = "Release" onClick={(e) => {this.onHideColumn(e)}}>Release</a>
-                 <a href="javascript:void(0)" name = "Lot" onClick={(e) => {this.onHideColumn(e)}}>Lot#</a>
-                 <a href="javascript:void(0)" name = "Material" onClick={(e) => {this.onHideColumn(e)}}>Material</a>
-                                                                            <a href="javascript:void(0)" name="Confmd"
-                                                                               onClick={(e) => {this.onHideColumn(e)}}>Confirmed?</a>
-                 <a href="javascript:void(0)" name = "Booking" onClick={(e) => {this.onHideColumn(e)}}>Booking</a>
-                 <a href="javascript:void(0)" name = "ShipmentType" onClick={(e) => {this.onHideColumn(e)}}>ShipmentType</a>
-                 <a href="javascript:void(0)" name = "Cutoff" onClick={(e) => {this.onHideColumn(e)}}>Cutoff</a>
-                 <a href="javascript:void(0)" name = "Forwarder" onClick={(e) => {this.onHideColumn(e)}}>Forwarder</a>
-                 <a href="javascript:void(0)" name = "CntrSize" onClick={(e) => {this.onHideColumn(e)}}>#CntrSize</a>
-                 <a href="javascript:void(0)" name = "InInvt" onClick={(e) => {this.onHideColumn(e)}}>In.Invt.</a>
-                 <a href="javascript:void(0)" name = "Qty"onClick={(e) => {this.onHideColumn(e)}}>Qty</a>
-                 <a href="javascript:void(0)" name = "Alloc" onClick={(e) => {this.onHideColumn(e)}}>Allocated</a>
-                 <a href="javascript:void(0)" name = "Enough" onClick={(e) => {this.onHideColumn(e)}}>Enough</a>
-                  <a href="javascript:void(0)" name="Bags" onClick={(e) => {this.onHideColumn(e)}}># of Bags In Inventory</a>
-                 <a href="javascript:void(0)" name = "ERD" onClick={(e) => {this.onHideColumn(e)}}>ERD</a>
-                 <a href="javascript:void(0)" name = "Vessel" onClick={(e) => {this.onHideColumn(e)}}>Vessel</a>
-                 <a href="javascript:void(0)" name = "SteamShip" onClick={(e) => {this.onHideColumn(e)}}>SteamShipLine</a>
-                 <a href="javascript:void(0)" name = "PU" onClick={(e) => {this.onHideColumn(e)}}>PU</a>
-                 <a href="javascript:void(0)" name = "Ret" onClick={(e) => {this.onHideColumn(e)}}>Return</a>
-                 <a href="javascript:void(0)" name = "Doc" onClick={(e) => {this.onHideColumn(e)}}>Doc</a>
-                 <a href="javascript:void(0)" name = "Status" onClick={(e) => {this.onHideColumn(e)}}>Status</a>
+                      <a href="javascript:void(0)" name = "ARB" className={this.state.showARB!==""?"":"active"} onClick = {(e,name) => {this.onHideColumn(e,"ARB")}}><span>ARB</span></a>
+                 <a href="javascript:void(0)" name = "Customer" className={this.state.showCustomer!==""?"":"active"} onClick = {(e,name) => {this.onHideColumn(e,"Customer")}}><span>Customer</span></a>
+                 <a href="javascript:void(0)" name="PO" className={this.state.showPO!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"PO")}}><span>PO#</span></a>
+                 <a href="javascript:void(0)" name = "Release" className={this.state.showRelease!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e, "Release")}}><span>Release</span></a>
+                 <a href="javascript:void(0)" name = "Lot" className={this.state.showLot!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e, "Lot")}}><span>Lot#</span></a>
+                 <a href="javascript:void(0)" name = "Material" className={this.state.showMaterial!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Material")}}><span>Material</span></a>
+                 <a href="javascript:void(0)" name="Confmd" className={this.state.showConfmd!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e, "Confmd")}}><span>Confirmed?</span></a>
+                 <a href="javascript:void(0)" name = "Booking" className={this.state.showBooking!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Booking")}}><span>Booking</span></a>
+                 <a href="javascript:void(0)" name = "ShipmentType" className={this.state.showShipmentType!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"ShipmentType")}}><span>ShipmentType</span></a>
+                 <a href="javascript:void(0)" name = "Cutoff" className={this.state.showCutoff!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Cutoff")}}><span>Cutoff</span></a>
+                 <a href="javascript:void(0)" name = "Forwarder" className={this.state.showForwarder!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Forwarder")}}><span>Forwarder</span></a>
+                 <a href="javascript:void(0)" name = "CntrSize" className={this.state.showCntrSize!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"CntrSize")}}><span>#CntrSize</span></a>
+                 <a href="javascript:void(0)" name = "InInvt" className={this.state.showInInvt!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"InInvt")}}><span>In.Invt.</span></a>
+                 <a href="javascript:void(0)" name = "Qty" className={this.state.showQty!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Qty")}}><span>Qty</span></a>
+                 <a href="javascript:void(0)" name = "Alloc" className={this.state.showAlloc!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Alloc")}}><span>Allocated</span></a>
+                 <a href="javascript:void(0)" name = "Enough" className={this.state.showEno!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Enough")}}><span>Enough</span></a>
+                  <a href="javascript:void(0)" name="Bags" className={this.state.showBags!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Bags")}}><span># of Bags In Inventory</span></a>
+                 <a href="javascript:void(0)" name = "ERD" className={this.state.showERD!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"ERD")}}><span>ERD</span></a>
+                 <a href="javascript:void(0)" name = "Vessel" className={this.state.showVessel!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Vessel")}}><span>Vessel</span></a>
+                 <a href="javascript:void(0)" name = "SteamShip" className={this.state.showSteamShip!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"SteamShip")}}><span>SteamShipLine</span></a>
+                 <a href="javascript:void(0)" name = "PU" className={this.state.showPU!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"PU")}}><span>PU</span></a>
+                 <a href="javascript:void(0)" name = "Ret" className={this.state.showRet!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Ret")}}><span>Return</span></a>
+                 <a href="javascript:void(0)" name = "Doc" className={this.state.showDoc!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Doc")}}><span>Doc</span></a>
+                      <a href="javascript:void(0)" name = "Status" className={this.state.showStatus!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Status")}}><span>Status</span></a>
 
 
                   </div>

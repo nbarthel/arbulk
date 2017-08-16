@@ -37,6 +37,7 @@ export default class PackagingInstructionViewForm extends React.Component {
             showBag:"",
             showInInvt:"",
             showStatus:"",
+            showRailcar:"",
             showRailcarArr:"",
             showRailcarArrD:"",
             showRailcarDep:"",
@@ -1045,19 +1046,19 @@ export default class PackagingInstructionViewForm extends React.Component {
     }
     onHideColumn(e,name){
 
-        setTimeout(function () {
-        $("#Packaging_Instruction_View").colResizable({
-            disable: true
+        setTimeout(function () { $("#Packaging_Instruction_View").colResizable({
+            disable: true,
+            resizeMode:'overflow'
         });
 
-        $("#Packaging_Instruction_View").colResizable({
-            liveDrag:false,
-            gripInnerHtml:"<div class='grip'></div>",
-            draggingClass:"dragging",
-        });
+            $("#Packaging_Instruction_View").colResizable({
+                liveDrag:false,
+                gripInnerHtml:"<div class='grip'></div>",
+                draggingClass:"dragging",
+            });
         },100);
 
-        switch(e.target.name){
+        switch(name){
             case "ARB" :
                 if(this.state.showARB == ""){
                     this.setState({
@@ -1095,7 +1096,6 @@ export default class PackagingInstructionViewForm extends React.Component {
                 }
                 break;
             case "Railcar" :
-                console.log(e.target.name)
                 if(this.state.showRailcar == ""){
                     this.setState({
                         showRailcar : "none"
@@ -1429,27 +1429,27 @@ export default class PackagingInstructionViewForm extends React.Component {
                             </div>
 
                             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 " id="hide4">
-                                <a href="javascript:void(0)" name = "ARB" onClick = {(e) => {this.onHideColumn(e,name)}}>ARB</a>
-                                <a href="javascript:void(0)" name = "Customer" onClick = {(e) => {this.onHideColumn(e)}}>Customer</a>
-                                <a href="javascript:void(0)" name = "PO" onClick={(e) => {this.onHideColumn(e)}}>PO#</a>
-                                <a href="javascript:void(0)" name = "Railcar" onClick={(e) => {this.onHideColumn(e)}}>Railcar#</a>
-                                <a href="javascript:void(0)" name = "Lot" onClick={(e) => {this.onHideColumn(e)}}>Lot#</a>
-                                <a href="javascript:void(0)" name = "Material" onClick={(e) => {this.onHideColumn(e)}}>Material</a>
-                                <a href="javascript:void(0)" name = "Confmd" onClick={(e) => {this.onHideColumn(e)}}>Confirmed?</a>
-                                <a href="javascript:void(0)" name = "Arrvd" onClick={(e) => {this.onHideColumn(e)}}>Arrived?</a>
-                                <a href="javascript:void(0)" name = "Recd" onClick={(e) => {this.onHideColumn(e)}}>Shipment Received?</a>
-                                <a href="javascript:void(0)" name = "Cutoff" onClick={(e) => {this.onHideColumn(e)}}>Cutoff</a>
-                                <a href="javascript:void(0)" name = "Weight" onClick={(e) => {this.onHideColumn(e)}}>Weight</a>
-                                <a href="javascript:void(0)" name = "Bag" onClick={(e) => {this.onHideColumn(e)}}>Qty Allocated</a>
-                                <a href="javascript:void(0)" name = "InInvt" onClick={(e) => {this.onHideColumn(e)}}>Qty Packaged</a>
-                                <a href="javascript:void(0)" name = "Status"onClick={(e) => {this.onHideColumn(e)}}>Status</a>
-                                <a href="javascript:void(0)" name = "RailcarArr" onClick={(e) => {this.onHideColumn(e)}}>Railcar Arrival</a>
+                                <a href="javascript:void(0)" className={this.state.showARB!==""?"":"active"} name = "ARB" onClick = {(e,name) => {this.onHideColumn(e,"ARB")}}><span >ARB</span></a>
+                                <a href="javascript:void(0)" name = "Customer" className={this.state.showCustomer!==""?"":"active"} onClick = {(e,name) => {this.onHideColumn(e,"Customer")}}><span >Customer</span></a>
+                                <a href="javascript:void(0)" name = "PO" className={this.state.showPO!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"PO")}}><span >PO#</span></a>
+                                <a href="javascript:void(0)" name = "Railcar" className={this.state.showRailcar!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Railcar")}}><span >Railcar#</span></a>
+                                <a href="javascript:void(0)" name = "Lot" className={this.state.showLot!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Lot")}}><span >Lot#</span></a>
+                                <a href="javascript:void(0)" name = "Material" className={this.state.showMaterial!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Material")}}><span >Material</span></a>
+                                <a href="javascript:void(0)" name = "Confmd" className={this.state.showConfmd!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Confmd")}}><span >Confirmed?</span></a>
+                                <a href="javascript:void(0)" name = "Arrvd" className={this.state.showArrvd!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Arrvd")}}><span >Arrived?</span></a>
+                                <a href="javascript:void(0)" name = "Recd" className={this.state.showRecd!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e, "Recd")}}><span >Shipment Received?</span></a>
+                                <a href="javascript:void(0)" name = "Cutoff" className={this.state.showCutoff!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e, "Cutoff")}}><span >Cutoff</span></a>
+                                <a href="javascript:void(0)" name = "Weight" className={this.state.showWeight!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e, "Weight")}}><span >Weight</span></a>
+                                <a href="javascript:void(0)" name = "Bag" className={this.state.showBag!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e, "Bag")}}><span >Qty Allocated</span></a>
+                                <a href="javascript:void(0)" name = "InInvt" className={this.state.showInInvt!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"InInvt")}}><span >Qty Packaged</span></a>
+                                <a href="javascript:void(0)" name = "Status" className={this.state.showStatus!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e, "Status")}}><span >Status</span></a>
+                                <a href="javascript:void(0)" name = "RailcarArr" className={this.state.showRailcarArr!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e, "RailcarArr")}}><span >Railcar Arrival</span></a>
 
-                                <a href="javascript:void(0)" name = "RailcarArrD" onClick={(e) => {this.onHideColumn(e)}}>Railcar Arrival Date</a>
-                                <a href="javascript:void(0)" name = "RailcarDep" onClick={(e) => {this.onHideColumn(e)}}>Railcar Departure</a>
-                                <a href="javascript:void(0)" name = "RailcarDepDate" onClick={(e) => {this.onHideColumn(e)}}>Railcar Departure Date</a>
-                                <a href="javascript:void(0)" name = "DaysPresent" onClick={(e) => {this.onHideColumn(e)}}>Railcar Days Present</a>
-                                <a href="javascript:void(0)" name = "RailcarStatus" onClick={(e) => {this.onHideColumn(e)}}>Railcar Status</a>
+                                <a href="javascript:void(0)" name = "RailcarArrD" className={this.state.showRailcarArrD!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"RailcarArrD")}}><span >Railcar Arrival Date</span></a>
+                                <a href="javascript:void(0)" name = "RailcarDep" className={this.state.showRailcarDep!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"RailcarDep")}}><span >Railcar Departure</span></a>
+                                <a href="javascript:void(0)" name = "RailcarDepDate" className={this.state.showRailcarDepDate!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"RailcarDepDate")}}><span >Railcar Departure Date</span></a>
+                                <a href="javascript:void(0)" name = "DaysPresent" className={this.state.showDaysPresent!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"DaysPresent")}}><span >Railcar Days Present</span></a>
+                                <a href="javascript:void(0)" name = "RailcarStatus" className={this.state.showRailcarStatus!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"RailcarStatus")}}><span >Railcar Status</span></a>
                             </div>
 
                             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12"  >

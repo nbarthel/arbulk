@@ -1240,16 +1240,16 @@ class ContainerViewForm extends React.Component {
 
     onHideColumn(e, name) {
         setTimeout(function () {
+            $("#Packaging_Instruction_View").colResizable({
+                disable: true,
+                resizeMode:'overflow'
+            });
 
-            // $("#Packaging_Instruction_View").colResizable({
-            //     disable: true
-            // });
-
-            // $("#Packaging_Instruction_View").colResizable({
-            //     liveDrag:false,
-            //     gripInnerHtml:"<div class='grip'></div>",
-            //     draggingClass:"dragging",
-            // });
+            $("#Packaging_Instruction_View").colResizable({
+                liveDrag:false,
+                gripInnerHtml:"<div class='grip'></div>",
+                draggingClass:"dragging",
+            });
         },100);
 
 
@@ -1510,23 +1510,23 @@ class ContainerViewForm extends React.Component {
                                     </div>
                                     <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 "><label>Show / Hide Table Columns</label></div>
                                     <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 " id="hide4">
-                                        <a href="javascript:void(0)"  className={this.state.aclass=="ARB"?"":"active"}><span  onClick={(e,name) => {this.onHideColumn(e,"ARB")}}>ARB</span></a>
+                                        <a href="javascript:void(0)"  className={this.state.showARB!==""?"":"active"}><span  onClick={(e,name) => {this.onHideColumn(e,"ARB")}}>ARB</span></a>
                                         <a href="javascript:void(0)" name="Customer"
-                                           onClick={(e,name) => {this.onHideColumn(e, "Customer")}} className={this.state.aclass=="Customer"?"":"active"}><span >Customer</span></a>
+                                           onClick={(e,name) => {this.onHideColumn(e, "Customer")}} className={this.state.showCustomer!==""?"":"active"}><span >Customer</span></a>
                                         <a href="javascript:void(0)" name="Release"
-                                           onClick={(e,name) => {this.onHideColumn(e, "Release")}} className={this.state.aclass=="Release"?"":"active"}><span>Release</span></a>
+                                           onClick={(e,name) => {this.onHideColumn(e, "Release")}} className={this.state.showRelease!==""?"":"active"}><span>Release</span></a>
                                         <a href="javascript:void(0)" name="Booking"
-                                           onClick={(e,name) => {this.onHideColumn(e, "Booking")}} className={this.state.aclass=="Booking"?"":"active"}><span>Booking</span></a>
+                                           onClick={(e,name) => {this.onHideColumn(e, "Booking")}} className={this.state.showBooking!==""?"":"active"}><span>Booking</span></a>
                                         <a href="javascript:void(0)" name="Container"
-                                           onClick={(e,name) => {this.onHideColumn(e, "Container")}} className={this.state.aclass=="Container"?"":"active"}><span>Container</span></a>
+                                           onClick={(e,name) => {this.onHideColumn(e, "Container")}} className={this.state.showContainer!==""?"":"active"}><span>Container</span></a>
                                         <a href="javascript:void(0)" name="Trucker"
-                                           onClick={(e,name) => {this.onHideColumn(e, "Trucker")}} className={this.state.aclass=="Trucker"?"":"active"}><span>Trucker</span></a>
+                                           onClick={(e,name) => {this.onHideColumn(e, "Trucker")}} className={this.state.showTrucker!==""?"":"active"}><span>Trucker</span></a>
                                         <a href="javascript:void(0)" name="Arrived"
-                                           onClick={(e,name) => {this.onHideColumn(e, "Arrived")}} className={this.state.aclass=="Aririved"?"":"active"}><span>Arrived</span></a>
+                                           onClick={(e,name) => {this.onHideColumn(e, "Arrived")}} className={this.state.showArrived!==""?"":"active"}><span>Arrived</span></a>
                                         <a href="javascript:void(0)" name="SteamShip"
-                                           onClick={(e,name) => {this.onHideColumn(e, "SteamShip")}} className={this.state.aclass=="SteamShip"?"":"active"}><span>SteamShip Line</span></a>
+                                           onClick={(e,name) => {this.onHideColumn(e, "SteamShip")}} className={this.state.showSteamShip!==""?"":"active"}><span>SteamShip Line</span></a>
                                         <a href="javascript:void(0)" name="Type"
-                                           onClick={(e,name) => {this.onHideColumn(e, "Type")}} className={this.state.aclass=="Type"?"":"active"}><span>Type</span></a>
+                                           onClick={(e,name) => {this.onHideColumn(e, "Type")}} className={this.state.showType!==""?"":"active"}><span>Type</span></a>
                                     </div>
                                     <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div className="">

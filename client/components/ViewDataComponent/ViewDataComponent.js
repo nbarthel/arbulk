@@ -202,8 +202,8 @@ class ViewDataComponent extends React.Component {
                     liveDrag:false,
                     gripInnerHtml:"<div class='grip'></div>",
                     draggingClass:"dragging",
-                    //resizeMode:'flex',
-                    //minWidth:100
+                    resizeMode:'flex',
+                    minWidth:120
                 });
 
                 $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
@@ -237,16 +237,13 @@ class ViewDataComponent extends React.Component {
                             headerArray: headerArray
                         });
 
-                        $("#Packaging_Instruction_View").colResizable({
-                            disable: true
-                        });
 
                         $("#Packaging_Instruction_View").colResizable({
                             liveDrag:false,
                             gripInnerHtml:"<div class='grip'></div>",
                             draggingClass:"dragging",
-                            //resizeMode:'flex',
-                            //minWidth:100
+                            resizeMode:'flex',
+                            minWidth:120
 
                         });
                     }
@@ -1263,7 +1260,7 @@ class ViewDataComponent extends React.Component {
 
             <Loader loaded={this.state.loaded} id="loaded">
                 <div className="loadedContentNew" id="loadedNew">
-                    <table id="Packaging_Instruction_View" className="table table-expandable sort kksky11" cellSpacing="0">
+                    <table id="Packaging_Instruction_View" className="table table-expandable sort kksky11" cellSpacing="0" style={{width: '2500'}}>
                         <thead id="table_head1" className="table_head header-fixed header red sorted_head">
                         {(grouping && this.props.SelcetedOptionForGroupBy != "") ?
                             <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>

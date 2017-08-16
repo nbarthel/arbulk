@@ -216,8 +216,8 @@ class ShipmentViewDataComponent extends React.Component {
                     liveDrag:false,
                     gripInnerHtml:"<div class='grip'></div>",
                     draggingClass:"dragging",
-                    //resizeMode:'flex',
-                    //minWidth:100
+                    resizeMode:'overflow',
+                    minWidth:100
                 });
 
                 $("#Packaging_Instruction_View").tableHeadFixer({'head': true});
@@ -1424,7 +1424,7 @@ class ShipmentViewDataComponent extends React.Component {
         return (
             <Loader loaded={this.state.loaded}>
                 <div className="loadedContentNew">
-                    <table id="Packaging_Instruction_View" className="table table-expandable table-striped" cellSpacing="0">
+                    <table id="Packaging_Instruction_View" style={{width:"100%"}} className="table table-expandable table-striped" cellSpacing="0">
                         <thead className="table_head header-fixed header sorted_head ">
                         {(grouping && this.props.SelcetedOptionForGroupBy != "") ?
                         <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
