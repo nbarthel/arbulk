@@ -223,30 +223,30 @@ this.setState({
     handleCheckbox(e){
 
       if(e.target.checked){
-          if(e.target.name == "containerInTransit" && !this.props.containerTable.containerLoaded){
-              swal("" , "Container is not loaded yet" , 'info')
-              e.target.checked = false;
-              return;
-          }
-          if(e.target.name == "containerDelivered" && !this.props.containerTable.containerInTransit){
-              swal("" , "Container is not InTransit yet" , 'info')
-              e.target.checked = false;
-              return;
-          }
+          // if(e.target.name == "containerInTransit" && !this.props.containerTable.containerLoaded){
+          //     swal("" , "Container is not loaded yet" , 'info')
+          //     e.target.checked = false;
+          //     return;
+          // }
+          // if(e.target.name == "containerDelivered" && !this.props.containerTable.containerInTransit){
+          //     swal("" , "Container is not InTransit yet" , 'info')
+          //     e.target.checked = false;
+          //     return;
+          // }
 
-            if(e.target.name == "containerInTransit" && this.props.containerTable.containerLoaded)
+            if(e.target.name == "containerInTransit")
             {
               this.SaveObj[e.target.name] = 1
               this.SaveObj["containerLoaded"] = 1
             }
-            if(e.target.name == "containerDelivered" && this.props.containerTable.containerInTransit)
+            if(e.target.name == "containerDelivered")
             {
               this.SaveObj[e.target.name] = 1
               this.SaveObj["containerLoaded"] = 1
               this.SaveObj["containerInTransit"] = 1
             }
 
-            if(e.target.name == "containerLoaded" && !this.props.containerTable.containerInTransit)
+            if(e.target.name == "containerLoaded")
             {
               this.SaveObj[e.target.name] = 1
 

@@ -892,7 +892,13 @@ class ShipmentViewDataComponent extends React.Component {
                                       }
                                       return(
                                           <tr key={i++}>
-                                              <td></td>
+                                              <td>
+                                                  <input type="checkbox" className="checkBox"
+                                                         onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
+                                                         value={view.id} id={view.id+"SC"}/>
+                                                  <label htmlFor={view.id+"SC"}></label>
+
+                                              </td>
                                           <td  key="ARB" style={{display : this.props.showARB}}>{view.TLocation ? view.TLocation.locationName : ''}</td>
                                           <td  key="Customer" style={{display : this.props.showCustomer}}>{view.TCompany ? view.TCompany.name : ''}</td>
                                           <td  key="Release" style={{display : this.props.showRelease}}>{view.releaseNumber ? view.releaseNumber : ''}</td>

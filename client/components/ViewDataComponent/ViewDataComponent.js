@@ -703,7 +703,12 @@ class ViewDataComponent extends React.Component {
 
                         return (
                             <tr key={count} className={count}>
-                                <td></td>
+                                <td>
+
+                                    <input type="checkbox" className="checkBox" onChange={(e)=>{this.props.headerCheckboxChange(e,view)}}
+                                           value={view.id} id={view.id +"VC"}/>
+                                    <label htmlFor={view.id+"VC"}></label>
+                                </td>
                                 <td key="arb" style={{display : this.props.showARB}}>{view.TLocation ? view.TLocation.locationName : ''}</td>
                                 <td style={{display: this.props.showCustomer}}> {view.TCompany ? view.TCompany.name : ''}</td>
                                 <td style={{display: this.props.showPO}}>{view.po_number} </td>
