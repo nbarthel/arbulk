@@ -6,11 +6,10 @@ import { hashHistory } from 'react-router'
 import FilterComponent from '../../../components/FilterComponent';
 import FilterButton from '../../../components/FilterComponent/FilterButton';
 import ViewDataComponent from '../../../components/ViewDataComponent/ViewDataComponent';
-import SweetAlert from 'sweetalert-react';
+
+import ShowHideColumn from '../../../components/ShowColumns/showColumn'
 import '../../../public/stylesheets/sweetalert.css';
-import HeadBody from '../../../components/ViewDataComponent/HeadBody';
 import axios from 'axios'
-var Loader = require('react-loader')
 import {Base_Url} from '../../../constants';
 import '../../../public/stylesheets/style.css'
 export default class PackagingInstructionViewForm extends React.Component {
@@ -47,7 +46,9 @@ export default class PackagingInstructionViewForm extends React.Component {
             startDate:'',
             endDate:'',
             OptionToGroupby :["ARB","Customer","PO#","Railcar#","Lot#","Material","Status","Railcar Status"],
-            SelcetedOptionForGroupBy : ""
+            SelcetedOptionForGroupBy : "",
+            columns:[],
+            open: false
         }
         this.status
         this.buttonDisplay = [ ]
@@ -92,8 +93,12 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.getCreatedDate = this.getCreatedDate.bind(this);
         this.shipmentRecived = this.shipmentRecived.bind(this);
         this.flagForShipmentRecivedFilter = ''
+        this.toggleColumn = this.toggleColumn.bind(this)
+        this.handleOpen = this.handleOpen.bind(this)
+        this.handleClose = this.handleClose.bind(this)
     }
     componentWillMount() {
+        var userId = Number(localStorage.getItem("userId"));
         axios.get(Base_Url+"TCustomViews").then(response=>{
             this.setState({
                 savedViews : response.data
@@ -109,7 +114,20 @@ export default class PackagingInstructionViewForm extends React.Component {
                 queue_Sequence : response.data
             })
         })
-
+        axios.get(Base_Url+`TColumnShowHides?filter={"where":{"tableName":"Packaging","userId":${userId}}}`).then(response=>{
+            this.setState({
+                columns:response.data
+            })
+            for(var i=0;i<response.data.length;i++){
+                this.toggleColumn(response.data[i].columnName,response.data[i].show);
+            }
+        })
+    }
+    handleOpen(){
+        this.setState({open: true});
+    }
+    handleClose(){
+        this.setState({open: false});
     }
     getdt(a){
         a.id=="1"?this.startDate = a.tempDate:this.endDate=a.tempDate;
@@ -455,7 +473,6 @@ export default class PackagingInstructionViewForm extends React.Component {
         let filterValue = ''
         if(option===1){
             filterValue = true
-
         }
         else if(option===0){
             filterValue = false;
@@ -1058,9 +1075,270 @@ export default class PackagingInstructionViewForm extends React.Component {
             });
         },100);
 
+        // this.toggleColumn(name);
+        // switch(name){
+        //     case "ARB" :
+        //         if(this.state.showARB == ""){
+        //             this.setState({
+        //                 showARB : "none"
+        //             })
+        //         }
+        //         else{
+        //             this.setState({
+        //                 showARB : ""
+        //             })
+        //         }
+        //         break;
+        //     case "Customer" :
+        //         if(this.state.showCustomer == ""){
+        //             this.setState({
+        //                 showCustomer : "none"
+        //             })
+        //         }
+        //         else{
+        //             this.setState({
+        //                 showCustomer : ""
+        //             })
+        //         }
+        //         break;
+        //     case "PO" :
+        //         if(this.state.showPO == ""){
+        //             this.setState({
+        //                 showPO : "none"
+        //             })
+        //         }
+        //         else{
+        //             this.setState({
+        //                 showPO : ""
+        //             })
+        //         }
+        //         break;
+        //     case "Railcar" :
+        //         if(this.state.showRailcar == ""){
+        //             this.setState({
+        //                 showRailcar : "none"
+        //             })
+        //         }
+        //         else{
+        //             this.setState({
+        //                 showRailcar : ""
+        //             })
+        //         }
+        //         break;
+        //     case "Lot" :
+        //         console.log(e.target.name)
+        //         if(this.state.showLot == ""){
+        //             this.setState({
+        //                 showLot : "none"
+        //             })
+        //         }
+        //         else{
+        //             this.setState({
+        //                 showLot : ""
+        //             })
+        //         }
+        //         break;
+        //     case "Material" :
+        //         console.log(e.target.name)
+        //         if(this.state.showMaterial == ""){
+        //             this.setState({
+        //                 showMaterial : "none"
+        //             })
+        //         }
+        //         else{
+        //             this.setState({
+        //                 showMaterial : ""
+        //             })
+        //         }
+        //         break;
+        //     case "Confmd" :
+        //         console.log(e.target.name)
+        //         if(this.state.showConfmd == ""){
+        //             this.setState({
+        //                 showConfmd : "none"
+        //             })
+        //         }
+        //         else{
+        //             this.setState({
+        //                 showConfmd : ""
+        //             })
+        //         }
+        //         break;
+        //     case "Arrvd" :
+        //         console.log(e.target.name)
+        //         if(this.state.showArrvd == ""){
+        //             this.setState({
+        //                 showArrvd : "none"
+        //             })
+        //         }
+        //         else{
+        //             this.setState({
+        //                 showArrvd : ""
+        //             })
+        //         }
+        //         break;
+        //     case "Recd" :
+        //         console.log(e.target.name)
+        //         if(this.state.showRecd == ""){
+        //             this.setState({
+        //                 showRecd : "none"
+        //             })
+        //         }
+        //         else{
+        //             this.setState({
+        //                 showRecd : ""
+        //             })
+        //         }
+        //         break;
+        //     case "Cutoff" :
+        //         console.log(e.target.name)
+        //         if(this.state.showCutoff == ""){
+        //             this.setState({
+        //                 showCutoff : "none"
+        //             })
+        //         }
+        //         else{
+        //             this.setState({
+        //                 showCutoff : ""
+        //             })
+        //         }
+        //         break;
+        //     case "Weight" :
+        //         console.log(e.target.name)
+        //         if(this.state.showWeight == ""){
+        //             this.setState({
+        //                 showWeight : "none"
+        //             })
+        //         }
+        //         else{
+        //             this.setState({
+        //                 showWeight : ""
+        //             })
+        //         }
+        //         break;
+        //     case "Bag" :
+        //         console.log(e.target.name)
+        //         if(this.state.showBag == ""){
+        //             this.setState({
+        //                 showBag : "none"
+        //             })
+        //         }
+        //         else{
+        //             this.setState({
+        //                 showBag : ""
+        //             })
+        //         }
+        //         break;
+        //     case "InInvt" :
+        //         console.log(e.target.name)
+        //         if(this.state.showInInvt == ""){
+        //             this.setState({
+        //                 showInInvt : "none"
+        //             })
+        //         }
+        //         else{
+        //             this.setState({
+        //                 showInInvt : ""
+        //             })
+        //         }
+        //         break;
+        //     case "Status" :
+        //         console.log(e.target.name)
+        //         if(this.state.showStatus == ""){
+        //             this.setState({
+        //                 showStatus : "none"
+        //             })
+        //         }
+        //         else{
+        //             this.setState({
+        //                 showStatus : ""
+        //             })
+        //         }
+        //         break;
+        //     case "RailcarArr" :
+        //         console.log(e.target.name)
+        //         if(this.state.showRailcarArr == ""){
+        //             this.setState({
+        //                 showRailcarArr : "none"
+        //             })
+        //         }
+        //         else{
+        //             this.setState({
+        //                 showRailcarArr : ""
+        //             })
+        //         }
+        //         break;
+        //     case "RailcarArrD" :
+        //         console.log(e.target.name)
+        //         if(this.state.showRailcarArrD == ""){
+        //             this.setState({
+        //                 showRailcarArrD : "none"
+        //             })
+        //         }
+        //         else{
+        //             this.setState({
+        //                 showRailcarArrD : ""
+        //             })
+        //         }
+        //         break;
+        //     case "RailcarDep" :
+        //         console.log(e.target.name)
+        //         if(this.state.showRailcarDep == ""){
+        //             this.setState({
+        //                 showRailcarDep : "none"
+        //             })
+        //         }
+        //         else{
+        //             this.setState({
+        //                 showRailcarDep : ""
+        //             })
+        //         }
+        //         break;
+        //     case "RailcarDepDate" :
+        //         console.log(e.target.name)
+        //         if(this.state.showRailcarDepDate == ""){
+        //             this.setState({
+        //                 showRailcarDepDate : "none"
+        //             })
+        //         }
+        //         else{
+        //             this.setState({
+        //                 showRailcarDepDate : ""
+        //             })
+        //         }
+        //         break;
+        //     case "DaysPresent" :
+        //         console.log(e.target.name)
+        //         if(this.state.showDaysPresent == ""){
+        //             this.setState({
+        //                 showDaysPresent : "none"
+        //             })
+        //         }
+        //         else{
+        //             this.setState({
+        //                 showDaysPresent : ""
+        //             })
+        //         }
+        //         break;
+        //     case "RailcarStatus" :
+        //         console.log(e.target.name)
+        //         if(this.state.showRailcarStatus == ""){
+        //             this.setState({
+        //                 showRailcarStatus : "none"
+        //             })
+        //         }
+        //         else{
+        //             this.setState({
+        //                 showRailcarStatus : ""
+        //             })
+        //         }
+        //         break;
+        // }
+    }
+    toggleColumn(name,value){
         switch(name){
             case "ARB" :
-                if(this.state.showARB == ""){
+                if(value===0){
                     this.setState({
                         showARB : "none"
                     })
@@ -1072,7 +1350,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 }
                 break;
             case "Customer" :
-                if(this.state.showCustomer == ""){
+                if(value===0){
                     this.setState({
                         showCustomer : "none"
                     })
@@ -1084,7 +1362,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 }
                 break;
             case "PO" :
-                if(this.state.showPO == ""){
+                if(value===0){
                     this.setState({
                         showPO : "none"
                     })
@@ -1386,7 +1664,13 @@ export default class PackagingInstructionViewForm extends React.Component {
 
                                 <div className="row">
                                     <FilterButton buttonDisplay = {this.buttonDisplay}  onButtonRemove = {this.onButtonRemove} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
-                                    <div className="col-lg-3 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
+                                    <div className="col-lg-2 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
+                                        <div className="pull-right ">
+                                            <a href="javascript:void(0)"  name = "setting" onClick={this.handleOpen}><span >Setting</span></a>
+                                        </div>
+
+                                    </div>
+                                    <div className="col-lg-2 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
                                         <div className="pull-right " id="hide5">
 
                                             <select className="form-control" id="groupBy" name="groupBy" onChange={this.OnGroupBy}>
@@ -1402,7 +1686,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                                         </div>
 
                                     </div>
-                                    <div className="col-lg-3 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
+                                    <div className="col-lg-2 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
                                         <div className="pull-right " id="hide5">
 
 
@@ -1428,7 +1712,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                                 </div>
                             </div>
 
-                            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 " id="hide4">
+                            {/*<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 " id="hide4">
                                 <a href="javascript:void(0)" className={this.state.showARB!==""?"":"active"} name = "ARB" onClick = {(e,name) => {this.onHideColumn(e,"ARB")}}><span >ARB</span></a>
                                 <a href="javascript:void(0)" name = "Customer" className={this.state.showCustomer!==""?"":"active"} onClick = {(e,name) => {this.onHideColumn(e,"Customer")}}><span >Customer</span></a>
                                 <a href="javascript:void(0)" name = "PO" className={this.state.showPO!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"PO")}}><span >PO#</span></a>
@@ -1450,7 +1734,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                                 <a href="javascript:void(0)" name = "RailcarDepDate" className={this.state.showRailcarDepDate!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"RailcarDepDate")}}><span >Railcar Departure Date</span></a>
                                 <a href="javascript:void(0)" name = "DaysPresent" className={this.state.showDaysPresent!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"DaysPresent")}}><span >Railcar Days Present</span></a>
                                 <a href="javascript:void(0)" name = "RailcarStatus" className={this.state.showRailcarStatus!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"RailcarStatus")}}><span >Railcar Status</span></a>
-                            </div>
+                            </div>*/}
 
                             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12"  >
                                 <div className="">
@@ -1483,7 +1767,8 @@ export default class PackagingInstructionViewForm extends React.Component {
                                         filterData = {filterData}
                                         id = {this.props.id}
                                         weight={this.state.selectedOption}
-                                        contanerLoad = {this.state.contanerLoad}/>
+                                        contanerLoad = {this.state.contanerLoad}
+                                        columnShow = {this.state.columns}/>
                                         :
                                         <ViewDataComponent
                                             SelcetedOptionForGroupBy = {this.state.SelcetedOptionForGroupBy}
@@ -1512,7 +1797,8 @@ export default class PackagingInstructionViewForm extends React.Component {
                                             showRailcarStatus = {this.state.showRailcarStatus}
                                             filterData = {filterData}
                                             weight={this.state.selectedOption}
-                                            contanerLoad = {this.state.contanerLoad}/>}
+                                            contanerLoad = {this.state.contanerLoad}
+                                            columnShow = {this.state.columns}/>}
 
                                 </div>
                                 <div id="nonPrintable">
@@ -1551,11 +1837,12 @@ export default class PackagingInstructionViewForm extends React.Component {
                         </div>
                     </div>
                 </div>
-
-
-
-
-
+                <ShowHideColumn
+                    Name={"Packaging"}
+                    open={this.state.open}
+                    onRequestClose={this.handleClose}
+                    autoScrollBodyContent={true}
+                />
 
             </section>
 

@@ -462,6 +462,9 @@ return (
                                 </select>
                                 <div className="error"><span></span></div>
                             </div>
+                            <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1 add_btn text_left">
+                                <i className="fa-2x fa fa-plus base_color" onClick={this.onAdd} aria-hidden="false" ></i>
+                            </div>
                         </div>
                         <div className="form-group">
                             <label for="Weight" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Lot #</label>

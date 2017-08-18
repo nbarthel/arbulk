@@ -2,16 +2,5 @@
   "db": {
     "name": "db",
     "connector": "memory"
-  },
-  "AccountDb": {
-    "host": "52.66.136.193",
-    "port": 3306,
-    "database": "Arbulk",
-    "password": "P@ssw0rd1",
-    "name": "AccountDb",
-    "user": "root",
-    "connector": "mysql",
-    "multipleStatements": true,
-    "connectionLimit": 10
   }
 }

@@ -41,7 +41,7 @@ app.use(webpackHotMiddleware(compiler));
 
 
 app.use(webpackHotMiddleware(compiler));
- 
+
 
 boot(app, __dirname);
 
@@ -61,3 +61,5 @@ app.start = function() {
 if (require.main === module) {
   app.start();
 }
+
+

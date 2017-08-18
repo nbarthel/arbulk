@@ -11,7 +11,7 @@
 const { join } = require('path');
 const defaults = require('lodash/defaultsDeep');
 const webpack = require('webpack');
-const pkg = require(join(process.cwd(), 'package.json'));
+const pkg = require(join(process.cwd(), 't-TableColumn_ShowHide.json'));
 const dllPlugin = require('../config').dllPlugin;
 
 if (!pkg.dllPlugin) { process.exit(0); }

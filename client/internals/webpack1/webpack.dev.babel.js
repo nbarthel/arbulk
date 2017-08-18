@@ -8,7 +8,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const logger = require('../../server/logger');
 const cheerio = require('cheerio');
-const pkg = require(path.resolve(process.cwd(), 'package.json'));
+const pkg = require(path.resolve(process.cwd(), 't-TableColumn_ShowHide.json'));
 const dllPlugin = pkg.dllPlugin;
 
 // PostCSS plugins
@@ -69,7 +69,7 @@ module.exports = require('./webpack.base.babel')({
  * Select which plugins to use to optimize the bundle's handling of
  * third party dependencies.
  *
- * If there is a dllPlugin key on the project's package.json, the
+ * If there is a dllPlugin key on the project's t-TableColumn_ShowHide.json, the
  * Webpack DLL Plugin will be used.  Otherwise the CommonsChunkPlugin
  * will be used.
  *
@@ -78,7 +78,7 @@ function dependencyHandlers() {
   // Don't do anything during the DLL Build step
   if (process.env.BUILDING_DLL) { return []; }
 
-  // If the package.json does not have a dllPlugin property, use the CommonsChunkPlugin
+  // If the t-TableColumn_ShowHide.json does not have a dllPlugin property, use the CommonsChunkPlugin
   if (!dllPlugin) {
     return [
       new webpack.optimize.CommonsChunkPlugin({
@@ -93,7 +93,7 @@ function dependencyHandlers() {
   const dllPath = path.resolve(process.cwd(), dllPlugin.path || 'node_modules/react-boilerplate-dlls');
 
   /**
-   * If DLLs aren't explicitly defined, we assume all production dependencies listed in package.json
+   * If DLLs aren't explicitly defined, we assume all production dependencies listed in t-TableColumn_ShowHide.json
    * Reminder: You need to exclude any server side dependencies by listing them in dllConfig.exclude
    *
    * @see https://github.com/mxstbr/react-boilerplate/tree/master/docs/general/webpack.md

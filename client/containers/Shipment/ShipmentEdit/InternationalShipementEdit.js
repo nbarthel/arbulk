@@ -5,6 +5,7 @@ import '../../../public/stylesheets/bootstrap.min.css';
 var DatePicker = require('react-datepicker');
 import SweetAlert from 'sweetalert-react';
 import { DateField, Calendar } from 'react-datepicker'
+import MaterialInformation from '../../../components/MaterialInformation/MaterialInformation';
 var moment = require('moment');
 var Spinner = require('react-spinkit');
 import {Base_Url} from '../../../constants';
@@ -28,6 +29,7 @@ class InternationalShipementEdit extends React.Component {
 		this.releaseChange = this.releaseChange.bind(this)
 		this.containerChange = this.containerChange.bind(this)
 		this.noOfBagsChange = this.noOfBagsChange.bind(this)
+        this.lastSelectedPo = {"po_number" : ""}
 		this.poChange =  this.poChange.bind(this)
 		this.bookingChange = this.bookingChange.bind(this)
 		this.freightChange = this.freightChange.bind(this)
@@ -40,6 +42,12 @@ class InternationalShipementEdit extends React.Component {
 		this.freeDaysChange = this.freeDaysChange.bind(this)
 		this.lotBagsChange = this.lotBagsChange.bind(this)
 		this.handleBagsToShip = this.handleBagsToShip.bind(this)
+        this.onAdd = this.onAdd.bind(this);
+		this.onMinus = this.onMinus.bind(this);
+		this.state = {
+            materialInfoList:[],
+            index: 0
+        }
 	}
 	bagsChange(e){
 		this.props.editData.numberOfBags = e.target.value
@@ -169,8 +177,32 @@ class InternationalShipementEdit extends React.Component {
         console.log(this.props.editData.TShipmentInternational[0].earliestReturnDate);
 
     }
+    onAdd(e){
+	    debugger
+        var tempObj = {
+            bagsToShip:"",
+            inInventorybags:"",
+            lot_id:"",
+            pi_id:""
+        }
+        this.state.lots.push(tempObj)
+        var count = this.state.index+1
+        const materialInfoList = this.state.materialInfoList;
+        this.setState({
+            index :count,
+            materialInfoList: materialInfoList.concat(<MaterialInformation count={this.state.index } poNumber = {this.poNumber} lastSelectedPo = {this.lastSelectedPo}/>)
+        })
+    }
+    onMinus(e){
+        var count = this.state.index-1;
+        this.state.lots.splice(this.state.lots.length-1,1);
+        this.setState({
+            index :count,
+            materialInfoList :this.state.materialInfoList.slice(0,-1)
+        });
+    }
 	componentDidMount() {
-		debugger
+        debugger
             var MIView = createDataLoader(InternationalShipementEdit, {
                         queries: [{
                             endpoint: 'TPackagingInstructions',
@@ -238,7 +270,7 @@ class InternationalShipementEdit extends React.Component {
                 this.forceUpdate()
          })
    }
-            componentWillMount() {
+    componentWillMount() {
             axios.get(Base_Url + "TShipmentTypes/").then((response) => {
             this.setState({
             ShipmentType: response.data
@@ -425,16 +457,19 @@ class InternationalShipementEdit extends React.Component {
 				 <div className="bages_estimated col-lg-11 col-md-11 col-sm-11 col-xs-11"><span></span></div>
                         <div className="form-group ">
                             <label for="Rail_Car_Number" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Purchase Order #</label>
-                            <div className="col-lg-8 col-sm-11  col-xs-11">
+                            <div className="col-lg-7 col-sm-11  col-xs-11">
                                 <select disabled onChange = {this.poChange} value = {this.props.editData.TShipmentLots[0].sId}  className="form-control" id="" >
                                  <option>{this.props.editData.TShipmentLots[0].TPackagingInstructions.po_number}</option>
                                 </select>
                                 <div className="error"><span></span></div>
                             </div>
+                            <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1 add_btn text_left">
+                                <i className="fa-2x fa fa-plus base_color" onClick={this.onAdd} aria-hidden="false" ></i>
+                            </div>
                         </div>
                         <div className="form-group">
                             <label for="Weight" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Lot #</label>
-                            <div className="col-lg-8  col-sm-11 col-xs-11 ">
+                            <div className="col-lg-7  col-sm-11 col-xs-11 ">
                                 <select
                                 value = {this.props.lotId}
                                 className="form-control" id="" >
@@ -443,12 +478,16 @@ class InternationalShipementEdit extends React.Component {
                                 </select>
                                 <div className="error"><span></span></div>
                             </div>
+                            <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1 add_btn text_left">
+                                {this.state.materialInfoList.length> 0 ? <i className="fa-2x fa fa-minus base_color" onClick={this.onMinus} aria-hidden="true"></i> : null}
+
+                            </div>
                         </div>
                           <div className="form-group ">
                                         <label htmlFor="Bags_To_Ship"
                                                className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Bags To Ship</label>
 
-                                        <div className="col-lg-8 col-sm-11  col-xs-11">
+                                        <div className="col-lg-7 col-sm-11  col-xs-11">
                                             <input type = "number" className="form-control"
                                                    id="bags_to_ship"
                                                    name="bags_to_ship"
@@ -459,15 +498,19 @@ class InternationalShipementEdit extends React.Component {
 
                                             <div className="error"><span></span></div>
                                         </div>
+
                                     </div>
                         <div className="form-group">
                             <label for="Lot_Number" className="col-lg-4 col-md-4 col-sm-11  col-xs-11 control-label"># Bags  for Lot</label>
-                            <div className="col-lg-8   col-sm-11 col-xs-11 ">
+                            <div className="col-lg-7   col-sm-11 col-xs-11 ">
                                 <input type="text" onChange = {this.lotBagsChange} disabled value = {this.props.editData.TShipmentLots[0].TPackagingInstructionLots.inInventory != null ? this.props.editData.TShipmentLots[0].TPackagingInstructionLots.inInventory : 0} className="form-control" id="Lot_Number" placeholder="No. of Bags  for Lot"/>
                                 <div className="error"><span></span></div>
                             </div>
                         </div>
                         {this.props.editData.TShipmentLots.length > 1 ? editableLot : ''}
+              {this.state.materialInfoList}
+
+              {this.state.lotInfoList}
             </fieldset>
 	</div>
 

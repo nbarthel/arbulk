@@ -4,19 +4,19 @@
 // var ExtractTextPlugin = require('extract-text-webpack-plugin');
 // var StatsPlugin = require('stats-webpack-plugin');
 
-// module.exports = {  
+// module.exports = {
 //    devtool:'source-map',
 //    entry: [
 //     path.join(__dirname, 'client/index.js')
 //   ],
-  
+
 //   output: {
 //     path: path.join(__dirname, '/dist/'),
 //     filename: 'bundle.js',
 //     publicPath: 'http://localhost:3000'
 //   },
 //    plugins: [
-   
+
 //     new HtmlWebpackPlugin({
 //       template: 'client/index.html',
 //       inject: 'body',
@@ -47,13 +47,13 @@
 //         presets:['es2015','react']
 //       },
 //     },{
-//       test: /\.json$/, 
+//       test: /\.json$/,
 //       loader: 'json'
 //     },{
 //       test: /\.css$/,
 //       loader: 'style!css'
 //     },
-//     { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' }, 
+//     { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' },
 //     ]
 //   }
 // };
@@ -86,13 +86,13 @@ module.exports = {
       exclude: /node_modules/,
       include: path.join(__dirname, 'client'),
     },{
-      test: /\.json$/, 
+      test: /\.json$/,
       loader: 'json'
     },{
       test: /\.css$/,
       loader: 'style!css'
     },
-     { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' }, 
+     { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' },
      ]
   }
 };

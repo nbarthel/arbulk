@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-import '../../../public/stylesheets/style.css';
-import '../../../public/stylesheets/bootstrap.min.css';
+import '../../../public1/stylesheets/style.css';
+import '../../../public1/stylesheets/bootstrap.min.css';
 var DatePicker = require('react-datepicker');
 import SweetAlert from 'sweetalert-react';
 import { DateField, Calendar } from 'react-datepicker'
@@ -11,7 +11,7 @@ import {Base_Url} from '../../../constants';
 import { createDataLoader } from 'react-loopback';
 //import  validateInput  from './shipmentvalidator';
 require('react-datepicker/dist/react-datepicker.css');
-import '../../../public/stylesheets/sweetalert.css';
+import '../../../public1/stylesheets/sweetalert.css';
 import LotInformation from './LotInformation';
 import { hashHistory } from 'react-router'
 class InternationalShipementEdit extends React.Component {

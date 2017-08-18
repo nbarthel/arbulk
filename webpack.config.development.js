@@ -2,7 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-  devtool: 'eval',
+  devtool: 'cheap-module-source-map',
   entry: [
     'webpack-hot-middleware/client',
     './client/index'
@@ -22,14 +22,14 @@ module.exports = {
       exclude: /node_modules/,
       loaders: [ 'babel-loader?presets[]=es2015,presets[]=stage-0,presets[]=react'],
     },{
-      test: /\.json$/, 
+      test: /\.json$/,
       loader: 'json-loader'
     },{
       test: /\.css$/,
       loader: 'style-loader!css-loader'
     },
-     { test: /\.(png|woff|woff2|eot|ttf|svg)$/, 
-      loader: 'url-loader?limit=100000' }, 
+     { test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+      loader: 'url-loader?limit=100000' },
      ]
   }
 };

@@ -11,7 +11,7 @@
  *
  */
   export const WELCOME_TEXT = 'AR Bulk Withand Node loopback';
-  export const Base_Url = 'http://52.66.136.193:3000/api/'
+  export const Base_Url = 'http://localhost:3000/api/'
 
  //export const Base_Url = 'http://192.168.0.105:8080/api/';
 //export const Base_Url = "http://172.27.101.87:8080/api/";
