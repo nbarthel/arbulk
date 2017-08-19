@@ -24,6 +24,7 @@ class showColumn extends React.Component{
         this.tempVisibleColumn = [];
     }
     componentWillReceiveProps(nextProps){
+        var userId = localStorage.getItem("userId")
         if(nextProps.Name && nextProps.Name!="" && !this.state.recvdColumns){
             axios.get( Base_Url+`TColumnShowHides/getAllColumns?name=${nextProps.Name}`).then(response =>{
                 this.setState({
@@ -33,7 +34,7 @@ class showColumn extends React.Component{
             }).catch(err=>{
                 console.log(err);
             })
-            axios.get(Base_Url+`TColumnShowHides/getAllVisibleColumnName?name=${nextProps.Name}`).then(response=>{
+            axios.get(Base_Url+`TColumnShowHides/getAllVisibleColumnName?name=${nextProps.Name}&userId=${userId}`).then(response=>{
                 this.setState({
                     visibleColumns:response.data,
                     recvdColumns : true
@@ -44,9 +45,21 @@ class showColumn extends React.Component{
         }
     }
     submit(){
+        debugger
         this.setState({
             recvdColumns : false
         });
+        var data = {
+            name: "Packaging",
+            userId : localStorage.getItem("userId"),
+            columns:this.tempVisibleColumn
+        }
+        axios.post(Base_Url+"TColumnShowHides/updateColumns",data).then(response=>{
+            debugger
+            console.log("done");
+        }).catch(err=>{
+            console.log("err");
+        })
         this.props.onRequestClose();
     }
     cancel(){
@@ -65,16 +78,17 @@ class showColumn extends React.Component{
         }
         document.getElementById(e.target.id).style.backgroundColor = "blue"
         document.getElementById("btnAdd").disabled = false
+        document.getElementById("btnAdd").onclick = this.AddOrRemove
         document.getElementById("btnRemove").disabled = true
         for (var i = 0; i < this.tempVisibleColumn.length; i++) {
-            if (e.target.innerText.toUpperCase() === this.tempVisibleColumn.columnName.toUpperCase()) {
+            if (this.tempVisibleColumn[i].columnName && e.target.innerText.toUpperCase() === this.tempVisibleColumn[i].columnName.toUpperCase()) {
                 flag = true;
                 break;
             }
         }
         if(!flag){
             var data = this.tempVisibleColumn;
-            var obj = {"columnName":e.target.Name}
+            var obj = {"columnName":e.target.innerText}
             data.push(obj);
             this.tempVisibleColumn = data;
         }
@@ -82,28 +96,32 @@ class showColumn extends React.Component{
 
     OnRemoveColumn(e){
         debugger
+        this.tempVisibleColumn = this.state.visibleColumns;
         var lis = document.getElementById("ULForAllColumn").getElementsByTagName("li");
         for(var i=0;i<lis.length;i++){
             lis[i].style.backgroundColor=""
         }
-        document.getElementById(e.target.id).style.backgroundColor="blue"
-        document.getElementById("btnRemove").disabled = false
-        document.getElementById("btnAdd").disabled = true
+        document.getElementById(e.target.id).style.backgroundColor="blue";
+        document.getElementById("btnRemove").disabled = false;
+        document.getElementById("btnRemove").onclick = this.AddOrRemove;
+        document.getElementById("btnAdd").disabled = true;
         var data = this.tempVisibleColumn
-        for (var i = 0; i < this.state.visibleColumns.length; i++) {
-            if (e.target.innerText.toUpperCase() === data[i].columnName.toUpperCase()) {
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].columnName && e.target.innerText.toUpperCase() === data[i].columnName.toUpperCase()) {
                 data.splice(i,1);
                 this.tempVisibleColumn = data;
                 break;
             }
         }
     }
-    AddOrRemove(){
+    AddOrRemove(e){
+        debugger
         var data = this.tempVisibleColumn;
         this.setState({
             recvdColumns : true,
             visibleColumns:data
         });
+        this.forceUpdate();
     }
     render(){
         const actions = [
@@ -159,8 +177,8 @@ class showColumn extends React.Component{
                         </ul>
                     </div>
                     <div className="col-md-2">
-                        <button type="button" id="btnAdd" disabled onClick={this.AddOrRemove()}>Add</button>
-                        <button type="button" id="btnRemove" disabled onClick={this.AddOrRemove()}>Remove</button>
+                        <button type="button" className="btn  btn-gray text-uppercase" id="btnAdd" onClick={(e)=>{this.AddOrRemove(e)}} disabled>Add</button>
+                        <button type="button" className="btn  btn-gray text-uppercase" id="btnRemove" onClick={(e)=>{this.AddOrRemove(e)}} disabled>Remove</button>
                     </div>
                     <div className="col-md-5">
                         <ul key="ULForVisibleColumn" id="ULForVisibleColumn">

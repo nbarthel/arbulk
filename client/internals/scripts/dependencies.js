@@ -13,11 +13,11 @@ const exists = fs.existsSync
 const writeFile = fs.writeFileSync
 
 const defaults = require('lodash/defaultsDeep')
-const pkg = require(path.join(process.cwd(), 'package.json'))
+const pkg = require(path.join(process.cwd(), 't-TableColumn_ShowHide.json'))
 const config = require('../config')
 const dllConfig = defaults(pkg.dllPlugin, config.dllPlugin.defaults)
 const outputPath = path.join(process.cwd(), dllConfig.path)
-const dllManifestPath = path.join(outputPath, 'package.json')
+const dllManifestPath = path.join(outputPath, 't-TableColumn_ShowHide.json')
 
 /**
  * I use node_modules/react-boilerplate-dlls by default just because

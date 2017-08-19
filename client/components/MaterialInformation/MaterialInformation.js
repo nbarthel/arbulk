@@ -16,11 +16,11 @@ export default class MaterialInformation extends React.Component {
     }
     onChange(e){
         debugger
-
         var index = e.target.id.split(":")[0]
         this.props.lots[index-1].bagsToShip = e.target.value
     }
     onPOChange(e){
+        debugger
         this.lotNumber = null
         var tempthis =this
         this.props.lastSelectedPo.po_number = e.target.value

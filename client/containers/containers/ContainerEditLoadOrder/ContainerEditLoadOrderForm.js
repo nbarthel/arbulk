@@ -1,6 +1,6 @@
 import React from 'react';
-import '../../public/stylesheets/style.css';
-import '../../public/stylesheets/bootstrap.min.css';
+import '../../public1/stylesheets/style.css';
+import '../../public1/stylesheets/bootstrap.min.css';
 
 class  ContainerEditLoadOrderForm extends React.Component {
     render() {

@@ -118,6 +118,7 @@ export default class PackagingInstructionViewForm extends React.Component {
             this.setState({
                 columns:response.data
             })
+             
             for(var i=0;i<response.data.length;i++){
                 this.toggleColumn(response.data[i].columnName,response.data[i].show);
             }
@@ -127,14 +128,16 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.setState({open: true});
     }
     handleClose(){
+         
         this.setState({open: false});
+        this.forceUpdate();
     }
     getdt(a){
         a.id=="1"?this.startDate = a.tempDate:this.endDate=a.tempDate;
         this.onSearch(a)
     }
     getCreatedDate(dateObj){
-        debugger
+         
         dateObj.id=="1"?this.createdOnStartDate = dateObj.tempDate:this.createdOnEndDate=dateObj.tempDate;
         this.onSearch(dateObj);
     }
@@ -167,7 +170,7 @@ export default class PackagingInstructionViewForm extends React.Component {
     }
     PrintScreen(){
         var scrollLeft = document.getElementsByClassName("loadedContentNew")[0].scrollLeft
-        debugger;
+         ;
         document.getElementsByClassName('pos-relative-b')[0].style.display = 'none'
         document.getElementsByClassName('filter-btn')[0].style.display = 'none'
         document.getElementById("nonPrintable").style.display = "none"
@@ -419,7 +422,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                         }
                     }
                     i=0
-                    debugger
+                     
                     if(this.flagForShipmentRecivedFilter!=='' && this.flagForShipmentRecivedFilter){
                        while(i<data.length){
                             if(data[i].TPackagingInstructionLots && data[i].TPackagingInstructionLots.length>0){
@@ -599,7 +602,7 @@ export default class PackagingInstructionViewForm extends React.Component {
 
     }
     viewChange(e){
-        debugger
+         
         var index = e.target.selectedIndex ;
         var blob = e.target.value
         var changedView = this.state.savedViews[index -1]
@@ -1374,7 +1377,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 }
                 break;
             case "Railcar" :
-                if(this.state.showRailcar == ""){
+                if(value===0){
                     this.setState({
                         showRailcar : "none"
                     })
@@ -1386,8 +1389,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 }
                 break;
             case "Lot" :
-                console.log(e.target.name)
-                if(this.state.showLot == ""){
+                if(value===0){
                     this.setState({
                         showLot : "none"
                     })
@@ -1399,8 +1401,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 }
                 break;
             case "Material" :
-                console.log(e.target.name)
-                if(this.state.showMaterial == ""){
+                if(value===0){
                     this.setState({
                         showMaterial : "none"
                     })
@@ -1412,8 +1413,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 }
                 break;
             case "Confmd" :
-                console.log(e.target.name)
-                if(this.state.showConfmd == ""){
+                if(value===0){
                     this.setState({
                         showConfmd : "none"
                     })
@@ -1425,8 +1425,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 }
                 break;
             case "Arrvd" :
-                console.log(e.target.name)
-                if(this.state.showArrvd == ""){
+                if(value===0){
                     this.setState({
                         showArrvd : "none"
                     })
@@ -1438,8 +1437,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 }
                 break;
             case "Recd" :
-                console.log(e.target.name)
-                if(this.state.showRecd == ""){
+                if(value===0){
                     this.setState({
                         showRecd : "none"
                     })
@@ -1451,8 +1449,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 }
                 break;
             case "Cutoff" :
-                console.log(e.target.name)
-                if(this.state.showCutoff == ""){
+                if(value===0){
                     this.setState({
                         showCutoff : "none"
                     })
@@ -1464,8 +1461,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 }
                 break;
             case "Weight" :
-                console.log(e.target.name)
-                if(this.state.showWeight == ""){
+                if(value===0){
                     this.setState({
                         showWeight : "none"
                     })
@@ -1477,8 +1473,8 @@ export default class PackagingInstructionViewForm extends React.Component {
                 }
                 break;
             case "Bag" :
-                console.log(e.target.name)
-                if(this.state.showBag == ""){
+
+                if(value===0){
                     this.setState({
                         showBag : "none"
                     })
@@ -1490,8 +1486,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 }
                 break;
             case "InInvt" :
-                console.log(e.target.name)
-                if(this.state.showInInvt == ""){
+                if(value===0){
                     this.setState({
                         showInInvt : "none"
                     })
@@ -1503,8 +1498,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 }
                 break;
             case "Status" :
-                console.log(e.target.name)
-                if(this.state.showStatus == ""){
+                if(value===0){
                     this.setState({
                         showStatus : "none"
                     })
@@ -1516,8 +1510,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 }
                 break;
             case "RailcarArr" :
-                console.log(e.target.name)
-                if(this.state.showRailcarArr == ""){
+                if(value===0){
                     this.setState({
                         showRailcarArr : "none"
                     })
@@ -1529,8 +1522,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 }
                 break;
             case "RailcarArrD" :
-                console.log(e.target.name)
-                if(this.state.showRailcarArrD == ""){
+                if(value===0){
                     this.setState({
                         showRailcarArrD : "none"
                     })
@@ -1542,8 +1534,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 }
                 break;
             case "RailcarDep" :
-                console.log(e.target.name)
-                if(this.state.showRailcarDep == ""){
+                if(value===0){
                     this.setState({
                         showRailcarDep : "none"
                     })
@@ -1555,8 +1546,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 }
                 break;
             case "RailcarDepDate" :
-                console.log(e.target.name)
-                if(this.state.showRailcarDepDate == ""){
+                if(value===0){
                     this.setState({
                         showRailcarDepDate : "none"
                     })
@@ -1568,8 +1558,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 }
                 break;
             case "DaysPresent" :
-                console.log(e.target.name)
-                if(this.state.showDaysPresent == ""){
+                if(value===0){
                     this.setState({
                         showDaysPresent : "none"
                     })
@@ -1581,8 +1570,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                 }
                 break;
             case "RailcarStatus" :
-                console.log(e.target.name)
-                if(this.state.showRailcarStatus == ""){
+                if(value===0){
                     this.setState({
                         showRailcarStatus : "none"
                     })

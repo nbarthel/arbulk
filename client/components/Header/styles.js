@@ -18,7 +18,7 @@ export default StyleSheet.create({
         "paddingLeft": 0
     },
     "logo": {
-        "backgroundImage": "url(\"../../public/img/logo_inner.png\")",
+        "backgroundImage": "url(\"../../public1/img/logo_inner.png\")",
         "backgroundRepeat": "no-repeat",
         "height": 40,
         "width": "100%"

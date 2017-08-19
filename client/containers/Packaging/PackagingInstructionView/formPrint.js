@@ -1338,7 +1338,7 @@ export default StyleSheet.create({
         "marginBottom": 50
     },
     "logo_icon": {
-        "background": "url(\"../../../public/img/logo_inner.png\")",
+        "background": "url(\"../../../public1/img/logo_inner.png\")",
         "backgroundRepeat": "no-repeat",
         "height": 30,
         "width": 150

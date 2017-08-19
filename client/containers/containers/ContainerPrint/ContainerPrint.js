@@ -62,8 +62,6 @@ export default class ContainerPrint extends React.Component {
 
  }
 
-
-
     getPackagingInfo(PiLotId){
         var ShipmentView = createDataLoader(ContainerPrint,{
             queries:[{
@@ -89,8 +87,8 @@ export default class ContainerPrint extends React.Component {
         return
     }
 
-
     componentDidMount() {
+
         (function(){
             debugger
             var

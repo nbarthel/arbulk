@@ -1,6 +1,4 @@
 import 'whatwg-fetch';
-import $ from 'jquery';
-const Constant = require('containers/App/constants');
 
 /**
  * Parses the JSON returned by a network request
@@ -44,8 +42,4 @@ export default function request(url, options) {
     .then(parseJSON)
     .then((data) => ({ data }))
     .catch((err) => ({ err }));
-}
-
-export function getSetData(params, successCallback, errorCallback) {
-  $.ajax({ url: Constant.API_URL, data: params, type: 'POST', dataType: 'json', success: successCallback, error: errorCallback });
 }
