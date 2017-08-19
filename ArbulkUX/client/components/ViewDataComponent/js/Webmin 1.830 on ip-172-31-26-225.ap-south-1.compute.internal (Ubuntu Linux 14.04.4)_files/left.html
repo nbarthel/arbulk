@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<!-- saved from url=(0036)https://52.66.136.193:10000/left.cgi -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="./gray-reset-fonts-grids-base.css">
+<link rel="stylesheet" type="text/css" href="./gray-virtual-server-style.css">
+<!--[if IE]>
+<style type="text/css">
+table.formsection, table.ui_table, table.loginform { border-collapse: collapse; }
+</style>
+<![endif]-->
+<script>
+var rowsel = new Array();
+</script>
+<script type="text/javascript" src="./sorttable.js"></script>
+<style type="text/css">
+textarea,pre { font-size:120%; }
+</style>
+<title></title>
+</head>
+<body id="popup" bgcolor="#ffffff" link="#376ebd" vlink="#376ebd" text="#000000">
+<link rel="stylesheet" type="text/css" href="./gray-left.css">
+<script>
+function toggleview (id1,id2) {
+		var obj1 = document.getElementById(id1);
+		var obj2 = document.getElementById(id2);
+		(obj1.className=="itemshown") ? obj1.className="itemhidden" : obj1.className="itemshown"; 
+		(obj1.className=="itemshown") ? obj2.innerHTML="<img border='0' src='images/gray-open.gif' alt='[&ndash;]'>" : obj2.innerHTML="<img border='0' src='images/gray-closed.gif' alt='[+]'>"; 
+	}
+
+// Show the logs for the current module in the right
+function show_logs() {
+  var url = ''+window.parent.frames[1].location;
+  var sl1 = url.indexOf('//');
+  var mod = '';
+  if (sl1 > 0) {
+    var sl2 = url.indexOf('/', sl1+2);
+    if (sl2 > 0) {
+      var sl3 = url.indexOf('/', sl2+1);
+      if (sl3 > 0) {
+        mod = url.substring(sl2+1, sl3);
+      } else {
+        mod = url.substring(sl2+1);
+      }
+    }
+  }
+if (mod && mod.indexOf('.cgi') <= 0) {
+  // Show one module's logs
+  window.parent.frames[1].location = 'webminlog/search.cgi?tall=4&uall=1&fall=1&mall=0&module='+mod;
+  }
+else {
+  // Show all logs
+  window.parent.frames[1].location = 'webminlog/search.cgi?tall=4&uall=1&fall=1&mall=0&mall=1'
+  }
+}
+</script>
+
+
+<div class="wrapper">
+<table id="main" width="100%"><tbody><tr><td>
+<div class="leftlink">Login: root</div>
+<hr>
+<div class="linkwithicon"><a href="javascript:toggleview(&#39;catwebmin&#39;,&#39;togglewebmin&#39;)" id="togglewebmin"><img border="0" src="./closed.gif" alt="[+]"></a>
+<div class="aftericon"><a href="javascript:toggleview(&#39;catwebmin&#39;,&#39;togglewebmin&#39;)" id="toggletextwebmin"><font color="#000000">Webmin</font></a></div></div>
+<div class="itemhidden" id="catwebmin">
+<div class="linkindented"><a href="https://52.66.136.193:10000/backup-config/" target="right">Backup Configuration Files</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/change-user/" target="right">Change Language and Theme</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/webminlog/" target="right">Webmin Actions Log</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/webmin/" target="right">Webmin Configuration</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/servers/" target="right">Webmin Servers Index</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/acl/" target="right">Webmin Users</a></div>
+</div>
+<div class="linkwithicon"><a href="javascript:toggleview(&#39;catsystem&#39;,&#39;togglesystem&#39;)" id="togglesystem"><img border="0" src="./closed.gif" alt="[+]"></a>
+<div class="aftericon"><a href="javascript:toggleview(&#39;catsystem&#39;,&#39;togglesystem&#39;)" id="toggletextsystem"><font color="#000000">System</font></a></div></div>
+<div class="itemhidden" id="catsystem">
+<div class="linkindented"><a href="https://52.66.136.193:10000/init/" target="right">Bootup and Shutdown</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/passwd/" target="right">Change Passwords</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/mount/" target="right">Disk and Network Filesystems</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/fsdump/" target="right">Filesystem Backup</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/logrotate/" target="right">Log File Rotation</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/mailcap/" target="right">MIME Type Programs</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/pam/" target="right">PAM Authentication</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/proc/" target="right">Running Processes</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/at/" target="right">Scheduled Commands</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/cron/" target="right">Scheduled Cron Jobs</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/package-updates/" target="right">Software Package Updates</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/software/" target="right">Software Packages</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/man/" target="right">System Documentation</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/syslog/" target="right">System Logs</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/useradmin/" target="right">Users and Groups</a></div>
+</div>
+<div class="linkwithicon"><a href="javascript:toggleview(&#39;catservers&#39;,&#39;toggleservers&#39;)" id="toggleservers"><img border="0" src="./closed.gif" alt="[+]"></a>
+<div class="aftericon"><a href="javascript:toggleview(&#39;catservers&#39;,&#39;toggleservers&#39;)" id="toggletextservers"><font color="#000000">Servers</font></a></div></div>
+<div class="itemhidden" id="catservers">
+<div class="linkindented"><a href="https://52.66.136.193:10000/mysql/" target="right">MySQL Database Server</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/mailboxes/" target="right">Read User Mail</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/sshd/" target="right">SSH Server</a></div>
+</div>
+<div class="linkwithicon"><a href="javascript:toggleview(&#39;catother&#39;,&#39;toggleother&#39;)" id="toggleother"><img border="0" src="./gray-open.gif" alt="[–]"></a>
+<div class="aftericon"><a href="javascript:toggleview(&#39;catother&#39;,&#39;toggleother&#39;)" id="toggletextother"><font color="#000000">Others</font></a></div></div>
+<div class="itemshown" id="catother">
+<div class="linkindented"><a href="https://52.66.136.193:10000/shell/" target="right">Command Shell</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/custom/" target="right">Custom Commands</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/filemin/" target="right">File Manager</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/tunnel/" target="right">HTTP Tunnel</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/file/" target="right">Java File Manager</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/cpan/" target="right">Perl Modules</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/htaccess-htpasswd/" target="right">Protected Web Directories</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/status/" target="right">System and Server Status</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/ajaxterm/" target="right">Text Login</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/updown/" target="right">Upload and Download</a></div>
+</div>
+<div class="linkwithicon"><a href="javascript:toggleview(&#39;catnet&#39;,&#39;togglenet&#39;)" id="togglenet"><img border="0" src="./closed.gif" alt="[+]"></a>
+<div class="aftericon"><a href="javascript:toggleview(&#39;catnet&#39;,&#39;togglenet&#39;)" id="toggletextnet"><font color="#000000">Networking</font></a></div></div>
+<div class="itemhidden" id="catnet">
+<div class="linkindented"><a href="https://52.66.136.193:10000/bandwidth/" target="right">Bandwidth Monitoring</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/firewall/" target="right">Linux Firewall</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/firewall6/" target="right">Linux IPv6 Firewall</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/net/" target="right">Network Configuration</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/nis/" target="right">NIS Client and Server</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/tcpwrappers/" target="right">TCP Wrappers</a></div>
+</div>
+<div class="linkwithicon"><a href="javascript:toggleview(&#39;cathardware&#39;,&#39;togglehardware&#39;)" id="togglehardware"><img border="0" src="./closed.gif" alt="[+]"></a>
+<div class="aftericon"><a href="javascript:toggleview(&#39;cathardware&#39;,&#39;togglehardware&#39;)" id="toggletexthardware"><font color="#000000">Hardware</font></a></div></div>
+<div class="itemhidden" id="cathardware">
+<div class="linkindented"><a href="https://52.66.136.193:10000/fdisk/" target="right">Partitions on Local Disks</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/lpadmin/" target="right">Printer Administration</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/time/" target="right">System Time</a></div>
+</div>
+<div class="linkwithicon"><a href="javascript:toggleview(&#39;catcluster&#39;,&#39;togglecluster&#39;)" id="togglecluster"><img border="0" src="./closed.gif" alt="[+]"></a>
+<div class="aftericon"><a href="javascript:toggleview(&#39;catcluster&#39;,&#39;togglecluster&#39;)" id="toggletextcluster"><font color="#000000">Cluster</font></a></div></div>
+<div class="itemhidden" id="catcluster">
+<div class="linkindented"><a href="https://52.66.136.193:10000/cluster-passwd/" target="right">Cluster Change Passwords</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/cluster-copy/" target="right">Cluster Copy Files</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/cluster-cron/" target="right">Cluster Cron Jobs</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/cluster-shell/" target="right">Cluster Shell Commands</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/cluster-software/" target="right">Cluster Software Packages</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/cluster-usermin/" target="right">Cluster Usermin Servers</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/cluster-useradmin/" target="right">Cluster Users and Groups</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/cluster-webmin/" target="right">Cluster Webmin Servers</a></div>
+</div>
+<div class="linkwithicon"><a href="javascript:toggleview(&#39;catunused&#39;,&#39;toggleunused&#39;)" id="toggleunused"><img border="0" src="./closed.gif" alt="[+]"></a>
+<div class="aftericon"><a href="javascript:toggleview(&#39;catunused&#39;,&#39;toggleunused&#39;)" id="toggletextunused"><font color="#000000">Un-used Modules</font></a></div></div>
+<div class="itemhidden" id="catunused">
+<div class="linkindented"><a href="https://52.66.136.193:10000/adsl-client/" target="right">ADSL Client</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/apache/" target="right">Apache Webserver</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/bacula-backup/" target="right">Bacula Backup System</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/bind8/" target="right">BIND DNS Server</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/burner/" target="right">CD Burner</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/dhcpd/" target="right">DHCP Server</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/quota/" target="right">Disk Quotas</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/dovecot/" target="right">Dovecot IMAP/POP3 Server</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/fail2ban/" target="right">Fail2Ban Intrusion Detector</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/fetchmail/" target="right">Fetchmail Mail Retrieval</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/firewalld/" target="right">FirewallD</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/grub/" target="right">GRUB Boot Loader</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/heartbeat/" target="right">Heartbeat Monitor</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/idmapd/" target="right">idmapd daemon</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/ipsec/" target="right">IPsec VPN Configuration</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/iscsi-client/" target="right">iSCSI Client</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/iscsi-server/" target="right">iSCSI Server</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/iscsi-target/" target="right">iSCSI Target</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/iscsi-tgtd/" target="right">iSCSI TGTd</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/jabber/" target="right">Jabber IM Server</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/krb5/" target="right">Kerberos5</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/ldap-client/" target="right">LDAP Client</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/ldap-server/" target="right">LDAP Server</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/ldap-useradmin/" target="right">LDAP Users and Groups</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/raid/" target="right">Linux RAID</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/lvm/" target="right">Logical Volume Management</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/mon/" target="right">MON Service Monitor</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/xinetd/" target="right">Network Services</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/inetd/" target="right">Network Services and Protocols</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/exports/" target="right">NFS Exports</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/openslp/" target="right">OpenSLP Server</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/phpini/" target="right">PHP Configuration</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/postfix/" target="right">Postfix Mail Server</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/postgresql/" target="right">PostgreSQL Database Server</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/pap/" target="right">PPP Dialin Server</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/ppp-client/" target="right">PPP Dialup Client</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/pptp-client/" target="right">PPTP VPN Client</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/pptp-server/" target="right">PPTP VPN Server</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/procmail/" target="right">Procmail Mail Filter</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/proftpd/" target="right">ProFTPD Server</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/qmailadmin/" target="right">QMail Mail Server</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/samba/" target="right">Samba Windows File Sharing</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/sendmail/" target="right">Sendmail Mail Server</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/shorewall/" target="right">Shoreline Firewall</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/shorewall6/" target="right">Shorewall6 Firewall</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/smart-status/" target="right">SMART Drive Status</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/spam/" target="right">SpamAssassin Mail Filter</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/squid/" target="right">Squid Proxy Server</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/sarg/" target="right">Squid Report Generator</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/telnet/" target="right">SSH Login</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/stunnel/" target="right">SSL Tunnels</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/syslog-ng/" target="right">System Logs NG</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/usermin/" target="right">Usermin Configuration</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/vgetty/" target="right">Voicemail Server</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/webalizer/" target="right">Webalizer Logfile Analysis</a></div>
+<div class="linkindented"><a href="https://52.66.136.193:10000/wuftpd/" target="right">WU-FTP Server</a></div>
+</div>
+<form action="https://52.66.136.193:10000/webmin_search.cgi" target="right">
+<div class="leftlink">Search:
+<input class="ui_textbox" type="text" name="search" id="search" value="" size="15"></div></form>
+<hr>
+<div class="linkwithicon"><img src="./logs.gif" alt="">
+<div class="aftericon"><a href="https://52.66.136.193:10000/webminlog/" target="right" onclick="show_logs(); return false;">View Module's Logs</a></div></div>
+<div class="linkwithicon"><img src="./gohome.gif" alt="">
+<div class="aftericon"><a href="https://52.66.136.193:10000/right.cgi" target="right">System Information</a></div></div>
+<div class="linkwithicon"><img src="./refresh-small.gif" alt="">
+<div class="aftericon"><a href="https://52.66.136.193:10000/webmin/refresh_modules.cgi" target="right">Refresh Modules</a></div></div>
+<div class="linkwithicon"><img src="./stock_quit.gif" alt="">
+<div class="aftericon"><a href="https://52.66.136.193:10000/session_login.cgi?logout=1" target="_top">Logout</a></div></div>
+</td></tr></tbody></table>
+</div>
+
+
+</body></html>

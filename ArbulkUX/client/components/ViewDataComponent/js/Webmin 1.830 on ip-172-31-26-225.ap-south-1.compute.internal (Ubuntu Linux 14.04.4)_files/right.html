@@ -1,0 +1,337 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<!-- saved from url=(0123)https://52.66.136.193:10000/filemin/index.cgi?path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="./gray-reset-fonts-grids-base.css">
+<link rel="stylesheet" type="text/css" href="./gray-virtual-server-style.css">
+<!--[if IE]>
+<style type="text/css">
+table.formsection, table.ui_table, table.loginform { border-collapse: collapse; }
+</style>
+<![endif]-->
+<script>
+var rowsel = new Array();
+</script>
+<script type="text/javascript" src="./sorttable.js"></script>
+<style type="text/css">
+textarea,pre { font-size:120%; }
+</style>
+
+<title>File Manager</title>
+<script type="text/javascript">
+window.defaultStatus="root logged into Webmin 1.830 on ip-172-31-26-225.ap-south-1.compute.internal (Ubuntu Linux 14.04.4)";
+</script>
+</head>
+<body bgcolor="#ffffff" link="#376ebd" vlink="#376ebd" text="#000000">
+<table class="header" width="100%" id="sortableTable0"><tbody><tr>
+<td id="headln2l" width="15%" valign="top" align="left"><a href="https://52.66.136.193:10000/filemin/index.cgi">Module Index</a><br>
+</td>
+<td id="headln2c" align="center" width="70%"><font size="+2">File Manager</font></td>
+<td id="headln2r" width="15%" valign="top" align="right"><a href="https://52.66.136.193:10000/filemin/config.cgi?path=/var/www/html/ArBulk/client/components/InventoryComponents" data-config-pagination="50">Module configuration</a></td></tr></tbody></table>
+<p><link rel="stylesheet" type="text/css" href="./style.css"><script type="text/javascript" src="./jquery.min.js"></script><script type="text/javascript" src="./jquery-ui.min.js"></script><script type="text/javascript" src="./legacy.js"></script><link rel="stylesheet" type="text/css" href="./jquery-ui.min.css"><script type="text/javascript" src="./chmod-calculator.js"></script><link rel="stylesheet" type="text/css" href="./fg.menu.css"><script type="text/javascript" src="./fg.menu.js"></script></p><div id="bread" style="float: left; padding-bottom: 2px;"><a href="https://52.66.136.193:10000/filemin/index.cgi?path="><img src="./drive-harddisk.png" class="hdd-icon"></a> / <a href="https://52.66.136.193:10000/filemin/index.cgi?path=/var">var</a> / <a href="https://52.66.136.193:10000/filemin/index.cgi?path=/var/www">www</a> / <a href="https://52.66.136.193:10000/filemin/index.cgi?path=/var/www/html">html</a> / <a href="https://52.66.136.193:10000/filemin/index.cgi?path=/var/www/html/ArBulk">ArBulk</a> / <a href="https://52.66.136.193:10000/filemin/index.cgi?path=/var/www/html/ArBulk/client">client</a> / <a href="https://52.66.136.193:10000/filemin/index.cgi?path=/var/www/html/ArBulk/client/components">components</a> / <a href="https://52.66.136.193:10000/filemin/index.cgi?path=/var/www/html/ArBulk/client/components/InventoryComponents">InventoryComponents</a> / <br>Pages: <a class="pages active" href="https://52.66.136.193:10000/filemin/index.cgi?path=/var/www/html/ArBulk/client/components/InventoryComponents&amp;page=1&amp;query=">1</a></div><div id="quicks" style="float:right">
+<a href="javascript:void(0)" onclick="searchDialog()" title="Search"><img src="./edit-find.png" alt="Search"></a>
+<a href="https://52.66.136.193:10000/filemin/bookmark.cgi?path=/var/www/html/ArBulk/client/components/InventoryComponents" title="Bookmark current directory"><img src="./bookmark-new.png" alt="Bookmark current directory"></a>
+<a tabindex="0" class="fg-button fg-button-icon-right ui-widget ui-corner-all ui-state-focus" id="flat">
+  <img src="./go-down.png" alt="Bookmarks">
+</a>
+<div id="bookmarks" class="ui-helper-hidden">
+<ul>
+  <li><a>No bookmarks yet</a></li>
+</ul>
+</div>
+<a href="javascript:void(0)" onclick="selectAll()" title="Select All"><img src="./select-all.png" alt="Select All"></a>
+<a href="javascript:void(0)" onclick="invertSelection()" title="Invert Selection"><img src="./invert.png" alt="Invert Selection"></a>
+<a href="javascript:void(0)" onclick="copySelected()" title="Copy Selected"><img src="./edit-copy.png" alt="Copy Selected"></a>
+<a href="javascript:void(0)" onclick="cutSelected()" title="Cut Selected"><img src="./edit-cut.png" alt="Cut Selected"></a>
+<a href="https://52.66.136.193:10000/filemin/paste.cgi?path=/var/www/html/ArBulk/client/components/InventoryComponents" title="Paste"><img src="./edit-paste.png" alt="Paste"></a>
+<a href="javascript:void(0)" onclick="createFolderDialog()" title="Create Directory"><img src="./folder-new.png" alt="Create Directory"></a>
+<a href="javascript:void(0)" onclick="createFileDialog()" title="Create File"><img src="./document-new.png" alt="Create File"></a>
+<a href="javascript:void(0)" onclick="compressDialog()" title="Compress Selected"><img src="./compress.png" alt="Compress Selected"></a>
+<a href="javascript:void(0)" onclick="chmodDialog()" title="Chmod Selected"><img src="./chmod.png" alt="Chmod Selected"></a>
+<a href="javascript:void(0)" onclick="chownDialog()" title="Chown Selected"><img src="./chown.png" alt="Chown Selected"></a>
+<a href="javascript:void(0)" onclick="chattrDialog()" title=""><img src="./chattr.png" alt=""></a>
+<a href="javascript:void(0)" onclick="chconDialog()" title=""><img src="./chcon.png" alt=""></a>
+<a href="javascript:void(0)" onclick="removeSelected()" title="Remove Selected"><img src="./remove.png" alt="Remove Selected"></a>
+<a href="javascript:void(0)" onclick="viewReadyForUpload()" title="Upload Files"><img src="./upload.png" alt="Upload Files"></a>
+<a href="javascript:void(0)" onclick="downFromUrlDialog()" title="Get from URL"><img src="./from-url.png" alt="Get from URL"></a>
+</div>
+<div id="info" style="float:right"></div>
+<div id="nothingSelected" class="modal">
+    <h3>Nothing selected</h3>
+</div>
+
+<div id="createFolderDialog" class="modal">
+  <form id="createFolderForm" action="https://52.66.136.193:10000/filemin/create_folder.cgi" method="post">
+      <div class="form-group">
+          <label>New directory name</label>
+          <input id="name" name="name" type="text" title="Provide directory name">
+          <input type="hidden" name="path" value="/var/www/html/ArBulk/client/components/InventoryComponents">
+      </div>
+  </form>
+</div>
+
+<div id="createFileDialog" class="modal">
+  <form id="createFileForm" action="https://52.66.136.193:10000/filemin/create_file.cgi" method="post">
+      <div class="form-group">
+          <label>New file name</label>
+          <input name="name" type="text">
+          <input type="hidden" name="path" value="/var/www/html/ArBulk/client/components/InventoryComponents">
+      </div>
+  </form>
+</div>
+
+<div id="renameDialog" class="modal">
+  <form id="renameForm" action="https://52.66.136.193:10000/filemin/rename.cgi" method="post">
+      <div class="form-group">
+          <label>New name</label>
+          <input name="name" type="text">
+          <input type="hidden" name="file" value="" required="">
+          <input type="hidden" name="path" value="/var/www/html/ArBulk/client/components/InventoryComponents">
+      </div>
+  </form>
+</div>
+
+<div id="compressDialog" class="modal">
+  <form id="compressSelectedForm" action="https://52.66.136.193:10000/filemin/compress.cgi" method="post">
+      <div class="form-group">
+          <label>Archive name</label>
+          <input name="filename" type="text">
+          <select name="method">
+              <option value="tar">.tar.gz</option>
+              <option value="zip">.zip</option>
+          </select>
+      </div>
+  </form>
+</div>
+
+<div id="removeDialog" class="modal">
+  <p>You're about to delete following items:</p>
+  <pre id="items-to-remove">  </pre>
+  Are you sure?
+</div>
+
+<div id="chownDialog" class="modal">
+  <form id="chownForm">
+      <div class="form-group">
+          <label>User name</label><br>
+          <input name="owner" type="text"><br>
+          <label>Group name</label><br>
+          <input name="group" type="text"><br>
+          <label>Recursive</label>
+          <input id="chown-recursive" type="checkbox" name="recursive">
+      </div>
+  </form>
+</div>
+
+<div id="chattrDialog" class="modal">
+  <form id="chattrForm">
+      <div class="form-group">
+          <label></label><br>
+          <input name="label" type="text"><br>
+          <label>Recursive</label>
+          <input id="chattr-recursive" type="checkbox" name="recursive">
+      </div>
+  </form>
+</div>
+
+<div id="chconDialog" class="modal">
+  <form id="chconForm">
+      <div class="form-group">
+          <label></label><br>
+          <input name="label" type="text"><br>
+          <label>Recursive</label>
+          <input id="chcon-recursive" type="checkbox" name="recursive">
+      </div>
+  </form>
+</div>
+
+<div id="downFromUrlDialog" class="modal">
+  <form id="downFromUrlForm" action="https://52.66.136.193:10000/filemin/http_download.cgi" method="post">
+    <div class="form-group">
+      <label>URL of file to download</label>
+      <input name="link" type="url"><br>
+      <label>Remote server username(if any required)</label>
+      <input name="username" type="text"><br>
+      <label>Remote server password(if any required)</label>
+      <input name="password" type="password">
+      <input type="hidden" name="path" value="/var/www/html/ArBulk/client/components/InventoryComponents">
+    </div>
+  </form>
+</div>
+
+<div id="readyForUploadDialog" class="modal">
+    <form id="upload-form" method="post" action="https://52.66.136.193:10000/filemin/upload.cgi?path=/var/www/html/ArBulk/client/components/InventoryComponents&amp;id=14840334109512" enctype="multipart/form-data" onsubmit="window.open(&quot;/uptracker.cgi?id=14840334109512&amp;uid=&quot;, &quot;uptracker&quot;, &quot;toolbar=no, menubar=no, scrollbars=no, location=no, resizable=no, width=screen.width, height=screen.height&quot;)">
+        <input type="file" id="upfiles" name="upfiles" multiple="" onchange="countUploads(this)">
+        <input type="hidden" name="path" value="/var/www/html/ArBulk/client/components/InventoryComponents">
+    </form>
+    <div id="readyForUploadList" class="well">
+    </div>
+</div>
+
+<div id="chmodDialog" class="modal fade">
+  <form name="chmod" id="chmodForm">
+      <div class="form-group">
+          <label for="t_total">Permissions :</label><br>
+          <input id="perms" type="text" name="t_total" value="0644" size="4" onkeyup="octalchange()" class="form-group-item">
+          <input type="text" name="sym_total" value="" size="12" readonly="true" class="form-group-item">
+      </div>
+      <table class="table" id="sortableTable1">
+          <tbody><tr>
+              <th></th>
+              <th><b>Owner</b></th>
+              <th><b>Group</b></th>
+              <th><b>Others<b></b></b></th>
+          </tr>
+          <tr>
+              <td>Read</td>
+              <td><input type="checkbox" name="owner4" value="4" onchange="calc_chmod()"></td>
+              <td><input type="checkbox" name="group4" value="4" onchange="calc_chmod()"></td>
+              <td><input type="checkbox" name="other4" value="4" onchange="calc_chmod()"></td>
+          </tr>
+          <tr>
+              <td>Write</td>
+              <td><input type="checkbox" name="owner2" value="2" onchange="calc_chmod()"></td>
+              <td><input type="checkbox" name="group2" value="2" onchange="calc_chmod()"></td>
+              <td><input type="checkbox" name="other2" value="2" onchange="calc_chmod()"></td>
+          </tr>
+          <tr>
+              <td>Execute</td>
+              <td><input type="checkbox" name="owner1" value="1" onchange="calc_chmod()"></td>
+              <td><input type="checkbox" name="group1" value="1" onchange="calc_chmod()"></td>
+              <td><input type="checkbox" name="other1" value="1" onchange="calc_chmod()"></td>
+          </tr>
+          <tr>
+              <td>----------</td>
+              <td></td>
+              <td></td>
+              <td></td>
+          </tr>
+          <tr>
+              <td>Sticky bit</td>
+              <td><input type="checkbox" name="sticky" value="1" onchange="calc_chmod()"></td>
+              <td></td>
+              <td></td>
+          </tr>
+          <tr>
+              <td>Setgid</td>
+              <td><input type="checkbox" name="setgid" value="2" onchange="calc_chmod()"></td>
+              <td></td>
+              <td></td>
+          </tr>
+      </tbody></table>
+      <label>Apply to</label>
+      <select name="applyto">
+          <option value="1">Selected directories and files only</option>
+          <option value="2">Selected files and directories and files in selected directories</option>
+          <option value="3">All (recursive)</option>
+          <option value="4">Selected files and files under selected directories and subdirectories</option>
+          <option value="5">Selected directories and subdirectories</option>
+      </select>
+  </form>
+</div>
+
+<div id="searchDialog" class="modal">
+  <form id="searchForm" action="https://52.66.136.193:10000/filemin/search.cgi" method="post">
+      <div class="form-group">
+          <label>Search query</label>
+          <input id="query" name="query" type="text" title="Provide search query"><br>
+          <input id="caseins" name="caseins" type="checkbox" checked="checked"> Case insensitive search
+          <input type="hidden" name="path" value="/var/www/html/ArBulk/client/components/InventoryComponents">
+      </div>
+  </form>
+</div>
+<div class="total">Total: 6 files and 0 directories</div><form class="ui_form" action="https://52.66.136.193:10000/filemin/index.cgi?path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents" method="post" id="list_form">
+<table class="wrapper" width="100%" id="sortableTable2">
+<tbody><tr><td>
+<table class="ui_table sortable ui_columns" id="sortableTable3">
+<thead> <tr bgcolor="#D0E0FC" class="maintitle">
+<td><b><a href="https://52.66.136.193:10000/filemin/index.cgi?path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents#" class="sortheader" onclick="ts_resortTable(this, 0);return false;"><span class="sortarrow">&nbsp;&nbsp;&nbsp;</span></a></b></td>
+<td><b><a href="https://52.66.136.193:10000/filemin/index.cgi?path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents#" class="sortheader" onclick="ts_resortTable(this, 1);return false;">
+<span class="sortarrow">&nbsp;&nbsp;&nbsp;</span></a></b></td>
+<td><b><a href="https://52.66.136.193:10000/filemin/index.cgi?path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents#" class="sortheader" onclick="ts_resortTable(this, 2);return false;">Name<span class="sortarrow">&nbsp;&nbsp;&nbsp;</span></a></b></td>
+<td><b><a href="https://52.66.136.193:10000/filemin/index.cgi?path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents#" class="sortheader" onclick="ts_resortTable(this, 3);return false;">Actions<span class="sortarrow">&nbsp;&nbsp;&nbsp;</span></a></b></td>
+<td><b><a href="https://52.66.136.193:10000/filemin/index.cgi?path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents#" class="sortheader" onclick="ts_resortTable(this, 4);return false;">Size<span class="sortarrow">&nbsp;&nbsp;&nbsp;</span></a></b></td>
+<td><b><a href="https://52.66.136.193:10000/filemin/index.cgi?path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents#" class="sortheader" onclick="ts_resortTable(this, 5);return false;"><span class="sortarrow">&nbsp;&nbsp;&nbsp;</span></a></b></td>
+<td><b><a href="https://52.66.136.193:10000/filemin/index.cgi?path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents#" class="sortheader" onclick="ts_resortTable(this, 6);return false;">Permissions<span class="sortarrow">&nbsp;&nbsp;&nbsp;</span></a></b></td>
+<td><b><a href="https://52.66.136.193:10000/filemin/index.cgi?path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents#" class="sortheader" onclick="ts_resortTable(this, 7);return false;">Last Modification Time<span class="sortarrow">&nbsp;&nbsp;&nbsp;</span></a></b></td>
+</tr></thead> <tbody>
+<tr id="row_name_CurrentInventory.js" bgcolor="#f5f5f5" class="row1 ui_checked_columns mainbody">
+<td class="ui_checked_checkbox"><input class="ui_checkbox" type="checkbox" name="name" value="CurrentInventory.js" id="name_CurrentInventory.js"> 
+</td>
+<td><a href="https://52.66.136.193:10000/filemin/download.cgi?file=CurrentInventory%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents"><img src="./application-javascript.png"></a></td>
+<td><a href="https://52.66.136.193:10000/filemin/download.cgi?file=CurrentInventory%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents" data-filemin-path="download.cgi?file=CurrentInventory%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents">CurrentInventory.js</a></td>
+<td><label for="name_CurrentInventory.js"><a class="action-link" href="javascript:void(0)" onclick="renameDialog(&quot;CurrentInventory.js&quot;)" title="Rename" data-container="body"><img src="./rename.png" alt="Rename"></a><a class="action-link" href="https://52.66.136.193:10000/filemin/edit_file.cgi?file=CurrentInventory%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents" title="Edit" data-container="body"><img src="./edit.png" alt="Edit"></a></label></td>
+<td><label for="name_CurrentInventory.js">31.03 kB</label></td>
+<td><label for="name_CurrentInventory.js">root:root</label></td>
+<td><label for="name_CurrentInventory.js">0644</label></td>
+<td><label for="name_CurrentInventory.js">2017/01/04 - 01:40:42</label></td>
+</tr>
+<tr id="row_name_InventoryHistory.js" bgcolor="#f5f5f5" class="row0 ui_checked_columns mainbody">
+<td class="ui_checked_checkbox"><input class="ui_checkbox" type="checkbox" name="name" value="InventoryHistory.js" id="name_InventoryHistory.js"> 
+</td>
+<td><a href="https://52.66.136.193:10000/filemin/download.cgi?file=InventoryHistory%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents"><img src="./application-javascript.png"></a></td>
+<td><a href="https://52.66.136.193:10000/filemin/download.cgi?file=InventoryHistory%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents" data-filemin-path="download.cgi?file=InventoryHistory%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents">InventoryHistory.js</a></td>
+<td><label for="name_InventoryHistory.js"><a class="action-link" href="javascript:void(0)" onclick="renameDialog(&quot;InventoryHistory.js&quot;)" title="Rename" data-container="body"><img src="./rename.png" alt="Rename"></a><a class="action-link" href="https://52.66.136.193:10000/filemin/edit_file.cgi?file=InventoryHistory%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents" title="Edit" data-container="body"><img src="./edit.png" alt="Edit"></a></label></td>
+<td><label for="name_InventoryHistory.js">3.39 kB</label></td>
+<td><label for="name_InventoryHistory.js">root:root</label></td>
+<td><label for="name_InventoryHistory.js">0644</label></td>
+<td><label for="name_InventoryHistory.js">2017/01/05 - 07:35:52</label></td>
+</tr>
+<tr id="row_name_InventoryLocationHistory.js" bgcolor="#f5f5f5" class="row1 ui_checked_columns mainbody">
+<td class="ui_checked_checkbox"><input class="ui_checkbox" type="checkbox" name="name" value="InventoryLocationHistory.js" id="name_InventoryLocationHistory.js"> 
+</td>
+<td><a href="https://52.66.136.193:10000/filemin/download.cgi?file=InventoryLocationHistory%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents"><img src="./application-javascript.png"></a></td>
+<td><a href="https://52.66.136.193:10000/filemin/download.cgi?file=InventoryLocationHistory%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents" data-filemin-path="download.cgi?file=InventoryLocationHistory%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents">InventoryLocationHistory.js</a></td>
+<td><label for="name_InventoryLocationHistory.js"><a class="action-link" href="javascript:void(0)" onclick="renameDialog(&quot;InventoryLocationHistory.js&quot;)" title="Rename" data-container="body"><img src="./rename.png" alt="Rename"></a><a class="action-link" href="https://52.66.136.193:10000/filemin/edit_file.cgi?file=InventoryLocationHistory%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents" title="Edit" data-container="body"><img src="./edit.png" alt="Edit"></a></label></td>
+<td><label for="name_InventoryLocationHistory.js">3.88 kB</label></td>
+<td><label for="name_InventoryLocationHistory.js">root:root</label></td>
+<td><label for="name_InventoryLocationHistory.js">0644</label></td>
+<td><label for="name_InventoryLocationHistory.js">2017/01/03 - 20:00:56</label></td>
+</tr>
+<tr id="row_name_InventoryTable.js" bgcolor="#f5f5f5" class="row0 ui_checked_columns mainbody">
+<td class="ui_checked_checkbox"><input class="ui_checkbox" type="checkbox" name="name" value="InventoryTable.js" id="name_InventoryTable.js"> 
+</td>
+<td><a href="https://52.66.136.193:10000/filemin/download.cgi?file=InventoryTable%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents"><img src="./application-javascript.png"></a></td>
+<td><a href="https://52.66.136.193:10000/filemin/download.cgi?file=InventoryTable%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents" data-filemin-path="download.cgi?file=InventoryTable%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents">InventoryTable.js</a></td>
+<td><label for="name_InventoryTable.js"><a class="action-link" href="javascript:void(0)" onclick="renameDialog(&quot;InventoryTable.js&quot;)" title="Rename" data-container="body"><img src="./rename.png" alt="Rename"></a><a class="action-link" href="https://52.66.136.193:10000/filemin/edit_file.cgi?file=InventoryTable%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents" title="Edit" data-container="body"><img src="./edit.png" alt="Edit"></a></label></td>
+<td><label for="name_InventoryTable.js">5.57 kB</label></td>
+<td><label for="name_InventoryTable.js">root:root</label></td>
+<td><label for="name_InventoryTable.js">0644</label></td>
+<td><label for="name_InventoryTable.js">2017/01/06 - 09:48:40</label></td>
+</tr>
+<tr id="row_name_PendingShipment.js" bgcolor="#f5f5f5" class="row1 ui_checked_columns mainbody">
+<td class="ui_checked_checkbox"><input class="ui_checkbox" type="checkbox" name="name" value="PendingShipment.js" id="name_PendingShipment.js"> 
+</td>
+<td><a href="https://52.66.136.193:10000/filemin/download.cgi?file=PendingShipment%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents"><img src="./application-javascript.png"></a></td>
+<td><a href="https://52.66.136.193:10000/filemin/download.cgi?file=PendingShipment%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents" data-filemin-path="download.cgi?file=PendingShipment%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents">PendingShipment.js</a></td>
+<td><label for="name_PendingShipment.js"><a class="action-link" href="javascript:void(0)" onclick="renameDialog(&quot;PendingShipment.js&quot;)" title="Rename" data-container="body"><img src="./rename.png" alt="Rename"></a><a class="action-link" href="https://52.66.136.193:10000/filemin/edit_file.cgi?file=PendingShipment%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents" title="Edit" data-container="body"><img src="./edit.png" alt="Edit"></a></label></td>
+<td><label for="name_PendingShipment.js">3.29 kB</label></td>
+<td><label for="name_PendingShipment.js">root:root</label></td>
+<td><label for="name_PendingShipment.js">0644</label></td>
+<td><label for="name_PendingShipment.js">2017/01/05 - 07:41:41</label></td>
+</tr>
+<tr id="row_name_TotalComponent.js" bgcolor="#f5f5f5" class="row0 ui_checked_columns mainbody">
+<td class="ui_checked_checkbox"><input class="ui_checkbox" type="checkbox" name="name" value="TotalComponent.js" id="name_TotalComponent.js"> 
+</td>
+<td><a href="https://52.66.136.193:10000/filemin/download.cgi?file=TotalComponent%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents"><img src="./application-javascript.png"></a></td>
+<td><a href="https://52.66.136.193:10000/filemin/download.cgi?file=TotalComponent%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents" data-filemin-path="download.cgi?file=TotalComponent%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents">TotalComponent.js</a></td>
+<td><label for="name_TotalComponent.js"><a class="action-link" href="javascript:void(0)" onclick="renameDialog(&quot;TotalComponent.js&quot;)" title="Rename" data-container="body"><img src="./rename.png" alt="Rename"></a><a class="action-link" href="https://52.66.136.193:10000/filemin/edit_file.cgi?file=TotalComponent%2Ejs&amp;path=%2Fvar%2Fwww%2Fhtml%2FArBulk%2Fclient%2Fcomponents%2FInventoryComponents" title="Edit" data-container="body"><img src="./edit.png" alt="Edit"></a></label></td>
+<td><label for="name_TotalComponent.js">1.34 kB</label></td>
+<td><label for="name_TotalComponent.js">root:root</label></td>
+<td><label for="name_TotalComponent.js">0644</label></td>
+<td><label for="name_TotalComponent.js">2017/01/03 - 18:48:16</label></td>
+</tr>
+</tbody> </table>
+</td> </tr> </tbody></table>
+<input class="ui_hidden" type="hidden" name="path" id="path" value="/var/www/html/ArBulk/client/components/InventoryComponents">
+
+</form>
+<script type="text/javascript">
+var opts = document.getElementsByClassName('ui_opt_textbox');
+for(var i=0; i<opts.length; i++) {
+  opts[i].disabled = document.getElementsByName(opts[i].name+'_def')[0].checked;
+}
+</script>
+<p>
+<br>
+
+</p></body></html>

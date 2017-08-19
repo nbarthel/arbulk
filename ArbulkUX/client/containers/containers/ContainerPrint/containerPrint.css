@@ -1,0 +1,101 @@
+html, body, div, span, applet, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre,a, abbr, acronym, address, big, cite, code,del, dfn, em, img, ins, kbd, q, s, samp,small, strike, strong, sub, sup, tt, var,b, u, i, center,dl, dt, dd, ol, ul, li,fieldset, form, label, legend,table, caption, tbody, tfoot, thead, tr, th, td,article, aside, canvas, details, embed,figure, figcaption, footer, header, hgroup,menu, nav, output, ruby, section, summary,time, mark, audio, video,table { margin: 0; padding: 0; border: 0; font: inherit; font-size: 100%; vertical-align: baseline; border:0px;}
+.bold{font-weight:bold;}
+i{font-style: italic;}
+strong { font-weight: bold; }
+p{text-align:left;}
+.text{ color:#000; text-align:justify;}
+.text strong{color:#000;}
+.font-6{font-size:8px;}
+.font-8{font-size:8px;}
+.font-10{font-size:10px;}
+.font-12{font-size:12px;}
+.font-11{font-size:11px;}
+body {margin:0 auto; width:100%; height:100%; background:#fff; color:#000;  padding:30px 0px; font-size: 100%;  }
+.bill-of-completed{ max-width:8.26in;  background:#fff; color:#000;  margin-bottom:50px; font-size: 11px;  font-weight:250;  margin: 0 auto; padding: 0; font-family:Arial, Helvetica, sans-serif; overflow:hidden; }
+.bill-of-completed .content-inside{padding-bottom: 50px;   position:relative;  z-index:1; }
+
+
+
+.bill-of-completed .table {border-collapse: collapse; width:100%; border:0px;}
+.bill-of-completed .table tr{border-bottom:2px solid #000;}
+.bill-of-completed .table td{padding: 3px 5px; white-space: pre-wrap; vertical-align: middle}
+
+
+.bill-of-completed .table_inner{border-collapse: collapse; width:100%; border:0px;}
+.bill-of-completed .table_inner tr{ padding:0px 0px; margin:0px;}
+.bill-of-completed .table_inner td{ padding:3px 0px;}
+
+
+.bill-of-completed .border {border:2px solid #000;}
+.bill-of-completed .border_right{border-right:2px solid #000;}
+.bill-of-completed .border_left{border-left:2px solid #000;}
+.bill-of-completed .border_bottom{border-bottom:2px solid #000 !important;}
+.bill-of-completed .border_bottom_none{border-bottom:0px solid #000;}
+
+.bill-of-completed .designate{width:35%;}
+.bill-of-completed .designate strong{ display:block; width:100%; text-align: center;}
+.bill-of-completed .designate label{display:block; width:50%; float:left;  }
+.bill-of-completed .designate label input[type="checkbox"]{margin-right: 10px; margin-top: 10px;}
+
+.bill-of-completed .booking_details{ width:35%;     text-align: left;}
+.bill-of-completed .customer_details{ width:65%;     text-align: left;}
+.bill-of-completed .customer_details .from{height:40px; width:100%;}
+.bill-of-completed .customer_details .at{width:100%;}
+.bill-of-completed .customer_details .details{ height:128px; vertical-align:middle; text-align:center; border-bottom:0px; }
+.bill-of-completed .customer_details .details td strong{width:100%; padding:0 10%; display:block;}
+
+.bill-of-completed .table td.customer_details{padding: 0px 0px; }
+.bill-of-completed .table td.customer_details td{padding: 6px 10px; position:relative; }
+
+.bill-of-completed .table td.booking_details{padding: 0px 0px; }
+.bill-of-completed .table td.booking_details td{padding: 6px 10px; position:relative; }
+
+.bill-of-completed .booking_details .po{ height:60px;}
+.bill-of-completed .booking_details .po span{ display:block; width:100%;}
+.bill-of-completed .booking_details .po span:first-child{ margin-bottom:5px;}
+.bill-of-completed .booking_details .container:before, .bill-of-completed .booking_details .container:after{content:''; display:none;}
+.bill-of-completed .booking_details .chassis{border-bottom: 0px; }
+
+.bill-of-completed .table td.bill_decription{padding: 0px 0px; width:20%; }
+.bill-of-completed .table td.bill_decription td{padding: 2px 6px; text-align:center; }
+
+.bill-of-completed .table td.bill_details{padding: 0px 0px; border-bottom: 0px; height:261px;}
+.bill-of-completed .table td.bill_details table tr.bill_details_body{height:261px;}
+.bill-of-completed .table td.bill_details td{padding: 2px 6px; position:relative;    vertical-align: baseline; }
+
+.bill-of-completed .bill_details .bill_details_header{}
+.bill-of-completed .bill_details .bill_details_body{ font-weight:600;   }
+.bill-of-completed .bill_details .bill_details_body td p{ line-height:50px; }
+.bill-of-completed .bill_details .bill_details_body td p span{text-align:right; float:right; margin-right:15px;}
+.bill-of-completed .bill_details .bill_details_body td.value span{ line-height:50px; display:block; width:100%; text-align: right; margin-right:15px;}
+
+.bill-of-completed .pl{height: 100px;}
+.bill-of-completed .ppd{height: 50px;}
+.bill-of-completed .plPpdApply{height: 80px;}
+
+.bill-of-completed .table td.signature {padding: 0px 0px; }
+.bill-of-completed .table td.signature td{padding: 0px 5px; text-align:left;text-align: left;height: 40px; }
+
+.bill-of-completed .placards {width:25%;}
+.bill-of-completed .placards strong{ display:block; width:100%; text-align: center;}
+.bill-of-completed .placards label{display:block; width:50%; float:left;  }
+.bill-of-completed .placards label input[type="checkbox"]{margin-right: 10px; margin-top: 10px;}
+
+.bill-of-completed .driverSignature{width:35%;}
+.bill-of-completed .emergencyResponse{width:35%;}
+
+.bill-of-completed .shipment_certification{ height:100%;}
+.bill-of-completed .shipment_certification .signature p{height: 42px; padding: 5px; width: 137px;}
+.bill-of-completed .shipment_certification .discription {padding-top:5px;}
+
+.bill-of-completed .shipment_details tr{border-bottom:0px solid #000;}
+
+.bill-of-completed .table td.shipment_details {padding: 0px 0px; }
+.bill-of-completed .table td.shipment_details td{padding: 0px 5px; text-align:left; }
+.bill-of-completed .cod span{ display:block; width:100%; margin-bottom:0px;  font-weight:600; font-size:18px!important; }
+.bill-of-completed .cod {width:164px;}
+
+.bill-of-completed .cod .cod_table{}
+.bill-of-completed .cod .cod_table tr td{padding: 10px 5px;    font-size: 18px;}
+
+.create_btn_container{margin-right:20%;float: right;padding: 10px 15px;width: 188px;margin-top: 20px;margin-bottom: 50px;}

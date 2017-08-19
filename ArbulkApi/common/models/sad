@@ -1,0 +1,58 @@
+{
+    "id": "22951f59-e739-423a-aa62-77bd36222bd0",
+    "timestamp": "2017-04-21T05:47:24.126Z",
+    "lang": "en",
+    "result": {
+    "source": "agent",
+        "resolvedQuery": "hi",
+        "action": "Greet",
+        "actionIncomplete": false,
+        "parameters": {
+        "greet": "Hi",
+            "GreetingType": ""
+    },
+    "contexts": [
+        {
+            "name": "greeting",
+            "parameters": {
+                "GreetingType": "",
+                "greet": "Hi",
+                "GreetingType.original": "",
+                "greet.original": ""
+            },
+            "lifespan": 5
+        },
+        {
+            "name": "greeting-followup",
+            "parameters": {
+                "GreetingType": "",
+                "greet": "Hi",
+                "GreetingType.original": "",
+                "greet.original": ""
+            },
+            "lifespan": 5
+        }
+    ],
+        "metadata": {
+        "intentId": "70662eda-e5a9-4820-a729-d130ddebe82e",
+            "webhookUsed": "false",
+            "webhookForSlotFillingUsed": "false",
+            "intentName": "Hi"
+    },
+    "fulfillment": {
+        "speech": "Hello there!! Are you looking for a new car, used car or service?",
+            "messages": [
+            {
+                "type": 0,
+                "speech": "Hello there!! Are you looking for a new car, used car or service?"
+            }
+        ]
+    },
+    "score": 1
+},
+    "status": {
+    "code": 200,
+        "errorType": "success"
+},
+    "sessionId": "1382b31f-a546-4b34-8a7c-c4c3eca30795"
+}

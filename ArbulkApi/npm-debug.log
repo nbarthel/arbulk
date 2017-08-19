@@ -1,0 +1,46 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/nodejs', '/usr/bin/npm', 'run', 'deploy' ]
+2 info using npm@3.10.10
+3 info using node@v6.11.1
+4 verbose run-script [ 'predeploy', 'deploy', 'postdeploy' ]
+5 info lifecycle loopback-redux-react-boilerplate@1.0.2~predeploy: loopback-redux-react-boilerplate@1.0.2
+6 silly lifecycle loopback-redux-react-boilerplate@1.0.2~predeploy: no script for predeploy, continuing
+7 info lifecycle loopback-redux-react-boilerplate@1.0.2~deploy: loopback-redux-react-boilerplate@1.0.2
+8 verbose lifecycle loopback-redux-react-boilerplate@1.0.2~deploy: unsafe-perm in lifecycle true
+9 verbose lifecycle loopback-redux-react-boilerplate@1.0.2~deploy: PATH: /usr/lib/node_modules/npm/bin/node-gyp-bin:/home/ankit/SVN/arbulk api/arbulk/node_modules/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin:/home/ankit/Android/Sdk/tools:/home/ankit/Android/Sdk/platform-tools
+10 verbose lifecycle loopback-redux-react-boilerplate@1.0.2~deploy: CWD: /home/ankit/SVN/arbulk api/arbulk
+11 silly lifecycle loopback-redux-react-boilerplate@1.0.2~deploy: Args: [ '-c',
+11 silly lifecycle   'NODE_ENV=production webpack -p --config webpack.config.production.js --progress' ]
+12 silly lifecycle loopback-redux-react-boilerplate@1.0.2~deploy: Returned: code: 1  signal: null
+13 info lifecycle loopback-redux-react-boilerplate@1.0.2~deploy: Failed to exec deploy script
+14 verbose stack Error: loopback-redux-react-boilerplate@1.0.2 deploy: `NODE_ENV=production webpack -p --config webpack.config.production.js --progress`
+14 verbose stack Exit status 1
+14 verbose stack     at EventEmitter.<anonymous> (/usr/lib/node_modules/npm/lib/utils/lifecycle.js:255:16)
+14 verbose stack     at emitTwo (events.js:106:13)
+14 verbose stack     at EventEmitter.emit (events.js:191:7)
+14 verbose stack     at ChildProcess.<anonymous> (/usr/lib/node_modules/npm/lib/utils/spawn.js:40:14)
+14 verbose stack     at emitTwo (events.js:106:13)
+14 verbose stack     at ChildProcess.emit (events.js:191:7)
+14 verbose stack     at maybeClose (internal/child_process.js:891:16)
+14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:226:5)
+15 verbose pkgid loopback-redux-react-boilerplate@1.0.2
+16 verbose cwd /home/ankit/SVN/arbulk api/arbulk
+17 error Linux 4.4.0-89-generic
+18 error argv "/usr/bin/nodejs" "/usr/bin/npm" "run" "deploy"
+19 error node v6.11.1
+20 error npm  v3.10.10
+21 error code ELIFECYCLE
+22 error loopback-redux-react-boilerplate@1.0.2 deploy: `NODE_ENV=production webpack -p --config webpack.config.production.js --progress`
+22 error Exit status 1
+23 error Failed at the loopback-redux-react-boilerplate@1.0.2 deploy script 'NODE_ENV=production webpack -p --config webpack.config.production.js --progress'.
+23 error Make sure you have the latest version of node.js and npm installed.
+23 error If you do, this is most likely a problem with the loopback-redux-react-boilerplate package,
+23 error not with npm itself.
+23 error Tell the author that this fails on your system:
+23 error     NODE_ENV=production webpack -p --config webpack.config.production.js --progress
+23 error You can get information on how to open an issue for this project with:
+23 error     npm bugs loopback-redux-react-boilerplate
+23 error Or if that isn't available, you can get their info via:
+23 error     npm owner ls loopback-redux-react-boilerplate
+23 error There is likely additional logging output above.
+24 verbose exit [ 1, true ]
