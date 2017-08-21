@@ -1,12 +1,10 @@
 import React from 'react';
 import _ from 'lodash';
-import  { PropTypes } from 'react';
 import { createDataLoader } from 'react-loopback';
 import { hashHistory } from 'react-router'
 import FilterComponent from '../../../components/FilterComponent';
 import FilterButton from '../../../components/FilterComponent/FilterButton';
 import ViewDataComponent from '../../../components/ViewDataComponent/ViewDataComponent';
-
 import ShowHideColumn from '../../../components/ShowColumns/showColumn'
 import '../../../public/stylesheets/sweetalert.css';
 import axios from 'axios'
@@ -1064,280 +1062,6 @@ export default class PackagingInstructionViewForm extends React.Component {
             swal("","The selected order is not ready","info")
         }
     }
-    onHideColumn(e,name){
-
-        setTimeout(function () { $("#Packaging_Instruction_View").colResizable({
-            disable: true,
-            resizeMode:'overflow'
-        });
-
-            $("#Packaging_Instruction_View").colResizable({
-                liveDrag:false,
-                gripInnerHtml:"<div class='grip'></div>",
-                draggingClass:"dragging",
-            });
-        },100);
-
-        // this.toggleColumn(name);
-        // switch(name){
-        //     case "ARB" :
-        //         if(this.state.showARB == ""){
-        //             this.setState({
-        //                 showARB : "none"
-        //             })
-        //         }
-        //         else{
-        //             this.setState({
-        //                 showARB : ""
-        //             })
-        //         }
-        //         break;
-        //     case "Customer" :
-        //         if(this.state.showCustomer == ""){
-        //             this.setState({
-        //                 showCustomer : "none"
-        //             })
-        //         }
-        //         else{
-        //             this.setState({
-        //                 showCustomer : ""
-        //             })
-        //         }
-        //         break;
-        //     case "PO" :
-        //         if(this.state.showPO == ""){
-        //             this.setState({
-        //                 showPO : "none"
-        //             })
-        //         }
-        //         else{
-        //             this.setState({
-        //                 showPO : ""
-        //             })
-        //         }
-        //         break;
-        //     case "Railcar" :
-        //         if(this.state.showRailcar == ""){
-        //             this.setState({
-        //                 showRailcar : "none"
-        //             })
-        //         }
-        //         else{
-        //             this.setState({
-        //                 showRailcar : ""
-        //             })
-        //         }
-        //         break;
-        //     case "Lot" :
-        //         console.log(e.target.name)
-        //         if(this.state.showLot == ""){
-        //             this.setState({
-        //                 showLot : "none"
-        //             })
-        //         }
-        //         else{
-        //             this.setState({
-        //                 showLot : ""
-        //             })
-        //         }
-        //         break;
-        //     case "Material" :
-        //         console.log(e.target.name)
-        //         if(this.state.showMaterial == ""){
-        //             this.setState({
-        //                 showMaterial : "none"
-        //             })
-        //         }
-        //         else{
-        //             this.setState({
-        //                 showMaterial : ""
-        //             })
-        //         }
-        //         break;
-        //     case "Confmd" :
-        //         console.log(e.target.name)
-        //         if(this.state.showConfmd == ""){
-        //             this.setState({
-        //                 showConfmd : "none"
-        //             })
-        //         }
-        //         else{
-        //             this.setState({
-        //                 showConfmd : ""
-        //             })
-        //         }
-        //         break;
-        //     case "Arrvd" :
-        //         console.log(e.target.name)
-        //         if(this.state.showArrvd == ""){
-        //             this.setState({
-        //                 showArrvd : "none"
-        //             })
-        //         }
-        //         else{
-        //             this.setState({
-        //                 showArrvd : ""
-        //             })
-        //         }
-        //         break;
-        //     case "Recd" :
-        //         console.log(e.target.name)
-        //         if(this.state.showRecd == ""){
-        //             this.setState({
-        //                 showRecd : "none"
-        //             })
-        //         }
-        //         else{
-        //             this.setState({
-        //                 showRecd : ""
-        //             })
-        //         }
-        //         break;
-        //     case "Cutoff" :
-        //         console.log(e.target.name)
-        //         if(this.state.showCutoff == ""){
-        //             this.setState({
-        //                 showCutoff : "none"
-        //             })
-        //         }
-        //         else{
-        //             this.setState({
-        //                 showCutoff : ""
-        //             })
-        //         }
-        //         break;
-        //     case "Weight" :
-        //         console.log(e.target.name)
-        //         if(this.state.showWeight == ""){
-        //             this.setState({
-        //                 showWeight : "none"
-        //             })
-        //         }
-        //         else{
-        //             this.setState({
-        //                 showWeight : ""
-        //             })
-        //         }
-        //         break;
-        //     case "Bag" :
-        //         console.log(e.target.name)
-        //         if(this.state.showBag == ""){
-        //             this.setState({
-        //                 showBag : "none"
-        //             })
-        //         }
-        //         else{
-        //             this.setState({
-        //                 showBag : ""
-        //             })
-        //         }
-        //         break;
-        //     case "InInvt" :
-        //         console.log(e.target.name)
-        //         if(this.state.showInInvt == ""){
-        //             this.setState({
-        //                 showInInvt : "none"
-        //             })
-        //         }
-        //         else{
-        //             this.setState({
-        //                 showInInvt : ""
-        //             })
-        //         }
-        //         break;
-        //     case "Status" :
-        //         console.log(e.target.name)
-        //         if(this.state.showStatus == ""){
-        //             this.setState({
-        //                 showStatus : "none"
-        //             })
-        //         }
-        //         else{
-        //             this.setState({
-        //                 showStatus : ""
-        //             })
-        //         }
-        //         break;
-        //     case "RailcarArr" :
-        //         console.log(e.target.name)
-        //         if(this.state.showRailcarArr == ""){
-        //             this.setState({
-        //                 showRailcarArr : "none"
-        //             })
-        //         }
-        //         else{
-        //             this.setState({
-        //                 showRailcarArr : ""
-        //             })
-        //         }
-        //         break;
-        //     case "RailcarArrD" :
-        //         console.log(e.target.name)
-        //         if(this.state.showRailcarArrD == ""){
-        //             this.setState({
-        //                 showRailcarArrD : "none"
-        //             })
-        //         }
-        //         else{
-        //             this.setState({
-        //                 showRailcarArrD : ""
-        //             })
-        //         }
-        //         break;
-        //     case "RailcarDep" :
-        //         console.log(e.target.name)
-        //         if(this.state.showRailcarDep == ""){
-        //             this.setState({
-        //                 showRailcarDep : "none"
-        //             })
-        //         }
-        //         else{
-        //             this.setState({
-        //                 showRailcarDep : ""
-        //             })
-        //         }
-        //         break;
-        //     case "RailcarDepDate" :
-        //         console.log(e.target.name)
-        //         if(this.state.showRailcarDepDate == ""){
-        //             this.setState({
-        //                 showRailcarDepDate : "none"
-        //             })
-        //         }
-        //         else{
-        //             this.setState({
-        //                 showRailcarDepDate : ""
-        //             })
-        //         }
-        //         break;
-        //     case "DaysPresent" :
-        //         console.log(e.target.name)
-        //         if(this.state.showDaysPresent == ""){
-        //             this.setState({
-        //                 showDaysPresent : "none"
-        //             })
-        //         }
-        //         else{
-        //             this.setState({
-        //                 showDaysPresent : ""
-        //             })
-        //         }
-        //         break;
-        //     case "RailcarStatus" :
-        //         console.log(e.target.name)
-        //         if(this.state.showRailcarStatus == ""){
-        //             this.setState({
-        //                 showRailcarStatus : "none"
-        //             })
-        //         }
-        //         else{
-        //             this.setState({
-        //                 showRailcarStatus : ""
-        //             })
-        //         }
-        //         break;
-        // }
-    }
     toggleColumn(name,value){
         switch(name){
             case "ARB" :
@@ -1652,13 +1376,13 @@ export default class PackagingInstructionViewForm extends React.Component {
 
                                 <div className="row">
                                     <FilterButton buttonDisplay = {this.buttonDisplay}  onButtonRemove = {this.onButtonRemove} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
-                                    <div className="col-lg-2 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
+                                    <div className="col-lg-3 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
                                         <div className="pull-right ">
                                             <a href="javascript:void(0)"  name = "setting" onClick={this.handleOpen}><span >Setting</span></a>
                                         </div>
 
                                     </div>
-                                    <div className="col-lg-2 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
+                                    <div className="col-lg-3 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
                                         <div className="pull-right " id="hide5">
 
                                             <select className="form-control" id="groupBy" name="groupBy" onChange={this.OnGroupBy}>
@@ -1674,7 +1398,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                                         </div>
 
                                     </div>
-                                    <div className="col-lg-2 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
+                                    <div className="col-lg-3 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
                                         <div className="pull-right " id="hide5">
 
 
@@ -1699,31 +1423,6 @@ export default class PackagingInstructionViewForm extends React.Component {
                                     </div>
                                 </div>
                             </div>
-
-                            {/*<div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 " id="hide4">
-                                <a href="javascript:void(0)" className={this.state.showARB!==""?"":"active"} name = "ARB" onClick = {(e,name) => {this.onHideColumn(e,"ARB")}}><span >ARB</span></a>
-                                <a href="javascript:void(0)" name = "Customer" className={this.state.showCustomer!==""?"":"active"} onClick = {(e,name) => {this.onHideColumn(e,"Customer")}}><span >Customer</span></a>
-                                <a href="javascript:void(0)" name = "PO" className={this.state.showPO!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"PO")}}><span >PO#</span></a>
-                                <a href="javascript:void(0)" name = "Railcar" className={this.state.showRailcar!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Railcar")}}><span >Railcar#</span></a>
-                                <a href="javascript:void(0)" name = "Lot" className={this.state.showLot!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Lot")}}><span >Lot#</span></a>
-                                <a href="javascript:void(0)" name = "Material" className={this.state.showMaterial!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Material")}}><span >Material</span></a>
-                                <a href="javascript:void(0)" name = "Confmd" className={this.state.showConfmd!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Confmd")}}><span >Confirmed?</span></a>
-                                <a href="javascript:void(0)" name = "Arrvd" className={this.state.showArrvd!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Arrvd")}}><span >Arrived?</span></a>
-                                <a href="javascript:void(0)" name = "Recd" className={this.state.showRecd!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e, "Recd")}}><span >Shipment Received?</span></a>
-                                <a href="javascript:void(0)" name = "Cutoff" className={this.state.showCutoff!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e, "Cutoff")}}><span >Cutoff</span></a>
-                                <a href="javascript:void(0)" name = "Weight" className={this.state.showWeight!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e, "Weight")}}><span >Weight</span></a>
-                                <a href="javascript:void(0)" name = "Bag" className={this.state.showBag!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e, "Bag")}}><span >Qty Allocated</span></a>
-                                <a href="javascript:void(0)" name = "InInvt" className={this.state.showInInvt!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"InInvt")}}><span >Qty Packaged</span></a>
-                                <a href="javascript:void(0)" name = "Status" className={this.state.showStatus!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e, "Status")}}><span >Status</span></a>
-                                <a href="javascript:void(0)" name = "RailcarArr" className={this.state.showRailcarArr!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e, "RailcarArr")}}><span >Railcar Arrival</span></a>
-
-                                <a href="javascript:void(0)" name = "RailcarArrD" className={this.state.showRailcarArrD!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"RailcarArrD")}}><span >Railcar Arrival Date</span></a>
-                                <a href="javascript:void(0)" name = "RailcarDep" className={this.state.showRailcarDep!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"RailcarDep")}}><span >Railcar Departure</span></a>
-                                <a href="javascript:void(0)" name = "RailcarDepDate" className={this.state.showRailcarDepDate!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"RailcarDepDate")}}><span >Railcar Departure Date</span></a>
-                                <a href="javascript:void(0)" name = "DaysPresent" className={this.state.showDaysPresent!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"DaysPresent")}}><span >Railcar Days Present</span></a>
-                                <a href="javascript:void(0)" name = "RailcarStatus" className={this.state.showRailcarStatus!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"RailcarStatus")}}><span >Railcar Status</span></a>
-                            </div>*/}
-
                             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12"  >
                                 <div className="">
 

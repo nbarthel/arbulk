@@ -22,7 +22,6 @@ class FilterComponent extends React.Component {
                 <CompanyNameFilterPage onCompanyFilter = {this.props.onCompanyFilter}/>
                 <CustomerNameFilterPage onCustomerFilter = {this.props.onCustomerFilter} />
                 <ContainerFilter lotSearch = {this.props.lotSearch} onTextChange = {this.props.onTextChange}/>
-
                 <ArrivalFilter Arrival={this.props.Arrival}/>
                 <SteamshipLineFilter onSteamShipFilter={this.props.onSteamShipFilter} SteamLine ={this.props.SteamLine} />
                 <ContainerTypeFilter onContainerFilter = {this.props.onContainerFilter}/>

@@ -7,7 +7,6 @@ import LotSearchFilterPage from './LotSearchFilter/LotSearchFilterPage';
 import CutOffDateFilterPage from './CutOffDateFilter/CutOffDateFilterPage';
 import StatusFilterPage from './StatusFilter/StatusFilterPage';
 import RailcarArrival from './RailcarArrival/RailcarArrivalFilterPage'
-//import ShippedDateFilter from './ShippedDateFilter/ShippedDateFilter'
 import CreatedOndateFilter from './CreatedOnDateFilter/createdOnDateFilter'
 import ShipmentReceivedFilter from './ShipmentRecievedFilter/shipmentRecievedFilter'
 
@@ -18,7 +17,6 @@ class FilterComponent extends React.Component {
 	}
     render() {
         return (
-
         <div className="">
  			<div className="well filter_bg collapse navbar-collapse" id="filter-menu">
                 <h4 className=" hidden-xs"> REFINE YOUR RESULT </h4>
@@ -30,7 +28,6 @@ class FilterComponent extends React.Component {
                 <CutOffDateFilterPage startDate = {this.props.StartDate} endDate = {this.props.EndDate} getdt={this.props.getdt} parent={this.props.parent} />
                 <StatusFilterPage onStatusFilter = {this.props.onStatusFilter} parent={this.props.parent}/>
                 <RailcarArrival onRailCarArrivalFilter = {this.props.onRailCarArrivalFilter} parent={this.props.parent}/>
-
                 <CreatedOndateFilter getCreatedDate={this.props.getCreatedDate}/>
                 <ShipmentReceivedFilter shipmentRecived={this.props.shipmentRecived}/>
             </div>

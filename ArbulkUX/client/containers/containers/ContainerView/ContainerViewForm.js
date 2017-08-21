@@ -6,6 +6,7 @@ import '../../../public/stylesheets/bootstrap.min.css';
 import FilterComponent from '../../../components/ContainerFilterComponent';
 import ContainerViewDataComponent from '../../../components/ContainerViewDataComponent/ContainerViewDataComponent';
 import FilterButton from '../../../components/ContainerFilterComponent/FilterButton';
+import ShowHideColumn from '../../../components/ShowColumns/showColumn'
 import { hashHistory } from 'react-router'
 import { createDataLoader } from 'react-loopback';
 import axios from 'axios'
@@ -29,7 +30,8 @@ class ContainerViewForm extends React.Component {
             index: 0,
             selectedOption1: 'kg',
             SelcetedOptionForGroupBy: "",
-            OptionToGroupby: ["ARB", "Customer", "Release#", "Booking#", "Container#", "Trucker", "Steamship Line", "Type", "Status", "Shipment Type"]
+            OptionToGroupby: ["ARB", "Customer", "Release#", "Booking#", "Container#", "Trucker", "Steamship Line", "Type", "Status", "Shipment Type"],
+            open:false
         }
         this.containerId = ''
         this.isDomestic = false
@@ -63,22 +65,34 @@ class ContainerViewForm extends React.Component {
         this.onSteamShipFilter = this.onSteamShipFilter.bind(this)
         this.SteamLineArray = []
         this.OnGroupBy = this.OnGroupBy.bind(this)
+        this.toggleColumn = this.toggleColumn.bind(this)
+        this.handleOpen = this.handleOpen.bind(this)
+        this.handleClose = this.handleClose.bind(this)
     }
 
 
     componentWillMount() {
+        var userId = Number(localStorage.getItem("userId"));
         axios.get(Base_Url + "TCustomViews").then(response=> {
             this.setState({
                 savedViews: response.data
             })
-        })
-
+        });
         axios.get(Base_Url + "TContainerInternationals/getMaxQueue").then(response=> {
             this.sequense = response.data
 
             this.setState({
                 max_seq: this.sequense[0].max_mark
             })
+        });
+        axios.get(Base_Url+`TColumnShowHides?filter={"where":{"tableName":"Container","userId":${userId}}}`).then(response=>{
+            this.setState({
+                columns:response.data
+            })
+
+            for(var i=0;i<response.data.length;i++){
+                this.toggleColumn(response.data[i].columnName,response.data[i].show);
+            }
         })
     }
 
@@ -1237,25 +1251,10 @@ class ContainerViewForm extends React.Component {
             swal('Error', "Please Select Filter Options First", 'error');
         }
     }
-
-    onHideColumn(e, name) {
-        setTimeout(function () {
-            $("#Packaging_Instruction_View").colResizable({
-                disable: true,
-                resizeMode:'overflow'
-            });
-
-            $("#Packaging_Instruction_View").colResizable({
-                liveDrag:false,
-                gripInnerHtml:"<div class='grip'></div>",
-                draggingClass:"dragging",
-            });
-        },100);
-
-
+    toggleColumn(name,value){
         switch (name) {
             case "ARB" :
-                if (this.state.showARB == "") {
+                if (value === 0) {
                     this.setState({
                         showARB: "none",
                         aclass:"ARB"
@@ -1269,7 +1268,7 @@ class ContainerViewForm extends React.Component {
                 }
                 break;
             case "Customer" :
-                if (this.state.showCustomer == "") {
+                if (value === 0) {
                     this.setState({
                         showCustomer: "none",
                         aclass:"Customer"
@@ -1283,7 +1282,7 @@ class ContainerViewForm extends React.Component {
                 }
                 break;
             case "Container" :
-                if (this.state.showContainer == "") {
+                if (value === 0) {
                     this.setState({
                         showContainer: "none",
                         aclass:"Container"
@@ -1298,7 +1297,7 @@ class ContainerViewForm extends React.Component {
                 break;
             case "Release" :
 
-                if (this.state.showRelease == "") {
+                if (value === 0) {
                     this.setState({
                         showRelease: "none",
                         aclass:"Release"
@@ -1313,7 +1312,7 @@ class ContainerViewForm extends React.Component {
                 break;
             case "Booking" :
 
-                if (this.state.showBooking == "") {
+                if (value === 0) {
                     this.setState({
                         showBooking: "none",
                         aclass:"Booking"
@@ -1328,7 +1327,7 @@ class ContainerViewForm extends React.Component {
                 break;
             case "Trucker" :
 
-                if (this.state.showTrucker == "") {
+                if (value === 0) {
                     this.setState({
                         showTrucker: "none",
                         aclass:"Trucker"
@@ -1343,7 +1342,7 @@ class ContainerViewForm extends React.Component {
                 break;
             case "Arrived" :
 
-                if (this.state.showArrived == "") {
+                if (value === 0) {
                     this.setState({
                         showArrived: "none",
                         aclass:"Arrived"
@@ -1358,7 +1357,7 @@ class ContainerViewForm extends React.Component {
                 break;
             case "SteamShip" :
 
-                if (this.state.showSteamShip == "") {
+                if (value === 0) {
                     this.setState({
                         showSteamShip: "none",
                         aclass:"SteamShip"
@@ -1373,7 +1372,7 @@ class ContainerViewForm extends React.Component {
                 break;
             case "Type" :
 
-                if (this.state.showType == "") {
+                if (value === 0) {
                     this.setState({
                         showType: "none",
                         aclass:"Type"
@@ -1387,6 +1386,14 @@ class ContainerViewForm extends React.Component {
                 }
                 break;
         }
+    }
+    handleOpen(){
+        this.setState({open: true});
+    }
+    handleClose(){
+
+        this.setState({open: false});
+        this.forceUpdate();
     }
 
 
@@ -1463,7 +1470,12 @@ class ContainerViewForm extends React.Component {
                                     <FilterButton buttonDisplay={this.buttonDisplay}
                                                   onButtonRemove={this.onButtonRemove} onRemove={this.onRemove}
                                                   Query={this.Query} onSearch={this.onSearch}/>
+                                    <div className="col-lg-2 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
+                                        <div className="pull-right ">
+                                            <a href="javascript:void(0)"  name = "setting" onClick={this.handleOpen}><span >Setting</span></a>
+                                        </div>
 
+                                    </div>
                                     <div className="col-lg-3 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
                                         <div className="pull-right " id="hide5">
                                             <select className="form-control" id="groupBy" name="groupBy"
@@ -1507,26 +1519,6 @@ class ContainerViewForm extends React.Component {
 
                                         </div>
 
-                                    </div>
-                                    <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 "><label>Show / Hide Table Columns</label></div>
-                                    <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 " id="hide4">
-                                        <a href="javascript:void(0)"  className={this.state.showARB!==""?"":"active"}><span  onClick={(e,name) => {this.onHideColumn(e,"ARB")}}>ARB</span></a>
-                                        <a href="javascript:void(0)" name="Customer"
-                                           onClick={(e,name) => {this.onHideColumn(e, "Customer")}} className={this.state.showCustomer!==""?"":"active"}><span >Customer</span></a>
-                                        <a href="javascript:void(0)" name="Release"
-                                           onClick={(e,name) => {this.onHideColumn(e, "Release")}} className={this.state.showRelease!==""?"":"active"}><span>Release</span></a>
-                                        <a href="javascript:void(0)" name="Booking"
-                                           onClick={(e,name) => {this.onHideColumn(e, "Booking")}} className={this.state.showBooking!==""?"":"active"}><span>Booking</span></a>
-                                        <a href="javascript:void(0)" name="Container"
-                                           onClick={(e,name) => {this.onHideColumn(e, "Container")}} className={this.state.showContainer!==""?"":"active"}><span>Container</span></a>
-                                        <a href="javascript:void(0)" name="Trucker"
-                                           onClick={(e,name) => {this.onHideColumn(e, "Trucker")}} className={this.state.showTrucker!==""?"":"active"}><span>Trucker</span></a>
-                                        <a href="javascript:void(0)" name="Arrived"
-                                           onClick={(e,name) => {this.onHideColumn(e, "Arrived")}} className={this.state.showArrived!==""?"":"active"}><span>Arrived</span></a>
-                                        <a href="javascript:void(0)" name="SteamShip"
-                                           onClick={(e,name) => {this.onHideColumn(e, "SteamShip")}} className={this.state.showSteamShip!==""?"":"active"}><span>SteamShip Line</span></a>
-                                        <a href="javascript:void(0)" name="Type"
-                                           onClick={(e,name) => {this.onHideColumn(e, "Type")}} className={this.state.showType!==""?"":"active"}><span>Type</span></a>
                                     </div>
                                     <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div className="">
@@ -1602,6 +1594,12 @@ class ContainerViewForm extends React.Component {
                         </div>
                     </div>
                 </div>
+                <ShowHideColumn
+                    Name={"Container"}
+                    open={this.state.open}
+                    onRequestClose={this.handleClose}
+                    autoScrollBodyContent={true}
+                />
             </section>
 
         )
