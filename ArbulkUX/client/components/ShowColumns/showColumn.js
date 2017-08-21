@@ -45,12 +45,11 @@ class showColumn extends React.Component{
         }
     }
     submit(){
-        debugger
         this.setState({
             recvdColumns : false
         });
         var data = {
-            name: "Packaging",
+            name: this.props.Name,
             userId : localStorage.getItem("userId"),
             columns:this.tempVisibleColumn
         }

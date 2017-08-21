@@ -1,15 +1,12 @@
 import React from 'react';
-//import '../../public/stylesheets/style.css';
-//import '../../public/stylesheets/bootstrap.min.css';
-//import '../../public/stylesheets/font.css';
-//import '../../public/stylesheets/font-awesome.min.css';
- import SweetAlert from 'sweetalert-react';
- import '../../../public/stylesheets/sweetalert.css';
+
+import '../../../public/stylesheets/sweetalert.css';
 import { createDataLoader } from 'react-loopback';
 import { hashHistory } from 'react-router';
 import ShipmentViewDataComponent from '../../../components/ShipmentViewDataComponent/ShipmentViewDataComponent'
 import FilterComponent from '../../../components/ShipmentFilterComponent';
 import FilterButton from '../../../components/ShipmentFilterComponent/FilterButton';
+import ShowHideColumn from '../../../components/ShowColumns/showColumn'
 import axios from 'axios'
 import {Base_Url} from '../../../constants';
 var moment = require('moment')
@@ -49,7 +46,8 @@ class  ShipmentViewForm extends React.Component
            showStatus: "",
            showTrucker: "",
             SelcetedOptionForGroupBy :"",
-            OptionToGroupby : ["ARB","customer","Release","Booking","PO#","Lot#","Material","Forwarder","Cntr Size","Qty","Allocated","Enough?","Vessel","Shipment Type","Steamship Line","PULocation","Return Location","Status"]
+            OptionToGroupby : ["ARB","customer","Release","Booking","PO#","Lot#","Material","Forwarder","Cntr Size","Qty","Allocated","Enough?","Vessel","Shipment Type","Steamship Line","PULocation","Return Location","Status"],
+            open: false
     }
             this.status
             this.handleChange = this.handleChange.bind(this);
@@ -85,7 +83,10 @@ class  ShipmentViewForm extends React.Component
             this.tempLotId = ""
             this.PrintScreen = this.PrintScreen.bind(this)
             this.headerCheckboxChange = this.headerCheckboxChange.bind(this)
-        this.OnGroupBy = this.OnGroupBy.bind(this)
+            this.OnGroupBy = this.OnGroupBy.bind(this)
+            this.toggleColumn = this.toggleColumn.bind(this)
+            this.handleOpen = this.handleOpen.bind(this)
+            this.handleClose = this.handleClose.bind(this)
     }
     OnGroupBy(e){
         this.setState({
@@ -149,20 +150,25 @@ onViewClick(e){
 }
 
  componentWillMount() {
-
-
+     var userId = Number(localStorage.getItem("userId"));
      axios.get(Base_Url+"TCustomViews").then(response=>{
          this.setState({
              savedViews : response.data
          })
-     })
-
-      axios.get(Base_Url+"TShipmentLots/getMaxQueue").then(response=>{
+     });
+     axios.get(Base_Url+"TShipmentLots/getMaxQueue").then(response=>{
     this.setState({
         queue_Sequence : response.data
     })
-})
-
+});
+     axios.get(Base_Url+`TColumnShowHides?filter={"where":{"tableName":"Shipment","userId":${userId}}}`).then(response=>{
+         this.setState({
+             columns:response.data
+         })
+         for(var i=0;i<response.data.length;i++){
+             this.toggleColumn(response.data[i].columnName,response.data[i].show);
+         }
+     })
  }
 PrintScreen(){
   var scrollLeft = document.getElementsByClassName("loadedContentNew")[0].scrollLeft
@@ -1409,331 +1415,342 @@ onHideColumn(e,name){
         });
     }, 100);
 
-    switch(name){
-    case "ARB" :
-    if(this.state.showARB == ""){
-    this.setState({
-         showARB : "none"
-    })
-}
-else{
-    this.setState({
-         showARB : ""
-    })
-}
- break;
- case "Customer" :
-   if(this.state.showCustomer == ""){
-    this.setState({
-        showCustomer : "none"
-    })
-}
-else{
-    this.setState({
-        showCustomer : ""
-    })
-}
-break;
- case "PO" :
-   if(this.state.showPO == ""){
-    this.setState({
-        showPO : "none"
-    })
-}
-else{
-    this.setState({
-        showPO : ""
-    })
-}
-break;
- case "Release" :
 
-     if(this.state.showRelease == ""){
-    this.setState({
-       showRelease : "none"
-    })
 }
-else{
-    this.setState({
-        showRelease : ""
-    })
-}
-break;
- case "Lot" :
+    toggleColumn(name,value){
+        switch(name){
+            case "ARB" :
+                if(value===0){
+                    this.setState({
+                        showARB : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showARB : ""
+                    })
+                }
+                break;
+            case "Customer" :
+                if(value===0){
+                    this.setState({
+                        showCustomer : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showCustomer : ""
+                    })
+                }
+                break;
+            case "PO" :
+                if(value===0){
+                    this.setState({
+                        showPO : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showPO : ""
+                    })
+                }
+                break;
+            case "Release" :
 
-     if(this.state.showLot == ""){
-    this.setState({
-        showLot : "none"
-    })
-}
-else{
-    this.setState({
-        showLot : ""
-    })
-}
-break;
- case "Material" :
+                if(value===0){
+                    this.setState({
+                        showRelease : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showRelease : ""
+                    })
+                }
+                break;
+            case "Lot" :
 
-     if(this.state.showMaterial == ""){
-    this.setState({
-        showMaterial : "none"
-    })
-}
-else{
-    this.setState({
-        showMaterial : ""
-    })
-}
-break;
- case "Confmd" :
+                if(value===0){
+                    this.setState({
+                        showLot : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showLot : ""
+                    })
+                }
+                break;
+            case "Material" :
 
-     if(this.state.showConfmd == ""){
-    this.setState({
-        showConfmd : "none"
-    })
-}
-else{
-    this.setState({
-        showConfmd : ""
-    })
-}
-break;
- case "Booking" :
+                if(value===0){
+                    this.setState({
+                        showMaterial : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showMaterial : ""
+                    })
+                }
+                break;
+            case "Confmd" :
 
-     if(this.state.showBooking == ""){
-    this.setState({
-        showBooking : "none"
-    })
-}
-else{
-    this.setState({
-        showBooking : ""
-    })
-}
-break;
- case "ShipmentType" :
+                if(value===0){
+                    this.setState({
+                        showConfmd : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showConfmd : ""
+                    })
+                }
+                break;
+            case "Booking" :
 
-     if(this.state.showShipmentType == ""){
-    this.setState({
-        showShipmentType : "none"
-    })
-}
-else{
-    this.setState({
-        showShipmentType : ""
-    })
-}
-break;
- case "Cutoff" :
+                if(value===0){
+                    this.setState({
+                        showBooking : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showBooking : ""
+                    })
+                }
+                break;
+            case "ShipmentType" :
 
-     if(this.state.showCutoff == ""){
-    this.setState({
-        showCutoff : "none"
-    })
-}
-else{
-    this.setState({
-        showCutoff : ""
-    })
-}
-break;
- case "Forwarder" :
+                if(value===0){
+                    this.setState({
+                        showShipmentType : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showShipmentType : ""
+                    })
+                }
+                break;
+            case "Cutoff" :
 
-     if(this.state.showForwarder == ""){
-    this.setState({
-        showForwarder : "none"
-    })
-}
-else{
-    this.setState({
-        showForwarder : ""
-    })
-}
-break;
- case "CntrSize" :
+                if(value===0){
+                    this.setState({
+                        showCutoff : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showCutoff : ""
+                    })
+                }
+                break;
+            case "Forwarder" :
 
-     if(this.state.showCntrSize == ""){
-    this.setState({
-        showCntrSize : "none"
-    })
-}
-else{
-    this.setState({
-        showCntrSize : ""
-    })
-}
-break;
- case "InInvt" :
+                if(value===0){
+                    this.setState({
+                        showForwarder : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showForwarder : ""
+                    })
+                }
+                break;
+            case "CntrSize" :
 
-     if(this.state.showInInvt == ""){
-    this.setState({
-        showInInvt : "none"
-    })
-}
-else{
-    this.setState({
-        showInInvt : ""
-    })
-}
-break;
- case "Qty" :
+                if(value===0){
+                    this.setState({
+                        showCntrSize : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showCntrSize : ""
+                    })
+                }
+                break;
+            case "InInvt" :
 
-     if(this.state.showQty == ""){
-    this.setState({
-        showQty : "none"
-    })
-}
-else{
-    this.setState({
-        showQty : ""
-    })
-}
-break;
- case "Alloc" :
+                if(value===0){
+                    this.setState({
+                        showInInvt : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showInInvt : ""
+                    })
+                }
+                break;
+            case "Qty" :
 
-     if(this.state.showAlloc == ""){
-    this.setState({
-        showAlloc : "none"
-    })
-}
-else{
-    this.setState({
-        showAlloc : ""
-    })
-}
-break;
- case "Enough" :
+                if(value===0){
+                    this.setState({
+                        showQty : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showQty : ""
+                    })
+                }
+                break;
+            case "Alloc" :
 
-     if(this.state.showEno == ""){
-    this.setState({
-        showEno : "none"
-    })
-}
-else{
-    this.setState({
-        showEno : ""
-    })
-}
-break;
- case "Bags" :
+                if(value===0){
+                    this.setState({
+                        showAlloc : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showAlloc : ""
+                    })
+                }
+                break;
+            case "Enough" :
 
-     if(this.state.showBags == ""){
-    this.setState({
-        showBags : "none"
-    })
-}
-else{
-    this.setState({
-        showBags : ""
-    })
-}
-break;
- case "ERD" :
+                if(value===0){
+                    this.setState({
+                        showEno : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showEno : ""
+                    })
+                }
+                break;
+            case "Bags" :
 
-     if(this.state.showERD == ""){
-    this.setState({
-        showERD : "none"
-    })
-}
-else{
-    this.setState({
-        showERD : ""
-    })
-}
-break;
- case "Vessel" :
+                if(value===0){
+                    this.setState({
+                        showBags : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showBags : ""
+                    })
+                }
+                break;
+            case "ERD" :
 
-     if(this.state.showVessel == ""){
-    this.setState({
-        showVessel : "none"
-    })
-}
-else{
-    this.setState({
-        showVessel : ""
-    })
-}
-break;
- case "SteamShip" :
+                if(value===0){
+                    this.setState({
+                        showERD : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showERD : ""
+                    })
+                }
+                break;
+            case "Vessel" :
 
-     if(this.state.showSteamShip == ""){
-    this.setState({
-        showSteamShip : "none"
-    })
-}
-else{
-    this.setState({
-        showSteamShip : ""
-    })
-}
-break;
-case "PU" :
+                if(value===0){
+                    this.setState({
+                        showVessel : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showVessel : ""
+                    })
+                }
+                break;
+            case "SteamShip" :
 
-    if(this.state.showPU == ""){
-    this.setState({
-        showPU : "none"
-    })
-}
-else{
-    this.setState({
-        showPU : ""
-    })
-}
-break;
- case "Ret" :
+                if(value===0){
+                    this.setState({
+                        showSteamShip : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showSteamShip : ""
+                    })
+                }
+                break;
+            case "PU" :
 
-     if(this.state.showRet == ""){
-    this.setState({
-        showRet : "none"
-    })
-}
-else{
-    this.setState({
-        showRet : ""
-    })
-}
-break;
- case "Doc" :
+                if(value===0){
+                    this.setState({
+                        showPU : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showPU : ""
+                    })
+                }
+                break;
+            case "Ret" :
 
-     if(this.state.showDoc == ""){
-    this.setState({
-        showDoc : "none"
-    })
-}
-else{
-    this.setState({
-        showDoc : ""
-    })
-}
-break;
- case "Status" :
+                if(value===0){
+                    this.setState({
+                        showRet : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showRet : ""
+                    })
+                }
+                break;
+            case "Doc" :
 
-     if(this.state.showStatus == ""){
-    this.setState({
-        showStatus : "none"
-    })
-}
-else{
-    this.setState({
-        showStatus : ""
-    })
-}
-break;
- case "Trucker" :
+                if(value===0){
+                    this.setState({
+                        showDoc : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showDoc : ""
+                    })
+                }
+                break;
+            case "Status" :
 
-     if(this.state.showTrucker == ""){
-    this.setState({
-        showTrucker : "none"
-    })
-}
-else{
-    this.setState({
-        showTrucker : ""
-    })
-}
-break;
-}
-}
+                if(value===0){
+                    this.setState({
+                        showStatus : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showStatus : ""
+                    })
+                }
+                break;
+            case "Trucker" :
+
+                if(value===0){
+                    this.setState({
+                        showTrucker : "none"
+                    })
+                }
+                else{
+                    this.setState({
+                        showTrucker : ""
+                    })
+                }
+                break;
+        }
+    }
+    handleOpen(){
+        this.setState({open: true});
+    }
+    handleClose(){
+
+        this.setState({open: false});
+        this.forceUpdate();
+    }
     render()
     {
         var filterData = ''
@@ -1757,7 +1774,12 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                                                                 <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
                                                                     <div className="row">
                                                                        <FilterButton buttonDisplay = {this.buttonDisplay}  onButtonRemove = {this.onButtonRemove} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
+                                                                        <div className="col-lg-2 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
+                                                                            <div className="pull-right ">
+                                                                                <a href="javascript:void(0)"  name = "setting" onClick={this.handleOpen}><span >Setting</span></a>
+                                                                            </div>
 
+                                                                        </div>
                                                                         <div className="col-lg-3 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
                                                                             <div className="pull-right " id="hide5">
 
@@ -1796,36 +1818,6 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                                                                                 </select>                    </div>
 
                                                                         </div>
-
-                  <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 " id="hide4">
-                      <a href="javascript:void(0)" name = "ARB" className={this.state.showARB!==""?"":"active"} onClick = {(e,name) => {this.onHideColumn(e,"ARB")}}><span>ARB</span></a>
-                 <a href="javascript:void(0)" name = "Customer" className={this.state.showCustomer!==""?"":"active"} onClick = {(e,name) => {this.onHideColumn(e,"Customer")}}><span>Customer</span></a>
-                 <a href="javascript:void(0)" name="PO" className={this.state.showPO!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"PO")}}><span>PO#</span></a>
-                 <a href="javascript:void(0)" name = "Release" className={this.state.showRelease!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e, "Release")}}><span>Release</span></a>
-                 <a href="javascript:void(0)" name = "Lot" className={this.state.showLot!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e, "Lot")}}><span>Lot#</span></a>
-                 <a href="javascript:void(0)" name = "Material" className={this.state.showMaterial!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Material")}}><span>Material</span></a>
-                 <a href="javascript:void(0)" name="Confmd" className={this.state.showConfmd!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e, "Confmd")}}><span>Confirmed?</span></a>
-                 <a href="javascript:void(0)" name = "Booking" className={this.state.showBooking!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Booking")}}><span>Booking</span></a>
-                 <a href="javascript:void(0)" name = "ShipmentType" className={this.state.showShipmentType!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"ShipmentType")}}><span>ShipmentType</span></a>
-                 <a href="javascript:void(0)" name = "Cutoff" className={this.state.showCutoff!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Cutoff")}}><span>Cutoff</span></a>
-                 <a href="javascript:void(0)" name = "Forwarder" className={this.state.showForwarder!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Forwarder")}}><span>Forwarder</span></a>
-                 <a href="javascript:void(0)" name = "CntrSize" className={this.state.showCntrSize!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"CntrSize")}}><span>#CntrSize</span></a>
-                 <a href="javascript:void(0)" name = "InInvt" className={this.state.showInInvt!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"InInvt")}}><span>In.Invt.</span></a>
-                 <a href="javascript:void(0)" name = "Qty" className={this.state.showQty!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Qty")}}><span>Qty</span></a>
-                 <a href="javascript:void(0)" name = "Alloc" className={this.state.showAlloc!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Alloc")}}><span>Allocated</span></a>
-                 <a href="javascript:void(0)" name = "Enough" className={this.state.showEno!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Enough")}}><span>Enough</span></a>
-                  <a href="javascript:void(0)" name="Bags" className={this.state.showBags!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Bags")}}><span># of Bags In Inventory</span></a>
-                 <a href="javascript:void(0)" name = "ERD" className={this.state.showERD!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"ERD")}}><span>ERD</span></a>
-                 <a href="javascript:void(0)" name = "Vessel" className={this.state.showVessel!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Vessel")}}><span>Vessel</span></a>
-                 <a href="javascript:void(0)" name = "SteamShip" className={this.state.showSteamShip!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"SteamShip")}}><span>SteamShipLine</span></a>
-                 <a href="javascript:void(0)" name = "PU" className={this.state.showPU!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"PU")}}><span>PU</span></a>
-                 <a href="javascript:void(0)" name = "Ret" className={this.state.showRet!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Ret")}}><span>Return</span></a>
-                 <a href="javascript:void(0)" name = "Doc" className={this.state.showDoc!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Doc")}}><span>Doc</span></a>
-                      <a href="javascript:void(0)" name = "Status" className={this.state.showStatus!==""?"":"active"} onClick={(e,name) => {this.onHideColumn(e,"Status")}}><span>Status</span></a>
-
-
-                  </div>
-
                                                                         <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                                             <div className=" ">
                                                                             <ShipmentViewDataComponent key={this.state.index} headerCheckboxChange={this.headerCheckboxChange} filterData = {filterData} checkboxChange = {this.checkboxChange} showARB = {this.state.showARB}
@@ -1900,7 +1892,12 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                                                                 </div>
                                                             </div>
                     </div>
-
+                <ShowHideColumn
+                    Name={"Shipment"}
+                    open={this.state.open}
+                    onRequestClose={this.handleClose}
+                    autoScrollBodyContent={true}
+                />
                                                         </section>
             );
             }
