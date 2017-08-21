@@ -566,6 +566,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
       }
       if(flagForUniqueRailcar)
         break;
+
       }
       if(flagForUniqueRailcar){
         e.preventDefault();

@@ -75,6 +75,7 @@ var http = require('http');
 var https = require('https');
 var bodyParser=require('body-parser')
 var app = module.exports = loopback();
+
 /*sendMail = require('../server/boot/sendMail.js');*/
 
 
@@ -86,15 +87,6 @@ app.use(bodyParser.json({limit:'50mb'}))
 // boot scripts mount components like REST API
 boot(app, __dirname);
 
-var httpOnly =  true;
-// app.all('/getDataAccordingtoQuery',function(req,res,next){
-//     console.log(">>>>>>>>>>>>>>inside weebhook query",req.body,req.data);
-//     var nlpResponseHandler = app.models.nlpResponseHandler;
-//     nlpResponseHandler.sendMessageToApiIo(req,res,function(data){
-//         console.log(">>>>>>>>>>>>>>>.after")
-//         return res.json(data)
-//     })
-// });
 app.start = function(httpOnly) {
     if (httpOnly === undefined) {
         httpOnly = process.env.HTTP;
@@ -119,6 +111,7 @@ app.start = function(httpOnly) {
 
 // start the server if `$ node server.js`
 if (require.main === module) {
+
     app.start();
 }
 
