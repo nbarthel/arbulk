@@ -703,18 +703,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
   }
 
   onMinus(e){
-    //this.setState({
-    //  railCarInfoList : [ ],
-    //  labelLength : []
-    //})
-    //this.railCarObjects.splice(1,this.railCarObjects.length-1)
-    //this.Add = false
-    //this.state.rObjects = []
-    //this.railcarObj = this.railCarObjects[0]
-    //this.state.index = 0;
-    //this.railCarObjects=[]
     this.RailCarArray.splice(this.RailCarArray.length-1,1);
-    //this.state.customLabel.splice(1,this.state.customLabel.length-1)
     this.setState({
     });
   }

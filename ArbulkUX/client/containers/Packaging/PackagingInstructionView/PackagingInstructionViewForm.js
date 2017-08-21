@@ -125,10 +125,12 @@ export default class PackagingInstructionViewForm extends React.Component {
     handleOpen(){
         this.setState({open: true});
     }
-    handleClose(){
+    handleClose(submitted){
          
         this.setState({open: false});
-        this.forceUpdate();
+        if(submitted){
+            window.location.reload();
+        }
     }
     getdt(a){
         a.id=="1"?this.startDate = a.tempDate:this.endDate=a.tempDate;

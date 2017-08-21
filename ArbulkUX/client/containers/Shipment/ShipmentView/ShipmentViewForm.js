@@ -1746,10 +1746,12 @@ onHideColumn(e,name){
     handleOpen(){
         this.setState({open: true});
     }
-    handleClose(){
+    handleClose(submitted){
 
         this.setState({open: false});
-        this.forceUpdate();
+        if(submitted){
+            window.location.reload();
+        }
     }
     render()
     {

@@ -59,13 +59,13 @@ class showColumn extends React.Component{
         }).catch(err=>{
             console.log("err");
         })
-        this.props.onRequestClose();
+        this.props.onRequestClose(1);
     }
     cancel(){
         this.setState({
             recvdColumns : false
         });
-        this.props.onRequestClose();
+        this.props.onRequestClose(0);
     }
     OnAddColumn(e) {
         debugger
