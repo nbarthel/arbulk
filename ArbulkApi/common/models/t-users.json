@@ -217,7 +217,7 @@
     {
       "principalType": "ROLE",
       "principalId": "$everyone",
-      "permission": "DENY"
+      "permission": "ALLOW"
     },
     {
       "principalType": "ROLE",
@@ -273,7 +273,13 @@
       "principalId": "$everyone",
       "permission": "ALLOW",
       "property": "resetPassword"
+    },
+    {
+      "ClearBaseAcls": true
     }
   ],
+  "mixins": {
+    "ClearBaseAcls": true
+  },
   "methods": {}
 }
