@@ -112,7 +112,7 @@ componentDidMount() {
 
 			return (
 				<tr key={invent.id}>
-				<td>{invent.TInventoryLocation.locationName}</td>
+				<td>{invent.inventoryLocation}</td>
 				<td>{invent.noOfBags}</td>
 				<td>{invent.weight}</td>
 				<td>{moment(invent.createdOn).format("MM-DD-YYYY HH:MM")}</td>

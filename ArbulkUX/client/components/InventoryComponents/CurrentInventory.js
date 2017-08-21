@@ -137,8 +137,11 @@ componentWillReceiveProps(nextProps) {
 }
 	onEdit(index){
 		this.index = index
-		console.log("BeforeEdit",this.orignalTble)
+		console.log("row number",index)
+
 		if(!this.splRow && !this.rowAdd){
+			console.log("in rows", this.state.rows)
+
 		this.edit = true
 		this.row = _.cloneDeep(this.state.rows[this.index])
 		this.selectedRow = _.cloneDeep(this.state.rows[this.index])
@@ -876,7 +879,7 @@ var tempThis = this
 
 					axios.put(Base_Url + "TPackagingInstructionLots/"+	this.CID,{status:"PARTIALLY PACKAGED",inInventory : this.totalBags}).then((response)=>{
 						swal({
-							title:"Edited",
+							title:"Sucess",
 							text:"Data Has Been Successfully Edited",
 							type:"info"},
 							function(isConfirm){

@@ -182,17 +182,19 @@ module.exports = function(Tinventorylocation) {
 
     Tinventorylocation.updatebagweight = function(tinventory, cb) {
         var d = new Date();
-        var date_with_time =       d.getFullYear()+"-"+(parseInt(d.getMonth())+parseInt(1))+"-"+d.getDate()+" "
+        var date_with_time =  d.getFullYear()+"-"+(parseInt(d.getMonth())+parseInt(1))+"-"+d.getDate()+" "
                                   +d.getHours()+":" +d.getMinutes()+":"+d.getSeconds()
       	console.log("Here is the date",date_with_time)
         var inventoryData = Tinventorylocation.app.models.TPiInventory;
       	var InventoryHistoryLog = Tinventorylocation.app.models.TPiInventoryHistory;
-        console.log(tinventory , '>>>>>>');
+
         var ds = Tinventorylocation.dataSource;
         var customErr = new Error();
         customErr.statusCode = 422;
         customErr.message=null;
-        console.log(">>>>>>>>>>>>>>>>>>tinventory" ,tinventory)
+        Tinventorylocation.find({where:{"id": tinventory.Tpinventory.id}},function (error,invt) {
+console.log("getinventory one data>>>>>>>>>>>>>>>>>>>>", invt);
+
         Tinventorylocation.upsert({
                 "id": tinventory.Tpinventory.id,
                 "locationName": tinventory.Tpinventory.locationName,
@@ -231,10 +233,10 @@ module.exports = function(Tinventorylocation) {
                             }
                         });
                       InventoryHistoryLog.create({
-
                         "id": 0,
                         "piLotId": tinventory.Tinventory.piLotId,
                         "inventoryLocationId": obj.id,
+                        "inventoryLocation": invt[0].locationName,
                         "noOfBags": tinventory.Tinventory.noOfBags,
                         "notes" : tinventory.Tinventory.notes,
                         "weight": tinventory.Tinventory.weight,
@@ -258,6 +260,7 @@ module.exports = function(Tinventorylocation) {
                     cb(null,obj);
                 }
             })
+        })
 
     };
 

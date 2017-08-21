@@ -163,7 +163,7 @@
       "scale": null,
       "mysql": {
         "columnName": "railcar_arrived_on",
-        "dataType": "date",
+        "dataType": "datetime",
         "dataLength": null,
         "dataPrecision": null,
         "dataScale": null,
