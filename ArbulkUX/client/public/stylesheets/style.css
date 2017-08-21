@@ -103,7 +103,7 @@ th.placeholder{background-color: rgb(46,109,164) !important;}
 #hide4{display: table-cell; width:auto}
 #hide4 a.active span{background: #e5e5ff;color: #000;padding: 2px 10px;border-radius: 2px;text-decoration: none; line-height: 22px;margin-right: 5px;  display: inline-block; margin-bottom: 5px; border:1px solid transparent;}
 #hide4 a span{background:#fff;color: #999;padding: 2px 10px;border-radius: 2px;text-decoration: none; line-height: 22px;margin-right: 5px;  display: inline-block; margin-bottom: 5px; border:1px solid #999;
-     text-align: center; display: inline-block;}
+    text-align: center; display: inline-block;}
 
 
 /*////////////////////////------pddn------ /////////////////////////////*/
@@ -120,7 +120,7 @@ th.placeholder{background-color: rgb(46,109,164) !important;}
 .pddn-10-btm {padding-bottom: 10px}.pddn-20-btm {padding-bottom: 20px}.pddn-30-btm {padding-bottom: 30px}.pddn-40-btm {padding-bottom: 40px}.pddn-50-btm {padding-bottom: 50px}.pddn-60-btm {padding-bottom: 60px}.pddn-70-btm {padding-bottom: 70px}.pddn-80-btm {padding-bottom: 80px}.pddn-90-btm {padding-bottom: 90px}.pddn-100-btm {padding-bottom: 100px}.pddn-150-btm {padding-bottom: 150px}.pddn-200-btm {padding-bottom: 200px}
 
 .circle-wrapper{
-	float: right;
+    float: right;
 }
 
 .pddn-25-btm {padding-bottom: 25px}
@@ -278,6 +278,7 @@ a.hiddenanchor{display: none;}
 .login_content input:focus:hover { outline: none !important;}
 .login-btn{display: inline-block;padding: 10px 20px;margin-bottom: 0;font-size: 14px;font-weight: 400;line-height: 1.42857143;text-align: center;white-space: nowrap;vertical-align: middle;-ms-touch-action: manipulation;touch-action: manipulation;cursor: pointer;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;background-image: none;border: 1px solid transparent;background-color:#004a98;color:#ffffff;}
 .login-btn:hover{ background-color:#0b6acf; }
+.textareacontrol {height: 100px !important;}
 
 /*////////////////////////------body_section  global------ /////////////////////////////*/
 
@@ -287,14 +288,14 @@ a.hiddenanchor{display: none;}
 
 
 fieldset.scheduler-border {border: 1px solid #ccc !important; margin: 0 0 1.5em 0 !important; border-radius: 5px;
-padding: 15px 20px 15px 20px;
+    padding: 15px 20px 15px 20px;
 }
 
 .label_info fieldset [class*="col-"]{padding-right: 0px;  padding-left: 0px; font-weight:500; }
 .scheduler-border  label{ font-weight: 400 !important; text-align:left  !important; font-size:12px; padding-right:0px; }
 legend.scheduler-border { text-transform:uppercase !important;font-weight: bold !important;text-align: left !important;color:#004a98 !important; font-size:16px;}
 
-.scheduler-border .form-control{height: 30px !important; border-radius: 3px !important; padding: 3px 12px; }
+.scheduler-border .form-control{height: 30px; border-radius: 3px !important; padding: 3px 12px; }
 .scheduler-border .form-group{margin-bottom: 8px!important;}
 .scheduler-border .form-group .react-date-field__input{padding: 4px 5px !important;}
 .react-date-field--theme-default { border: 1px solid #ddd !important;}
@@ -319,9 +320,9 @@ legend.scheduler-border { text-transform:uppercase !important;font-weight: bold 
 .edit_Packaging .textarea-entry{height: 150px !important; resize: none;}
 .add_btn{cursor:pointer; padding:0px !important;}
 .Packaging_footer{ background:#f7f7f7; min-height:150px; padding:20px 0px; clear:both;}
- .add_btn{margin-left: 0px !important;padding-left: 0px !important;padding-top: 0px; margin: 0 auto;
+.add_btn{margin-left: 0px !important;padding-left: 0px !important;padding-top: 0px; margin: 0 auto;
     text-align: left !important;}
- .add_btn i{ border: 1px solid #ddd;font-size: 18px;padding: 5px 8px;border-radius: 3px;     margin-left: -5px;}
+.add_btn i{ border: 1px solid #ddd;font-size: 18px;padding: 5px 8px;border-radius: 3px;     margin-left: -5px;}
 .edit_Packaging{ margin-top: 8px; min-width:300px;}
 .edit_Packaging .control__indicator {top:3px;}
 
@@ -355,7 +356,7 @@ legend.scheduler-border { text-transform:uppercase !important;font-weight: bold 
 .view_table-queue table td label{margin-left: 0px;}
 .view_table-queue .table th,td{ font-weight:300 !important; font-size:12px; color:#000000; white-space: nowrap;  overflow: hidden;  text-overflow: ellipsis;}
 /*===========side-filter===========*/
- #filter-menu{width:230px; min-height:100vh; height: 700px !important;float: left;overflow: auto !important;overflow-x: hidden !important;}
+#filter-menu{width:230px; min-height:100vh; height: 700px !important;float: left;overflow: auto !important;overflow-x: hidden !important;}
 #filter-grid{margin-left:230px; }
 
 .side-filter{height:100%; margin:-1px; width:100%}
@@ -376,7 +377,7 @@ legend.scheduler-border { text-transform:uppercase !important;font-weight: bold 
 
 .filter-btn button{margin-right: 10px !important;padding: 3px 5px; font-size: 11px;border-radius: 3px;margin-bottom: 10px;  }
 .filter-btn a{ text-decoration: none; color:#fff; margin-right: 10px !important;padding: 5px 8px; font-size: 11px;border-radius: 3px;margin-bottom: 10px;     background-color: #fe5716;
-border-color: #ff4800; border: 1px solid transparent; font-weight: 400;line-height: 1.42857143;text-align: center;white-space: nowrap;vertical-align: middle;}
+    border-color: #ff4800; border: 1px solid transparent; font-weight: 400;line-height: 1.42857143;text-align: center;white-space: nowrap;vertical-align: middle;}
 .filter-btn a:hover,.filter-btn a:focus,.filter-btn a:active{ color:#fff; text-decoration: none;}
 .side-filter input, select, textarea{height: 30px;padding: 6px 12px;font-size: 14px;line-height: 1.42857143;color: #555;background-color: #fff;background-image: none;border: 1px solid #ccc;border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);box-shadow: inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;}
 .side-filter .menu-bg{padding:5px 20px ;height:50px; width:100%;background-color: #f5f5f5;border: 1px solid #e3e3e3;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.05);box-shadow: inset 0 1px 1px rgba(0,0,0,.05);}
@@ -467,78 +468,78 @@ border-color: #ff4800; border: 1px solid transparent; font-weight: 400;line-heig
 /*////////////////////////------media------ /////////////////////////////*/
 
 .custom-LABEL p{
-	margin-bottom : 2px !important
+    margin-bottom : 2px !important
 }
 .SetWidhOfTD td{
-	width : 10px !important
+    width : 10px !important
 }
 @media (min-width: 100px) and (max-width: 768px) {
-#filter-grid{margin-left:0px; }
-#filter-menu{min-width:220px; width:100%; height:100%; float:left;}
+    #filter-grid{margin-left:0px; }
+    #filter-menu{min-width:220px; width:100%; height:100%; float:left;}
 }
 
 @media (min-width: 220px) and (max-width: 1200px) {
-.form-horizontal .control-label {padding-top: 0px; margin-bottom: 0;text-align: right; display:none;}
-.edit_Packaging  .col-md-7 {width: 95.5%;}
-.edit_Packaging  .col-md-1 {padding:0px; width: 2.5%; padding-top:4px;}
-.col-xs-1{padding-right: 0px;padding-left: 0px; padding-top:5px;}
-.padding-top-btm-xs-sm{ padding-top:10px!important;}
-#login .signin_label{ padding-top:0px; vertical-align:middle;}
-.container_detils .label_details .sameHeight { height: auto;}
+    .form-horizontal .control-label {padding-top: 0px; margin-bottom: 0;text-align: right; display:none;}
+    .edit_Packaging  .col-md-7 {width: 95.5%;}
+    .edit_Packaging  .col-md-1 {padding:0px; width: 2.5%; padding-top:4px;}
+    .col-xs-1{padding-right: 0px;padding-left: 0px; padding-top:5px;}
+    .padding-top-btm-xs-sm{ padding-top:10px!important;}
+    #login .signin_label{ padding-top:0px; vertical-align:middle;}
+    .container_detils .label_details .sameHeight { height: auto;}
 }
 @media (min-width: 480px) and (max-width: 768px) {
 
 }
 @media only screen and (max-width: 320px){
-.breadcrumb_bg i {padding: 0 2px;}
- .create_user fieldset.scheduler-border {padding: 15px 5px 15px 5px;}
+    .breadcrumb_bg i {padding: 0 2px;}
+    .create_user fieldset.scheduler-border {padding: 15px 5px 15px 5px;}
 
 }
 
 @media (min-width: 320px) and (max-width: 768px) {
-.padding-top-btm-xs{ padding:10px !important;}
-.margin-left-xs{ margin-left:15px !important;}
-.padding-top-btm-xs{ padding-top:10px !important; }
-.inventory_card  h5{text-align:center;}
-.inventory_card .table-top-padding{padding-top:0px;}
-.inventory_card .edit .col-md-3{padding-left:15px !important; padding-right:15px !important; margin-bottom: 15px;}
-.inventory_card .edit .col-lg-3{padding-left:15px !important; padding-right:15px !important;}
-fieldset.scheduler-border {min-width:200px;}
-.bages_estimated { padding-left: 2px;width: 100%;text-align: left;}
-#filter-menu{min-width:215px; height:100%;}
-legend.scheduler-border {font-size: 14px;}
-.confirm_shipment .sameHeight-International,.confirm_shipment .sameHeight-Domestic{ height:100%;}
-.confirm_Packaging  .sameHeight{height:100%;}
-.shipment .sameHeight{height:100%;}
-#login{  z-index: 22; height:100%; min-width:300px; display:cell;  vertical-align:middle;  }
+    .padding-top-btm-xs{ padding:10px !important;}
+    .margin-left-xs{ margin-left:15px !important;}
+    .padding-top-btm-xs{ padding-top:10px !important; }
+    .inventory_card  h5{text-align:center;}
+    .inventory_card .table-top-padding{padding-top:0px;}
+    .inventory_card .edit .col-md-3{padding-left:15px !important; padding-right:15px !important; margin-bottom: 15px;}
+    .inventory_card .edit .col-lg-3{padding-left:15px !important; padding-right:15px !important;}
+    fieldset.scheduler-border {min-width:200px;}
+    .bages_estimated { padding-left: 2px;width: 100%;text-align: left;}
+    #filter-menu{min-width:215px; height:100%;}
+    legend.scheduler-border {font-size: 14px;}
+    .confirm_shipment .sameHeight-International,.confirm_shipment .sameHeight-Domestic{ height:100%;}
+    .confirm_Packaging  .sameHeight{height:100%;}
+    .shipment .sameHeight{height:100%;}
+    #login{  z-index: 22; height:100%; min-width:300px; display:cell;  vertical-align:middle;  }
 }
 @media (min-width: 900px) and (max-width: 1200px) {
 
-.top_nav_admin  > li > a {  position: relative; display: block;  padding: 15px 6px; font-size: 11px; }
+    .top_nav_admin  > li > a {  position: relative; display: block;  padding: 15px 6px; font-size: 11px; }
 }
 @media (min-width:768px) and (max-width: 900px) {
-.top_nav_admin  > li > a {  position: relative; display: block;  padding: 15px 8px; font-size: 8px; }
+    .top_nav_admin  > li > a {  position: relative; display: block;  padding: 15px 8px; font-size: 8px; }
 }
 
 @media (min-width: 768px) and (max-width: 1200px) {
-.edit_Packaging.bages_estimated { padding-right: 20px;width: 100%;}
-.shipment_edit.bages_estimated { padding-right: 36px !important; width: 100%;}
+    .edit_Packaging.bages_estimated { padding-right: 20px;width: 100%;}
+    .shipment_edit.bages_estimated { padding-right: 36px !important; width: 100%;}
 
-.tab-width li{ font-size: 13px; width:50%}
+    .tab-width li{ font-size: 13px; width:50%}
 }
 @media (min-width: 768px) and (max-width: 800px) {.top_nav li {font-size: 13px;}}
 @media only screen and (max-width: 768px){
-.edit_Packaging fieldset .col-xs-1{margin-left:0px; padding-left:0px;}
-.shipment_edit fieldset .col-xs-1{margin-left:0px; padding-left:0px;}
+    .edit_Packaging fieldset .col-xs-1{margin-left:0px; padding-left:0px;}
+    .shipment_edit fieldset .col-xs-1{margin-left:0px; padding-left:0px;}
 }
 
 @media (min-width: 480px) and (max-width: 768px) {
-.edit_Packaging fieldset.scheduler-border {padding: 15px 5px 15px 20px;}
-.shipment_edit fieldset.scheduler-border {padding: 15px 5px 15px 20px;}
+    .edit_Packaging fieldset.scheduler-border {padding: 15px 5px 15px 20px;}
+    .shipment_edit fieldset.scheduler-border {padding: 15px 5px 15px 20px;}
 }
 @media (min-width: 1200px) and (max-width: 1800px) {
-.edit_Packaging fieldset.scheduler-border {padding: 15px 15px 15px 15px;}
-.shipment_edit fieldset.scheduler-border {padding: 15px 15px 15px 15px;}
+    .edit_Packaging fieldset.scheduler-border {padding: 15px 15px 15px 15px;}
+    .shipment_edit fieldset.scheduler-border {padding: 15px 15px 15px 15px;}
 }
 
 
@@ -594,7 +595,7 @@ select{text-transform: uppercase !important;}
 .RailCarAdd{ border-top: 1px solid #ddd;  padding-top: 10px;}
 .mw-200{min-width: 200px;}
 
- #Packaging_Instruction_View .table>thead>tr>th {
+#Packaging_Instruction_View .table>thead>tr>th {
     background-color: #2E6DA4 !important;
 }
 
@@ -642,4 +643,217 @@ select{text-transform: uppercase !important;}
 }
 #Material{
     text-transform: capitalize;
+}
+/*!
+ * https://github.com/YouCanBookMe/react-datetime
+ */
+
+.rdt {
+    position: relative;
+}
+.rdtPicker {
+    display: none;
+    position: absolute;
+    width: 250px;
+    padding: 4px;
+    margin-top: -300px;
+    z-index: 99999 !important;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,.1);
+    border: 1px solid #f9f9f9;
+}
+.rdtOpen .rdtPicker {
+    display: block;
+}
+.rdtStatic .rdtPicker {
+    box-shadow: none;
+    position: static;
+}
+
+.rdtPicker .rdtTimeToggle {
+    text-align: center;
+}
+
+.rdtPicker table {
+    width: 100%;
+    margin: 0;
+}
+.rdtPicker td,
+.rdtPicker th {
+    text-align: center;
+    height: 28px;
+}
+.rdtPicker td {
+    cursor: pointer;
+}
+.rdtPicker td.rdtDay:hover,
+.rdtPicker td.rdtHour:hover,
+.rdtPicker td.rdtMinute:hover,
+.rdtPicker td.rdtSecond:hover,
+.rdtPicker .rdtTimeToggle:hover {
+    background: #eeeeee;
+    cursor: pointer;
+}
+.rdtPicker td.rdtOld,
+.rdtPicker td.rdtNew {
+    color: #999999;
+}
+.rdtPicker td.rdtToday {
+    position: relative;
+}
+.rdtPicker td.rdtToday:before {
+    content: '';
+    display: inline-block;
+    border-left: 7px solid transparent;
+    border-bottom: 7px solid #428bca;
+    border-top-color: rgba(0, 0, 0, 0.2);
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+}
+.rdtPicker td.rdtActive,
+.rdtPicker td.rdtActive:hover {
+    background-color: #428bca;
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+.rdtPicker td.rdtActive.rdtToday:before {
+    border-bottom-color: #fff;
+}
+.rdtPicker td.rdtDisabled,
+.rdtPicker td.rdtDisabled:hover {
+    background: none;
+    color: #999999;
+    cursor: not-allowed;
+}
+
+.rdtPicker td span.rdtOld {
+    color: #999999;
+}
+.rdtPicker td span.rdtDisabled,
+.rdtPicker td span.rdtDisabled:hover {
+    background: none;
+    color: #999999;
+    cursor: not-allowed;
+}
+.rdtPicker th {
+    border-bottom: 1px solid #f9f9f9;
+}
+.rdtPicker .dow {
+    width: 14.2857%;
+    border-bottom: none;
+}
+.rdtPicker th.rdtSwitch {
+    width: 100px;
+}
+.rdtPicker th.rdtNext,
+.rdtPicker th.rdtPrev {
+    font-size: 21px;
+    vertical-align: top;
+}
+
+.rdtPrev span,
+.rdtNext span {
+    display: block;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -khtml-user-select: none;    /* Konqueror */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;
+}
+
+.rdtPicker th.rdtDisabled,
+.rdtPicker th.rdtDisabled:hover {
+    background: none;
+    color: #999999;
+    cursor: not-allowed;
+}
+.rdtPicker thead tr:first-child th {
+    cursor: pointer;
+}
+.rdtPicker thead tr:first-child th:hover {
+    background: #eeeeee;
+}
+
+.rdtPicker tfoot {
+    border-top: 1px solid #f9f9f9;
+}
+
+.rdtPicker button {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+.rdtPicker button:hover {
+    background-color: #eee;
+}
+
+.rdtPicker thead button {
+    width: 100%;
+    height: 100%;
+}
+
+td.rdtMonth,
+td.rdtYear {
+    height: 50px;
+    width: 25%;
+    cursor: pointer;
+}
+td.rdtMonth:hover,
+td.rdtYear:hover {
+    background: #eee;
+}
+
+.rdtCounters {
+    display: inline-block;
+}
+
+.rdtCounters > div {
+    float: left;
+}
+
+.rdtCounter {
+    height: 100px;
+}
+
+.rdtCounter {
+    width: 40px;
+}
+
+.rdtCounterSeparator {
+    line-height: 100px;
+}
+
+.rdtCounter .rdtBtn {
+    height: 40%;
+    line-height: 40px;
+    cursor: pointer;
+    display: block;
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -khtml-user-select: none;    /* Konqueror */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;
+}
+.rdtCounter .rdtBtn:hover {
+    background: #eee;
+}
+.rdtCounter .rdtCount {
+    height: 20%;
+    font-size: 1.2em;
+}
+
+.rdtMilli {
+    vertical-align: middle;
+    padding-left: 8px;
+    width: 48px;
+}
+
+.rdtMilli input {
+    width: 100%;
+    font-size: 1.2em;
+    margin-top: 37px;
 }
