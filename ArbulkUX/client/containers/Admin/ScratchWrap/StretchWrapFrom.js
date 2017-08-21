@@ -73,7 +73,7 @@ class StretchWrapFrom extends React.Component {
                     <div className="create_user col-lg-8 col-md-8 col-sm-12 col-xs-12">
                         <form className=" bs-component">
                             <fieldset className="scheduler-border">
-                                <legend className="scheduler-border">Add StretchWrap</legend>
+                                <legend className="scheduler-border">Add Stretch Wrap</legend>
                                 <div className="col-lg-6  col-md-6 col-sm-6 col-xs-12">
                                     <label htmlFor="Weight">Name</label>
                                     <div className={this.state.errors.name ? "form-group has error" : "form-group"}>
@@ -92,7 +92,7 @@ class StretchWrapFrom extends React.Component {
                                         <button  type="submit"
                                                  onClick = {this.onSubmit}
                                                  className="btn  btn-primary text-uppercase"
-                                        >Add StretchWrap</button>
+                                        >Add Stretch Wrap</button>
                                     </div>
                                 </div>
                             </fieldset>

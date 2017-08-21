@@ -158,7 +158,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
           console.log(err)
         })
 
-    axios.get(Base_Url+"TWrapTypes").then((response) => {
+    axios.get(Base_Url+'TWrapTypes?filter={"where":{"activee":1}}').then((response) => {
       this.setState({
         wrapType : response.data
       })
@@ -1456,7 +1456,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
                       </div>
 
                       <div className="form-group">
-                        <label htmlFor="Stretch_wrap" className={ this.state.errors.wrap_type_id ? "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label has error" : "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label"}>Stretch wrap</label>
+                        <label htmlFor="Stretch_wrap" className={ this.state.errors.wrap_type_id ? "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label has error" : "col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label"}>Stretch Wrap</label>
                         <div className="col-lg-9    col-sm-11 col-xs-11 ">
                           {this.props.data != undefined ?
                               <select

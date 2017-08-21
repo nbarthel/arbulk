@@ -137,7 +137,7 @@ class ModifyUserForm extends React.Component {
                                 </div>
                             </div>
                             <div className="col-md-6">
-                                <p >Total Records Founds : {this.total}</p>
+                                <p >Total Records Found : {this.total}</p>
                                 </div>
                                 </fieldset>
 
