@@ -557,8 +557,8 @@ export default class EnterPackagingInstructionForm extends React.Component {
     debugger
     var checkPo = []
       var flagForUniqueRailcar = false
-      for(var i=0;i<this.RailCarArray.length;i++){
-      for(var j=i+i;j<this.RailCarArray.length;j++){
+      for(let i=0;i<this.RailCarArray.length;i++){
+      for(let j=i+i;j<this.RailCarArray.length;j++){
         if(this.RailCarArray[i].railcar_number && this.RailCarArray[j].railcar_number && this.RailCarArray[i].railcar_number.toUpperCase() === this.RailCarArray[j].railcar_number.toUpperCase()){
             flagForUniqueRailcar = true;
             break;
@@ -575,7 +575,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
       else{
           DisableDoubleClick('submit')
 
-          for(var i in this.state.polList){
+          for(let i in this.state.polList){
               checkPo.push(this.state.polList[i].poNumber)
           }
           if(this.obj.po_number != ""){
@@ -617,28 +617,18 @@ export default class EnterPackagingInstructionForm extends React.Component {
                   writable: true,
                   configurable:true,
                   value:this.obj})
-//if(this.state.customChecked == false){
-              //   if(Object.keys(this.railcarObj).length != 0){
-              //      this.addrailcarObject();
-              //   }
-//}
               this.railCarObjects = this.RailCarArray
               console.log(this.railCarObjects)
               if(this.railCarObjects && this.railCarObjects.length > 1){
                   this.state.labelLength.unshift(this.obj.custom_label)
 
-                  for(var i in this.railCarObjects){
-                      // let tempcustomlabel = this.state.labelLength[i]
-                      // if(i>0){
-                      //   tempcustomlabel = tempcustomlabel.poNumber+tempcustomlabel.lotNumber+tempcustomlabel.material+tempcustomlabel.originName+tempcustomlabel.weight
-                      // }
-                      //this.railCarObjects[i].custom_label = tempcustomlabel
+                  for(let i in this.railCarObjects){
                       this.railCarObjects[i].custom_label = this.state.customLabel[i]
                   }
               }
               if(this.state.selectedOption == 'kg'){
                   var flag = true;
-                  for(var i=0;i<this.railCarObjects.length;i++){
+                  for(let i=0;i<this.railCarObjects.length;i++){
                       this.railCarObjects[i].weight = this.railCarObjects[i].weight*MUL_FACTOR
                   }
               }
@@ -653,7 +643,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
               var postUrl = Base_Url+"TPackagingInstructions/createPiEntry"
               if(this.railCarObjects== 0){
                   if(flag){
-                      for(var i=0;i<this.railCarObjects.length;i++){
+                      for(let i=0;i<this.railCarObjects.length;i++){
                           this.railCarObjects[i].weight = this.railCarObjects[i].weight/MUL_FACTOR
                       }
                   }
@@ -683,7 +673,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
                   error:function(err){
                       EnableClick('submit')
                       if(flag){
-                          for(var i=0;i<this.railCarObjects.length;i++){
+                          for(let i=0;i<this.railCarObjects.length;i++){
                               this.railCarObjects[i].weight = this.railCarObjects[i].weight/MUL_FACTOR
                           }
                       }
