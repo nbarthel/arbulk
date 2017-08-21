@@ -558,7 +558,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
     var checkPo = []
       var flagForUniqueRailcar = false
       for(let i=0;i<this.RailCarArray.length;i++){
-      for(let j=i+i;j<this.RailCarArray.length;j++){
+      for(let j=i+1;j<this.RailCarArray.length;j++){
         if(this.RailCarArray[i].railcar_number && this.RailCarArray[j].railcar_number && this.RailCarArray[i].railcar_number.toUpperCase() === this.RailCarArray[j].railcar_number.toUpperCase()){
             flagForUniqueRailcar = true;
             break;
