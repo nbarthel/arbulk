@@ -1,7 +1,5 @@
 import React from 'react';
-import { DateField, Calendar } from 'react-datepicker'
 var moment = require('moment');
-require('react-datepicker/dist/react-datepicker.css');
 import Datetime from 'react-datetime';
 
 import {Base_Url} from '../../../constants';
@@ -30,14 +28,15 @@ export default class RailcarArrivalEntryForm extends React.Component {
         this.dateTime = ''
         this.state = {
             dateTime:'',
+            chekVals:[],
             startDate : '',
             key:0,
             selectedOption: 'lbs',
             selectedOption1: 'lbs',
         }
         this.updateCartArrival = this.updateCartArrival.bind(this);
-        this.handleChange1 = this.handleChange1.bind(this)
-
+        this.handledate = this.handledate.bind(this)
+        this.lotOrderValue=[]
         this.onClickli = this.onClickli.bind(this)
         this.onClickPo = this.onClickPo.bind(this)
         this.lotSearch = this.lotSearch.bind(this)
@@ -48,14 +47,10 @@ export default class RailcarArrivalEntryForm extends React.Component {
         this.onRemove = this.onRemove.bind(this)
         this.onSearch = this.onSearch.bind(this)
         this.onTextChange = this.onTextChange.bind(this)
-        this.onChnage = this.onChnage.bind(this)
         this.handleOptionChange = this.handleOptionChange.bind(this)
         this.handleOptionChange1 = this.handleOptionChange1.bind(this)
     }
-    onformat(inputDate) {
-        var datear = inputDate.split('-')
-        return (datear[1] +'-'+ datear[2] +'-'+ datear[0])
-    }
+
 
     onTextChange(e){
         this.Query[e.target.id] = e.target.value
@@ -63,14 +58,14 @@ export default class RailcarArrivalEntryForm extends React.Component {
         this.onSearch(e)
     }
 
-    handleChange1(event) {
+    handledate(event) {
+        debugger
         var dateTime = parseInt(event._d.getMonth()) +1 +'/'+parseInt(event._d.getDate())+'/' +parseInt(event._d.getFullYear())+' '+parseInt(event._d.getHours())+':'+parseInt(event._d.getMinutes())+':'+event._d.getSeconds();
-        this.setState({startDate : dateTime,
-            dateTime:event})
+        this.startDate = dateTime
+        //this.setState({startDate : dateTime, dateTime:event})
     }
 
     onClickPo(e){
-        //debugger;
         this.Query[e.target.id] = e.target.getAttribute('value')
         document.getElementById('POSearch').value = e.target.getAttribute('value')
         //console.log(this.Query)
@@ -79,7 +74,6 @@ export default class RailcarArrivalEntryForm extends React.Component {
     }
 
     lotSearch(e){
-        //debugger;
         this.Query[e.target.id] = e.target.getAttribute('value')
         ///	console.log(this.Query)
         document.getElementById('LotSearch').value = e.target.getAttribute('value')
@@ -361,117 +355,195 @@ export default class RailcarArrivalEntryForm extends React.Component {
 
     }
 
-
-    click(data,value,index)
+     click(data,value,index)
     {
-
-
+        var cartDataArray = []
         if(data.target.checked){
             //this.checked = true
             document.getElementById('th'+ index).value = "YES"
+            document.getElementById('th'+ index).nextSibling.checked=true
             document.getElementById('th'+ index).innerText = "YES"
             for(var i=0;i<this.props.data.length;i++){
                 if(this.props.data[i].TPackagingInstructions.po_number == value.TPackagingInstructions.po_number){
                     this.props.data[i].arrived = 1;
+                    this.cartArray.push(value.id)
+                    this.lotOrderValue.push(value)
                     break;
                 }
             }
             //this.forceUpdate()
         }
         else if(!data.target.checked){
-            // this.checked = false
+
+            document.getElementById('checkall').checked=false;
             document.getElementById('th'+index).value = "NO"
             document.getElementById('th'+ index).innerText = "NO"
             for(var i=0;i<this.props.data.length;i++){
                 if(this.props.data[i].TPackagingInstructions.po_number == value.TPackagingInstructions.po_number){
                     this.props.data[i].arrived = 0
+                    let index = this.cartArray.indexOf(value.id);
+                    if (index > -1) {
+                        this.cartArray.splice(index, 1);
+                    }
+                    let index1 = this.lotOrderValue.indexOf(value);
+                    if (index1 > -1) {
+                        this.lotOrderValue1.splice(index, 1);
+                    }
                     break;
                 }
             }
             //this.forceUpdate()
         }
-        var cartDataArray = []
+
         //	var dateArray = []
-        this.cartArray.push(value.id)
-        this.lotOrderValue = value
-        //console.log("clicked" , data , value)
+
+
     };
 
+    checkAll(e){
+        let viewData = this.props.data
+        let checkAll = [];
+        let cartDataArray = []
 
-    updateCartArrival(){
-        console.log(this.cartArray.length)
-        if(this.cartArray.length < 1 || (this.state.startDate==null || this.state.startDate=== undefined || this.state.startDate.trim()=== '' || this.state.startDate=== false)){
-            swal('Info' , 'Please select arrival Date and or row' , 'info')
+        if(e.target.checked) {
+            console.log(e.target.checked)
+            for (let i = 0; i < viewData.length; i++) {
+                if (viewData[i].TPackagingInstructions && (viewData[i].status == "CONFIRMED" || viewData[i].status == "UNCONFIRMED" || viewData[i].status == "READY") && (viewData[i].arrived != 1)) {
+                    this.props.data[i].arrived = 1;
+                    if(document.getElementById('th'+ i)) {
+                        document.getElementById('th' + i).value = "YES"
+                        document.getElementById(viewData[i].id).checked = true;
+                        document.getElementById('th' + i).innerText = "YES"
+                        this.cartArray.push(viewData[i].id)
+                        this.lotOrderValue.push(viewData[i])
+                    }
+                }
+            }
+        }
+    else if(e.target.checked===false){
+            console.log(e.target.checked)
+            for(let i=0; i<viewData.length;i++){
+                if(viewData[i].TPackagingInstructions && (viewData[i].status == "CONFIRMED" || viewData[i].status == "UNCONFIRMED"|| viewData[i].status == "READY") && (viewData[i].arrived === 1)){
+
+                    if(document.getElementById('th'+ i)) {
+                        this.props.data[i].arrived = 0;
+                        let index = this.cartArray.indexOf(viewData[i].id);
+                        if (index > -1) {
+                            this.cartArray.splice(index, 1);
+                        }
+                        let index1 = this.lotOrderValue.indexOf(viewData[i]);
+                        if (index1 > -1) {
+                            this.lotOrderValue.splice(index1, 1);
+                        }
+                        document.getElementById('th' + i).value = "NO"
+                        document.getElementById('th' + i).innerText = "NO"
+                        document.getElementById(viewData[i].id).checked = false;
+                        this.cartArray.push(viewData[i].id)
+                    }
+                }
+            }
+        }
+    }
+
+
+    cookCheckAll(){
+        let viewData = this.props.data
+        let checkAll=[];
+        for(let i=0; i<viewData.length;i++){
+            if(viewData[i].TPackagingInstructions && (viewData[i].status == "CONFIRMED" || viewData[i].status == "UNCONFIRMED"|| viewData[i].status == "READY") && (viewData[i].arrived != 1)){
+                this.props.data[i].arrived = 0;
+                document.getElementById('th'+ i).value = "NO"
+                document.getElementById('th'+ i).innerText = "NO"
+            }
+        }
+
+        console.log(checkAll)
+        this.setState({chekVals:checkAll})
+    }
+
+
+    updateCartArrival() {
+        if (this.cartArray.length < 1 || (this.startDate == null || this.startDate === undefined || this.startDate.trim() === '' || this.startDate === false)) {
+            swal('Info', 'Please select arrival date and or row.', 'info')
             return
         }
-
-        if(this.lotOrderValue.status == "CONFIRMED")
-        {
-            this.cartArray.forEach((id ,index)=>{
-                axios.put(Base_Url+"TPackagingInstructionLots/" + id , {railcar_arrived_on : this.state.startDate , status:"READY" , arrived : 1,railcar_status:"ARRIVED"}).then(function(response){
-                    swal({
-                            title: "Success",
-                            text: "Arrival Submitted",
-                            type: "success",
-                            showCancelButton: true,
-                        },
-                        function(isConfirm){
-                            hashHistory.push('/Packaging/packaginginstview/')
-                        });
-                }).catch(function(err){
-                    //console.log("Error Is" + err)
+        for (let j = 0; j < this.lotOrderValue.length; j++) {
+            if (this.lotOrderValue[j].status == "CONFIRMED") {
+                this.cartArray.forEach((id, index) => {
+                    axios.put(Base_Url + "TPackagingInstructionLots/" + id, {
+                        railcar_arrived_on: this.startDate,
+                        status: "READY",
+                        arrived: 1,
+                        railcar_status: "ARRIVED"
+                    }).then(function (response) {
+                        swal({
+                                title: "Success",
+                                text: "Arrival submitted.",
+                                type: "success",
+                                showCancelButton: false,
+                            },
+                            function (isConfirm) {
+                                hashHistory.push('/Packaging/packaginginstview/')
+                            });
+                    }).catch(function (err) {
+                        //console.log("Error Is" + err)
+                    })
                 })
-            })
-        }
+            }
 
-        else if(this.lotOrderValue.status == "QUEUED")
-        {
-            this.cartArray.forEach((id ,index)=>{
-                axios.put(Base_Url+"TPackagingInstructionLots/" + id , {railcar_arrived_on : this.state.startDate, arrived : 1,railcar_status:"ARRIVED"}).then(function(response){
-                    swal({
-                            title: "Success",
-                            text: "Arrival Submitted",
-                            type: "success",
-                            showCancelButton: true,
-                        },
-                        function(isConfirm){
-                            hashHistory.push('/Packaging/packaginginstview/')
-                        });
-                }).catch(function(err){
-                    //console.log("Error Is" + err)
+            else if (this.lotOrderValue[j].status == "QUEUED") {
+                this.cartArray.forEach((id, index) => {
+                    axios.put(Base_Url + "TPackagingInstructionLots/" + id, {
+                        railcar_arrived_on: this.startDate,
+                        arrived: 1,
+                        railcar_status: "ARRIVED"
+                    }).then(function (response) {
+                        swal({
+                                title: "Success",
+                                text: "Arrival submitted.",
+                                type: "success",
+                                showCancelButton: false,
+                            },
+                            function (isConfirm) {
+                                hashHistory.push('/Packaging/packaginginstview/')
+                            });
+                    }).catch(function (err) {
+                        //console.log("Error Is" + err)
+                    })
                 })
-            })
-        }
+            }
 
 
+            else if (this.lotOrderValue[j].status == "UNCONFIRMED") {
+                this.cartArray.forEach((id, index) => {
+                    axios.put(Base_Url + "TPackagingInstructionLots/" + id, {
+                        railcar_arrived_on: this.startDate,
+                        arrived: 1,
+                        railcar_status: "ARRIVED"
+                    }).then(function (response) {
 
+                        swal({
+                                title: "Success",
+                                text: "Arrival submitted.",
+                                type: "success",
+                                showCancelButton: false,
+                            },
+                            function (isConfirm) {
+                                hashHistory.push('/Packaging/packaginginstview/')
+                            });
 
-        else if(this.lotOrderValue.status == "UNCONFIRMED")
-        {
-            this.cartArray.forEach((id ,index)=>{
-                axios.put(Base_Url+"TPackagingInstructionLots/" + id , {railcar_arrived_on : this.state.startDate , arrived : 1,railcar_status:"ARRIVED"}).then(function(response){
-
-                    swal({
-                            title: "Success",
-                            text: "Arrival Submitted",
-                            type: "success",
-                            showCancelButton: true,
-                        },
-                        function(isConfirm){
-                            hashHistory.push('/Packaging/packaginginstview/')
-                        });
-
-                }).catch(function(err){
-                    console.log("Error Is" + err)
+                    }).catch(function (err) {
+                        console.log("Error Is" + err)
+                    })
                 })
-            })
+            }
+
+
+            else {
+                swal("Info", "Railcar must be confirmed first.", 'info')
+            }
+
         }
-
-
-        else{
-            swal("Info" , "Railcar must be confirmed first" , 'info')
-        }
-
     }
 
     componentDidMount() {
@@ -481,14 +553,11 @@ export default class RailcarArrivalEntryForm extends React.Component {
 
             }, 2000);
         });
+        this.cookCheckAll()
 
     }
 
-    onChnage(e){
-
-    }
     render() {
-        //debugger;
         var fiterData = undefined ;
         fiterData = this.state.viewData ? this.state.viewData : undefined ;
 
@@ -507,7 +576,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 							<td ref="arrived" id={"th"+index}> {view.arrived == 1 || this.checked==true ? "YES" : "NO"}</td>
 							<td>
 								<label className="checkBox">
-									<input className="checkBox" type="checkbox" id={"row1"+ index} value={view} onChange={(e) => this.click(e,view,index)} />
+									<input className="checkBox" type="checkbox" id={"row1"+ index} value={this.state.chekVals[index]} onChange={(e) => this.click(e,view,index)} />
 									<label htmlFor={index}></label>
 								</label>
 							</td>
@@ -526,7 +595,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
         var railcartData = _.map(railCart , (view ,index)=>{
 
 
-            if(view.TPackagingInstructions && (view.status == "CONFIRMED" || view.status == "UNCONFIRMED" || view.status == "QUEUED")) {
+            if(view.TPackagingInstructions && (view.status == "CONFIRMED" || view.status == "UNCONFIRMED"|| view.status == "READY") && (view.arrived != 1)) {
 
                 return(
 					<tr>
@@ -611,7 +680,9 @@ export default class RailcarArrivalEntryForm extends React.Component {
 												<th>Material </th>
 												<th>Confirmed</th>
 												<th>Arrived</th>
-												<th></th>
+												<th>
+                                                    <input className="checkbox" onClick={this.checkAll.bind(this)} type="checkbox" id="checkall"/>
+                                                    </th>
 											</tr>
 											</thead>
 											<tbody >
@@ -627,15 +698,16 @@ export default class RailcarArrivalEntryForm extends React.Component {
 
 
 									<div className="pull-right padding-top-btm-xs col-lg-12 col-md-12 col-sm-12 col-xs-12">
-										<div className="pull-right padding-10-last-r"><button type="button"  className="btn  btn-primary" onClick={this.updateCartArrival} >Save </button></div>
+										<div className="pull-right padding-10-last-r"><button type="button"  className="btn  btn-primary" onClick={this.updateCartArrival} >Arrived </button></div>
 										<div className="pull-right padding-10-all"><button type="button"  className="btn  btn-gray" onClick={hashHistory.goBack}>Cancel </button></div>
 										<div className="pull-right padding-10-all"><div className="right-inner-addon mw-200">
-                                            {this.state.dateTime===''?<i style={{right:50}}>RailCar Arrival Date</i>:''}<i className="fa fa-calendar" aria-hidden="true"></i>
+                                            <i className="fa fa-calendar" aria-hidden="true"></i>
 											<Datetime
 												dateFormat="MM-DD-YYYY"
+                                                defaultValue = "RailCar Arrival Date"
 												selected={this.state.dateTime}
 												vlaue={this.state.dateTime}
-												onChange={(event) => this.handleChange1(event)}/></div>
+												onChange={(event) => this.handledate(event)}/></div>
 
 										</div>
 									</div>

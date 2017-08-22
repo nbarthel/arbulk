@@ -75,7 +75,7 @@ class UpdateStretchWrap extends React.Component {
             axios.put(Base_Url+"TWrapTypes/"+this.props.params.scrapID,this.state.createUsrObj).then((response)=>{
                 swal({
                     title: "Success",
-                    text: "StretchWrap Updated Successfully",
+                    text: "Stretch wrap updated successfully.",
                     type: "success",
                     showCancelButton: false,
                     confirmButtonColor: "#DD6B55",
@@ -99,7 +99,7 @@ class UpdateStretchWrap extends React.Component {
                             <div className="create_user col-lg-8 col-md-8 col-sm-12 col-xs-12">
                                 <form className="bs-component">
                                     <fieldset className="scheduler-border">
-                                        <legend className="scheduler-border">Update StretchWrap</legend>
+                                        <legend className="scheduler-border">Update Stretch Wrap</legend>
                                         <div className="col-lg-6  col-md-6 col-sm-6 col-xs-12">
                                             <label htmlFor="Weight">Name</label>
                                             <div className={this.state.errors.name ? "form-group has error" : "form-group"}>
@@ -119,7 +119,7 @@ class UpdateStretchWrap extends React.Component {
                                                 <button  type="submit"
                                                          onClick = {this.onSubmit}
                                                          className="btn  btn-primary text-uppercase"
-                                                >Update StretchWrap</button>
+                                                >Update Stretch Wrap</button>
                                             </div>
                                         </div>
                                     </fieldset>

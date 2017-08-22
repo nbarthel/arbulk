@@ -360,11 +360,11 @@ export default class RailcarArrivalEntryForm extends React.Component {
     updateCartArrival(){
 
         if(this.cartArray.length < 1){
-            swal('Info' , 'Please select row and date to submit Departure' , 'info')
+            swal('Info' , 'Please select row and date to submit departure.' , 'info')
             return
         }
         if(this.state.startDate == ""){
-            swal('Info' , 'Please select a date' , 'info')
+            swal('Info' , 'Please select a date.' , 'info')
             return
         }
         var option = {
@@ -377,9 +377,9 @@ export default class RailcarArrivalEntryForm extends React.Component {
 
                 swal({
                         title: "Success",
-                        text: "Departure Submitted",
+                        text: "Departure submitted.",
                         type: "success",
-                        showCancelButton: true,
+                        showCancelButton: false,
                         closeOnConfirm: true
                     },
                     function(isConfirm){
@@ -395,6 +395,42 @@ export default class RailcarArrivalEntryForm extends React.Component {
             })
         })
 
+    }
+
+    checkAll(e){
+        let viewData = this.props.data
+        let checkAll = [];
+        let cartDataArray = []
+        if(e.target.checked) {
+            debugger
+            console.log(e.target.checked)
+            for (let i = 0; i < viewData.length; i++) {
+                if (viewData[i].TPackagingInstructions && (viewData[i].status == "IN INVENTORY")) {
+                    this.props.data[i].arrived = 1;
+                    if(document.getElementById(viewData[i].id)) {
+                        document.getElementById(viewData[i].id).checked = true;
+                        this.cartArray.push(viewData[i].id)
+                    }
+                }
+            }
+        }
+        else if(e.target.checked===false){
+            console.log(e.target.checked)
+            for(let i=0; i<viewData.length;i++){
+                if(viewData[i].TPackagingInstructions && (viewData[i].status == "IN INVENTORY")){
+
+                    if(document.getElementById(viewData[i].id)) {
+                        this.props.data[i].arrived = 0;
+                        let index = this.cartArray.indexOf(viewData[i].id);
+                        if (index > -1) {
+                            this.cartArray.splice(index, 1);
+                        }
+                        document.getElementById(viewData[i].id).checked = false;
+
+                    }
+                }
+            }
+        }
     }
     render() {
 
@@ -430,25 +466,6 @@ export default class RailcarArrivalEntryForm extends React.Component {
                     )
                 }
 
-                //else{
-                //	return (
-                //		<tr>
-                //			<td>{view.TPackagingInstructions.TCompany.name}</td>
-                //			<td>{view.TPackagingInstructions.po_number}</td>
-                //			<td>{view.railcar_number}</td>
-                //			<td>{view.lot_number}</td>
-                //			<td>{view.TPackagingInstructions.material}</td>
-                //			<td> {view.TPackagingInstructions.stamp_confirmed == 1 ? 'Y' : 'N'}</td>
-                //			<td>
-                //				<label className="control control--checkbox">
-                //					<input type="checkbox" id="row1" value={view} onChange={(e) => this.click(e,view)}/>
-                //
-                //					<div className="control__indicator"></div>
-                //				</label>
-                //			</td>
-                //		</tr>
-                //	)
-                //}
             })
         }
         railCarFilterData = _.filter(railCarFilterData, function (param) {
@@ -523,9 +540,9 @@ export default class RailcarArrivalEntryForm extends React.Component {
 													<th>Lot# </th>
 													<th>Material </th>
 													<th>In Inventory?</th>
-													<th>
-
-													</th>
+                                                    <th>
+                                                        <input className="checkbox" onClick={this.checkAll.bind(this)} type="checkbox" id="checkall"/>
+                                                    </th>
 												</tr>
 												</thead>
 
@@ -543,9 +560,10 @@ export default class RailcarArrivalEntryForm extends React.Component {
 										<div className="pull-right padding-top-btm-xs">
 											<div className="pull-right padding-10-last-r"><button type="button"  className="btn  btn-primary" onClick={this.updateCartArrival} >DEPARTED </button></div>
 											<div className="pull-right padding-10-all"><button type="button"  className="btn  btn-gray" onClick={hashHistory.goBack}>BACK </button></div>
-											<div className="pull-right padding-10-all">	<div className="right-inner-addon mw-200">{this.state.startDate===''?<i style={{right:25}}>RailCar Departure Date</i>:''}<i className="fa fa-calendar" aria-hidden="true"></i>
+											<div className="pull-right padding-10-all">	<div className="right-inner-addon mw-200"><i className="fa fa-calendar" aria-hidden="true"></i>
 
 												<Datetime
+                                                    defaultValue="RailCar Departure Date"
 													dateFormat="MM-DD-YYYY"
 													selected={this.state.startDate}
 													value={this.state.startDate}
