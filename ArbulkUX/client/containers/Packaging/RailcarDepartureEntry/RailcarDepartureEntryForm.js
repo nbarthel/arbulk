@@ -351,10 +351,19 @@ export default class RailcarArrivalEntryForm extends React.Component {
         });
     }
 
-    click(data , value)
+    click(data, value)
     {
+
         var cartDataArray = []
-        this.cartArray.push(value.id);
+        if(data.target.checked){this.cartArray.push(value.id);}
+        else if(!data.target.checked){
+            let index = this.cartArray.indexOf(value.id);
+            if (index > -1) {
+                this.cartArray.splice(index, 1);
+            }
+        }
+
+
         //console.log("clicked" , data , value)
     };
     updateCartArrival(){

@@ -360,9 +360,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
         var cartDataArray = []
         if(data.target.checked){
             //this.checked = true
-            document.getElementById('th'+ index).value = "YES"
             document.getElementById('th'+ index).nextSibling.checked=true
-            document.getElementById('th'+ index).innerText = "YES"
             for(var i=0;i<this.props.data.length;i++){
                 if(this.props.data[i].TPackagingInstructions.po_number == value.TPackagingInstructions.po_number){
                     this.props.data[i].arrived = 1;
@@ -376,8 +374,6 @@ export default class RailcarArrivalEntryForm extends React.Component {
         else if(!data.target.checked){
 
             document.getElementById('checkall').checked=false;
-            document.getElementById('th'+index).value = "NO"
-            document.getElementById('th'+ index).innerText = "NO"
             for(var i=0;i<this.props.data.length;i++){
                 if(this.props.data[i].TPackagingInstructions.po_number == value.TPackagingInstructions.po_number){
                     this.props.data[i].arrived = 0
@@ -411,9 +407,9 @@ export default class RailcarArrivalEntryForm extends React.Component {
                 if (viewData[i].TPackagingInstructions && (viewData[i].status == "CONFIRMED" || viewData[i].status == "UNCONFIRMED" || viewData[i].status == "READY") && (viewData[i].arrived != 1)) {
                     this.props.data[i].arrived = 1;
                     if(document.getElementById('th'+ i)) {
-                        document.getElementById('th' + i).value = "YES"
+
                         document.getElementById(viewData[i].id).checked = true;
-                        document.getElementById('th' + i).innerText = "YES"
+
                         this.cartArray.push(viewData[i].id)
                         this.lotOrderValue.push(viewData[i])
                     }
@@ -435,8 +431,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
                         if (index1 > -1) {
                             this.lotOrderValue.splice(index1, 1);
                         }
-                        document.getElementById('th' + i).value = "NO"
-                        document.getElementById('th' + i).innerText = "NO"
+
                         document.getElementById(viewData[i].id).checked = false;
                         this.cartArray.push(viewData[i].id)
                     }
@@ -452,8 +447,6 @@ export default class RailcarArrivalEntryForm extends React.Component {
         for(let i=0; i<viewData.length;i++){
             if(viewData[i].TPackagingInstructions && (viewData[i].status == "CONFIRMED" || viewData[i].status == "UNCONFIRMED"|| viewData[i].status == "READY") && (viewData[i].arrived != 1)){
                 this.props.data[i].arrived = 0;
-                document.getElementById('th'+ i).value = "NO"
-                document.getElementById('th'+ i).innerText = "NO"
             }
         }
 
@@ -464,7 +457,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 
     updateCartArrival() {
         if (this.cartArray.length < 1 || (this.startDate == null || this.startDate === undefined || this.startDate.trim() === '' || this.startDate === false)) {
-            swal('Info', 'Please select arrival date and or row.', 'info')
+            swal('Info', 'Please select arrival date or row.', 'info')
             return
         }
         for (let j = 0; j < this.lotOrderValue.length; j++) {
