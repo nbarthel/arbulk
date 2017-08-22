@@ -3,22 +3,14 @@
 import React from 'react';
 import axios from 'axios';
 import _ from 'lodash';
-import  { PropTypes } from 'react';
 import { createDataLoader } from 'react-loopback';
 import { hashHistory } from 'react-router'
-
-import request from '../../utils/request';
 import { Base_Url } from '../../constants';
-var moment = require('moment');
 import './js/tableHeadFixer.js'
-//import './js/jquery.dataTables.min.js';
-//import './js/jquery.dragtable.js';
-//import './stylesheet/dragtable.css';
 import './js/jquery-sortable-min.js'
 import './js/colResizable-1.6.min.js';
-//import './js/jquery-resizable.js';
-//import './js/jquery-resizableTableColumns.js'
 import './stylesheet/main.css';
+var moment = require('moment');
 var Loader = require('react-loader');
 var sortedDataflag = false
 var sortedData = []
@@ -640,12 +632,10 @@ class ViewDataComponent extends React.Component {
             )
     }
 
-    getDetailsGroup(groupID)
-    {
+    getDetailsGroup(groupID) {
         hashHistory.push('/Packaging/inventorycard/'+groupID+'/null');
     }
-    getDetailsSingle(rowID, groupID)
-    {
+    getDetailsSingle(rowID, groupID) {
         hashHistory.push('/Packaging/inventorycard/'+groupID+'/'+rowID);
     }
     GetRows(view,count,selectedWeight){

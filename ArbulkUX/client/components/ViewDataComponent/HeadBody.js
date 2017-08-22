@@ -1,11 +1,7 @@
 
 
 import React from 'react';
-import axios from 'axios';
-import _ from 'lodash';
-import  { PropTypes } from 'react';
 import { createDataLoader } from 'react-loopback';
-import Reactable from 'reactable';
 
 
 class HeadBody extends React.Component{

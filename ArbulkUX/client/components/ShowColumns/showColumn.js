@@ -5,7 +5,7 @@ import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import axios from 'axios'
-import {Base_Url} from '../../../constants';
+import {Base_Url} from '../../constants';
 import _ from 'lodash';
 import '../../../public/stylesheets/style.css'
 class showColumn extends React.Component{
