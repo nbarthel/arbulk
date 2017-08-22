@@ -221,6 +221,12 @@
       "permission": "ALLOW"
     },
     {
+      "accessType": "DELETE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
       "principalType": "ROLE",
       "principalId": "$everyone",
       "permission": "ALLOW",
