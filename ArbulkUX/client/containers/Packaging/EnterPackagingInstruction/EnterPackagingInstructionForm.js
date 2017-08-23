@@ -522,7 +522,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
           type: "POST",
           url: postUrl,
           data: this.props.data,
-          success: function () {
+          success: function (sdata) {
               swal("Posted", "Data Has Been Successfully Edited !", "success");
               hashHistory.push('/Packaging/packaginginstview/')
           },
@@ -666,7 +666,8 @@ export default class EnterPackagingInstructionForm extends React.Component {
                   type:"POST",
                   url: postUrl,
                   data:this.Allobjs,
-                  success:function(){
+                  success:function(data){
+                      console.log("resp data>>>>>>>>>",data)
                       swal("Posted" , "Data Has Been Successfully Posted !" , "success");
                       hashHistory.push('/Packaging/packaginginstview/')
                   },
@@ -1585,8 +1586,6 @@ export default class EnterPackagingInstructionForm extends React.Component {
                             <button type="button"  className="btn  btn-primary" id="submit" onClick = {this.onSubmit}>SUBMIT</button> }
                     </div>
                     <div className="pull-left padding-20-all"><button type="button" onClick={this.onCancelRequest.bind(this)}  className="btn  btn-gray">CANCEL</button> </div>
-                    <div className="pull-left padding-20-all"><button type="button" onClick={hashHistory.goBack}  className="btn  btn-gray">BACK</button> </div>
-
                   </div>
                   {this.state.isLoading ?  <Spinner spinnerName='circle' /> : null}
                 </div>

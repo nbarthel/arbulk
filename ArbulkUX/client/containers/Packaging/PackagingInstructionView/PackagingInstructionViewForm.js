@@ -85,7 +85,7 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.createdOnStartDate = ''
         this.createdOnEndDate = ''
         this.getdt = this.getdt.bind(this)
-        this.PrintScreen = this.PrintScreen.bind(this)
+        this.PrintElem = this.PrintElem.bind(this)
         this.OnGroupBy = this.OnGroupBy.bind(this)
         this.railcarArrival = '';
         this.getCreatedDate = this.getCreatedDate.bind(this);
@@ -168,6 +168,23 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.Query[e.target.id] = e.target.getAttribute('value')
         document.getElementById('railcarSearch').value = e.target.getAttribute('value')
     }
+PrintElem(elem)
+{
+    var mywindow = window.open('', 'PrintWindow', '');
+    mywindow.document.write('<html><head><title>' + document.title  + '</title>');
+   // mywindow.document.write('<link rel="stylesheet" href={../../../public/stylesheets/style.css} type="text/css" />');
+    mywindow.document.write('</head><body ><table border="0">');
+    mywindow.document.write(document.getElementById('Packaging_Instruction_View').innerHTML);
+    mywindow.document.write('</table></body></html>');
+    debugger
+    mywindow.document.close(); // necessary for IE >= 10
+    mywindow.focus(); // necessary for IE >= 10*/
+    mywindow.print();
+    mywindow.close();
+    return true
+
+    //window.location.reload()
+}
     PrintScreen(){
         var scrollLeft = document.getElementsByClassName("loadedContentNew")[0].scrollLeft
          ;
@@ -1380,7 +1397,7 @@ export default class PackagingInstructionViewForm extends React.Component {
                                     <FilterButton buttonDisplay = {this.buttonDisplay}  onButtonRemove = {this.onButtonRemove} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
                                     <div className="col-lg-3 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
                                         <div className="pull-right ">
-                                            <a href="javascript:void(0)"  name = "setting" onClick={this.handleOpen}><span >Setting</span></a>
+                                            <button className="btn btn-primary" onClick={this.handleOpen}> <i className="fa fa-cogs" aria-hidden="true"></i> Columns</button>
                                         </div>
 
                                     </div>
@@ -1495,7 +1512,7 @@ export default class PackagingInstructionViewForm extends React.Component {
 
                                         <div className="pull-left margin-10-last-l"><button type="button" onClick = {(e)=>{this.print(e)}} className="btn  btn-gray">Print Packaging Instruction</button></div>
                                         <div className="pull-left margin-10-all"><button type="button" onClick={this.addToQueue} className="btn  btn-gray">Add To Queue</button></div>
-                                        <div className="pull-left margin-10-all"><button type="button" onClick={this.PrintScreen}  className="btn  btn-gray">Print</button></div>
+                                        <div className="pull-left margin-10-all"><button type="button" onClick={this.PrintElem}  className="btn  btn-gray">Print</button></div>
                                         <div className="pull-right margin-10-last-r"><button type="button" onClick={(e) => this.onViewClick(e)} className="btn  btn-primary">View</button></div>
                                         <div className="pull-right margin-10-all"><button type="button" id="edit_btn" onClick={this.onEdit}  className="btn  btn-orange">EDIT</button></div>
                                         <div className="pull-right margin-10-all"><button type="button" onClick = {(e) => this.onConfirmClick(e)}  className="btn  btn-default">Confirm</button></div>

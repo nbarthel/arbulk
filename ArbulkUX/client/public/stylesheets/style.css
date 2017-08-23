@@ -857,3 +857,12 @@ td.rdtYear:hover {
     font-size: 1.2em;
     margin-top: 37px;
 }
+.ModelHEading{padding-top:10px!important;padding-bottom:10px!important;margin-bottom:10px!important;}
+.wrapperModelNew ul{
+    padding: 10px;
+    height: 210px;
+    overflow: auto;
+    background: #f5f5f5;}
+.wrapperModelNew ul li{padding-left:5px;}
+.wrapperModelNew .btn{min-width:100px;margin-bottom:10px;}
+.wrapperModelNew #btnAdd{margin-top:60px;}

@@ -81,7 +81,7 @@ class  ShipmentViewForm extends React.Component
             this.qArray = []
             this.addToQueue = this.addToQueue.bind(this)
             this.tempLotId = ""
-            this.PrintScreen = this.PrintScreen.bind(this)
+            this.PrintElem = this.PrintElem.bind(this)
             this.headerCheckboxChange = this.headerCheckboxChange.bind(this)
             this.OnGroupBy = this.OnGroupBy.bind(this)
             this.toggleColumn = this.toggleColumn.bind(this)
@@ -170,6 +170,23 @@ onViewClick(e){
          }
      })
  }
+ PrintElem(elem)
+{
+    var mywindow = window.open('', 'PrintWindow', 'width=750,height=650,top=50,left=100,toolbars=no,scrollbars=yes,status=no,resizable=yes,');
+    mywindow.document.write('<html><head><title>' + document.title  + '</title>');
+   // mywindow.document.write('<link rel="stylesheet" href={../../../public/stylesheets/style.css} type="text/css" />');
+    mywindow.document.write('</head><body ><table border="0" width="10">');
+    mywindow.document.write(document.getElementById('Packaging_Instruction_View').innerHTML);
+    mywindow.document.write('</table></body></html>');
+    debugger
+    mywindow.document.close(); // necessary for IE >= 10
+    mywindow.focus(); // necessary for IE >= 10*/
+    mywindow.print();
+    mywindow.close();
+    return true
+
+    //window.location.reload()
+}
 PrintScreen(){
   var scrollLeft = document.getElementsByClassName("loadedContentNew")[0].scrollLeft
   document.getElementsByClassName('pos-relative-b')[0].style.display = 'none'
@@ -177,14 +194,14 @@ PrintScreen(){
   document.getElementById("nonPrintable").style.display = "none"
   document.getElementById("row").style.display = "none"
   document.getElementById("hide1").style.display = "none"
-  // document.getElementById("hide2").style.display = "none"
-  // document.getElementById("hide3").style.display = "none"
+  document.getElementById("hide2").style.display = "none"
+  document.getElementById("hide3").style.display = "none"
   document.getElementById("hide4").style.display = "none"
   document.getElementById("hide5").style.display = "none"
   document.getElementById("customer_name").style.display = "none"
   document.getElementsByClassName("loadedContentNew")[0].style.cssText=""
   document.getElementsByClassName("loadedContentNew")[0].style.height="100%"
-    document.getElementsByClassName("loadedContentNew")[0].style.maxHeight="100%"
+  document.getElementsByClassName("loadedContentNew")[0].style.maxHeight="100%"
   document.getElementsByClassName("loadedContentNew")[0].scrollLeft = scrollLeft
   var printContent = document.getElementById('Packaging_Instruction_View').innerHtml
   document.body.innerHtml = printContent
@@ -1778,8 +1795,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                                                                        <FilterButton buttonDisplay = {this.buttonDisplay}  onButtonRemove = {this.onButtonRemove} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
                                                                         <div className="col-lg-2 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
                                                                             <div className="pull-right ">
-                                                                                <a href="javascript:void(0)"  name = "setting" onClick={this.handleOpen}><span >Setting</span></a>
-                                                                            </div>
+                                                                                <button className="btn btn-primary" onClick={this.handleOpen}> <i className="fa fa-cogs" aria-hidden="true"></i> Columns</button> </div>
 
                                                                         </div>
                                                                         <div className="col-lg-3 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
@@ -1862,7 +1878,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                                                                                 }
                                                                              <div className="pull-left margin-10-all"><button type="button"  className="btn  btn-gray text-uppercase" onClick = {(e) => {this.print(e)}}>Print Load Order</button></div>
                                                                              <div className="pull-left margin-10-all"><button type="button" onClick = {(e) => {this.allocateContainer(e)} }  className="btn  btn-primary text-uppercase">Allocate Container</button></div>
-                                                                             <div className="pull-left margin-10-all"><button type="button" onClick={this.PrintScreen}  className="btn  btn-gray">Print</button></div>
+                                                                             <div className="pull-left margin-10-all"><button type="button" onClick={this.PrintElem}  className="btn  btn-gray">Print</button></div>
 
                                                                                 <div className="pull-right margin-10-last-r"><button type="button"  className="btn  btn-primary text-uppercase" onClick = {this.onViewClick.bind(this)}>VIEW</button></div>
                                                                                 <div className="pull-right margin-10-all"><button type="button"  className="btn  btn-orange text-uppercase" onClick={(e) =>this.onEditClick(e)}>EDIT</button></div>

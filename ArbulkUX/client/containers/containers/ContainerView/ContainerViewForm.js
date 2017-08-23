@@ -61,7 +61,7 @@ class ContainerViewForm extends React.Component {
         this.handleTextChange = this.handleTextChange.bind(this)
         this.viewChange = this.viewChange.bind(this)
         this.addToqueue = this.addToqueue.bind(this)
-        this.PrintScreen = this.PrintScreen.bind(this)
+        this.PrintElem = this.PrintElem.bind(this)
         this.onSteamShipFilter = this.onSteamShipFilter.bind(this)
         this.SteamLineArray = []
         this.OnGroupBy = this.OnGroupBy.bind(this)
@@ -147,6 +147,23 @@ class ContainerViewForm extends React.Component {
             value: this.arrivalType
         })
         this.onSearch(e)
+    }
+    PrintElem(elem)
+    {
+        var mywindow = window.open('', 'PrintWindow', '');
+        mywindow.document.write('<html><head><title>' + document.title  + '</title>');
+        // mywindow.document.write('<link rel="stylesheet" href={../../../public/stylesheets/style.css} type="text/css" />');
+        mywindow.document.write('</head><body ><table border="0">');
+        mywindow.document.write(document.getElementById('Packaging_Instruction_View').innerHTML);
+        mywindow.document.write('</table></body></html>');
+        debugger
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10*/
+        mywindow.print();
+        mywindow.close();
+        return true
+
+        //window.location.reload()
     }
 
     PrintScreen() {
@@ -1474,7 +1491,7 @@ class ContainerViewForm extends React.Component {
                                                   Query={this.Query} onSearch={this.onSearch}/>
                                     <div className="col-lg-2 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
                                         <div className="pull-right ">
-                                            <a href="javascript:void(0)"  name = "setting" onClick={this.handleOpen}><span >Setting</span></a>
+                                            <button className="btn btn-primary" onClick={this.handleOpen}> <i className="fa fa-cogs" aria-hidden="true"></i> Columns</button>
                                         </div>
 
                                     </div>
@@ -1557,7 +1574,7 @@ class ContainerViewForm extends React.Component {
                                                     </button>
                                                 </div>
                                                 <div className="pull-left margin-10-all">
-                                                    <button type="button" onClick={this.PrintScreen}
+                                                    <button type="button" onClick={this.PrintElem}
                                                             className="btn  btn-gray">Print
                                                     </button>
                                                 </div>

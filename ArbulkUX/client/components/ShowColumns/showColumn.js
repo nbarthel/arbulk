@@ -75,7 +75,7 @@ class showColumn extends React.Component{
         for (var i = 0; i < lis.length; i++) {
             lis[i].style.backgroundColor = ""
         }
-        document.getElementById(e.target.id).style.backgroundColor = "blue"
+        document.getElementById(e.target.id).style.backgroundColor = "#cbd3ff"
         document.getElementById("btnAdd").disabled = false
         document.getElementById("btnAdd").onclick = this.AddOrRemove
         document.getElementById("btnRemove").disabled = true
@@ -100,7 +100,7 @@ class showColumn extends React.Component{
         for(var i=0;i<lis.length;i++){
             lis[i].style.backgroundColor=""
         }
-        document.getElementById(e.target.id).style.backgroundColor="blue";
+        document.getElementById(e.target.id).style.backgroundColor="#cbd3ff";
         document.getElementById("btnRemove").disabled = false;
         document.getElementById("btnRemove").onclick = this.AddOrRemove;
         document.getElementById("btnAdd").disabled = true;
@@ -162,22 +162,23 @@ class showColumn extends React.Component{
         })
         return(
             <Dialog
-                title="Set column to visible"
+                title="Show Columns"
                 actions={actions}
                 modal={false}
                 open={this.props.open}
                 onRequestClose={this.props.onRequestClose}
                 autoScrollBodyContent={true}
+                titleClassName="ModelHEading"
             >
-                <div className="row">
+                <div className="row wrapperModelNew">
                     <div className="col-md-5">
                         <ul key="ULForAllColumn" id="ULForAllColumn">
                             {listOfAllcolumn}
                         </ul>
                     </div>
                     <div className="col-md-2">
-                        <button type="button" className="btn  btn-gray text-uppercase" id="btnAdd" onClick={(e)=>{this.AddOrRemove(e)}} disabled>Add</button>
-                        <button type="button" className="btn  btn-gray text-uppercase" id="btnRemove" onClick={(e)=>{this.AddOrRemove(e)}} disabled>Remove</button>
+                        <button type="button" className="btn  text-uppercase btn-primary" id="btnAdd" onClick={(e)=>{this.AddOrRemove(e)}} disabled>Add <i className="fa fa-angle-double-right"></i></button>
+                        <button type="button" className="btn  text-uppercase btn-danger" id="btnRemove" onClick={(e)=>{this.AddOrRemove(e)}} disabled><i className="fa fa-angle-double-left"></i> Remove </button>
                     </div>
                     <div className="col-md-5">
                         <ul key="ULForVisibleColumn" id="ULForVisibleColumn">

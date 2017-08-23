@@ -1429,7 +1429,7 @@ class ShipmentViewDataComponent extends React.Component {
 
         return (
             <Loader loaded={this.state.loaded}>
-                <div className="loadedContentNew">
+                <div className="loadedContentNew" id="loadedContentNew">
                     <table id="Packaging_Instruction_View" style={{width:"100%"}} className="table table-expandable table-striped" cellSpacing="0">
                         <thead className="table_head header-fixed header sorted_head ">
                         {(grouping && this.props.SelcetedOptionForGroupBy != "") ?
