@@ -31,10 +31,7 @@ app.use(webpackHotMiddleware(compiler));
 
      res.sendFile(path.join(__dirname, '../client/index.html'));
   })
-  // app.use(loopback.static(__dirname + '/dist'));
-  // app.get('*', function response(req, res) {
-  //   res.sendFile(path.join(__dirname, '../client/index.html'));
-  // });
+
 }
 
 
