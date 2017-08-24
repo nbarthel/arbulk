@@ -20,7 +20,12 @@ class CompanyNameFilterPage extends React.Component{
             console.log(err)
         })
     }
-
+    componentWillReceiveProps(nextProps){
+        debugger
+        if(nextProps.locationSelected && nextProps.locationSelected.length>0){
+            this.refs[nextProps.locationSelected[nextProps.locationSelected.length-1]].checked = true;
+        }
+    }
 
     render(){
 
@@ -28,7 +33,7 @@ class CompanyNameFilterPage extends React.Component{
             return (
                 <li key={location.id}>
                             <label className="control control--checkbox">{location.locationName}
-                                <input type="checkbox" value={location.locationName} onChange={(e) => this.props.onCompanyFilter(e,location)} id={location.id}/><div className="control__indicator"></div>
+                                <input ref = {location.id} type="checkbox" value={location.locationName} onChange={(e) => this.props.onCompanyFilter(e,location)} id={location.id}/><div className="control__indicator"></div>
                             </label>
                         </li>
 

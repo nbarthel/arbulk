@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import  { PropTypes } from 'react';
 import { createDataLoader } from 'react-loopback';
 import { hashHistory } from 'react-router'
 import FilterComponent from '../../../components/FilterComponent';
@@ -10,6 +11,7 @@ import '../../../public/stylesheets/sweetalert.css';
 import axios from 'axios'
 import {Base_Url} from '../../../constants';
 import '../../../public/stylesheets/style.css'
+import sweetalert from 'sweetalert-react'
 export default class PackagingInstructionViewForm extends React.Component {
     constructor(props){
         super(props);
@@ -46,7 +48,8 @@ export default class PackagingInstructionViewForm extends React.Component {
             OptionToGroupby :["ARB","Customer","PO#","Railcar#","Lot#","Material","Status","Railcar Status"],
             SelcetedOptionForGroupBy : "",
             columns:[],
-            open: false
+            open: false,
+            locationSelected:[]
         }
         this.status
         this.buttonDisplay = [ ]
@@ -86,6 +89,7 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.createdOnEndDate = ''
         this.getdt = this.getdt.bind(this)
         this.PrintElem = this.PrintElem.bind(this)
+        this.print = this.print.bind(this);
         this.OnGroupBy = this.OnGroupBy.bind(this)
         this.railcarArrival = '';
         this.getCreatedDate = this.getCreatedDate.bind(this);
@@ -182,35 +186,11 @@ PrintElem(elem)
     mywindow.print();
     mywindow.close();
     return true
-
-    //window.location.reload()
 }
-    PrintScreen(){
-        var scrollLeft = document.getElementsByClassName("loadedContentNew")[0].scrollLeft
-         ;
-        document.getElementsByClassName('pos-relative-b')[0].style.display = 'none'
-        document.getElementsByClassName('filter-btn')[0].style.display = 'none'
-        document.getElementById("nonPrintable").style.display = "none"
-        document.getElementById("row").style.display = "none"
-        document.getElementById("hide1").style.display = "none"
-        document.getElementById("hide2").style.display = "none"
-        document.getElementById("hide3").style.display = "none"
-        document.getElementById("hide4").style.display = "none"
-        document.getElementById("hide5").style.display = "none"
-        document.getElementById("customer_name").style.display = "none"
-        document.getElementsByClassName("loadedContentNew")[0].style.cssText=""
-        document.getElementsByClassName("loadedContentNew")[0].style.height="100%"
-        document.getElementsByClassName("loadedContentNew")[0].style.maxHeight="100%"
-        document.getElementsByClassName("loadedContentNew")[0].scrollLeft = scrollLeft
-        var printContent = document.getElementById('Packaging_Instruction_View').innerHtml
-        console.log(printContent)
-        document.body.innerHtml = printContent
-        window.print()
-        window.location.reload()
-
-    }
     onSearch(e) {
+        debugger
         var cutofFilter = []
+
         var flagForcutOffFilter = false
         var CreatedOnfilter = []
         var flagForCreatedOnfilter = false
@@ -257,8 +237,7 @@ PrintElem(elem)
 
         var serachObj = []
         var serachObjLots =[]
-        if (this.Where != undefined && this.Where!= null)
-        {
+        if (this.Where != undefined && this.Where!= null) {
             if(this.Where.Customer && this.Where.Customer.length >0){
                 var customer = []
                 var obj = {}
@@ -508,7 +487,7 @@ PrintElem(elem)
         this.onSearch(e);
     }
     onCompanyFilter(e,location){
-
+        debugger
         if(e.target.checked){
             this.forceUpdate()
             this.checkedCompany.push(e.target.id)
@@ -516,6 +495,7 @@ PrintElem(elem)
                 writable: true,
                 configurable:true,
                 value:this.checkedCompany})
+            this.state.locationSelected.push(e.target.id)
 
         }
         else if (!e.target.checked){
@@ -530,10 +510,15 @@ PrintElem(elem)
             let index = this.buttonDisplay.indexOf(e.target.value)
             if(index !== -1)
                 this.buttonDisplay = _.without(this.buttonDisplay,value)
+            for(let i =0 ;i<this.state.locationSelected.length;i++){
+                if(this.state.locationSelected[i].toString() == id.toString()){
+                    this.state.locationSelected.splice(i,1);
+                }
+            }
+
             this.forceUpdate()
         }
         this.onSearch(e)
-
     }
     onCustomerFilter(e,customer){
         if(e.target.checked){
@@ -616,30 +601,23 @@ PrintElem(elem)
         this.setState({
             Text  : e.target.value
         })
-
     }
     viewChange(e){
-         
+        debugger
+        debugger
         var index = e.target.selectedIndex ;
         var blob = e.target.value
-        var changedView = this.state.savedViews[index -1]
         this.Where = JSON.parse(blob)
-
-
         var cutofFilter = []
         var flagForcutOffFilter = false
-
-
         if(this.Where.CutofFilter){
             this.startDate = new Date(this.Where.CutofFilter[0].cargoCutoffDate)
             this.endDate = new Date(this.Where.CutofFilter[this.Where.CutofFilter.length-1].cargoCutoffDate)
         }
         if(this.startDate && this.endDate) {
-
             var cutoffDate = []
             cutoffDate.push(this.startDate)
             cutoffDate.push(this.endDate)
-
             var objdate = {}
             for(var j in cutoffDate){
                 objdate = {"cargoCutoffDate" : cutoffDate[j]}
@@ -649,15 +627,11 @@ PrintElem(elem)
                 writable: true,
                 configurable: true,
                 value:cutofFilter})
-
             flagForcutOffFilter = true
-
         }
-
         var serachObj = []
         var serachObjLots =[]
-        if (this.Where != undefined && this.Where!= null)
-        {
+        if (this.Where != undefined && this.Where!= null) {
             if(this.Where.railcar_status===true){
                 var arrivalSerach = [{'railcar_status':'ARRIVED'}]
                 serachObjLots.push(arrivalSerach)
@@ -666,7 +640,7 @@ PrintElem(elem)
                 var arrivalSerach = [{'railcar_status':'INTRANSIT'}]
                 serachObjLots.push(arrivalSerach)
             }
-            if(this.Where.created_on.length==2){
+            if(this.Where.created_on && this.Where.created_on.length==2){
                 var createdStartOnObj = [{'created_on':{'gte':new Date(this.Where.created_on[0].created_on)}}]
                 var createdEndObj = [{'created_on':{'lte':new Date(this.Where.created_on[1].created_on)}}]
                 serachObj.push(createdStartOnObj);
@@ -675,13 +649,17 @@ PrintElem(elem)
             if(this.Where.Customer && this.Where.Customer.length >0){
                 var customer = []
                 var obj = {}
+                let tempObj = [];
                 for(var i in this.Where.Customer){
+                    tempObj.push(this.Where.Customer[i])
+                    this.checkedCompany.push(this.Where.Customer[i])
+                    this.setState({
+                        locationSelected : tempObj
+                    })
                     obj = {"customer_id" : this.Where.Customer[i] }
                     customer.push(obj);
                 }
-
             }
-
             if(this.Where.Company && this.Where.Company.length > 0){
                 var company = [] ;
                 var objCompany = {}
@@ -692,9 +670,7 @@ PrintElem(elem)
                 }
 
             }
-
             if(this.Where.status && this.Where.status.length){
-
                 var Railstatus = [];
                 var objStatus = {};
                 for(var z in this.Where.status){
@@ -703,23 +679,18 @@ PrintElem(elem)
                 }
                 serachObjLots.push(Railstatus)
             }
-
             if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.POSearch && this.Where.Query.POSearch!= undefined ){
                 var poSearch =  [ {'po_number': {"like": "%" + this.Where.Query.POSearch + "%"}}]
                 serachObj.push(poSearch)
             }
-
-
             if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.railcarSearch && this.Where.Query.railcarSearch!= undefined ){
                 var railSearch = [{'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}}]
                 serachObjLots.push(railSearch)
             }
-
             if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.LotSearch && this.Where.Query.LotSearch!= undefined ){
                 var lotSearch =  [{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
                 serachObjLots.push(lotSearch)
             }
-
             serachObj = [].concat.apply([], serachObj);
             serachObjLots = [].concat.apply([], serachObjLots);
             var PIview = createDataLoader(PackagingInstructionViewForm, {
@@ -785,7 +756,6 @@ PrintElem(elem)
                     }
                 });
             }
-
 
             $.ajax({
                 url: this.urlSearch,
@@ -1365,7 +1335,7 @@ PrintElem(elem)
                 <div className="container">
                     <div className="row-fluid">
 
-                        <FilterComponent getdt = {this.getdt} startDate = {this.StartDate} endDate = {this.EndDate} key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter} onRailCarArrivalFilter={this.onRailCarArrivalFilter} getCreatedDate={this.getCreatedDate} shipmentRecived={this.shipmentRecived}/>
+                        <FilterComponent locationSelected = {this.state.locationSelected} getdt = {this.getdt} startDate = {this.StartDate} endDate = {this.EndDate} key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter} onRailCarArrivalFilter={this.onRailCarArrivalFilter} getCreatedDate={this.getCreatedDate} shipmentRecived={this.shipmentRecived}/>
                         <div id="filter-grid">
                             <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
                                 <div className="pull-right margin-30-right" id="hide2">
