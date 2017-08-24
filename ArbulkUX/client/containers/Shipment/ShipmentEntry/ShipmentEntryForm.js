@@ -181,7 +181,7 @@ class ShipmentEntryForm extends React.Component {
             "where" : {type : "CUSTOMER" }
         })
 
-        axios.get(Base_Url + "TShipmentTypes/").then((response) => {
+        axios.get(Base_Url + "TShipmentTypes?filter=%7B%22where%22%3A%7B%22active%22%3A1%7D%7D").then((response) => {
             this.setState({
                 ShipmentType: response.data
             })

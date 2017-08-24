@@ -114,7 +114,7 @@ class ViewPackagingMaterial extends React.Component{
             </div>
 
 <div className="row-fluid pddn-50-btm padding-top-btm-xs">
-<div className="pull-right margin-10-all"><button type="button" className="btn  btn-orange" onClick={this.update} >Update</button></div>
+<div className="pull-right margin-10-all"><button type="button" className="btn  btn-orange" onClick={this.update} >Edit</button></div>
 </div>
       </div>
         <Footer />

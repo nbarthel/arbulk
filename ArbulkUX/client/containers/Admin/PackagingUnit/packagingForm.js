@@ -34,7 +34,7 @@ class PackagingForm extends React.Component {
         let errors = { }
         if(this.createUsrObj.packagingType == "")
         {
-            errors.name = "Unit Name is Required.";
+            errors.name = "Unit name is required.";
             this.error = true;
         }
         if(this.error){

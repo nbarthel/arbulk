@@ -81,7 +81,7 @@ class ShipmentForm extends React.Component {
                                                className="form-control"
                                                id="shipmentType"
                                                onChange = {this.onUserInfoChange}
-                                               placeholder="Enter unit name"/>
+                                               placeholder="Enter shipment type"/>
                                         { this.state.errors.name &&
                                         <span>{this.state.errors.name}</span>
                                         }
