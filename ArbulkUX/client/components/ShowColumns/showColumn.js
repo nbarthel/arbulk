@@ -23,6 +23,7 @@ class showColumn extends React.Component{
         this.OnRemoveColumn = this.OnRemoveColumn.bind(this);
         this.AddOrRemove = this.AddOrRemove.bind(this);
         this.tempVisibleColumn = [];
+        this.tempAllcolumns = [];
     }
     componentWillReceiveProps(nextProps){
         var userId = localStorage.getItem("userId")
@@ -76,21 +77,26 @@ class showColumn extends React.Component{
         for (var i = 0; i < lis.length; i++) {
             lis[i].style.backgroundColor = ""
         }
-        document.getElementById(e.target.id).style.backgroundColor = "#cbd3ff"
+        if(document.getElementById(e.target.id).style.backgroundColor===""){
+            document.getElementById(e.target.id).style.backgroundColor = "#cbd3ff"
+        }
+        else{
+            document.getElementById(e.target.id).style.backgroundColor = ""
+        }
         document.getElementById("btnAdd").disabled = false
         document.getElementById("btnAdd").onclick = this.AddOrRemove
         document.getElementById("btnRemove").disabled = true
-        for (var i = 0; i < this.tempVisibleColumn.length; i++) {
-            if (this.tempVisibleColumn[i].columnName && e.target.innerText.toUpperCase() === this.tempVisibleColumn[i].columnName.toUpperCase()) {
-                flag = true;
+
+        var data = this.tempVisibleColumn;
+        var obj = {"columnName":e.target.innerText}
+        data.push(obj);
+        this.tempVisibleColumn = data;
+        this.tempAllcolumns = this.state.allCoulmns
+        for(var i =0;i<this.tempAllcolumns.length;i++){
+            if(this.tempAllcolumns[i].columnName==e.target.innerText){
+                this.tempAllcolumns.splice(i,1)
                 break;
             }
-        }
-        if(!flag){
-            var data = this.tempVisibleColumn;
-            var obj = {"columnName":e.target.innerText}
-            data.push(obj);
-            this.tempVisibleColumn = data;
         }
     }
 
@@ -101,7 +107,12 @@ class showColumn extends React.Component{
         for(var i=0;i<lis.length;i++){
             lis[i].style.backgroundColor=""
         }
-        document.getElementById(e.target.id).style.backgroundColor="#cbd3ff";
+        if(document.getElementById(e.target.id).style.backgroundColor===""){
+            document.getElementById(e.target.id).style.backgroundColor = "#cbd3ff"
+        }
+        else{
+            document.getElementById(e.target.id).style.backgroundColor = ""
+        }
         document.getElementById("btnRemove").disabled = false;
         document.getElementById("btnRemove").onclick = this.AddOrRemove;
         document.getElementById("btnAdd").disabled = true;
@@ -113,13 +124,17 @@ class showColumn extends React.Component{
                 break;
             }
         }
+        var tempAllColumn = this.state.allCoulmns;
+        tempAllColumn.push({"columnName":e.target.innerText});
     }
     AddOrRemove(e){
         debugger
         var data = this.tempVisibleColumn;
+        var allColumnData = this.tempAllcolumns;
         this.setState({
             recvdColumns : true,
-            visibleColumns:data
+            visibleColumns:data,
+            allCoulmns:allColumnData
         });
         this.forceUpdate();
     }
