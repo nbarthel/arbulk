@@ -268,6 +268,24 @@ export default function createRoutes(store) {
 				.catch(errorLoading)
 		}
 	},
+        {
+            path: '/Admin/addPackaginUnit',
+            name: <span>Admin<i className="fa fa-angle-double-right"/>Add Pallet</span>,
+            getComponent(nextState, cb){
+                System.import('./containers/Admin/PackagingUnit/UnitPage')
+                    .then(loadModule(cb))
+                    .catch(errorLoading)
+            }
+        },
+        {
+            path: '/Admin/updateUnit/(:unitId)',
+            name: <span>Admin<i className="fa fa-angle-double-right"/>Add Pallet</span>,
+            getComponent(nextState, cb){
+                System.import('./containers/Admin/PackagingUnit/UpdateUnit')
+                    .then(loadModule(cb))
+                    .catch(errorLoading)
+            }
+        },
 	{
 		path: '/Admin/addStretchWrap',
 		name: <span>Admin<i className="fa fa-angle-double-right"/>Add Pallet</span>,

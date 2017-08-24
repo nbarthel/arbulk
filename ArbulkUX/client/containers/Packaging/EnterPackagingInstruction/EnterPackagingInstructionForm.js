@@ -140,7 +140,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
           console.log(err)
         })
 
-    axios.get(Base_Url+"TPackagingTypes").then((response) => {
+    axios.get(Base_Url+"TPackagingTypes?filter=%7B%22where%22%3A%7B%22active%22%3A1%7D%7D").then((response) => {
       this.setState({
         packagingtype : response.data
       })

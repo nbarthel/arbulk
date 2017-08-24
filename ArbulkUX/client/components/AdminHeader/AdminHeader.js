@@ -45,7 +45,8 @@ export default class AdminHeader extends React.Component {
 								 <li><Link to ="/Admin/AddMaterial">Add Material</Link></li>
 								 <li role="separator" className="divider"></li>
 								 <li><Link to ="/Admin/addPallet">Add Pallet</Link></li>
-								 <li><Link to ="/Admin/addStretchWrap">Add Stretch wrap</Link></li>
+								 <li><Link to ="/Admin/addStretchWrap">Add Stretch Wrap</Link></li>
+								 <li><Link to ="/Admin/addPackaginUnit">Add Packaging Unit</Link></li>
 							 </ul>
 						 </li>
 
