@@ -2,9 +2,8 @@
  * Created by ankit on 3/8/17.
  */
 import React from  'react';
-var DatePicker = require('react-datepicker');
-var moment = require('moment');
-require('react-datepicker/dist/react-datepicker.css');
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 class ShippedDateFilter extends React.Component {
     constructor(props){
