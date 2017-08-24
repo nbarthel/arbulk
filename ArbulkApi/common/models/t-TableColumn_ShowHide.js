@@ -13,7 +13,10 @@ module.exports = function(TColumnShowHide) {
     });
     TColumnShowHide.remoteMethod('getAllColumns',{
         description: 'Get all Column that are not visible',
-        accepts: { arg: 'name', type: 'string'} ,
+        accepts: [
+                    { arg: 'name', type: 'string'},
+                    { arg: 'userId', type: 'number'}
+                 ] ,
         returns: { type: 'object',root: true},
         http: {path:"/getAllColumns", verb: 'get'}
     });
@@ -25,7 +28,7 @@ module.exports = function(TColumnShowHide) {
     });
     TColumnShowHide.getAllVisibleColumnName = function(name,userId,cb){
         var ds = TColumnShowHide.dataSource;
-        var sql ="select distinct columnName from t_TableColumn_ShowHide where `tableName` = '" + name +"' and `show` = 1 and userId =" + userId
+        var sql ="select distinct columnName from t_TableColumn_ShowHide where `tableName` = '" + name +"' and `show` = 1 and `userId` =" + userId
         console.log(sql)
         ds.connector.query(sql, function (err, result) {
             if (err) {
@@ -36,10 +39,10 @@ module.exports = function(TColumnShowHide) {
             cb(null, result);
         });
     }
-    TColumnShowHide.getAllColumns = function(name,cb){
+    TColumnShowHide.getAllColumns = function(name,userId ,cb){
         debugger
         var ds = TColumnShowHide.dataSource;
-        var sql ="select distinct columnName from t_TableColumn_ShowHide where tableName = '" + name +"'"
+        var sql ="select distinct columnName from t_TableColumn_ShowHide where `tableName` = '" + name +"' and `show` = 0 and `userId` =" + userId
         console.log(sql);
         ds.connector.query(sql, function (err, result) {
             if (err) {

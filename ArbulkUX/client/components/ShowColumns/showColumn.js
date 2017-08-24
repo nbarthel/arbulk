@@ -4,6 +4,7 @@
 import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import axios from 'axios'
 import {Base_Url} from '../../constants';
 import _ from 'lodash';
@@ -26,7 +27,7 @@ class showColumn extends React.Component{
     componentWillReceiveProps(nextProps){
         var userId = localStorage.getItem("userId")
         if(nextProps.Name && nextProps.Name!="" && !this.state.recvdColumns){
-            axios.get( Base_Url+`TColumnShowHides/getAllColumns?name=${nextProps.Name}`).then(response =>{
+            axios.get( Base_Url+`TColumnShowHides/getAllColumns?name=${nextProps.Name}&userId=${userId}`).then(response =>{
                 this.setState({
                     allCoulmns:response.data,
                     recvdColumns : true
@@ -141,6 +142,7 @@ class showColumn extends React.Component{
                 <li
                     key={"A:"+data.columnName}
                     id={"A:"+data.columnName}
+                    ref = {"A:"+data.columnName}
                     name={data.columnName}
                     onClick={(e)=>{this.OnAddColumn(e)}}>
                     {data.columnName}
@@ -154,6 +156,7 @@ class showColumn extends React.Component{
                     key ={"V:"+data.columnName}
                     id={"V:"+data.columnName}
                     name={data.columnName}
+                    ref = {"V:"+data.columnName}
                     onClick={(e)=>{this.OnRemoveColumn(e)}}>
                     {data.columnName}
                 </li>
@@ -161,6 +164,7 @@ class showColumn extends React.Component{
 
         })
         return(
+        <MuiThemeProvider>
             <Dialog
                 title="Show Columns"
                 actions={actions}
@@ -189,6 +193,7 @@ class showColumn extends React.Component{
 
 
             </Dialog>
+        </MuiThemeProvider>
         )
     }
 }
