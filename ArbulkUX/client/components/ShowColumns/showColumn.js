@@ -124,8 +124,9 @@ class showColumn extends React.Component{
                 break;
             }
         }
-        var tempAllColumn = this.state.allCoulmns;
-        tempAllColumn.push({"columnName":e.target.innerText});
+        let tempall = this.state.allCoulmns;
+        tempall.push({"columnName":e.target.innerText});
+        this.tempAllcolumns = tempall
     }
     AddOrRemove(e){
         debugger
