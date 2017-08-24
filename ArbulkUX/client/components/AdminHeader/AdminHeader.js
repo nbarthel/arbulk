@@ -47,6 +47,7 @@ export default class AdminHeader extends React.Component {
 								 <li><Link to ="/Admin/addPallet">Add Pallet</Link></li>
 								 <li><Link to ="/Admin/addStretchWrap">Add Stretch Wrap</Link></li>
 								 <li><Link to ="/Admin/addPackaginUnit">Add Packaging Unit</Link></li>
+								 <li><Link to ="/Admin/addshipmentType">Add Shipment Type</Link></li>
 							 </ul>
 						 </li>
 

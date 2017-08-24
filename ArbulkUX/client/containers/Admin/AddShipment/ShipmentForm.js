@@ -8,14 +8,14 @@ import axios from 'axios';
 import { Base_Url } from '../../../constants'
 import SweetAlert from 'sweetalert-react'
 import '../../../public/stylesheets/sweetalert.css';
-class PackagingForm extends React.Component {
+class ShipmentForm extends React.Component {
 
     constructor(props){
         super(props);
 
         this.createUsrObj = {
             "id":0,
-            "packagingType" : '',
+            "shipmentType" : '',
             'active':1
         }
         this.state = {
@@ -32,9 +32,9 @@ class PackagingForm extends React.Component {
     isValid(){
         this.error = false;
         let errors = { }
-        if(this.createUsrObj.packagingType == "")
+        if(this.createUsrObj.shipmentType == "")
         {
-            errors.name = "Unit Name is Required.";
+            errors.name = "Type is Required.";
             this.error = true;
         }
         if(this.error){
@@ -48,10 +48,10 @@ class PackagingForm extends React.Component {
         e.preventDefault()
         if(this.isValid() == false){
             console.log(this.createUsrObj);
-            axios.post(Base_Url+"TPackagingTypes",this.createUsrObj).then((response)=>{
+            axios.post(Base_Url+"TShipmentTypes",this.createUsrObj).then((response)=>{
                 swal({
                     title: "Success",
-                    text: "Packaging unit added.",
+                    text: "Shipment type added.",
                     type: "success",
                     showCancelButton: false,
                     confirmButtonColor: "#DD6B55",
@@ -73,13 +73,13 @@ class PackagingForm extends React.Component {
                     <div className="create_user col-lg-8 col-md-8 col-sm-12 col-xs-12">
                         <form className=" bs-component">
                             <fieldset className="scheduler-border">
-                                <legend className="scheduler-border">Add Packaging Unit</legend>
+                                <legend className="scheduler-border">Add Shipment Type</legend>
                                 <div className="col-lg-6  col-md-6 col-sm-6 col-xs-12">
                                     <label htmlFor="Weight">Name</label>
                                     <div className={this.state.errors.name ? "form-group has error" : "form-group"}>
                                         <input type="text"
                                                className="form-control"
-                                               id="packagingType"
+                                               id="shipmentType"
                                                onChange = {this.onUserInfoChange}
                                                placeholder="Enter unit name"/>
                                         { this.state.errors.name &&
@@ -92,7 +92,7 @@ class PackagingForm extends React.Component {
                                         <button  type="submit"
                                                  onClick = {this.onSubmit}
                                                  className="btn  btn-primary text-uppercase"
-                                        >Add Unit</button>
+                                        >Add Type</button>
                                     </div>
                                 </div>
                             </fieldset>
@@ -104,4 +104,4 @@ class PackagingForm extends React.Component {
         );
     }
 }
-export default PackagingForm;
+export default ShipmentForm;

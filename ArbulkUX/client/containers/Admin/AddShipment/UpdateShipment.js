@@ -10,20 +10,20 @@ import axios from 'axios';
 import { Base_Url } from '../../../constants'
 import SweetAlert from 'sweetalert-react'
 import '../../../public/stylesheets/sweetalert.css';
-class UpdateUnit extends React.Component {
+class UpdateShipment extends React.Component {
 
     constructor(props){
         super(props);
         this.createUsrObj = {
             "id":0,
-            "packagingType" : '',
+            "shipmentType" : '',
             'active':1
         }
         this.state = {
             errors : { },
             createUsrObj : {
                 "id":0,
-                "packagingType" : '',
+                "shipmentType" : '',
                 'active':1
             }
         }
@@ -33,11 +33,11 @@ class UpdateUnit extends React.Component {
     }
     componentWillMount()
     {
-        axios.get(Base_Url+"TPackagingTypes/"+this.props.params.unitId).then((response)=>{
+        axios.get(Base_Url+"TShipmentTypes/"+this.props.params.typeId).then((response)=>{
             if(response.data)
             {
                 this.createUsrObj.id =response.data.id;
-                this.createUsrObj.packagingType =response.data.packagingType;
+                this.createUsrObj.shipmentType =response.data.shipmentType;
                 this.createUsrObj.active =response.data.active;
                 this.setState({
                     createUsrObj: this.createUsrObj
@@ -56,9 +56,9 @@ class UpdateUnit extends React.Component {
     isValid(){
         this.error = false;
         let errors = { }
-        if(this.state.createUsrObj.packagingType == "")
+        if(this.state.createUsrObj.shipmentType == "")
         {
-            errors.name = "Unit name is required.";
+            errors.name = "Shipment type is required.";
             this.error = true;
         }
         if(this.error){
@@ -72,10 +72,10 @@ class UpdateUnit extends React.Component {
         e.preventDefault()
         if(this.isValid() == false){
             console.log(this.state.createUsrObj);
-            axios.put(Base_Url+"TPackagingTypes/"+this.props.params.unitId,this.state.createUsrObj).then((response)=>{
+            axios.put(Base_Url+"TShipmentTypes/"+this.props.params.typeId,this.state.createUsrObj).then((response)=>{
                 swal({
                     title: "Success",
-                    text: "Packaging unit updated successfully.",
+                    text: "Shipment type updated successfully.",
                     type: "success",
                     showCancelButton: false,
                     confirmButtonColor: "#DD6B55",
@@ -99,14 +99,14 @@ class UpdateUnit extends React.Component {
                             <div className="create_user col-lg-8 col-md-8 col-sm-12 col-xs-12">
                                 <form className="bs-component">
                                     <fieldset className="scheduler-border">
-                                        <legend className="scheduler-border">Update packaging unit</legend>
+                                        <legend className="scheduler-border">Update Shipment type</legend>
                                         <div className="col-lg-6  col-md-6 col-sm-6 col-xs-12">
                                             <label htmlFor="Weight">Name</label>
                                             <div className={this.state.errors.name ? "form-group has error" : "form-group"}>
                                                 <input type="text"
                                                        className="form-control"
-                                                       id="packagingType"
-                                                       value={this.state.createUsrObj.packagingType}
+                                                       id="shipmentType"
+                                                       value={this.state.createUsrObj.shipmentType}
                                                        onChange = {this.onUserInfoChange}
                                                        placeholder="Enter name"/>
                                                 { this.state.errors.name &&
@@ -119,7 +119,7 @@ class UpdateUnit extends React.Component {
                                                 <button  type="submit"
                                                          onClick = {this.onSubmit}
                                                          className="btn  btn-primary text-uppercase"
-                                                >Update Unit</button>
+                                                >Update Type</button>
                                             </div>
                                         </div>
                                     </fieldset>
@@ -134,4 +134,4 @@ class UpdateUnit extends React.Component {
         );
     }
 }
-export default UpdateUnit;
+export default UpdateShipment;

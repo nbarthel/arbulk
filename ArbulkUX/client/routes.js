@@ -286,6 +286,24 @@ export default function createRoutes(store) {
                     .catch(errorLoading)
             }
         },
+        {
+            path: '/Admin/addshipmentType',
+            name: <span>Admin<i className="fa fa-angle-double-right"/>Add Pallet</span>,
+            getComponent(nextState, cb){
+                System.import('./containers/Admin/AddShipment/ShipmentPage')
+                    .then(loadModule(cb))
+                    .catch(errorLoading)
+            }
+        },
+        {
+            path: '/Admin/updateShipmentType/(:typeId)',
+            name: <span>Admin<i className="fa fa-angle-double-right"/>Add Pallet</span>,
+            getComponent(nextState, cb){
+                System.import('./containers/Admin/AddShipment/UpdateShipment')
+                    .then(loadModule(cb))
+                    .catch(errorLoading)
+            }
+        },
 	{
 		path: '/Admin/addStretchWrap',
 		name: <span>Admin<i className="fa fa-angle-double-right"/>Add Pallet</span>,

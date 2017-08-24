@@ -4,9 +4,8 @@
   "main": "server/server.js",
   "scripts": {
     "start": "node .",
-    "start_prod": "NODE_ENV=production node .",
-    "deploy": "NODE_ENV=production webpack -p --config webpack.config.production.js --progress",
-    "clean": "rm -rf dist/"
+    "start_prod": "NODE_ENV=development node .",
+    "deploy": "NODE_ENV=development webpack -p --config webpack.config.development.js --progress"
   },
   "eslintConfig": {
     "env": {
@@ -64,9 +63,7 @@
     "sweetalert-react": "^0.4.10",
     "utils": "^0.3.1",
     "validator": "^5.5.0",
-    "webpack": "^2.7.0",
-    "webpack-dev-middleware": "^1.6.1",
-    "webpack-hot-middleware": "^2.18.2",
+    "webpack": "^2.1.0-beta.25",
     "whatwg-fetch": "1.0.0",
     "winston": "^2.3.1",
     "winston-daily-rotate-file": "^1.4.6"
@@ -149,9 +146,10 @@
     "stylelint": "6.9.0",
     "stylelint-config-standard": "10.0.0",
     "url-loader": "0.5.7",
-    "webpack": "^2.1.0-beta.15",
-    "webpack-dev-middleware": "1.6.1",
-    "webpack-hot-middleware": "^2.12.1"
+    "webpack": "^2.7.0",
+    "webpack-dev-middleware": "^1.12.0",
+    "webpack-dev-server": "^2.7.1",
+    "webpack-hot-middleware": "^2.18.2"
   },
   "repository": {
     "type": "git",
