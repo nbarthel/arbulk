@@ -56,7 +56,7 @@ class showColumn extends React.Component{
             columns:this.tempVisibleColumn
         }
         axios.post(Base_Url+"TColumnShowHides/updateColumns",data).then(response=>{
-            debugger
+             
             console.log("done");
         }).catch(err=>{
             console.log("err");
@@ -71,65 +71,69 @@ class showColumn extends React.Component{
     }
     OnAddColumn(e) {
         debugger
-        var flag = false;
         this.tempVisibleColumn = this.state.visibleColumns;
+        this.tempAllcolumns = this.state.allCoulmns
         var lis = document.getElementById("ULForVisibleColumn").getElementsByTagName("li");
         for (var i = 0; i < lis.length; i++) {
             lis[i].style.backgroundColor = ""
         }
         if(document.getElementById(e.target.id).style.backgroundColor===""){
             document.getElementById(e.target.id).style.backgroundColor = "#cbd3ff"
+            var obj = {"columnName":e.target.innerText}
+            this.tempVisibleColumn.push(obj)
+            for(var i =0;i<this.tempAllcolumns.length;i++){
+                if(this.tempAllcolumns[i].columnName==e.target.innerText){
+                    this.tempAllcolumns.splice(i,1)
+                    break;
+                }
+            }
         }
         else{
             document.getElementById(e.target.id).style.backgroundColor = ""
+            for(let i =0;i<this.tempVisibleColumn.length;i++){
+                if(this.tempVisibleColumn[i].columnName === e.target.innerText){
+                    this.tempVisibleColumn.splice(i,1);
+                }
+            }
+            this.tempAllcolumns.push({"columnName":e.target.innerText})
         }
         document.getElementById("btnAdd").disabled = false
         document.getElementById("btnAdd").onclick = this.AddOrRemove
         document.getElementById("btnRemove").disabled = true
-
-        var data = this.tempVisibleColumn;
-        var obj = {"columnName":e.target.innerText}
-        data.push(obj);
-        this.tempVisibleColumn = data;
-        this.tempAllcolumns = this.state.allCoulmns
-        for(var i =0;i<this.tempAllcolumns.length;i++){
-            if(this.tempAllcolumns[i].columnName==e.target.innerText){
-                this.tempAllcolumns.splice(i,1)
-                break;
-            }
-        }
     }
-
     OnRemoveColumn(e){
-        debugger
         this.tempVisibleColumn = this.state.visibleColumns;
+        this.tempAllcolumns = this.state.allCoulmns
         var lis = document.getElementById("ULForAllColumn").getElementsByTagName("li");
         for(var i=0;i<lis.length;i++){
             lis[i].style.backgroundColor=""
         }
         if(document.getElementById(e.target.id).style.backgroundColor===""){
             document.getElementById(e.target.id).style.backgroundColor = "#cbd3ff"
+            var obj = {"columnName":e.target.innerText}
+            this.tempAllcolumns.push(obj)
+            for(var i =0;i<this.tempVisibleColumn.length;i++){
+                if(this.tempVisibleColumn[i].columnName==e.target.innerText){
+                    this.tempVisibleColumn.splice(i,1)
+                    break;
+                }
+            }
         }
         else{
             document.getElementById(e.target.id).style.backgroundColor = ""
+            for(let i =0;i<this.tempAllcolumns.length;i++){
+                if(this.tempAllcolumns[i].columnName === e.target.innerText){
+                    this.tempAllcolumns.splice(i,1);
+                }
+            }
+            this.tempVisibleColumn.push({"columnName":e.target.innerText})
         }
         document.getElementById("btnRemove").disabled = false;
         document.getElementById("btnRemove").onclick = this.AddOrRemove;
         document.getElementById("btnAdd").disabled = true;
-        var data = this.tempVisibleColumn
-        for (var i = 0; i < data.length; i++) {
-            if (data[i].columnName && e.target.innerText.toUpperCase() === data[i].columnName.toUpperCase()) {
-                data.splice(i,1);
-                this.tempVisibleColumn = data;
-                break;
-            }
-        }
-        let tempall = this.state.allCoulmns;
-        tempall.push({"columnName":e.target.innerText});
-        this.tempAllcolumns = tempall
+
     }
     AddOrRemove(e){
-        debugger
         var data = this.tempVisibleColumn;
         var allColumnData = this.tempAllcolumns;
         this.setState({
