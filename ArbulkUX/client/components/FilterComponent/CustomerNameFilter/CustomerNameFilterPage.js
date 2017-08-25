@@ -8,16 +8,29 @@ class CustomerNameFilterPage extends React.Component {
     constructor(props){
         super(props);
         this.checkedCustomer = { }
-       this.state = { records:8}
+       this.state = { records:8,called:false}
     }
     componentDidMount() {
-
         console.log("I have recieved props")
-        //debugger
         this.collesp(8);
-
     }
-
+    componentDidUpdate(){
+        debugger
+        for(let i =0;i<this.props.customerSelected.length;i++){
+            let customer_id = this.props.customerSelected[i];
+            if(this.refs["c"+customer_id]){
+                this.refs["c"+customer_id].checked = true;
+            }
+        }
+    }
+    componentWillReceiveProps(nextProps){
+        if(!this.state.called && nextProps.customerSelected && nextProps.customerSelected.length>0){
+            this.collesp(1000)
+            this.setState({
+                called:true
+            })
+        }
+    }
     collesp(limit){
         var PIview = createDataLoader(CustomerNameFilterPage,{
             queries:[{
@@ -71,7 +84,7 @@ class CustomerNameFilterPage extends React.Component {
         var customers = _.map(this.state.name,(customer,i) => {
             return  (<li key={customer.id}>
                     <label className="control control--checkbox">{customer.name}
-                    <input type="checkbox" value={customer.name} id={customer.id} onChange={(e) => this.props.onCustomerFilter(e,customer)}/><div className="control__indicator"></div>
+                    <input type="checkbox" value={customer.name} ref={"c"+customer.id} id={customer.id} onChange={(e) => this.props.onCustomerFilter(e,customer)}/><div className="control__indicator"></div>
                     </label>
                     </li>)
        })

@@ -21,9 +21,8 @@ class CompanyNameFilterPage extends React.Component{
         })
     }
     componentWillReceiveProps(nextProps){
-        debugger
         if(nextProps.locationSelected && nextProps.locationSelected.length>0){
-            this.refs[nextProps.locationSelected[nextProps.locationSelected.length-1]].checked = true;
+            this.refs[nextProps.locationSelected[nextProps.locationSelected.length-1].location_id].checked = true;
         }
     }
 

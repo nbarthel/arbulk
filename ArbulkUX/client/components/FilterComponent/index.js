@@ -21,7 +21,7 @@ class FilterComponent extends React.Component {
  			<div className="well filter_bg collapse navbar-collapse" id="filter-menu">
                 <h4 className=" hidden-xs"> REFINE YOUR RESULT </h4>
                 <CompanyNameFilterPage locationSelected = {this.props.locationSelected} onCompanyFilter = {this.props.onCompanyFilter}/>
-                <CustomerNameFilterPage onCustomerFilter = {this.props.onCustomerFilter} />
+                <CustomerNameFilterPage customerSelected = {this.props.customerSelected} onCustomerFilter = {this.props.onCustomerFilter} />
                 <POSearchFilterPage onClickPo = {this.props.onClickPo}  onTextChange = {this.props.onTextChange}  />
                 <RailCarFilterPage onClickli={this.props.onClickli}  onTextChange = {this.props.onTextChange} />
                 <LotSearchFilterPage  lotSearch = {this.props.lotSearch} onTextChange = {this.props.onTextChange}/>

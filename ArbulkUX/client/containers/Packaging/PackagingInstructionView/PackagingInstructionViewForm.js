@@ -49,7 +49,8 @@ export default class PackagingInstructionViewForm extends React.Component {
             SelcetedOptionForGroupBy : "",
             columns:[],
             open: false,
-            locationSelected:[]
+            locationSelected:[],
+            customerSelected:[]
         }
         this.status
         this.buttonDisplay = [ ]
@@ -528,6 +529,7 @@ PrintElem(elem)
                 writable: true,
                 configurable:true,
                 value:this.checkedCustomer})
+            this.state.customerSelected.push({"location_id":e.target.id})
         }
         else if (!e.target.checked){
             let id = e.target.id
@@ -541,6 +543,11 @@ PrintElem(elem)
             let index = this.buttonDisplay.indexOf(e.target.value)
             if(index !== -1)
                 this.buttonDisplay = _.without(this.buttonDisplay,value)
+            for(let i in this.state.customerSelected){
+                if(this.state.customerSelected[i].location_id === e.target.id){
+                    this.state.customerSelected.splice(i,1);
+                }
+            }
             this.forceUpdate()
         }
         this.onSearch(e)
@@ -604,7 +611,6 @@ PrintElem(elem)
     }
     viewChange(e){
         debugger
-        debugger
         var index = e.target.selectedIndex ;
         var blob = e.target.value
         this.Where = JSON.parse(blob)
@@ -646,27 +652,36 @@ PrintElem(elem)
                 serachObj.push(createdStartOnObj);
                 serachObj.push(createdEndObj);
             }
+
+            //customer are name of customer to which packing has to be sent/recieved
             if(this.Where.Customer && this.Where.Customer.length >0){
                 var customer = []
                 var obj = {}
                 let tempObj = [];
                 for(var i in this.Where.Customer){
+                    this.checkedCustomer.push(this.Where.Company[j])
                     tempObj.push(this.Where.Customer[i])
-                    this.checkedCompany.push(this.Where.Customer[i])
+                    //this.checkedCompany.push(this.Where.Customer[i])
                     this.setState({
-                        locationSelected : tempObj
+                        customerSelected : tempObj
                     })
                     obj = {"customer_id" : this.Where.Customer[i] }
                     customer.push(obj);
                 }
             }
+
+            //name of locations
             if(this.Where.Company && this.Where.Company.length > 0){
                 var company = [] ;
                 var objCompany = {}
                 for(var j in this.Where.Company)
                 {
+                    this.checkedCompany.push(this.Where.Company[j])
                     objCompany = {"location_id" : this.Where.Company[j] }
                     company.push(objCompany);
+                    this.setState({
+                        locationSelected:company
+                    });
                 }
 
             }
@@ -1335,7 +1350,7 @@ PrintElem(elem)
                 <div className="container">
                     <div className="row-fluid">
 
-                        <FilterComponent locationSelected = {this.state.locationSelected} getdt = {this.getdt} startDate = {this.StartDate} endDate = {this.EndDate} key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter} onRailCarArrivalFilter={this.onRailCarArrivalFilter} getCreatedDate={this.getCreatedDate} shipmentRecived={this.shipmentRecived}/>
+                        <FilterComponent customerSelected = {this.state.customerSelected} locationSelected = {this.state.locationSelected} getdt = {this.getdt} startDate = {this.StartDate} endDate = {this.EndDate} key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter} onRailCarArrivalFilter={this.onRailCarArrivalFilter} getCreatedDate={this.getCreatedDate} shipmentRecived={this.shipmentRecived}/>
                         <div id="filter-grid">
                             <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
                                 <div className="pull-right margin-30-right" id="hide2">
