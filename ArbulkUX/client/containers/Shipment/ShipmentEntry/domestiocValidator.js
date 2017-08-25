@@ -16,40 +16,40 @@ export default function validateDomesticInput(data){
 
     if (Validator.isNull(data.shippingReferenceNumber))
     {
-        errorsd.shippingReferenceNumber = 'ShippingReferenceNumber field is required';
+        errorsd.shippingReferenceNumber = 'Shipping reference number field is required';
         isError = true;
     }
 
     if (Validator.isNull(data.recipent)){
-        errorsd.recipent = 'recipent field is required';
+        errorsd.recipent = 'Recipent field is required';
         isError = true;
     }
     if (Validator.isNull(data.recipentContact))
     {
-        errorsd.recipentContact = 'recipentContact field is required';
+        errorsd.recipentContact = 'Recipent contact field is required';
         isError = true;
     }
     if (Validator.isNull(data.recipentTelNumber)){
-        errorsd.recipentTelNumber = 'recipentTelNumber field is required';
+        errorsd.recipentTelNumber = 'Recipent telNumber field is required';
         isError = true;
     }
     if (Validator.isNull(data.carrier))
     {
-        errorsd.carrier = 'carrier  field is required';
+        errorsd.carrier = 'Carrier  field is required';
         isError = true;
     }
 
     if (Validator.isNull(data.carrierAcNumber)){
-        errorsd.carrierAcNumber = 'carrierAcNumber field is required';
+        errorsd.carrierAcNumber = 'Carrier acNumber field is required';
         isError = true;
     }
     if (Validator.isNull(data.bookingNumber))
     {
-        errorsd.bookingNumber = 'bookingNumber field is required';
+        errorsd.bookingNumber = 'Booking number field is required';
         isError = true;
     }
     if (Validator.isNull(data.paymentTypeId)){
-        errorsd.paymentTypeId = 'paymentTypeId field is required';
+        errorsd.paymentTypeId = 'Payment typeId field is required';
         isError = true;
     }
     if (Validator.isNull(data.paidBy))

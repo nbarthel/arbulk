@@ -129,13 +129,13 @@ class  ShipmentViewForm extends React.Component
             }
 
             else{
-                swal("Error","Please select unconfirmed order","error")
+                swal("Error","Please select unconfirmed order.","error")
             }
         }
         else
         {
 
-            swal("Selection Missing", "Please Select A Shipment Lot.","error")
+            swal("Selection Missing", "Please select a shipment lot.","error")
         }
 
     }
@@ -145,7 +145,7 @@ onViewClick(e){
       if(this.conFirmID != null || undefined){
           hashHistory.push('/Shipment/shipmentDetails/'+this.conFirmID+'/'+this.tempLotId+'/'+1+'/');
     }else{
-      swal("Selection Missing","Please Select A Shipment Lot","info")
+      swal("Selection Missing","Please select a shipment lot.","info")
     }
 }
 
@@ -242,7 +242,7 @@ PrintScreen(){
         if (this.conFirmID != null || undefined) {
             hashHistory.push('/Shipment/shipmentDetails/' + this.conFirmID + '/' + this.tempLotId);
         } else {
-            swal("Selection Missing", "Please Select A Shipment Lot", "info")
+            swal("Selection Missing", "Please select a shipment lot.", "info")
         }
     }
 
@@ -253,7 +253,7 @@ PrintScreen(){
           "queueSequence" : parseInt(this.state.queue_Sequence[0].max_mark) +1
       }
     axios.put(Base_Url+"TShipmentLots/"+this.shipLotid ,option).then((response)=>{
-        swal("" , "Successfully added to the queue" , 'success')
+        swal("Success" , "Successfully added to the queue." , 'success')
     })
 
     }
@@ -918,7 +918,7 @@ onClickli(e){
 
        if(saveCustomView.viewFilters != undefined && saveCustomView.viewFilters != null && saveCustomView.viewFilters != {} ){
         axios.post(Base_Url + "TCustomViews", saveCustomView).then(response=> {
-        swal('Success' , "Successfully Saved..." , 'success');
+        swal('Success' , "Successfully saved." , 'success');
 
 
             axios.get(Base_Url+"TCustomViews").then(response=>{
@@ -931,7 +931,7 @@ onClickli(e){
 
             }
        else {
-        swal('Error' , "Please Select Filter Options First" , 'error');
+        swal('Error' , "Please select filter options first." , 'error');
       }
 
     }
@@ -1404,7 +1404,7 @@ success:function(data){
         {
 
             //hashHistory.push('/Shipment/shipmentPrint/')
-            swal("Selection Missing", "Please Select A Lot To View.","error")
+            swal("Selection Missing", "Please select a lot to view.","error")
         }
     }
 
@@ -1416,7 +1416,7 @@ success:function(data){
 
     else
     {
-      swal("Selection Missing","Please Select A Checkbox","error")
+      swal("Error","Selection Missing","Please select a checkbox.","error")
     }
   }
 onHideColumn(e,name){

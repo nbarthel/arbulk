@@ -4,7 +4,6 @@ import '../../../public/stylesheets/style.css';
 import '../../../public/stylesheets/bootstrap.min.css';
 var DatePicker = require('react-datepicker');
 import SweetAlert from 'sweetalert-react';
-//import { DateField, Calendar } from 'react-datepicker'
 var moment = require('moment');
 import _ from 'lodash';
 var Spinner = require('react-spinkit');
@@ -721,7 +720,7 @@ class ShipmentEntryForm extends React.Component {
         if(!(this.isValid())){
             EnableClick('submit')
             if(this.haveSpecial==0){
-                swal("", "Please fill red marked fields", "error")
+                swal("", "Please fill red marked fields.", "error")
             }
             return
         }
@@ -730,7 +729,7 @@ class ShipmentEntryForm extends React.Component {
             if (!(this.isValidDomestic())) {
                 EnableClick('submit')
                 if(this.haveSpecial==0){
-                    swal("", "Please fill red marked Domestic fields", "error")
+                    swal("", "Please fill red marked domestic fields.", "error")
                 }
                 return
             }
@@ -739,7 +738,7 @@ class ShipmentEntryForm extends React.Component {
             if(!(this.isValidInt())) {
                 EnableClick('submit')
                 if(this.haveSpecial==0){
-                    swal("", "Please fill red marked International Shipment fields", "error")
+                    swal("", "Please fill red marked international shipment fields.", "error")
                 }
                 return
             }
@@ -865,7 +864,7 @@ class ShipmentEntryForm extends React.Component {
 
             swal({
                 title: "Are you sure?",
-                text: "Lesser number of bags in inventory to ship",
+                text: "Lesser number of bags in inventory to ship.",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
@@ -938,7 +937,7 @@ class ShipmentEntryForm extends React.Component {
                             }
                         }
                         else {
-                            swal("Posted", "Success", "success");
+                            swal("Posted", "Success.", "success");
                             console.log("here");
                             hashHistory.push('/Shipment/shipmentview/')
                         }
@@ -1022,7 +1021,7 @@ class ShipmentEntryForm extends React.Component {
                     }
                 }
                 else {
-                    swal("Posted", "Success", "success");
+                    swal("Posted", "Success.", "success");
                     console.log("here");
                     hashHistory.push('/Shipment/shipmentview/')
                 }
@@ -1062,7 +1061,7 @@ class ShipmentEntryForm extends React.Component {
         if(!(this.isValid())){
             EnableClick('submitContainer')
             if(this.haveSpecial==0){
-                swal("" , "Please fill red marked fields" , "error")
+                swal("" , "Please fill red marked fields." , "error")
             }
             return
         }
@@ -1071,7 +1070,7 @@ class ShipmentEntryForm extends React.Component {
             if (!(this.isValidDomestic())) {
                 EnableClick('submitContainer')
                 if(this.haveSpecial==0){
-                    swal("", "Please fill red marked Domestic fields", "error")
+                    swal("", "Please fill red marked Domestic fields.", "error")
                 }
                 return
             }
@@ -1227,7 +1226,7 @@ class ShipmentEntryForm extends React.Component {
 
             swal({
                 title: "Are you sure?",
-                text: "Lesser number of bags in inventory to ship",
+                text: "Lesser number of bags in inventory to ship.",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
@@ -1287,7 +1286,7 @@ class ShipmentEntryForm extends React.Component {
                                 return
                             }}
                         else{
-                            swal("Posted", "Success", "success")
+                            swal("Posted", "Success.", "success")
                             hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/-'+ 1 )
                         }
 
@@ -1354,7 +1353,7 @@ class ShipmentEntryForm extends React.Component {
                         return
                     }}
                 else{
-                    swal("Posted", "Success", "success")
+                    swal("Posted", "Success.", "success")
                     hashHistory.push('/Shipment/shipmentDetails/'+response.data.id+'/-'+ 1 )
                 }
 
@@ -1502,11 +1501,12 @@ class ShipmentEntryForm extends React.Component {
 
                                             <div className="col-lg-8   col-sm-11 col-xs-11 ">
                                                 <input type="text"
-                                                       className="form-control"
+                                                       className="form-control text-uppercase"
                                                        id="Release #"
                                                        placeholder="Release #"
                                                        name="releaseNumber"
                                                        onChange={this.handleSIChange}
+
                                                 />
 
                                                 <div className="error"><span></span></div>
@@ -1530,32 +1530,7 @@ class ShipmentEntryForm extends React.Component {
                                                 <div className="error"><span>{this.state.errors.numberOfBags}</span></div>
                                             </div>
                                         </div>
-                                        {
-                                            /*
-                                             <div className="form-group">
-                                             <label htmlFor="Purchase_Order"
-                                             className={this.state.errors.numberOfBags? "col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label has error":"col-lg-5  col-md-5 col-sm-11  col-xs-11 control-label"}>No.
-                                             of
-                                             Bags</label>
 
-                                             <div className="col-lg-6    col-sm-11 col-xs-11 ">
-                                             <input type="text"
-                                             className="form-control"
-                                             id="No. of Bags"
-                                             placeholder="No. of Bags"
-                                             name="numberOfBags"
-                                             onChange={this.handleSIChange}
-                                             value={this.state.noofbags}
-                                             type="number"
-
-
-                                             />
-
-                                             <div className="error"><span>{this.state.errors.numberOfBags}</span>
-                                             </div>
-                                             </div>
-                                             </div>
-                                             */ }
                                     </fieldset>
 
 
@@ -1877,7 +1852,6 @@ class ShipmentEntryForm extends React.Component {
 
                                                     <input type="number" className="form-control" id="" name="freeDaysPerContainer"  onChange={this.InternationalChange} placeholder="# of Free Days per Container"/>
 
-                                                    <div className="error"><span>{this.state.errorsI.freeDaysPerContainer}</span></div>
                                                 </div>
                                             </div>
                                             <div className="form-group">
@@ -1960,7 +1934,7 @@ class ShipmentEntryForm extends React.Component {
 
                                                 <div className="col-lg-8   col-sm-11 col-xs-11 ">
                                                     <input type="text"
-                                                           className="form-control"
+                                                           className="form-control text-uppercase"
                                                            id=""
                                                            placeholder="Shipping Ref #"
                                                            name="shippingReferenceNumber"
@@ -1975,14 +1949,15 @@ class ShipmentEntryForm extends React.Component {
 
                                             <div className="form-group">
                                                 <label htmlFor="Type_of_Bag"
-                                                       className={this.state.errorsd.recipent ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Reciepient</label>
+                                                       className={this.state.errorsd.recipent ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Recipient</label>
 
                                                 <div className="col-lg-8    col-sm-11 col-xs-11 ">
                                                     <input type="text"
                                                            className="form-control"
-                                                           id="" placeholder="Reciepient"
+                                                           id="" placeholder="Recipient"
                                                            name="recipent"
                                                            onChange={this.DomesticChange}
+                                                           style={{textTransform: "capitalize"}}
 
                                                     />
 
@@ -1992,7 +1967,7 @@ class ShipmentEntryForm extends React.Component {
 
                                             <div className="form-group">
                                                 <label htmlFor="No_of_Bages_Pallat"
-                                                       className={this.state.errorsd.recipentContact ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Reciepient
+                                                       className={this.state.errorsd.recipentContact ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Recipient
                                                     Contact</label>
 
                                                 <div className="col-lg-8  col-sm-11 col-xs-11 ">
@@ -2002,6 +1977,7 @@ class ShipmentEntryForm extends React.Component {
                                                            placeholder="Recipent Contact"
                                                            name="recipentContact"
                                                            onChange={this.DomesticChange}
+                                                           style={{textTransform: "capitalize"}}
                                                     />
 
                                                     <div className="error"><span></span></div>
@@ -2009,14 +1985,14 @@ class ShipmentEntryForm extends React.Component {
                                             </div>
                                             <div className="form-group">
                                                 <label htmlFor="Type_of_Packaging"
-                                                       className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Reciepient Telephone
+                                                       className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Recipient Telephone
                                                 </label>
 
                                                 <div className="col-lg-8 col-sm-11 col-xs-11 ">
-                                                    <input type="text"
+                                                    <input type="number"
                                                            className="form-control"
                                                            id=""
-                                                           placeholder="Reciepient Telephone"
+                                                           placeholder="Recipient Telephone"
                                                            name="recipentTelNumber"
                                                            onChange={this.DomesticChange}
                                                         />
@@ -2119,7 +2095,7 @@ class ShipmentEntryForm extends React.Component {
 
                                                     <div className="col-lg-8   col-sm-11 col-xs-11 ">
                                                         <input type="text"
-                                                               className="form-control"
+                                                               className="form-control text-uppercase"
                                                                id="No_of_Bages_Pallat"
                                                                placeholder="Carrier"
                                                                name="carrier"
@@ -2135,9 +2111,9 @@ class ShipmentEntryForm extends React.Component {
                                                            className={this.state.errorsd.carrierAcNumber ? "col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label has error":"col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label"}>Carrier
                                                         Account #</label>
 
-                                                    <div className="col-lg-8  col-sm-11 col-xs-11 ">
+                                                    <div className="col-lg-8  col-sm-11 col-xs-11">
                                                         <input type="text"
-                                                               className="form-control"
+                                                               className="form-control text-uppercase"
                                                                id="No_of_Bages_Pallat"
                                                                placeholder="Carrier Account #"
                                                                name="carrierAcNumber"
@@ -2181,6 +2157,7 @@ class ShipmentEntryForm extends React.Component {
                                                                placeholder="Shipping Paid By"
                                                                name="paidBy"
                                                                onChange={this.DomesticChange}
+                                                               style={{textTransform:"capitalize"}}
                                                         />
 
                                                         <div className="error"><span></span></div>

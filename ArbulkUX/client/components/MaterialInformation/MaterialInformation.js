@@ -121,12 +121,12 @@ export default class MaterialInformation extends React.Component {
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="Lot_Number" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">No. of Bags  for Lot</label>
+                    <label htmlFor="Lot_Number" className="col-lg-4  col-md-4 col-sm-11  col-xs-11 control-label">Bags To Ship</label>
                     <div className="col-lg-7    col-sm-11 col-xs-11 " >
-                        <input type="text"
+                        <input type="number"
                                className="form-control"
                                id={this.props.count+":Lot_Number"}
-                               placeholder="No. of Bags  for Lot"
+                               placeholder="Bags To Ship"
                                name="noofbagsperlot"
                                onChange = {this.onChange}/>
 

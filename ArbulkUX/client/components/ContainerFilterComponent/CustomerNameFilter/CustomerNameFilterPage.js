@@ -73,10 +73,12 @@ class CustomerNameFilterPage extends React.Component {
     }*/
     render() {
         var customers = _.map(this.state.name,(customer) => {
-return  (<li key={customer.id}>
+return  (<li key={customer.id} className="checkboxCustomer inline">
                     <label className="control control--checkbox">{customer.name}
                     <input type="checkbox" value={customer.name} id={customer.id} onChange={(e) => this.props.onCustomerFilter(e,customer)}/><div className="control__indicator"></div>
                     </label>
+    <span className="displayonlyFilter" title ={customer.name} onClick={(e) => this.props.onCustomerFilter(e,customer)}>{"  Only  "}</span>
+    <span className="labText">{customer.name}</span>
                     </li>)})            
         return (
             <div className="customer">
