@@ -15,7 +15,6 @@ class CustomerNameFilterPage extends React.Component {
         this.collesp(8);
     }
     componentDidUpdate(){
-        debugger
         for(let i =0;i<this.props.customerSelected.length;i++){
             let customer_id = this.props.customerSelected[i];
             if(this.refs["c"+customer_id]){

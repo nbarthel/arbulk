@@ -50,7 +50,9 @@ export default class PackagingInstructionViewForm extends React.Component {
             columns:[],
             open: false,
             locationSelected:[],
-            customerSelected:[]
+            customerSelected:[],
+            statusSelected:[],
+            railcarArrived:''
         }
         this.status
         this.buttonDisplay = [ ]
@@ -471,13 +473,22 @@ PrintElem(elem)
     }
     onRailCarArrivalFilter(e,option){
         let filterValue = ''
-        if(option===1){
+        if(option===1 && e.target.id === "arrived_yes"){
             filterValue = true
+            this.setState({
+                railcarArrived : "ARRIVED"
+            })
         }
-        else if(option===0){
+        else if(option===0 && e.target.id === "arrived_no"){
             filterValue = false;
+            this.setState({
+                railcarArrived : "INTRANSIT"
+            })
         }
         else{
+            this.setState({
+                railcarArrived : ""
+            })
             filterValue = ''
         }
         this.railcarArrival = filterValue;
@@ -554,33 +565,31 @@ PrintElem(elem)
     }
     onStatusFilter(e,status){
         if(e.target.checked){
-
             this.checkedStatus.push(e.target.value);
             Object.defineProperty(this.Where,"status",{enumerable: true ,
                 writable: true,
                 configurable:true,
                 value:this.checkedStatus})
-
+            this.state.statusSelected.push(e.target.value)
             this.forceUpdate()
-
-
         }
         else if (!e.target.checked){
             let value = e.target.value
-
             this.checkedStatus = _.without(this.checkedStatus,value)
             this.Where.status = this.checkedStatus
-
             if(Object.keys(this.Where.status).length === 0){
                 this.Where.status = undefined
                 delete this.Where.status
             }
-            console.log(this.Where)
-
             let index = this.buttonDisplay.indexOf(e.target.value)
             if(index !== -1)
                 this.buttonDisplay = _.without(this.buttonDisplay,value)
-
+            let data = this.state.statusSelected
+            let currntIndex = data.indexOf(e.target.value)
+            data.splice(currntIndex,1)
+            this.setState({
+                statusSelected:data
+            })
             this.forceUpdate()
         }
         this.onSearch(e)
@@ -641,10 +650,18 @@ PrintElem(elem)
             if(this.Where.railcar_status===true){
                 var arrivalSerach = [{'railcar_status':'ARRIVED'}]
                 serachObjLots.push(arrivalSerach)
+                this.setState({
+                    railcarArrived:'ARRIVED'
+                })
+                this.railcarArrival = true
             }
             else if(this.Where.railcar_status===false){
                 var arrivalSerach = [{'railcar_status':'INTRANSIT'}]
                 serachObjLots.push(arrivalSerach)
+                this.setState({
+                    railcarArrived:'INTRANSIT'
+                })
+                this.railcarArrival = false
             }
             if(this.Where.created_on && this.Where.created_on.length==2){
                 var createdStartOnObj = [{'created_on':{'gte':new Date(this.Where.created_on[0].created_on)}}]
@@ -685,14 +702,21 @@ PrintElem(elem)
                 }
 
             }
+            var Railstatus = [];
             if(this.Where.status && this.Where.status.length){
-                var Railstatus = [];
+
                 var objStatus = {};
+                let statusObj = [];
                 for(var z in this.Where.status){
                     objStatus = {"status" : this.Where.status[z]}
+                    this.checkedStatus.push(this.Where.status[z]);
+                    statusObj.push(this.Where.status[z])
+                    this.setState({
+                        statusSelected : statusObj
+                    });
                     Railstatus.push(objStatus)
                 }
-                serachObjLots.push(Railstatus)
+                //serachObjLots.push(Railstatus)
             }
             if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.POSearch && this.Where.Query.POSearch!= undefined ){
                 var poSearch =  [ {'po_number': {"like": "%" + this.Where.Query.POSearch + "%"}}]
@@ -731,7 +755,7 @@ PrintElem(elem)
                                     "scope":{"include" : "TShipmentInternational",
                                         "scope":{"where" : {"or" : cutofFilter }}
                                     }}}},
-                        "where":{ "and": [{"and":serachObjLots},{active:1}]}
+                        "where":{ "and": [{"and":serachObjLots},{"or":Railstatus},{active:1}]}
                     }
                     }
                     ],
@@ -1350,7 +1374,7 @@ PrintElem(elem)
                 <div className="container">
                     <div className="row-fluid">
 
-                        <FilterComponent customerSelected = {this.state.customerSelected} locationSelected = {this.state.locationSelected} getdt = {this.getdt} startDate = {this.StartDate} endDate = {this.EndDate} key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter} onRailCarArrivalFilter={this.onRailCarArrivalFilter} getCreatedDate={this.getCreatedDate} shipmentRecived={this.shipmentRecived}/>
+                        <FilterComponent railcarArrived={this.state.railcarArrived} statusSelected={this.state.statusSelected} customerSelected = {this.state.customerSelected} locationSelected = {this.state.locationSelected} getdt = {this.getdt} startDate = {this.StartDate} endDate = {this.EndDate} key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter} onRailCarArrivalFilter={this.onRailCarArrivalFilter} getCreatedDate={this.getCreatedDate} shipmentRecived={this.shipmentRecived}/>
                         <div id="filter-grid">
                             <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
                                 <div className="pull-right margin-30-right" id="hide2">

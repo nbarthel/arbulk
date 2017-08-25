@@ -26,8 +26,8 @@ class FilterComponent extends React.Component {
                 <RailCarFilterPage onClickli={this.props.onClickli}  onTextChange = {this.props.onTextChange} />
                 <LotSearchFilterPage  lotSearch = {this.props.lotSearch} onTextChange = {this.props.onTextChange}/>
                 <CutOffDateFilterPage startDate = {this.props.StartDate} endDate = {this.props.EndDate} getdt={this.props.getdt} parent={this.props.parent} />
-                <StatusFilterPage onStatusFilter = {this.props.onStatusFilter} parent={this.props.parent}/>
-                <RailcarArrival onRailCarArrivalFilter = {this.props.onRailCarArrivalFilter} parent={this.props.parent}/>
+                <StatusFilterPage statusSelected = {this.props.statusSelected} onStatusFilter = {this.props.onStatusFilter} parent={this.props.parent}/>
+                <RailcarArrival railcarArrived={this.props.railcarArrived} onRailCarArrivalFilter = {this.props.onRailCarArrivalFilter} parent={this.props.parent}/>
                 <CreatedOndateFilter getCreatedDate={this.props.getCreatedDate}/>
                 <ShipmentReceivedFilter shipmentRecived={this.props.shipmentRecived}/>
             </div>
