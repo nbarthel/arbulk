@@ -29,7 +29,7 @@ class FilterComponent extends React.Component {
                 <StatusFilterPage statusSelected = {this.props.statusSelected} onStatusFilter = {this.props.onStatusFilter} parent={this.props.parent}/>
                 <RailcarArrival railcarArrived={this.props.railcarArrived} onRailCarArrivalFilter = {this.props.onRailCarArrivalFilter} parent={this.props.parent}/>
                 <CreatedOndateFilter getCreatedDate={this.props.getCreatedDate}/>
-                <ShipmentReceivedFilter shipmentRecived={this.props.shipmentRecived}/>
+                <ShipmentReceivedFilter selectedShipmentRecieved = {this.props.selectedShipmentRecieved} shipmentRecived={this.props.shipmentRecived}/>
             </div>
         </div>
 

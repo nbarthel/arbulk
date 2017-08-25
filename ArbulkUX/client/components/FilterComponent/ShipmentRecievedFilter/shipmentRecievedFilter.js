@@ -5,6 +5,14 @@
 import React, { Component } from 'react';
 
 class RailcarArrivalFilterPage extends Component {
+    constructor(props){
+        super(props)
+    }
+    componentWillReceiveProps(nextProps){
+        if(nextProps.selectedShipmentRecieved){
+
+        }
+    }
     render() {
         return (
             <div>
@@ -16,12 +24,12 @@ class RailcarArrivalFilterPage extends Component {
                 <ul>
                     <li>
                         <label className="control control--radio">Yes
-                            <input type="radio"  name="arrived_yes" value="1" id="arrived_yes" onChange={(e)=>this.props.shipmentRecived(e,1)}/><div className="control__indicator"></div>
+                            <input type="radio"  name="arrived_yes" value="1" id="arrived_yes" ref="arrived_yes" onChange={(e)=>this.props.shipmentRecived(e,1)}/><div className="control__indicator"></div>
                         </label>
                     </li>
                     <li>
                         <label className="control control--radio">No
-                            <input type="radio"  name="arrived_yes" id=""  value="0" onChange={(e)=>this.props.shipmentRecived(e,0)} /><div className="control__indicator"></div>
+                            <input type="radio"  name="arrived_yes" id="" ref="arrived_no"  value="0" onChange={(e)=>this.props.shipmentRecived(e,0)} /><div className="control__indicator"></div>
                         </label>
                     </li>
                     <li>

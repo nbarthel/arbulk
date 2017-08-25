@@ -52,7 +52,8 @@ export default class PackagingInstructionViewForm extends React.Component {
             locationSelected:[],
             customerSelected:[],
             statusSelected:[],
-            railcarArrived:''
+            railcarArrived:'',
+            selectedShipmentRecieved:''
         }
         this.status
         this.buttonDisplay = [ ]
@@ -646,6 +647,17 @@ PrintElem(elem)
         }
         var serachObj = []
         var serachObjLots =[]
+        for(var prop in this.Where){
+            if(prop === "flagForShipmentRecivedFilter" && this.Where.flagForShipmentRecivedFilter){
+                this.setState({
+                    selectedShipmentRecieved:true
+                });
+            }
+            else if(prop === "flagForShipmentRecivedFilter" && !this.Where.flagForShipmentRecivedFilter){
+
+            }
+        }
+
         if (this.Where != undefined && this.Where!= null) {
             if(this.Where.railcar_status===true){
                 var arrivalSerach = [{'railcar_status':'ARRIVED'}]
@@ -669,7 +681,6 @@ PrintElem(elem)
                 serachObj.push(createdStartOnObj);
                 serachObj.push(createdEndObj);
             }
-
             //customer are name of customer to which packing has to be sent/recieved
             if(this.Where.Customer && this.Where.Customer.length >0){
                 var customer = []
@@ -686,7 +697,6 @@ PrintElem(elem)
                     customer.push(obj);
                 }
             }
-
             //name of locations
             if(this.Where.Company && this.Where.Company.length > 0){
                 var company = [] ;
@@ -1374,7 +1384,7 @@ PrintElem(elem)
                 <div className="container">
                     <div className="row-fluid">
 
-                        <FilterComponent railcarArrived={this.state.railcarArrived} statusSelected={this.state.statusSelected} customerSelected = {this.state.customerSelected} locationSelected = {this.state.locationSelected} getdt = {this.getdt} startDate = {this.StartDate} endDate = {this.EndDate} key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter} onRailCarArrivalFilter={this.onRailCarArrivalFilter} getCreatedDate={this.getCreatedDate} shipmentRecived={this.shipmentRecived}/>
+                        <FilterComponent selectedShipmentRecieved={this.state.selectedShipmentRecieved} railcarArrived={this.state.railcarArrived} statusSelected={this.state.statusSelected} customerSelected = {this.state.customerSelected} locationSelected = {this.state.locationSelected} getdt = {this.getdt} startDate = {this.StartDate} endDate = {this.EndDate} key={this.state.key} lotSearch={this.lotSearch} onClickPo={this.onClickPo} onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange} onStatusFilter = {this.onStatusFilter} onRailCarArrivalFilter={this.onRailCarArrivalFilter} getCreatedDate={this.getCreatedDate} shipmentRecived={this.shipmentRecived}/>
                         <div id="filter-grid">
                             <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
                                 <div className="pull-right margin-30-right" id="hide2">
