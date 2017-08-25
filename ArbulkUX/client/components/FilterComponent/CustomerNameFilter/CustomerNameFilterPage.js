@@ -77,8 +77,6 @@ class CustomerNameFilterPage extends React.Component {
         }
 
     }
-
-
     render() {
         var customers = _.map(this.state.name,(customer,i) => {
             return  (<li key={customer.id} className="checkboxCustomer inline">

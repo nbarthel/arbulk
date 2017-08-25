@@ -528,7 +528,6 @@ PrintElem(elem)
                     this.state.locationSelected.splice(i,1);
                 }
             }
-
             this.forceUpdate()
         }
         this.onSearch(e)
@@ -599,13 +598,20 @@ PrintElem(elem)
         let filterValue = ''
         if(option===1){
             filterValue = true
+            this.setState({
+                selectedShipmentRecieved:{"shipmentRecieved":true}
+            })
         }
         else if(option===0){
             filterValue = false;
+            this.setState({
+                selectedShipmentRecieved:{"shipmentRecieved":false}
+            })
         }
         else{
             filterValue = ''
         }
+
         this.flagForShipmentRecivedFilter = filterValue;
         Object.defineProperty(this.Where,"flagForShipmentRecivedFilter",{enumerable: true ,
             writable: true,
@@ -621,6 +627,13 @@ PrintElem(elem)
     }
     viewChange(e){
         debugger
+        this.setState({
+            locationSelected:[],
+            customerSelected:[],
+            statusSelected:[],
+            railcarArrived:'',
+            selectedShipmentRecieved:''
+        });
         var index = e.target.selectedIndex ;
         var blob = e.target.value
         this.Where = JSON.parse(blob)
@@ -650,11 +663,15 @@ PrintElem(elem)
         for(var prop in this.Where){
             if(prop === "flagForShipmentRecivedFilter" && this.Where.flagForShipmentRecivedFilter){
                 this.setState({
-                    selectedShipmentRecieved:true
+                    selectedShipmentRecieved:{"shipmentRecieved":true}
                 });
+                this.flagForShipmentRecivedFilter = true;
             }
             else if(prop === "flagForShipmentRecivedFilter" && !this.Where.flagForShipmentRecivedFilter){
-
+                this.setState({
+                    selectedShipmentRecieved:{"shipmentRecieved":false}
+                });
+                this.flagForShipmentRecivedFilter = false;
             }
         }
 

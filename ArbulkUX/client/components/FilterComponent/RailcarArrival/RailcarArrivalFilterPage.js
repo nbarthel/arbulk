@@ -9,7 +9,6 @@ class RailcarArrivalFilterPage extends Component {
         super(props);
     }
     componentWillReceiveProps(nextProps){
-        debugger
         if(nextProps.railcarArrived){
             this.refs["R"+nextProps.railcarArrived].checked = true
         }
