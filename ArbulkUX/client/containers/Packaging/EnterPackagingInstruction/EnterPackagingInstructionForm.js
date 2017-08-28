@@ -149,7 +149,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
           console.log(err)
         })
 
-    axios.get(Base_Url+"TPalletTypes").then((response)=> {
+    axios.get(Base_Url+'TPalletTypes?filter={"where":{"active":1}}').then((response)=> {
       this.setState({
         pallettype : response.data
       })
@@ -667,9 +667,11 @@ export default class EnterPackagingInstructionForm extends React.Component {
                   url: postUrl,
                   data:this.Allobjs,
                   success:function(data){
+
                       console.log("resp data>>>>>>>>>",data)
+                      hashHistory.push('/Packaging/inventorycard/'+data.id+'/null');
                       swal("Posted" , "Data has been posted successfully." , "success");
-                      hashHistory.push('/Packaging/packaginginstview/')
+                     // hashHistory.push('/Packaging/packaginginstview/')
                   },
                   error:function(err){
                       EnableClick('submit')

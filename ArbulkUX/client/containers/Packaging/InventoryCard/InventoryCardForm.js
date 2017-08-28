@@ -133,6 +133,7 @@ var tempThis = this
 	    }
 
 componentWillMount() {
+		console.log("view data props>>>>>>>>>>>>>>",this.props.viewData[0])
         var PIview = createDataLoader(InventoryCardForm, {
             queries: [{
                 endpoint: 'TPackagingInstructionLots',
