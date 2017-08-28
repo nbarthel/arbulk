@@ -155,8 +155,13 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.onSearch(dateObj);
     }
     onTextChange(e){
+        debugger
         var idValue = e.target.id
         this.Query[idValue] = e.target.value
+        let Obj = {"po_number":e.target.value}
+        this.setState({
+            selectedPO:Obj
+        })
         this.onSearch(e)
     }
     OnGroupBy(e){
@@ -764,10 +769,16 @@ PrintElem(elem)
             if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.railcarSearch && this.Where.Query.railcarSearch!= undefined ){
                 var railSearch = [{'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}}]
                 serachObjLots.push(railSearch)
+                this.setState({
+                    selectedRail:{"railcar":this.Where.Query.railcarSearch}
+                })
             }
             if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.LotSearch && this.Where.Query.LotSearch!= undefined ){
                 var lotSearch =  [{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
                 serachObjLots.push(lotSearch)
+                this.setState({
+                    selectedLot:{"railcar":this.Where.Query.LotSearch}
+                })
             }
             serachObj = [].concat.apply([], serachObj);
             serachObjLots = [].concat.apply([], serachObjLots);

@@ -14,11 +14,10 @@ class POSearchFilterPage extends React.Component {
         this.onKeyUp = this.onKeyUp.bind(this)
     }
     componentWillReceiveProps(nextProps){
-        if(nextProps.selectedPO["po_number"]!==""){
+        debugger
             this.setState({
                 poValue:nextProps.selectedPO["po_number"]
             })
-        }
     }
     componentDidMount() {
         axois.get(Base_Url+"TPackagingInstructions/getPoList").then((response) => {
@@ -32,9 +31,11 @@ class POSearchFilterPage extends React.Component {
 }
 
 onKeyUp(e){
+        debugger
     this.setState({
         poValue:e.target.value
     });
+    this.props.selectedPO["po_number"] = e.target.value;
  var poArray = [];
    // console.log(">>>>>>>>>>>>" , e.target.value)
      var PIview = createDataLoader(POSearchFilterPage, {
