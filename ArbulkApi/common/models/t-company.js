@@ -6,7 +6,7 @@ module.exports = function(Tcompany) {
 
         var ds = Tcompany.dataSource;
         var sql ="select count(aT.customer_id) as mostActive, bT.*, customer_id from  t_packaging_instructions as aT inner join t_company as bT on bT.id = aT.customer_id group by aT.customer_id having bT.type='CUSTOMER' order by mostActive desc limit "+id
-        console.log("sql>>>>>>>>>>>>>>>>>>>", sql)
+
         ds.connector.query(sql, function (err, result) {
             if (err) {
                 logger.error(err)
