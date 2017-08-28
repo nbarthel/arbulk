@@ -508,7 +508,7 @@ PrintElem(elem)
                 writable: true,
                 configurable:true,
                 value:this.checkedCompany})
-            this.state.locationSelected.push(e.target.id)
+            this.state.locationSelected.push({"location_id":e.target.id})
 
         }
         else if (!e.target.checked){
@@ -524,7 +524,7 @@ PrintElem(elem)
             if(index !== -1)
                 this.buttonDisplay = _.without(this.buttonDisplay,value)
             for(let i =0 ;i<this.state.locationSelected.length;i++){
-                if(this.state.locationSelected[i].toString() == id.toString()){
+                if(this.state.locationSelected[i].location_id.toString() == id.toString()){
                     this.state.locationSelected.splice(i,1);
                 }
             }
@@ -611,7 +611,6 @@ PrintElem(elem)
         else{
             filterValue = ''
         }
-
         this.flagForShipmentRecivedFilter = filterValue;
         Object.defineProperty(this.Where,"flagForShipmentRecivedFilter",{enumerable: true ,
             writable: true,
@@ -925,6 +924,10 @@ PrintElem(elem)
         }
     }
     saveView(e){
+        debugger
+        if(this.Where.Query && this.Where.Query){
+            let poObj = {"K":""};
+        }
         for(var props in this.Where.Query){
             var obj = {[props]:this.Where.Query[props]}
             this.Where.Query[props] = this.Where.Query[props]
@@ -1015,8 +1018,6 @@ PrintElem(elem)
 
     }
     onRemove(e){
-
-
         this.buttonDisplay = [];
         this.checkedCustomer = []
         this.checkedStatus = []
@@ -1030,7 +1031,12 @@ PrintElem(elem)
         this.setState({
             key : this.state.key +1,
             index : this.state.index +1,
-            SelcetedOptionForGroupBy : ""
+            SelcetedOptionForGroupBy : "",
+            locationSelected:[],
+            customerSelected:[],
+            statusSelected:[],
+            railcarArrived:'',
+            selectedShipmentRecieved:''
         })
         document.getElementById('groupBy').selectedIndex = 0
         document.getElementById('customer_name').selectedIndex = 0
