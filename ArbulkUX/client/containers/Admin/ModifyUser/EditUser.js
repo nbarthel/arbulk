@@ -110,7 +110,7 @@ class EditUser extends Component {
  }
 validate(){
 	if(!this.userObject.oldPassword){
-		swal("Please Provide a Old Password")
+		swal("Please provide a old password.")
 		return false;
 	}
 	if(this.userObject.confirmPassword==undefined && this.userObject.newPassword==undefined){
@@ -118,21 +118,21 @@ validate(){
 		this.userObject.newPassword = this.userObject.oldPassword
 	}
 	if(!this.userObject.confirmPassword || !this.userObject.newPassword){
-		swal("Please Provide a Password")
+		swal("Please provide a password.")
 		return false;
 	}
 	if(this.userObject.confirmPassword!=this.userObject.newPassword){
-		swal("Password Does Not Match")
+		swal("Password does not match.")
 		return false;
 	}
 	if(this.userObject.confirmEmail || this.userObject.email){
 		if(this.userObject.confirmEmail!=this.userObject.email){
-			swal("Email Does not Match")
+			swal("Email does not match.")
 			return false
 		}
 	}
 	if(this.userObject.firstName==""){
-		swal("First Name can't be Empty")
+		swal("First name can't be empty.")
 		return false
 	}
 	return true
@@ -157,17 +157,17 @@ validate(){
 			lastName:this.userObject.lastName,
 			role:this.userObject.role,
 			email:this.userObject.email}).then((response)=>{
-				swal("Update Successfully")
+				swal("Update successfully.")
 				hashHistory.goBack()
 			}).catch((error)=>{
-				swal("Can't Update Right Now try again later ")
+				swal("Can't update right now, Please try again later.")
 				return
 			})
 
 		}).catch((error)=>{
 			debugger
 				if(error.response.status == 401){
-					swal("Old Password is Wrong")
+					swal("Old password is wrong.")
 					return
 				}
 		})
