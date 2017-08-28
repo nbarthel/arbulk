@@ -1,9 +1,12 @@
 'use strict';
 
 module.exports = function(Tcompany) {
-    Tcompany.getCustomers = function (cb) {
+
+    Tcompany.getCustomers = function (id, cb) {
+
         var ds = Tcompany.dataSource;
-        var sql ="select count(aT.customer_id) as mostActive, bT.*, customer_id from  t_packaging_instructions as aT inner join t_company as bT on bT.id = aT.customer_id group by aT.customer_id order by mostActive desc"
+        var sql ="select count(aT.customer_id) as mostActive, bT.*, customer_id from  t_packaging_instructions as aT inner join t_company as bT on bT.id = aT.customer_id group by aT.customer_id having bT.type='CUSTOMER' order by mostActive desc limit "+id
+        console.log("sql>>>>>>>>>>>>>>>>>>>", sql)
         ds.connector.query(sql, function (err, result) {
             if (err) {
                 logger.error(err)
@@ -11,11 +14,13 @@ module.exports = function(Tcompany) {
             }
             cb(null, result);
         });
+        //cb(null, null);
 
     }
     Tcompany.remoteMethod('getCustomers', {
         description: 'get all customers',
-        returns: { type: 'object',root: true},
-        http: {path:"/getCustomers", verb: 'get'}
+        accepts: {"arg": "id","type": "string","http": {"source": "query"}},
+        returns: { type: 'object', root: true},
+        http: {path:"/getCustomers/", verb: 'get'}
     });
 };
