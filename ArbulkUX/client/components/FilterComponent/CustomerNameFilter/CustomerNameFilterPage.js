@@ -39,7 +39,7 @@ class CustomerNameFilterPage extends React.Component {
                 }
             }]
         })
-        var base = 'TCompanies'
+        var base = 'TCompanies/getCustomers'
         if(limit===8){
             this.urlCustomer = PIview._buildUrl(base, {
                 "where" : {type : "CUSTOMER"},"order": "name",limit:limit
