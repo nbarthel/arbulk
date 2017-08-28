@@ -552,7 +552,6 @@ PrintElem(elem)
                     this.state.locationSelected.splice(i,1);
                 }
             }
-
             this.forceUpdate()
         }
         this.onSearch(e)
@@ -671,6 +670,10 @@ PrintElem(elem)
         if(this.Where.CutofFilter){
             this.startDate = new Date(this.Where.CutofFilter[0].cargoCutoffDate)
             this.endDate = new Date(this.Where.CutofFilter[this.Where.CutofFilter.length-1].cargoCutoffDate)
+            let cutOfObj = [this.startDate,this.endDate]
+            this.setState({
+                SelectedCutOffDate:cutOfObj
+            })
         }
         if(this.startDate && this.endDate) {
             var cutoffDate = []
@@ -726,6 +729,10 @@ PrintElem(elem)
                 var createdEndObj = [{'created_on':{'lte':new Date(this.Where.created_on[1].created_on)}}]
                 serachObj.push(createdStartOnObj);
                 serachObj.push(createdEndObj);
+                let createdObj = [this.Where.created_on[0].created_on,this.Where.created_on[1].created_on]
+                this.setState({
+                    SelectedCreadtedDate : createdObj
+                });
             }
             //customer are name of customer to which packing has to be sent/recieved
             if(this.Where.Customer && this.Where.Customer.length >0){
@@ -1444,7 +1451,7 @@ PrintElem(elem)
                 <div className="container">
                     <div className="row-fluid">
 
-                        <FilterComponent railcarArrived={this.state.railcarArrived} statusSelected={this.state.statusSelected} customerSelected = {this.state.customerSelected} locationSelected = {this.state.locationSelected} getdt = {this.getdt} startDate = {this.StartDate} endDate = {this.EndDate} key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter} onRailCarArrivalFilter={this.onRailCarArrivalFilter} getCreatedDate={this.getCreatedDate} shipmentRecived={this.shipmentRecived}/>
+                        <FilterComponent SelectedCreadtedDate = {this.state.SelectedCreadtedDate} SelectedCutOffDate = {this.state.SelectedCutOffDate} selectedLot = {this.state.selectedLot} selectedRail={this.state.selectedRail} selectedPO = {this.state.selectedPO} selectedShipmentRecieved={this.state.selectedShipmentRecieved} railcarArrived={this.state.railcarArrived} statusSelected={this.state.statusSelected} customerSelected = {this.state.customerSelected} locationSelected = {this.state.locationSelected} getdt = {this.getdt} startDate = {this.StartDate} endDate = {this.EndDate} key={this.state.key} lotSearch={this.lotSearch} onClickPo={this.onClickPo} onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange} onStatusFilter = {this.onStatusFilter} onRailCarArrivalFilter={this.onRailCarArrivalFilter} getCreatedDate={this.getCreatedDate} shipmentRecived={this.shipmentRecived}/>
                         <div id="filter-grid">
                             <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
                                 <div className="pull-right margin-30-right" id="hide2">

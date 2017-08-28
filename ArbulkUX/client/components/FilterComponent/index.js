@@ -25,10 +25,10 @@ class FilterComponent extends React.Component {
                 <POSearchFilterPage selectedPO={this.props.selectedPO} onClickPo = {this.props.onClickPo}  onTextChange = {this.props.onTextChange}  />
                 <RailCarFilterPage selectedRail = {this.props.selectedRail} onClickli={this.props.onClickli}  onTextChange = {this.props.onTextChange} />
                 <LotSearchFilterPage selectedLot = {this.props.selectedLot}  lotSearch = {this.props.lotSearch} onTextChange = {this.props.onTextChange}/>
-                <CutOffDateFilterPage startDate = {this.props.StartDate} endDate = {this.props.EndDate} getdt={this.props.getdt} parent={this.props.parent} />
+                <CutOffDateFilterPage SelectedCutOffDate = {this.props.SelectedCutOffDate} startDate = {this.props.StartDate} endDate = {this.props.EndDate} getdt={this.props.getdt} parent={this.props.parent} />
                 <StatusFilterPage statusSelected = {this.props.statusSelected} onStatusFilter = {this.props.onStatusFilter} parent={this.props.parent}/>
                 <RailcarArrival railcarArrived={this.props.railcarArrived} onRailCarArrivalFilter = {this.props.onRailCarArrivalFilter} parent={this.props.parent}/>
-                <CreatedOndateFilter getCreatedDate={this.props.getCreatedDate}/>
+                <CreatedOndateFilter SelectedCreadtedDate = {this.props.SelectedCreadtedDate} getCreatedDate={this.props.getCreatedDate}/>
                 <ShipmentReceivedFilter selectedShipmentRecieved = {this.props.selectedShipmentRecieved} shipmentRecived={this.props.shipmentRecived}/>
             </div>
         </div>

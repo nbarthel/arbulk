@@ -6,6 +6,7 @@
  */
 import React from  'react';
 import DatePicker from 'react-datepicker';
+import moment from 'moment'
 import 'react-datepicker/dist/react-datepicker.css';
 
 
@@ -19,8 +20,14 @@ class ShippedDateFilter extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleChange1 = this.handleChange1.bind(this);
     };
-
-
+    componentWillReceiveProps(nextProps){
+        if(nextProps.SelectedCreadtedDate && nextProps.SelectedCreadtedDate.length>=2){
+            this.setState({
+                createdOnStartDate : moment(nextProps.SelectedCreadtedDate[0]),
+                createdOnEndDate : moment(nextProps.SelectedCreadtedDate[1])
+            })
+        }
+    }
     handleChange(date){
         var tempDate;
         if(date != null)

@@ -31,8 +31,6 @@ class RailCarFilterPage extends React.Component {
             .catch(function(err){
                 console.log(err)
             })
-
-
     }
 
 

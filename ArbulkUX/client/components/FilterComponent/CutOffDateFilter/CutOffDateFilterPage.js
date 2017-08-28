@@ -1,5 +1,6 @@
 import React from  'react';
 import DatePicker from 'react-datepicker';
+import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 
 class CutOffDateFilterPage extends React.Component {
@@ -13,10 +14,16 @@ constructor(props){
     this.handleChange = this.handleChange.bind(this);
     this.handleChange1 = this.handleChange1.bind(this);
     //this.getDate() = this.getDate().bind(this);
-
     };
-
-
+    componentWillReceiveProps(nextProps){
+         
+        if(nextProps.SelectedCutOffDate && nextProps.SelectedCutOffDate.length >=2){
+            this.setState({
+                startDate:moment(nextProps.SelectedCutOffDate[0]),
+                endDate:moment(nextProps.SelectedCutOffDate[1])
+            })
+        }
+    }
     handleChange(date){
       var tempDate;
       if(date != null)
@@ -51,15 +58,13 @@ constructor(props){
 
     }
     render() {
-
       if((this.props.parent && this.props.parent !="RailcarArrivalEntry" && this.props.parent !="RailcarDeparture")||this.props.parent==undefined){
         return (
             <div className="">
                 <hr/>
                 <div className="head_bg">
                     <h6 className="pull-left text_left">CUT OFF DATE </h6>
-              </div>
-
+                </div>
                 <div className="">
                     <div id="date" className="row">
                         <div className="col-md-6 col-sm-6 col-xs-6 pr-5">
