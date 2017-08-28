@@ -155,13 +155,27 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.onSearch(dateObj);
     }
     onTextChange(e){
-        debugger
-        var idValue = e.target.id
-        this.Query[idValue] = e.target.value
-        let Obj = {"po_number":e.target.value}
-        this.setState({
-            selectedPO:Obj
-        })
+        var idValue = e.target.id;
+        this.Query[idValue] = e.target.value;
+        let Obj = '';
+        if(e.target.id==="LotSearch"){
+            Obj = {"lot":e.target.value}
+            this.setState({
+                selectedLot:Obj
+            })
+        }
+        else if(e.target.id==="railcarSearch"){
+            Obj = {"railcar":e.target.value}
+            this.setState({
+                selectedRail:Obj
+            })
+        }
+        else if(e.target.id==="POSearch"){
+            Obj = {"po_number":e.target.value}
+            this.setState({
+                selectedPO:Obj
+            })
+        }
         this.onSearch(e)
     }
     OnGroupBy(e){
@@ -777,7 +791,7 @@ PrintElem(elem)
                 var lotSearch =  [{'lot_number': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
                 serachObjLots.push(lotSearch)
                 this.setState({
-                    selectedLot:{"railcar":this.Where.Query.LotSearch}
+                    selectedLot:{"lot":this.Where.Query.LotSearch}
                 })
             }
             serachObj = [].concat.apply([], serachObj);
@@ -1429,7 +1443,7 @@ PrintElem(elem)
                 <div className="container">
                     <div className="row-fluid">
 
-                        <FilterComponent selectedPO = {this.state.selectedPO} selectedShipmentRecieved={this.state.selectedShipmentRecieved} railcarArrived={this.state.railcarArrived} statusSelected={this.state.statusSelected} customerSelected = {this.state.customerSelected} locationSelected = {this.state.locationSelected} getdt = {this.getdt} startDate = {this.StartDate} endDate = {this.EndDate} key={this.state.key} lotSearch={this.lotSearch} onClickPo={this.onClickPo} onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange} onStatusFilter = {this.onStatusFilter} onRailCarArrivalFilter={this.onRailCarArrivalFilter} getCreatedDate={this.getCreatedDate} shipmentRecived={this.shipmentRecived}/>
+                        <FilterComponent selectedLot = {this.state.selectedLot} selectedRail={this.state.selectedRail} selectedPO = {this.state.selectedPO} selectedShipmentRecieved={this.state.selectedShipmentRecieved} railcarArrived={this.state.railcarArrived} statusSelected={this.state.statusSelected} customerSelected = {this.state.customerSelected} locationSelected = {this.state.locationSelected} getdt = {this.getdt} startDate = {this.StartDate} endDate = {this.EndDate} key={this.state.key} lotSearch={this.lotSearch} onClickPo={this.onClickPo} onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange} onStatusFilter = {this.onStatusFilter} onRailCarArrivalFilter={this.onRailCarArrivalFilter} getCreatedDate={this.getCreatedDate} shipmentRecived={this.shipmentRecived}/>
                         <div id="filter-grid">
                             <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
                                 <div className="pull-right margin-30-right" id="hide2">

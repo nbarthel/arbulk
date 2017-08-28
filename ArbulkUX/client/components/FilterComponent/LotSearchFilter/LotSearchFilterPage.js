@@ -9,13 +9,21 @@ class LotSearchFilterPage extends React.Component {
         super()
         this.showAll = this.showAll.bind(this);
         this.state = {
-            show : false
+            show : false,
+            lotValue:''
         }
          this.onKeyUp = this.onKeyUp.bind(this)
     }
+    componentWillReceiveProps(nextProps){
+         
+        if(nextProps.selectedLot){
+            this.setState({
+                lotValue : nextProps.selectedLot["lot"]
+            })
+        }
 
+    }
     componentDidMount() {
-        debugger;
         axois.get(Base_Url+"TPackagingInstructionLots/getLotList").then((response) => {
             this.setState({
                 lotLIst: response.data
@@ -29,7 +37,6 @@ class LotSearchFilterPage extends React.Component {
 
 
 onKeyUp(e){
-   debugger;
    var lotArray = [];
     console.log(">>>>>>>>>>>>" , e.target.value)
      var PIview = createDataLoader(LotSearchFilterPage, {
@@ -92,7 +99,6 @@ else{
 
 
     showAll(){
-        debugger;
          if(this.state.show == true){
            this.setState({
             show  : false
@@ -131,7 +137,7 @@ else{
                     <div className="">
                         <div className="left-inner-addon ">
                             <i className="fa fa-search" aria-hidden="true"></i>
-                            <input type="search" onKeyUp={this.onKeyUp}  id="LotSearch" onChange = {this.props.onTextChange}  className="form-control" placeholder="Search" />
+                            <input type="search" onKeyUp={this.onKeyUp}  id="LotSearch" value = {this.state.lotValue} onChange = {this.props.onTextChange}  className="form-control" placeholder="Search" />
                             <ul className = "list-hover scrollshow">
                                   { this.state.show== true? this.expandList : ''}
                             </ul>

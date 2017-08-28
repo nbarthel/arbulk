@@ -14,10 +14,11 @@ class POSearchFilterPage extends React.Component {
         this.onKeyUp = this.onKeyUp.bind(this)
     }
     componentWillReceiveProps(nextProps){
-        debugger
+        if(nextProps.selectedPO){
             this.setState({
                 poValue:nextProps.selectedPO["po_number"]
             })
+        }
     }
     componentDidMount() {
         axois.get(Base_Url+"TPackagingInstructions/getPoList").then((response) => {
@@ -31,7 +32,6 @@ class POSearchFilterPage extends React.Component {
 }
 
 onKeyUp(e){
-        debugger
     this.setState({
         poValue:e.target.value
     });
