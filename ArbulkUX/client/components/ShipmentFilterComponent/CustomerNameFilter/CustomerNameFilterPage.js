@@ -22,7 +22,7 @@ class CustomerNameFilterPage extends React.Component {
         console.log("I have recieved props")
         //debugger
 
-        var base = 'TCompanies'
+        var base = 'TCompanies/getCustomers'
 
         if(limit===8){
             this.urlCustomer = PIview._buildUrl(base, {
