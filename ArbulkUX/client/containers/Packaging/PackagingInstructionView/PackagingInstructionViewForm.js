@@ -925,10 +925,10 @@ PrintElem(elem)
     }
     saveView(e){
         debugger
-        if(this.Where.Query && this.Where.Query){
-            let poObj = {"K":""};
+        for(let props in this.Where.Query){
+            this.Where[props] = this.Where.query[props]
         }
-        for(var props in this.Where.Query){
+        for(let props in this.Where.Query){
             var obj = {[props]:this.Where.Query[props]}
             this.Where.Query[props] = this.Where.Query[props]
         }
@@ -943,7 +943,7 @@ PrintElem(elem)
             "modifiedOn": "2016-09-26",
             "active": 1
         }
-        if(saveCustomView.viewFilters != undefined && saveCustomView.viewFilters != null){
+        if(JSON.stringify(this.Where)!=="{}" && this.state.Text!==undefined && this.state.Text!==""){
             axios.post(Base_Url + "TCustomViews", saveCustomView).then(response=> {
                 swal('Success' , "Successfully Saved..." , 'success');
                 console.log("response", response)
@@ -955,6 +955,9 @@ PrintElem(elem)
                 })
             })
 
+        }
+        else if(this.state.Text===undefined || this.state.Text===""){
+            swal('Error' , "Please give the name of custom view" , 'error');
         }
         else {
             swal('Error' , "Please Select Filter Options First" , 'error');
@@ -1023,6 +1026,7 @@ PrintElem(elem)
         this.checkedStatus = []
         this.checkedCompany = []
         this.Query = []
+        this.where = ''
         delete this.Where.Company
         delete this.Where.Customer
         delete this.Where.status
@@ -1042,7 +1046,6 @@ PrintElem(elem)
         document.getElementById('customer_name').selectedIndex = 0
         localStorage.removeItem('piViewData')
         this.forceUpdate();
-
     }
     onConfirmClick(){
         if(this.selected != undefined && this.selected != null){
