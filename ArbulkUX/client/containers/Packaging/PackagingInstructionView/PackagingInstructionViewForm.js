@@ -748,7 +748,7 @@ PrintElem(elem)
                 var obj = {}
                 let tempObj = [];
                 for(var i in this.Where.Customer){
-                    this.checkedCustomer.push(this.Where.Company[j])
+                    this.checkedCustomer.push(this.Where.Customer[i])
                     tempObj.push(this.Where.Customer[i])
                     //this.checkedCompany.push(this.Where.Customer[i])
                     this.setState({
