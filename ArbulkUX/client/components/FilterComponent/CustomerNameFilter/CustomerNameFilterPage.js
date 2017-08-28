@@ -43,16 +43,18 @@ class CustomerNameFilterPage extends React.Component {
         if(limit===8){
             this.urlCustomer = PIview._buildUrl(base+"/?id="+parseInt(limit))
         }else {
-            this.urlCustomer = PIview._buildUrl(base)
+            base = 'TCompanies'
+            this.urlCustomer = PIview._buildUrl(base, {"where" : {type : "CUSTOMER"}, "order": "name"})
         }
 
         axios.get(this.urlCustomer).then((response) => {
+
             console.log("customer", response)
             this.setState({
                 name: response.data
             })
         }).catch(function(err){
-              //  console.log('eroor>>>>', err)
+                console.log('eroor>>>>' , err)
             })
 
 

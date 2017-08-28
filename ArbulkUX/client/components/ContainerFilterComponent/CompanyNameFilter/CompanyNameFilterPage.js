@@ -33,24 +33,6 @@ class CompanyNameFilterPage extends React.Component{
     }
         
 
-   /* onClick(e,location){
-        if(e.target.checked){
-            this.props.checkedCompany[e.target.id] = e.target.value;
-            this.props.buttonDisplay.push(e.target.value)
-            //console.log(this.props.checkedCompany)
-            //console.log(this.props.buttonDisplay)
-           }
-        else if (!e.target.checked){
-         delete this.props.checkedCompany[e.target.id]
-            let value = e.target.value
-            let index = this.props.buttonDisplay.indexOf(e.target.value)
-            if(index !== -1)
-             this.props.buttonDisplay = _.without(this.props.buttonDisplay,value)       
-                  console.log(this.props.buttonDisplay)
-                   }
-    }
-*/
-
     render(){
 
     let locations = _.map(this.state.location,(location) => {
