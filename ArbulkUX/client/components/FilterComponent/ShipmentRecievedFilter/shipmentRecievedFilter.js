@@ -9,7 +9,7 @@ class RailcarArrivalFilterPage extends Component {
         super(props)
     }
     componentWillReceiveProps(nextProps){
-        debugger
+         
         if(nextProps.selectedShipmentRecieved && nextProps.selectedShipmentRecieved.shipmentRecieved){
             this.refs["arrived_yes"].checked = true
         }

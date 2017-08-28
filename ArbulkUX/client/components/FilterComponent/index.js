@@ -22,7 +22,7 @@ class FilterComponent extends React.Component {
                 <h4 className=" hidden-xs"> REFINE YOUR RESULT </h4>
                 <CompanyNameFilterPage locationSelected = {this.props.locationSelected} onCompanyFilter = {this.props.onCompanyFilter}/>
                 <CustomerNameFilterPage customerSelected = {this.props.customerSelected} onCustomerFilter = {this.props.onCustomerFilter} />
-                <POSearchFilterPage onClickPo = {this.props.onClickPo}  onTextChange = {this.props.onTextChange}  />
+                <POSearchFilterPage selectedPO={this.props.selectedPO} onClickPo = {this.props.onClickPo}  onTextChange = {this.props.onTextChange}  />
                 <RailCarFilterPage onClickli={this.props.onClickli}  onTextChange = {this.props.onTextChange} />
                 <LotSearchFilterPage  lotSearch = {this.props.lotSearch} onTextChange = {this.props.onTextChange}/>
                 <CutOffDateFilterPage startDate = {this.props.StartDate} endDate = {this.props.EndDate} getdt={this.props.getdt} parent={this.props.parent} />

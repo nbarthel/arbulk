@@ -53,7 +53,12 @@ export default class PackagingInstructionViewForm extends React.Component {
             customerSelected:[],
             statusSelected:[],
             railcarArrived:'',
-            selectedShipmentRecieved:''
+            selectedShipmentRecieved:'',
+            selectedPO:'',
+            selectedRail:'',
+            selectedLot:'',
+            SelectedCutOffDate:[],
+            SelectedCreadtedDate:[]
         }
         this.status
         this.buttonDisplay = [ ]
@@ -631,7 +636,12 @@ PrintElem(elem)
             customerSelected:[],
             statusSelected:[],
             railcarArrived:'',
-            selectedShipmentRecieved:''
+            selectedShipmentRecieved:'',
+            selectedPO:'',
+            selectedRail:'',
+            selectedLot:'',
+            SelectedCutOffDate:[],
+            SelectedCreadtedDate:[]
         });
         var index = e.target.selectedIndex ;
         var blob = e.target.value
@@ -747,6 +757,9 @@ PrintElem(elem)
             if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.POSearch && this.Where.Query.POSearch!= undefined ){
                 var poSearch =  [ {'po_number': {"like": "%" + this.Where.Query.POSearch + "%"}}]
                 serachObj.push(poSearch)
+                this.setState({
+                    selectedPO:{"po_number":this.Where.Query.POSearch}
+                })
             }
             if(this.Where.Query && this.Where.Query!= null && this.Where.Query!= undefined && this.Where.Query.railcarSearch && this.Where.Query.railcarSearch!= undefined ){
                 var railSearch = [{'railcar_number': {"like": "%" + this.Where.Query.railcarSearch + "%"}}]
@@ -926,7 +939,7 @@ PrintElem(elem)
     saveView(e){
         debugger
         for(let props in this.Where.Query){
-            this.Where[props] = this.Where.query[props]
+            this.Where[props] = this.Where.Query[props]
         }
         for(let props in this.Where.Query){
             var obj = {[props]:this.Where.Query[props]}
@@ -943,24 +956,19 @@ PrintElem(elem)
             "modifiedOn": "2016-09-26",
             "active": 1
         }
-        if(JSON.stringify(this.Where)!=="{}" && this.state.Text!==undefined && this.state.Text!==""){
+        if(this.state.Text!==undefined && this.state.Text!==""){
             axios.post(Base_Url + "TCustomViews", saveCustomView).then(response=> {
                 swal('Success' , "Successfully Saved..." , 'success');
                 console.log("response", response)
-
                 axios.get(Base_Url+"TCustomViews").then(response=>{
                     this.setState({
                         savedViews : response.data
                     })
                 })
             })
-
         }
-        else if(this.state.Text===undefined || this.state.Text===""){
+        else{
             swal('Error' , "Please give the name of custom view" , 'error');
-        }
-        else {
-            swal('Error' , "Please Select Filter Options First" , 'error');
         }
 
     }
@@ -1410,7 +1418,7 @@ PrintElem(elem)
                 <div className="container">
                     <div className="row-fluid">
 
-                        <FilterComponent selectedShipmentRecieved={this.state.selectedShipmentRecieved} railcarArrived={this.state.railcarArrived} statusSelected={this.state.statusSelected} customerSelected = {this.state.customerSelected} locationSelected = {this.state.locationSelected} getdt = {this.getdt} startDate = {this.StartDate} endDate = {this.EndDate} key={this.state.key} lotSearch={this.lotSearch} onClickPo={this.onClickPo} onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange} onStatusFilter = {this.onStatusFilter} onRailCarArrivalFilter={this.onRailCarArrivalFilter} getCreatedDate={this.getCreatedDate} shipmentRecived={this.shipmentRecived}/>
+                        <FilterComponent selectedPO = {this.state.selectedPO} selectedShipmentRecieved={this.state.selectedShipmentRecieved} railcarArrived={this.state.railcarArrived} statusSelected={this.state.statusSelected} customerSelected = {this.state.customerSelected} locationSelected = {this.state.locationSelected} getdt = {this.getdt} startDate = {this.StartDate} endDate = {this.EndDate} key={this.state.key} lotSearch={this.lotSearch} onClickPo={this.onClickPo} onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange} onStatusFilter = {this.onStatusFilter} onRailCarArrivalFilter={this.onRailCarArrivalFilter} getCreatedDate={this.getCreatedDate} shipmentRecived={this.shipmentRecived}/>
                         <div id="filter-grid">
                             <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
                                 <div className="pull-right margin-30-right" id="hide2">
