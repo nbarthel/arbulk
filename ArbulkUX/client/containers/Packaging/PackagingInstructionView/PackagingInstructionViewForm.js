@@ -109,6 +109,7 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.handleOpen = this.handleOpen.bind(this)
         this.handleClose = this.handleClose.bind(this)
         this.saveNewCustomView = this.saveNewCustomView.bind(this);
+        this.updateExistingView = this.updateExistingView.bind(this);
     }
     componentWillMount() {
         var userId = Number(localStorage.getItem("userId"));
@@ -663,11 +664,13 @@ PrintElem(elem)
             selectedLot:'',
             SelectedCutOffDate:[],
             SelectedCreadtedDate:[],
-            viewId:e.target.id
+            viewId:e.target.selectedOptions[0].id
         });
         var index = e.target.selectedIndex ;
         var blob = e.target.value
         this.Where = JSON.parse(blob)
+        this.createdOnEndDate = '';
+        this.createdOnStartDate = '';
         var cutofFilter = []
         var flagForcutOffFilter = false
         if(this.Where.CutofFilter){
@@ -736,6 +739,8 @@ PrintElem(elem)
                 this.setState({
                     SelectedCreadtedDate : createdObj
                 });
+                this.createdOnEndDate = this.Where.created_on[1].created_on
+                this.createdOnStartDate = this.Where.created_on[0].created_on
             }
             //customer are name of customer to which packing has to be sent/recieved
             if(this.Where.Customer && this.Where.Customer.length >0){
@@ -1007,7 +1012,34 @@ PrintElem(elem)
         }
     }
     updateExistingView(tempThis){
-
+        debugger
+        for(let props in tempThis.Where.Query){
+            tempThis.Where[props] = tempThis.Where.Query[props]
+        }
+        for(let props in tempThis.Where.Query){
+            var obj = {[props]:tempThis.Where.Query[props]}
+            tempThis.Where.Query[props] = tempThis.Where.Query[props]
+        }
+        var saveCustomView = {
+            "id": tempThis.state.viewId,
+            "screenName": "PACKAGING",
+            "viewName": tempThis.state.Text,
+            "viewFilters": JSON.stringify(tempThis.Where),
+            "modifiedOn": moment(new Date()).format("YYYY-MM-DD"),
+            "active": 1
+        }
+        if(tempThis.state.Text===undefined || tempThis.state.Text===""){
+            delete saveCustomView.viewName;
+        }
+        axios.put(Base_Url+"TCustomViews",saveCustomView).then(response=>{
+            swal('Updated' , "Successfully updated." , 'success');
+            console.log("response", response)
+            axios.get(Base_Url+"TCustomViews").then(response=>{
+                tempThis.setState({
+                    savedViews : response.data
+                })
+            })
+        })
     }
     saveView(e){
         debugger
