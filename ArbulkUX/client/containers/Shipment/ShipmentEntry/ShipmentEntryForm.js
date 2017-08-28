@@ -559,7 +559,7 @@ class ShipmentEntryForm extends React.Component {
 
         else {
             this.state.index = this.state.index-1
-            swal("Empty Fields","Please Enter All The Fields Before Adding New Lots.","error")
+            swal("Empty Fields","Please enter all the fields before adding new lots.","error")
         }
 
     }
@@ -577,7 +577,7 @@ class ShipmentEntryForm extends React.Component {
             })
         }
         else {
-            swal("Empty Fields","Please Enter All The Fields Before Adding New Lots.","error")
+            swal("Empty Fields","Please enter all the fields before adding new lots.","error")
         }
 
     }
@@ -651,7 +651,7 @@ class ShipmentEntryForm extends React.Component {
             //console.log(this.DomesticInfoObjects);
         }
         else {
-            swal("Empty Fields","Please Enter All The Fields Before Adding New Lots.","error")
+            swal("Empty Fields","Please enter all the fields before adding new lots.","error")
         }
 
     }
@@ -1081,7 +1081,7 @@ class ShipmentEntryForm extends React.Component {
             if(!(this.isValidInt())) {
                 EnableClick('submitContainer')
                 if(this.haveSpecial==0){
-                    swal("", "Please fill red marked International Shipment fields", "error")
+                    swal("", "Please fill red marked international shipment fields.", "error")
                 }
                 return
             }

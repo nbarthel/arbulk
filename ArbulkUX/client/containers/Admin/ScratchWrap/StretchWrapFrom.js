@@ -34,7 +34,7 @@ class StretchWrapFrom extends React.Component {
         let errors = { }
         if(this.createUsrObj.name == "")
         {
-            errors.name = "Name is Required.";
+            errors.name = "Name is required.";
             this.error = true;
         }
         if(this.error){
@@ -51,7 +51,7 @@ class StretchWrapFrom extends React.Component {
             axios.post(Base_Url+"TWrapTypes",this.createUsrObj).then((response)=>{
                 swal({
                     title: "Success",
-                    text: "ScratchWrap Added",
+                    text: "Stretch wrap added",
                     type: "success",
                     showCancelButton: false,
                     confirmButtonColor: "#DD6B55",

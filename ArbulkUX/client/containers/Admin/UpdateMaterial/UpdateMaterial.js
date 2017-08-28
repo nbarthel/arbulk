@@ -65,7 +65,7 @@ this.forceUpdate()
     axios.put(Base_Url+"TPackagingMaterials/"+temp.id,temp).then((response)=>{
       	swal({
   				title: "Success",
-  				text: "Updated",
+  				text: "Updated.",
   				type: "success",
   				showCancelButton: false
   			},

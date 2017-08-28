@@ -552,6 +552,7 @@ PrintElem(elem)
                     this.state.locationSelected.splice(i,1);
                 }
             }
+
             this.forceUpdate()
         }
         this.onSearch(e)
@@ -983,7 +984,7 @@ PrintElem(elem)
         }
         if(this.state.Text!==undefined && this.state.Text!==""){
             axios.post(Base_Url + "TCustomViews", saveCustomView).then(response=> {
-                swal('Success' , "Successfully Saved..." , 'success');
+                swal('Success' , "Successfully saved." , 'success');
                 console.log("response", response)
                 axios.get(Base_Url+"TCustomViews").then(response=>{
                     this.setState({
@@ -993,7 +994,7 @@ PrintElem(elem)
             })
         }
         else{
-            swal('Error' , "Please give the name of custom view" , 'error');
+            swal('Error' , "Please give the name of custom view." , 'error');
         }
 
     }
@@ -1017,7 +1018,7 @@ PrintElem(elem)
             hashHistory.push('/Packaging/inventorycard/'+this.piID+'/'+this.selected)}
         else
         {
-            swal("Selection Missing", "Please Select A Lot To View.","error")
+            swal("Selection Missing", "Please select a lot to view.","error")
         }
     }
     headerCheckboxChange(e,value){
@@ -1088,7 +1089,7 @@ PrintElem(elem)
             }
 
             else{
-                swal("Error","Please select unconfirmed order","error")
+                swal("Error","Please select unconfirmed order.","error")
             }
         }
         else
@@ -1107,7 +1108,7 @@ PrintElem(elem)
             hashHistory.push('/Packaging/enterpackginginst/'+this.piID +'/'+ this.selected)
         }
         else{
-            swal("Nothing To Edit","Please Select A PI To Edit.","error")
+            swal("Nothing To Edit","Please select a PI to edit.","error")
         }
     }
 
@@ -1135,7 +1136,7 @@ PrintElem(elem)
                         console.log("Queue Added" , response)
                         swal({
                                 title: "Success",
-                                text: "Successfully added to the queue",
+                                text: "Successfully added to the queue.",
                                 type: "success",
                                 showCancelButton: true,
                             },
@@ -1156,7 +1157,7 @@ PrintElem(elem)
         }
 
         else {
-            swal("","The selected order is not ready","info")
+            swal("","The selected order is not ready.","info")
         }
     }
     toggleColumn(name,value){
@@ -1406,11 +1407,11 @@ PrintElem(elem)
     }
     print(e){
         if(this.status==undefined || this.status==null){
-            swal("" , "Please Select a single Lot" , "info")
+            swal("" , "Please select a single lot." , "info")
             return
         }
         if(this.status == "UNCONFIRMED"){
-            swal("" , "The Order is not confirmed yet" , "info")
+            swal("" , "The order is not confirmed yet." , "info")
             return
         }
         if(this.selected != undefined || this.piID != undefined){
@@ -1419,7 +1420,7 @@ PrintElem(elem)
         }
         else
         {
-            swal("Selection Missing", "Please Select A Lot To View.","error")
+            swal("Selection Missing", "Please select a lot to view.","error")
             return
         }
     }
@@ -1443,7 +1444,7 @@ PrintElem(elem)
                 <div className="container">
                     <div className="row-fluid">
 
-                        <FilterComponent selectedLot = {this.state.selectedLot} selectedRail={this.state.selectedRail} selectedPO = {this.state.selectedPO} selectedShipmentRecieved={this.state.selectedShipmentRecieved} railcarArrived={this.state.railcarArrived} statusSelected={this.state.statusSelected} customerSelected = {this.state.customerSelected} locationSelected = {this.state.locationSelected} getdt = {this.getdt} startDate = {this.StartDate} endDate = {this.EndDate} key={this.state.key} lotSearch={this.lotSearch} onClickPo={this.onClickPo} onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange} onStatusFilter = {this.onStatusFilter} onRailCarArrivalFilter={this.onRailCarArrivalFilter} getCreatedDate={this.getCreatedDate} shipmentRecived={this.shipmentRecived}/>
+                        <FilterComponent railcarArrived={this.state.railcarArrived} statusSelected={this.state.statusSelected} customerSelected = {this.state.customerSelected} locationSelected = {this.state.locationSelected} getdt = {this.getdt} startDate = {this.StartDate} endDate = {this.EndDate} key={this.state.key} lotSearch={this.lotSearch}   onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter} onRailCarArrivalFilter={this.onRailCarArrivalFilter} getCreatedDate={this.getCreatedDate} shipmentRecived={this.shipmentRecived}/>
                         <div id="filter-grid">
                             <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
                                 <div className="pull-right margin-30-right" id="hide2">

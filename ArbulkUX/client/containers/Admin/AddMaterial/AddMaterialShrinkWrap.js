@@ -40,7 +40,7 @@ class AddMaterialShrinkWrap extends Component {
 		axios.post(Base_Url + "TPackagingMaterials",this.wrapPostObj).then((response)=>{
 			swal({
 				title: "Success",
-				text: "New Material Added",
+				text: "New material added.",
 				type: "success",
 				showCancelButton: false
 			},

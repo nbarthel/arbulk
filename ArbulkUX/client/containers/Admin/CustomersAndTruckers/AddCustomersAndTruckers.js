@@ -155,7 +155,7 @@ import { validateCustomer,validateAddress } from './validateCustomer'
  		 			axios.post(Base_Url + "TAddresses",payLoad).then((newResponse)=>{
  		 				swal({
  						title: "Success",
- 						text: "New Entry Created",
+ 						text: "New entry created.",
  						type: "success",
  						showCancelButton: false
  					},

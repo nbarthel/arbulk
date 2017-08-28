@@ -397,7 +397,7 @@ onSave(e){
   if(parseInt(arrivedDom) + parseInt(arrivedInt) == parseInt(totalContainer))
   {
   EnableClick('Save')
-  swal("" , "Arrived containers can not be more than assigned containers", "info")
+  swal("" , "Arrived containers can not be more than assigned containers.", "info")
   return
 }
 }
@@ -409,7 +409,7 @@ else if(this.shipmentType == 0){
   if((parseInt(arrivedDom) + parseInt(arrivedInt)) == parseInt(totalContainer))
   {
   EnableClick('Save')
-  swal("" , "Arrived containers can not be more than assigned containers" , "info")
+  swal("" , "Arrived containers can not be more than assigned containers." , "info")
   return
 }
 }
@@ -428,7 +428,7 @@ else if(this.shipmentType == 0){
   today = mm+'/'+dd+'/'+yyyy
   if(this.shipmentId == ""){
     EnableClick('Save')
-    swal("Missing","Please Select A Booking Number","info")
+    swal("Missing","Please select a booking number.","info")
     return
       }
 
@@ -448,7 +448,7 @@ else if(this.shipmentType == 0){
   this.postObj.id = 0
   if(this.isValid() == true){
     axios.post(Base_Url + 'TContainerDomestics',this.postObj).then((response) =>{
-      swal('Success',"Entry Done","success")
+      swal('Success',"Entry done.","success")
         hashHistory.push('/Container/containerview')
 
     }).catch(function(error){
@@ -457,7 +457,7 @@ else if(this.shipmentType == 0){
   }else{
       EnableClick('Save')
       if(this.haveSpecial==0){
-        swal("Missing","Please fill in all the fields","info")
+        swal("Missing","Please fill in all the fields.","info")
       }
 
     }
@@ -472,7 +472,7 @@ onIntSave(e){
   if(parseInt(arrivedDom) + parseInt(arrivedInt) == parseInt(totalContainer))
   {
   EnableClick('IntSave')
-  swal("" , "Arrived containers can not be more than assigned containers" , "info")
+  swal("" , "Arrived containers can not be more than assigned containers." , "info")
   return
 }
 }
@@ -484,7 +484,7 @@ else if(this.shipmentType == 0){
   if((parseInt(arrivedDom) + parseInt(arrivedInt)) == parseInt(totalContainer))
   {
   EnableClick('IntSave')
-  swal("" , "Arrived containers can not be more than assigned containers" , "info")
+  swal("" , "Arrived containers can not be more than assigned containers." , "info")
   return
 }
 }
@@ -502,19 +502,19 @@ else if(this.shipmentType == 0){
 
 if(this.shipmentId == ""){
   EnableClick('IntSave')
-  swal("Missing","Please Select A Booking Number","info")
+  swal("Missing","Please select a booking number.","info")
   return
 }
 
     if(this.state.ContainerTypeConfirmed===0){
         EnableClick('IntSave')
-        swal("Missing","Please confirm container type ","info")
+        swal("Missing","Please confirm container type.","info")
         return
     }
     console.log(this.state.ContainerSteamLineConfirmed);
     if(this.state.ContainerSteamLineConfirmed===0){
         EnableClick('IntSave')
-        swal("Missing","Please confirm steamship line","info")
+        swal("Missing","Please confirm steamship line.","info")
         return
     }
   this.IntPostObj.shipmentId = parseInt(this.shipmentId)
@@ -537,7 +537,7 @@ if(this.shipmentId == ""){
     
   if(this.isIValid() == true){
     axios.post(Base_Url + 'TContainerInternationals',this.IntPostObj).then((response) =>{
-      swal('Success',"Entry Done","success")
+      swal('Success',"Entry done.","success")
         hashHistory.push('/Container/containerview')
     }).catch(function(){
       EnableClick('IntSave')
@@ -545,7 +545,7 @@ if(this.shipmentId == ""){
   }else{
       EnableClick('IntSave')
       if(this.haveSpecial==0){
-        swal("Missing","Please fill the missing fields","info")
+        swal("Missing","Please fill the missing fields.","info")
       }
 
     }

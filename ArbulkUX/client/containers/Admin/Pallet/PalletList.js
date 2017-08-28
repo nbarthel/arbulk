@@ -27,7 +27,7 @@ class PalletList extends React.Component {
         axios.put(Base_Url+"TPalletTypes/"+ID,{"active": 0}).then((response)=>{
             swal({
                 title: "Success",
-                text: "Pallet Deleted Successfully!",
+                text: "Pallet deleted successfully.",
                 type: "success",
                 showCancelButton: false,
                 confirmButtonColor: "#DD6B55",
@@ -44,7 +44,7 @@ class PalletList extends React.Component {
         axios.put(Base_Url+"TPalletTypes/"+ID,{"active": 1}).then((response)=>{
             swal({
                 title: "Success",
-                text: "Pallet Reactivated Successfully!",
+                text: "Pallet reactivated successfully.",
                 type: "success",
                 showCancelButton: false,
                 confirmButtonColor: "#DD6B55",

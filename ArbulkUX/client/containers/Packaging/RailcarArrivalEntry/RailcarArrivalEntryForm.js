@@ -211,8 +211,8 @@ export default class RailcarArrivalEntryForm extends React.Component {
             $.ajax({
                 url: this.urlSearch,
                 success:function(data){
-                    //debugger;
-                    //	console.log('ajax ',data);
+                    debugger;
+                    console.log('ajax ',data);
 
                     this.setState(
                         {

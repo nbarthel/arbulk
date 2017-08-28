@@ -7,26 +7,26 @@ export default function validateIntInput(data){
 	let intErrors = { };
 	var isError = false;
 	if(Validator.isNull(data.containerNumber)){
-		intErrors.containerNumber = "Must be a Number";
+		intErrors.containerNumber = "Must be a number.";
 		isError = true;
 	}
 	// if(Validator.isNull(data.sealNumber)){
 	// 	intErrors.sealNumber = "Required"
 	// }
 	if(Validator.isNull(data.truckerId)){
-		intErrors.truckerId = "Required"
+		intErrors.truckerId = "Required."
 		isError = true;
 	}
 	if(Validator.isNull(data.pickupTruckerId)){
-		intErrors.pickupTrucker = "Required"
+		intErrors.pickupTrucker = "Required."
 		isError = true;
 	}
 	if(Validator.isNull(data.chasisNumber)){
-		intErrors.chasisNumber = "Required"
+		intErrors.chasisNumber = "Required."
 		isError = true;
 	}
 	if(Validator.isNull(data.tareWeight)){
-		intErrors.tareWeight = "Required"
+		intErrors.tareWeight = "Required."
 		isError = true;
 	}
 	if(!isError){

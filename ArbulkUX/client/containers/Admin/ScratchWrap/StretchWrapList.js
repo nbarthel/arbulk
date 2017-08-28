@@ -30,7 +30,7 @@ class StretchWrapList extends React.Component {
         axios.put(Base_Url+"TWrapTypes/"+ID,{"activee": 0}).then((response)=>{
             swal({
                 title: "Success",
-                text: "Stretch Deleted Successfully!",
+                text: "Stretch wrap deleted successfully.",
                 type: "success",
                 showCancelButton: false,
                 confirmButtonColor: "#DD6B55",

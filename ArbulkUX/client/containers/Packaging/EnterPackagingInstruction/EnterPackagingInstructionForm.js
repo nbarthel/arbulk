@@ -458,7 +458,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
       }
       if (flagForuniqueRailCar) {
           e.preventDefault();
-          swal('error', "Railcar Number can't be same", 'error');
+          swal('error', "Railcar number can't be same.", 'error');
           EnableClick('update')
       }
       else {
@@ -489,26 +489,26 @@ export default class EnterPackagingInstructionForm extends React.Component {
           var railcar_number = this.props.data.TPackagingInstructionLots[i].railcar_number
           var weight = this.props.data.TPackagingInstructionLots[i].weight
           if (lot_number == " " || lot_number == null || lot_number == undefined || lot_number == "") {
-              swal("Lot Number can't be empty")
+              swal("Lot number can't be empty.")
               isError = true;
               EnableClick('update')
               return
           }
           if (railcar_number == " " || railcar_number == null || railcar_number == undefined || railcar_number == "") {
-              swal("Railcar Number can't be empty")
+              swal("Railcar number can't be empty.")
               isError = true;
               EnableClick('update')
               return
           }
           if (weight == " " || weight == null || weight == undefined || weight == 0 || weight == "") {
-              swal("Weight can't be empty or 0")
+              swal("Weight can't be empty or 0.")
               isError = true;
               EnableClick('update')
               return
           }
       }
       if (!document.getElementById('row1').checked) {
-          swal("Error", "Please check the Create Label Check Box", "info")
+          swal("Error", "Please check the create label check box.", "info")
           isError = true
           EnableClick('update')
           return
@@ -523,12 +523,12 @@ export default class EnterPackagingInstructionForm extends React.Component {
           url: postUrl,
           data: this.props.data,
           success: function (sdata) {
-              swal("Posted", "Data Has Been Successfully Edited !", "success");
+              swal("Posted", "Data has been successfully edited.", "success");
               hashHistory.push('/Packaging/packaginginstview/')
           },
           Error: function (err) {
               EnableClick('update')
-              swal("Failed", "Error occured please try later!", "error");
+              swal("Failed", "Error occured please try later.", "error");
           }
       })
   }
@@ -570,7 +570,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
       }
       if(flagForUniqueRailcar){
         e.preventDefault();
-        swal('Error',"Railcar Number can't be same",'error')
+        swal('Error',"Railcar number can't be same.",'error')
       }
       else{
           DisableDoubleClick('submit')
@@ -580,7 +580,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
           }
           if(this.obj.po_number != ""){
               if(checkPo.indexOf(this.obj.po_number) > 0){
-                  swal('Warning' , "This Purchase order already exists" , 'info')
+                  swal('Warning' , "This purchase order already exists." , 'info')
                   EnableClick('submit')
                   return ;
               }
@@ -588,7 +588,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
           if(this.isValid() == true){
 
               if(!document.getElementById('row1').checked){
-                  swal("Error","Please check the Create Label Check Box")
+                  swal("Error","Please check the create label check box.",'error')
                   EnableClick('submit')
                   return
               }
@@ -648,7 +648,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
                       }
                   }
                   this.state.labelLength.shift()
-                  swal("Error","Please enter railcar Information","error")
+                  swal("Error","Please enter railcar information.","error")
                   EnableClick('submit')
                   return;
               }
@@ -658,7 +658,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
               }
               swal({
                   title: "Submitting",
-                  text: "Please Wait",
+                  text: "Please wait.",
                   timer: 2500,
                   showConfirmButton: false
               })
@@ -668,7 +668,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
                   data:this.Allobjs,
                   success:function(data){
                       console.log("resp data>>>>>>>>>",data)
-                      swal("Posted" , "Data Has Been Successfully Posted !" , "success");
+                      swal("Posted" , "Data has been posted successfully." , "success");
                       hashHistory.push('/Packaging/packaginginstview/')
                   },
                   error:function(err){
@@ -679,14 +679,14 @@ export default class EnterPackagingInstructionForm extends React.Component {
                           }
                       }
                       this.state.labelLength.shift()
-                      swal("Error","Please enter all the fields","error")
+                      swal("Error","Please enter all the fields.","error")
                   }
               })
               this.railCarObjects.splice(this.railCarObjects.length-1,1)
           }
           else{
               if(this.state.haveSpecialChar==0){
-                  swal('',"Please complete fields marked as red" , 'info')
+                  swal('',"Please complete fields marked as red." , 'info')
                   EnableClick('submit')
               }
           }
@@ -727,19 +727,19 @@ export default class EnterPackagingInstructionForm extends React.Component {
 
     for(var i =0; i <obj.length;i++){
       if(Object.keys(obj[i]).length<3){
-        swal("","Please Enter all fields of Railcar: "+(i + 1),"info")
+        swal("","Please enter all fields of railcar: "+(i + 1)+".","info")
         isError = true;
         break
       }
       for(var prop in obj[i]){
         if (obj[i].hasOwnProperty(prop)) {
           if(obj[i][prop] =="" || obj[i][prop] == null){
-            swal("","Please Enter all fields of Railcar: "+i,"info")
+            swal("","Please enter all fields of railcar: "+i+".","info")
             isError = true;
             break
           }
           if(!/^[\w-//]+$/.test(obj[i][prop])){
-            swal("Error","Cant't have special charcters","warning")
+            swal("Error","Cant't have special charcters.","warning")
             isError = true;
             break
           }
@@ -797,7 +797,7 @@ export default class EnterPackagingInstructionForm extends React.Component {
   }
   ChangeRailCarForProps(){
     debugger
-    swal("value changed")
+    swal("value changed.")
   }
   MinusRailCarFromProps(e){
     var id = parseInt(e.target.id.substring(10,e.target.id.length))
@@ -1233,8 +1233,8 @@ export default class EnterPackagingInstructionForm extends React.Component {
                             </div>
 
                             <div className="form-group">
-                              <label htmlFor="Weight" className="col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label pr-0">{ this.state.selectedOption=='lbs'?'Weight (lbs)':'Weight(kg)'}</label>
-                              <div className="col-lg-8    col-sm-11 col-xs-11 pr-0 ">
+                              <label htmlFor="Weight" className="col-lg-3 col-md-3 col-sm-11  col-xs-11 control-label pr-0">{ this.state.selectedOption=='lbs'?'Weight (lbs)':'Weight (kg)'}</label>
+                             <div className="col-lg-8    col-sm-11 col-xs-11 pr-0 ">
                                 {this.props.lotInfo != undefined ?
                                     <input
                                         type="number"

@@ -85,7 +85,7 @@ class UploadDataForm extends Component {
 			this.palletPostArray.push(_.cloneDeep(this.palletData))			
 			this.palletData.palletType = null
 		}else{
-			swal("Missing Data","Please fill the current field before adding new fields","info")
+			swal("Missing data","Please fill the current field before adding new fields.","info")
 			return
 		}
 		this.palletComponent = this.palletComponent.concat(<PalletComponent key = {this.state.palletIndex + 1} handlePalletChange = {(e) => this.handlePalletChange(e)}/>)
@@ -100,7 +100,7 @@ class UploadDataForm extends Component {
 			this.steamShipPostArray.push(_.cloneDeep(this.steamShipData))
 			this.steamShipData.name = null
 		}else{
-			swal("Missing Data","Please fill the current field before adding new fields","info")
+			swal("Missing data","Please fill the current field before adding new fields.","info")
 			return
 		}
 		this.steamShipComponent = this.steamShipComponent.concat(<SteamShipComponent key = {this.state.steamShipIndex + 1} handleSteamShipChange = {(e) => this.handleSteamShipChange(e)}/>)
@@ -115,7 +115,7 @@ class UploadDataForm extends Component {
 			this.containerPostArray.push(_.cloneDeep(this.containerData))
 			this.containerData.name = null
 		}else{
-			swal("Missing Data","Please fill the current field before adding new fields","info")
+			swal("Missing data","Please fill the current field before adding new fields.","info")
 			return
 		}
 		this.containerComponent = this.containerComponent.concat(<ContainerComponent key = {this.state.containerIndex +1} handleContainerChange = {(e) => this.handleContainerChange(e)}/>)
@@ -161,7 +161,7 @@ class UploadDataForm extends Component {
 			this.locationData.locationName = null
 			this.locationData.bagsPerPallet = null
 		}else{
-			swal("Missing Data","Please fill the current fields before adding","info")
+			swal("Missing data","Please fill the current fields before adding.","info")
 			return
 		}
 		this.locationComponent = this.locationComponent.concat(<LocationComponent key = {this.state.locationIndex + 1} handleLocationChange = {(e) => this.handleLocationChange(e)}/>)
@@ -176,7 +176,7 @@ class UploadDataForm extends Component {
 			this.inventPostArray.push(_.cloneDeep(this.inventLocData))
 			this.inventLocData.locationName = null
 		}else{
-			swal("Missing Data","Please fill the current fields before adding","info")
+			swal("Missing data","Please fill the current fields before adding","info")
 			return
 		}
 		this.inventComponent = this.inventComponent.concat(<InventoryComponent key = { this.state.inventIndex + 1} inventPostArray = {this.inventPostArray} inventLocData = {this.inventLocData}  handleInventLocChange = {(e) => this.handleInventLocChange(e)}/>)

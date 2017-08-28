@@ -202,14 +202,14 @@ onSave(){
                                     }).then((response)=> {
 
                                             if (Lilength == index + 1) {
-                                                    swal("Posted", "Success", "success")
+                                                    swal("Posted", "Success.", "success")
                                                     hashHistory.push("/Shipment/shipmentview")
                                             }
                                     })
                             }
                             else{
                                     if (Lilength == index + 1) {
-                                            swal("Posted", "Success", "success")
+                                            swal("Posted", "Success.", "success")
                                             hashHistory.push("/Shipment/shipmentview")
                                     }
                             }
@@ -221,7 +221,7 @@ onSave(){
                     this.postObj.lotInformation.forEach(function (element, index) {
                             if (parseInt(element.noOfBags) == parseInt(element.TPackagingInstructionLots.inInventory)) {
                                     axios.put(Base_Url + "TPackagingInstructionLots/" + element.piLotsId, {status: "SHIPPED",shippedOn:new Date()}).then((response)=> {
-                                            swal("Posted", "Success", "success")
+                                            swal("Posted", "Success.", "success")
                                             hashHistory.push("/Shipment/shipmentview")
                                     }).then((response)=> {
 
@@ -232,7 +232,7 @@ onSave(){
                                     })
                             }
                             else{
-                                    swal("Posted","Success","success")
+                                    swal("Posted","Success.","success")
                                     hashHistory.push("/Shipment/shipmentview")
                             }
 

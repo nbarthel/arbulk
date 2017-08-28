@@ -314,14 +314,14 @@ class InternationalShipementEdit extends React.Component {
 									}).then((response)=> {
 
 											if (Lilength == index + 1) {
-													swal("Posted", "Success", "success")
+													swal("Posted", "Success.", "success")
 													hashHistory.push("/Shipment/shipmentview")
 											}
 									})
 							}
 							else{
 									if (Lilength == index + 1) {
-											swal("Posted", "Success", "success")
+											swal("Posted", "Success.", "success")
 											hashHistory.push("/Shipment/shipmentview")
 									}
 							}
@@ -333,7 +333,7 @@ class InternationalShipementEdit extends React.Component {
 					this.postObj.lotInformation.forEach(function (element, index) {
 							if (parseInt(element.noOfBags) == parseInt(element.TPackagingInstructionLots.inInventory)) {
 									axios.put(Base_Url + "TPackagingInstructionLots/" + element.piLotsId, {status: "SHIPPED",shippedOn:new Date()}).then((response)=> {
-											swal("Posted", "Success", "success")
+											swal("Posted", "Success.", "success")
 											hashHistory.push("/Shipment/shipmentview")
 									}).then((response)=> {
 
@@ -344,7 +344,7 @@ class InternationalShipementEdit extends React.Component {
 									})
 							}
 							else{
-									swal("Posted","Success","success")
+									swal("Posted","Success.","success")
 									hashHistory.push("/Shipment/shipmentview")
 							}
 

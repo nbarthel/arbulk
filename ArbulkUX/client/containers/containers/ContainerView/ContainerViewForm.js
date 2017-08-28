@@ -107,10 +107,10 @@ class ContainerViewForm extends React.Component {
         }
         else if (this.containerId == '' && this.isDomestic == false) {
 
-            swal("Selection Missing", "Please Select A Container To Print.", "error")
+            swal("Selection Missing", "Please select a container to print.", "error")
         }
         else {
-            swal('', 'Domestic Container report is not available');
+            swal('', 'Domestic container report is not available.');
         }
     }
 
@@ -131,7 +131,7 @@ class ContainerViewForm extends React.Component {
         else {
             //console.log('mmmmmmmmmmmmmmmmmmmmm');
             //hashHistory.push('/Shipment/shipmentPrint/')
-            swal("Selection Missing", "Please Select A Lot To View.", "error")
+            swal("Selection Missing", "Please select a lot to view.", "error")
         }
     }
 
@@ -419,16 +419,16 @@ class ContainerViewForm extends React.Component {
     addToqueue() {
 
         if (!this.containerData.containerSteamshipLineConfirmed) {
-            swal("", "Domestic container can not be in queue", 'info')
+            swal("", "Domestic container can not be in queue.", 'info')
             return;
         }
         if (!this.containerData.containerArrived) {
-            swal("", "Container must be arrived before queued", 'info');
+            swal("", "Container must be arrived before queued.", 'info');
             return
         }
 
         if (this.containerData && (this.containerData.status == "LOADED" || this.containerData.status == "INTRANSIT" || this.containerData.status == "DELIVERED")) {
-            swal("", "The container is already" + " " + this.containerData.status, 'info');
+            swal("", "The container is already" + " " + this.containerData.status+".", 'info');
             return
         }
 
@@ -443,7 +443,7 @@ class ContainerViewForm extends React.Component {
             axios.put(Base_Url + "TShipmentInternationals/" + shipId, {status: "QUEUED"}).then((response)=> {
                 swal({
                         title: "Success",
-                        text: "Successfully added to the queue",
+                        text: "Successfully added to the queue.",
                         type: "success",
                         showCancelButton: true,
                     },
@@ -1253,7 +1253,7 @@ class ContainerViewForm extends React.Component {
 
         if (saveCustomView.viewFilters != undefined && saveCustomView.viewFilters != null && saveCustomView.viewFilters != {}) {
             axios.post(Base_Url + "TCustomViews", saveCustomView).then(response=> {
-                swal('Success', "Successfully Saved...", 'success');
+                swal('Success', "Successfully saved.", 'success');
 
 
                 axios.get(Base_Url + "TCustomViews").then(response=> {
@@ -1265,7 +1265,7 @@ class ContainerViewForm extends React.Component {
 
         }
         else {
-            swal('Error', "Please Select Filter Options First", 'error');
+            swal('Error', "Please select filter options first.", 'error');
         }
     }
     toggleColumn(name,value){
@@ -1452,7 +1452,7 @@ class ContainerViewForm extends React.Component {
 
     onViewClick(e) {
         if (this.contId == undefined) {
-            swal("Info", "Selection Missing", "info")
+            swal("Info", "Selection missing.", "info")
             return
         }
         hashHistory.push('/Conatainer/containerDetails/' + this.contId + '/' + this.type)

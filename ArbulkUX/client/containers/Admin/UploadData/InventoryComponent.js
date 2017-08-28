@@ -24,7 +24,7 @@ import TextField from './TextField'
 			this.props.inventPostArray.push(_.cloneDeep(this.props.inventLocData))
 			this.props.inventLocData.locationName = null
 		}else{
-			swal("Missing Data","Please Fill The Current Field Before Adding","info")
+			swal("Missing Data","Please fill the current field before adding.","info")
 			return
 		}
 		this.textFieldComponent = this.textFieldComponent.concat(<TextField key = {this.state.textIndex + 1}  handleInventLocChange = {(e) => this.props.handleInventLocChange(e)}/>)

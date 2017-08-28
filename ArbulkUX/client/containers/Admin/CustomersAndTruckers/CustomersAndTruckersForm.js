@@ -25,18 +25,18 @@ class CustomersAndTruckersForm extends React.Component {
 		 // console.log(e.target.getAttribute('value'))
      swal({   
             title: "You are about to delete a entry?", 
-            text: "Are You Sure ?", 
+            text: "Are you sure ?",
             type: "warning", 
             showCancelButton: true,  
             confirmButtonColor: "#DD6B55",  
-            confirmButtonText: "Yes, delete it!",  
+            confirmButtonText: "Yes, delete it.",
             closeOnConfirm: false }, 
               function(){ 
                  axios.delete(Base_Url + "TAddresses/"+addrId).then((newRespnse)=>{
                  axios.delete(Base_Url+"TCompanies/"+delId).then((response)=>{
                      swal({
                       title: "Success",
-                      text: "Entry has been deleted",
+                      text: "Entry has been deleted.",
                       type: "success",
                       showCancelButton: false,
       },

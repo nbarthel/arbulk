@@ -44,7 +44,7 @@ constructor(){
 				hashHistory.push('/Packaging/confirmpckginst/'+this.id)
            }
                  else{
-                  swal("Error","Please select unconfirmed order","error")
+                  swal("Error","Please select unconfirmed order.","error")
                 }
 	}
 	onEdit(e){
@@ -70,7 +70,7 @@ constructor(){
 var tempThis = this
 		swal({
 			title:"Are you sure?",
-			text:"Want to Delete Order",
+			text:"Want to delete order.",
 			type:"warning",
 			showCancelButton: true,
 			confirmButtonColor: "#DD6B55",
@@ -93,7 +93,7 @@ var tempThis = this
 						success:function(data){
 						swal({
 							title:"Info",
-							text:"Deleted Successfully",
+							text:"Deleted successfully.",
 							type:"info"
 						},function(){
 								hashHistory.push('/Packaging/packaginginstview/')
@@ -118,7 +118,7 @@ var tempThis = this
 	print(e){
 
 	  if(this.status == "UNCONFIRMED"){
-	    swal("" , "The Order is not confirmed yet" , "info")
+	    swal("" , "The Order is not confirmed yet." , "info")
 	    return
 	  }
 	        if(this.id != undefined){
@@ -128,7 +128,7 @@ var tempThis = this
 	        }
 	        else
 	        {
-	            swal("Selection Missing", "Please Select A Lot To View.","error")
+	            swal("Selection Missing", "Please select a lot to view.","error")
 	        }
 	    }
 
@@ -182,11 +182,11 @@ componentWillMount() {
 
     addToQueue(e){
 		 if(this.lotIdArray.length>1){
-			 swal("warning","Please Select a single Lot","warning")
+			 swal("warning","Please select a single lot.","warning")
 			 return
 		 }
 		 else if(this.lotIdArray.length<=0){
-			 swal("warning","Please Select a Lot","warning")
+			 swal("warning","Please select a lot.","warning")
 			 return
 		 }
      let id = this.lotIdArray[0]
@@ -203,7 +203,7 @@ componentWillMount() {
                   console.log("Queue Added" , response)
                   swal({
                       title: "Success",
-                      text: "Successfully added to the queue",
+                      text: "Successfully added to the queue.",
                       type: "success",
                       showCancelButton: true,
       },
@@ -218,7 +218,7 @@ componentWillMount() {
   }
 
   else {
-    swal("","The selected order is not ready","info")
+    swal("","The selected order is not ready.","info")
   }
 }
 
@@ -237,7 +237,7 @@ componentWillMount() {
 			if (this.checked){
 			}
 			else {
-				swal("Failed","Please Check Packaging Complete","error")
+				swal("Failed","Please check packaging complete.","error")
 			}
 
 		}

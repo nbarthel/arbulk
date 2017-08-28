@@ -9,23 +9,23 @@ export default function validateInput(data){
     var isError = false;
         if (Validator.isNull(data.customer_id))
         {
-            errors.customerId = 'Customer Name field is required';
+            errors.customerId = 'Customer name field is required.';
             isError = true;
         }
 
     if (Validator.isNull(data.location_id))
     {
-        errors.locationId = 'location Name field is required';
+        errors.locationId = 'location name field is required.';
         isError = true;
     }
 
     if (Validator.isNull(data.releaseNumber)){
-        errors.releaseNumber = 'Release field is required';
+        errors.releaseNumber = 'Release field is required.';
         isError = true;
     }
     if (Validator.isNull(data.numberOfContainers))
     {
-        errors.numberOfContainers = 'Number of Container must be number';
+        errors.numberOfContainers = 'Number of container must be number.';
         isError = true;
     }
     if(!isError){

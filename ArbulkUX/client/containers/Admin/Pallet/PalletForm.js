@@ -55,7 +55,7 @@ class PalletForm extends React.Component {
             axios.post(Base_Url+"TPalletTypes",this.createUsrObj).then((response)=>{
                 swal({
                     title: "Success",
-                    text: "Pallet Added",
+                    text: "Pallet added.",
                     type: "success",
                     showCancelButton: false,
                     confirmButtonColor: "#DD6B55",

@@ -207,7 +207,7 @@ onSave(){
                                     }).then((response)=> {
 
                                             if (Lilength == index + 1) {
-                                                    swal("Posted", "Success", "success")
+                                                    swal("Posted", "Success.", "success")
                                                     hashHistory.push("/Shipment/shipmentview")
                                             }
                                     })
@@ -215,7 +215,7 @@ onSave(){
                             else{
                               debugger;
                                     if (Lilength == index + 1) {
-                                            swal("Posted", "Success", "success")
+                                            swal("Posted", "Success.", "success")
                                             hashHistory.push("/Shipment/shipmentview")
                                     }
                             }
@@ -227,7 +227,7 @@ onSave(){
 
                if (parseInt(this.postObj.lotInformation[0].noOfBags) == parseInt(this.postObj.lotInformation[0].TPackagingInstructionLots.inInventory)) {
                    axios.put(Base_Url + "TPackagingInstructionLots/" + lotId, {status: "SHIPPED",shippedOn:new Date()}).then((response)=> {
-                       swal("Posted", "Success", "success")
+                       swal("Posted", "Success.", "success")
                        hashHistory.push("/Shipment/shipmentview")
                    }).then((response)=> {
 
@@ -238,7 +238,7 @@ onSave(){
                    })
                }
                else{
-                   swal("Posted","Success","success")
+                   swal("Posted","Success.","success")
                    hashHistory.push("/Shipment/shipmentview")
                }
 

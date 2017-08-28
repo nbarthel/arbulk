@@ -57,7 +57,7 @@ class LoginForm extends React.Component{
 			hashHistory.push('/Packaging/enterpackginginst/')
 			//console.log(this.state.userData)
 			}).catch(function(error){
-				swal("Fail :(" , "You Have Entered Wrong Username or Password " , "error")
+				swal("Fail :(" , "You have entered wrong username or password." , "error")
 			})
 		}
 	}

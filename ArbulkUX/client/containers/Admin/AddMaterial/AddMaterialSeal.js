@@ -56,7 +56,7 @@ class AddMaterialSeal extends Component {
 		axios.post(Base_Url + "TPackagingMaterials",this.sealPostObj).then((response)=>{
 			swal({
 				title: "Success",
-				text: "New Material Added",
+				text: "New material added.",
 				type: "success",
 				showCancelButton: false
 			},

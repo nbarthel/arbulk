@@ -140,7 +140,7 @@ class DomesticContainerEditForm extends Component {
         this.postObj.modifiedBy = this.userID
         this.postObj.modifiedOn = today
         axios.put(Base_Url + "TContainerDomestics" + "/" + this.id,this.postObj).then((response) =>{
-            swal("success","Succuessfully Edited","success")
+            swal("success","Succuessfully edited.","success")
             hashHistory.push('/Container/containerview')
         })
         console.log("POSTOBJ",this.postObj)

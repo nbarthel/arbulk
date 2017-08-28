@@ -28,12 +28,12 @@ import { hashHistory } from 'react-router'
 		var shipmentId = this.props.data.TShipmentent.TShipmentDomestic[0].id
         if(this.count == 23){
 			axios.put(Base_Url+"TShipmentDomestics/"+ shipmentId , {status : "CONFIRMED"}).then((response)=>{
-				swal("Confirmed","Shipment Has Been Confirmed","info")
+				swal("Confirmed","Shipment has been confirmed.","info")
 				hashHistory.push("/Shipment/shipmentview")
 			})
         }
         else{
-			swal("Missing Checks","Please Check All The Checkboxes","error")
+			swal("Missing Checks","Please check all the checkboxes.","error")
         }
     }
 	render() {

@@ -133,7 +133,7 @@ import { hashHistory } from 'react-router'
  			axios.patch(Base_Url + "TAddresses"+"/"+addrId,this.props.addrData).then((newResponse)=>{
  				swal({
 				title: "Success",
-				text: "User Data Has Been Updated",
+				text: "User data has been updated.",
 				type: "success",
 				showCancelButton: false
 			},

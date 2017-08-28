@@ -32,13 +32,13 @@ class  ShipmentConfirmationForm extends React.Component {
         if(this.count == 16){
 
             axios.put(Base_Url+"TShipmentInternationals/"+ shipmentId , {status : "CONFIRMED"}).then((response)=>{
-                swal("Confirmed","Shipment Has Been Confirmed","info")
+                swal("Confirmed","Shipment has been confirmed.","info")
                 hashHistory.push("/Shipment/shipmentview")
             })
 
         }
         else{
-            swal("Missing Checks","Please Check All The Checkboxes","error")
+            swal("Missing Checks","Please check all the checkboxes.","error")
         }
     }
     onCancel(){

@@ -85,7 +85,7 @@ class updatePallet extends React.Component {
             axios.put(Base_Url+"TPalletTypes/"+this.props.params.palletId,this.state.createUsrObj).then((response)=>{
                 swal({
                     title: "Success",
-                    text: "Pallet Updated Successfully",
+                    text: "Pallet updated successfully.",
                     type: "success",
                     showCancelButton: false,
                     confirmButtonColor: "#DD6B55",

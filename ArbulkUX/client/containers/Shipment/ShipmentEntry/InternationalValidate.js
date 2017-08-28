@@ -9,23 +9,23 @@ export default function validateInternationalInput(data){
     var isError = false;
     if (Validator.isNull(data.freightForwarder))
     {
-        errorsI.freightForwarder = 'Customer Name field is required';
+        errorsI.freightForwarder = 'Customer name field is required.';
         isError = true;
     }
 
     if (Validator.isNull(data.containerTypeId))
     {
-        errorsI.containerTypeId = 'containerTypeId field is required';
+        errorsI.containerTypeId = 'containerTypeId field is required.';
         isError = true;
     }
 
     if (Validator.isNull(data.steamshipLineId)){
-        errorsI.steamshipLineId = 'steamshipLineId field is required';
+        errorsI.steamshipLineId = 'steamshipLineId field is required.';
         isError = true;
     }
     if (Validator.isNull(data.steamshipVessel))
     {
-        errorsI.steamshipVessel = 'steamshipVessel field is required';
+        errorsI.steamshipVessel = 'steamshipVessel field is required.';
         isError = true;
     }
     //if (!(Validator.isDate(data.EarliestReturnDate))){
@@ -44,7 +44,7 @@ export default function validateInternationalInput(data){
     //}
     if (Validator.isNull(data.bookingNumber))
     {
-        errorsI.bookingNumber = 'bookingNumber field is required';
+        errorsI.bookingNumber = 'bookingNumber field is required.';
         isError = true;
     }
     //if (!(Validator.isDate(data.CargoCutoffDate))){
@@ -52,17 +52,17 @@ export default function validateInternationalInput(data){
     //}
     if (Validator.isNull(data.freeDaysPerContainer))
     {
-        errorsI.freeDaysPerContainer = 'freeDaysPerContainer must be number';
+        errorsI.freeDaysPerContainer = 'freeDaysPerContainer must be number.';
         isError = true;
     }
 
     if (Validator.isNull(data.containerPickupLocation)){
-        errorsI.containerPickupLocation = 'containerPickupLocation field is required';
+        errorsI.containerPickupLocation = 'containerPickupLocation field is required.';
         isError = true;
     }
     if (Validator.isNull(data.containerReturnLocation))
     {
-        errorsI.containerReturnLocation = 'containerReturnLocation field is required';
+        errorsI.containerReturnLocation = 'containerReturnLocation field is required.';
         isError = true;
     }
 

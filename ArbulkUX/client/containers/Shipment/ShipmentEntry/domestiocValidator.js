@@ -10,51 +10,51 @@ export default function validateDomesticInput(data){
     var isError = false;
     if (Validator.isNull(data.typeOfShipment))
     {
-        errorsd.typeOfShipment = 'Customer Name field is required';
+        errorsd.typeOfShipment = 'Customer Name field is required.';
         isError = true;
     }
 
     if (Validator.isNull(data.shippingReferenceNumber))
     {
-        errorsd.shippingReferenceNumber = 'Shipping reference number field is required';
+        errorsd.shippingReferenceNumber = 'Shipping reference number field is required.';
         isError = true;
     }
 
     if (Validator.isNull(data.recipent)){
-        errorsd.recipent = 'Recipent field is required';
+        errorsd.recipent = 'Recipient field is required.';
         isError = true;
     }
     if (Validator.isNull(data.recipentContact))
     {
-        errorsd.recipentContact = 'Recipent contact field is required';
+        errorsd.recipentContact = 'Recipient contact field is required.';
         isError = true;
     }
     if (Validator.isNull(data.recipentTelNumber)){
-        errorsd.recipentTelNumber = 'Recipent telNumber field is required';
+        errorsd.recipentTelNumber = 'Recipient telephone number field is required.';
         isError = true;
     }
     if (Validator.isNull(data.carrier))
     {
-        errorsd.carrier = 'Carrier  field is required';
+        errorsd.carrier = 'Carrier  field is required.';
         isError = true;
     }
 
     if (Validator.isNull(data.carrierAcNumber)){
-        errorsd.carrierAcNumber = 'Carrier acNumber field is required';
+        errorsd.carrierAcNumber = 'Carrier account number field is required.';
         isError = true;
     }
     if (Validator.isNull(data.bookingNumber))
     {
-        errorsd.bookingNumber = 'Booking number field is required';
+        errorsd.bookingNumber = 'Booking number field is required.';
         isError = true;
     }
     if (Validator.isNull(data.paymentTypeId)){
-        errorsd.paymentTypeId = 'Payment typeId field is required';
+        errorsd.paymentTypeId = 'Payment typeId field is required.';
         isError = true;
     }
     if (Validator.isNull(data.paidBy))
     {
-        errorsd.paidBy = 'Customer Name field is required';
+        errorsd.paidBy = 'Customer name field is required.';
         isError = true;
     }
     //if (data.recipentTelNumber.length!=10){

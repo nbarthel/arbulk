@@ -137,7 +137,7 @@ class  ShipmentDetailsForm extends React.Component {
 
             swal({
                     title:"Are you sure?",
-                    text:"Want to Delete Shipment",
+                    text:"Want to delete shipment.",
                     type:"warning",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
@@ -168,7 +168,7 @@ class  ShipmentDetailsForm extends React.Component {
                                 debugger
                                 swal({
                                     title:"Info",
-                                    text:"Deleted Successfully",
+                                    text:"Deleted successfully.",
                                     type:"info"
                                 },function(){
                                     debugger
@@ -188,7 +188,7 @@ class  ShipmentDetailsForm extends React.Component {
         else{
             swal({
                     title:"Info",
-                    text:"order with status " + status + " can not be deleted",
+                    text:"order with status " + status + " can not be deleted.",
                     type:"info"
                 },
                 function(){
@@ -373,7 +373,7 @@ class  ShipmentDetailsForm extends React.Component {
 
         if(this.state.CSummaryData.numberOfContainers < TotalSum){
             window.location.reload()
-            swal("" ,"Container can not be added" , 'info')
+            swal("" ,"Container can not be added." , 'info')
 
             return
         }
@@ -393,7 +393,7 @@ class  ShipmentDetailsForm extends React.Component {
                         // hashHistory.push('/Packaging/packaginginstview/')
                     },
                     Error:function(err){
-                        swal("Failed" , "Error occured please try later!" , "error");
+                        swal("Failed" , "Error occured please try later." , "error");
                     }
                 })
 
@@ -410,7 +410,7 @@ class  ShipmentDetailsForm extends React.Component {
                     if(length == index+1){
                         swal({
                                 title: "Success",
-                                text: "Done",
+                                text: "Done.",
                                 type: "success",
                                 showCancelButton: true,
                             },
@@ -444,7 +444,7 @@ class  ShipmentDetailsForm extends React.Component {
                                         if(length == index+1){
                                             swal({
                                                     title: "Success",
-                                                    text: "Done",
+                                                    text: "Done.",
                                                     type: "success",
                                                     showCancelButton: true,
                                                 },
@@ -460,7 +460,7 @@ class  ShipmentDetailsForm extends React.Component {
                             // hashHistory.push('/Packaging/packaginginstview/')
                         },
                         Error:function(err){
-                            swal("Failed" , "Error occured please try later!" , "error");
+                            swal("Failed" , "Error occured please try later." , "error");
                         }
                     })
                 }
@@ -480,7 +480,7 @@ class  ShipmentDetailsForm extends React.Component {
                 if(length == index+1){
                     swal({
                             title: "Success",
-                            text: "Done",
+                            text: "Done.",
                             type: "success",
                             showCancelButton: true,
                         },
@@ -622,14 +622,14 @@ class  ShipmentDetailsForm extends React.Component {
                     this.unique.splice(0,1)
                     this.b = this.unique
                     //  this.b = bArray
-                    swal("" , "Allocated container can't be more than Unallocated container" , "info")
+                    swal("" , "Allocated container can't be more than unallocated container." , "info")
                 }
                 else{
                     if(this.unique.length > 1){
                         this.unique.splice(this.unique.length -1,1)
                         this.b = this.unique
                     }
-                    swal("" , "Allocated container can't be more than Unallocated container" , "info")
+                    swal("" , "Allocated container can't be more than unallocated container." , "info")
 
                     return
                 }
@@ -646,13 +646,13 @@ class  ShipmentDetailsForm extends React.Component {
         if(this.props.data.isDomestic == 0){
             if((this.state.CSummaryData && this.state.CSummaryData.TContainerInternational && this.state.CSummaryData.TContainerInternational.length > 0 ) && (this.state.CSummaryData.TContainerInternational.length == this.state.CSummaryData.numberOfContainers) )
             {
-                swal("" , "This allocation can not be deleted" , "info")
+                swal("" , "This allocation can not be deleted." , "info")
                 return
             }
         }else if(this.props.data.isDomestic == 1){
             if((this.state.CSummaryData && this.state.CSummaryData.TContainerDomestic && this.state.CSummaryData.TContainerDomestic.length > 0 ) && (this.state.CSummaryData.TContainerDomestic.length == this.state.CSummaryData.numberOfContainers) )
             {
-                swal("" , "This allocation can not be deleted" , "info")
+                swal("" , "This allocation can not be deleted." , "info")
                 return
             }
         }
@@ -703,7 +703,7 @@ class  ShipmentDetailsForm extends React.Component {
                 hashHistory.push('/Shipment/shipmentConfirmation/'+this.confid)
             }
             else{
-                swal("Error","Order has already been confirmed","error")
+                swal("Error","Order has already been confirmed.","error")
             }
         }else{
 
@@ -711,7 +711,7 @@ class  ShipmentDetailsForm extends React.Component {
                 hashHistory.push('/Shipment/shipmentConfirmation/'+this.confid)
             }
             else{
-                swal("Error","Order has already been confirmed","error")
+                swal("Error","Order has already been confirmed.","error")
             }
         }
 
@@ -734,7 +734,7 @@ class  ShipmentDetailsForm extends React.Component {
 
         else
         {
-            swal("Selection Missing","Please Select A Checkbox","error")
+            swal("Selection Missing","Please select a checkbox.","error")
         }
     }
     print(e){

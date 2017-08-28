@@ -6,19 +6,19 @@ export default function validateInput(data){
 	let domesticErrors = { };
 	var isError = false;
 	if(Validator.isNull(data.containerNumber)){
-		domesticErrors.containerNumber = "Must be a Number";
+		domesticErrors.containerNumber = "Must be a number.";
 		isError = true
 	}
 	if (Validator.isNull(data.trackingNumber)){
-		domesticErrors.trackingNumber = "Required"
+		domesticErrors.trackingNumber = "Required."
 		isError = true
 	}
 	if(Validator.isNull(data.truckerId)){
-		domesticErrors.truckerId = "Required"
+		domesticErrors.truckerId = "Required."
 		isError = true
 	}
 	if(Validator.isNull(data.pickupTrucker)){
-		domesticErrors.pickupTrucker = "Required"
+		domesticErrors.pickupTrucker = "Required."
 		isError = true
 	}
 	if(!isError){

@@ -45,10 +45,9 @@ class CreateUserForm extends React.Component {
             e.preventDefault()
             if(this.isValid() == true){
                         axios.post(Base_Url+"TUsers",this.createUsrObj).then((response)=>{
-                            swal("Success","User Created","success")
-                            swal({
+                               swal({
                                 title: "Success",
-                                text: "User Created",
+                                text: "User created.",
                                 type: "success",
                                 showCancelButton: false,
                                 confirmButtonColor: "#DD6B55",

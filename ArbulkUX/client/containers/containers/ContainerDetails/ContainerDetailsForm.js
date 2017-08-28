@@ -155,7 +155,7 @@ if(this.props.isDomestic == "1"){
   let shipId = this.props.containerTable.TShipmentent.TShipmentDomestic[0].id
   var stat = this.statusArray[0] == "DELIVERED" ? "COMPLETED" : this.statusArray[0]
   axios.put(Base_Url + "TShipmentDomestics/"+ shipId , {status : stat}).then((response)=>{
-    swal("Done" , "Saved Successfully" , "info")
+    swal("Done" , "Saved successfully." , "info")
   //hashHistory.push('/Container/containerview')
 
   })
@@ -165,12 +165,12 @@ else if(this.props.isDomestic == "0" ){
   let shipInt = this.props.containerTable.TShipmentent.TShipmentInternational[0].id
     var stat = this.statusArray[0] == "DELIVERED" ? "COMPLETED" : this.statusArray[0]
   axios.put(Base_Url + "TShipmentInternationals/"+ shipInt , {status : stat}).then((response)=>{
-    swal("Done" , "Saved Successfully" , "info")
+    swal("Done" , "Saved successfully." , "info")
 //  hashHistory.push('/Container/containerview')
   })
 }
 else{
-  swal("Done" , "Saved Successfully" , "info")
+  swal("Done" , "Saved successfully." , "info")
 //  hashHistory.push('/Container/containerview')
 }
 }
@@ -205,7 +205,7 @@ this.setState({
            if(i>=len-1){
 
              this.loadNewData()
-             swal("","Loaded","success")
+             swal("","Loaded.","success")
              this.removeArray = []
            }
          }).catch(function (error) {
@@ -215,7 +215,7 @@ this.setState({
            });
      }}
       else{
-          swal("Missing","Please Select A Inventory","info")
+          swal("Missing","Please select a inventory.","info")
           }
            this.cIArray=[]
 
@@ -264,7 +264,7 @@ this.setState({
       var temp,len = this.removeArray.length;
       if(len>0){
           if(this.props.containerTable.containerLoaded == 1 ){
-              swal("" , "Lots can't be removed for loaded container" , 'info') ;
+              swal("" , "Lots can't be removed for loaded container." , 'info') ;
               return
           }
         for(var i=0;i<len;i++){
@@ -276,7 +276,7 @@ this.setState({
         axios.post(Base_Url+"TPiInventories/AddInventory",{id:temp.pInventId}).then((response) => {
           if(i>=len-1){
             this.loadNewData()
-            swal("","Removed","success")
+            swal("","Removed.","success")
             this.removeArray = []
           }
         }).catch(function (error) {
@@ -286,7 +286,7 @@ this.setState({
 
     }}
     else{
-      swal("Please select a row")
+      swal("Please select a row.")
       return
     }
   }
@@ -505,7 +505,7 @@ changeLot(e){
     onEditClick(e){
 
             if (this.props.containerTable.status == "DELIVERED") {
-                swal("", "Container is delivered", 'info')
+                swal("", "Container is delivered.", 'info')
                 return;
             }
 
@@ -513,7 +513,7 @@ changeLot(e){
 
        if(this.props.isDomestic == 0){
            if(this.props.containerTable.status == "ARRIVED"){
-               swal("", "Container must be queued" , 'info')
+               swal("", "Container must be queued." , 'info')
                return;
            }
 
@@ -521,7 +521,7 @@ changeLot(e){
 
         if (this.props.isDomestic == 1) {
             if (this.props.containerTable.containerArrived == 0) {
-                swal("", "Container is not arrived", "info")
+                swal("", "Container is not arrived.", "info")
                return;
            }
        }
@@ -599,7 +599,7 @@ changeLot(e){
           //        })
           //     }
           if(!flagToDecideStatus){
-                swal("Done" , "Saved Successfully" , "info")
+                swal("Done" , "Saved successfully." , "info")
                 hashHistory.push('/Container/containerview')
                this.setState({
                    editing: false
@@ -634,7 +634,7 @@ changeLot(e){
                  if(sum==this.state.contLoadData[temp].TPackagingInstructionLots.inInventory || this.state.currentIntObject.TPiInventory.length<=0){
                    axios.put(Base_Url + "TPackagingInstructionLots/" + array[i], {status: "SHIPPED",shippedOn:new Date()}).then((response)=> {
                             if(i==array.length-1){
-                              swal("Done" , "Saved Successfully" , "info")
+                              swal("Done" , "Saved successfully." , "info")
                               hashHistory.push('/Container/containerview')
                              this.setState({
                                  editing: false
@@ -645,7 +645,7 @@ changeLot(e){
           }
   }
     if(flagToDecideStatus){
-        swal("Done" , "Saved Successfully" , "info")
+        swal("Done" , "Saved successfully." , "info")
         hashHistory.push('/Container/containerview')
        this.setState({
            editing: false

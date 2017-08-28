@@ -35,7 +35,7 @@ class ForgotPasswordForm extends React.Component{
 
 		axios.post(Base_Url+"TUsers/passwordReset",data).then((respnse)=>{
 			
-				swal("Done","Please check your email","success")
+				swal("Done","Please check your email.","success")
 			
 		})
 				
@@ -44,14 +44,14 @@ class ForgotPasswordForm extends React.Component{
 	}
 	else{
 		this.setState({
-			error : "Please enter a valid Email Address"
+			error : "Please enter a valid email address."
 		})
 	}
 	}
 	else
 	{
 		this.setState({
-			error : "Please enter Email Address"
+			error : "Please enter email address."
 		})
 	}
 

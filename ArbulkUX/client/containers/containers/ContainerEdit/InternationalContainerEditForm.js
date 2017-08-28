@@ -218,7 +218,7 @@ class InternationalContainerEditForm extends Component {
         this.IntPostObj.modifiedBy = this.userID
         this.IntPostObj.modifiedOn = today
         axios.put(Base_Url + "TContainerInternationals" + "/" + this.id,this.IntPostObj).then((response) =>{
-            swal("success","Succuessfully Edited","success");
+            swal("success","Succuessfully edited.","success");
             hashHistory.push('/Container/containerview')
         })
         console.log("POSTOBJ",this.IntPostObj)
