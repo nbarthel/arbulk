@@ -58,7 +58,8 @@ export default class PackagingInstructionViewForm extends React.Component {
             selectedRail:'',
             selectedLot:'',
             SelectedCutOffDate:[],
-            SelectedCreadtedDate:[]
+            SelectedCreadtedDate:[],
+            viewId:''
         }
         this.status
         this.buttonDisplay = [ ]
@@ -107,6 +108,7 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.toggleColumn = this.toggleColumn.bind(this)
         this.handleOpen = this.handleOpen.bind(this)
         this.handleClose = this.handleClose.bind(this)
+        this.saveNewCustomView = this.saveNewCustomView.bind(this);
     }
     componentWillMount() {
         var userId = Number(localStorage.getItem("userId"));
@@ -660,7 +662,8 @@ PrintElem(elem)
             selectedRail:'',
             selectedLot:'',
             SelectedCutOffDate:[],
-            SelectedCreadtedDate:[]
+            SelectedCreadtedDate:[],
+            viewId:e.target.id
         });
         var index = e.target.selectedIndex ;
         var blob = e.target.value
@@ -969,33 +972,31 @@ PrintElem(elem)
             })
         }
     }
-    saveView(e){
-        debugger
-
-        for(let props in this.Where.Query){
-            this.Where[props] = this.Where.Query[props]
+    saveNewCustomView(tempThis){
+        for(let props in tempThis.Where.Query){
+            tempThis.Where[props] = tempThis.Where.Query[props]
         }
-        for(let props in this.Where.Query){
-            var obj = {[props]:this.Where.Query[props]}
-            this.Where.Query[props] = this.Where.Query[props]
+        for(let props in tempThis.Where.Query){
+            var obj = {[props]:tempThis.Where.Query[props]}
+            tempThis.Where.Query[props] = tempThis.Where.Query[props]
         }
         var saveCustomView = {
             "id": 0,
             "screenName": "PACKAGING",
-            "viewName": this.state.Text,
-            "viewFilters": JSON.stringify(this.Where),
+            "viewName": tempThis.state.Text,
+            "viewFilters": JSON.stringify(tempThis.Where),
             "createdBy": 0,
             "createdOn": "2016-09-26",
             "modifiedBy": 0,
             "modifiedOn": "2016-09-26",
             "active": 1
         }
-        if(this.state.Text!==undefined && this.state.Text!==""){
+        if(tempThis.state.Text!==undefined && tempThis.state.Text!==""){
             axios.post(Base_Url + "TCustomViews", saveCustomView).then(response=> {
                 swal('Success' , "Successfully saved." , 'success');
                 console.log("response", response)
                 axios.get(Base_Url+"TCustomViews").then(response=>{
-                    this.setState({
+                    tempThis.setState({
                         savedViews : response.data
                     })
                 })
@@ -1004,7 +1005,38 @@ PrintElem(elem)
         else{
             swal('Error' , "Please give the name of custom view." , 'error');
         }
+    }
+    updateExistingView(tempThis){
 
+    }
+    saveView(e){
+        debugger
+        if(this.state.viewId===""){
+            this.saveNewCustomView(this);
+        }
+        else{
+            var tempThis = this;
+            swal({
+                    title: "Custom View",
+                    text: "Do you want to edit this view or want to save a new one",
+                    type: "info",
+                    showCancelButton: true,
+                    confirmButtonText: "Save as a new custom view",
+                    cancelButtonText: "Update the existing one",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function(saveNew){
+                    debugger
+                    if(saveNew){
+                        tempThis.saveNewCustomView(tempThis);
+                    }
+                    else{
+                        tempThis.updateExistingView(tempThis);
+                    }
+                }
+            );
+        }
     }
 
     handleOptionChange1(e) {
@@ -1082,7 +1114,13 @@ PrintElem(elem)
             customerSelected:[],
             statusSelected:[],
             railcarArrived:'',
-            selectedShipmentRecieved:''
+            selectedShipmentRecieved:'',
+            selectedPO:'',
+            selectedRail:'',
+            selectedLot:'',
+            SelectedCutOffDate:[],
+            SelectedCreadtedDate:[],
+            viewId:''
         })
         document.getElementById('groupBy').selectedIndex = 0
         document.getElementById('customer_name').selectedIndex = 0
@@ -1540,7 +1578,7 @@ PrintElem(elem)
                                                         if(views.screenName == "PACKAGING") {
                                                             return (
 
-                                                                <option key={index} value={views.viewFilters}>{views.viewName}</option>
+                                                                <option id = {views.id} key={index} value={views.viewFilters}>{views.viewName}</option>
                                                             )
                                                         }
                                                     })
