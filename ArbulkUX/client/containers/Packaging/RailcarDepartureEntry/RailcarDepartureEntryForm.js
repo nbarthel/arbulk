@@ -357,6 +357,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
         var cartDataArray = []
         if(data.target.checked){this.cartArray.push(value.id);}
         else if(!data.target.checked){
+            document.getElementById('checkall').checked=false;
             let index = this.cartArray.indexOf(value.id);
             if (index > -1) {
                 this.cartArray.splice(index, 1);
@@ -367,7 +368,6 @@ export default class RailcarArrivalEntryForm extends React.Component {
         //console.log("clicked" , data , value)
     };
     updateCartArrival(){
-
         if(this.cartArray.length < 1){
             swal('Info' , 'Please select row and date to submit departure.' , 'info')
             return
@@ -392,7 +392,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
                         closeOnConfirm: true
                     },
                     function(isConfirm){
-                        if(isConfirm){ hashHistory.push('/Packaging/packaginginstview/')}
+                        if(isConfirm){ location.reload();}
                         else{
 
                         }
@@ -411,22 +411,21 @@ export default class RailcarArrivalEntryForm extends React.Component {
         let checkAll = [];
         let cartDataArray = []
         if(e.target.checked) {
-            debugger
             console.log(e.target.checked)
             for (let i = 0; i < viewData.length; i++) {
-                if (viewData[i].TPackagingInstructions && (viewData[i].status == "IN INVENTORY")) {
+                if (viewData[i].TPackagingInstructions && (viewData[i].status == "IN INVENTORY" && viewData[i].railcar_status !== 'RETURNED')) {
                     this.props.data[i].arrived = 1;
                     if(document.getElementById(viewData[i].id)) {
                         document.getElementById(viewData[i].id).checked = true;
                         this.cartArray.push(viewData[i].id)
-                    }
+                        }
                 }
             }
         }
         else if(e.target.checked===false){
             console.log(e.target.checked)
             for(let i=0; i<viewData.length;i++){
-                if(viewData[i].TPackagingInstructions && (viewData[i].status == "IN INVENTORY")){
+                if(viewData[i].TPackagingInstructions && (viewData[i].status == "IN INVENTORY" && viewData[i].railcar_status !== 'RETURNED')){
 
                     if(document.getElementById(viewData[i].id)) {
                         this.props.data[i].arrived = 0;
@@ -451,7 +450,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
         if(fiterData != undefined){
             var railCarFilterData = _.map(fiterData , (view ,index)=>{
                 //	console.log("----",fiterData)
-                if(view.TPackagingInstructions && (view.status == "IN INVENTORY") ){
+                if(view.TPackagingInstructions && (view.status == "IN INVENTORY" && view.railcar_status !=='RETURNED') ){
 
                     return (
 						<tr key={index}>
@@ -485,7 +484,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 
         var railcartData = _.map(railCart , (view , index)=>{
 
-            if(view.TPackagingInstructions && (view.status == "IN INVENTORY") ){
+            if(view.TPackagingInstructions && (view.status == "IN INVENTORY" && view.railcar_status !=='RETURNED') ){
                 debugger
                 return(
 
