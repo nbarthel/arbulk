@@ -15,12 +15,15 @@ class CustomerNameFilterPage extends React.Component {
         this.collesp(8);
     }
     componentDidUpdate(){
-        for(let i =0;i<this.props.customerSelected.length;i++){
-            let customer_id = this.props.customerSelected[i];
-            if(this.refs["c"+customer_id]){
-                this.refs["c"+customer_id].checked = true;
+        if(this.props && this.props.customerSelected){
+            for(let i =0;i<this.props.customerSelected.length;i++){
+                let customer_id = this.props.customerSelected[i];
+                if(this.refs["c"+customer_id]){
+                    this.refs["c"+customer_id].checked = true;
+                }
             }
         }
+
     }
     componentWillReceiveProps(nextProps){
         if(!this.state.called && nextProps.customerSelected && nextProps.customerSelected.length>0){
@@ -48,13 +51,12 @@ class CustomerNameFilterPage extends React.Component {
         }
 
         axios.get(this.urlCustomer).then((response) => {
-
             console.log("customer", response)
             this.setState({
                 name: response.data
             })
         }).catch(function(err){
-                console.log('eroor>>>>' , err)
+                //console.log('eroor>>>>' , err)
             })
 
 
@@ -81,7 +83,7 @@ class CustomerNameFilterPage extends React.Component {
                     <input className="checkbox" type="checkbox" value={customer.name} ref={"c"+customer.id} id={customer.id} onChange={(e) => this.props.onCustomerFilter(e,customer)}/> <div className="control__indicator"></div>
 
                     </label>
-                <span className="displayonlyFilter" title ={customer.name} onClick={(e) => this.props.onCustomerFilter(e,customer)}>{"  Only  "}</span>
+                <span className="displayonlyFilter" title ={customer.name} id = {"c:"+customer.id} onClick={(e) => this.props.onCustomerFilter(e,customer,true)}>{"  Only  "}</span>
                 <span className="labText">{customer.name}</span>
                     </li>)
        })
