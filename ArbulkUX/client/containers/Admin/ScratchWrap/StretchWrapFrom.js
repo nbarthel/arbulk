@@ -51,7 +51,7 @@ class StretchWrapFrom extends React.Component {
             axios.post(Base_Url+"TWrapTypes",this.createUsrObj).then((response)=>{
                 swal({
                     title: "Success",
-                    text: "Stretch wrap added",
+                    text: "Stretch wrap added.",
                     type: "success",
                     showCancelButton: false,
                     confirmButtonColor: "#DD6B55",

@@ -3,9 +3,9 @@
 module.exports = function(Tcompany) {
 
     Tcompany.getCustomers = function (id, cb) {
-        var sql ="select count(aT.customer_id) as mostActive, bT.*, customer_id from  t_packaging_instructions as aT inner join t_company as bT on bT.id = aT.customer_id group by aT.customer_id having bT.type='CUSTOMER' order by bT.name"
+        var limit =(id!==undefined)? " limit "+ id : '';
+        var sql ="select * from (select count(aT.customer_id) as mostActive, bT.*, customer_id from t_packaging_instructions as aT inner join t_company as bT on bT.id = aT.customer_id group by aT.customer_id order by mostActive desc "+limit+") as a order by name"
         var ds = Tcompany.dataSource;
-        sql =  (id!==undefined)? sql+" limit "+ id : sql
  console.log(sql)
         ds.connector.query(sql, function (err, result) {
             if (err) {
@@ -14,7 +14,7 @@ module.exports = function(Tcompany) {
             }
             cb(null, result);
         });
-        //cb(null, null);
+       // cb(null, null);
 
     }
     Tcompany.remoteMethod('getCustomers', {

@@ -278,10 +278,6 @@ export default class RailcarArrivalEntryForm extends React.Component {
                 writable: true,
                 configurable:true,
                 value:this.checkedCustomer})
-            // this.buttonDisplay.push(e.target.value)
-            //console.log(this.props.checkedCompany)
-            //console.log(this.props.buttonDisplay)
-            //console.log(this.checkedCustomer)
         }
         else if (!e.target.checked){
             let id = e.target.id
@@ -366,7 +362,6 @@ export default class RailcarArrivalEntryForm extends React.Component {
                     this.props.data[i].arrived = 1;
                     this.cartArray.push(value.id)
                     this.lotOrderValue.push(value)
-                    break;
                 }
             }
             //this.forceUpdate()
@@ -383,7 +378,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
                     }
                     let index1 = this.lotOrderValue.indexOf(value);
                     if (index1 > -1) {
-                        this.lotOrderValue1.splice(index, 1);
+                        this.lotOrderValue.splice(index1, 1);
                     }
                     break;
                 }
@@ -400,16 +395,13 @@ export default class RailcarArrivalEntryForm extends React.Component {
         let viewData = this.props.data
         let checkAll = [];
         let cartDataArray = []
-
         if(e.target.checked) {
             console.log(e.target.checked)
             for (let i = 0; i < viewData.length; i++) {
                 if (viewData[i].TPackagingInstructions && (viewData[i].status == "CONFIRMED" || viewData[i].status == "UNCONFIRMED" || viewData[i].status == "READY") && (viewData[i].arrived != 1)) {
                     this.props.data[i].arrived = 1;
                     if(document.getElementById('th'+ i)) {
-
                         document.getElementById(viewData[i].id).checked = true;
-
                         this.cartArray.push(viewData[i].id)
                         this.lotOrderValue.push(viewData[i])
                     }
@@ -431,9 +423,9 @@ export default class RailcarArrivalEntryForm extends React.Component {
                         if (index1 > -1) {
                             this.lotOrderValue.splice(index1, 1);
                         }
-
                         document.getElementById(viewData[i].id).checked = false;
-                        this.cartArray.push(viewData[i].id)
+                        this.cartArray.splice(i, 1)
+                        this.lotOrderValue.splice(i, 1)
                     }
                 }
             }
@@ -449,8 +441,6 @@ export default class RailcarArrivalEntryForm extends React.Component {
                 this.props.data[i].arrived = 0;
             }
         }
-
-        console.log(checkAll)
         this.setState({chekVals:checkAll})
     }
 
@@ -461,6 +451,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
             return
         }
         for (let j = 0; j < this.lotOrderValue.length; j++) {
+            debugger
             if (this.lotOrderValue[j].status == "CONFIRMED") {
                 this.cartArray.forEach((id, index) => {
                     axios.put(Base_Url + "TPackagingInstructionLots/" + id, {
@@ -469,19 +460,12 @@ export default class RailcarArrivalEntryForm extends React.Component {
                         arrived: 1,
                         railcar_status: "ARRIVED"
                     }).then(function (response) {
-                        swal({
-                                title: "Success",
-                                text: "Arrival submitted.",
-                                type: "success",
-                                showCancelButton: false,
-                            },
-                            function (isConfirm) {
-                                hashHistory.push('/Packaging/packaginginstview/')
-                            });
+
                     }).catch(function (err) {
                         //console.log("Error Is" + err)
                     })
                 })
+
             }
 
             else if (this.lotOrderValue[j].status == "QUEUED") {
@@ -491,15 +475,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
                         arrived: 1,
                         railcar_status: "ARRIVED"
                     }).then(function (response) {
-                        swal({
-                                title: "Success",
-                                text: "Arrival submitted.",
-                                type: "success",
-                                showCancelButton: false,
-                            },
-                            function (isConfirm) {
-                                hashHistory.push('/Packaging/packaginginstview/')
-                            });
+
                     }).catch(function (err) {
                         //console.log("Error Is" + err)
                     })
@@ -515,15 +491,18 @@ export default class RailcarArrivalEntryForm extends React.Component {
                         railcar_status: "ARRIVED"
                     }).then(function (response) {
 
-                        swal({
-                                title: "Success",
-                                text: "Arrival submitted.",
-                                type: "success",
-                                showCancelButton: false,
-                            },
-                            function (isConfirm) {
-                                hashHistory.push('/Packaging/packaginginstview/')
-                            });
+                    }).catch(function (err) {
+                        console.log("Error Is" + err)
+                    })
+                })
+            }
+            else if (this.lotOrderValue[j].status == "READY"){
+                this.cartArray.forEach((id, index) => {
+                    axios.put(Base_Url + "TPackagingInstructionLots/" + id, {
+                        railcar_arrived_on: this.startDate,
+                        arrived: 1,
+                        railcar_status: "ARRIVED"
+                    }).then(function (response) {
 
                     }).catch(function (err) {
                         console.log("Error Is" + err)
@@ -534,6 +513,17 @@ export default class RailcarArrivalEntryForm extends React.Component {
 
             else {
                 swal("Info", "Railcar must be confirmed first.", 'info')
+            }
+            if(j+1 === this.lotOrderValue.length){
+                swal({
+                        title: "Success",
+                        text: "Arrival submitted.",
+                        type: "success",
+                        showCancelButton: false,
+                    },
+                    function (isConfirm) {
+                        location.reload();
+                    });
             }
 
         }
@@ -582,8 +572,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
         railCarFilterData = _.filter(railCarFilterData, function (param) {
             return param !== undefined;
         });
-
-
+if(this.props.data!==''){
         const railCart = this.props.data
         var railcartData = _.map(railCart , (view ,index)=>{
 
@@ -592,7 +581,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
 
                 return(
 					<tr>
-						<td>{view.TPackagingInstructions.TCompany? view.TPackagingInstructions.TCompany.name : ''}</td>
+						<td>{view.TPackagingInstructions.TCompany && view.TPackagingInstructions.TCompany.name ? view.TPackagingInstructions.TCompany.name : ''}</td>
 						<td>{view.TPackagingInstructions ? view.TPackagingInstructions.po_number : ''}</td>
 						<td>{view.railcar_number ? view.railcar_number : ''}</td>
 						<td>{view.weight?(this.state.selectedOption=='lbs'?view.weight:(view.weight/MUL_FACTOR).toFixed(2)):''}</td>
@@ -612,7 +601,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
                 )
             }
 
-        })
+        })}
         return (
 
 			<section className="side-filter">
