@@ -1740,7 +1740,6 @@ export default class PackagingInstructionViewForm extends React.Component {
                                                 value = {this.state.Text}
                                             />
                                         </div>
-
                                         <div className="col-lg-4 col-sm-4 col-md-4 col-xs-12 padding-top-btm-xs">
                                             <button type="button" onClick={(e) => this.saveView(e)} className="btn  btn-success margin-left-xs">SAVE CUSTOM VIEW</button>
                                         </div>
