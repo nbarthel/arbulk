@@ -25,6 +25,8 @@ class ContainerViewForm extends React.Component {
             showArrived: "",
             showSteamShip: "",
             showType: "",
+            showStatus:"",
+            showShipmentType:"",
             key: 0,
             selectedOption: 'lbs',
             index: 0,
@@ -1313,7 +1315,6 @@ class ContainerViewForm extends React.Component {
                 }
                 break;
             case "Release" :
-
                 if (value === 0) {
                     this.setState({
                         showRelease: "none",
@@ -1328,7 +1329,6 @@ class ContainerViewForm extends React.Component {
                 }
                 break;
             case "Booking" :
-
                 if (value === 0) {
                     this.setState({
                         showBooking: "none",
@@ -1343,7 +1343,6 @@ class ContainerViewForm extends React.Component {
                 }
                 break;
             case "Trucker" :
-
                 if (value === 0) {
                     this.setState({
                         showTrucker: "none",
@@ -1358,7 +1357,6 @@ class ContainerViewForm extends React.Component {
                 }
                 break;
             case "Arrived" :
-
                 if (value === 0) {
                     this.setState({
                         showArrived: "none",
@@ -1373,7 +1371,6 @@ class ContainerViewForm extends React.Component {
                 }
                 break;
             case "SteamShip" :
-
                 if (value === 0) {
                     this.setState({
                         showSteamShip: "none",
@@ -1388,7 +1385,6 @@ class ContainerViewForm extends React.Component {
                 }
                 break;
             case "Type" :
-
                 if (value === 0) {
                     this.setState({
                         showType: "none",
@@ -1402,6 +1398,35 @@ class ContainerViewForm extends React.Component {
                     })
                 }
                 break;
+            case "Status" :
+                if (value === 0) {
+                    this.setState({
+                        showStatus: "none",
+                        aclass:"Type"
+                    })
+                }
+                else {
+                    this.setState({
+                        showStatus: "",
+                        aclass:""
+                    })
+                }
+                break;
+            case "Shipment Type" :
+                if (value === 0) {
+                    this.setState({
+                        showShipmentType: "none",
+                        aclass:"Type"
+                    })
+                }
+                else {
+                    this.setState({
+                        showShipmentType: "",
+                        aclass:""
+                    })
+                }
+                break;
+
         }
     }
     handleOpen(){
@@ -1551,6 +1576,8 @@ class ContainerViewForm extends React.Component {
                                                                         showArrived={this.state.showArrived}
                                                                         showSteamShip={this.state.showSteamShip}
                                                                         showType={this.state.showType}
+                                                                        showStatus = {this.state.showStatus}
+                                                                        showShipmentType = {this.state.showShipmentType}
                                                                         onCheckboxChange={this.onCheckboxChange}
                                                                         key={this.state.index}
                                                                         onCheckboxChange={this.onCheckboxChange}

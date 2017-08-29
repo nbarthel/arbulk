@@ -8,22 +8,16 @@ import axios from 'axios';
 import _ from 'lodash';
 import  { PropTypes } from 'react';
 import { createDataLoader } from 'react-loopback';
-//import PackagingInstructionViewForm from '../../containers/Packaging/PackagingInstructionView/PackagingInstructionViewForm';
 import HeadBody from './HeadBody';
 import NestedRows from './NestedRows'
 import request from '../../utils/request';
-import { Base_Url } from '../../constants'
-var moment = require('moment');
 import './js/tableHeadFixer.js';
-//import './js/tableHeadFixer';
-//import './js/jquery.dataTables.min.js';
-//import './js/jquery.dragtable.js';
-//import './stylesheet/dragtable.css';
 import './js/jquery-sortable-min.js'
 import './js/colResizable-1.6.min.js';
 import './stylesheet/main.css';
+import { Base_Url } from '../../constants'
+var moment = require('moment');
 
-//*import './stylesheet/jquery.dataTables.min.css'*/
 var flagSorting = false;
 var sortedData = [];
 var Loader = require('react-loader');
@@ -671,8 +665,8 @@ class ContainerViewDataComponent extends React.Component {
                                             <td style={{display : this.props.showSteamShip}}>{'N/A'}</td>
                                             <td key="Type" style={{display : this.props.showType}}>{'N/A'}</td>
                                             <td key="status"
-                                                style={{display : this.props.showType}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0) ? (view.TContainerDomestic[index].status == null ? "ALLOCATED" : view.TContainerDomestic[index].status) : 'ALLOCATED'}</td>
-                                            <td key="ship" style={{display : this.props.showType}}>{shipType}</td>
+                                                style={{display : this.props.showStatus}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0) ? (view.TContainerDomestic[index].status == null ? "ALLOCATED" : view.TContainerDomestic[index].status) : 'ALLOCATED'}</td>
+                                            <td key="ship" style={{display : this.props.showShipmentType}}>{shipType}</td>
                                         </tr>
                                     )
                                 })
@@ -723,9 +717,9 @@ class ContainerViewDataComponent extends React.Component {
                                                 style={{display : this.props.showSteamShip}}>{steamship ? steamship : 'N/A'}</td>
                                             <td key="type" style={{display : this.props.showType}}>{type}</td>
                                             <td key="status"
-                                                style={{display : this.props.showType}}>{(view.TContainerInternational && view.TContainerInternational.length > 0) ?
+                                                style={{display : this.props.showStatus}}>{(view.TContainerInternational && view.TContainerInternational.length > 0) ?
                                                 (view.TContainerInternational[index].status == null ? "ALLOCATED" : view.TContainerInternational[index].status ) : 'NA'}</td>
-                                            <td key="shipType" style={{display : this.props.showType}}>{shipType}</td>
+                                            <td key="shipType" style={{display : this.props.showShipmentType}}>{shipType}</td>
                                         </tr>
                                     )
                                 })
@@ -780,10 +774,10 @@ class ContainerViewDataComponent extends React.Component {
                             <td key="type" style={{display : this.props.showType}}></td>
                         );
                         subheaderObj["Status"] = (
-                            <td key=" status" style={{display : this.props.showType}}></td>
+                            <td key=" status" style={{display : this.props.showStatus}}></td>
                         );
                         subheaderObj["Shipment Type"] = (
-                            <td key="shipment" style={{display : this.props.showType}}></td>
+                            <td key="shipment" style={{display : this.props.showShipmentType}}></td>
                         );
 
                         return (
@@ -846,10 +840,10 @@ class ContainerViewDataComponent extends React.Component {
                                     );
                                     cellObj["Status"] = (
                                         <td key="status"
-                                            style={{display : this.props.showType}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0) ? (view.TContainerDomestic[index].status == null ? "ALLOCATED" : view.TContainerDomestic[index].status) : 'ALLOCATED'}</td>
+                                            style={{display : this.props.showStatus}}>{(view.TContainerDomestic && view.TContainerDomestic.length > 0) ? (view.TContainerDomestic[index].status == null ? "ALLOCATED" : view.TContainerDomestic[index].status) : 'ALLOCATED'}</td>
                                     );
                                     cellObj["Shipment Type"] = (
-                                        <td key="ship" style={{display : this.props.showType}}>{shipType}</td>
+                                        <td key="ship" style={{display : this.props.showShipmentType}}>{shipType}</td>
                                     );
                                     return (
                                         <tr key={index} className={count}>
@@ -918,10 +912,10 @@ class ContainerViewDataComponent extends React.Component {
                             <td key="type" style={{display : this.props.showType}}></td>
                         );
                         subheaderObj["Status"] = (
-                            <td style={{display : this.props.showType}}></td>
+                            <td style={{display : this.props.showStatus}}></td>
                         );
                         subheaderObj["Shipment Type"] = (
-                            <td key="ship" style={{display : this.props.showType}}></td>
+                            <td key="ship" style={{display : this.props.showShipmentType}}></td>
                         );
                         return (
                             <tbody key={index}>
@@ -983,11 +977,11 @@ class ContainerViewDataComponent extends React.Component {
                                     );
                                     cellObj["Status"] = (
                                         <td key="status"
-                                            style={{display : this.props.showType}}>{(view.TContainerInternational && view.TContainerInternational.length > 0) ?
+                                            style={{display : this.props.showStatus}}>{(view.TContainerInternational && view.TContainerInternational.length > 0) ?
                                             (view.TContainerInternational[index].status == null ? "ALLOCATED" : view.TContainerInternational[index].status ) : 'NA'}</td>
                                     );
                                     cellObj["Shipment Type"] = (
-                                        <td key="shipType" style={{display : this.props.showType}}>{shipType}</td>
+                                        <td key="shipType" style={{display : this.props.showShipmentType}}>{shipType}</td>
                                     );
                                     return (
                                         <tr key={index} className={count}>
@@ -1099,14 +1093,14 @@ class ContainerViewDataComponent extends React.Component {
 
             </th>);
         headerObj["Status"] = (
-            <th key="status" style={{display : this.props.showType}} onClick={(e)=> this.onAscending(e,'status')}>Status
+            <th key="status" style={{display : this.props.showStatus}} onClick={(e)=> this.onAscending(e,'status')}>Status
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
                         <i className="fa fa-sort-desc fa-stack-1x"></i>
                 </span>
 
             </th>);
-        headerObj["Shipment Type"] = (<th key="Shipment" style={{display : this.props.showType}}
+        headerObj["Shipment Type"] = (<th key="Shipment" style={{display : this.props.showShipmentType}}
                                           onClick={(e)=> this.onAscending(e,'shipmentType')}>Shipment Type
                 <span className="fa-stack ">
                         <i className="fa fa-sort-asc fa-stack-1x"></i>
@@ -1134,8 +1128,8 @@ class ContainerViewDataComponent extends React.Component {
                         <th className="exclude-drag" style ={{display : this.props.showArrived}}>Arrived?</th>
                         <th className="exclude-drag" style ={{display : this.props.showSteamShip}}>Steamship Line</th>
                         <th className="exclude-drag" style ={{display : this.props.showType}}>Type</th>
-                        <th className="exclude-drag" style ={{display : this.props.showType}}>Status</th>
-                        <th className="exclude-drag" style ={{display : this.props.showType}}>Shipment Type</th>
+                        <th className="exclude-drag" style ={{display : this.props.showStatus}}>Status</th>
+                        <th className="exclude-drag" style ={{display : this.props.showShipmentType}}>Shipment Type</th>
                     </tr>:
                     <tr className="sorting_head"  style={{"backgroundColor" : "#2e6da4"}}>
                         <th className="exclude-drag"></th>

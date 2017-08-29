@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import _ from 'lodash';
 import  { PropTypes } from 'react';
 import { createDataLoader } from 'react-loopback';
@@ -211,7 +212,7 @@ PrintElem(elem)
     mywindow.document.write('</head><body ><table border="0">');
     mywindow.document.write(document.getElementById('Packaging_Instruction_View').innerHTML);
     mywindow.document.write('</table></body></html>');
-    debugger
+    
     mywindow.document.close(); // necessary for IE >= 10
     mywindow.focus(); // necessary for IE >= 10*/
     mywindow.print();
@@ -219,7 +220,7 @@ PrintElem(elem)
     return true
 }
     onSearch(e) {
-        debugger
+        
         var cutofFilter = []
 
         var flagForcutOffFilter = false
@@ -527,7 +528,7 @@ PrintElem(elem)
         this.onSearch(e);
     }
     onCompanyFilter(e,location){
-        debugger
+
         if(e.target.checked){
             this.forceUpdate()
             this.checkedCompany.push(e.target.id)
@@ -559,34 +560,59 @@ PrintElem(elem)
         }
         this.onSearch(e)
     }
-    onCustomerFilter(e,customer){
-        if(e.target.checked){
-            this.forceUpdate()
-            this.checkedCustomer.push(e.target.id)
+    onCustomerFilter(e,customer,isOnly){
+        
+        if(isOnly){
+            let id = e.target.id.split(':')[1]
+            let elements = document.getElementsByClassName('checkboxCustomer inline')
+            for(let i=0;i<elements.length;i++){
+                let elem = elements[i].firstChild.firstChild;
+                elem.checked = false;
+                if(elem.id === id)
+                    elem.checked = true
+            }
+            //will not work as 2 child components are having same id
+            //document.getElementById(id).checked = true;
+            this.checkedCustomer = []
+            this.checkedCustomer.push(id)
             Object.defineProperty(this.Where,"Customer",{enumerable: true ,
                 writable: true,
                 configurable:true,
                 value:this.checkedCustomer})
-            this.state.customerSelected.push(e.target.id)
+            this.setState({
+                customerSelected:[]
+            });
+            this.state.customerSelected.push(id)
         }
-        else if (!e.target.checked){
-            let id = e.target.id
-            this.checkedCustomer = _.without(this.checkedCustomer,id)
-            this.Where.Customer = this.checkedCustomer
-            if(Object.keys(this.Where.Customer).length === 0){
-                this.Where.Customer = undefined
-                delete this.Where.Customer
+        else{
+            if(e.target.checked){
+                this.forceUpdate()
+                this.checkedCustomer.push(e.target.id)
+                Object.defineProperty(this.Where,"Customer",{enumerable: true ,
+                    writable: true,
+                    configurable:true,
+                    value:this.checkedCustomer})
+                this.state.customerSelected.push(e.target.id)
             }
-            let value = e.target.value
-            let index = this.buttonDisplay.indexOf(e.target.value)
-            if(index !== -1)
-                this.buttonDisplay = _.without(this.buttonDisplay,value)
-            for(let i in this.state.customerSelected){
-                if(this.state.customerSelected[i] === e.target.id){
-                    this.state.customerSelected.splice(i,1);
+            else if (!e.target.checked){
+                let id = e.target.id
+                this.checkedCustomer = _.without(this.checkedCustomer,id)
+                this.Where.Customer = this.checkedCustomer
+                if(Object.keys(this.Where.Customer).length === 0){
+                    this.Where.Customer = undefined
+                    delete this.Where.Customer
                 }
+                let value = e.target.value
+                let index = this.buttonDisplay.indexOf(e.target.value)
+                if(index !== -1)
+                    this.buttonDisplay = _.without(this.buttonDisplay,value)
+                for(let i in this.state.customerSelected){
+                    if(this.state.customerSelected[i] === e.target.id){
+                        this.state.customerSelected.splice(i,1);
+                    }
+                }
+                this.forceUpdate()
             }
-            this.forceUpdate()
         }
         this.onSearch(e)
     }
@@ -652,7 +678,7 @@ PrintElem(elem)
         })
     }
     viewChange(e){
-        debugger
+        
         this.setState({
             locationSelected:[],
             customerSelected:[],
@@ -1012,7 +1038,7 @@ PrintElem(elem)
         }
     }
     updateExistingView(tempThis){
-        debugger
+        
         for(let props in tempThis.Where.Query){
             tempThis.Where[props] = tempThis.Where.Query[props]
         }
@@ -1042,7 +1068,7 @@ PrintElem(elem)
         })
     }
     saveView(e){
-        debugger
+        
         if(this.state.viewId===""){
             this.saveNewCustomView(this);
         }
@@ -1059,7 +1085,7 @@ PrintElem(elem)
                     closeOnCancel: false
                 },
                 function(saveNew){
-                    debugger
+                    
                     if(saveNew){
                         tempThis.saveNewCustomView(tempThis);
                     }
