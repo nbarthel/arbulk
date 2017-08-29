@@ -398,7 +398,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
         if(e.target.checked) {
             console.log(e.target.checked)
             for (let i = 0; i < viewData.length; i++) {
-                if (viewData[i].TPackagingInstructions && (viewData[i].status == "CONFIRMED" || viewData[i].status == "UNCONFIRMED" || viewData[i].status == "READY") && (viewData[i].arrived != 1)) {
+                if (viewData[i].TPackagingInstructions && (viewData[i].status == "CONFIRMED" || viewData[i].status == "UNCONFIRMED" || viewData[i].status == "READY")) {
                     this.props.data[i].arrived = 1;
                     if(document.getElementById('th'+ i)) {
                         document.getElementById(viewData[i].id).checked = true;
@@ -411,7 +411,7 @@ export default class RailcarArrivalEntryForm extends React.Component {
     else if(e.target.checked===false){
             console.log(e.target.checked)
             for(let i=0; i<viewData.length;i++){
-                if(viewData[i].TPackagingInstructions && (viewData[i].status == "CONFIRMED" || viewData[i].status == "UNCONFIRMED"|| viewData[i].status == "READY") && (viewData[i].arrived === 1)){
+                if(viewData[i].TPackagingInstructions && (viewData[i].status == "CONFIRMED" || viewData[i].status == "UNCONFIRMED"|| viewData[i].status == "READY")){
 
                     if(document.getElementById('th'+ i)) {
                         this.props.data[i].arrived = 0;

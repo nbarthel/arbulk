@@ -11,6 +11,24 @@ export default class RailcarArrivalEntryPage extends React.Component {
         super(props);
         this.state = { loaded : false}
     }
+    getLotsData(url){
+        $.ajax({
+            url: url,
+            success:function(data){
+                console.log('ajax lots data',data);
+                if(data[0].TPackagingInstructions.TCompany){
+                    this.setState({
+                        viewRailcartData : data,
+                        loaded:true
+                    })
+                }else {
+                    this.getLotsData(url);
+
+                }
+            }.bind(this)
+
+        })
+    }
     componentDidMount() {
 
         var PIview = createDataLoader(RailcarArrivalEntryForm, {
@@ -28,24 +46,7 @@ export default class RailcarArrivalEntryPage extends React.Component {
             "where" : {"railcar_status": {"neq":"ARRIVED"},"active":1}
         });
 
-      //  console.log('sdsddsdsdsdsd' , this.url);
-
-        $.ajax({
-            url: this.url,
-            success:function(data){
-              //  console.log('ajax ',data);
-
-                this.setState(
-                    {
-                        viewRailcartData : data,
-                        loaded:true
-                    }
-                )
-             //   console.log( '>>>>>>>>>>>>raillcart' , this.state.viewRailcartData)
-            }.bind(this)
-
-        })
-        debugger
+        this.getLotsData(this.url);
     }
 
     render() {

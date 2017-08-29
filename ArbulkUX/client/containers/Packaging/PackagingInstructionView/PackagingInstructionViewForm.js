@@ -62,6 +62,7 @@ export default class PackagingInstructionViewForm extends React.Component {
             SelectedCreadtedDate:[],
             viewId:''
         }
+
         this.status
         this.buttonDisplay = [ ]
         this.checkedCustomer = [ ]
