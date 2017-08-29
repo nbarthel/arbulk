@@ -567,7 +567,7 @@ PrintElem(elem)
                 writable: true,
                 configurable:true,
                 value:this.checkedCustomer})
-            this.state.customerSelected.push({"location_id":e.target.id})
+            this.state.customerSelected.push(e.target.id)
         }
         else if (!e.target.checked){
             let id = e.target.id
@@ -582,7 +582,7 @@ PrintElem(elem)
             if(index !== -1)
                 this.buttonDisplay = _.without(this.buttonDisplay,value)
             for(let i in this.state.customerSelected){
-                if(this.state.customerSelected[i].location_id === e.target.id){
+                if(this.state.customerSelected[i] === e.target.id){
                     this.state.customerSelected.splice(i,1);
                 }
             }
