@@ -8,29 +8,20 @@ class StatusFilterPage extends React.Component {
          {name:"QUEUED",id:1},
         {name:"LOADED",id:2},
            {name:"INTRANSIT",id:3},{name:"DELIVERED",id:4}]
-        
         this.checkedStatus = { }
-
-    
-        
     }
-    /*onClick(e,status){
-        if(e.target.checked){
-            this.props.checkedStatus[e.target.id] = e.target.value;
-            this.props.buttonDisplay.push(e.target.value)
-            //console.log(this.props.checkedStatus)
+    componentWillReceiveProps(nextProps){
+        if(nextProps.statusSelected && nextProps.statusSelected!==""){
+            for(let i =0;i<nextProps.statusSelected.length;i++){
+                this.refs[nextProps.statusSelected[i]].checked = true;
+            }
         }
-        else if (!e.target.checked){
-         delete this.props.checkedStatus[e.target.id]
-         //console.log(this.props.checkedStatus)
-            
-        }
-    }*/
+    }
     render() {
         var stats = _.map(this.status,(status) => {
             return (<li key={status.id}>
                      <label className="control control--checkbox">{status.name}
-                     <input type="checkbox" value={status.name} onChange={(e) => this.props.onStatusFilter(e,status)}  id={status.id} /><div className="control__indicator"></div>
+                     <input type="checkbox" value={status.name} onChange={(e) => this.props.onStatusFilter(e,status)}  id={status.id} ref = {status.name} /><div className="control__indicator"></div>
                      </label>
                         </li>)
         })

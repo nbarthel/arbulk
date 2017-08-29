@@ -90,8 +90,6 @@ else{
 }
      
 }
-
-
     showAll(){
      
         if(this.state.show == true){
@@ -113,10 +111,6 @@ else{
         this.forceUpdate()
 
     }
-
-
-
-
     render() {
         return (
             <div className="">

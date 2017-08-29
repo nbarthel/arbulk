@@ -33,7 +33,14 @@ class ContainerViewForm extends React.Component {
             selectedOption1: 'kg',
             SelcetedOptionForGroupBy: "",
             OptionToGroupby: ["ARB", "Customer", "Release#", "Booking#", "Container#", "Trucker", "Steamship Line", "Type", "Status", "Shipment Type"],
-            open:false
+            open:false,
+            locationSelected:[],
+            customerSelected:[],
+            statusSelected:[],
+            selectedRelease:'',
+            selectedArrd:'',
+            selectedSteamShip:[],
+            viewId:''
         }
         this.containerId = ''
         this.isDomestic = false
@@ -70,6 +77,7 @@ class ContainerViewForm extends React.Component {
         this.toggleColumn = this.toggleColumn.bind(this)
         this.handleOpen = this.handleOpen.bind(this)
         this.handleClose = this.handleClose.bind(this)
+        this.removeSates = this.removeSates.bind(this)
     }
 
 
@@ -148,6 +156,9 @@ class ContainerViewForm extends React.Component {
             configurable: true,
             value: this.arrivalType
         })
+        this.setState({
+            selectedArrd:e.target.value
+        })
         this.onSearch(e)
     }
     PrintElem(elem)
@@ -191,6 +202,7 @@ class ContainerViewForm extends React.Component {
     }
 
     onSteamShipFilter(e, steamShip) {
+        debugger
         if (e.target.checked) {
             this.SteamLineArray.push(parseInt(e.target.id));
             Object.defineProperty(this.Where, "SteamLine", {
@@ -199,6 +211,9 @@ class ContainerViewForm extends React.Component {
                 configurable: true,
                 value: this.SteamLineArray
             })
+            this.setState({
+                selectedSteamShip : this.SteamLineArray
+            })
             // this.buttonDisplay.push(e.target.value)
 
         }
@@ -206,6 +221,9 @@ class ContainerViewForm extends React.Component {
             if (this.SteamLineArray.indexOf(parseInt(e.target.id)) != -1) {
                 this.SteamLineArray.splice(this.SteamLineArray.indexOf(parseInt(e.target.id)), 1)
             }
+            this.setState({
+                selectedSteamShip : this.SteamLineArray
+            })
             this.buttonDisplay = _.without(this.buttonDisplay, e.target.value)
         }
         this.onSearch(e)
@@ -257,13 +275,9 @@ class ContainerViewForm extends React.Component {
                 configurable: true,
                 value: this.checkedCompany
             })
-            //this.buttonDisplay.push(e.target.value)
-            //console.log(this.props.checkedCompany)
-            //console.log(this.props.buttonDisplay)
-
+            this.state.locationSelected.push({"locationId":e.target.id})
         }
         else if (!e.target.checked) {
-
             let id = e.target.id
             this.checkedCompany = _.without(this.checkedCompany, id)
             this.Where.Company = this.checkedCompany
@@ -278,44 +292,55 @@ class ContainerViewForm extends React.Component {
                 configurable: true,
                 value: this.checkedContainer
             });
-
             let value = e.target.value
             let index = this.buttonDisplay.indexOf(e.target.value)
             if (index !== -1)
                 this.buttonDisplay = _.without(this.buttonDisplay, value)
+            for(let i =0 ;i<this.state.locationSelected.length;i++){
+                if(this.state.locationSelected[i].locationId.toString() == id.toString()){
+                    this.state.locationSelected.splice(i,1);
+                }
+            }
             this.forceUpdate()
         }
         this.onSearch(e)
     }
 
-    onCustomerFilter(e, customer) {
-        if (e.target.checked) {
-            this.forceUpdate()
-            this.checkedCustomer.push(e.target.id)
-            Object.defineProperty(this.Where, "Customer", {
-                enumerable: true,
-                writable: true,
-                configurable: true,
-                value: this.checkedCustomer
-            })
-            //this.buttonDisplay.push(e.target.value)
-            //console.log(this.props.checkedCompany)
-            //console.log(this.props.buttonDisplay)
-            //console.log(this.checkedCustomer)
+    onCustomerFilter(e,customer,isOnly) {
+        if(isOnly){
+
         }
-        else if (!e.target.checked) {
-            let id = e.target.id
-            this.checkedCustomer = _.without(this.checkedCustomer, id)
-            this.Where.Customer = this.checkedCustomer
-            if (Object.keys(this.Where.Customer).length === 0) {
-                this.Where.Customer = undefined
-                delete this.Where.Customer
+        else{
+            if (e.target.checked) {
+                this.forceUpdate()
+                this.checkedCustomer.push(e.target.id)
+                Object.defineProperty(this.Where, "Customer", {
+                    enumerable: true,
+                    writable: true,
+                    configurable: true,
+                    value: this.checkedCustomer
+                })
+                this.state.customerSelected.push(e.target.id)
             }
-            let value = e.target.value
-            let index = this.buttonDisplay.indexOf(e.target.value)
-            if (index !== -1)
-                this.buttonDisplay = _.without(this.buttonDisplay, value)
-            this.forceUpdate()
+            else if (!e.target.checked) {
+                let id = e.target.id
+                this.checkedCustomer = _.without(this.checkedCustomer, id)
+                this.Where.Customer = this.checkedCustomer
+                if (Object.keys(this.Where.Customer).length === 0) {
+                    this.Where.Customer = undefined
+                    delete this.Where.Customer
+                }
+                let value = e.target.value
+                let index = this.buttonDisplay.indexOf(e.target.value)
+                if (index !== -1)
+                    this.buttonDisplay = _.without(this.buttonDisplay, value)
+                for(let i in this.state.customerSelected){
+                    if(this.state.customerSelected[i] === e.target.id){
+                        this.state.customerSelected.splice(i,1);
+                    }
+                }
+                this.forceUpdate()
+            }
         }
         this.onSearch(e)
     }
@@ -330,30 +355,27 @@ class ContainerViewForm extends React.Component {
                 configurable: true,
                 value: this.checkedStatus
             })
-
-            //this.buttonDisplay.push(e.target.value)
+            this.state.statusSelected.push(e.target.value)
             this.forceUpdate()
-            //console.log(this.props.buttonDisplay)
-            /* console.log(this.Where)
-             console.log(this.checkedStatus)
-             console.log(this.checkedStatus.length)*/
         }
         else if (!e.target.checked) {
             let value = e.target.value
             let pos = this.checkedStatus.indexOf(e.target.value)
             this.checkedStatus = _.without(this.checkedStatus, value)
             this.Where.status = this.checkedStatus
-            //console.log(this.Where.status)
             if (Object.keys(this.Where.status).length === 0) {
                 this.Where.status = undefined
                 delete this.Where.status
             }
-
-            //let value = e.target.value
             let index = this.buttonDisplay.indexOf(e.target.value)
             if (index !== -1)
                 this.buttonDisplay = _.without(this.buttonDisplay, value)
-            //console.log(this.buttonDisplay)
+            let data = this.state.statusSelected
+            let currntIndex = data.indexOf(e.target.value)
+            data.splice(currntIndex,1)
+            this.setState({
+                statusSelected:data
+            })
             this.forceUpdate()
         }
         this.onSearch(e)
@@ -364,15 +386,14 @@ class ContainerViewForm extends React.Component {
         this.forceUpdate()
 
     }
-
-    onRemove(e) {
-        //console.log("clicked")
-        //console.log("WHERE", this.Where)
+    removeSates(){
         this.buttonDisplay = [];
         this.checkedCustomer = []
         this.checkedStatus = []
         this.checkedCompany = []
         this.Query = []
+        this.SteamLineArray = []
+        this.arrivalType = ''
         this.SteamLineArray = []
         delete this.Where.Company
         delete this.Where.Customer
@@ -385,13 +406,22 @@ class ContainerViewForm extends React.Component {
         this.setState({
             key: this.state.key + 1,
             index: this.state.index + 1,
-            SelcetedOptionForGroupBy: ""
+            SelcetedOptionForGroupBy: "",
+            locationSelected:[],
+            customerSelected:[],
+            statusSelected:[],
+            selectedRelease:'',
+            selectedArrd : -1,
+            selectedSteamShip : [],
+            viewId:''
         })
+    }
+    onRemove(e) {
+        this.removeSates();
         document.getElementById('groupBy').selectedIndex = 0
         document.getElementById('customer_name').selectedIndex = 0
         localStorage.removeItem('conViewData')
         this.forceUpdate();
-
     }
 
     onCheckboxChange(e, data, contData) {
@@ -464,6 +494,7 @@ class ContainerViewForm extends React.Component {
     }
 
     onSearch(e) {
+        debugger
         Object.defineProperty(this.Where, "Query", {
             enumerable: true,
             writable: true,
@@ -860,26 +891,30 @@ class ContainerViewForm extends React.Component {
                 }.bind(this)
 
             })
-
-
         }
     }
 
     viewChange(e) {
+        this.removeSates();
+        this.setState({
+            locationSelected:[],
+            customerSelected:[],
+            statusSelected:[],
+            selectedRelease:'',
+            selectedArrd:-1,
+            selectedSteamShip : [],
+            viewId:e.target.selectedOptions[0].id
+        });
+        debugger
         var index = e.target.selectedIndex;
-        // this.Where = {}
         var blob = e.target.value
-        // var changedView = this.state.savedViews[index -1]
         this.Where = JSON.parse(blob)
-
         Object.defineProperty(this.Where, "Query", {
             enumerable: true,
             writable: true,
             configurable: true,
             value: this.Query
         })
-
-
         var serachObj = []
         var serachObjLots = []
         var shipType = []
@@ -924,49 +959,70 @@ class ContainerViewForm extends React.Component {
             if (this.Where.Customer && this.Where.Customer.length > 0) {
                 var customer = []
                 var obj = {}
+                let tempObj = [];
                 for (var i in this.Where.Customer) {
+                    this.checkedCustomer.push(this.Where.Customer[i])
+                    tempObj.push(this.Where.Customer[i])
+                    this.setState({
+                        customerSelected : tempObj
+                    })
                     obj = {"customerId": this.Where.Customer[i]}
                     customer.push(obj);
                 }
                 serachObj.push(customer)
             }
-
             if (this.Where.Company && this.Where.Company.length > 0) {
                 var company = [];
                 var objCompany = {}
                 for (var j in this.Where.Company) {
+                    this.checkedCompany.push(this.Where.Company[j])
                     objCompany = {"locationId": this.Where.Company[j]}
                     company.push(objCompany);
+                    this.setState({
+                        locationSelected:company
+                    });
                 }
                 serachObj.push(company)
             }
-
             if (this.Where.status && this.Where.status.length) {
-
                 var Railstatus = [];
                 var objStatus = {};
+                let statusObj = [];
                 for (var z in this.Where.status) {
                     objStatus = {"status": this.Where.status[z]}
+                    this.checkedStatus.push(this.Where.status[z]);
+                    statusObj.push(this.Where.status[z])
+                    this.setState({
+                        statusSelected : statusObj
+                    });
                     Railstatus.push(objStatus)
                 }
                 serachObjLots.push(Railstatus)
 
             }
-
             if (this.Where.Query && this.Where.Query != null && this.Where.Query != undefined && this.Where.Query.POSearch && this.Where.Query.POSearch != undefined) {
                 var poSearch = [{'po_number': {"like": "%" + this.Where.Query.POSearch + "%"}}]
                 serachObj.push(poSearch)
+                this.setState({
+                    selectedPO:{"po_number":this.Where.Query.POSearch}
+                })
             }
-
-            if (this.Where.Query && this.Where.Query != null && this.Where.Query != undefined && this.Where.Query.LotSearch && this.Where.Query.LotSearch != undefined) {
-                var lotSearch = [{'releaseNumber': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
+            if (this.Where.LotSearch && this.Where.LotSearch != undefined) {
+                var lotSearch = [{'releaseNumber': {"like": "%" + this.Where.LotSearch + "%"}}]
                 serachObj.push(lotSearch)
+                this.setState({
+                    selectedRelease:{"release":this.Where.LotSearch}
+                })
             }
             var arrivalData = {"containerArrived": -1}
             if (this.Where.Arrival == "1" || this.Where.Arrival == "0") {
                 arrivalData = {"containerArrived": parseInt(this.Where.Arrival)}
                 arrival.push(arrivalData)
                 intl.push(arrivalData)
+                this.setState({
+                    selectedArrd : this.Where.Arrival
+                })
+                this.arrivalType = this.Where.Arrival
             }
             var tempsteamp = this.SteamLineArray.length > 0 ? 1 : -1
             var steam = []
@@ -976,15 +1032,18 @@ class ContainerViewForm extends React.Component {
                 steamflag = true
                 for (var steamTemp in this.Where.SteamLine) {
                     steam.push(this.Where.SteamLine[steamTemp])
+                    this.SteamLineArray.push(this.Where.SteamLine[steamTemp])
                 }
+                this.setState({
+                    selectedSteamShip : steam
+                })
+
                 var steamdata = {"containerSteamshipLineConfirmed": this.Where.SteamLine}
                 intl.push(steamdata)
             }
-
             serachObj = [].concat.apply([], serachObj);
             serachObjLots = [].concat.apply([], serachObjLots);
             containerSearch = [].concat.apply([], containerSearch);
-
             var PIview = createDataLoader(ContainerViewForm, {
                 queries: [{
                     endpoint: 'TPackagingInstructions',
@@ -1239,8 +1298,14 @@ class ContainerViewForm extends React.Component {
     }
 
     saveView(e) {
-
-
+        var tempThis = this
+        for(let props in this.Where.Query){
+            this.Where[props] = tempThis.Where.Query[props]
+        }
+        for(let props in tempThis.Where.Query){
+            var obj = {[props]:tempThis.Where.Query[props]}
+            tempThis.Where.Query[props] = tempThis.Where.Query[props]
+        }
         var saveCustomView = {
             "id": 0,
             "screenName": "CONTAINER",
@@ -1253,7 +1318,7 @@ class ContainerViewForm extends React.Component {
             "active": 1
         }
 
-        if (saveCustomView.viewFilters != undefined && saveCustomView.viewFilters != null && saveCustomView.viewFilters != {}) {
+        if (this.state.Text!==undefined && this.state.Text!=="") {
             axios.post(Base_Url + "TCustomViews", saveCustomView).then(response=> {
                 swal('Success', "Successfully saved.", 'success');
 
@@ -1267,7 +1332,7 @@ class ContainerViewForm extends React.Component {
 
         }
         else {
-            swal('Error', "Please select filter options first.", 'error');
+            swal('Error' , "Please give the name of custom view." , 'error');
         }
     }
     toggleColumn(name,value){
@@ -1439,17 +1504,15 @@ class ContainerViewForm extends React.Component {
             window.location.reload();
         }
     }
-
-
     onTextChange(e) {
         var idValue = e.target.id
         this.Query[idValue] = e.target.value
-
+        this.setState({
+            selectedRelease : e.target.value
+        })
         this.onSearch(e)
     }
-
     SteamLine(e) {
-
         this.SteamLine = e.target.value
         Object.defineProperty(this.Where, "SteamLine", {
             enumerable: true,
@@ -1459,22 +1522,17 @@ class ContainerViewForm extends React.Component {
         })
         this.onSearch(e)
     }
-
     lotSearch(e) {
         this.Query[e.target.id] = e.target.getAttribute('value')
-
         document.getElementById('LotSearch').value = e.target.getAttribute('value')
         this.onSearch(e)
-
     }
-
     handleTextChange(e) {
         this.setState({
             Text: e.target.value
         })
         this.onSearch(e)
     }
-
     onViewClick(e) {
         if (this.contId == undefined) {
             swal("Info", "Selection missing.", "info")
@@ -1482,7 +1540,6 @@ class ContainerViewForm extends React.Component {
         }
         hashHistory.push('/Conatainer/containerDetails/' + this.contId + '/' + this.type)
     }
-
     render() {
         var filterData = ''
         if (this.state.viewData && (this.state.viewData.length == 0 || this.state.viewData.length > 0 )) {
@@ -1502,11 +1559,22 @@ class ContainerViewForm extends React.Component {
                 </div>
                 <div className="container">
                     <div className="row-fluid">
-                        <FilterComponent key={this.state.key} onSteamShipFilter={this.onSteamShipFilter}
-                                         onContainerFilter={this.onContainerFilter} Arrival={this.Arrival}
-                                         SteamLine={this.SteamLine} onCompanyFilter={this.onCompanyFilter}
-                                         onCustomerFilter={this.onCustomerFilter} lotSearch={this.lotSearch}
-                                         onTextChange={this.onTextChange} onStatusFilter={this.onStatusFilter}/>
+                        <FilterComponent selectedArrd = {this.state.selectedArrd}
+                                         selectedSteamShip = {this.state.selectedSteamShip}
+                                         selectedRelease={this.state.selectedRelease}
+                                         statusSelected={this.state.statusSelected}
+                                         customerSelected = {this.state.customerSelected}
+                                         locationSelected = {this.state.locationSelected}
+                                         key={this.state.key}
+                                         onSteamShipFilter={this.onSteamShipFilter}
+                                         onContainerFilter={this.onContainerFilter}
+                                         Arrival={this.Arrival}
+                                         SteamLine={this.SteamLine}
+                                         onCompanyFilter={this.onCompanyFilter}
+                                         onCustomerFilter={this.onCustomerFilter}
+                                         lotSearch={this.lotSearch}
+                                         onTextChange={this.onTextChange}
+                                         onStatusFilter={this.onStatusFilter}/>
 
                         <div id="filter-grid">
                             <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">

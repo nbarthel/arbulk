@@ -19,13 +19,13 @@ class FilterComponent extends React.Component {
         <div className="">
  			<div className="well filter_bg collapse navbar-collapse" id="filter-menu">
                 <h4 className=" hidden-xs"> REFINE YOUR RESULT </h4>
-                <CompanyNameFilterPage onCompanyFilter = {this.props.onCompanyFilter}/>
-                <CustomerNameFilterPage onCustomerFilter = {this.props.onCustomerFilter} />
-                <ContainerFilter lotSearch = {this.props.lotSearch} onTextChange = {this.props.onTextChange}/>
-                <ArrivalFilter Arrival={this.props.Arrival}/>
-                <SteamshipLineFilter onSteamShipFilter={this.props.onSteamShipFilter} SteamLine ={this.props.SteamLine} />
+                <CompanyNameFilterPage locationSelected = {this.props.locationSelected} onCompanyFilter = {this.props.onCompanyFilter}/>
+                <CustomerNameFilterPage customerSelected = {this.props.customerSelected} onCustomerFilter = {this.props.onCustomerFilter} />
+                <ContainerFilter selectedRelease = {this.props.selectedRelease} lotSearch = {this.props.lotSearch} onTextChange = {this.props.onTextChange}/>
+                <ArrivalFilter selectedArrd = {this.props.selectedArrd} Arrival={this.props.Arrival}/>
+                <SteamshipLineFilter selectedSteamShip = {this.props.selectedSteamShip} onSteamShipFilter={this.props.onSteamShipFilter} SteamLine ={this.props.SteamLine} />
                 <ContainerTypeFilter onContainerFilter = {this.props.onContainerFilter}/>
-                <StatusFilterPage onStatusFilter = {this.props.onStatusFilter}/>
+                <StatusFilterPage statusSelected = {this.props.statusSelected} onStatusFilter = {this.props.onStatusFilter}/>
             </div>
         </div>
 

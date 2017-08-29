@@ -18,15 +18,21 @@ constructor(props){
 
 
     }
-
-
+    componentDidUpdate(){
+    debugger
+        if(this.props.selectedSteamShip.length>0){
+            for(let i=0;i<this.props.selectedSteamShip.length;i++){
+                this.refs["steam"+this.props.selectedSteamShip[i]].checked = true
+            }
+        }
+    }
     render(){
 
     let steamShip = _.map(this.state.steamShip,(steamShip) => {
             return (
                 <li key={location.id}>
                             <label className="control control--checkbox">{steamShip.name}
-                                <input type="checkbox" value={steamShip.name} onChange={(e) => this.props.onSteamShipFilter(e,steamShip)} id={steamShip.id}/><div className="control__indicator"></div>
+                                <input type="checkbox" ref = {"steam"+steamShip.id} value={steamShip.name} onChange={(e) => this.props.onSteamShipFilter(e,steamShip)} id={steamShip.id}/><div className="control__indicator"></div>
 
                             </label>
                         </li>

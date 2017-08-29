@@ -24,7 +24,7 @@ constructor(props){
 
     let containerType = _.map(this.state.containerType,(containerType) => {
 
-        debugger;
+
             return ( 
                 <li key={containerType.id}>
                             <label className="control control--checkbox">{containerType.name}

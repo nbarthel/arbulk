@@ -8,7 +8,25 @@ class CustomerNameFilterPage extends React.Component {
     constructor(props){
         super(props);
         this.checkedCustomer = { }
-        this.state = { records:8}
+        this.state = { records:8,called:false}
+    }
+    componentDidUpdate(){
+        if(this.props && this.props.customerSelected){
+            for(let i =0;i<this.props.customerSelected.length;i++){
+                let customer_id = this.props.customerSelected[i];
+                if(this.refs["c"+customer_id]){
+                    this.refs["c"+customer_id].checked = true;
+                }
+            }
+        }
+    }
+    componentWillReceiveProps(nextProps){
+        if(!this.state.called && nextProps.customerSelected && nextProps.customerSelected.length>0){
+            this.collesp(1000)
+            this.setState({
+                called:true
+            })
+        }
     }
     collesp(limit){
         var PIview = createDataLoader(CustomerNameFilterPage,{
@@ -54,26 +72,13 @@ class CustomerNameFilterPage extends React.Component {
 
     }
 
-
- /* onClick(e,customer){
-        if(e.target.checked){
-            this.props.checkedCustomer[e.target.id] = e.target.value;
-            this.props.buttonDisplay.push(e.target.value)
-            //console.log(this.props.checkedCustomer)
-        }
-        else if (!e.target.checked){
-         delete this.props.checkedCustomer[e.target.id]
-       
-            //console.log(this.props.checkedCustomer)
-        }
-    }*/
     render() {
         var customers = _.map(this.state.name,(customer) => {
 return  (<li key={customer.id} className="checkboxCustomer inline">
                     <label className="control control--checkbox">{customer.name}
-                    <input type="checkbox" value={customer.name} id={customer.id} onChange={(e) => this.props.onCustomerFilter(e,customer)}/><div className="control__indicator"></div>
+                    <input type="checkbox" value={customer.name} ref={"c"+customer.id} id={customer.id} onChange={(e) => this.props.onCustomerFilter(e,customer)}/><div className="control__indicator"></div>
                     </label>
-    <span className="displayonlyFilter" title ={customer.name} onClick={(e) => this.props.onCustomerFilter(e,customer)}>{"  Only  "}</span>
+    <span className="displayonlyFilter" title ={customer.name} id = {"c:"+customer.id} onClick={(e) => this.props.onCustomerFilter(e,customer)}>{"  Only  "}</span>
     <span className="labText">{customer.name}</span>
                     </li>)})            
         return (

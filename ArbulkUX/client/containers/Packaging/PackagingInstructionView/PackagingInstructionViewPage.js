@@ -13,14 +13,11 @@ export default class PackagingInstructionViewPage extends React.Component {
     super(props);
     this.state = {
       viewData : undefined,
-
     }
 
   }
 
   render() {
-
-
     return (
       <div className="wrapper-inner">
       <div className="content-inside">

@@ -1,6 +1,17 @@
 import React, { Component } from 'react';
 
   class ArrivalFilter extends Component {
+  	constructor(props){
+  		super(props)
+	}
+	componentWillReceiveProps(nextProps){
+  		if(nextProps.selectedArrd===1){
+  			this.refs["A1"].checked = true
+		}
+		else if(nextProps.selectedArrd===0){
+            this.refs["A0"].checked = true
+		}
+	}
 	render() {
 		return (
 			<div>
@@ -12,12 +23,12 @@ import React, { Component } from 'react';
 				<ul>
 					<li>
 						<label className="control control--radio">Yes
-						  <input type="radio"  name="arrived_yes" value="1" id="arrived_yes" onChange={this.props.Arrival}/><div className="control__indicator"></div>
+						  <input type="radio"  name="arrived_yes" ref = "A1" value="1" id="A1" onClick={this.props.Arrival}/><div className="control__indicator"></div>
 						</label>
 					</li>
 					<li>
 						<label className="control control--radio">No
-						  <input type="radio"  name="arrived_yes" id=""  value="0" onChange={this.props.Arrival} /><div className="control__indicator"></div>
+						  <input type="radio"  name="arrived_yes" id="A0" ref="A0" value="0" onClick={this.props.Arrival} /><div className="control__indicator"></div>
 						</label>
 					</li>
 				</ul>

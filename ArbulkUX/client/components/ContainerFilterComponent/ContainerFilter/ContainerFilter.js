@@ -8,13 +8,20 @@ class ContainerFilter extends React.Component {
 		super()
 		this.showAll = this.showAll.bind(this);
 		this.state = {
-			show : false
+			show : false,
+            releaseValue:''
 		}
 		this.onKeyUp = this.onKeyUp.bind(this)
 	}
-
+    componentWillReceiveProps(nextProps){
+		 
+        if(nextProps.selectedRelease){
+            this.setState({
+                releaseValue:nextProps.selectedRelease["release"]
+            })
+        }
+    }
 	componentDidMount() {
-
 		axois.get(Base_Url+"TShipmentents/getReleaseList").then((response) => {
 			this.setState({
 				lotLIst: response.data
@@ -24,11 +31,9 @@ class ContainerFilter extends React.Component {
 				console.log(err)
 			})
 	}
-
-
-
 	onKeyUp(e){
-		debugger;
+		 ;
+        this.props.releaseValue["release"] = e.target.value;
 		var lotArray = [];
 
 		var PIview = createDataLoader(ContainerFilter, {
@@ -50,7 +55,7 @@ class ContainerFilter extends React.Component {
 
 		if(e.target.value.length > 2){
 			axois.get(lotlUrl).then((response) => {
-				debugger;
+				 ;
 				this.lotResult = {
 					lotList: response.data
 				}
@@ -84,14 +89,7 @@ class ContainerFilter extends React.Component {
 		}
 
 	}
-
-
-
-
-
-
 	showAll(){
-		debugger;
 		if(this.state.show == true){
 			this.setState({
 				show  : false
@@ -110,17 +108,8 @@ class ContainerFilter extends React.Component {
 		this.forceUpdate()
 
 	}
-
-
-
-
-
-
-
 	render() {
-
 		return (
-
 			<div className="">
 				<hr/>
 				<div className="head_bg">
@@ -130,7 +119,7 @@ class ContainerFilter extends React.Component {
 				<div className="">
 					<div className="left-inner-addon ">
 						<i className="fa fa-search" aria-hidden="true"></i>
-						<input type="search" onKeyUp={this.onKeyUp}  id="LotSearch" onChange = {this.props.onTextChange}  className="form-control" placeholder="Search" />
+						<input type="search" onKeyUp={this.onKeyUp} value={this.state.releaseValue}  id="LotSearch" onChange = {this.props.onTextChange}  className="form-control" placeholder="Search" />
 						<ul className = "list-hover scrollshow">
 							{ this.state.show== true? this.expandList : ''}
 						</ul>
@@ -138,10 +127,6 @@ class ContainerFilter extends React.Component {
 					</div>
 				</div>
 			</div>
-
-
-
-
 		);
 	}
 }
