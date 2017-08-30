@@ -83,7 +83,7 @@ class CustomerNameFilterPage extends React.Component {
 
                     </label>
                 <span className="displayonlyFilter" title ={customer.name} id = {"c:"+customer.id} onClick={(e) => this.props.onCustomerFilter(e,customer,true)}>{"  Only  "}</span>
-                <span className="labText">{customer.name}</span>
+                <span className="labText">{customer.name.substring(0,10)+'..'}</span>
                     </li>)
        })
         return (
