@@ -47,7 +47,7 @@ debugger
 													title: "Success",
 													text: "Order has been Confirmed",
 													type: "success",
-													showCancelButton: true,
+													showCancelButton: false,
 					},
 									function(isConfirm){
 									hashHistory.push('/Packaging/packaginginstview/')
