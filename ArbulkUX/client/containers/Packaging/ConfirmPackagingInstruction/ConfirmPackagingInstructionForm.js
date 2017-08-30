@@ -45,7 +45,7 @@ debugger
 			axios.put(putUrl , confirmationReady).then((response)=>{
 				 swal({
 													title: "Success",
-													text: "Order has been Confirmed",
+													text: "Order has been confirmed.",
 													type: "success",
 													showCancelButton: false,
 					},
@@ -60,9 +60,9 @@ debugger
 			axios.put(putUrl , confirmation).then((response)=>{
 				 swal({
 													title: "Success",
-													text: "Order has been Confirmed",
+													text: "Order has been confirmed.",
 													type: "success",
-													showCancelButton: true,
+													showCancelButton: false,
 					},
 									function(isConfirm){
 									hashHistory.push('/Packaging/packaginginstview/')
