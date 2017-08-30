@@ -40,6 +40,7 @@ class ContainerViewForm extends React.Component {
             selectedRelease:'',
             selectedArrd:'',
             selectedSteamShip:[],
+            selectedContainerType:[],
             viewId:''
         }
         this.containerId = ''
@@ -239,6 +240,7 @@ class ContainerViewForm extends React.Component {
                 configurable: true,
                 value: this.checkedContainer
             })
+
             // this.buttonDisplay.push(e.target.value)
             //   this.forceUpdate()
             //console.log(this.props.checkedCompany)
@@ -246,7 +248,6 @@ class ContainerViewForm extends React.Component {
 
         }
         else if (!e.target.checked) {
-
             let id = e.target.id
             this.checkedContainer = _.without(this.checkedContainer, id)
             this.Where.checkedContainer = this.checkedContainer
@@ -261,6 +262,9 @@ class ContainerViewForm extends React.Component {
                 this.buttonDisplay = _.without(this.buttonDisplay, value)
             this.forceUpdate()
         }
+        this.setState({
+            selectedContainerType : this.checkedContainer
+        })
         this.onSearch(e)
     }
 
@@ -413,6 +417,7 @@ class ContainerViewForm extends React.Component {
             selectedRelease:'',
             selectedArrd : -1,
             selectedSteamShip : [],
+            selectedContainerType : [],
             viewId:''
         })
     }
@@ -897,12 +902,6 @@ class ContainerViewForm extends React.Component {
     viewChange(e) {
         this.removeSates();
         this.setState({
-            locationSelected:[],
-            customerSelected:[],
-            statusSelected:[],
-            selectedRelease:'',
-            selectedArrd:-1,
-            selectedSteamShip : [],
             viewId:e.target.selectedOptions[0].id
         });
         debugger
@@ -931,7 +930,6 @@ class ContainerViewForm extends React.Component {
                 value: this.shipMentType
             })
         }
-
         if (this.Where.shipMentType && this.Where.shipMentType == "Domestic") {
             isDomestic = true
             var objShip = {"isDomestic": 1}
@@ -942,16 +940,20 @@ class ContainerViewForm extends React.Component {
             var objShip = {"isDomestic": 0}
             serachObj.push(objShip)
         }
-
         var searchContainerFlag = false
         if (this.Where.Container && this.Where.Container.length > 0) {
             var container = []
             var obj2 = {}
+            let selectedContainerObj = [];
             for (var i in this.Where.Container) {
-
+                this.checkedContainer.push(this.Where.Container[i])
+                selectedContainerObj.push(this.Where.Container[i])
                 obj2 = {"containerTypeId": this.Where.Container[i]}
                 container.push(obj2);
             }
+            this.setState({
+                selectedContainerType : selectedContainerObj
+            })
             containerSearch.push(container)
             searchContainerFlag = true
         }
@@ -1055,11 +1057,8 @@ class ContainerViewForm extends React.Component {
                     }
                 }]
             })
-
             var base = 'TShipmentents';
-            //TPackagingInstructionLots TContainerInternational
             if ((containerSearch && containerSearch.length > 0)) {
-
                 this.url = PIview._buildUrl(base, {
                     "include": ["TContainerInternational", "TCompany", "TLocation", "TShipmentDomestic",
                         {
@@ -1071,7 +1070,6 @@ class ContainerViewForm extends React.Component {
 
                 });
             }
-
             if (serachObjLots && serachObjLots.length > 0) {
                 this.url = PIview._buildUrl(base, {
                     "include": [{
@@ -1123,9 +1121,7 @@ class ContainerViewForm extends React.Component {
 
                 });
             }
-
             else if (tempsteamp != -1 && serachObj.length >= 0 && arrival.length >= 0 && serachObjLots.length == 0) {
-
                 this.url = PIview._buildUrl(base, {
                     "include": [{
                         "relation": "TContainerInternational",
@@ -1145,9 +1141,7 @@ class ContainerViewForm extends React.Component {
 
                 });
             }
-
             else if (tempsteamp != -1 && arrival.length >= 0 && serachObj.length == 0 && serachObjLots.length == 0) {
-
                 this.url = PIview._buildUrl(base, {
                     "include": [{
                         "relation": "TContainerInternational",
@@ -1166,7 +1160,6 @@ class ContainerViewForm extends React.Component {
 
                 });
             }
-
             else if (arrival.length > 0 && tempsteamp == -1 && serachObj.length == 0 && serachObjLots.length == 0) {
                 this.url = PIview._buildUrl(base, {
                     "include": [{
@@ -1291,10 +1284,7 @@ class ContainerViewForm extends React.Component {
                 }.bind(this)
 
             })
-
-
         }
-
     }
 
     saveView(e) {
@@ -1560,6 +1550,7 @@ class ContainerViewForm extends React.Component {
                 <div className="container">
                     <div className="row-fluid">
                         <FilterComponent selectedArrd = {this.state.selectedArrd}
+                                         selectedContainerType = {this.state.selectedContainerType}
                                          selectedSteamShip = {this.state.selectedSteamShip}
                                          selectedRelease={this.state.selectedRelease}
                                          statusSelected={this.state.statusSelected}
