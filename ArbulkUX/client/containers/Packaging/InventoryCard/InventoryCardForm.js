@@ -464,7 +464,7 @@ if(when==0 ){
 				</div>
 			</div>
 			<div className=" col-lg-5 col-md-5 col-sm-5 col-xs-12">
-				<div className="pull-right margin-10-last-r"><button type="button" id="back" onClick = {hashHistory.goBack} className="btn  btn-gray">Back</button> </div>
+				<div className="pull-right margin-10-last-r"><button type="button" id="back" onClick = {hashHistory.goBack} className="btn  btn-gray">Cancel</button> </div>
 			</div>
 		</div>
 
