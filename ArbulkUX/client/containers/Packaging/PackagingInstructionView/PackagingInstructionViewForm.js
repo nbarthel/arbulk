@@ -194,13 +194,11 @@ export default class PackagingInstructionViewForm extends React.Component {
         document.getElementById('POSearch').value = e.target.getAttribute('value')
         this.onSearch(e)
     }
-
     lotSearch(e){
         this.Query[e.target.id] = e.target.getAttribute('value')
         document.getElementById('LotSearch').value = e.target.getAttribute('value')
         this.onSearch(e)
     }
-
     onClickli(e){
         this.Query[e.target.id] = e.target.getAttribute('value')
         document.getElementById('railcarSearch').value = e.target.getAttribute('value')
@@ -562,7 +560,6 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.onSearch(e)
     }
     onCustomerFilter(e,customer,isOnly){
-
         if(isOnly){
             let id = e.target.id.split(':')[1]
             let elements = document.getElementsByClassName('checkboxCustomer inline')
@@ -672,7 +669,6 @@ export default class PackagingInstructionViewForm extends React.Component {
             value:filterValue})
         this.onSearch(e);
     }
-
     handleTextChange(e){
         this.setState({
             Text  : e.target.value
@@ -1094,13 +1090,11 @@ export default class PackagingInstructionViewForm extends React.Component {
             );
         }
     }
-
     handleOptionChange1(e) {
         this.setState({
             selectedOption: e.target.value
         });
     }
-
     handleOptionChange(changeEvent) {
         var selectedOption = changeEvent.target.value
         this.setState({
@@ -1108,7 +1102,6 @@ export default class PackagingInstructionViewForm extends React.Component {
         });
         console.log( selectedOption);
     }
-
     onViewClick(e){
         if(this.selected != undefined || this.piID != undefined){
             hashHistory.push('/Packaging/inventorycard/'+this.piID+'/'+this.selected)}
@@ -1118,19 +1111,14 @@ export default class PackagingInstructionViewForm extends React.Component {
         }
     }
     headerCheckboxChange(e,value){
-
-
         if(e.target.checked){
             this.piID = e.target.value
         }
         else if(!e.target.checked){
             this.piID = undefined
-
         }
-
     }
     checkboxChange(e,value){
-
         if(e.target.checked){
             this.piID = e.target.value
             this.selected = e.target.id
@@ -1146,9 +1134,7 @@ export default class PackagingInstructionViewForm extends React.Component {
     }
     onButtonRemove(index,button){
         this.buttonDisplay.splice(index,1)
-
         this.forceUpdate()
-
     }
     onRemove(e){
         this.buttonDisplay = [];
@@ -1185,11 +1171,9 @@ export default class PackagingInstructionViewForm extends React.Component {
     }
     onConfirmClick(){
         if(this.selected != undefined && this.selected != null){
-
             if(this.status == "UNCONFIRMED"){
                 hashHistory.push('/Packaging/confirmpckginst/'+this.selected)
             }
-
             else{
                 swal("Error","Please select unconfirmed order.","error")
             }
@@ -1199,10 +1183,8 @@ export default class PackagingInstructionViewForm extends React.Component {
             swal("Selection Missing", "Please select a lot to confirm.","error")
         }
     }
-
     onEdit(){
         if(this.piID != null && this.piID != undefined && this.selected == null){
-
             hashHistory.push('/Packaging/enterpackginginst/'+this.piID)
         }
         else if(this.selected != null && this.selected != undefined)
@@ -1213,14 +1195,11 @@ export default class PackagingInstructionViewForm extends React.Component {
             swal("Nothing To Edit","Please select a PI to edit.","error")
         }
     }
-
     addToQueue(e){
-
         let pid = this.piID
         var qArray =  localStorage.getItem('qArray')
         var sequence =  localStorage.getItem('queue_Sequence')
         var queueArray = qArray.split(",")
-
         localStorage.removeItem('qArray');
         localStorage.removeItem('queue_Sequence');
         var option = {
@@ -1228,7 +1207,6 @@ export default class PackagingInstructionViewForm extends React.Component {
         }
 
         var optionpkg = {
-
             status : "QUEUED"
         }
         if(this.status == "READY" || this.status == "CONFIRMED"){
@@ -1244,7 +1222,6 @@ export default class PackagingInstructionViewForm extends React.Component {
                             },
                             function(isConfirm){
                                 hashHistory.push('/Packaging/packaginginstqueue/')
-
                             }
                         );
                     }).catch(function(err){
@@ -1255,9 +1232,7 @@ export default class PackagingInstructionViewForm extends React.Component {
             else{
                 alert('Please select row ')
             }
-
         }
-
         else {
             swal("","The selected order is not ready.","info")
         }

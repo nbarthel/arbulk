@@ -27,7 +27,6 @@ class CompanyNameFilterPage extends React.Component{
     }
 
     render(){
-
     let locations = _.map(this.state.location,(location) => {
             return (
                 <li key={location.id}>

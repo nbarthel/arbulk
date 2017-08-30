@@ -8,6 +8,7 @@ import FilterComponent from '../../../components/ShipmentFilterComponent';
 import FilterButton from '../../../components/ShipmentFilterComponent/FilterButton';
 import ShowHideColumn from '../../../components/ShowColumns/showColumn'
 import axios from 'axios'
+import sweetalert from 'sweetalert-react'
 import {Base_Url} from '../../../constants';
 var moment = require('moment')
 //import './moment.js'
@@ -47,7 +48,15 @@ class  ShipmentViewForm extends React.Component
            showTrucker: "",
             SelcetedOptionForGroupBy :"",
             OptionToGroupby : ["ARB","customer","Release","Booking","PO#","Lot#","Material","Forwarder","Cntr Size","Qty","Allocated","Enough?","Vessel","Shipment Type","Steamship Line","PULocation","Return Location","Status"],
-            open: false
+            open: false,
+            locationSelected:[],
+            customerSelected:[],
+            selectedPO:'',
+            selectedRelease:'',
+            selectedshipType:-1,
+            SelectedCutOffDate:[],
+            statusSelected:[],
+            viewId:''
     }
             this.status
             this.handleChange = this.handleChange.bind(this);
@@ -87,6 +96,7 @@ class  ShipmentViewForm extends React.Component
             this.toggleColumn = this.toggleColumn.bind(this)
             this.handleOpen = this.handleOpen.bind(this)
             this.handleClose = this.handleClose.bind(this)
+            this.removeState = this.removeState.bind(this)
     }
     OnGroupBy(e){
         this.setState({
@@ -178,7 +188,7 @@ onViewClick(e){
     mywindow.document.write('</head><body ><table border="0" width="10">');
     mywindow.document.write(document.getElementById('Packaging_Instruction_View').innerHTML);
     mywindow.document.write('</table></body></html>');
-    debugger
+     
     mywindow.document.close(); // necessary for IE >= 10
     mywindow.focus(); // necessary for IE >= 10*/
     mywindow.print();
@@ -260,12 +270,22 @@ PrintScreen(){
 
 
        onTextChange(e){
-
-         var idValue = e.target.id
-
-          this.Query[idValue] = e.target.value
-
-          this.onSearch(e)
+           var idValue = e.target.id
+           this.Query[idValue] = e.target.value
+           let Obj = ''
+           if(idValue === "LotSearch"){
+               Obj = {"releaseNumber":e.target.value}
+               this.setState({
+                   selectedRelease:Obj
+               })
+           }
+           else{
+               Obj = {"po_number":e.target.value}
+               this.setState({
+                   selectedPO:Obj
+               })
+           }
+           this.onSearch(e)
         }
 
       onClickPo(e){
@@ -291,7 +311,7 @@ onClickli(e){
     document.getElementById('railcarSearch').value = e.target.getAttribute('value')
 
 }
- onCompanyFilter(e,location){
+        onCompanyFilter(e,location){
 //console.log("group",e.target.checked);
             if(e.target.checked){
             this.forceUpdate()
@@ -300,6 +320,7 @@ onClickli(e){
                                                       writable: true,
                                                       configurable:true,
                                                       value:this.checkedCompany})
+            this.state.locationSelected.push({"locationId":e.target.id})
             // this.buttonDisplay.push(e.target.value)
             // console.log(this.checkedCompany)
             //console.log(this.props.buttonDisplay)
@@ -317,43 +338,78 @@ onClickli(e){
                 let value = e.target.value
                 let index = this.buttonDisplay.indexOf(e.target.value)
                 if(index !== -1)
-                this.buttonDisplay = _.without(this.buttonDisplay,value)
-                 this.forceUpdate()
-                   }
+                    this.buttonDisplay = _.without(this.buttonDisplay,value)
+                for(let i =0 ;i<this.state.locationSelected.length;i++){
+                    if(this.state.locationSelected[i].locationId.toString() == id.toString()){
+                        this.state.locationSelected.splice(i,1);
+                    }
+                }
+
+                this.forceUpdate()
+            }
           this.onSearch(e)
         }
-        onCustomerFilter(e,customer){
-
-            if(e.target.checked){
-            this.forceUpdate()
-            this.checkedCustomer.push(e.target.id)
-            Object.defineProperty(this.Where,"Customer",{enumerable: true ,
-                                                      writable: true,
-                                                      configurable:true,
-                                                      value:this.checkedCustomer})
-            //this.buttonDisplay.push(e.target.value)
-            //console.log(this.props.checkedCompany)
-            //console.log(this.props.buttonDisplay)
-            //console.log(this.checkedCustomer)
-           }
-            else if (!e.target.checked){
-            let id = e.target.id
-            this.checkedCustomer = _.without(this.checkedCustomer,id)
-            this.Where.Customer = this.checkedCustomer
-            if(Object.keys(this.Where.Customer).length === 0){
-              this.Where.Customer = undefined
-              delete this.Where.Customer
+        onCustomerFilter(e,customer, isOnly){
+            if(isOnly){
+                let id = e.target.id.split(':')[1]
+                let elements = document.getElementsByClassName('checkboxCustomer inline')
+                for(let i=0;i<elements.length;i++){
+                    let elem = elements[i].firstChild.firstChild;
+                    elem.checked = false;
+                    if(elem.id === id)
+                        elem.checked = true
+                }
+                //will not work as 2 child components are having same id
+                //document.getElementById(id).checked = true;
+                this.checkedCustomer = []
+                this.checkedCustomer.push(id)
+                Object.defineProperty(this.Where,"Customer",{enumerable: true ,
+                    writable: true,
+                    configurable:true,
+                    value:this.checkedCustomer})
+                this.setState({
+                    customerSelected:[]
+                });
+                this.state.customerSelected.push(id)
             }
-                let value = e.target.value
-                let index = this.buttonDisplay.indexOf(e.target.value)
-                if(index !== -1)
-                this.buttonDisplay = _.without(this.buttonDisplay,value)
-                  this.forceUpdate()
-                   }
-          this.onSearch(e)
+            else{
+                if(e.target.checked){
+                    this.forceUpdate()
+                    this.checkedCustomer.push(e.target.id)
+                    Object.defineProperty(this.Where,"Customer",{enumerable: true ,
+                        writable: true,
+                        configurable:true,
+                        value:this.checkedCustomer})
+                    this.state.customerSelected.push(e.target.id)
+                    //this.buttonDisplay.push(e.target.value)
+                    //console.log(this.props.checkedCompany)
+                    //console.log(this.props.buttonDisplay)
+                    //console.log(this.checkedCustomer)
+                }
+                else if (!e.target.checked){
+                    let id = e.target.id
+                    this.checkedCustomer = _.without(this.checkedCustomer,id)
+                    this.Where.Customer = this.checkedCustomer
+                    if(Object.keys(this.Where.Customer).length === 0){
+                        this.Where.Customer = undefined
+                        delete this.Where.Customer
+                    }
+                    let value = e.target.value
+                    let index = this.buttonDisplay.indexOf(e.target.value)
+                    if(index !== -1)
+                        this.buttonDisplay = _.without(this.buttonDisplay,value)
+                    for(let i in this.state.customerSelected){
+                        if(this.state.customerSelected[i] === e.target.id){
+                            this.state.customerSelected.splice(i,1);
+                        }
+                    }
+                    this.forceUpdate()
+                }
+            }
+            this.onSearch(e)
         }
         onStatusFilter(e,status){
-
+            debugger
             if(e.target.checked){
 
             this.checkedStatus.push(e.target.value);
@@ -361,6 +417,7 @@ onClickli(e){
                                                       writable: true,
                                                       configurable:true,
                                                       value:this.checkedStatus})
+
             // this.buttonDisplay.push(e.target.value)
             // this.forceUpdate()
             //console.log(this.props.buttonDisplay)
@@ -384,6 +441,10 @@ onClickli(e){
                 if(index !== -1)
                 this.buttonDisplay = _.without(this.buttonDisplay,value)
                 //console.log(this.buttonDisplay)
+                for(let i =0;i<this.state.statusSelected.length;i++){
+                    if(this.state.statusSelected[i].status === e.target.value)
+                        this.state.statusSelected.splice(i,1);
+                }
                   this.forceUpdate()
                   }
                   this.onSearch(e)
@@ -393,28 +454,39 @@ onClickli(e){
     this.forceUpdate()
 
 }
-    onRemove(e){
-
+    removeState(){
         this.buttonDisplay = [];
-            this.checkedCustomer = []
-            this.checkedStatus = []
-            this.checkedCompany = []
-            this.Query = []
-            delete this.Where.Company
-            delete this.Where.Customer
-            delete this.Where.status
-            delete this.state.viewData
-            delete this.Where.CutofFilter
-            delete this.Where.shipMentType
-            delete this.state.SelcetedOptionForGroupBy
-           delete this.startdate
-           delete this.endDate
+        this.checkedCustomer = []
+        this.checkedStatus = []
+        this.checkedCompany = []
+        this.Query = []
+        delete this.Where.Company
+        delete this.Where.Customer
+        delete this.Where.status
+        delete this.state.viewData
+        delete this.Where.CutofFilter
+        delete this.Where.shipMentType
+        delete this.state.SelcetedOptionForGroupBy
+        delete this.startdate
+        delete this.endDate
         delete this.Where.Query
-            this.setState({
-                key : this.state.key +1,
-                index : this.state.index +1,
-                SelcetedOptionForGroupBy :""
-            })
+        this.setState({
+            key : this.state.key +1,
+            index : this.state.index +1,
+            SelcetedOptionForGroupBy :"",
+            locationSelected:[],
+            customerSelected:[],
+            selectedPO:'',
+            selectedRelease:'',
+            selectedshipType:-1,
+            SelectedCutOffDate : [],
+            statusSelected:[],
+            viewId:''
+        })
+
+    }
+    onRemove(e){
+            this.removeState();
             document.getElementById('groupBy').selectedIndex = 0
             document.getElementById('customer_name').selectedIndex = 0
             localStorage.removeItem('siViewData')
@@ -423,6 +495,7 @@ onClickli(e){
        }
 
     onSearch(e){
+        debugger
         var cutofFilter = []
         var lotFlag = false
         var poFlag = false
@@ -453,15 +526,13 @@ onClickli(e){
           var serachObj = []
           var serachObjLots =[]
           var shipType = []
-           var isDomestic
+          var isDomestic
         if(this.shipMentType){
             Object.defineProperty(this.Where,"shipMentType",{enumerable:true ,
                 writable: true,
                 configurable: true,
                 value:this.shipMentType})
         }
-
-
         if(this.Where.shipMentType && this.Where.shipMentType == "Domestic") {
             isDomestic = true
             var objShip = {"isDomestic" : 1}
@@ -475,14 +546,13 @@ onClickli(e){
             if (this.Where != undefined && this.Where!= null)
                 {
                     if(this.Where.Customer && this.Where.Customer.length >0){
-                                                var obj = {}
+                        var obj = {}
                         for(var i in this.Where.Customer){
                             obj = {"customerId" : this.Where.Customer[i] }
                             customer.push(obj);
                         }
                         serachObj.push(customer)
                     }
-
                     if(this.Where.Company && this.Where.Company.length > 0){
                         var company = [] ;
                         var objCompany = {}
@@ -631,13 +701,13 @@ onClickli(e){
                                                                 {
                                                                   "relation" :"TShipmentDomestic",
                                                                   "scope":{"include":"TShipmentType",
-                                                                  "where":{"and":serachObjLots,"active":1}}
+                                                                  "where":{"or":serachObjLots,"active":1}}
                                                                 },
 
                                                                 {
                                                                   "relation" :"TShipmentInternational",
                                                                   "scope":{"where" : {
-                                                                                        "and" : serachObjLots,"active":1
+                                                                                        "or" : serachObjLots,"active":1
                                                                                       },
                                                                   "include":["TSteamshipLine","TContainerType"]}
                                                                 },
@@ -684,12 +754,14 @@ onClickli(e){
                                                               },
                                                               {
                                                                   "relation": "TShipmentDomestic",
-                                                                  "scope": {"include": ["TShipmentType"],"where":{"active":1}}
+                                                                  "scope": {"include": ["TShipmentType"],
+                                                                  "where":{"or":Railstatus,"active":1}}
                                                               },
 
                                                               {
                                                                   "relation": "TShipmentInternational",
-                                                                  "scope": {"include": ["TSteamshipLine","TContainerType"],"where":{"active":1}}
+                                                                  "scope": {"include": ["TSteamshipLine","TContainerType"],
+                                                                  "where":{"or":Railstatus,"active":1}}
                                                               },
 
                                                               {
@@ -734,12 +806,12 @@ onClickli(e){
 
                                                             {
                                                                 "relation": "TShipmentDomestic",
-                                                                "scope": {"include": ["TShipmentType"],"where":{"active":1}}
+                                                                "scope": {"include": ["TShipmentType"],"where":{"or":Railstatus,"active":1}}
                                                             },
 
                                                             {
                                                                 "relation": "TShipmentInternational",
-                                                                "scope": {"include": ["TSteamshipLine","TContainerType"],"where":{"active":1}}
+                                                                "scope": {"include": ["TSteamshipLine","TContainerType"],"where":{"or":Railstatus,"active":1}}
                                                             },
 
                                                             {
@@ -785,12 +857,12 @@ onClickli(e){
 
                                                                           {
                                                                               "relation": "TShipmentDomestic",
-                                                                              "scope": {"include": ["TShipmentType"],"where":{"active":1}}
+                                                                              "scope": {"include": ["TShipmentType"],"where":{"or":Railstatus,"active":1}}
                                                                           },
 
                                                                           {
                                                                               "relation": "TShipmentInternational",
-                                                                              "scope": {"include": ["TSteamshipLine","TContainerType"],"where":{"active":1}}
+                                                                              "scope": {"include": ["TSteamshipLine","TContainerType"],"where":{"or":Railstatus,"active":1}}
                                                                           },
                                                                           {
                                                                               "relation": "TShipmentLots",
@@ -902,8 +974,14 @@ onClickli(e){
     }
 
    saveView(e){
-
-
+       const tempThis = this
+       for(let props in tempThis.Where.Query){
+           tempThis.Where[props] = tempThis.Where.Query[props]
+       }
+       for(let props in tempThis.Where.Query){
+           var obj = {[props]:tempThis.Where.Query[props]}
+           tempThis.Where.Query[props] = tempThis.Where.Query[props]
+       }
         var saveCustomView = {
             "id": 0,
             "screenName": "SHIPMENT",
@@ -937,10 +1015,14 @@ onClickli(e){
     }
 
  viewChange(e){
+       debugger
+    this.removeState();
+     this.setState({
+         viewId:e.target.selectedOptions[0].id
+     });
     var blob = e.target.value
     this.Where = JSON.parse(blob)
-
-   var serachObj = []
+     var serachObj = []
      var serachObjLots =[]
      var shipType = []
      var isDomestic
@@ -951,17 +1033,30 @@ onClickli(e){
          isDomestic = true
          var objShip = {"isDomestic" : 1}
          serachObj.push(objShip)
+         this.setState({
+             selectedshipType : 1
+         })
      }
-     else if(this.Where.shipMentType && this.Where.shipMentType== "International"){  isDomestic = false
+   else if(this.Where.shipMentType && this.Where.shipMentType== "International"){
+        isDomestic = false
          var objShip = {"isDomestic" : 0}
          serachObj.push(objShip)
+       this.setState({
+           selectedshipType : 0
+       })
      }
      var customer = []
          if (this.Where != undefined && this.Where!= null)
              {
                  if(this.Where.Customer && this.Where.Customer.length >0){
-                                             var obj = {}
+                     var obj = {}
+                     let tempObj = [];
                      for(var i in this.Where.Customer){
+                         this.checkedCustomer.push(this.Where.Customer[i])
+                         tempObj.push(this.Where.Customer[i])
+                         this.setState({
+                             customerSelected : tempObj
+                         })
                          obj = {"customerId" : this.Where.Customer[i] }
                          customer.push(obj);
                      }
@@ -973,19 +1068,26 @@ onClickli(e){
                      var objCompany = {}
                      for(var j in this.Where.Company)
                      {
+                         this.checkedCompany.push(this.Where.Company[j])
                          objCompany = {"locationId" : this.Where.Company[j] }
                          company.push(objCompany);
+                         this.setState({
+                             locationSelected:company
+                         });
                      }
                      serachObj.push(company)
                  }
                  var Railstatus = [{"status":"UNCONFIRMED"},{"staus":"CONFIRMED"},{"status":"QUEUED"},{"status":"LOADED"},{"status":"COMPLETED"}];
-
                  if(this.Where.status && this.Where.status.length){
                      Railstatus = [];
                      var objStatus = {};
                      for(var z in this.Where.status){
                          objStatus = {"status" : this.Where.status[z]}
+                         this.checkedStatus.push(this.Where.status[z]);
                          Railstatus.push(objStatus)
+                         this.setState({
+                             statusSelected : Railstatus
+                         })
                      }
                       serachObjLots.push(Railstatus)
                  }
@@ -998,6 +1100,9 @@ onClickli(e){
                      poSearch =  [ {'po_number': {"like": "%" + this.Where.Query.POSearch + "%"}}]
                      serachObj.push(poSearch)
                      poFlag = true
+                     this.setState({
+                         selectedPO:{"po_number":this.Where.Query.POSearch}
+                     })
                  }
                  else{
                    poSearch =  [ {'po_number': {"like": "%" + "%"}}]
@@ -1014,6 +1119,9 @@ onClickli(e){
                      var lotSearch =  [{'releaseNumber': {"like": "%" + this.Where.Query.LotSearch + "%"}}]
                      serachObj.push(lotSearch)
                      lotFlag = true
+                     this.setState({
+                         selectedRelease : {"releaseNumber":this.Where.Query.LotSearch}
+                     })
                  }
                  else{
                    var lotSearch =  [{'releaseNumber': {"like": "%"  + "%"}}]
@@ -1036,6 +1144,12 @@ onClickli(e){
            var startDate = moment(this.Where.CutofFilter[0].cargoCutoffDate),
                endDate = moment(this.Where.CutofFilter[this.Where.CutofFilter.length-1].cargoCutoffDate);
            var cutoffDate = this.getDates(startDate, endDate)
+           let dateObj = [startDate,endDate]
+             this.setState({
+               SelectedCutOffDate : dateObj,
+               startDate : startDate,
+               endDate :  endDate
+           })
            var objdate = {}
            for(var j in cutoffDate){
                objdate = {"cargoCutoffDate" : cutoffDate[j]}
@@ -1119,13 +1233,13 @@ onClickli(e){
                                                     {
                                                       "relation" :"TShipmentDomestic",
                                                       "scope":{"include":"TShipmentType",
-                                                      "where":{"and":serachObjLots}}
+                                                      "where":{"or":serachObjLots}}
                                                     },
 
                                                     {
                                                       "relation" :"TShipmentInternational",
                                                       "scope":{"where" : {
-                                                                            "and" : serachObjLots
+                                                                            "or" : serachObjLots
                                                                           },
                                                       "include":["TSteamshipLine","TContainerType"]}
                                                     },
@@ -1172,12 +1286,14 @@ onClickli(e){
                                                   },
                                                   {
                                                       "relation": "TShipmentDomestic",
-                                                      "scope": {"include": ["TShipmentType"]}
+                                                      "scope": {"include": ["TShipmentType"],
+                                                      "where":{"or":Railstatus,"active":1}}
                                                   },
 
                                                   {
                                                       "relation": "TShipmentInternational",
-                                                      "scope": {"include": ["TSteamshipLine","TContainerType"]}
+                                                      "scope": {"include": ["TSteamshipLine","TContainerType"],
+                                                      "where":{"or":Railstatus,"active":1}}
                                                   },
 
                                                   {
@@ -1222,12 +1338,12 @@ onClickli(e){
 
                                                 {
                                                     "relation": "TShipmentDomestic",
-                                                    "scope": {"include": ["TShipmentType"]}
+                                                    "scope": {"include": ["TShipmentType"],"where":{"or":Railstatus,"active":1}}
                                                 },
 
                                                 {
                                                     "relation": "TShipmentInternational",
-                                                    "scope": {"include": ["TSteamshipLine","TContainerType"]}
+                                                    "scope": {"include": ["TSteamshipLine","TContainerType"],"where":{"or":Railstatus,"active":1}}
                                                 },
 
                                                 {
@@ -1273,12 +1389,12 @@ onClickli(e){
 
                                                               {
                                                                   "relation": "TShipmentDomestic",
-                                                                  "scope": {"include": ["TShipmentType"]}
+                                                                  "scope": {"include": ["TShipmentType"],"where":{"or":Railstatus,"active":1}}
                                                               },
 
                                                               {
                                                                   "relation": "TShipmentInternational",
-                                                                  "scope": {"include": ["TSteamshipLine","TContainerType"]}
+                                                                  "scope": {"include": ["TSteamshipLine","TContainerType"],"where":{"or":Railstatus,"active":1}}
                                                               },
                                                               {
                                                                   "relation": "TShipmentLots",
@@ -1388,8 +1504,11 @@ success:function(data){
     }
 
     ShipmentType(e){
-
+         
         this.shipMentType = e.target.value
+        this.setState({
+            selectedshipType : e.target.value === "Domestic"?1:0
+        })
         this.onSearch(e)
     }
 
@@ -1419,21 +1538,6 @@ success:function(data){
       swal("Error","Selection Missing","Please select a checkbox.","error")
     }
   }
-onHideColumn(e,name){
-
-    setTimeout(function () {
-        $("#Packaging_Instruction_View").colResizable({
-            disable: true
-        });
-        $("#Packaging_Instruction_View").colResizable({
-            liveDrag: false,
-            gripInnerHtml: "<div class='grip'></div>",
-            draggingClass: "dragging"
-        });
-    }, 100);
-
-
-}
     toggleColumn(name,value){
         switch(name){
             case "ARB" :
@@ -1788,127 +1892,149 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                 </div>
                 <div className="container">
                     <div className="row-fluid">
-                    <FilterComponent key= {this.state.key} ShipmentType={this.ShipmentType}  startDate = {this.state.startDate} endDate = {this.state.endDate} handleChange = {(date) => {this.handleChange(date)}} handleChange1 = {(date) => {this.handleChange1(date)}} lotSearch={this.lotSearch}  onClickPo={this.onClickPo}  onClickli={this.onClickli} onCompanyFilter = {this.onCompanyFilter} onCustomerFilter = {this.onCustomerFilter} onTextChange = {this.onTextChange}  onStatusFilter = {this.onStatusFilter} handleChange1={this.handleChange1} handleChange={this.handleChange}/>
-                                                            <div id="filter-grid">
-                                                                <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
-                                                                    <div className="row">
-                                                                       <FilterButton buttonDisplay = {this.buttonDisplay}  onButtonRemove = {this.onButtonRemove} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
-                                                                        <div className="col-lg-2 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
-                                                                            <div className="pull-right ">
-                                                                                <button className="btn btn-primary" onClick={this.handleOpen}> <i className="fa fa-cogs" aria-hidden="true"></i> Columns</button> </div>
+                    <FilterComponent
+                            customerSelected = {this.state.customerSelected}
+                            locationSelected = {this.state.locationSelected}
+                            selectedPO = {this.state.selectedPO}
+                            selectedRelease = {this.state.selectedRelease}
+                            selectedshipType = {this.state.selectedshipType}
+                            SelectedCutOffDate = {this.state.SelectedCutOffDate}
+                            statusSelected = {this.state.statusSelected}
+                            key= {this.state.key}
+                            ShipmentType={this.ShipmentType}
+                            startDate = {this.state.startDate}
+                            endDate = {this.state.endDate}
+                            handleChange = {(date) => {this.handleChange(date)}}
+                            handleChange1 = {(date) => {this.handleChange1(date)}}
+                            lotSearch={this.lotSearch}
+                            onClickPo={this.onClickPo}
+                            onClickli={this.onClickli}
+                            onCompanyFilter = {this.onCompanyFilter}
+                            onCustomerFilter = {this.onCustomerFilter}
+                            onTextChange = {this.onTextChange}
+                            onStatusFilter = {this.onStatusFilter}
+                            handleChange1={this.handleChange1}
+                            handleChange={this.handleChange}/>
+                    <div id="filter-grid">
+                        <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 pddn-20-top pull-right">
+                            <div className="row">
+                               <FilterButton buttonDisplay = {this.buttonDisplay}  onButtonRemove = {this.onButtonRemove} onRemove = {this.onRemove} Query = {this.Query} onSearch = {this.onSearch}/>
+                                <div className="col-lg-2 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
+                                    <div className="pull-right ">
+                                        <button className="btn btn-primary" onClick={this.handleOpen}> <i className="fa fa-cogs" aria-hidden="true"></i> Columns</button> </div>
 
-                                                                        </div>
-                                                                        <div className="col-lg-3 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
-                                                                            <div className="pull-right " id="hide5">
+                                </div>
+                                <div className="col-lg-3 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
+                                    <div className="pull-right " id="hide5">
 
-                                                                                <select className="form-control" id="groupBy" name="groupBy" onChange={this.OnGroupBy}>
-                                                                                    <option value="Please Select An Option To Group by" disabled selected> Select An Option To Group by</option>
-                                                                                    {
-                                                                                        _.map(this.state.OptionToGroupby,(views,index)=>{
-                                                                                            return (
-                                                                                                <option key={index} value={views}>{views}</option>
-                                                                                            )
-                                                                                        })
-                                                                                    }
-                                                                                </select>
-                                                                            </div>
+                                        <select className="form-control" id="groupBy" name="groupBy" onChange={this.OnGroupBy}>
+                                            <option value="Please Select An Option To Group by" disabled selected> Select An Option To Group by</option>
+                                            {
+                                                _.map(this.state.OptionToGroupby,(views,index)=>{
+                                                    return (
+                                                        <option key={index} value={views}>{views}</option>
+                                                    )
+                                                })
+                                            }
+                                        </select>
+                                    </div>
 
-                                                                        </div>
-                                                                        <div className="col-lg-3 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
-                                                                            <div className="pull-right " id="hide5">
-
-
-
-                                                                                <select className="form-control"   id="customer_name" name="customer_name" onChange={this.viewChange}>
-                                                                                    <option value="Please Select An Option" disabled selected>Select custom view</option>
-                                                                                    {
-                                                                                        _.map(this.state.savedViews , (views,index)=>{
-
-                                                                                            if(views.screenName == "SHIPMENT")
-                                                                                            {
-                                                                                                return(
-
-                                                                                                    <option key = {index} value={views.viewFilters}>{views.viewName }</option>
-                                                                                                )
-                                                                                            }
-                                                                                        })
-                                                                                    }
-                                                                                </select>                    </div>
-
-                                                                        </div>
-                                                                        <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                                            <div className=" ">
-                                                                            <ShipmentViewDataComponent key={this.state.index} headerCheckboxChange={this.headerCheckboxChange} filterData = {filterData} checkboxChange = {this.checkboxChange} showARB = {this.state.showARB}
-                        showCustomer = {this.state.showCustomer}
-                        SelcetedOptionForGroupBy = {this.state.SelcetedOptionForGroupBy}
-                        showPO = {this.state.showPO}
-                        showRelease = {this.state.showRelease}
-                        showLot = {this.state.showLot}
-                        showMaterial = {this.state.showMaterial}
-                        showConfmd = {this.state.showConfmd}
-                        showBooking = {this.state.showBooking}
-                        showShipmentType = {this.state.showShipmentType}
-                        showCutoff = {this.state.showCutoff}
-                        showForwarder = {this.state.showForwarder}
-                        showCntrSize = {this.state.showCntrSize}
-                        showInInvt = {this.state.showInInvt}
-                        showStatus = {this.state.showStatus }
-                        showQty = {this.state.showQty}
-                        showAlloc = {this.state.showAlloc}
-                        showEno = {this.state.showEno}
-                        showBags = {this.state.showBags}
-                        showERD = {this.state.showERD}
-                        showVessel = {this.state.showVessel}
-                        showSteamShip = {this.state.showSteamShip}
-                        showPU = {this.state.showPU}
-                        showRet = {this.state.showRet}
-                        showDoc = {this.state.showDoc}
-                        showStatus = {this.state.showStatus}
-                        showTrucker = {this.state.showTrucker}
-                        />
-
-                                                                            </div>
-                                                                            <div id="nonPrintable">
-                                                                            <div className="row-fluid pddn-50-btm padding-top-btm-xs">
-
-                                                                                {
-                                                                                    /*
-                                                                                    <div className="pull-left margin-10-last-l"><button type="button"  className="btn  btn-gray text-uppercase" onClick={this.addToQueue}>Add to queue</button></div>
-                                                                                       */
-                                                                                }
-                                                                             <div className="pull-left margin-10-all"><button type="button"  className="btn  btn-gray text-uppercase" onClick = {(e) => {this.print(e)}}>Print Load Order</button></div>
-                                                                             <div className="pull-left margin-10-all"><button type="button" onClick = {(e) => {this.allocateContainer(e)} }  className="btn  btn-primary text-uppercase">Allocate Container</button></div>
-                                                                             <div className="pull-left margin-10-all"><button type="button" onClick={this.PrintElem}  className="btn  btn-gray">Print</button></div>
-
-                                                                                <div className="pull-right margin-10-last-r"><button type="button"  className="btn  btn-primary text-uppercase" onClick = {this.onViewClick.bind(this)}>VIEW</button></div>
-                                                                                <div className="pull-right margin-10-all"><button type="button"  className="btn  btn-orange text-uppercase" onClick={(e) =>this.onEditClick(e)}>EDIT</button></div>
-                                                                                <div className="pull-right margin-10-all"><button type="button" onClick = {(e) => {this.onConfirmClick(e)}}  className="btn  btn-success text-uppercase">Confirm</button></div>
+                                </div>
+                                <div className="col-lg-3 col-sm-6 col-xs-12 padding-top-btm-xs pull-right mb-10">
+                                    <div className="pull-right " id="hide5">
 
 
-                                                                            </div>
 
-                                                                            <div className="row pddn-50-btm">
-                                                                                <div  className="col-lg-12 col-md-12 col-sm-12 col-xs-12"><hr/></div>
+                                        <select className="form-control"   id="customer_name" name="customer_name" onChange={this.viewChange}>
+                                            <option value="Please Select An Option" disabled selected>Select custom view</option>
+                                            {
+                                                _.map(this.state.savedViews , (views,index)=>{
 
-                                                                                <div className="col-lg-4 col-sm-4 col-md-4 col-xs-12 ">
-                                                                                    <input type="text" className="form-control" id="No_of_Bages_Pallat" placeholder="Enter a name for your custom saved view"
-                                                                                     onChange = {this.handleTextChange}
-                                                                                     value = {this.state.Text}
-                                                                                     />
-                                                                                    </div>
+                                                    if(views.screenName == "SHIPMENT")
+                                                    {
+                                                        return(
 
-                                                                                    <div className="col-lg-4 col-sm-4 col-md-4 col-xs-12 padding-top-btm-xs">
-                                                                                        <button type="button"   className="btn  btn-success margin-left-xs text-uppercase" onClick={this.saveView}>SAVE CUSTOM VIEW</button>
-                                                                                    </div>
+                                                            <option key = {index} value={views.viewFilters}>{views.viewName }</option>
+                                                        )
+                                                    }
+                                                })
+                                            }
+                                        </select>                    </div>
 
-                                                                                </div>
-                                                                                </div>
-                                                                            </div>
+                                </div>
+                                <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div className=" ">
+                                    <ShipmentViewDataComponent key={this.state.index} headerCheckboxChange={this.headerCheckboxChange} filterData = {filterData} checkboxChange = {this.checkboxChange} showARB = {this.state.showARB}
+showCustomer = {this.state.showCustomer}
+SelcetedOptionForGroupBy = {this.state.SelcetedOptionForGroupBy}
+showPO = {this.state.showPO}
+showRelease = {this.state.showRelease}
+showLot = {this.state.showLot}
+showMaterial = {this.state.showMaterial}
+showConfmd = {this.state.showConfmd}
+showBooking = {this.state.showBooking}
+showShipmentType = {this.state.showShipmentType}
+showCutoff = {this.state.showCutoff}
+showForwarder = {this.state.showForwarder}
+showCntrSize = {this.state.showCntrSize}
+showInInvt = {this.state.showInInvt}
+showStatus = {this.state.showStatus }
+showQty = {this.state.showQty}
+showAlloc = {this.state.showAlloc}
+showEno = {this.state.showEno}
+showBags = {this.state.showBags}
+showERD = {this.state.showERD}
+showVessel = {this.state.showVessel}
+showSteamShip = {this.state.showSteamShip}
+showPU = {this.state.showPU}
+showRet = {this.state.showRet}
+showDoc = {this.state.showDoc}
+showStatus = {this.state.showStatus}
+showTrucker = {this.state.showTrucker}
+/>
 
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                    </div>
+                                    <div id="nonPrintable">
+                                    <div className="row-fluid pddn-50-btm padding-top-btm-xs">
+
+                                        {
+                                            /*
+                                            <div className="pull-left margin-10-last-l"><button type="button"  className="btn  btn-gray text-uppercase" onClick={this.addToQueue}>Add to queue</button></div>
+                                               */
+                                        }
+                                     <div className="pull-left margin-10-all"><button type="button"  className="btn  btn-gray text-uppercase" onClick = {(e) => {this.print(e)}}>Print Load Order</button></div>
+                                     <div className="pull-left margin-10-all"><button type="button" onClick = {(e) => {this.allocateContainer(e)} }  className="btn  btn-primary text-uppercase">Allocate Container</button></div>
+                                     <div className="pull-left margin-10-all"><button type="button" onClick={this.PrintElem}  className="btn  btn-gray">Print</button></div>
+
+                                        <div className="pull-right margin-10-last-r"><button type="button"  className="btn  btn-primary text-uppercase" onClick = {this.onViewClick.bind(this)}>VIEW</button></div>
+                                        <div className="pull-right margin-10-all"><button type="button"  className="btn  btn-orange text-uppercase" onClick={(e) =>this.onEditClick(e)}>EDIT</button></div>
+                                        <div className="pull-right margin-10-all"><button type="button" onClick = {(e) => {this.onConfirmClick(e)}}  className="btn  btn-success text-uppercase">Confirm</button></div>
+
+
+                                    </div>
+
+                                    <div className="row pddn-50-btm">
+                                        <div  className="col-lg-12 col-md-12 col-sm-12 col-xs-12"><hr/></div>
+
+                                        <div className="col-lg-4 col-sm-4 col-md-4 col-xs-12 ">
+                                            <input type="text" className="form-control" id="No_of_Bages_Pallat" placeholder="Enter a name for your custom saved view"
+                                             onChange = {this.handleTextChange}
+                                             value = {this.state.Text}
+                                             />
+                                            </div>
+
+                                            <div className="col-lg-4 col-sm-4 col-md-4 col-xs-12 padding-top-btm-xs">
+                                                <button type="button"   className="btn  btn-success margin-left-xs text-uppercase" onClick={this.saveView}>SAVE CUSTOM VIEW</button>
+                                            </div>
+
+                                        </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     </div>
                 <ShowHideColumn
                     Name={"Shipment"}
@@ -1920,4 +2046,4 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
             );
             }
             }
-            export default ShipmentViewForm;
+export default ShipmentViewForm;
