@@ -1039,7 +1039,6 @@ export default class PackagingInstructionViewForm extends React.Component {
         }
     }
     updateExistingView(tempThis){
-
         for(let props in tempThis.Where.Query){
             tempThis.Where[props] = tempThis.Where.Query[props]
         }
@@ -1069,7 +1068,6 @@ export default class PackagingInstructionViewForm extends React.Component {
         })
     }
     saveView(e){
-
         if(this.state.viewId===""){
             this.saveNewCustomView(this);
         }
@@ -1086,7 +1084,6 @@ export default class PackagingInstructionViewForm extends React.Component {
                     closeOnCancel: false
                 },
                 function(saveNew){
-
                     if(saveNew){
                         tempThis.saveNewCustomView(tempThis);
                     }

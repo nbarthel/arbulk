@@ -79,6 +79,8 @@ class ContainerViewForm extends React.Component {
         this.handleOpen = this.handleOpen.bind(this)
         this.handleClose = this.handleClose.bind(this)
         this.removeSates = this.removeSates.bind(this)
+        this.saveNewCustomView = this.saveNewCustomView.bind(this)
+        this.updateExistingView = this.updateExistingView.bind(this)
     }
 
 
@@ -232,15 +234,9 @@ class ContainerViewForm extends React.Component {
     }
 
     onContainerFilter(e, location) {
+        debugger
         if (e.target.checked) {
             this.checkedContainer.push(e.target.id)
-            Object.defineProperty(this.Where, "Container", {
-                enumerable: true,
-                writable: true,
-                configurable: true,
-                value: this.checkedContainer
-            })
-
             // this.buttonDisplay.push(e.target.value)
             //   this.forceUpdate()
             //console.log(this.props.checkedCompany)
@@ -253,19 +249,24 @@ class ContainerViewForm extends React.Component {
             this.Where.checkedContainer = this.checkedContainer
             if (Object.keys(this.Where.Container).length === 0) {
                 this.Where.Container = undefined
-                //console.log(this.Where)
                 delete this.Where.Container
             }
             let value = e.target.value
             let index = this.buttonDisplay.indexOf(e.target.value)
             if (index !== -1)
                 this.buttonDisplay = _.without(this.buttonDisplay, value)
-            this.forceUpdate()
         }
+        Object.defineProperty(this.Where, "Container", {
+            enumerable: true,
+            writable: true,
+            configurable: true,
+            value: this.checkedContainer
+        })
         this.setState({
             selectedContainerType : this.checkedContainer
         })
         this.onSearch(e)
+        this.forceUpdate()
     }
 
 
@@ -1286,11 +1287,9 @@ class ContainerViewForm extends React.Component {
             })
         }
     }
-
-    saveView(e) {
-        var tempThis = this
-        for(let props in this.Where.Query){
-            this.Where[props] = tempThis.Where.Query[props]
+    saveNewCustomView(tempThis){
+        for(let props in tempThis.Where.Query){
+            tempThis.Where[props] = tempThis.Where.Query[props]
         }
         for(let props in tempThis.Where.Query){
             var obj = {[props]:tempThis.Where.Query[props]}
@@ -1299,22 +1298,19 @@ class ContainerViewForm extends React.Component {
         var saveCustomView = {
             "id": 0,
             "screenName": "CONTAINER",
-            "viewName": this.state.Text,
-            "viewFilters": JSON.stringify(this.Where),
+            "viewName": tempThis.state.Text,
+            "viewFilters": JSON.stringify(tempThis.Where),
             "createdBy": 0,
             "createdOn": "2016-09-26",
             "modifiedBy": 0,
             "modifiedOn": "2016-09-26",
             "active": 1
         }
-
-        if (this.state.Text!==undefined && this.state.Text!=="") {
+        if (tempThis.state.Text!==undefined && tempThis.state.Text!=="") {
             axios.post(Base_Url + "TCustomViews", saveCustomView).then(response=> {
                 swal('Success', "Successfully saved.", 'success');
-
-
                 axios.get(Base_Url + "TCustomViews").then(response=> {
-                    this.setState({
+                    tempThis.setState({
                         savedViews: response.data
                     })
                 })
@@ -1323,6 +1319,61 @@ class ContainerViewForm extends React.Component {
         }
         else {
             swal('Error' , "Please give the name of custom view." , 'error');
+        }
+    }
+    updateExistingView(tempThis){
+        for(let props in tempThis.Where.Query){
+            tempThis.Where[props] = tempThis.Where.Query[props]
+        }
+        for(let props in tempThis.Where.Query){
+            var obj = {[props]:tempThis.Where.Query[props]}
+            tempThis.Where.Query[props] = tempThis.Where.Query[props]
+        }
+        var saveCustomView = {
+            "id": tempThis.state.viewId,
+            "viewName": tempThis.state.Text,
+            "viewFilters": JSON.stringify(tempThis.Where),
+            "modifiedOn": moment(new Date()).format("YYYY-MM-DD"),
+            "active": 1
+        }
+        if(tempThis.state.Text===undefined || tempThis.state.Text===""){
+            delete saveCustomView.viewName;
+        }
+        axios.put(Base_Url+"TCustomViews",saveCustomView).then(response=>{
+            swal('Updated' , "Successfully updated." , 'success');
+            console.log("response", response)
+            axios.get(Base_Url+"TCustomViews").then(response=>{
+                tempThis.setState({
+                    savedViews : response.data
+                })
+            })
+        })
+    }
+    saveView(e) {
+        if(this.state.viewId===""){
+            this.saveNewCustomView(this);
+        }
+        else{
+            var tempThis = this;
+            swal({
+                    title: "Custom View",
+                    text: "Do you want to edit this view or want to save a new one",
+                    type: "info",
+                    showCancelButton: true,
+                    confirmButtonText: "Save as a new custom view",
+                    cancelButtonText: "Update the existing one",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function(saveNew){
+                    if(saveNew){
+                        tempThis.saveNewCustomView(tempThis);
+                    }
+                    else{
+                        tempThis.updateExistingView(tempThis);
+                    }
+                }
+            );
         }
     }
     toggleColumn(name,value){
@@ -1613,7 +1664,9 @@ class ContainerViewForm extends React.Component {
                                                             return (
 
                                                                 <option key={index}
-                                                                        value={views.viewFilters}>{views.viewName }</option>
+                                                                        value={views.viewFilters}
+                                                                        id = {views.id}>{views.viewName }
+                                                                </option>
                                                             )
                                                         }
                                                     })
