@@ -172,7 +172,7 @@ class ContainerViewForm extends React.Component {
         mywindow.document.write('</head><body ><table border="0">');
         mywindow.document.write(document.getElementById('Packaging_Instruction_View').innerHTML);
         mywindow.document.write('</table></body></html>');
-        debugger
+         
         mywindow.document.close(); // necessary for IE >= 10
         mywindow.focus(); // necessary for IE >= 10*/
         mywindow.print();
@@ -205,7 +205,7 @@ class ContainerViewForm extends React.Component {
     }
 
     onSteamShipFilter(e, steamShip) {
-        debugger
+         
         if (e.target.checked) {
             this.SteamLineArray.push(parseInt(e.target.id));
             Object.defineProperty(this.Where, "SteamLine", {
@@ -234,7 +234,7 @@ class ContainerViewForm extends React.Component {
     }
 
     onContainerFilter(e, location) {
-        debugger
+         
         if (e.target.checked) {
             this.checkedContainer.push(e.target.id)
             // this.buttonDisplay.push(e.target.value)
@@ -313,7 +313,26 @@ class ContainerViewForm extends React.Component {
 
     onCustomerFilter(e,customer,isOnly) {
         if(isOnly){
-
+            let id = e.target.id.split(':')[1]
+            let elements = document.getElementsByClassName('checkboxCustomer inline')
+            for(let i=0;i<elements.length;i++){
+                let elem = elements[i].firstChild.firstChild;
+                elem.checked = false;
+                if(elem.id === id)
+                    elem.checked = true
+            }
+            //will not work as 2 child components are having same id
+            //document.getElementById(id).checked = true;
+            this.checkedCustomer = []
+            this.checkedCustomer.push(id)
+            Object.defineProperty(this.Where,"Customer",{enumerable: true ,
+                writable: true,
+                configurable:true,
+                value:this.checkedCustomer})
+            this.setState({
+                customerSelected:[]
+            });
+            this.state.customerSelected.push(id)
         }
         else{
             if (e.target.checked) {
@@ -500,7 +519,7 @@ class ContainerViewForm extends React.Component {
     }
 
     onSearch(e) {
-        debugger
+         
         Object.defineProperty(this.Where, "Query", {
             enumerable: true,
             writable: true,
@@ -905,7 +924,6 @@ class ContainerViewForm extends React.Component {
         this.setState({
             viewId:e.target.selectedOptions[0].id
         });
-        debugger
         var index = e.target.selectedIndex;
         var blob = e.target.value
         this.Where = JSON.parse(blob)

@@ -78,7 +78,7 @@ return  (<li key={customer.id} className="checkboxCustomer inline">
                     <label className="control control--checkbox">
                     <input type="checkbox" value={customer.name} ref={"c"+customer.id} id={customer.id} onChange={(e) => this.props.onCustomerFilter(e,customer)}/><div className="control__indicator"></div>
                     </label>
-    <span className="displayonlyFilter" title ={customer.name} id = {"c:"+customer.id} onClick={(e) => this.props.onCustomerFilter(e,customer)}>{"  Only  "}</span>
+    <span className="displayonlyFilter" title ={customer.name} id = {"c:"+customer.id} onClick={(e) => this.props.onCustomerFilter(e,customer,true)}>{"  Only  "}</span>
     <span className="labText">{customer.name.substring(0,10)+'..'}</span>
                     </li>)})            
         return (

@@ -9,11 +9,18 @@ class RailCarFilterPage extends React.Component {
         super()
         this.showAll = this.showAll.bind(this);
         this.state = {
-            show : false
+            show : false,
+            releaseValue : ''
         }
         this.onKeyUp = this.onKeyUp.bind(this)
     }
-
+    componentWillReceiveProps(nextProps){
+        if(nextProps.selectedRelease){
+            this.setState({
+                releaseValue : nextProps.selectedRelease["releaseNumber"]
+            })
+        }
+    }
     componentDidMount() {
         debugger;
         axois.get(Base_Url+"TPackagingInstructionLots/getrailCarList").then((response) => {
@@ -126,7 +133,7 @@ else{
                     <div className="">
                         <div className="left-inner-addon ">
                             <i className="fa fa-search" aria-hidden="true"></i>
-                            <input type="search"className="form-control" onKeyUp={this.onKeyUp}  id="railcarSearch"  onChange = {this.props.onTextChange}  placeholder="Search" />
+                            <input type="search"className="form-control" value = {this.state.releaseValue} onKeyUp={this.onKeyUp}  id="railcarSearch"  onChange = {this.props.onTextChange}  placeholder="Search" />
                             <ul className = "list-hover">
                             { this.state.show== true? this.expandList : ''}
                             </ul>

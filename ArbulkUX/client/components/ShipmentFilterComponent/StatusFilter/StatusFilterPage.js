@@ -12,6 +12,14 @@ class StatusFilterPage extends React.Component {
 
 
     }
+    componentWillReceiveProps(nextProps){
+         
+        if(nextProps.statusSelected && nextProps.statusSelected!==""){
+            for(let i =0;i<nextProps.statusSelected.length;i++){
+                this.refs[nextProps.statusSelected[i].status].checked = true;
+            }
+        }
+    }
     /*onClick(e,status){
         if(e.target.checked){
             this.props.checkedStatus[e.target.id] = e.target.value;
@@ -35,7 +43,7 @@ class StatusFilterPage extends React.Component {
         var stats = _.map(this.status,(status) => {
             return (<li key={status.id}>
                      <label className="control control--checkbox">{status.name}
-                     <input type="checkbox" value={status.name} onChange={(e) => this.props.onStatusFilter(e,status)}  id={status.id} /><div className="control__indicator"></div>
+                     <input type="checkbox" ref = {status.name} value={status.name} onChange={(e) => this.props.onStatusFilter(e,status)}  id={status.id} /><div className="control__indicator"></div>
                      </label>
                         </li>)
         })

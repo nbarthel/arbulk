@@ -40,7 +40,16 @@ class CustomerNameFilterPage extends React.Component {
     }
     componentDidMount() {
         this.collesp(8);
-
+    }
+    componentDidUpdate(){
+        if(this.props && this.props.customerSelected){
+            for(let i =0;i<this.props.customerSelected.length;i++){
+                let customer_id = this.props.customerSelected[i];
+                if(this.refs["c"+customer_id]){
+                    this.refs["c"+customer_id].checked = true;
+                }
+            }
+        }
     }
     collespeRec(){
         if(this.state.records===8){
@@ -60,9 +69,9 @@ class CustomerNameFilterPage extends React.Component {
         var customers = _.map(this.state.name,(customer) => {
 return  (<li key={customer.id} className="checkboxCustomer inline">
                     <label className="control control--checkbox">
-                    <input type="checkbox" value={customer.name} id={customer.id} onChange={(e) => this.props.onCustomerFilter(e,customer)}/><div className="control__indicator"></div>
+                    <input type="checkbox" value={customer.name} ref={"c"+customer.id} id={customer.id} onChange={(e) => this.props.onCustomerFilter(e,customer)}/><div className="control__indicator"></div>
                     </label>
-    <span className="displayonlyFilter" title ={customer.name} onClick={(e) => this.props.onCustomerFilter(e,customer)}>{"  Only  "}</span>
+    <span className="displayonlyFilter" title ={customer.name} id = {"c:"+customer.id} onClick={(e) => this.props.onCustomerFilter(e,customer,true)}>{"  Only  "}</span>
     <span className="labText">{customer.name.substring(0,10)+'..'}</span>
                     </li>)})            
         return (

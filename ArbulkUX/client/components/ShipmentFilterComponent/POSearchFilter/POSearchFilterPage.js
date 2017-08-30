@@ -8,11 +8,22 @@ class POSearchFilterPage extends React.Component {
         super(props);
         this.showAll = this.showAll.bind(this);
         this.state = {
-            show : false
+            show : false,
+            poValue:''
         }
         this.onKeyUp = this.onKeyUp.bind(this)
+
     }
 
+
+    componentWillReceiveProps(nextProps){
+        debugger
+        if(nextProps.selectedPO){
+            this.setState({
+                poValue:nextProps.selectedPO["po_number"]
+            })
+        }
+    }
     componentDidMount() {
         axois.get(Base_Url+"TPackagingInstructions/getPoList").then((response) => {
             this.setState({
@@ -23,7 +34,6 @@ class POSearchFilterPage extends React.Component {
                 console.log(err)
             })
 }
-
 onKeyUp(e){
 
  var poArray = [];
@@ -104,9 +114,6 @@ else{
 
     }
 
-
-
-
     render() {
         return (
             <div className="">
@@ -120,7 +127,7 @@ else{
                             <div className="left-inner-addon ">
                                 <i className="fa fa-search" aria-hidden="true"></i>
 
-                                <input type="search" id="POSearch" onKeyUp={this.onKeyUp}  onChange = {this.props.onTextChange} className="form-control" placeholder="Search" />
+                                <input type="search" id="POSearch" value = {this.state.poValue} onKeyUp={this.onKeyUp}  onChange = {this.props.onTextChange} className="form-control" placeholder="Search" />
                                 <ul className = "list-hover scrollshow">
                                     { this.state.show== true? this.expandList : ''}
                                 </ul>

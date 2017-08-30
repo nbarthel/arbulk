@@ -1,6 +1,17 @@
 import React, { Component } from 'react';
 
   class ShipmentTypeFilter extends Component {
+  	constructor(props){
+  		super(props)
+	}
+	componentWillReceiveProps(nextProps){
+  		if(nextProps.selectedshipType===1){
+  			this.refs["Domestic"].checked = true
+		}
+		else if(nextProps.selectedshipType===1){
+            this.refs["International"].checked = true
+		}
+	}
 	render() {
 		return (
 			<div>
@@ -12,12 +23,12 @@ import React, { Component } from 'react';
 				<ul>
 					<li>
 						<label className="control control--radio">International
-						  <input type="radio"  name="shipment_type" value="International" id="International" onChange={this.props.ShipmentType}/><div className="control__indicator"></div>
+						  <input type="radio"  name="shipment_type" ref = "International" value="International" id="International" onChange={this.props.ShipmentType}/><div className="control__indicator"></div>
 						</label>
 					</li>
 					<li>
 						<label className="control control--radio">Domestic
-						  <input type="radio"  name="shipment_type" id=""  value="Domestic"  id="Domestic" onChange={this.props.ShipmentType}/><div className="control__indicator"></div>
+						  <input type="radio"  name="shipment_type" value="Domestic" ref = "Domestic"  id="Domestic" onChange={this.props.ShipmentType}/><div className="control__indicator"></div>
 						</label>
 					</li>
 				</ul>

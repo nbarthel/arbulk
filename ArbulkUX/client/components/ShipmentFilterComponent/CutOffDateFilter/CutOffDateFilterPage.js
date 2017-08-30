@@ -6,6 +6,14 @@ require('react-datepicker/dist/react-datepicker.css');
 
 class CutOffDateFilterPage extends React.Component {
     /**/
+    constructor(props){
+        super(props)
+    }
+    componentWillReceiveProps(nextProps){
+        if(nextProps.SelectedCutOffDate && nextProps.SelectedCutOffDate.length>=2){
+
+        }
+    }
     render() {
         return (
             <div className="">

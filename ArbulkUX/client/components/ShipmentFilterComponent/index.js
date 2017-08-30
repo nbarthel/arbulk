@@ -21,13 +21,13 @@ class FilterComponent extends React.Component {
         <div className="">
  			<div className="well filter_bg collapse navbar-collapse" id="filter-menu">
                 <h4 className=" hidden-xs"> REFINE YOUR RESULT </h4>
-                <CompanyNameFilterPage onCompanyFilter = {this.props.onCompanyFilter}/>
-                <CustomerNameFilterPage onCustomerFilter = {this.props.onCustomerFilter} />
-                <POSearchFilterPage onClickPo = {this.props.onClickPo}  onTextChange = {this.props.onTextChange}  />
-               <LotSearchFilterPage lotSearch = {this.props.lotSearch} onTextChange = {this.props.onTextChange}/>
-                <ShipmentTypeFilter ShipmentType={this.props.ShipmentType} />
-                <CutOffDateFilterPage startDate = {this.props.startDate} endDate = {this.props.endDate} handleChange = {this.props.handleChange} handleChange1 = {this.props.handleChange1}/>
-                <StatusFilterPage onStatusFilter = {this.props.onStatusFilter} />
+                <CompanyNameFilterPage locationSelected = {this.props.locationSelected} onCompanyFilter = {this.props.onCompanyFilter}/>
+                <CustomerNameFilterPage customerSelected = {this.props.customerSelected} onCustomerFilter = {this.props.onCustomerFilter} />
+                <POSearchFilterPage selectedPO={this.props.selectedPO} onClickPo = {this.props.onClickPo}  onTextChange = {this.props.onTextChange}  />
+                <LotSearchFilterPage selectedRelease = {this.props.selectedRelease} lotSearch = {this.props.lotSearch} onTextChange = {this.props.onTextChange}/>
+                <ShipmentTypeFilter selectedshipType = {this.props.selectedshipType} ShipmentType={this.props.ShipmentType} />
+                <CutOffDateFilterPage SelectedCutOffDate = {this.props.SelectedCutOffDate} startDate = {this.props.startDate} endDate = {this.props.endDate} handleChange = {this.props.handleChange} handleChange1 = {this.props.handleChange1}/>
+                <StatusFilterPage statusSelected = {this.props.statusSelected} onStatusFilter = {this.props.onStatusFilter} />
             </div>
         </div>
               

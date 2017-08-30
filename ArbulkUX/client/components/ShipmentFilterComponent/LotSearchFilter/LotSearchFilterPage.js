@@ -9,9 +9,18 @@ class LotSearchFilterPage extends React.Component {
         super()
         this.showAll = this.showAll.bind(this);
         this.state = {
-            show : false
+            show : false,
+            releaseValue : ''
         }
          this.onKeyUp = this.onKeyUp.bind(this)
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.selectedRelease){
+            this.setState({
+                releaseValue : nextProps.selectedRelease["releaseNumber"]
+            })
+        }
     }
 
     componentDidMount() {
@@ -131,7 +140,7 @@ else{
                     <div className="">
                         <div className="left-inner-addon ">
                             <i className="fa fa-search" aria-hidden="true"></i>
-                            <input type="search" onKeyUp={this.onKeyUp}  id="LotSearch" onChange = {this.props.onTextChange}  className="form-control" placeholder="Search" />
+                            <input type="search" onKeyUp={this.onKeyUp}  id="LotSearch" value = {this.state.releaseValue} onChange = {this.props.onTextChange}  className="form-control" placeholder="Search" />
                             <ul className = "list-hover scrollshow">
                                   { this.state.show== true? this.expandList : ''}
                             </ul>
