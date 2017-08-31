@@ -7,7 +7,11 @@ import React, { Component } from 'react';
     }
     render() {
         if(this.props.contLoadData && this.props.contLoadData.length>0){
+            let totalBags=0;
+            let totalWeight=0;
             this.contLoadTable = _.map(this.props.contLoadData,(data,index)=>{
+                    totalBags = totalBags+parseInt(data.noOfBags)
+                    totalWeight = totalWeight+parseInt(data.weight)
                 return(
                     <tr key={index}>
                                                     <td>{data.TInventoryLocation.locationName}</td>
@@ -23,7 +27,10 @@ import React, { Component } from 'react';
                         </td>
                     </tr>
                     )
+
             })
+
+            this.contLoadTable.push(<tr><td >Total</td><td >{totalBags}</td><td >{totalWeight}</td><td ></td><td ></td></tr>);
         }
 		return (
 			 <table className="table table-striped">

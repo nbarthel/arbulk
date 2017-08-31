@@ -19,7 +19,7 @@ export default class ContainerPrint extends React.Component {
         this.state = {loaded: true,lot:'',railCar:'',weight:'',noBox:'',no_of_bags:0};
         this.state.viewData={TShipmentent:{TShipmentInternational:[{}],TCompany:{},TLocation:{}}};
         this.state.PIData={TPackagingInstructions:{TPackagingMaterial:{}}};
-        this.createPDF = this.createPDF.bind(this);
+
 
     }
     componentWillMount(){
@@ -88,23 +88,19 @@ export default class ContainerPrint extends React.Component {
     }
 
     componentDidMount() {
-
         (function(){
             debugger
-            var
-                form = $('.bill-of-completed'),
+            var form = $('.bill-of-completed'),
                 cache_width = form.width(),
-                a4  =[595.28, 550.89]; // for a4 size paper width and height
-               $('#create_pdf').on('click',function(){
-                console.log('call create pdf');
+                a4  =[595.28, 800.89]; // for a4 size paper width and height
+            $('#create_pdf').on('click',function(){
                 $('html,body').scrollTop(0);
                 createPDF();
             });
 
             function createPDF(){
                 getCanvas().then(function(canvas){
-                    var
-                        img = canvas.toDataURL("image/png"),
+                    var img = canvas.toDataURL("image/png"),
                         doc = new jsPDF({
                             unit:'px',
                             format:'a4'
@@ -126,10 +122,6 @@ export default class ContainerPrint extends React.Component {
 
         }());
     }
-    createPDF(e){
-        console.log('print view')
-        //hashHistory.push('/Shipment/shipmentPrint/')
-    }
     printFun(){
         window.print()
     }
@@ -141,7 +133,7 @@ export default class ContainerPrint extends React.Component {
         var weight =0
         var unit=""
         var unitType=""
-        debugger
+
         if(this.state.PIData.TPackagingInstructions.TPackagingMaterial.TPackagingType!=undefined){
           weight =   this.state.PIData.TPackagingInstructions.TPackagingMaterial.avarageMaterialWeight
           unit =     this.state.PIData.TPackagingInstructions.TPackagingMaterial.TPackagingType.id==1?"Kg":"lbs"
@@ -157,7 +149,7 @@ export default class ContainerPrint extends React.Component {
           var gW = avgMaterialBags + tw
       }
         return (
-            <div style={{margin:'0 auto',textAlign :'center'}}>
+            <div>
                 <div className="bill-of-completed">
                     <div className="content-inside">
 
@@ -348,10 +340,12 @@ export default class ContainerPrint extends React.Component {
                                             </td>
                                             <td className="cod" rowSpan="3" width="26%">
                                                 <table className="cod_table">
+                                                    <tbody>
                                                     <tr><td>C.O.D. SHIPMENT</td></tr>
                                                     <tr><td>C.O.D. Amt </td></tr>
                                                     <tr><td>Collection Fee</td></tr>
                                                     <tr><td>Total Charges </td></tr>
+                                                    </tbody>
                                                 </table>
                                             </td>
                                         </tr>
@@ -380,7 +374,7 @@ export default class ContainerPrint extends React.Component {
 
                 </div>
 
-                <button type="button"  className="create_btn_container" onClick={this.printFun.bind(this)}>Print</button><button type="button" id="create_pdf" className="create_btn_container">CREATE PDF </button>
+                <button type="button"  className="create_btn_container" onClick={this.printFun.bind(this)}>Print</button><button type="button" id="create_pdf" className="create_btn_container" >CREATE PDF </button>
             </div>
         );
 

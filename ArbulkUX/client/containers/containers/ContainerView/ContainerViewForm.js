@@ -501,7 +501,7 @@ class ContainerViewForm extends React.Component {
                         title: "Success",
                         text: "Successfully added to the queue.",
                         type: "success",
-                        showCancelButton: true,
+                        showCancelButton: false,
                     },
 
                     function (isConfirm) {

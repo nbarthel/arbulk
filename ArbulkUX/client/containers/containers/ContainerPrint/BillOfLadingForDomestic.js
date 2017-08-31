@@ -94,7 +94,7 @@ export default class BillOfLadingForDomestic extends React.Component {
             var
                 form = $('.bill-of-completed'),
                 cache_width = form.width(),
-                a4  =[ 595.28,  841.89]; // for a4 size paper width and height
+                a4  =[595.28,  841.89]; // for a4 size paper width and height
 
             $('#create_pdf').on('click',function(){
                 console.log('call create pdf');

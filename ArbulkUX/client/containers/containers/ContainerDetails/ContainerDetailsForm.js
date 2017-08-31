@@ -44,6 +44,7 @@ class ContainerDetailsForm extends React.Component {
         this.handleContainerLoadChecks = this.handleContainerLoadChecks.bind(this)
         this.onRightClick = this.onRightClick.bind(this)
         this.onSaveClick = this.onSaveClick.bind(this)
+        this.addToqueue = this.addToqueue.bind(this)
         this.cIArray =[]
         this.removeArray =  []
         this.noOfContainers = undefined
@@ -85,12 +86,94 @@ class ContainerDetailsForm extends React.Component {
             })
         }
         axios.get(this.CLoadURL).then((response)=>{
-
+console.log("resp>>>>>>>>>", response.data);
             this.setState({
                 contLoadData : response.data
             })
         })
     }
+
+    printLoadOrder(e) {
+
+        if (this.props.containerTable.id != undefined || this.props.containerTable.TShipmentent.id != undefined) {
+            //console.log('print view', this.editId + '/' + this.contId)
+            hashHistory.push('/Shipment/shipmentPrint/' + this.props.containerTable.TShipmentent.id + '/' + this.props.containerTable.id)
+            //hashHistory.push('/Packaging/inventorycard/'+this.piID+'/'+this.selected)
+        }
+        else {
+            //console.log('mmmmmmmmmmmmmmmmmmmmm');
+            //hashHistory.push('/Shipment/shipmentPrint/')
+            swal("Selection Missing", "Please select a lot to view.", "error")
+        }
+    }
+    print(e) {
+        if (this.props.containerTable.id != '' && this.props.isDomestic == false) {
+
+            hashHistory.push('/Container/containerPrint/' + this.props.containerTable.id)
+            //hashHistory.push('/Packaging/inventorycard/'+this.piID+'/'+this.selected)
+        }
+        else if (this.props.containerTable.id != '' && this.props.isDomestic == true) {
+            hashHistory.push('/Container/BOLDomestic/' + this.props.containerTable.id)
+        }
+        else if (this.props.containerTable.id == '' && this.props.isDomestic == false) {
+
+            swal("Selection Missing", "Please select a container to print.", "error")
+        }
+        else {
+            swal('', 'Domestic container report is not available.');
+        }
+    }
+
+    addToqueue() {
+      console.log("container table",this.props.containerTable);
+        if (this.props.containerTable.containerSteamshipLineConfirmed!==1) {
+            swal("", "Domestic container can not be in queue.", 'info')
+            return;
+        }
+        if (this.props.containerTable.containerArrived!==1) {
+            swal("", "Container must be arrived before queued.", 'info');
+            return
+        }
+
+        if (this.props.containerTable && (this.props.containerTable.status == "LOADED" || this.props.containerTable.status == "INTRANSIT" || this.props.containerTable.status == "DELIVERED")) {
+            swal("", "The container is already" + " " + this.props.containerTable.status+".", 'info');
+            return
+        }
+
+        var id = this.props.containerTable.id
+        var shipId = this.props.containerTable.TShipmentent.TShipmentInternational[0].id;
+        axios.get(Base_Url + "TContainerInternationals/getMaxQueue").then(response=> {
+            this.sequense = response.data
+        axios.put(Base_Url + "TContainerInternationals/" + id, {
+            sequence: parseInt(this.sequense[0].max_mark) + 1,
+            status: 'QUEUED',
+            isqueued: 1
+        }).then((response)=> {
+
+            axios.put(Base_Url + "TShipmentInternationals/" + shipId, {status: "QUEUED"}).then((response)=> {
+                swal({
+                        title: "Success",
+                        text: "Successfully added to the queue.",
+                        type: "success",
+                        showCancelButton: false,
+                    },
+
+                    function (isConfirm) {
+                        hashHistory.push('/Conatainer/containerqueueview')
+
+                    }
+                );
+            })
+
+
+        }).catch((err)=> {
+
+        })
+
+
+        });
+    }
+
     allValuesSame(arr) {
 
        for(var i = 1; i < arr.length; i++)
@@ -537,6 +620,7 @@ changeLot(e){
         })
       }
     }
+
     onSaveClick(e){
 
       var bagsLoadedInContainer =0
@@ -804,22 +888,22 @@ changeLot(e){
             <div className=" col-lg-12 "><hr/></div>
                     <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <div className="text_left">
-                         <div className="pull-left margin-10-last-l"><button type="button" id="back" className="btn  btn-gray text-uppercase" onClick={hashHistory.goBack}> BACK</button> </div>
-                            {
-                               /* <div className="pull-left margin-10-all">
-                                    <button type="button" className="btn  btn-gray text-uppercase">Add to queue</button>
-                                </div>
 
-                                < div className="pull-left margin-10-all"><button type="button" id="edit_details"  className="btn  btn-gray text-uppercase">Print Load Order</button> </div>
-                                <div className="pull-left margin-10-all"><button type="button" id="edit_details"  className="btn  btn-gray text-uppercase">Print BOL</button> </div>
-                           */
-                            }
+
+
+
                         </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
                           <div className="pull-right margin-10-last-r">{this.state.editing == false ? <button type="button"  className="btn  btn-success text-uppercase" onClick = {this.onEditClick}> Edit</button> : <button type="button"  className="btn  btn-success text-uppercase" onClick = {this.onSaveClick.bind(this)} > SAVE</button>} </div>
                           <div className="pull-right margin-10-all"><button type="button" id="edit_details"  className={this.state.editing ? "btn  btn-primary text-uppercase" : "btn  btn-primary text-uppercase hidden" } onClick = {this.onCancelClick}>Cancel</button> </div>
-
+                        <div className="pull-right margin-10-last-r"><button type="button" id="back" className="btn  btn-gray text-uppercase" onClick={hashHistory.goBack}> BACK</button> </div>
+                        <div className="pull-right margin-10-all">
+                            <button type="button" className="btn  btn-gray text-uppercase" onClick={this.addToqueue}>Add to queue</button>
+                        </div>
+                        < div className="pull-right margin-10-all"><button type="button" id="edit_details" onClick={(e) => this.printLoadOrder(e)}  className="btn  btn-gray text-uppercase">Print Load Order</button> </div>
+                        <div className="pull-right margin-10-all"><button type="button" id="edit_details" onClick={(e) => this.print(e)}  className="btn  btn-gray text-uppercase">Print BOL</button> </div>
 
 
                     </div>

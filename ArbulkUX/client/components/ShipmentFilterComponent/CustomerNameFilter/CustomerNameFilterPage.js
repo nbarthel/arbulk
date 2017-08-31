@@ -72,7 +72,7 @@ return  (<li key={customer.id} className="checkboxCustomer inline">
                     <input type="checkbox" value={customer.name} ref={"c"+customer.id} id={customer.id} onChange={(e) => this.props.onCustomerFilter(e,customer)}/><div className="control__indicator"></div>
                     </label>
     <span className="displayonlyFilter" title ={customer.name} id = {"c:"+customer.id} onClick={(e) => this.props.onCustomerFilter(e,customer,true)}>{"  Only  "}</span>
-    <span className="labText">{customer.name.substring(0,10)+'..'}</span>
+    <span className="labText">{(customer.name.length>10)?customer.name.substring(0,10)+'..':customer.name}</span>
                     </li>)})            
         return (
             <div className="customer">
