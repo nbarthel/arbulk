@@ -966,56 +966,104 @@ onClickli(e){
 
 }
 
-  handleTextChange(e){
+    handleTextChange(e){
         this.setState({
             Text  : e.target.value
         })
 
     }
-
-   saveView(e){
-       const tempThis = this
-       for(let props in tempThis.Where.Query){
-           tempThis.Where[props] = tempThis.Where.Query[props]
-       }
-       for(let props in tempThis.Where.Query){
-           var obj = {[props]:tempThis.Where.Query[props]}
-           tempThis.Where.Query[props] = tempThis.Where.Query[props]
-       }
+    saveNewCustomView(tempThis){
+        for(let props in tempThis.Where.Query){
+            tempThis.Where[props] = tempThis.Where.Query[props]
+        }
+        for(let props in tempThis.Where.Query){
+            var obj = {[props]:tempThis.Where.Query[props]}
+            tempThis.Where.Query[props] = tempThis.Where.Query[props]
+        }
         var saveCustomView = {
             "id": 0,
             "screenName": "SHIPMENT",
-            "viewName": this.state.Text,
-            "viewFilters": JSON.stringify(this.Where),
+            "viewName": tempThis.Text,
+            "viewFilters": JSON.stringify(tempThis.Where),
             "createdBy": 0,
             "createdOn": "2016-09-26",
             "modifiedBy": 0,
             "modifiedOn": "2016-09-26",
             "active": 1
         }
-
-       if(saveCustomView.viewFilters != undefined && saveCustomView.viewFilters != null && saveCustomView.viewFilters != {} ){
-        axios.post(Base_Url + "TCustomViews", saveCustomView).then(response=> {
-        swal('Success' , "Successfully saved." , 'success');
-
-
+        if(tempThis.state.Text!==undefined && tempThis.state.Text!==""){
+            axios.post(Base_Url + "TCustomViews", saveCustomView).then(response=> {
+                swal('Success' , "Successfully saved." , 'success');
+                axios.get(Base_Url+"TCustomViews").then(response=>{
+                    tempThis.setState({
+                        savedViews: response.data,
+                        Text: ""
+                    })
+                })
+            })
+        }
+        else {
+            swal('Error' , "Please give the name of custom view." , 'error');
+        }
+    }
+    updateExistingView(tempThis){
+        for(let props in tempThis.Where.Query){
+            tempThis.Where[props] = tempThis.Where.Query[props]
+        }
+        for(let props in tempThis.Where.Query){
+            var obj = {[props]:tempThis.Where.Query[props]}
+            tempThis.Where.Query[props] = tempThis.Where.Query[props]
+        }
+        var saveCustomView = {
+            "id": tempThis.state.viewId,
+            "viewName": tempThis.state.Text,
+            "viewFilters": JSON.stringify(tempThis.Where),
+            "modifiedOn": moment(new Date()).format("YYYY-MM-DD"),
+            "active": 1
+        }
+        if(tempThis.state.Text===undefined || tempThis.state.Text===""){
+            delete saveCustomView.viewName;
+        }
+        axios.put(Base_Url+"TCustomViews",saveCustomView).then(response=>{
+            swal('Updated' , "Successfully updated." , 'success');
+            console.log("response", response)
             axios.get(Base_Url+"TCustomViews").then(response=>{
-         this.setState({
-             savedViews: response.data,
-             Text: ""
-             })
-         })
-       })
-
-            }
-       else {
-        swal('Error' , "Please select filter options first." , 'error');
-      }
+                tempThis.setState({
+                    savedViews : response.data
+                })
+            })
+        })
+    }
+    saveView(e){
+       if(this.state.viewId===""){
+           this.saveNewCustomView(this);
+       }
+       else{
+           var tempThis = this;
+           swal({
+                   title: "Custom View",
+                   text: "Do you want to edit this view or want to save a new one",
+                   type: "info",
+                   showCancelButton: true,
+                   confirmButtonText: "Save as a new custom view",
+                   cancelButtonText: "Update the existing one",
+                   closeOnConfirm: false,
+                   closeOnCancel: false
+               },
+               function(saveNew){
+                   if(saveNew){
+                       tempThis.saveNewCustomView(tempThis);
+                   }
+                   else{
+                       tempThis.updateExistingView(tempThis);
+                   }
+               }
+           );
+       }
 
     }
 
  viewChange(e){
-       debugger
     this.removeState();
      this.setState({
          viewId:e.target.selectedOptions[0].id
@@ -1954,7 +2002,7 @@ if(this.state.viewData && (this.state.viewData.length ==0 || this.state.viewData
                                                     {
                                                         return(
 
-                                                            <option key = {index} value={views.viewFilters}>{views.viewName }</option>
+                                                            <option key = {index} value={views.viewFilters} id = {views.id}>{views.viewName }</option>
                                                         )
                                                     }
                                                 })

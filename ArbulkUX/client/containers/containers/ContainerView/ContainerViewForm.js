@@ -370,7 +370,6 @@ class ContainerViewForm extends React.Component {
     }
 
     onStatusFilter(e, status) {
-
         if (e.target.checked) {
             this.checkedStatus.push(e.target.value);
             Object.defineProperty(this.Where, "status", {
