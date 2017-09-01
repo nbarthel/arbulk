@@ -291,8 +291,6 @@ export default class PackagingInstructionViewForm extends React.Component {
             }
             var Railstatus = [];
             if(this.Where.status && this.Where.status.length){
-
-
                 var temp = []
                 var objStatus = {};
                 for(var z in this.Where.status){
