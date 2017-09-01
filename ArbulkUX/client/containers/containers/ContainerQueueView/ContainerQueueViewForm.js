@@ -22,14 +22,19 @@ class  ContainerQueueViewForm extends React.Component {
         this.callonEdit = this.callonEdit.bind(this)
         this._throttledMouseMove = _.throttle(this._throttledMouseMove.bind(this));
         this.selectedcontainer =[];
+        this.onCheckboxChange = this.onCheckboxChange.bind(this)
+        this.onViewClick = this.onViewClick.bind(this)
     }
     componentDidMount(){
 
     }
 
-    onCheckboxChange(e, value) {
-        console.log(">>>>>>"+ value.id );
-        this.selectedcontainer.push(value.id);
+    onCheckboxChange(e, data) {
+        this.contId = data.id
+        console.log("data",data)
+        this.type = data.TShipmentent.isDomestic
+        console.log(">>>>>>"+ data.id );
+        this.selectedcontainer.push(data.id);
     }
 
     callonEdit(){
@@ -39,7 +44,13 @@ class  ContainerQueueViewForm extends React.Component {
             update: this.handleSortableUpdate
         } );
     }
-
+    onViewClick(e) {
+        if (this.contId == undefined) {
+            swal("Info", "Selection missing.", "info")
+            return
+        }
+        hashHistory.push('/Conatainer/containerDetails/' + this.contId + '/' + this.type)
+    }
 
     handleSortableUpdate(e , selected , swapped) {
         debugger;
@@ -56,10 +67,10 @@ class  ContainerQueueViewForm extends React.Component {
             // this.props.data.queue_sequence = index;
         });
         console.log('>>>>>>>' , newSequence)
-       for(var j in ids)
+        for(var j in ids)
         {
-           axios.put(Base_Url+"TContainerInternationals/" + ids[j] , {sequence : newSequence[j] }).then((response)=>{
-     });
+            axios.put(Base_Url+"TContainerInternationals/" + ids[j] , {sequence : newSequence[j] }).then((response)=>{
+            });
         }
 
         // Lets React reorder the DOM
@@ -72,50 +83,50 @@ class  ContainerQueueViewForm extends React.Component {
     }
     _throttledMouseMove(e){
 
-       if(clickOnEdit&&e.buttons){
+        if(clickOnEdit&&e.buttons){
 
-         if(initialY==0)
-         {
-           initialY = e.clientY
-         }
-    if(i>4){
-         if(initialY - e.clientY > 300){
-
-           this.ScrollUp(e.clientY-initialY-150)
-           initialY = e.clientY
-           i =0;
-           goTop = true;
-           goDown = false;
-         }
-          else if(e.clientY-initialY > 300){
-
-                this.ScrollUp(initialY-e.clientY+250)
+            if(initialY==0)
+            {
                 initialY = e.clientY
-                i =0;
-                goTop = false;
-                goDown = true;
-          }
-          else if(i>4){
-            i++;
-            if(i>12){
-            if(goTop){
-              this.ScrollUp(-200)
             }
-            else{
-              this.ScrollUp(200)
-            }
-          }
-          }
+            if(i>4){
+                if(initialY - e.clientY > 300){
 
+                    this.ScrollUp(e.clientY-initialY-150)
+                    initialY = e.clientY
+                    i =0;
+                    goTop = true;
+                    goDown = false;
+                }
+                else if(e.clientY-initialY > 300){
+
+                    this.ScrollUp(initialY-e.clientY+250)
+                    initialY = e.clientY
+                    i =0;
+                    goTop = false;
+                    goDown = true;
+                }
+                else if(i>4){
+                    i++;
+                    if(i>12){
+                        if(goTop){
+                            this.ScrollUp(-200)
+                        }
+                        else{
+                            this.ScrollUp(200)
+                        }
+                    }
+                }
+
+            }
+            else {
+                i++;
+            }
         }
-        else {
-          i++;
-        }
-     }
-     }
+    }
     ScrollUp(a)
     {
-      scroll.scrollMore(a);
+        scroll.scrollMore(a);
 
     }
 
@@ -131,15 +142,15 @@ class  ContainerQueueViewForm extends React.Component {
         //console.log(">>>>>>>>>??<<<<<<<<<<<<<"+ JSON.stringify(this.props.queueData));
         var propsdata = (this.props.queueData && this.props.queueData.length > 0 )?this.props.queueData.reverse() : []
         var arrPropsdata = _.sortBy(propsdata, 'sequence', function(n) {
-             return Math.sin(n);
-   });
+            return Math.sin(n);
+        });
 
-   arrPropsdata = arrPropsdata.reverse()
-   var arrPropsdataSorted = arrPropsdata.sort(function(a, b) {
-    return parseFloat(a.sequence) - parseFloat(b.sequence);
-});
+        arrPropsdata = arrPropsdata.reverse()
+        var arrPropsdataSorted = arrPropsdata.sort(function(a, b) {
+            return parseFloat(a.sequence) - parseFloat(b.sequence);
+        });
         this.queueViewList = _.map(arrPropsdataSorted , (data , index) =>{
-          debugger
+            debugger
             if(data.sequence != null){
                 return(
                     <tr onDoubleClick={this.containerView.bind(this)} key={data.sequence} id = {data.sequence} data-id={data.id} className="item">
@@ -155,7 +166,7 @@ class  ContainerQueueViewForm extends React.Component {
                         <td>3 of 20</td>
                         <td>
                             <label className="control control--checkbox">
-                                <input type="checkbox" id="row1" /><div className="control__indicator"></div>
+                                <input onChange={(e)=>{this.onCheckboxChange(e, data)}} type="checkbox" id="row1" /><div className="control__indicator"></div>
                             </label>
                         </td>
                     </tr>
@@ -206,8 +217,8 @@ class  ContainerQueueViewForm extends React.Component {
                             <div className="padding-top-btm-xs">
                                 <div className="padding-20-last-l pull-left"><button type="button"    className="btn  btn-gray text-uppercase" onClick={hashHistory.goBack}>Back</button></div>
 
-                               <div className="padding-20-all pull-right"><button type="button"   id="edit_btn"  className="btn  btn-orange text-uppercase" onClick={this.callonEdit}>Edit</button></div>
-                                {/*<div class="pull-right margin-10-last-r"><button type="button" class="btn  btn-success">View</button></div>*/}
+                                <div className="padding-20-all pull-right"><button type="button"   id="edit_btn"  className="btn  btn-orange text-uppercase" onClick={this.callonEdit}>Edit</button></div>
+                                <div className="pull-right margin-10-last-r"><button type="button" onClick={this.onViewClick} className="btn  btn-success">View</button></div>
 
 
                             </div>
@@ -215,12 +226,12 @@ class  ContainerQueueViewForm extends React.Component {
 
 
 
-                        </div>
-
                     </div>
 
-                </section>
-            )
-            }
-            }
-            export default ContainerQueueViewForm;
+                </div>
+
+            </section>
+        )
+    }
+}
+export default ContainerQueueViewForm;
