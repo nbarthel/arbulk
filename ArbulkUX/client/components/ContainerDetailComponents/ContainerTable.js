@@ -33,9 +33,11 @@ class ContainerTable extends Component {
           if(this.props.table.TShipmentent.TShipmentLots[0].TPackagingInstructionLots.status!="UNCONFIRMED"){
             isOrdercnfd = "YES"
           }
-           for(var i in this.props.table.TShipmentent.TShipmentLots){
-                 QtyReq = parseInt(QtyReq) + parseInt(this.props.table.TShipmentent.TShipmentLots[i].TPackagingInstructionLots.inInventory)
-             }
+           for(var i in this.props.table.TShipmentent.TShipmentLots) {
+               if (this.props.table.TShipmentent.TShipmentLots[i].TPackagingInstructionLots) {
+                   QtyReq = parseInt(QtyReq) + parseInt(this.props.table.TShipmentent.TShipmentLots[i].TPackagingInstructionLots.inInventory)
+               }
+           }
 
          }
 
