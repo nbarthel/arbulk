@@ -580,79 +580,7 @@ if(e.target.checked){
 }
 }
   onCustomerChange(e){
- // 
- // var base = "TShipmentents"
- // var CIView = createDataLoader(ContainerArrivalEntryForm,{
- //                queries:[{
- //                  endpoint: 'TShipmentents',
- //                  filter:{
- //                    include:["TShipmentDomestic","TShipmentInternational"]
- //                  }
- //                }]
- //  })
- //
- //   this.url = CIView._buildUrl(base, {
- //          include : ["TShipmentDomestic","TShipmentInternational"]
- //
- //   })
- //     axios.get(this.url).then((response) => {
- //      this.setState({
- //        bookingNumbers : response.data
- //      })
- //
- //    })
 
- // if(e.target.id == "customer_domestic" ){
- // this.customerValue = e.target.value
- //  var base = "TShipmentents"
- //  this.url = CIView._buildUrl(base, {
- //         include : ["TShipmentDomestic"],
- //        "where":{"customerId":this.customerValue}
- //  })
- //   axios.get(this.url).then((response) => {
- //    this.setState({
- //      bookingNumbers : response.data
- //    })
- //
- //  })
- //    if(e.target.value == "1"){
- //            axios.get(Base_Url+"TPackagingInstructions/getPoListID1").then((response)=>{
- //                this.setState({
- //                    poNumber:response.data
- //                })
- //                 this.poNumber = _.map(this.state.poNumber,(poNum,index)=>{
- //            return <option key={index} id={poNum} value={poNum.poNumber}>{poNum.poNumber}</option>})
- //                console.log("poNumber",this.state.poNumber)
- //                this.forceUpdate()
- //            })
- //            }
- //            else if(e.target.value == "2"){
- //                 axios.get(Base_Url+"TPackagingInstructions/getPoListID2").then((response)=>{
- //                this.setState({
- //                    poNumber:response.data
- //                })
- //                this.poNumber = _.map(this.state.poNumber,(poNum,index)=>{
- //            return <option key={index} id={poNum} value={poNum.poNumber}>{poNum.poNumber}</option>})
- //                console.log("poNumber",this.state.poNumber)
- //            })
- //
- //            }
- //
- // }else if(e.target.id == "customer_international"){
-//  
-// this.value = e.target.value
-//   var base = "TShipmentents"
-//   this.url = CIView._buildUrl(base, {
-//          include : ["TShipmentInternational"],
-//         "where":{"customerId":this.value}
-//   })
-//    axios.get(this.url).then((response) => {
-//     this.setState({
-//       bookingNumbers : response.data
-//     })
-//
-//   })
-//  }
   }
 
   toogleTab(e){
@@ -692,22 +620,6 @@ if(e.target.checked){
 
     }
 
-
-//    var populatePo = undefined
-//    var populateArry = this.state.poArray
-//    //if(this.state.poArray > 0) {
-//    alert(JSON.stringify(this.state.poArray))
-//
-//    setTimeout(function(){
-//    populatePo = _.map(populateArry, (data, index)=> {
-//        alert("poresult")
-//        
-//        return (
-//            <option key={index} id={index} value={data.TPackagingInstructions ? data.TPackagingInstructions.po_number : ''}>{data.TPackagingInstructions ? data.TPackagingInstructions.po_number : ''}</option>
-//        )
-//    })
-//    console.log("populatePo" ,populatePo)
-//},500)
 
     render() {
         

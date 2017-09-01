@@ -72,6 +72,7 @@ module.exports = function(Tinventorylocation) {
                                     "id": 0,
                                     "piLotId": tinventory.Tinventory.piLotId,
                                     "inventoryLocationId": obj.id,
+                                    "inventoryLocation": tinventory.Tpinventory.locationName,
                                     "noOfBags": tinventory.Tinventory.noOfBags,
                                     "notes" : tinventory.Tinventory.notes,
                                     "weight": tinventory.Tinventory.weight,

@@ -359,7 +359,7 @@ else{
 var calcWeight = this.state.weightBox
  if(this.state.weightBox){
 	 this.state.weightBox = ''
- }
+}
 
 			if(this.edit){
 				this.isPresent = false

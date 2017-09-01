@@ -84,30 +84,10 @@ componentDidMount() {
 }
 
 	render() {
-
-		// var inventory = _.map(this.state.InvtLocationHistory.TPiInventory,(invent,index) => {
-		// if(invent.TInventoryLocation)
-		// {      	return (
-		// 	<tr key={index}>
-		// 	<td>{invent.TInventoryLocation? invent.TInventoryLocation.locationName : ''}</td>
-		// 	<td>{invent.noOfBags}</td>
-		// 	<td>{invent.weight}</td>
-		// 	<td>{this.state.currentInventory.lot_number}</td>
-		// 	<td>{this.state.currentInventory.lot_number}</td>
-		// 	</tr>
-		// )
-		// }
-		//
-		// })
-
-
-		//console.log("INVTLOCATIONHISTORY>>>>>>>>>>>>>>>>>>>>",this.state.InvtLocationHistory)
-		var invt ;
+var invt ;
 		if(this.state.InvtLocationHistory )
 		{
-            // var newArr = _.sortBy(this.state.InvtLocationHistory, 'locationName', function(n) {
-            //     return n.TInventoryLocation.locationName.toLowerCase();
-            // });
+
 		 invt = _.map(this.state.InvtLocationHistory,(invent)=>{
 
 			return (
