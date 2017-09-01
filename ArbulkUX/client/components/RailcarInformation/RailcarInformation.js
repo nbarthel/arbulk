@@ -44,6 +44,7 @@ export default class RailcarInformation extends React.Component {
 									type="text"
 									name="railcar_number"
 									className="form-control"
+									style={{textTransform: 'uppercase'}}
 									id={this.props.idd!==undefined?"Rail_Car_Number"+this.props.idd:"Rail_Car_Number"}
 									ref={this.props.id}
 									placeholder="Railcar #"
@@ -55,6 +56,7 @@ export default class RailcarInformation extends React.Component {
 									type="text"
 									name="railcar_number"
 									className="form-control"
+									style={{textTransform: 'uppercase'}}
 									id={this.props.idd!==undefined?"Rail_Car_Number"+this.props.idd:"Rail_Car_Number"}
 									placeholder="Railcar #"
 									onChange={this.props.onChange}

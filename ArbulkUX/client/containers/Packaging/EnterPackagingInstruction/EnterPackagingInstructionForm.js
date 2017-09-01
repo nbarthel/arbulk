@@ -740,11 +740,11 @@ export default class EnterPackagingInstructionForm extends React.Component {
             isError = true;
             break
           }
-          if(!/^[\w-//]+$/.test(obj[i][prop])){
-            swal("Error","Cant't have special charcters.","warning")
-            isError = true;
-            break
-          }
+          // if(!/^[\w-//]+$/.test(obj[i][prop])){
+          //   swal("Error","Cant't have special charcters.","warning")
+          //   isError = true;
+          //   break
+          // }
         }}
       if(isError){
         break
