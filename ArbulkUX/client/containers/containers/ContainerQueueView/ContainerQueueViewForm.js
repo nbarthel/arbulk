@@ -5,6 +5,8 @@ import './arrayclean.js';
 import { Base_Url} from '../../../constants';
 import ReactDOM from 'react-dom'
 import axios from 'axios'
+import SweetAlert from 'sweetalert-react';
+import '../../../public/stylesheets/sweetalert.css';
 import { hashHistory } from 'react-router'
 var Scroll  = require('react-scroll');
 var scroll     = Scroll.animateScroll;
@@ -73,12 +75,6 @@ class  ContainerQueueViewForm extends React.Component {
             });
         }
 
-        // Lets React reorder the DOM
-        // swal("Success" , 'Successfully updated Qsequence' , 'success')
-        // $node.sortable('cancel');
-        // this.setState({ items: newItems });
-        // this.props.data = this.state.items
-        // this.forceUpdate();
 
     }
     _throttledMouseMove(e){
@@ -128,6 +124,16 @@ class  ContainerQueueViewForm extends React.Component {
     {
         scroll.scrollMore(a);
 
+    }
+    loadedOrder(){
+        if (this.contId == undefined) {
+            swal("Info", "Selection missing.", "info")
+            return
+        }
+        axios.put(Base_Url+"TContainerInternationals/" + this.contId ,
+            {containerLoaded : 1 }).then((response)=>{
+            swal("Success","Container mark as loaded.","success")
+        });
     }
 
 
@@ -229,6 +235,11 @@ class  ContainerQueueViewForm extends React.Component {
                                 <div className="pull-left margin-10-all">
                                     <button type="button" onClick={(e) => this.printLoadOrder(e)}
                                             className="btn  btn-primary">Print Load Order
+                                    </button>
+                                </div>
+                                <div className="pull-left margin-10-all">
+                                    <button type="button" onClick={(e) => this.loadedOrder(e)}
+                                            className="btn  btn-primary">Loaded
                                     </button>
                                 </div>
                                 <div className="padding-20-all pull-right"><button type="button"   id="edit_btn"  className="btn  btn-orange text-uppercase" onClick={this.callonEdit}>Edit</button></div>
