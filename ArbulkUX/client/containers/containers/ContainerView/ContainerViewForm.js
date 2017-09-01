@@ -137,13 +137,10 @@ class ContainerViewForm extends React.Component {
     printLoadOrder(e) {
 
         if (this.editId != undefined || this.contId != undefined) {
-            //console.log('print view', this.editId + '/' + this.contId)
             hashHistory.push('/Shipment/shipmentPrint/' + this.editId + '/' + this.contId)
             //hashHistory.push('/Packaging/inventorycard/'+this.piID+'/'+this.selected)
         }
         else {
-            //console.log('mmmmmmmmmmmmmmmmmmmmm');
-            //hashHistory.push('/Shipment/shipmentPrint/')
             swal("Selection Missing", "Please select a lot to view.", "error")
         }
     }
@@ -454,7 +451,6 @@ class ContainerViewForm extends React.Component {
         this.contId = contData.id
         this.type = data.isDomestic
         this.editId = data.id
-        //console.log("DATA", data)
         this.parentShipId = (data.TContainerInternational && data.TContainerInternational.length > 0 ) ? data.TContainerInternational[0].id : ''
         this.shipmentid = (data.TShipmentInternational && data.TShipmentInternational.length > 0) ? data.TShipmentInternational[0].id : ''
         if (data.isDomestic == 1) {

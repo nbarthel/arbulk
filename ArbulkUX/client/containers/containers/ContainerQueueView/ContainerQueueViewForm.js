@@ -134,6 +134,16 @@ class  ContainerQueueViewForm extends React.Component {
     containerView() {
         hashHistory.push('/Container/containerview/')
     }
+    printLoadOrder(e) {
+
+        if (this.editId != undefined || this.contId != undefined) {
+            hashHistory.push('/Shipment/shipmentPrint/' + this.editId + '/' + this.contId)
+            //hashHistory.push('/Packaging/inventorycard/'+this.piID+'/'+this.selected)
+        }
+        else {
+            swal("Selection Missing", "Please select a lot to view.", "error")
+        }
+    }
 
 
 
@@ -216,7 +226,11 @@ class  ContainerQueueViewForm extends React.Component {
 
                             <div className="padding-top-btm-xs">
                                 <div className="padding-20-last-l pull-left"><button type="button"    className="btn  btn-gray text-uppercase" onClick={hashHistory.goBack}>Back</button></div>
-
+                                <div className="pull-left margin-10-all">
+                                    <button type="button" onClick={(e) => this.printLoadOrder(e)}
+                                            className="btn  btn-primary">Print Load Order
+                                    </button>
+                                </div>
                                 <div className="padding-20-all pull-right"><button type="button"   id="edit_btn"  className="btn  btn-orange text-uppercase" onClick={this.callonEdit}>Edit</button></div>
                                 <div className="pull-right margin-10-last-r"><button type="button" onClick={this.onViewClick} className="btn  btn-success">View</button></div>
 
