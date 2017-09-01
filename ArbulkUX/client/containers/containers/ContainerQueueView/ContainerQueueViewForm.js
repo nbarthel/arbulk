@@ -34,6 +34,7 @@ class  ContainerQueueViewForm extends React.Component {
     onCheckboxChange(e, data) {
         this.contId = data.id
         console.log("data",data)
+        this.shipmentId = data.shipmentId
         this.type = data.TShipmentent.isDomestic
         console.log(">>>>>>"+ data.id );
         this.selectedcontainer.push(data.id);
@@ -143,7 +144,7 @@ class  ContainerQueueViewForm extends React.Component {
     printLoadOrder(e) {
 
         if (this.editId != undefined || this.contId != undefined) {
-            hashHistory.push('/Shipment/shipmentPrint/' + this.editId + '/' + this.contId)
+            hashHistory.push('/Shipment/shipmentPrint/' + this.shipmentId + '/' + this.contId)
             //hashHistory.push('/Packaging/inventorycard/'+this.piID+'/'+this.selected)
         }
         else {
