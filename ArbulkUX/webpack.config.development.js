@@ -14,7 +14,22 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin(),
+      new webpack.optimize.UglifyJsPlugin({
+          comments: false, // remove comments
+          compress: {
+              unused: true,
+              screw_ie8: true,
+              dead_code: true, // big one--strip code that will never execute
+              warnings: false, // good for prod apps so users can't peek behind curtain
+              drop_debugger: true,
+              conditionals: true,
+              evaluate: true, // strips console statements
+              drop_console: true,
+              sequences: true,
+              booleans: true,
+          }
+      }),
   ],
   module: {
     loaders: [{

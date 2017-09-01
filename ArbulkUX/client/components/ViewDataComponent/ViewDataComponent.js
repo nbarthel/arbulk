@@ -628,7 +628,6 @@ class ViewDataComponent extends React.Component {
                 <td></td>
                 <td></td>
             </tr>
-
             )
     }
 

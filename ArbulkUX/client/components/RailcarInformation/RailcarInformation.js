@@ -86,6 +86,7 @@ export default class RailcarInformation extends React.Component {
 								className="form-control"
 								id={this.props.idd!==undefined?"Lot_Number"+this.props.idd:"Lot_Number"}
 								ref={this.props.id}
+								style={{textTransform: 'uppercase'}}
 								placeholder="Lot #"
 								name="lot_number"
 								onChange={this.props.handleLotNumberEdit}
@@ -97,6 +98,7 @@ export default class RailcarInformation extends React.Component {
 								id={this.props.idd!==undefined?"Lot_Number"+this.props.idd:"Lot_Number"}
 								placeholder="Lot #"
 								name="lot_number"
+								style={{textTransform: 'uppercase'}}
 								onChange={this.props.onChange}
 								value={this.state.lotnumber}/>
 						}
