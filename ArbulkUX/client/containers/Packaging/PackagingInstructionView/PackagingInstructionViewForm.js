@@ -152,13 +152,24 @@ export default class PackagingInstructionViewForm extends React.Component {
     getdt(a){
         a.id=="1"?this.startDate = a.tempDate:this.endDate=a.tempDate;
         let tempObj = [this.startDate,this.endDate]
+        let obj = [{"cargoCutoffDate" : this.startDate},{"cargoCutoffDate" : this.endDate}]
         this.setState({
             SelectedCutOffDate : tempObj
         })
-        Object.defineProperty(this.Where,"CutofFilter",{enumerable:true ,
-            writable: true,
-            configurable: true,
-            value:tempObj})
+        if(!this.startDate){
+            tempObj[0] = ""
+            delete this.Where["created_on"]
+        }
+        else if(!this.endDate){
+            tempObj[1] = ""
+            delete this.Where["created_on"]
+        }
+        if(this.startDate && this.endDate){
+            Object.defineProperty(this.Where,"CutofFilter",{enumerable:true ,
+                writable: true,
+                configurable: true,
+                value:tempObj})
+        }
         this.onSearch(a)
     }
     getCreatedDate(dateObj){

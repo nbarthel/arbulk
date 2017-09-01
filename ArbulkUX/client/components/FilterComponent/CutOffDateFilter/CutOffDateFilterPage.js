@@ -18,10 +18,16 @@ constructor(props){
     componentWillReceiveProps(nextProps){
          
         if(nextProps.SelectedCutOffDate && nextProps.SelectedCutOffDate.length >=2){
-            this.setState({
-                startDate:moment(nextProps.SelectedCutOffDate[0]),
-                endDate:moment(nextProps.SelectedCutOffDate[1])
-            })
+            if(!isNaN(new Date(nextProps.SelectedCutOffDate[0]).getTime())){
+                this.setState({
+                    startDate:moment(nextProps.SelectedCutOffDate[0])
+                })
+            }
+            if(!isNaN(new Date(nextProps.SelectedCutOffDate[1]).getTime())){
+                this.setState({
+                    endDate:moment(nextProps.SelectedCutOffDate[1])
+                })
+            }
         }
     }
     handleChange(date){
