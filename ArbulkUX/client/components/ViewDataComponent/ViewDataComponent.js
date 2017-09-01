@@ -23,9 +23,9 @@ class ViewDataComponent extends React.Component {
         super(props);
         this.isAsc = false
         this.state = {
-        loaded: false, headerArray : ["ARB","Customer", "PO#","Railcar#","Lot#","Material","Confirmed?","Arrived?","Shipment Received?",    "Cutoff","Weight","Qty Allocated",    "Qty Packaged","Status","Railcar Arrival","Railcar Arrival Date","Railcar Departure","Railcar Departure Date","Railcar Days Present", "Railcar Status"],
-        GroupedData : {}
-    }
+            loaded: false, headerArray : ["ARB","Customer", "PO#","Railcar#","Lot#","Material","Confirmed?","Arrived?","Shipment Received?",    "Cutoff","Weight","Qty Allocated",    "Qty Packaged","Status","Railcar Arrival","Railcar Arrival Date","Railcar Departure","Railcar Departure Date","Railcar Days Present", "Railcar Status"],
+            GroupedData : {}
+        }
         this.PIData = {}
         this.myObj = {}
         this.qArray = []
@@ -186,7 +186,7 @@ class ViewDataComponent extends React.Component {
         })
     }
     componentDidMount() {
-         var that = this;
+        var that = this;
 
         $(function () {
             setTimeout(function () {
@@ -262,23 +262,23 @@ class ViewDataComponent extends React.Component {
         grouping = true
         var tempData = []
         if (data === undefined) {
-        for (var i in this.state.viewData) {
-            var tempObj = new Object()
-            for (var props in this.state.viewData[i]) {
-                if (props != "TPackagingInstructionLots") {
-                    tempObj[props] = JSON.parse(JSON.stringify(this.state.viewData[i][props]))
+            for (var i in this.state.viewData) {
+                var tempObj = new Object()
+                for (var props in this.state.viewData[i]) {
+                    if (props != "TPackagingInstructionLots") {
+                        tempObj[props] = JSON.parse(JSON.stringify(this.state.viewData[i][props]))
+                    }
                 }
-            }
-            for (var j in this.state.viewData[i].TPackagingInstructionLots) {
-                var tempLots = JSON.parse(JSON.stringify(this.state.viewData[i].TPackagingInstructionLots[j]))
-                tempObj.TPackagingInstructionLots = []
-                tempObj.TPackagingInstructionLots.push(JSON.parse(JSON.stringify(tempLots)))
-                tempData.push(tempObj)
-            }
+                for (var j in this.state.viewData[i].TPackagingInstructionLots) {
+                    var tempLots = JSON.parse(JSON.stringify(this.state.viewData[i].TPackagingInstructionLots[j]))
+                    tempObj.TPackagingInstructionLots = []
+                    tempObj.TPackagingInstructionLots.push(JSON.parse(JSON.stringify(tempLots)))
+                    tempData.push(tempObj)
+                }
 
+            }
         }
-    }
-    else{
+        else{
 
             tempData = data
 
@@ -512,7 +512,7 @@ class ViewDataComponent extends React.Component {
                     if (item.TPackagingInstructionLots.length > 0 && item.TPackagingInstructionLots[0].TShipmentLots.length > 0) {
                         if (item.TPackagingInstructionLots[0].arrived != 1) {
                             return 0
-                          }
+                        }
                     }
                     return 1
                 });
@@ -628,7 +628,7 @@ class ViewDataComponent extends React.Component {
                 <td></td>
                 <td></td>
             </tr>
-            )
+        )
     }
 
     getDetailsGroup(groupID) {
@@ -639,7 +639,7 @@ class ViewDataComponent extends React.Component {
     }
     GetRows(view,count,selectedWeight){
 
-       return _.map(view.TPackagingInstructionLots, (data, index) => {
+        return _.map(view.TPackagingInstructionLots, (data, index) => {
                 let diff;
                 var bagsallocated = 0
                 if (this.props.contanerLoad != undefined) {
@@ -1019,7 +1019,7 @@ class ViewDataComponent extends React.Component {
             debugger;
 
             var groupedData = _.map(this.state.GroupedData, (data, index) => {
-               return(
+                return(
                     <tbody key={i++}>
                     {
                         this.GetHead(index.toUpperCase(), i++, data.length)
@@ -1031,14 +1031,14 @@ class ViewDataComponent extends React.Component {
                             }
                         })
                     }
-                   </tbody>
+                    </tbody>
 
-               )
+                )
             })
 
         }
         else {
-        var listData = this.GetData(this.state.viewData,false)
+            var listData = this.GetData(this.state.viewData,false)
         }
         listData = _.filter(listData, function (param) {
             return param !== undefined;
@@ -1053,7 +1053,7 @@ class ViewDataComponent extends React.Component {
             <th key="arb" style={{display : this.props.showARB }} onKeyDown={(e)=>this.press(e)}
                 onClick={(e)=> this.onAscending(e,'location')} className="exclude-drag">
                 ARB
-                                <span className="fa-stack ">
+                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                            </span>
@@ -1062,7 +1062,7 @@ class ViewDataComponent extends React.Component {
         headerObj["Customer"] = (
             <th key="customer" style={{display : this.props.showCustomer}}
                 onClick={(e)=> this.onAscending(e,'company')}>Customer
-                                <span className="fa-stack ">
+                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -1071,7 +1071,7 @@ class ViewDataComponent extends React.Component {
         );
         headerObj["PO#"] = (
             <th key="po" style={{display : this.props.showPO}} onClick={(e)=> this.onAscending(e,'po_number')}>PO#
-                                <span className="fa-stack ">
+                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -1080,7 +1080,7 @@ class ViewDataComponent extends React.Component {
         headerObj["Railcar#"] = (
             <th key="railecar" style={{display : this.props.Railcar}}
                 onClick={(e)=> this.onAscending(e,'railcar_number')}>Railcar#
-                                <span className="fa-stack ">
+                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -1089,8 +1089,8 @@ class ViewDataComponent extends React.Component {
 
         headerObj["Lot#"] = (
             <th key="lot" style={{display : this.props.showLot}} onClick={(e)=> this.onAscending(e,'lot_number')}
-                >Lot#
-                                <span className="fa-stack ">
+            >Lot#
+                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -1101,7 +1101,7 @@ class ViewDataComponent extends React.Component {
         headerObj["Material"] = (
             <th key="material" style={{display : this.props.showMaterial}}
                 onClick={(e)=> this.onAscending(e,'Material')}>Material
-                                <span className="fa-stack ">
+                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -1110,9 +1110,9 @@ class ViewDataComponent extends React.Component {
         );
         headerObj["Confirmed?"] = (
             <th key="confirmed" style={{display : this.props.showConfmd}} onClick={(e)=> this.onAscending(e,'Confmd')}
-                >
+            >
                 Confirmed?
-                                <span className="fa-stack ">
+                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -1120,9 +1120,9 @@ class ViewDataComponent extends React.Component {
         );
         headerObj["Arrived?"] = (
             <th key="arrived" style={{display : this.props.showArrvd}} onClick={(e)=> this.onAscending(e,'Arrvd')}
-                >
+            >
                 Arrived?
-                                <span className="fa-stack ">
+                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -1132,7 +1132,7 @@ class ViewDataComponent extends React.Component {
         headerObj["Shipment Received?"] = (
             <th key="shipmentreceived" style={{display : this.props.showRecd}}
                 onClick={(e)=> this.onAscending(e,'Recd')}>Shipment Received?
-                                <span className="fa-stack ">
+                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -1142,7 +1142,7 @@ class ViewDataComponent extends React.Component {
         headerObj["Cutoff"] = (
             <th key="cutoff" style={{display : this.props.showCutoff}} onClick={(e)=> this.onAscending(e,'Cutoff')}>
                 Cutoff
-                                <span className="fa-stack ">
+                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -1152,7 +1152,7 @@ class ViewDataComponent extends React.Component {
         headerObj["Weight"] = (
             <th key="weight" style={{display : this.props.showWeight}} onClick={(e)=> this.onAscending(e,'weight')}>
                 Weight
-                                <span className="fa-stack ">
+                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -1163,7 +1163,7 @@ class ViewDataComponent extends React.Component {
         headerObj["Qty Allocated"] = (
             <th key="qtyallocated" style={{display : this.props.showBag}} onClick={(e)=> this.onAscending(e,'Bags')}>Qty
                 Allocated
-                                <span className="fa-stack ">
+                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -1174,7 +1174,7 @@ class ViewDataComponent extends React.Component {
             <th key="qtypackaged" style={{display : this.props.showInInvt}}
                 onClick={(e)=> this.onAscending(e,'InInvt')}>
                 Qty Packaged
-                                <span className="fa-stack ">
+                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -1184,7 +1184,7 @@ class ViewDataComponent extends React.Component {
         headerObj["Status"] = (
             <th key="status" style={{display : this.props.showStatus}} onClick={(e)=> this.onAscending(e,'Status')}>
                 Status
-                                <span className="fa-stack ">
+                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -1193,7 +1193,7 @@ class ViewDataComponent extends React.Component {
         headerObj["Railcar Arrival"] = (
             <th key="railcararrival" style={{display : this.props.showRailcarArr}}
                 onClick={(e)=> this.onAscending(e,'RailcarArrival')} >Railcar Arrival
-                                <span className="fa-stack ">
+                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -1202,7 +1202,7 @@ class ViewDataComponent extends React.Component {
         headerObj["Railcar Arrival Date"] = (
             <th key="railcalarrivaldate" style={{display : this.props.showRailcarArrD}}
                 onClick={(e)=> this.onAscending(e,'RailcarArrivalDate')}>Railcar Arrival Date
-                                <span className="fa-stack ">
+                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -1211,7 +1211,7 @@ class ViewDataComponent extends React.Component {
         headerObj["Railcar Departure"] = (
             <th key="railcardeparture" style={{display : this.props.showRailcarDep}}
                 onClick={(e)=> this.onAscending(e,'RailcarDeparture')}>Railcar Departure
-                                <span className="fa-stack ">
+                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -1220,7 +1220,7 @@ class ViewDataComponent extends React.Component {
         headerObj["Railcar Departure Date"] = (
             <th key="railcardeparturedate" style={{display : this.props.showRailcarDepDate}}
                 onClick={(e)=> this.onAscending(e,'RailcarDepartureDate')}>Railcar Departure Date
-                                <span className="fa-stack ">
+                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -1231,7 +1231,7 @@ class ViewDataComponent extends React.Component {
         headerObj["Railcar Days Present"] = (
             <th key="railcardayspresent" style={{display : this.props.showDaysPresent}}
                 onClick={(e)=> this.onAscending(e,'RailcarDaysPresent')}>Railcar Days Present
-                                <span className="fa-stack ">
+                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -1242,7 +1242,7 @@ class ViewDataComponent extends React.Component {
         headerObj["Railcar Status"] = (
             <th key="railcarstatus" style={{display : this.props.showRailcarStatus}}
                 onClick={(e)=> this.onAscending(e,'RailcarStatus')}>Railcar Status
-                                <span className="fa-stack ">
+                <span className="fa-stack ">
                                <i className="fa fa-sort-asc fa-stack-1x"></i>
                                <i className="fa fa-sort-desc fa-stack-1x"></i>
                        </span>
@@ -1260,7 +1260,7 @@ class ViewDataComponent extends React.Component {
                             <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
                                 <th className="exclude-drag">{ this.props.SelcetedOptionForGroupBy}</th>
                                 <th className="exclude-drag" style={{display : this.props.showARB }}>ARB
-                                 <span className="fa-stack "></span></th>
+                                    <span className="fa-stack "></span></th>
                                 <th className="exclude-drag" style={{display : this.props.showCustomer}}>Customer</th>
                                 <th className="exclude-drag" style={{display : this.props.showPO}}>PO#</th>
                                 <th className="exclude-drag" style={{display : this.props.Railcar}}>Railcar#</th>
@@ -1281,13 +1281,13 @@ class ViewDataComponent extends React.Component {
                                 <th className="exclude-drag" style={{display : this.props.showDaysPresent}}>Railcar Days Present</th>
                                 <th className="exclude-drag" style={{display : this.props.showRailcarStatus}}>Railcar Status</th>
                             </tr> :
-                        <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
-                            <th className="exclude-drag">
-                            </th>
-                            {this.state.headerArray.map(obj => {
-                                return headerObj[obj];
-                            })}
-                        </tr>}
+                            <tr className="sorting_head header-fixed" style={{"backgroundColor" : "#2e6da4"}}>
+                                <th className="exclude-drag">
+                                </th>
+                                {this.state.headerArray.map(obj => {
+                                    return headerObj[obj];
+                                })}
+                            </tr>}
                         </thead>
                         { (( listData == undefined || listData.length == 0) && (groupedData == undefined || groupedData.length == 0)) ?
                             <tbody>

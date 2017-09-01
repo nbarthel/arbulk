@@ -22,10 +22,17 @@ class ShippedDateFilter extends React.Component {
     };
     componentWillReceiveProps(nextProps){
         if(nextProps.SelectedCreadtedDate && nextProps.SelectedCreadtedDate.length>=2){
-            this.setState({
-                createdOnStartDate : moment(nextProps.SelectedCreadtedDate[0]),
-                createdOnEndDate : moment(nextProps.SelectedCreadtedDate[1])
-            })
+            if(!isNaN(new Date(nextProps.SelectedCreadtedDate[0]).getTime())){
+                this.setState({
+                    createdOnStartDate : moment(nextProps.SelectedCreadtedDate[0])
+                })
+            }
+            if(!isNaN(new Date(nextProps.SelectedCreadtedDate[1]).getTime())){
+                this.setState({
+                    createdOnEndDate : moment(nextProps.SelectedCreadtedDate[1])
+                })
+            }
+
         }
     }
     handleChange(date){

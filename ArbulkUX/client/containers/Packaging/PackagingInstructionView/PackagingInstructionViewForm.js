@@ -151,24 +151,38 @@ export default class PackagingInstructionViewForm extends React.Component {
     }
     getdt(a){
         a.id=="1"?this.startDate = a.tempDate:this.endDate=a.tempDate;
-        this.onSearch(a)
-    }
-    getCreatedDate(dateObj){
-        dateObj.id=="1"?this.createdOnStartDate = dateObj.tempDate:this.createdOnEndDate=dateObj.tempDate;
-        if(this.createdOnStartDate.length<3){
-            this.createdOnStartDate = undefined
-        }
-        if(this.createdOnEndDate.length<3){
-            this.createdOnEndDate = undefined
-        }
-        let tempObj = [this.createdOnStartDate,this.createdOnEndDate]
+        let tempObj = [this.startDate,this.endDate]
         this.setState({
-            SelectedCreadtedDate : tempObj
-        });
-        Object.defineProperty(this.Where,"created_on",{enumerable:true ,
+            SelectedCutOffDate : tempObj
+        })
+        Object.defineProperty(this.Where,"CutofFilter",{enumerable:true ,
             writable: true,
             configurable: true,
             value:tempObj})
+        this.onSearch(a)
+    }
+    getCreatedDate(dateObj){
+        debugger
+        dateObj.id=="1"?this.createdOnStartDate = dateObj.tempDate:this.createdOnEndDate=dateObj.tempDate;
+        let tempObj = [{"created_on":this.createdOnStartDate},{"created_on":this.createdOnEndDate}]
+        let obj = [this.createdOnStartDate,this.createdOnEndDate]
+        this.setState({
+            SelectedCreadtedDate : obj
+        });
+        if(!this.createdOnStartDate){
+            obj[0] = ""
+            delete this.Where["created_on"]
+        }
+        else if(!this.createdOnEndDate){
+            obj[1] = ""
+            delete this.Where["created_on"]
+        }
+        if(this.createdOnStartDate && this.createdOnEndDate){
+            Object.defineProperty(this.Where,"created_on",{enumerable:true ,
+                writable: true,
+                configurable: true,
+                value:tempObj})
+        }
         this.onSearch(dateObj);
     }
     onTextChange(e){
@@ -1151,13 +1165,17 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.checkedStatus = []
         this.checkedCompany = []
         this.Query = []
-        this.Where = ''
-        delete this.Where
+        this.startDate = null
+        this.endDate = null
+        this.createdOnStartDate = null
+        this.createdOnEndDate = null
         delete this.Where.Company
         delete this.Where.Customer
         delete this.Where.status
         delete this.state.viewData
         delete this.state.SelcetedOptionForGroupBy
+        delete this.Where.Query
+        this.Where = new Object();
         this.setState({
             key : this.state.key +1,
             index : this.state.index +1,
