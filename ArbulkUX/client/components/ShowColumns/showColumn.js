@@ -56,12 +56,12 @@ class showColumn extends React.Component{
             columns:this.tempVisibleColumn
         }
         axios.post(Base_Url+"TColumnShowHides/updateColumns",data).then(response=>{
-             
             console.log("done");
+            this.props.onRequestClose(1);
         }).catch(err=>{
             console.log("err");
+            this.props.onRequestClose(1);
         })
-        this.props.onRequestClose(1);
     }
     cancel(){
         this.setState({
