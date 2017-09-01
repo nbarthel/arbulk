@@ -886,27 +886,19 @@ changeLot(e){
 
             <div className="row">
             <div className=" col-lg-12 "><hr/></div>
-                    <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <div className="text_left">
-
-
-
-
+                    <div className="col-lg-5 col-md-5 col-sm-5 col-xs-12">
                         </div>
-                    </div>
-                    <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div className="col-lg-7 col-md-7 col-sm-7 col-xs-12">
 
-                          <div className="pull-right margin-10-last-r">{this.state.editing == false ? <button type="button"  className="btn  btn-success text-uppercase" onClick = {this.onEditClick}> Edit</button> : <button type="button"  className="btn  btn-success text-uppercase" onClick = {this.onSaveClick.bind(this)} > SAVE</button>} </div>
+                        <div className="pull-right margin-10-last-r">{this.state.editing == false ? <button type="button"  className="btn  btn-success text-uppercase" onClick = {this.onEditClick}> Edit</button> : <button type="button"  className="btn  btn-success text-uppercase" onClick = {this.onSaveClick.bind(this)} > SAVE</button>} </div>
                           <div className="pull-right margin-10-all"><button type="button" id="edit_details"  className={this.state.editing ? "btn  btn-primary text-uppercase" : "btn  btn-primary text-uppercase hidden" } onClick = {this.onCancelClick}>Cancel</button> </div>
                         <div className="pull-right margin-10-last-r"><button type="button" id="back" className="btn  btn-gray text-uppercase" onClick={hashHistory.goBack}> BACK</button> </div>
                         <div className="pull-right margin-10-all">
                             <button type="button" className="btn  btn-gray text-uppercase" onClick={this.addToqueue}>Add to queue</button>
                         </div>
-                        < div className="pull-right margin-10-all"><button type="button" id="edit_details" onClick={(e) => this.printLoadOrder(e)}  className="btn  btn-gray text-uppercase">Print Load Order</button> </div>
                         <div className="pull-right margin-10-all"><button type="button" id="edit_details" onClick={(e) => this.print(e)}  className="btn  btn-gray text-uppercase">Print BOL</button> </div>
-
-
-                    </div>
+                        < div className="pull-right margin-10-last-l"><button type="button" id="edit_details" onClick={(e) => this.printLoadOrder(e)}  className="btn  btn-gray text-uppercase">Print Load Order</button> </div>
+</div>
 
                 </div>
 
