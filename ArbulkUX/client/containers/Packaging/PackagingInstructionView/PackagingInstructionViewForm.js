@@ -112,7 +112,6 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.handleClose = this.handleClose.bind(this)
         this.saveNewCustomView = this.saveNewCustomView.bind(this);
         this.updateExistingView = this.updateExistingView.bind(this);
-        this.update = this.update.bind(this)
     }
     componentWillMount() {
         var userId = Number(localStorage.getItem("userId"));
@@ -155,7 +154,6 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.onSearch(a)
     }
     getCreatedDate(dateObj){
-
         dateObj.id=="1"?this.createdOnStartDate = dateObj.tempDate:this.createdOnEndDate=dateObj.tempDate;
         if(this.createdOnStartDate.length<3){
             this.createdOnStartDate = undefined
