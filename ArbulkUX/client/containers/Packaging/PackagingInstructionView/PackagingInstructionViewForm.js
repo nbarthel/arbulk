@@ -112,6 +112,7 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.handleClose = this.handleClose.bind(this)
         this.saveNewCustomView = this.saveNewCustomView.bind(this);
         this.updateExistingView = this.updateExistingView.bind(this);
+        this.update = this.update.bind(this)
     }
     componentWillMount() {
         var userId = Number(localStorage.getItem("userId"));
@@ -144,7 +145,6 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.setState({open: true});
     }
     handleClose(submitted){
-
         this.setState({open: false});
         if(submitted){
             window.location.reload();
@@ -157,6 +157,20 @@ export default class PackagingInstructionViewForm extends React.Component {
     getCreatedDate(dateObj){
 
         dateObj.id=="1"?this.createdOnStartDate = dateObj.tempDate:this.createdOnEndDate=dateObj.tempDate;
+        if(this.createdOnStartDate.length<3){
+            this.createdOnStartDate = undefined
+        }
+        if(this.createdOnEndDate.length<3){
+            this.createdOnEndDate = undefined
+        }
+        let tempObj = [this.createdOnStartDate,this.createdOnEndDate]
+        this.setState({
+            SelectedCreadtedDate : tempObj
+        });
+        Object.defineProperty(this.Where,"created_on",{enumerable:true ,
+            writable: true,
+            configurable: true,
+            value:tempObj})
         this.onSearch(dateObj);
     }
     onTextChange(e){
@@ -203,8 +217,7 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.Query[e.target.id] = e.target.getAttribute('value')
         document.getElementById('railcarSearch').value = e.target.getAttribute('value')
     }
-    PrintElem(elem)
-    {
+    PrintElem(elem) {
         var mywindow = window.open('', 'PrintWindow', '');
         mywindow.document.write('<html><head><title>' + document.title  + '</title>');
         // mywindow.document.write('<link rel="stylesheet" href={../../../public/stylesheets/style.css} type="text/css" />');
@@ -1140,7 +1153,8 @@ export default class PackagingInstructionViewForm extends React.Component {
         this.checkedStatus = []
         this.checkedCompany = []
         this.Query = []
-        this.where = ''
+        this.Where = ''
+        delete this.Where
         delete this.Where.Company
         delete this.Where.Customer
         delete this.Where.status

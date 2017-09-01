@@ -45,7 +45,6 @@ class ShippedDateFilter extends React.Component {
     }
 
     handleChange1(date){
-         
         var tempDate;
         if(date != null)
         {
