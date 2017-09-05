@@ -187,7 +187,9 @@ export default class PrintPackaging extends React.Component {
              if(status=='BOXES'){
                  return(
                      <div className="packaging_data " style={{"text-align":"center"}}>
+
                          <table width="100%" className="bg_striped">
+
                              <tbody>
                              <tr><td>DATE:</td> <td></td></tr>
                              <tr><td>CUSTOMER:</td> <td>{this.state.viewData.TCompany.name}</td></tr>

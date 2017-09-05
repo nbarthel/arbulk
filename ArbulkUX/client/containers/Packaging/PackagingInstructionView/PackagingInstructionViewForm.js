@@ -1552,6 +1552,7 @@ export default class PackagingInstructionViewForm extends React.Component {
             <section className="side-filter">
                 <div className="menu-bg hidden-md hidden-lg hidden-sm  visible-xs-block">
                     <div className="" id="hide1">
+
                         <h4 className="pull-left">REFINE YOUR RESULT </h4>
                         <button type="button" className="btn collapsed pull-right " data-toggle="collapse" data-target="#filter-menu" aria-expanded="false"><i className="fa fa-caret-down fa-2x" aria-hidden="true"></i></button>
                     </div>
@@ -1559,7 +1560,6 @@ export default class PackagingInstructionViewForm extends React.Component {
 
                 <div className="container">
                     <div className="row-fluid">
-
                         <FilterComponent SelectedCreadtedDate = {this.state.SelectedCreadtedDate}
                                          SelectedCutOffDate = {this.state.SelectedCutOffDate}
                                          selectedLot = {this.state.selectedLot}

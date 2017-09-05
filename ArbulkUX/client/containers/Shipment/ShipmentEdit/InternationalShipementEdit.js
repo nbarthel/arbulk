@@ -185,12 +185,15 @@ class InternationalShipementEdit extends React.Component {
             lot_id:"",
             pi_id:""
         }
-        this.state.lots.push(tempObj)
+        this.state.lotNumber.push(tempObj)
         var count = this.state.index+1
         const materialInfoList = this.state.materialInfoList;
+	    //let propTshipment = this.props.editData.TShipmentLots
+        //propTshipment.push(this.state.lotNumber)
+        //this.props.editData.TShipmentLots = propTshipment;
         this.setState({
             index :count,
-            materialInfoList: materialInfoList.concat(<MaterialInformation count={this.state.index } poNumber = {this.poNumber} lastSelectedPo = {this.lastSelectedPo}/>)
+            materialInfoList: materialInfoList.concat(<MaterialInformation count={this.state.index } lots={this.state.lotNumber} poNumber = {this.poNumber}  lastSelectedPo = {this.lastSelectedPo}/>)
         })
     }
     onMinus(e){
@@ -394,8 +397,10 @@ class InternationalShipementEdit extends React.Component {
 	render() {
 		var editableLot = []
         editableLot = _.map(this.props.editData.TShipmentLots,(lots,index) =>{
+            console.log("lotNumber>>>>>", lots)
             if(index != 0){
-            return <LotInformation key = {index} lotNumber = {this.lotNumber} handleLotBagsToShip = {(e) => {this.handleLotBagsToShip(e,index)}} id = {index} data = {lots} />}
+            return <LotInformation key = {index} lotNumber = {this.lotNumber} handleLotBagsToShip = {(e) => {this.handleLotBagsToShip(e,index)}} id = {index} data = {lots} />
+            }
         })
 		return (
 			<section className="shipment_edit">

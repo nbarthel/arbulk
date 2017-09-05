@@ -24,8 +24,11 @@ export default class MaterialInformation extends React.Component {
         this.lotNumber = null
         var tempthis =this
         this.props.lastSelectedPo.po_number = e.target.value
+        console.log(this.props.lastSelectedPo)
         var indexId = e.target.id.split(":")[0]
-        this.props.lots[indexId-1].pi_id = e.target.value
+        console.log(indexId);
+
+        this.props.lots[indexId].pi_id = e.target.value
         var MIView = createDataLoader(MaterialInformation, {
             queries: [{
                 endpoint: 'TPackagingInstructions',
@@ -40,17 +43,18 @@ export default class MaterialInformation extends React.Component {
             "where": {and:[{"pi_id":  e.target.value },{active:1}]}
         } );
         axios.get(pLotUrl).then((response)=>{
+            console.log(response)
             this.setState({
                 propLotNum:response.data
             })
             this.lotNumber = _.map(this.state.propLotNum,(lotNum,index) => {
                 debugger
                 if(index==0){
-                    tempthis.props.lots[indexId-1].lot_id = lotNum.id
+                    tempthis.props.lots[indexId].lot_id = lotNum.id
                 }
                 totalBagsInPO += parseInt(lotNum.inInventory)
                 let temp={target:{value:lotNum.id}}
-                tempthis.props.GetTotalbags(temp,function(values){
+                tempthis.GetTotalbags(temp,function(values){
                     var tempvalue = values;
                     totalBagsOrderForPO += tempvalue['totalBags']
                     tempthis.inInventoryBags = totalBagsInPO - totalBagsOrderForPO
@@ -58,6 +62,31 @@ export default class MaterialInformation extends React.Component {
                 });
                 return <option key = {index} id = {lotNum.id} value = {lotNum.id} data-target={lotNum.inInventory}>{lotNum.lot_number}</option>
             })
+
+        })
+    }
+    GetTotalbags(event,next)
+    {
+        var bags;
+        var totalAllocatedbags=0;
+        var MIView = createDataLoader(MaterialInformation, {
+            queries: [{
+                endpoint: 'TShipmentLots'
+            }]
+        });
+        var base = 'TShipmentLots';
+        var pLotUrl = MIView._buildUrl(base, {
+
+            "where": {"piLotsId":  event.target.value }
+        } );
+        console.log(pLotUrl)
+        axios.get(pLotUrl).then(function(response){
+            bags=response.data;
+            for(var i =0;i<bags.length;i++)
+            {
+                totalAllocatedbags += bags[i].noOfBags;
+            }
+            return next({totalBags:totalAllocatedbags});
 
         })
     }
