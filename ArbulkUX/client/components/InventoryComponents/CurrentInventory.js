@@ -118,8 +118,7 @@ componentWillReceiveProps(nextProps) {
 
                 this.setState({
                 	currentInventory : data[0],
-                	rows : tempData,
-									loaded : true
+                	rows : tempData,loaded : true
                 })
                 if(this.orignalTble === undefined){
 
@@ -140,11 +139,14 @@ componentWillReceiveProps(nextProps) {
 		console.log("row number",index)
 
 		if(!this.splRow && !this.rowAdd){
-			console.log("in rows", this.state.rows)
+			let temRows = _.sortBy(this.state.rows, 'locationName', function(n) {
+                return n.TInventoryLocation.locationName.toLowerCase();
+            });
+			console.log("in rows", temRows)
 
 		this.edit = true
-		this.row = _.cloneDeep(this.state.rows[this.index])
-		this.selectedRow = _.cloneDeep(this.state.rows[this.index])
+		this.row = _.cloneDeep(temRows[this.index])
+		this.selectedRow = _.cloneDeep(temRows[this.index])
 		console.log(this.selectedRow)
 		if (this.selectedRow.noOfBags != undefined && this.selectedRow.TInventoryLocation != undefined && this.selectedRow.weight != undefined) {
 		this.refs.noOfBags.value = this.selectedRow.noOfBags

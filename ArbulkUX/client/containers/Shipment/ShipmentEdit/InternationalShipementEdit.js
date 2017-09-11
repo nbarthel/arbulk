@@ -186,6 +186,8 @@ class InternationalShipementEdit extends React.Component {
             pi_id:""
         }
         this.state.lotNumber.push(tempObj)
+        this.addedLots.push(this.props.editData.TShipmentLots[0])
+        console.log(this.props.editData.TShipmentLots[0])
         var count = this.state.index+1
         const materialInfoList = this.state.materialInfoList;
 	    //let propTshipment = this.props.editData.TShipmentLots

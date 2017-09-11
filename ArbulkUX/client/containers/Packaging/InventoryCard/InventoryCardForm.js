@@ -168,7 +168,6 @@ componentWillMount() {
 
         })
 
-		//alert('status' , this.status)
      axios.get(Base_Url+"TPackagingInstructionLots/getMaxQueue").then(response=>{
     this.setState({
         queue_Sequence : response.data
