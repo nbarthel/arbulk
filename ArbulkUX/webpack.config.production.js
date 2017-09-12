@@ -82,15 +82,15 @@ module.exports = {
   module: {
     loaders: [{
       test: /\.js$/,
-      loaders: ['babel'],
+      loaders: [ 'babel-loader?presets[]=es2015,presets[]=stage-0,presets[]=react'],
       exclude: /node_modules/,
       include: path.join(__dirname, 'client'),
     },{
       test: /\.json$/,
-      loader: 'json'
+      loader: 'json-loader'
     },{
       test: /\.css$/,
-      loader: 'style!css'
+      loader: 'style-loader!css-loader'
     },
      { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' },
      ]
